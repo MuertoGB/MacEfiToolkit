@@ -10,6 +10,7 @@ Currently under development, Mac EFI Toolkit is a GUI based software to edit and
 - Original binaries left untouched, new image built from memory
 - Get information such as the PDR board-id when available
 - Replace serial with automatic HWC and CRC32 calculation
+- Ability to detect and decompress lzma DXE volumes
 - Clear NVRAM and EFI lock with header preservation
 - Detects and fixes invalid Fsys checksum
 - Check serial number with EveryMac
