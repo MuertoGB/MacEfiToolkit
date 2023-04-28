@@ -33,3 +33,9 @@ Some features have been purposely left out as I'm not ready to talk about them y
 Updates will be added as I progress further, beta source code will be available when I feel it's ready to view. Currently I'm working on acquiring various LMZA compressed DXE volume GUIDs so they can be extracted into memory, and checked for others necessary markers.
 
 <img width="600" src="files/images/met.png" alt="MET">
+
+## Acknowledgements
+
+MacEfiTool utilises the 7z LZMA v22.01 SDK:\
+https://www.7-zip.org/sdk.html
+
