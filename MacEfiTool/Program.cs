@@ -11,9 +11,6 @@ using System.Drawing.Text;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Xml;
-using System.Threading.Tasks;
-using System.IO;
 
 using Mac_EFI_Toolkit.Interop;
 
