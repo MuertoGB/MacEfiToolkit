@@ -161,7 +161,6 @@ namespace Mac_EFI_Toolkit.Utils
             Buffer.BlockCopy(newBytes, 0, sourceBytes, (int)offset, newBytes.Length);
         }
 
-
         /// <summary>
         /// Removes any trailing 0xFF bytes from a byte array.
         /// </summary>
