@@ -3,6 +3,8 @@
 
 // Utilities
 // BinaryUtils.cs - A collection of functions to handle binary data.
+// Updated 29.04.2023 - Impliment FindOffset Knuth-Morris-Pratt algorithm
+// This code uses the Knuth-Morris-Pratt algorithm for pattern matching and string searching, developed by Donald Knuth, Vaughan Pratt, and James Morris.
 // Released under the GNU GLP v3.0
 
 using System;
@@ -23,6 +25,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
         internal static long FindOffset(byte[] sourceBytes, byte[] pattern)
         {
+            // Call the overload that takes a baseOffset parameter and sets it to 0.
             return FindOffset(sourceBytes, pattern, 0);
         }
 
@@ -35,23 +38,73 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
         internal static long FindOffset(byte[] sourceBytes, byte[] pattern, long baseOffset)
         {
-            for (int i = (int)baseOffset; i <= sourceBytes.Length - pattern.Length; i++)
+            // Build the partial match table for the pattern using the Knuth-Morris-Pratt algorithm.
+            int[] partialMatchTable = BuildPartialMatchTable(pattern);
+
+            // Initialize the source and pattern indices.
+            int sourceIndex = (int)baseOffset;
+            int patternIndex = 0;
+
+            // Iterate over the source bytes until the end or until the pattern is found.
+            while (sourceIndex < sourceBytes.Length)
             {
-                bool found = true;
-                for (int j = 0; j < pattern.Length; j++)
+                if (sourceBytes[sourceIndex] == pattern[patternIndex])
                 {
-                    if (sourceBytes[i + j] != pattern[j])
+                    // If the source byte matches the pattern byte, increment the indices.
+                    sourceIndex++;
+                    patternIndex++;
+
+                    // If the pattern has been fully matched, return the offset.
+                    if (patternIndex == pattern.Length)
                     {
-                        found = false;
-                        break;
+                        return sourceIndex - patternIndex;
                     }
                 }
-                if (found)
+                else if (patternIndex > 0)
                 {
-                    return i;
+                    // If the source byte does not match and we have partially matched the pattern, backtrack the pattern index.
+                    patternIndex = partialMatchTable[patternIndex - 1];
+                }
+                else
+                {
+                    // If the source byte does not match and we have not partially matched the pattern, increment the source index.
+                    sourceIndex++;
                 }
             }
+
+            // If the pattern is not found, return -1.
             return -1;
+        }
+
+        /// <summary>
+        /// Builds the partial match table for a byte pattern using the Knuth-Morris-Pratt algorithm.
+        /// </summary>
+        /// <param name="pattern">The byte pattern to build the table for.</param>
+        /// <returns>An array of integers representing the partial match table.</returns>
+        private static int[] BuildPartialMatchTable(byte[] pattern)
+        {
+            int[] table = new int[pattern.Length];
+            int i = 0;
+            int j = 1;
+            while (j < pattern.Length)
+            {
+                if (pattern[i] == pattern[j])
+                {
+                    i++;
+                    table[j] = i;
+                    j++;
+                }
+                else if (i > 0)
+                {
+                    i = table[i - 1];
+                }
+                else
+                {
+                    table[j] = 0;
+                    j++;
+                }
+            }
+            return table;
         }
         #endregion
 
@@ -160,6 +213,7 @@ namespace Mac_EFI_Toolkit.Utils
 
             Buffer.BlockCopy(newBytes, 0, sourceBytes, (int)offset, newBytes.Length);
         }
+
 
         /// <summary>
         /// Removes any trailing 0xFF bytes from a byte array.
