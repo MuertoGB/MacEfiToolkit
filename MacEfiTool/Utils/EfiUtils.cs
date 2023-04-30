@@ -3,10 +3,9 @@
 
 // Utilities
 // EfiUtils.cs
+// Updated 30.04.2023 - GetConfigCodeStringAsync support 11 char serial numbers.
 // Released under the GNU GLP v3.0
 
-using System;
-using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -27,18 +26,24 @@ namespace Mac_EFI_Toolkit.Utils
         {
             try
             {
-                if (serialNumber.Length != 12)
-                {
-                    return "Serial No. too short";
-                }
-                var url = $"http://support-sp.apple.com/sp/product?cc={serialNumber.Substring(8, 4)}";
-                if (!NetUtils.IsWebsiteAvailable(url))
-                {
-                    return "Domain not available";
-                }
+                // Return an error message if the serial number is too short
+                if (serialNumber.Length < 11) return "Serial No. too short";
+
+                // Determine the number of digits to take from the serial number
+                int digitsToTake = serialNumber.Length == 12 ? 4 : 3;
+
+                // Build the URL to retrieve the configuration code
+                var url = $"http://support-sp.apple.com/sp/product?cc={serialNumber.Substring(serialNumber.Length - digitsToTake)}";
+
+                // Check if the website is available
+                if (!NetUtils.IsWebsiteAvailable(url)) return "Domain not available";
+
+                // Download and parse the XML data to retrieve the configuration code
                 var xml = await new WebClient().DownloadStringTaskAsync(url);
                 var doc = XDocument.Parse(xml);
                 var data = doc.XPathSelectElement("/root/configCode")?.Value;
+
+                // Return the configuration code or an error message
                 return data ?? "Invalid Serial";
             }
             catch
