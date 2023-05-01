@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// METVersion.cs - Provides a simple version check
+// Updated 01.05.2023 - Refactoring
+// Released under the GNU GLP v3.0
+
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -7,18 +14,14 @@ using System.Xml;
 
 namespace Mac_EFI_Toolkit
 {
-
     public enum VersionCheckResult
     {
         UpToDate,
         NewVersionAvailable,
         Error
     }
-
     class METVersion
     {
-
-        #region Version Check
         internal static async Task<VersionCheckResult> CheckForUpdate(string versionUrl)
         {
             try
@@ -31,29 +34,17 @@ namespace Mac_EFI_Toolkit
                 doc.Load(reader);
 
                 var node = doc.SelectSingleNode("data/MET/VersionString");
-                if (node == null)
-                {
-                    return VersionCheckResult.Error;
-                }
+                if (node == null) return VersionCheckResult.Error;
 
                 var remoteVersion = new Version(node.InnerText);
                 var localVersion = new Version(Application.ProductVersion);
 
-                if (remoteVersion > localVersion)
-                {
-                    return VersionCheckResult.NewVersionAvailable;
-                }
-                else
-                {
-                    return VersionCheckResult.UpToDate;
-                }
+                return remoteVersion > localVersion ? VersionCheckResult.NewVersionAvailable : VersionCheckResult.UpToDate;
             }
             catch
             {
                 return VersionCheckResult.Error;
             }
         }
-        #endregion
-
     }
 }

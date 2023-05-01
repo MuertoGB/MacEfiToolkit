@@ -12,20 +12,17 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-using Mac_EFI_Toolkit.Interop;
-
 namespace Mac_EFI_Toolkit
 {
     static class Program
     {
 
-        #region Fields
+        internal static string APP_BUILD = $"010523.{Application.ProductVersion.Replace(".", ""):0000}.0223";
 
-        internal static bool DebugModeEnabled = false;
-
+        #region Internal Fonts
+        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
         internal static Font FONT_MDL2_REG_14;
         internal static Font FONT_MDL2_REG_9;
-
         #endregion
 
         #region Main Entry Point
@@ -34,14 +31,17 @@ namespace Mac_EFI_Toolkit
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Unhandled Exception
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
+            // Web Security Protocol
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
+            // Font Data
             byte[] fontData = Properties.Resources.segmdl2;
-
             FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData, 9.0F), FontStyle.Regular);
             FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData, 14.0F), FontStyle.Regular);
 
@@ -50,7 +50,6 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Font Resolver
-        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
 
         public static Font LoadFontFromResource(byte[] fontData, float fontSize)
         {
@@ -73,36 +72,16 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Arguments
-        private static void CheckArgs(string[] Args)
-        {
-            foreach (var Arg in Args)
-            {
-                // Enable debug mode
-                if (Arg.ToLower() == "-d")
-                {
-                    DebugModeEnabled = true;
-                }
-            }
-        }
-        #endregion
-
         #region Exception Handler
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            if (e != null)
-            {
-                METCatchUnhandledException(e.Exception);
-            }
+            if (e != null) METCatchUnhandledException(e.Exception);
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
-            if (ex != null)
-            {
-                METCatchUnhandledException(ex);
-            }
+            if (ex != null) METCatchUnhandledException(ex);
         }
 
         static void METCatchUnhandledException(Exception e)
