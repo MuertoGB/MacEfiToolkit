@@ -5,9 +5,9 @@
 		<Build></Build>
 		<ReleaseDate></ReleaseDate>
 		<SHA256></SHA256>
-		<VersionString>0.1.1</VersionString>
+		<VersionString>0.2.4</VersionString>
 		<Maj>0</Maj>
-		<Min>1</Min>
-		<Rev>1</Rev>
+		<Min>2</Min>
+		<Rev>4</Rev>
 	</MET>
 </data>
