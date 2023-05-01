@@ -1,4 +1,12 @@
-﻿using System;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// UI Components
+// METCheckbox.cs
+// Updated 01.05.2023 - Refactoring OnPaintForeground
+// Released under the GNU GLP v3.0
+
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,7 +16,6 @@ using Mac_EFI_Toolkit.UI.Design;
 namespace Mac_EFI_Toolkit.UI
 {
     [DefaultBindingProperty("CheckState")]
-    //[DefaultEvent("CheckChanged")]
     [DefaultProperty("Checked")]
     [Designer(typeof(METCheckboxDesigner))]
     public class METCheckbox : CheckBox
@@ -34,7 +41,7 @@ namespace Mac_EFI_Toolkit.UI
         #region Properties
         private Color BorderInactive_ = Colours.BorderInactive;
         [Description("Check area border color")]
-        [Category("Appearance (Gambol)")]
+        [Category("Appearance (MET)")]
         public Color BorderColor
         {
             get
@@ -50,7 +57,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private Color BorderActive_ = Colours.BorderActive;
         [Description("Check area mouseover border color")]
-        [Category("Appearance (Gambol)")]
+        [Category("Appearance (MET)")]
         public Color BorderColorActive
         {
             get
@@ -66,7 +73,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private Color ClientInactive_ = Colours.ClientInactive;
         [Description("Check area backcolor")]
-        [Category("Appearance (Gambol)")]
+        [Category("Appearance (MET)")]
         public Color ClientColor
         {
             get
@@ -82,7 +89,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private Color ClientActive_ = Colours.ClientActive;
         [Description("Check area mouseover color")]
-        [Category("Appearance (Gambol)")]
+        [Category("Appearance (MET)")]
         public Color ClientColorActive
         {
             get
@@ -98,7 +105,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private Color Checked_ = Colours.Checked;
         [Description("Control checked color")]
-        [Category("Appearance (Gambol)")]
+        [Category("Appearance (MET)")]
         public Color CheckedColor
         {
             get
@@ -132,64 +139,52 @@ namespace Mac_EFI_Toolkit.UI
 
         protected virtual void OnPaintForeground(PaintEventArgs e)
         {
-            int Diameter = ClientRectangle.Height - 2;
-            Rectangle InnerRectangle = new Rectangle(2, 2, Diameter - 2, Diameter - 2);
-            Rectangle OuterRectangle = new Rectangle(2, 2, Diameter - 2, Diameter - 2);
-            Color SwitchBorder, SwitchBack;
+            if (e == null) return;
 
-            if (e != null)
+            int diameter = ClientRectangle.Height - 2;
+            Rectangle innerRectangle = new Rectangle(2, 2, diameter - 2, diameter - 2);
+            Rectangle outerRectangle = new Rectangle(2, 2, diameter - 2, diameter - 2);
+
+            Color switchBorder = Enabled ?
+                (MouseHovered && MousePressed ? Color.FromArgb(Colours.A, CheckedColor.R, CheckedColor.G, CheckedColor.B) :
+                 MouseHovered ? BorderColorActive : BorderColor) : Colours.DisabledControl;
+
+            Color switchBack = MouseHovered ? ClientColorActive : ClientColor;
+
+            using (var pen = new Pen(switchBorder, 2.0f))
             {
-                Graphics g = e.Graphics;
+                e.Graphics.DrawRectangle(pen, outerRectangle);
+            }
 
-                if (Enabled)
+            innerRectangle.Inflate(-1, -1);
+
+            using (var brush = new SolidBrush(switchBack))
+            {
+                e.Graphics.FillRectangle(brush, innerRectangle);
+            }
+
+            if (Checked)
+            {
+                innerRectangle = new Rectangle(1, 1, diameter, diameter);
+                innerRectangle.Inflate(-5, -5); // Control size of check
+
+                using (var brush = new SolidBrush(CheckedColor))
                 {
-                    if (MouseHovered && MousePressed)
-                    { SwitchBorder = Color.FromArgb(Colours.A, CheckedColor.R, CheckedColor.G, CheckedColor.B); }
-                    else if (MouseHovered)
-                    { SwitchBorder = BorderColorActive; }
-                    else
-                    { SwitchBorder = BorderColor; }
+                    e.Graphics.FillRectangle(brush, innerRectangle);
                 }
-                else { SwitchBorder = Colours.DisabledControl; }
+            }
 
-                using (Pen P = new Pen(SwitchBorder, 2.0f))
-                {
-                    g.DrawRectangle(P, OuterRectangle);
-                }
+            var textArea = new Rectangle(outerRectangle.Width + 6, 0, Width - outerRectangle.Width - 6, Height);
+            var textColor = Enabled ? ForeColor : Colours.DisabledText;
 
-                InnerRectangle.Inflate(-1, -1);
-
-                if (MouseHovered)
-                { SwitchBack = ClientColorActive; }
-                else { SwitchBack = ClientColor; }
-
-                using (SolidBrush SB = new SolidBrush(SwitchBack))
-                {
-                    g.FillRectangle(SB, InnerRectangle);
-                }
-
-                if (Checked)
-                {
-                    InnerRectangle = new Rectangle(1, 1, Diameter, Diameter);
-                    InnerRectangle.Inflate(-5, -5); // Control size of check
-                    using (SolidBrush SB = new SolidBrush(CheckedColor))
-                    {
-                        g.FillRectangle(SB, InnerRectangle);
-                    }
-                }
-
-                Rectangle TextArea = new Rectangle(OuterRectangle.Width + 6, 0, Width - OuterRectangle.Width - 6, Height);
-                Color BC = Enabled ? ForeColor : Colours.DisabledText;
-
-                using (StringFormat TF = new StringFormat() { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
-                using (SolidBrush SB = new SolidBrush(BC))
-                {
-                    g.DrawRectangle(Pens.Transparent, TextArea);
-                    g.DrawString(Text, Font, SB, TextArea, TF);
-                }
-
+            using (var format = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
+            using (var brush = new SolidBrush(textColor))
+            {
+                e.Graphics.DrawRectangle(Pens.Transparent, textArea);
+                e.Graphics.DrawString(Text, Font, brush, textArea, format);
             }
         }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             OnPaintBackground(e);
