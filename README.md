@@ -4,9 +4,11 @@ Mac EFI Toolkit
 
 ## About
 
+This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete. However basic functionality such as viewing EFIROM info, and dumping the Fsys block is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
+
 <img width="600" src="files/images/met.png" alt="MET">
 
-Currently under development, Mac EFI Toolkit is a firmware repair tool designed to aid technicians in repair of a Mac EFIROM (BIOS). Built to be minimal, this software should achieve the following (list not final):-
+Mac EFI Toolkit is a firmware repair tool designed to aid technicians in repair of a Mac EFIROM (BIOS). Built to be minimal, this software should achieve the following (list not final):-
 
 ```
 Features:
@@ -40,7 +42,7 @@ Requirements:
 
 Incomplete source code will become available over time, then a test build should follow. This way anyone can get involved and ask questions about the work done so far.
 
-> Currently working on: About Window, Refactoring.
+> Currently working on: Replace Fsys, Repair Fsys.
 
 ## Acknowledgements
 
