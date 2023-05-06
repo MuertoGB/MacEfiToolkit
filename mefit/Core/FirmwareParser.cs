@@ -86,12 +86,23 @@ namespace Mac_EFI_Toolkit.Core
 
         internal static string GetFsysSerialNumber(byte[] bytesIn)
         {
-            long ssnOffset = BinaryUtils.FindOffset(bytesIn, Filesystem.SSN_SIG);
-            if (ssnOffset != -1) ssnOffset += 0x6;
+            long ssnOffset = BinaryUtils.FindOffset(bytesIn, Filesystem.SSN_UPPER_SIG) == -1 ?
+                             BinaryUtils.FindOffset(bytesIn, Filesystem.SSN_LOWER_SIG) :
+                             BinaryUtils.FindOffset(bytesIn, Filesystem.SSN_UPPER_SIG);
+
+            if (ssnOffset == -1)
+            {
+                return "Not found";
+            }
+
+            ssnOffset += 0x5;
+
             long ssnEndOffset = BinaryUtils.FindOffset(bytesIn, new byte[] { 0x3 }, ssnOffset);
-            byte[] data = (ssnOffset != -1) ? BinaryUtils.ReadBytesBetweenOffsets(bytesIn, ssnOffset, ssnEndOffset) : null;
-            return (data != null) ? utf8Enc.GetString(data) : "Not found";
+            byte[] data = BinaryUtils.ReadBytesBetweenOffsets(bytesIn, ssnOffset, ssnEndOffset);
+
+            return utf8Enc.GetString(data);
         }
+
 
         internal static string GetFsysSon(byte[] bytesIn)
         {
