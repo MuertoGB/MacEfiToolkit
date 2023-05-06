@@ -81,7 +81,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void FormatLinks()
         {
             lnkUrls.Links.Clear();
-            lnkUrls.Links.Add(0, 10, "mailto:qbug@tuta.io");
+            lnkUrls.Links.Add(0, 10, "mailto:muertogb@proton.me");
             lnkUrls.Links.Add(13, 11, "https://github.com/MuertoGB/MacEfiToolkit");
             lnkUrls.Links.Add(27, 6, "https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ");
         }
