@@ -168,7 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\met.ico" />
-    <None Include="Resources\imgSettings32px.png" />
     <None Include="Resources\imgmuerto64px.png" />
     <None Include="Resources\logo64px.png" />
     <None Include="Resources\logo32px.png" />

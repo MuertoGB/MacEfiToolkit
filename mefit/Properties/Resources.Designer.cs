@@ -73,16 +73,6 @@ namespace Mac_EFI_Toolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap imgSettings32px {
-            get {
-                object obj = ResourceManager.GetObject("imgSettings32px", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap imgSprite {
             get {
                 object obj = ResourceManager.GetObject("imgSprite", resourceCulture);
