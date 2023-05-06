@@ -106,8 +106,9 @@ namespace Mac_EFI_Toolkit.Core
             0x24, 0x4D, 0x4E, 0x32
         };
         internal static readonly byte[] FLASH_DESC_SIG =
-       {
+        {
             0x5A, 0xA5, 0xF0, 0x0F
         };
+
     }
 }

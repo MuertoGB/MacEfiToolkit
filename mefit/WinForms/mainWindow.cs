@@ -30,17 +30,17 @@ namespace Mac_EFI_Toolkit
         internal static byte[] bytesLoadedFile;
         internal static byte[] bytesFsys;
         internal byte[] bytesDxeCompressed;
-        internal static int intChecksum;
+        internal static uint uintCrcOfLoadedFile;
+        internal static long lngFilesize;
         internal static bool ValidBinaryLoaded = false;
 
         #region Strings
         internal static string strInitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         internal static string strLoadedBinaryFilePath;
         internal static string strRememberPath = string.Empty;
-        internal static string strChecksumBytesInBinary;
+        internal static string strFsysChecksumInBinary;
+        internal static string strFsysCalculation;
         internal static string strFilename;
-        internal static long lngFilesize;
-        internal static uint uintCrc;
         internal static string strFitcVersion;
         internal static string strMeVersion;
         internal static string strSerialNumber;
@@ -85,14 +85,17 @@ namespace Mac_EFI_Toolkit
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            ToggleControlEnable(false);
+            bool dbgMode = false;
 #if DEBUG
-            labTitle.Text += $" ({Program.APP_BUILD})";
+            dbgMode = true;
 #endif
+
+            ToggleControlEnable(false);
+
+            labTitle.Text += $" ({Program.APP_BUILD})";
             labVersion.Text = Application.ProductVersion;
 
-            // Setting to disable incoming
-            CheckForNewVersion();
+            if (!dbgMode) CheckForNewVersion();
         }
 
         internal async void CheckForNewVersion()
@@ -149,6 +152,7 @@ namespace Mac_EFI_Toolkit
                 {
                     strLoadedBinaryFilePath = ofDialog.FileName; // Get filepath for binary
                     bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath); // Load new binary bytes into array
+                    bytesFsys = FirmwareParser.GetFsysBlock(bytesLoadedFile); // Load the Fsys block
                     if (boolIsValidFirmware() == true)
                     {
                         strInitialDirectory = strLoadedBinaryFilePath;
@@ -158,6 +162,7 @@ namespace Mac_EFI_Toolkit
                     {
                         strLoadedBinaryFilePath = string.Empty;
                         bytesLoadedFile = null;
+                        bytesFsys = null;
                     }
                 }
             }
@@ -229,28 +234,35 @@ namespace Mac_EFI_Toolkit
 
         #region Firmware Parsing
 
-        internal static bool boolIsValidFirmware()
+        internal bool boolIsValidFirmware()
         {
             FileInfo fInfo = new FileInfo(strLoadedBinaryFilePath);
             // Binary too small? Potential bug here.
             if (fInfo.Length < Program.minRomSize) // 1048576 bytes
             {
+                METMessageBox.Show(this, "File Error", "File too small, and was ignored", MsgType.Warning, MsgButton.Okay);
                 MessageBox.Show("File too small, ignored.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return false;
             }
             // Binary too large, no Mac EFI is this big.
             if (fInfo.Length > Program.maxRomSize) // 33554432 bytes
             {
-                MessageBox.Show("File too large, ignored.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                METMessageBox.Show(this, "File Error", "File too large, and was ignored.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
             if (!FirmwareParser.boolIsValidFlashHeader(bytesLoadedFile))
             {
-                MessageBox.Show("Invalid flash descriptor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                METMessageBox.Show(this, "File Error", "Invalid flash descriptor, file was ignored.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
+            if (bytesFsys == null)
+            {
+                METMessageBox.Show(this, "Data Error", "Failed to load Fsys block, cannot continue.", MsgType.Warning, MsgButton.Okay);
+                return false;
+            }
+            ValidBinaryLoaded = true;
             return true;
         }
 
@@ -260,42 +272,24 @@ namespace Mac_EFI_Toolkit
             strFilename = Path.GetFileName(strLoadedBinaryFilePath);
             // Size
             lngFilesize = FileUtils.GetFileSizeBytes(strLoadedBinaryFilePath);
-            // CRC32
-            uintCrc = FileUtils.CalculateCrc32(bytesLoadedFile);
+            // File CRC32
+            uintCrcOfLoadedFile = FileUtils.CalculateCrc32(bytesLoadedFile);
+            // Fsys CRC32 string
+            strFsysChecksumInBinary = FirmwareParser.GetFsysCrc32(bytesLoadedFile);
+            // Fsys CRC32
+            byte[] bytesTempFsys = new byte[0x7FC];
+            Array.Copy(bytesFsys, 0, bytesTempFsys, 0, bytesTempFsys.Length);
+            strFsysCalculation = FileUtils.CalculateCrc32(bytesTempFsys).ToString("X2");
             // FITC
             strFitcVersion = MEParser.GetFitcVersion(bytesLoadedFile);
             //ME
             strMeVersion = MEParser.GetMeVersion(bytesLoadedFile);
+            // APFSJumpStart
+            strApfsCapable = $"{ FirmwareParser.GetIsApfsCapable(bytesLoadedFile) }";
             // EFI Version
             strEfiVer = FirmwareParser.GetEfiVersionFromAppleRomSection(bytesLoadedFile);
             // ROM version
             strBootrom = FirmwareParser.GetBootromVersionFromAppleRomSection(bytesLoadedFile);
-            // Fsys
-            bytesFsys = FirmwareParser.GetFsysBlock(bytesLoadedFile);
-            if (bytesFsys != null)
-            {
-                ValidBinaryLoaded = true;
-
-                // Define new byte array and copy 0x7FC len of bytes into new array
-                byte[] bytesFsysRaw = new byte[0x7FC];
-                Array.Copy(bytesFsys, 0, bytesFsysRaw, 0, bytesFsysRaw.Length);
-
-                // Calculate the Fsys CRC32 checksum from the byte array to get the actual Fsys checksum, not what is stored in the binary.
-                intChecksum = (int)FileUtils.CalculateCrc32(bytesFsysRaw);
-
-                // Calculate Fsys CRC32 checksum from original binary with length of 0X7FC.
-                strChecksumBytesInBinary = FirmwareParser.GetFsysCrc32(bytesLoadedFile);
-
-                // Check if the CRC32 is valid in the original binary, and handle accordingly.
-                ToggleControlEnable(true);
-            }
-            else
-            {
-                cmdReset.Enabled = true;
-            }
-
-            // APFSJumpStart
-            strApfsCapable = FirmwareParser.GetIsApfsCapable(bytesLoadedFile).ToString();
             // Serial number
             strSerialNumber = FirmwareParser.GetFsysSerialNumber(bytesFsys);
             // Config code
@@ -313,24 +307,14 @@ namespace Mac_EFI_Toolkit
             labFilename.Text = $"> {strFilename}";
             labSizeBytes.ForeColor = EFIUtils.IsValidSize((int)lngFilesize) ? clrGood : clrUnknown;
             labSizeBytes.Text = FileUtils.FormatBytesWithCommas(FileUtils.GetFileSizeBytes(strLoadedBinaryFilePath));
-            labChecksum.Text = uintCrc.ToString("X2");
+            labChecksum.Text = uintCrcOfLoadedFile.ToString("X2");
             labFitcVersion.Text = strFitcVersion;
             labMeVersion.Text = strMeVersion;
             labEfiVersion.Text = strEfiVer;
             labRomVersion.Text = strBootrom;
             labApfsCapable.Text = strApfsCapable;
-
-            if (string.Equals(intChecksum.ToString("X2"), strChecksumBytesInBinary))
-            {
-                labFsysCrc.ForeColor = clrGood;
-                labFsysCrc.Text = $"{ strChecksumBytesInBinary }h";
-            }
-            else
-            {
-                labFsysCrc.ForeColor = clrError;
-                labFsysCrc.Text = $"{strChecksumBytesInBinary}h, should be {intChecksum.ToString("X2")}h";
-            }
-
+            labFsysCrc.Text = $"{ strFsysChecksumInBinary }h";
+            labFsysCrc.ForeColor = (strFsysCalculation ==  strFsysChecksumInBinary) ? labFsysCrc.ForeColor = clrGood : labFsysCrc.ForeColor = clrError;
             labValid.Text = ValidBinaryLoaded ? "Yes" : "No";
             labSerial.Text = strSerialNumber;
             labSon.Text = strSon;
@@ -341,7 +325,6 @@ namespace Mac_EFI_Toolkit
         {
             var configCode = await EFIUtils.GetConfigCodeStringAsync(serialNumber);
             labConfig.Text = $"> {configCode}";
-
         }
         #endregion
 

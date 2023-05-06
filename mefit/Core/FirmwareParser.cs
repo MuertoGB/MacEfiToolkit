@@ -77,6 +77,15 @@ namespace Mac_EFI_Toolkit.Core
             return (offset != -1) ? BinaryUtils.ReadBytesAtOffset(bytesIn, offset, 0x800) : null;
         }
 
+        //internal static string GetFsysCrc32(byte[] bytesIn)
+        //{
+        //    long offset = BinaryUtils.FindOffset(bytesIn, Filesystem.FSYS_SIG);
+        //    if (offset == -1) return "Not found";
+        //    byte[] byteCsum = (offset != -1) ? BinaryUtils.ReadBytesAtOffset(bytesIn, offset + 0x7FC, 0x4) : null;
+        //    byte[] data = (byteCsum != null) ? FileUtils.SwitchCrc32Endianness(byteCsum) : null;
+        //    return (data != null) ? BitConverter.ToString(data).Replace("-", "") : "Not found";
+        //}
+
         internal static string GetFsysCrc32(byte[] bytesIn)
         {
             long offset = BinaryUtils.FindOffset(bytesIn, Filesystem.FSYS_SIG);
