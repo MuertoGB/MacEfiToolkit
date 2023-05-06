@@ -317,7 +317,7 @@ namespace Mac_EFI_Toolkit
             labEfiVersion.Text = strEfiVer;
             labRomVersion.Text = strBootrom;
             labApfsCapable.Text = strApfsCapable;
-            labFsysCrc.Text = $"{ strFsysChecksumInBinary }h";
+            labFsysCrc.Text = (strFsysCalculation == strFsysChecksumInBinary) ? $"{ strFsysChecksumInBinary }h" : $"{ strFsysChecksumInBinary }h (Invalid)";
             labFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? labFsysCrc.ForeColor = clrGood : labFsysCrc.ForeColor = clrError;
             labValid.Text = ValidBinaryLoaded ? "Yes" : "No";
             labSerial.Text = strSerialNumber;
