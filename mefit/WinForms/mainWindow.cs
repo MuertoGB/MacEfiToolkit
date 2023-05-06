@@ -161,8 +161,7 @@ namespace Mac_EFI_Toolkit
                     else
                     {
                         strLoadedBinaryFilePath = string.Empty;
-                        bytesLoadedFile = null;
-                        bytesFsys = null;
+                        ResetClear();
                     }
                 }
             }
@@ -262,6 +261,7 @@ namespace Mac_EFI_Toolkit
                 METMessageBox.Show(this, "Data Error", "Failed to load Fsys block, cannot continue.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
+            ToggleControlEnable(true);
             ValidBinaryLoaded = true;
             return true;
         }
