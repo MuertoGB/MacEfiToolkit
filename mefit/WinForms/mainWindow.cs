@@ -260,6 +260,7 @@ namespace Mac_EFI_Toolkit
                 METMessageBox.Show(this, "Data Error", "Failed to load Fsys block, cannot continue.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
+
             ToggleControlEnable(true);
             ValidBinaryLoaded = true;
             return true;
@@ -291,8 +292,6 @@ namespace Mac_EFI_Toolkit
             strBootrom = FirmwareParser.GetBootromVersionFromAppleRomSection(bytesLoadedFile);
             // Serial number
             strSerialNumber = FirmwareParser.GetFsysSerialNumber(bytesFsys);
-            // Config code
-            CheckHwcAsync(strSerialNumber);
             // SON
             strSon = FirmwareParser.GetFsysSon(bytesFsys);
             // Get the BoardId
@@ -316,6 +315,7 @@ namespace Mac_EFI_Toolkit
             labFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? labFsysCrc.ForeColor = clrGood : labFsysCrc.ForeColor = clrError;
             labValid.Text = ValidBinaryLoaded ? "Yes" : "No";
             labSerial.Text = strSerialNumber;
+            CheckHwcAsync(strSerialNumber);
             labSon.Text = strSon;
             labBoardId.Text = strBoardId;
         }
