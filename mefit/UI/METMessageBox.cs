@@ -101,8 +101,8 @@ namespace Mac_EFI_Toolkit.UI
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
             boxSound.Play();
-            FlashForecolor(labTitle); // "this" is the current form instance
-            FlashForecolor(cmdClose);
+            InterfaceUtils.FlashForecolor(labTitle); // "this" is the current form instance
+            InterfaceUtils.FlashForecolor(cmdClose);
         }
         #endregion
 
@@ -156,18 +156,6 @@ namespace Mac_EFI_Toolkit.UI
             Close();
         }
         #endregion
-
-        private async void FlashForecolor(Control control)
-        {
-            Color originalColor = control.ForeColor;
-            for (int i = 0; i < 6; i++)
-            {
-                control.ForeColor = Color.FromArgb(control.ForeColor.A, 80, 80, 80);
-                await Task.Delay(80);
-                control.ForeColor = originalColor;
-                await Task.Delay(80);
-            }
-        }
 
     }
 }

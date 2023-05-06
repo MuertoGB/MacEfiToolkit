@@ -97,6 +97,7 @@
     <Compile Include="Core\LzmaCoder.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="METVersion.cs" />
+    <Compile Include="UI\InterfaceUtils.cs" />
     <Compile Include="UI\METMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>

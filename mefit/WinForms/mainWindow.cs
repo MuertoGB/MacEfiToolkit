@@ -69,6 +69,7 @@ namespace Mac_EFI_Toolkit
             InitializeComponent();
 
             Load += new EventHandler(mainWindow_Load);
+            Shown += new EventHandler(mainWindow_Shown);
 
             tlpMain.MouseMove += new MouseEventHandler(Move_Form);
             tlpMainIcon.MouseMove += new MouseEventHandler(Move_Form);
@@ -95,6 +96,11 @@ namespace Mac_EFI_Toolkit
             labVersion.Text = Application.ProductVersion;
 
             if (!dbgMode) CheckForNewVersion();
+        }
+
+        private void mainWindow_Shown(object sender, EventArgs e)
+        {
+            InterfaceUtils.FlashForecolor(cmdOpenBin);
         }
 
         internal async void CheckForNewVersion()
