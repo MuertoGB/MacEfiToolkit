@@ -3,7 +3,7 @@
 
 // WinForms
 // mainWindow.cs
-// Updated 04.05.23 - Remember strInitialDirectory last sucessful path
+// Updated 04.05.23 - Modify load order of data, enhance crc32 matching.
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Core;
