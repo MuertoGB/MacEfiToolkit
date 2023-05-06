@@ -109,6 +109,5 @@ namespace Mac_EFI_Toolkit.Core
         {
             0x5A, 0xA5, 0xF0, 0x0F
         };
-
     }
 }

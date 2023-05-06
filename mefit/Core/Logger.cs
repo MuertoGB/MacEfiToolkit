@@ -13,7 +13,6 @@ namespace Mac_EFI_Toolkit
 {
     class Logger
     {
-
         private static readonly string logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MEFIT.log");
 
         internal static void Write(string logMessage)
@@ -23,7 +22,6 @@ namespace Mac_EFI_Toolkit
                 writer.WriteLine($"{DateTime.Now.ToString()} : {logMessage}");
             }
         }
-
         internal static void ViewLog()
         {
             if (File.Exists(logFilePath))
@@ -31,6 +29,5 @@ namespace Mac_EFI_Toolkit
                 Process.Start(logFilePath);
             }
         }
-
     }
 }

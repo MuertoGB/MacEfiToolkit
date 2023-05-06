@@ -11,7 +11,6 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Core
 {
@@ -51,7 +50,6 @@ namespace Mac_EFI_Toolkit.Core
 
     class FirmwareParser
     {
-
         internal static readonly Encoding utf8Enc = Encoding.UTF8;
 
         #region Flash Header
@@ -59,7 +57,7 @@ namespace Mac_EFI_Toolkit.Core
         {
             byte[] bytesFlashHeader = BinaryUtils.ReadBytesAtOffset(bytesIn, 0, 0x14);
             FlashDescriptor descriptor = Helper.DeserializeHeader<FlashDescriptor>(bytesFlashHeader);
-            
+
             if (descriptor.Signature.SequenceEqual(Filesystem.FLASH_DESC_SIG))
             {
                 return true;

@@ -6,7 +6,6 @@
 // Updated 30.04.2023 - GetConfigCodeStringAsync support 11 char serial numbers.
 // Released under the GNU GLP v3.0
 
-using System;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;

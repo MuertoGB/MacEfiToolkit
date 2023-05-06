@@ -2,7 +2,7 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // UI Components
-// METToolstripRenderer.cs
+// METMenuRenderer.cs
 // Released under the GNU GLP v3.0
 
 using System.Drawing;
@@ -12,7 +12,7 @@ namespace Mac_EFI_Toolkit.UI.Renderers
 {
     class METMenuRenderer : ToolStripRenderer
     {
-        private Color BorderColor = Color.FromArgb(120,120,120);
+        private Color BorderColor = Color.FromArgb(120, 120, 120);
         private Color ItemHoveredColor = Color.FromArgb(50, 50, 50);
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)

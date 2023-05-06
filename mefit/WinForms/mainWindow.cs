@@ -23,32 +23,31 @@ namespace Mac_EFI_Toolkit
 {
     public partial class mainWindow : Form
     {
+        internal byte[] bytesLoadedFile;
+        internal byte[] bytesFsys;
+        internal byte[] bytesDxeCompressed;
+        internal uint uintCrcOfLoadedFile;
+        internal long lngFilesize;
+
+        #region Private Members
+        private string strInitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private string strLoadedBinaryFilePath;
+        private string strRememberPath = string.Empty;
+        private string strFsysChecksumInBinary;
+        private string strFsysCalculation;
+        private string strFilename;
+        private string strFitcVersion;
+        private string strMeVersion;
+        private string strSerialNumber;
+        private string strSon;
+        private string strBoardId;
+        private string strEfiVer;
+        private string strBootrom;
+        private string strApfsCapable;
+        private bool ValidBinaryLoaded = false;
         private readonly Color clrUnknown = Color.Tomato;
         private readonly Color clrError = Color.FromArgb(255, 70, 50);
         private readonly Color clrGood = Color.FromArgb(128, 255, 128);
-
-        internal static byte[] bytesLoadedFile;
-        internal static byte[] bytesFsys;
-        internal byte[] bytesDxeCompressed;
-        internal static uint uintCrcOfLoadedFile;
-        internal static long lngFilesize;
-        internal static bool ValidBinaryLoaded = false;
-
-        #region Strings
-        internal static string strInitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        internal static string strLoadedBinaryFilePath;
-        internal static string strRememberPath = string.Empty;
-        internal static string strFsysChecksumInBinary;
-        internal static string strFsysCalculation;
-        internal static string strFilename;
-        internal static string strFitcVersion;
-        internal static string strMeVersion;
-        internal static string strSerialNumber;
-        internal static string strSon;
-        internal static string strBoardId;
-        internal static string strEfiVer;
-        internal static string strBootrom;
-        internal static string strApfsCapable;
         #endregion
 
         #region Overriden Properties
@@ -314,7 +313,7 @@ namespace Mac_EFI_Toolkit
             labRomVersion.Text = strBootrom;
             labApfsCapable.Text = strApfsCapable;
             labFsysCrc.Text = $"{ strFsysChecksumInBinary }h";
-            labFsysCrc.ForeColor = (strFsysCalculation ==  strFsysChecksumInBinary) ? labFsysCrc.ForeColor = clrGood : labFsysCrc.ForeColor = clrError;
+            labFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? labFsysCrc.ForeColor = clrGood : labFsysCrc.ForeColor = clrError;
             labValid.Text = ValidBinaryLoaded ? "Yes" : "No";
             labSerial.Text = strSerialNumber;
             labSon.Text = strSon;
