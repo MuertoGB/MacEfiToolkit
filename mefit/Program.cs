@@ -59,10 +59,9 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData, 14.0F), FontStyle.Regular);
             FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData, 20.0F), FontStyle.Regular);
 
-            if (!File.Exists(Settings.settingsFilePath))
-            {
-                Settings.CreateSettingsFile();
-            }
+            // Settings
+            if (!File.Exists(Settings.settingsFilePath)) Settings.CreateSettingsFile();
+            // else { Settings.LoadSettings() }, or grab each setting on the fly?
 
             Application.Run(new mainWindow());
         }

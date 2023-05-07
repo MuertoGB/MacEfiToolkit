@@ -64,7 +64,6 @@ namespace Mac_EFI_Toolkit.Core
             }
 
             return false;
-
         }
         #endregion
 

@@ -14,12 +14,16 @@ using System.Xml;
 
 namespace Mac_EFI_Toolkit
 {
+
+    #region Enum
     public enum VersionCheckResult
     {
         UpToDate,
         NewVersionAvailable,
         Error
     }
+    #endregion
+
     class METVersion
     {
         internal static async Task<VersionCheckResult> CheckForUpdate(string versionUrl)

@@ -3,14 +3,14 @@
 
 // WinForms
 // mainWindow.cs
-// Updated 04.05.23 - Implement app right click menu
+// Updated 04.05.23 - Refactor, fix double messagebox.
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Core;
-using Mac_EFI_Toolkit.WIN32;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.UI.Renderers;
 using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.WIN32;
 using Mac_EFI_Toolkit.WinForms;
 using System;
 using System.Diagnostics;
@@ -63,7 +63,7 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Startup Events
+        #region Window Events
         public mainWindow()
         {
             InitializeComponent();
@@ -87,7 +87,7 @@ namespace Mac_EFI_Toolkit
 
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            bool dbgMode = false;
+            var dbgMode = false;
 #if DEBUG
             dbgMode = true;
 #endif
@@ -116,6 +116,15 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
+            {
+                // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
+                e.Cancel = true;
+                Program.ExitMet(this);
+            }
+        }
         #endregion
 
         #region Mouse Events
@@ -148,17 +157,18 @@ namespace Mac_EFI_Toolkit
 
         private void cmdOpenBin_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog ofDialog = new OpenFileDialog())
+            using (var dialog = new OpenFileDialog
             {
-                ofDialog.InitialDirectory = strInitialDirectory;
-                ofDialog.Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*";
-
-                if (ofDialog.ShowDialog() == DialogResult.OK)
+                InitialDirectory = strInitialDirectory,
+                Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
+            })
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    strLoadedBinaryFilePath = ofDialog.FileName; // Get filepath for binary
-                    bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath); // Load new binary bytes into array
-                    bytesFsys = FirmwareParser.GetFsysBlock(bytesLoadedFile); // Load the Fsys block
-                    if (boolIsValidFirmware() == true)
+                    strLoadedBinaryFilePath = dialog.FileName;
+                    bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath);
+                    bytesFsys = FirmwareParser.GetFsysBlock(bytesLoadedFile);
+                    if (boolIsValidFirmware())
                     {
                         strInitialDirectory = strLoadedBinaryFilePath;
                         LoadEfiData();
@@ -172,9 +182,36 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        //private void cmdOpenBin_Click(object sender, EventArgs e)
+        //{
+        //    using (var dialog = new OpenFileDialog
+        //    {
+        //        InitialDirectory = strInitialDirectory,
+        //        Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
+        //    })
+        //    {
+        //        if (dialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            strLoadedBinaryFilePath = dialog.FileName;
+        //            bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath);
+        //            bytesFsys = FirmwareParser.GetFsysBlock(bytesLoadedFile);
+        //            if (boolIsValidFirmware() == true)
+        //            {
+        //                strInitialDirectory = strLoadedBinaryFilePath;
+        //                LoadEfiData();
+        //            }
+        //            else
+        //            {
+        //                strLoadedBinaryFilePath = string.Empty;
+        //                ResetClear();
+        //            }
+        //        }
+        //    }
+        //}
+
         private void cmdResetUnload_Click(object sender, EventArgs e)
         {
-            DialogResult result = METMessageBox.Show(this, "Reset", "This will clear all data, and unload the binary.\r\nAre you sure you want to reset?", MsgType.Warning, MsgButton.YesNoCancel);
+            var result = METMessageBox.Show(this, "Reset", "This will clear all data, and unload the binary.\r\nAre you sure you want to reset?", MsgType.Warning, MsgButton.YesNoCancel);
 
             switch (result)
             {
@@ -188,24 +225,26 @@ namespace Mac_EFI_Toolkit
 
         private void cmdExportFsys_Click(object sender, EventArgs e)
         {
-            if (bytesFsys != null)
-            {
-                using (SaveFileDialog sfDialog = new SaveFileDialog())
-                {
-                    sfDialog.Filter = "Binary Files (*.bin)|*.bin";
-                    sfDialog.Title = "Export Fsys block data...";
-                    sfDialog.FileName = string.Concat("Fsys_", strSerialNumber, ".bin");
-                    sfDialog.InitialDirectory = strInitialDirectory;
-
-                    if (sfDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        System.IO.File.WriteAllBytes(sfDialog.FileName, bytesFsys);
-                    }
-                }
-            }
-            else
+            if (bytesFsys == null)
             {
                 MessageBox.Show("Fsys block bytes[] empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (var dialog = new SaveFileDialog
+            {
+                Filter = "Binary Files (*.bin)|*.bin",
+                Title = "Export Fsys block data...",
+                FileName = string.Concat("Fsys_", strSerialNumber, ".bin"),
+                InitialDirectory = strInitialDirectory
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                File.WriteAllBytes(dialog.FileName, bytesFsys);
             }
         }
 
@@ -286,26 +325,25 @@ namespace Mac_EFI_Toolkit
             // Binary too small? Potential bug here.
             if (fInfo.Length < Program.minRomSize) // 1048576 bytes
             {
-                METMessageBox.Show(this, "File Error", "File too small, and was ignored", MsgType.Warning, MsgButton.Okay);
-                MessageBox.Show("File too small, ignored.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                METMessageBox.Show(this, "File Error", "File ignored, the file was too small.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
             // Binary too large, no Mac EFI is this big.
             if (fInfo.Length > Program.maxRomSize) // 33554432 bytes
             {
-                METMessageBox.Show(this, "File Error", "File too large, and was ignored.", MsgType.Warning, MsgButton.Okay);
+                METMessageBox.Show(this, "File Error", "File ignored, the file was too large.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
             if (!FirmwareParser.boolIsValidFlashHeader(bytesLoadedFile))
             {
-                METMessageBox.Show(this, "File Error", "Invalid flash descriptor, file was ignored.", MsgType.Warning, MsgButton.Okay);
+                METMessageBox.Show(this, "File Error", "File ignored, the flash descriptor signature was invalid.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
             if (bytesFsys == null)
             {
-                METMessageBox.Show(this, "Data Error", "Failed to load Fsys block, cannot continue.", MsgType.Warning, MsgButton.Okay);
+                METMessageBox.Show(this, "Data Error", "Could not locate the Fsys block, the file was not loaded.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
@@ -422,16 +460,6 @@ namespace Mac_EFI_Toolkit
 
 
         #endregion
-
-        private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
-            {
-                // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
-                e.Cancel = true;
-                Program.ExitMet(this);       
-            }
-        }
 
     }
 }
