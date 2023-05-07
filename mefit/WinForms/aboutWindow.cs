@@ -6,7 +6,7 @@
 // Updated 05.05.23 - Enabled KeyPreview, enabled links.
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Interop;
+using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;

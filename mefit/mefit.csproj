@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="Core\Filesystem.cs" />
     <Compile Include="Core\Helper.cs" />
+    <Compile Include="Core\IniFile.cs" />
     <Compile Include="Core\MEParser.cs" />
     <Compile Include="SevenZip\Common\CommandLineParser.cs" />
     <Compile Include="SevenZip\Common\CRC.cs" />
@@ -116,7 +117,7 @@
     <Compile Include="WinForms\mainWindow.Designer.cs">
       <DependentUpon>mainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interop\NativeMethods.cs" />
+    <Compile Include="WIN32\NativeMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Colours.cs" />

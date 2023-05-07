@@ -7,7 +7,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Core;
-using Mac_EFI_Toolkit.Interop;
+using Mac_EFI_Toolkit.WIN32;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.UI.Renderers;
 using Mac_EFI_Toolkit.Utils;
