@@ -4,6 +4,8 @@ Mac EFI Toolkit
 
 ## About
 
+>🛠 Currently working on: Settings UI and underlying systems.
+
 This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete. However basic functionality such as viewing EFIROM info, and dumping the Fsys block is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
 
 <img width="600" src="files/images/met.png" alt="MET">
@@ -41,8 +43,6 @@ Requirements:
 ```
 
 Incomplete source code will become available over time, then a test build should follow. This way anyone can get involved and ask questions about the work done so far.
-
-> Currently working on: Replace Fsys, Repair Fsys.
 
 ## Acknowledgements
 
