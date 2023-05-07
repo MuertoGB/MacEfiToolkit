@@ -80,6 +80,7 @@
     <Compile Include="Core\Helper.cs" />
     <Compile Include="Core\IniFile.cs" />
     <Compile Include="Core\MEParser.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SevenZip\Common\CommandLineParser.cs" />
     <Compile Include="SevenZip\Common\CRC.cs" />
     <Compile Include="SevenZip\Common\InBuffer.cs" />

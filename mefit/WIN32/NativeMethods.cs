@@ -31,7 +31,7 @@ namespace Mac_EFI_Toolkit.WIN32
 
         // https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-addfontmemresourceex
         [DllImport("gdi32.dll", ExactSpelling = true)]
-        internal static extern bool AddFontMemResourceEx(
+        internal static extern IntPtr AddFontMemResourceEx(
             IntPtr pFileView,
             uint cjSize,
             IntPtr pvReserved,
@@ -49,7 +49,7 @@ namespace Mac_EFI_Toolkit.WIN32
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-writeprivateprofilestringa
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-        internal static extern long WritePrivateProfileString(
+        internal static extern bool WritePrivateProfileString(
             string lpAppName,
             string lpKeyName,
             string lpString,

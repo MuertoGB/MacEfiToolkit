@@ -9,6 +9,7 @@ using Mac_EFI_Toolkit.UI;
 using System;
 using System.Drawing;
 using System.Drawing.Text;
+using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -57,6 +58,11 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData, 9.0F), FontStyle.Regular);
             FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData, 14.0F), FontStyle.Regular);
             FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData, 20.0F), FontStyle.Regular);
+
+            if (!File.Exists(Settings.settingsFilePath))
+            {
+                Settings.CreateSettingsFile();
+            }
 
             Application.Run(new mainWindow());
         }

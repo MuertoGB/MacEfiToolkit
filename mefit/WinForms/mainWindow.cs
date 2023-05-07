@@ -427,7 +427,9 @@ namespace Mac_EFI_Toolkit
         {
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
-                Program.ExitMet(this);
+                // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
+                e.Cancel = true;
+                Program.ExitMet(this);       
             }
         }
 
