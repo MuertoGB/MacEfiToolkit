@@ -96,6 +96,12 @@ namespace Mac_EFI_Toolkit
             this.pbxTitleLogo = new System.Windows.Forms.PictureBox();
             this.cmdMin = new System.Windows.Forms.Button();
             this.cmdClose = new System.Windows.Forms.Button();
+            this.cmsApplication = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.minimizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartApplicationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlMain.SuspendLayout();
             this.panel3.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -112,6 +118,7 @@ namespace Mac_EFI_Toolkit
             this.transparent.SuspendLayout();
             this.tlpMainIcon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxTitleLogo)).BeginInit();
+            this.cmsApplication.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -1115,6 +1122,7 @@ namespace Mac_EFI_Toolkit
             this.pbxTitleLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbxTitleLogo.TabIndex = 1;
             this.pbxTitleLogo.TabStop = false;
+            this.pbxTitleLogo.Click += new System.EventHandler(this.pbxTitleLogo_Click);
             // 
             // cmdMin
             // 
@@ -1159,6 +1167,63 @@ namespace Mac_EFI_Toolkit
             this.cmdClose.UseVisualStyleBackColor = false;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
+            // cmsApplication
+            // 
+            this.cmsApplication.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsApplication.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsApplication.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.minimizeToolStripMenuItem,
+            this.resetPositionToolStripMenuItem,
+            this.restartApplicationToolStripMenuItem1,
+            this.toolStripSeparator3,
+            this.exitToolStripMenuItem});
+            this.cmsApplication.Name = "cmsApplication";
+            this.cmsApplication.ShowImageMargin = false;
+            this.cmsApplication.Size = new System.Drawing.Size(199, 150);
+            // 
+            // minimizeToolStripMenuItem
+            // 
+            this.minimizeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.minimizeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.minimizeToolStripMenuItem.Name = "minimizeToolStripMenuItem";
+            this.minimizeToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.minimizeToolStripMenuItem.Text = "Minimize";
+            this.minimizeToolStripMenuItem.Click += new System.EventHandler(this.minimizeToolStripMenuItem_Click);
+            // 
+            // resetPositionToolStripMenuItem
+            // 
+            this.resetPositionToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resetPositionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.resetPositionToolStripMenuItem.Name = "resetPositionToolStripMenuItem";
+            this.resetPositionToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.resetPositionToolStripMenuItem.Text = "Reset Position";
+            this.resetPositionToolStripMenuItem.Click += new System.EventHandler(this.resetPositionToolStripMenuItem_Click);
+            // 
+            // restartApplicationToolStripMenuItem1
+            // 
+            this.restartApplicationToolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.restartApplicationToolStripMenuItem1.ForeColor = System.Drawing.Color.White;
+            this.restartApplicationToolStripMenuItem1.Name = "restartApplicationToolStripMenuItem1";
+            this.restartApplicationToolStripMenuItem1.Size = new System.Drawing.Size(198, 28);
+            this.restartApplicationToolStripMenuItem1.Text = "Restart Application";
+            this.restartApplicationToolStripMenuItem1.Click += new System.EventHandler(this.restartApplicationToolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(195, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exitToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // mainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -1197,6 +1262,7 @@ namespace Mac_EFI_Toolkit
             this.transparent.PerformLayout();
             this.tlpMainIcon.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxTitleLogo)).EndInit();
+            this.cmsApplication.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1267,6 +1333,12 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label labOptionsText;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem restartApplicationToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip cmsApplication;
+        private System.Windows.Forms.ToolStripMenuItem minimizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetPositionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem restartApplicationToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

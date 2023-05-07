@@ -3,7 +3,7 @@
 
 // WinForms
 // mainWindow.cs
-// Updated 04.05.23 - Modify load order of data, enhance crc32 matching.
+// Updated 04.05.23 - Implement app right click menu
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Core;
@@ -68,14 +68,16 @@ namespace Mac_EFI_Toolkit
         {
             InitializeComponent();
 
-            Load += new EventHandler(mainWindow_Load);
-            Shown += new EventHandler(mainWindow_Shown);
+            Load += mainWindow_Load;
+            Shown += mainWindow_Shown;
+            FormClosing += mainWindow_FormClosing;
 
-            tlpMain.MouseMove += new MouseEventHandler(Move_Form);
-            tlpMainIcon.MouseMove += new MouseEventHandler(Move_Form);
-            labTitle.MouseMove += new MouseEventHandler(Move_Form);
+            tlpMain.MouseMove += Move_Form;
+            tlpMainIcon.MouseMove += Move_Form;
+            labTitle.MouseMove += Move_Form;
 
             cmsMainMenu.Renderer = new METMenuRenderer();
+            cmsApplication.Renderer = new METMenuRenderer();
 
             cmdMenu.Font = Program.FONT_MDL2_REG_14;
             cmdMenu.Text = "\xEDE3";
@@ -135,15 +137,13 @@ namespace Mac_EFI_Toolkit
 
         private void cmdMin_Click(object sender, EventArgs e)
         {
-            // Minimizes application
-            WindowState = FormWindowState.Minimized;
+            MinimizeWindow();
         }
 
         private void cmdMenu_Click(object sender, EventArgs e)
         {
-            Point ptLowerLeft = new Point(-1, ((Button)sender).Height + 2);
-            ptLowerLeft = ((Button)sender).PointToScreen(ptLowerLeft);
-            cmsMainMenu.Show(ptLowerLeft);
+            Control control = sender as Control;
+            ShowContextMenu(control, cmsMainMenu);
         }
 
         private void cmdOpenBin_Click(object sender, EventArgs e)
@@ -233,6 +233,48 @@ namespace Mac_EFI_Toolkit
             {
                 frm.ShowDialog();
             }
+        }
+
+        private void MinimizeWindow()
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void resetPositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CenterToScreen();
+        }
+
+        private void restartApplicationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Program.RestartMet(this);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Program.ExitMet(this);
+        }
+        #endregion
+
+        #region Picturebox Events
+        private void pbxTitleLogo_Click(object sender, EventArgs e)
+        {
+            Control control = sender as Control;
+            ShowContextMenu(control, cmsApplication);
+        }
+
+        private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MinimizeWindow();
+        }
+
+        #region Window Events
+
+        private void ShowContextMenu(Control control, ContextMenuStrip menu)
+        {
+            Point ptLowerLeft = new Point(-1, control.Height + 2);
+            ptLowerLeft = control.PointToScreen(ptLowerLeft);
+            menu.Show(ptLowerLeft);
         }
         #endregion
 
@@ -377,6 +419,17 @@ namespace Mac_EFI_Toolkit
             }
         }
         #endregion
+
+
+        #endregion
+
+        private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
+            {
+                Program.ExitMet(this);
+            }
+        }
 
     }
 }
