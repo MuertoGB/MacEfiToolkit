@@ -1179,7 +1179,7 @@ namespace Mac_EFI_Toolkit
             this.exitToolStripMenuItem});
             this.cmsApplication.Name = "cmsApplication";
             this.cmsApplication.ShowImageMargin = false;
-            this.cmsApplication.Size = new System.Drawing.Size(199, 150);
+            this.cmsApplication.Size = new System.Drawing.Size(199, 122);
             // 
             // minimizeToolStripMenuItem
             // 
@@ -1238,6 +1238,7 @@ namespace Mac_EFI_Toolkit
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(820, 423);
             this.Name = "mainWindow";
             this.Padding = new System.Windows.Forms.Padding(1);

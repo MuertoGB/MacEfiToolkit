@@ -182,33 +182,6 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        //private void cmdOpenBin_Click(object sender, EventArgs e)
-        //{
-        //    using (var dialog = new OpenFileDialog
-        //    {
-        //        InitialDirectory = strInitialDirectory,
-        //        Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
-        //    })
-        //    {
-        //        if (dialog.ShowDialog() == DialogResult.OK)
-        //        {
-        //            strLoadedBinaryFilePath = dialog.FileName;
-        //            bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath);
-        //            bytesFsys = FirmwareParser.GetFsysBlock(bytesLoadedFile);
-        //            if (boolIsValidFirmware() == true)
-        //            {
-        //                strInitialDirectory = strLoadedBinaryFilePath;
-        //                LoadEfiData();
-        //            }
-        //            else
-        //            {
-        //                strLoadedBinaryFilePath = string.Empty;
-        //                ResetClear();
-        //            }
-        //        }
-        //    }
-        //}
-
         private void cmdResetUnload_Click(object sender, EventArgs e)
         {
             var result = METMessageBox.Show(this, "Reset", "This will clear all data, and unload the binary.\r\nAre you sure you want to reset?", MsgType.Warning, MsgButton.YesNoCancel);
@@ -263,7 +236,10 @@ namespace Mac_EFI_Toolkit
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            METMessageBox.Show(this, "Information", "This settings dialog is not enabled yet.", MsgType.Information, MsgButton.Okay);
+            using (Form frm = new settingsWindow())
+            {
+                frm.ShowDialog();
+            }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -457,7 +433,6 @@ namespace Mac_EFI_Toolkit
             }
         }
         #endregion
-
 
         #endregion
 

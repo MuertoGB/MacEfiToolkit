@@ -31,6 +31,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(aboutWindow));
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.labInfo = new System.Windows.Forms.Label();
             this.lnkUrls = new System.Windows.Forms.LinkLabel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
@@ -38,7 +39,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuild = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
-            this.labInfo = new System.Windows.Forms.Label();
             this.pnlMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpLabels.SuspendLayout();
@@ -55,6 +55,20 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(422, 188);
             this.pnlMain.TabIndex = 71;
+            // 
+            // labInfo
+            // 
+            this.labInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labInfo.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labInfo.ForeColor = System.Drawing.Color.White;
+            this.labInfo.Location = new System.Drawing.Point(0, 0);
+            this.labInfo.Name = "labInfo";
+            this.labInfo.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.labInfo.Size = new System.Drawing.Size(422, 127);
+            this.labInfo.TabIndex = 11;
+            this.labInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
+    "erto, so don\'t eat it. The \'Muerto\' avatar was hand crafted by Hammi.";
+            this.labInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lnkUrls
             // 
@@ -182,20 +196,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pbxLogo.TabIndex = 85;
             this.pbxLogo.TabStop = false;
             // 
-            // labInfo
-            // 
-            this.labInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labInfo.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labInfo.ForeColor = System.Drawing.Color.White;
-            this.labInfo.Location = new System.Drawing.Point(0, 0);
-            this.labInfo.Name = "labInfo";
-            this.labInfo.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.labInfo.Size = new System.Drawing.Size(422, 127);
-            this.labInfo.TabIndex = 11;
-            this.labInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
-    "erto, so don\'t eat it. The \'Muerto\' avatar was hand crafted by Hammi.";
-            this.labInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // aboutWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -212,7 +212,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(424, 280);
-            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(424, 280);
             this.Name = "aboutWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
