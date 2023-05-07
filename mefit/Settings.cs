@@ -1,10 +1,10 @@
-﻿using Mac_EFI_Toolkit.Core;
-// Mac EFI Toolkit
+﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // Settings.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Core;
 using System;
 using System.IO;
 using System.Reflection;

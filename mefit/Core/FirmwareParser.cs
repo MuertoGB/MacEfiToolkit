@@ -84,18 +84,29 @@ namespace Mac_EFI_Toolkit.Core
             return (data != null) ? BitConverter.ToString(data).Replace("-", "") : "Not found";
         }
 
+        // Okay we're back to the serial number bollocks again, as the last fix was not enough.
+        // Thinking about it, a serial always starts with the upper or lower SSN, then bytes {0x0C, 0x00}.
+        // After we get the 12 SN bytes, the only thing we have to worry about is an 11 digit SN,
+        // as there will be a stray char on the end, so now we're just trimming any invalid char.
         internal static string GetFsysSerialNumber(byte[] bytesIn)
         {
             long ssnOffset = BinaryUtils.FindOffset(bytesIn, Filesystem.SSN_UPPER_SIG);
             if (ssnOffset == -1) ssnOffset = BinaryUtils.FindOffset(bytesIn, Filesystem.SSN_LOWER_SIG);
-
             if (ssnOffset == -1) return "Not found";
 
-            ssnOffset += 0x5;
-            long ssnEndOffset = BinaryUtils.FindOffset(bytesIn, new byte[] { 0x3 }, ssnOffset);
-            byte[] data = BinaryUtils.ReadBytesBetweenOffsets(bytesIn, ssnOffset, ssnEndOffset);
+            byte[] snData = BinaryUtils.ReadBytesAtOffset(bytesIn, ssnOffset + 0x05, 0x0C);
 
-            return (data != null) ? utf8Enc.GetString(data) : "Not found";
+            if (snData != null)
+            {
+                // Remove any non-alphanumeric characters from the serial number
+                string serialNumber = utf8Enc.GetString(snData).Trim();
+                serialNumber = new string(serialNumber.Where(c => Char.IsLetterOrDigit(c)).ToArray());
+                return serialNumber;
+            }
+            else
+            {
+                return "Not found";
+            }
         }
 
         internal static string GetFsysSon(byte[] bytesIn)
