@@ -44,7 +44,7 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
-        #region Startup Event
+        #region Window Events
         private void aboutWindow_Load(object sender, EventArgs e)
         {
             lblBuild.Text = $"Build: { Program.APP_BUILD} ";

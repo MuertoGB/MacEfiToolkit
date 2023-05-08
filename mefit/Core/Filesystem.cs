@@ -3,7 +3,7 @@
 
 // Core Components
 // Filesystem.cs - Contains GUIDs and signature bytes
-// Updated 03.05.23 - Add MN2 signature bytes
+// Updated 03.05.23 - Edit sigs
 // Released under the GNU GLP v3.0
 
 namespace Mac_EFI_Toolkit.Core
@@ -55,11 +55,11 @@ namespace Mac_EFI_Toolkit.Core
         };
         internal static readonly byte[] SSN_LOWER_SIG =
         {
-            0x73, 0x73, 0x6E, 0x0C
+            0x73, 0x73, 0x6E
         };
         internal static readonly byte[] SSN_UPPER_SIG =
 {
-            0x53, 0x53, 0x4E, 0x0C
+            0x53, 0x53, 0x4E
         };
         internal static readonly byte[] SON_SIG =
         {

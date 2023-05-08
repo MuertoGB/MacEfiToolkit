@@ -71,6 +71,7 @@ namespace Mac_EFI_Toolkit
             Load += mainWindow_Load;
             Shown += mainWindow_Shown;
             FormClosing += mainWindow_FormClosing;
+            KeyDown += mainWindow_KeyDown;
 
             tlpMain.MouseMove += Move_Form;
             tlpMainIcon.MouseMove += Move_Form;
@@ -97,7 +98,11 @@ namespace Mac_EFI_Toolkit
             labTitle.Text += $" ({Program.APP_BUILD})";
             labVersion.Text = Application.ProductVersion;
 
-            if (!dbgMode) CheckForNewVersion();
+            if (!Settings._settingsGetBool(SettingsBoolType.DisableVersionCheck))
+            {
+                if (!dbgMode) CheckForNewVersion();
+            }
+
         }
 
         private void mainWindow_Shown(object sender, EventArgs e)
@@ -121,9 +126,27 @@ namespace Mac_EFI_Toolkit
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
                 // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
-                e.Cancel = true;
+                if (!Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
+                {
+                    e.Cancel = true;
+                }
+
                 Program.ExitMet(this);
             }
+        }
+        #endregion
+
+        #region KeyDown Events
+        private void mainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.O) cmdOpenBin.PerformClick();
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.R) cmdReset.PerformClick();
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.E) cmdExportFsys.PerformClick();
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C) cmdSerialCheck.PerformClick();
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.M) ShowContextMenu(cmdMenu, cmsMainMenu);
+            if (e.Modifiers == Keys.Shift && e.KeyCode == Keys.R) Program.RestartMet(this);
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.S) using (var frm = new settingsWindow()) frm.Show();
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A) using (var frm = new aboutWindow()) frm.Show();
         }
         #endregion
 
@@ -157,6 +180,11 @@ namespace Mac_EFI_Toolkit
 
         private void cmdOpenBin_Click(object sender, EventArgs e)
         {
+            strInitialDirectory = Settings._settingsGetString(SettingsStringType.InitialDirectory) != string.Empty &&
+                      Directory.Exists(Settings._settingsGetString(SettingsStringType.InitialDirectory))
+                          ? Settings._settingsGetString(SettingsStringType.InitialDirectory)
+                          : strInitialDirectory;
+
             using (var dialog = new OpenFileDialog
             {
                 InitialDirectory = strInitialDirectory,
@@ -167,7 +195,7 @@ namespace Mac_EFI_Toolkit
                 {
                     strLoadedBinaryFilePath = dialog.FileName;
                     bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath);
-                    bytesFsys = FirmwareParser.GetFsysBlock(bytesLoadedFile);
+                    bytesFsys = FirmwareParser._byteGetFsysBlock(bytesLoadedFile);
                     if (boolIsValidFirmware())
                     {
                         strInitialDirectory = strLoadedBinaryFilePath;
@@ -184,15 +212,22 @@ namespace Mac_EFI_Toolkit
 
         private void cmdResetUnload_Click(object sender, EventArgs e)
         {
-            var result = METMessageBox.Show(this, "Reset", "This will clear all data, and unload the binary.\r\nAre you sure you want to reset?", MsgType.Warning, MsgButton.YesNoCancel);
-
-            switch (result)
+            if (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
             {
-                case DialogResult.Yes:
-                    ResetClear();
-                    break;
-                case DialogResult.No:
-                    break;
+                ResetClear();
+            }
+            else
+            {
+                var result = METMessageBox.Show(this, "Reset", "This will clear all data, and unload the binary.\r\nAre you sure you want to reset?", MsgType.Warning, MsgButton.YesNoCancel);
+
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        ResetClear();
+                        break;
+                    case DialogResult.No:
+                        break;
+                }
             }
         }
 
@@ -236,18 +271,12 @@ namespace Mac_EFI_Toolkit
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Form frm = new settingsWindow())
-            {
-                frm.ShowDialog();
-            }
+            using (Form frm = new settingsWindow()) frm.ShowDialog();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Form frm = new aboutWindow())
-            {
-                frm.ShowDialog();
-            }
+            using (Form frm = new aboutWindow()) frm.ShowDialog();
         }
 
         private void MinimizeWindow()
@@ -311,17 +340,25 @@ namespace Mac_EFI_Toolkit
                 return false;
             }
 
-            if (!FirmwareParser.boolIsValidFlashHeader(bytesLoadedFile))
+            if (!Settings._settingsGetBool(SettingsBoolType.DisableDescriptorEnforce))
             {
-                METMessageBox.Show(this, "File Error", "File ignored, the flash descriptor signature was invalid.", MsgType.Warning, MsgButton.Okay);
-                return false;
+                if (!FirmwareParser._boolIsValidFlashHeader(bytesLoadedFile))
+                {
+                    METMessageBox.Show(this, "File Error", "File ignored, the flash descriptor signature was invalid.", MsgType.Warning, MsgButton.Okay);
+                    return false;
+                }
             }
 
-            if (bytesFsys == null)
+
+            if (!Settings._settingsGetBool(SettingsBoolType.DisableFsysEnforce))
             {
-                METMessageBox.Show(this, "Data Error", "Could not locate the Fsys block, the file was not loaded.", MsgType.Warning, MsgButton.Okay);
-                return false;
+                if (bytesFsys == null)
+                {
+                    METMessageBox.Show(this, "Data Error", "Could not locate the Fsys block, the file was not loaded.", MsgType.Warning, MsgButton.Okay);
+                    return false;
+                }
             }
+
 
             ToggleControlEnable(true);
             ValidBinaryLoaded = true;
@@ -333,31 +370,31 @@ namespace Mac_EFI_Toolkit
             // Filename
             strFilename = Path.GetFileName(strLoadedBinaryFilePath);
             // Size
-            lngFilesize = FileUtils.GetFileSizeBytes(strLoadedBinaryFilePath);
+            lngFilesize = FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath);
             // File CRC32
-            uintCrcOfLoadedFile = FileUtils.CalculateCrc32(bytesLoadedFile);
+            uintCrcOfLoadedFile = FileUtils._uintGetCrc32FromBytes(bytesLoadedFile);
             // Fsys CRC32 string
-            strFsysChecksumInBinary = FirmwareParser.GetFsysCrc32(bytesLoadedFile);
+            strFsysChecksumInBinary = FirmwareParser._stringGetFsysCrc32(bytesLoadedFile);
             // Fsys CRC32
             byte[] bytesTempFsys = new byte[0x7FC];
-            Array.Copy(bytesFsys, 0, bytesTempFsys, 0, bytesTempFsys.Length);
-            strFsysCalculation = FileUtils.CalculateCrc32(bytesTempFsys).ToString("X2");
+            if (bytesFsys != null) Array.Copy(bytesFsys, 0, bytesTempFsys, 0, bytesTempFsys.Length);
+            strFsysCalculation = FileUtils._uintGetCrc32FromBytes(bytesTempFsys).ToString("X2");
             // FITC
-            strFitcVersion = MEParser.GetFitcVersion(bytesLoadedFile);
+            strFitcVersion = MEParser._stringGetFitcVersion(bytesLoadedFile);
             //ME
-            strMeVersion = MEParser.GetMeVersion(bytesLoadedFile);
+            strMeVersion = MEParser._stringGetMeVersion(bytesLoadedFile);
             // APFSJumpStart
-            strApfsCapable = $"{ FirmwareParser.GetIsApfsCapable(bytesLoadedFile) }";
+            strApfsCapable = $"{ FirmwareParser._getIsApfsCapable(bytesLoadedFile) }";
             // EFI Version
-            strEfiVer = FirmwareParser.GetEfiVersionFromAppleRomSection(bytesLoadedFile);
+            strEfiVer = FirmwareParser._stingGetEfiVersionFromAppleRomSection(bytesLoadedFile);
             // ROM version
-            strBootrom = FirmwareParser.GetBootromVersionFromAppleRomSection(bytesLoadedFile);
+            strBootrom = FirmwareParser._stringGetBootromVersionFromAppleRomSection(bytesLoadedFile);
             // Serial number
-            strSerialNumber = FirmwareParser.GetFsysSerialNumber(bytesFsys);
+            strSerialNumber = FirmwareParser._stringGetFsysSerialNumber(bytesFsys);
             // SON
-            strSon = FirmwareParser.GetFsysSon(bytesFsys);
+            strSon = FirmwareParser._stringGetFsysSon(bytesFsys);
             // Get the BoardId
-            strBoardId = FirmwareParser.GetPdrBoardId(bytesLoadedFile);
+            strBoardId = FirmwareParser._stringGetPdrBoardId(bytesLoadedFile);
 
             UpdateControls();
         }
@@ -365,8 +402,8 @@ namespace Mac_EFI_Toolkit
         internal void UpdateControls()
         {
             labFilename.Text = $"> {strFilename}";
-            labSizeBytes.ForeColor = EFIUtils.IsValidSize((int)lngFilesize) ? clrGood : clrUnknown;
-            labSizeBytes.Text = FileUtils.FormatBytesWithCommas(FileUtils.GetFileSizeBytes(strLoadedBinaryFilePath));
+            labSizeBytes.ForeColor = EFIUtils._boolGetIsValidBinarySize((int)lngFilesize) ? clrGood : clrUnknown;
+            labSizeBytes.Text = FileUtils._stringFormatBytesWithCommas(FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath));
             labChecksum.Text = uintCrcOfLoadedFile.ToString("X2");
             labFitcVersion.Text = strFitcVersion;
             labMeVersion.Text = strMeVersion;
@@ -381,10 +418,9 @@ namespace Mac_EFI_Toolkit
             labSon.Text = strSon;
             labBoardId.Text = strBoardId;
         }
-
         internal async void CheckHwcAsync(string serialNumber)
         {
-            var configCode = await EFIUtils.GetConfigCodeStringAsync(serialNumber);
+            var configCode = await EFIUtils._stringGetConfigCodeAsync(serialNumber);
             labConfig.Text = $"> {configCode}";
         }
         #endregion

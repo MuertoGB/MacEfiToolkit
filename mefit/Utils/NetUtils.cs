@@ -17,7 +17,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="strUrl">The URL of the website to check.</param>
         /// <returns>True if the website is available, false otherwise.</returns>
-        internal static bool IsWebsiteAvailable(string strUrl)
+        internal static bool _boolIsWebsiteAvailable(string strUrl)
         {
             try
             {
@@ -25,7 +25,7 @@ namespace Mac_EFI_Toolkit.Utils
                 req = WebRequest.Create(strUrl);
                 req.Timeout = 5000;
                 req.Method = "HEAD";
-                using (WebResponse res = req.GetResponse())
+                using (var res = req.GetResponse())
                 {
                     return true;
                 }
@@ -35,12 +35,11 @@ namespace Mac_EFI_Toolkit.Utils
                 return false;
             }
         }
-
         /// <summary>
         /// Checks if a network connection is available by attempting to send a ping request to a known IP address.
         /// </summary>
         /// <returns>True if a network connection is available, false otherwise.</returns>
-        internal static bool IsNetworkAvailable()
+        internal static bool _boolIsNetworkAvailable()
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
             {
@@ -59,6 +58,5 @@ namespace Mac_EFI_Toolkit.Utils
                 return false;
             }
         }
-
     }
 }

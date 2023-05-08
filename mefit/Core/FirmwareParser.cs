@@ -3,7 +3,7 @@
 
 // Core Components
 // FirmwareParser.cs - Handles parsing of firmware data
-// Updated 05.05.23 - Gain GetNvramSectionSize()
+// Updated 05.05.23 - Naming
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Utils;
@@ -53,9 +53,9 @@ namespace Mac_EFI_Toolkit.Core
         internal static readonly Encoding utf8Enc = Encoding.UTF8;
 
         #region Flash Header
-        internal static bool boolIsValidFlashHeader(byte[] bytesIn)
+        internal static bool _boolIsValidFlashHeader(byte[] bytesIn)
         {
-            byte[] bytesFlashHeader = BinaryUtils.ReadBytesAtOffset(bytesIn, 0, 0x14);
+            byte[] bytesFlashHeader = BinaryUtils._byteReadAtOffset(bytesIn, 0, 0x14);
             FlashDescriptor descriptor = Helper.DeserializeHeader<FlashDescriptor>(bytesFlashHeader);
 
             if (descriptor.Signature.SequenceEqual(Filesystem.FLASH_DESC_SIG))
@@ -68,18 +68,17 @@ namespace Mac_EFI_Toolkit.Core
         #endregion
 
         #region Fsys Data
-        internal static byte[] GetFsysBlock(byte[] bytesIn)
+        internal static byte[] _byteGetFsysBlock(byte[] bytesIn)
         {
-            long offset = BinaryUtils.FindOffset(bytesIn, Filesystem.FSYS_SIG);
-            return (offset != -1) ? BinaryUtils.ReadBytesAtOffset(bytesIn, offset, 0x800) : null;
+            long offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.FSYS_SIG);
+            return (offset != -1) ? BinaryUtils._byteReadAtOffset(bytesIn, offset, 0x800) : null;
         }
 
-        internal static string GetFsysCrc32(byte[] bytesIn)
+        internal static string _stringGetFsysCrc32(byte[] bytesIn)
         {
-            long offset = BinaryUtils.FindOffset(bytesIn, Filesystem.FSYS_SIG);
-            if (offset == -1) return "Not found";
-            byte[] byteCsum = (offset != -1) ? BinaryUtils.ReadBytesAtOffset(bytesIn, offset + 0x7FC, 0x4) : null;
-            byte[] data = (byteCsum != null) ? FileUtils.SwitchCrc32Endianness(byteCsum) : null;
+            long offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.FSYS_SIG);
+            byte[] byteCsum = BinaryUtils._byteReadAtOffset(bytesIn, offset + 0x7FC, 0x4);
+            byte[] data = (byteCsum != null) ? byteCsum.Reverse().ToArray() : null;
             return (data != null) ? BitConverter.ToString(data).Replace("-", "") : "Not found";
         }
 
@@ -87,13 +86,13 @@ namespace Mac_EFI_Toolkit.Core
         // Thinking about it, a serial always starts with the upper or lower SSN, then bytes {0x0C, 0x00}.
         // After we get the 12 SN bytes, the only thing we have to worry about is an 11 digit SN,
         // as there will be a stray char on the end, so now we're just trimming any invalid char.
-        internal static string GetFsysSerialNumber(byte[] bytesIn)
+        internal static string _stringGetFsysSerialNumber(byte[] bytesIn)
         {
-            long ssnOffset = BinaryUtils.FindOffset(bytesIn, Filesystem.SSN_UPPER_SIG);
-            if (ssnOffset == -1) ssnOffset = BinaryUtils.FindOffset(bytesIn, Filesystem.SSN_LOWER_SIG);
+            long ssnOffset = BinaryUtils._longFindOffset(bytesIn, Filesystem.SSN_UPPER_SIG);
+            if (ssnOffset == -1) ssnOffset = BinaryUtils._longFindOffset(bytesIn, Filesystem.SSN_LOWER_SIG);
             if (ssnOffset == -1) return "Not found";
 
-            byte[] snData = BinaryUtils.ReadBytesAtOffset(bytesIn, ssnOffset + 0x05, 0x0C);
+            byte[] snData = BinaryUtils._byteReadAtOffset(bytesIn, ssnOffset + 0x05, 0x0C);
 
             if (snData != null)
             {
@@ -108,45 +107,45 @@ namespace Mac_EFI_Toolkit.Core
             }
         }
 
-        internal static string GetFsysSon(byte[] bytesIn)
+        internal static string _stringGetFsysSon(byte[] bytesIn)
         {
-            long offset = BinaryUtils.FindOffset(bytesIn, Filesystem.SON_SIG);
-            byte[] data = (offset != -1) ? BinaryUtils.ReadBytesAtOffset(bytesIn, offset + 0x6, 0x5) : null;
+            long offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.SON_SIG);
+            byte[] data = (offset != -1) ? BinaryUtils._byteReadAtOffset(bytesIn, offset + 0x6, 0x5) : null;
             return (data != null) ? utf8Enc.GetString(data) : "Not found";
         }
         #endregion
 
         #region Platform Data Region Data
-        internal static string GetPdrBoardId(byte[] bytesIn)
+        internal static string _stringGetPdrBoardId(byte[] bytesIn)
         {
-            long offset = BinaryUtils.FindOffset(bytesIn, Filesystem.BID_SIG);
-            byte[] boardIdBytes = BinaryUtils.ReadBytesAtOffset(bytesIn, offset + 0x5, 0x8);
+            long offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.BID_SIG);
+            byte[] boardIdBytes = BinaryUtils._byteReadAtOffset(bytesIn, offset + 0x5, 0x8);
             return BitConverter.ToString(boardIdBytes).Replace("-", "").All(c => c == '0') ? "Not found"
                 : String.Concat("Mac-", BitConverter.ToString(boardIdBytes).Replace("-", ""));
         }
         #endregion
 
         #region Apple ROM Section Data
-        internal static string GetEfiVersionFromAppleRomSection(byte[] bytesIn)
+        internal static string _stingGetEfiVersionFromAppleRomSection(byte[] bytesIn)
         {
-            long offset = BinaryUtils.FindOffset(bytesIn, Filesystem.EFIVER_SIG);
-            return (offset != -1) ? utf8Enc.GetString(BinaryUtils.ReadBytesAtOffsetByteDelimited(bytesIn, offset + Filesystem.EFIVER_SIG.Length, 0x20, 0x0A)) : "Not found";
+            long offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.EFIVER_SIG);
+            return (offset != -1) ? utf8Enc.GetString(BinaryUtils._byteReadAtOffsetByteDelimited(bytesIn, offset + Filesystem.EFIVER_SIG.Length, 0x20, 0x0A)) : "Not found";
         }
 
-        internal static string GetBootromVersionFromAppleRomSection(byte[] bytesIn)
+        internal static string _stringGetBootromVersionFromAppleRomSection(byte[] bytesIn)
         {
-            long offset = BinaryUtils.FindOffset(bytesIn, Filesystem.ROMVER_SIG);
-            return (offset != -1) ? utf8Enc.GetString(BinaryUtils.ReadBytesAtOffsetByteDelimited(bytesIn, offset + Filesystem.ROMVER_SIG.Length, 0x20, 0x0A)) : "Not found";
+            long offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.ROMVER_SIG);
+            return (offset != -1) ? utf8Enc.GetString(BinaryUtils._byteReadAtOffsetByteDelimited(bytesIn, offset + Filesystem.ROMVER_SIG.Length, 0x20, 0x0A)) : "Not found";
         }
         #endregion
 
         #region NVRAM Data
         private static readonly int HeaderDataSize = 0x6;
 
-        internal static int GetNvramSectionSize(byte[] bytesIn, NVRAMHeaderType HeaderType)
+        internal static int _intGetNvramSectionSize(byte[] bytesIn, NVRAMHeaderType HeaderType)
         {
-            long offset = BinaryUtils.FindOffset(bytesIn, HeaderType == NVRAMHeaderType.SVS ? Filesystem.SVS_SIG : Filesystem.VSS_SIG);
-            if (offset != -1 && BinaryUtils.ReadBytesAtOffset(bytesIn, offset, HeaderDataSize) is byte[] headerBytes)
+            long offset = BinaryUtils._longFindOffset(bytesIn, HeaderType == NVRAMHeaderType.SVS ? Filesystem.SVS_SIG : Filesystem.VSS_SIG);
+            if (offset != -1 && BinaryUtils._byteReadAtOffset(bytesIn, offset, HeaderDataSize) is byte[] headerBytes)
             {
                 NvramSectionHeader header = Helper.DeserializeHeader<NvramSectionHeader>(headerBytes);
                 if (header.SizeOfData != 0)
@@ -159,22 +158,25 @@ namespace Mac_EFI_Toolkit.Core
         #endregion
 
         #region APFSJumpStart Dxe searcher
-        internal static ApfsCompatibleFirmware GetIsApfsCapable(byte[] bytesIn)
+        internal static ApfsCompatibleFirmware _getIsApfsCapable(byte[] bytesIn)
         {
-            long offsetApfsGuid = BinaryUtils.FindOffset(bytesIn, Filesystem.APFS_DXE_GUID);
+            long offsetApfsGuid = BinaryUtils._longFindOffset(bytesIn, Filesystem.APFS_DXE_GUID);
             if (offsetApfsGuid != -1) return ApfsCompatibleFirmware.Yes;
 
-            long offsetDxeSectionLzma = BinaryUtils.FindOffset(bytesIn, Filesystem.LZMA_DXE_NEW_GUID);
-            if (offsetDxeSectionLzma == -1) offsetDxeSectionLzma = BinaryUtils.FindOffset(bytesIn, Filesystem.LZMA_DXE_OLD_GUID);
+            //TODO: Is this really the best place for this?
+            if (Settings._settingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) return ApfsCompatibleFirmware.Unknown;
+
+            long offsetDxeSectionLzma = BinaryUtils._longFindOffset(bytesIn, Filesystem.LZMA_DXE_NEW_GUID);
+            if (offsetDxeSectionLzma == -1) offsetDxeSectionLzma = BinaryUtils._longFindOffset(bytesIn, Filesystem.LZMA_DXE_OLD_GUID);
             if (offsetDxeSectionLzma != -1)
             {
-                offsetDxeSectionLzma = BinaryUtils.FindOffset(bytesIn, new byte[] { 0x5D }, offsetDxeSectionLzma + 0x10);
-                long offsetAppleRomInfo = BinaryUtils.FindOffset(bytesIn, Filesystem.ROM_INFO_GUID, offsetDxeSectionLzma);
+                offsetDxeSectionLzma = BinaryUtils._longFindOffset(bytesIn, new byte[] { 0x5D }, offsetDxeSectionLzma + 0x10);
+                long offsetAppleRomInfo = BinaryUtils._longFindOffset(bytesIn, Filesystem.ROM_INFO_GUID, offsetDxeSectionLzma);
                 if (offsetAppleRomInfo != -1)
                 {
-                    byte[] compressedSection = BinaryUtils.RemoveTrailingFFPadding(BinaryUtils.ReadBytesBetweenOffsets(bytesIn, offsetDxeSectionLzma, offsetAppleRomInfo));
+                    byte[] compressedSection = BinaryUtils.RemoveTrailingFFPadding(BinaryUtils._byteReadBetweenOffsets(bytesIn, offsetDxeSectionLzma, offsetAppleRomInfo));
                     byte[] decompressedSection = LzmaCoder.Decompress(compressedSection);
-                    long offsetApfsDecompressed = BinaryUtils.FindOffset(decompressedSection, Filesystem.APFS_DXE_GUID);
+                    long offsetApfsDecompressed = BinaryUtils._longFindOffset(decompressedSection, Filesystem.APFS_DXE_GUID);
                     return (offsetApfsDecompressed != -1) ? ApfsCompatibleFirmware.Yes : ApfsCompatibleFirmware.No;
                 }
                 else

@@ -15,13 +15,16 @@ namespace Mac_EFI_Toolkit.UI
     {
         internal static async void FlashForecolor(Control control)
         {
-            Color originalColor = control.ForeColor;
-            for (int i = 0; i < 6; i++)
+            if (!Settings._settingsGetBool(SettingsBoolType.DisableFlashingUI)) // TODO - Should this really be here?
             {
-                control.ForeColor = Color.FromArgb(control.ForeColor.A, 60, 60, 60);
-                await Task.Delay(80);
-                control.ForeColor = originalColor;
-                await Task.Delay(80);
+                Color originalColor = control.ForeColor;
+                for (int i = 0; i < 6; i++)
+                {
+                    control.ForeColor = Color.FromArgb(control.ForeColor.A, 60, 60, 60);
+                    await Task.Delay(80);
+                    control.ForeColor = originalColor;
+                    await Task.Delay(80);
+                }
             }
         }
     }

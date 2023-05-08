@@ -19,7 +19,7 @@ namespace Mac_EFI_Toolkit
     static class Program
     {
 
-        internal static string APP_BUILD = $"{Application.ProductVersion.Replace(".", ""):0000}:6523-ms3";
+        internal static string APP_BUILD = $"{Application.ProductVersion.Replace(".", ""):0000}:8523-ms3";
         internal static int minRomSize = 1048576;
         internal static int maxRomSize = 33554432;
 
@@ -60,8 +60,8 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData, 20.0F), FontStyle.Regular);
 
             // Settings
-            if (!File.Exists(Settings.settingsFilePath)) Settings.CreateSettingsFile();
-            // else { Settings.LoadSettings() }, or grab each setting on the fly?
+            if (!File.Exists(Settings.strSettingsFilePath)) Settings._createSettingsFile();
+            // We will grab settings on the fly. Thanks Kyle and Daz. I will blame if anything goes sideways. Peace out.
 
             Application.Run(new mainWindow());
         }
@@ -125,11 +125,17 @@ namespace Mac_EFI_Toolkit
         #region Restart
         internal static void RestartMet(Form owner)
         {
-            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", MsgType.Question, MsgButton.YesNoCancel);
-
-            if (result == DialogResult.Yes)
+            if (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
             {
                 Application.Restart();
+            }
+            else
+            {
+                DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", MsgType.Question, MsgButton.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    Application.Restart();
+                }
             }
         }
         #endregion
@@ -137,11 +143,17 @@ namespace Mac_EFI_Toolkit
         #region Exit
         internal static void ExitMet(Form owner)
         {
-            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", MsgType.Question, MsgButton.YesNoCancel);
-
-            if (result == DialogResult.Yes)
+            if (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
             {
                 Application.Exit();
+            }
+            else
+            {
+                DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", MsgType.Question, MsgButton.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    Application.Exit();
+                }
             }
         }
         #endregion

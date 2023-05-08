@@ -13,13 +13,12 @@ namespace Mac_EFI_Toolkit.Utils
 {
     class FileUtils
     {
-
         /// <summary>
         /// Calculates the MD5 hash of a byte array.
         /// </summary>
         /// <param name="sourceBytes">The byte array to calculate the hash for.</param>
         /// <returns>The MD5 hash of the byte array.</returns>
-        internal static string CalculateMd5(byte[] sourceBytes)
+        internal static string _stringGetMd5FromBytes(byte[] sourceBytes)
         {
             using (var md5 = MD5.Create())
             {
@@ -27,82 +26,47 @@ namespace Mac_EFI_Toolkit.Utils
                 return BitConverter.ToString(hashBytes).Replace("-", "");
             }
         }
-
+        // Updated _uintGetCrc32FromBytes
+        // Note that this version of the code uses the two's complement trick to conditionally XOR
+        // the polynomial with the current value of the CRC32 register, the original code explicitly
+        // initializes a lookup table for the CRC32 calculation; there may be a performance hit?
         /// <summary>
-        /// Calculates the CRC32 checksum of a byte array.
+        /// Calculates the CRC32 checksum of a byte array. 
         /// </summary>
         /// <param name="sourceBytes">The byte array to calculate the checksum for.</param>
         /// <returns>The CRC32 checksum of the byte array.</returns>
-        internal static uint CalculateCrc32(byte[] sourceBytes)
+        internal static uint _uintGetCrc32FromBytes(byte[] sourceBytes)
         {
-            uint[] table = new uint[256];
-
             const uint polynomial = 0xEDB88320;
-            uint initialValue = 0xFFFFFFFF;
-
-            for (uint i = 0; i < 256; i++)
-            {
-                uint entry = i;
-                for (int j = 0; j < 8; j++)
-                {
-                    if ((entry & 1) == 1)
-                    {
-                        entry = (entry >> 1) ^ polynomial;
-                    }
-                    else
-                    {
-                        entry >>= 1;
-                    }
-                }
-                table[i] = entry;
-            }
-            uint crc = initialValue;
+            uint crc = 0xFFFFFFFF;
             for (int i = 0; i < sourceBytes.Length; i++)
             {
-                byte index = (byte)(crc ^ sourceBytes[i]);
-                crc = (crc >> 8) ^ table[index];
+                crc ^= sourceBytes[i];
+                for (int j = 0; j < 8; j++)
+                {
+                    crc = (uint)((crc >> 1) ^ (polynomial & -(crc & 1)));
+                }
             }
-            return crc ^ initialValue;
+            return crc ^ 0xFFFFFFFF;
         }
-
-        /// <summary>
-        /// Reverses the order of bytes in a given byte array.
-        /// </summary>
-        /// <param name="sourceBytes">The byte array to reverse.</param>
-        /// <returns>A new byte array with the bytes in reversed order.</returns>
-        internal static byte[] SwitchCrc32Endianness(byte[] sourceBytes)
-        {
-            int len = sourceBytes.Length;
-            byte[] reversedBytes = new byte[len];
-
-            for (int i = 0; i < len; i++)
-            {
-                reversedBytes[len - i - 1] = sourceBytes[i];
-            }
-
-            return reversedBytes;
-        }
-
         /// <summary>
         /// Returns the size of a file in bytes.
         /// </summary>
         /// <param name="filePath">The path to the file.</param>
         /// <returns>The size of the file in bytes.</returns>
-        internal static long GetFileSizeBytes(string filePath)
+        internal static long _longGetFileSizeBytes(string filePath)
         {
             FileInfo fInfo = new FileInfo(filePath);
             return fInfo.Length;
         }
-
         /// <summary>
         /// Formats a number of bytes as a string with commas.
         /// </summary>
         /// <param name="number">The number of bytes to format.</param>
         /// <returns>A string representation of the number of bytes with commas.</returns>
-        public static string FormatBytesWithCommas(long number)
+        public static string _stringFormatBytesWithCommas(long number)
         {
             return string.Format("{0:#,##0}", number);
         }
-
     }
 }
