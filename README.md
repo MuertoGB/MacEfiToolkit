@@ -4,7 +4,7 @@ Mac EFI Toolkit
 
 ## About
 
->🛠 Currently working on: Settings UI and underlying systems.
+>🛠 Current Status: Waiting on 044:8523-ms3 feedback, then moving onto developing the editing features.
 
 This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete. However basic functionality such as viewing EFIROM info, and dumping the Fsys block is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
 
