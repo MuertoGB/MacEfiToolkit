@@ -194,7 +194,6 @@ namespace Mac_EFI_Toolkit
             }
 
         }
-
         #endregion
 
     }

@@ -16,7 +16,10 @@ namespace Mac_EFI_Toolkit.WinForms
     public partial class settingsWindow : Form
     {
 
+        #region Private Members
         private static string strNewOfdInitialPath = string.Empty;
+        private bool isTimerRunning = false;
+        #endregion
 
         #region Overrides Properties
         protected override CreateParams CreateParams
@@ -80,17 +83,11 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Close();
         }
-        #endregion
 
         private void cmdEditingTerms_Click(object sender, EventArgs e)
         {
             // User accepts terms
             cbxAcceptedEditingTerms.Enabled = true;
-        }
-
-        private void cmdCancel_Click(object sender, EventArgs e)
-        {
-            Close();
         }
 
         private void cmdEditCustomPath_Click(object sender, EventArgs e)
@@ -108,6 +105,11 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
+        private void cmdCloseForm_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         private void cmdApply_Click(object sender, EventArgs e)
         {
             // Here we are simply using the bool value from a checkboxes state. Nice and simple.
@@ -120,46 +122,28 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings._settingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
             //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
             DisplaySettingsUpdatedLabel();
-
         }
-
-        private bool isTimerRunning = false;
+        #endregion
 
         private void DisplaySettingsUpdatedLabel()
         {
             if (!isTimerRunning)
             {
-
-                // Show the label.
                 lblSettingsUpdated.Show();
                 InterfaceUtils.FlashForecolor(lblSettingsUpdated);
 
-                // Create a new Timer control.
                 var timer = new System.Windows.Forms.Timer();
 
-                // Set the interval of the timer to 5 seconds.
                 timer.Interval = 3000;
-
-                // Set the event handler for the timer's Tick event.
                 timer.Tick += (sender, e) =>
                 {
-                    // Hide the label when the timer ticks.
                     lblSettingsUpdated.Hide();
-
-                    // Stop the timer.
                     timer.Stop();
-
-                    // Dispose the timer.
                     timer.Dispose();
-
-                    // Set the flag variable to indicate that the timer is no longer running.
                     isTimerRunning = false;
                 };
 
-                // Start the timer.
                 timer.Start();
-
-                // Set the flag variable to indicate that the timer is now running.
                 isTimerRunning = true;
             }
         }
