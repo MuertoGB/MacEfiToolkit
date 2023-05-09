@@ -2,7 +2,6 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // METVersion.cs - Provides a simple version check
-// Updated 01.05.2023 - Refactoring
 // Released under the GNU GLP v3.0
 
 using System;
@@ -26,6 +25,8 @@ namespace Mac_EFI_Toolkit
 
     class METVersion
     {
+        internal static string latestUrl = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+
         internal static async Task<VersionCheckResult> CheckForUpdate(string versionUrl)
         {
             try

@@ -1,5 +1,19 @@
+## Version 0.4.5:
 
-### Version 0.4.4 (044:8523-ms3)
+#### New:
+- Main window version text now clickable when an update is available.
+- Settings window 'reset' option now available.
+
+#### Enhancements:
+- Disabled unnecessary WinKey+Up shortcut with low level hook.
+- Changed build text format to version-date-type.
+- Removed build text from main window title.
+- Signed the assembly, and added verification.
+
+#### Bugs:
+- Fixed broken initial directory path
+
+## Version 0.4.4
 
 #### New:
 - Added descriptor signature check when loading a binary.

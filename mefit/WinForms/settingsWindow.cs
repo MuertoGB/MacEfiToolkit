@@ -49,6 +49,11 @@ namespace Mac_EFI_Toolkit.WinForms
         private void settingsWindow_Load(object sender, EventArgs e)
         {
             lblSettingsUpdated.Hide();
+            _updateControls();
+        }
+
+        private void _updateControls()
+        {
             cbxDisableVersionCheck.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableVersionCheck)) ? true : false;
             cbxDisableFlashingUI.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableFlashingUI)) ? true : false;
             cbxDisableConfDiag.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag)) ? true : false;
@@ -121,6 +126,21 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings._settingsSetBool(SettingsBoolType.DisableFsysEnforce, cbxDisableFsysEnforce.Checked);
             Settings._settingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
             //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
+            _showSettingsUpdatedLabel();
+        }
+
+        private void cmdDefaults_Click(object sender, EventArgs e)
+        {
+            // Here we are simply using the bool value from a checkboxes state. Nice and simple.
+            Settings._settingsSetBool(SettingsBoolType.DisableVersionCheck, false);
+            Settings._settingsSetBool(SettingsBoolType.DisableFlashingUI, false);
+            Settings._settingsSetBool(SettingsBoolType.DisableConfDiag, false);
+            if (strNewOfdInitialPath != string.Empty) Settings._settingsSetString(SettingsStringType.InitialDirectory, Settings.strDefaultOfdPath);
+            Settings._settingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
+            Settings._settingsSetBool(SettingsBoolType.DisableFsysEnforce, false);
+            Settings._settingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
+            //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
+            _updateControls();
             _showSettingsUpdatedLabel();
         }
 

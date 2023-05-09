@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <data>
 	<MET>
-		<Channel></Channel>
-		<Build></Build>
-		<ReleaseDate></ReleaseDate>
+		<Channel>BETA</Channel>
+		<Build>0.4.5-090523-ms3 </Build>
+		<ReleaseDate>09.05.2023</ReleaseDate>
 		<SHA256></SHA256>
-		<VersionString>0.4.4</VersionString>
+		<VersionString>0.4.5</VersionString>
 		<Maj>0</Maj>
 		<Min>4</Min>
-		<Rev>4</Rev>
+		<Rev>5</Rev>
 	</MET>
 </data>

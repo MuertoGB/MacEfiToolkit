@@ -3,7 +3,6 @@
 
 // WinForms
 // mainWindow.cs
-// Updated 04.05.23 - Refactor, fix double messagebox.
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Core;
@@ -95,7 +94,7 @@ namespace Mac_EFI_Toolkit
 
             ToggleControlEnable(false);
 
-            labVersion.Text = Application.ProductVersion;
+            lblVersion.Text = Application.ProductVersion;
 
             if (!Settings._settingsGetBool(SettingsBoolType.DisableVersionCheck))
             {
@@ -115,8 +114,9 @@ namespace Mac_EFI_Toolkit
 
             if (result == VersionCheckResult.NewVersionAvailable)
             {
-                labVersion.ForeColor = Color.Tomato;
-                labVersion.Cursor = Cursors.Hand;
+                lblVersion.ForeColor = Color.Tomato;
+                lblVersion.Cursor = Cursors.Hand;
+                lblVersion.Click += lblVersion_Click;
             }
         }
 
@@ -254,7 +254,8 @@ namespace Mac_EFI_Toolkit
                 Filter = "Binary Files (*.bin)|*.bin",
                 Title = "Export Fsys block data...",
                 FileName = string.Concat("Fsys_", strSerialNumber, ".bin"),
-                InitialDirectory = strInitialDirectory
+                OverwritePrompt = true,
+                InitialDirectory = strRememberPath
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -307,6 +308,13 @@ namespace Mac_EFI_Toolkit
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Program.ExitMet(this);
+        }
+        #endregion
+
+        #region Label Events
+        private void lblVersion_Click(object sender, EventArgs e)
+        {
+            Process.Start(METVersion.latestUrl);
         }
         #endregion
 

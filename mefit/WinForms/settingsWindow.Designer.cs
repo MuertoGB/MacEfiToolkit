@@ -39,46 +39,46 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdCloseForm = new System.Windows.Forms.Button();
             this.pnlTitleMenuSplit = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpDac = new System.Windows.Forms.TableLayoutPanel();
             this.lblDacText = new System.Windows.Forms.Label();
-            this.cbxDisableLzmaFsSearch = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpDwf = new System.Windows.Forms.TableLayoutPanel();
             this.lblDwfText = new System.Windows.Forms.Label();
-            this.cbxDisableFlashingUI = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.lblApplicationText = new System.Windows.Forms.Label();
             this.lblStartupText = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblDscText = new System.Windows.Forms.Label();
-            this.cbxDisableVersionCheck = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.lnlCidText = new System.Windows.Forms.Label();
+            this.tlpDvc = new System.Windows.Forms.TableLayoutPanel();
+            this.lblDvcText = new System.Windows.Forms.Label();
+            this.tlpCif = new System.Windows.Forms.TableLayoutPanel();
+            this.lnlCifText = new System.Windows.Forms.Label();
             this.cmdEditCustomPath = new System.Windows.Forms.Button();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpDfe = new System.Windows.Forms.TableLayoutPanel();
             this.lblDfeText = new System.Windows.Forms.Label();
-            this.cbxDisableFsysEnforce = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpAet = new System.Windows.Forms.TableLayoutPanel();
             this.lblAetText = new System.Windows.Forms.Label();
-            this.cbxAcceptedEditingTerms = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.cmdEditingTerms = new System.Windows.Forms.Button();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpDde = new System.Windows.Forms.TableLayoutPanel();
             this.lblDdeText = new System.Windows.Forms.Label();
-            this.cbxDisableDescriptorEnforce = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpDcd = new System.Windows.Forms.TableLayoutPanel();
             this.lblDcdText = new System.Windows.Forms.Label();
-            this.cbxDisableConfDiag = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.lblFirmwareText = new System.Windows.Forms.Label();
             this.lblSettingsUpdated = new System.Windows.Forms.Label();
+            this.cbxDisableLzmaFsSearch = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.cbxDisableFlashingUI = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.cbxDisableVersionCheck = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.cbxDisableFsysEnforce = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.cbxAcceptedEditingTerms = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.cbxDisableDescriptorEnforce = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.cbxDisableConfDiag = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.panTitle.SuspendLayout();
             this.tlpButtons.SuspendLayout();
             this.tlpMain.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
-            this.tableLayoutPanel7.SuspendLayout();
-            this.tableLayoutPanel8.SuspendLayout();
+            this.tlpDac.SuspendLayout();
+            this.tlpDwf.SuspendLayout();
+            this.tlpDvc.SuspendLayout();
+            this.tlpCif.SuspendLayout();
+            this.tlpDfe.SuspendLayout();
+            this.tlpAet.SuspendLayout();
+            this.tlpDde.SuspendLayout();
+            this.tlpDcd.SuspendLayout();
             this.SuspendLayout();
             // 
             // panTitle
@@ -153,7 +153,6 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.cmdDefaults.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cmdDefaults.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(44)))), ((int)(((byte)(48)))));
-            this.cmdDefaults.Enabled = false;
             this.cmdDefaults.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.cmdDefaults.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDefaults.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -163,8 +162,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdDefaults.Name = "cmdDefaults";
             this.cmdDefaults.Size = new System.Drawing.Size(100, 34);
             this.cmdDefaults.TabIndex = 2;
-            this.cmdDefaults.Text = "Defaults";
+            this.cmdDefaults.Text = "Reset";
             this.cmdDefaults.UseVisualStyleBackColor = false;
+            this.cmdDefaults.Click += new System.EventHandler(this.cmdDefaults_Click);
             // 
             // cmdApply
             // 
@@ -215,16 +215,16 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Controls.Add(this.tableLayoutPanel4, 0, 14);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel2, 0, 6);
+            this.tlpMain.Controls.Add(this.tlpDac, 0, 14);
+            this.tlpMain.Controls.Add(this.tlpDwf, 0, 6);
             this.tlpMain.Controls.Add(this.lblApplicationText, 0, 4);
             this.tlpMain.Controls.Add(this.lblStartupText, 0, 0);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel1, 0, 2);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel3, 0, 10);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel5, 0, 16);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel6, 0, 20);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel7, 0, 18);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel8, 0, 8);
+            this.tlpMain.Controls.Add(this.tlpDvc, 0, 2);
+            this.tlpMain.Controls.Add(this.tlpCif, 0, 10);
+            this.tlpMain.Controls.Add(this.tlpDfe, 0, 16);
+            this.tlpMain.Controls.Add(this.tlpAet, 0, 20);
+            this.tlpMain.Controls.Add(this.tlpDde, 0, 18);
+            this.tlpMain.Controls.Add(this.tlpDcd, 0, 8);
             this.tlpMain.Controls.Add(this.lblFirmwareText, 0, 12);
             this.tlpMain.Controls.Add(this.lblSettingsUpdated, 0, 22);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -258,22 +258,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.Size = new System.Drawing.Size(408, 400);
             this.tlpMain.TabIndex = 93;
             // 
-            // tableLayoutPanel4
+            // tlpDac
             // 
-            this.tableLayoutPanel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel4.Controls.Add(this.lblDacText, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.cbxDisableLzmaFsSearch, 1, 0);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 229);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(408, 30);
-            this.tableLayoutPanel4.TabIndex = 6;
+            this.tlpDac.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tlpDac.ColumnCount = 2;
+            this.tlpDac.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDac.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpDac.Controls.Add(this.lblDacText, 0, 0);
+            this.tlpDac.Controls.Add(this.cbxDisableLzmaFsSearch, 1, 0);
+            this.tlpDac.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDac.Location = new System.Drawing.Point(0, 229);
+            this.tlpDac.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpDac.Name = "tlpDac";
+            this.tlpDac.RowCount = 1;
+            this.tlpDac.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDac.Size = new System.Drawing.Size(408, 30);
+            this.tlpDac.TabIndex = 6;
             // 
             // lblDacText
             // 
@@ -288,37 +288,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDacText.TabIndex = 1;
             this.lblDacText.Text = "Disable APFS check in compressed DXE:";
             // 
-            // cbxDisableLzmaFsSearch
+            // tlpDwf
             // 
-            this.cbxDisableLzmaFsSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableLzmaFsSearch.BackColor = System.Drawing.Color.Transparent;
-            this.cbxDisableLzmaFsSearch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableLzmaFsSearch.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableLzmaFsSearch.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.cbxDisableLzmaFsSearch.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableLzmaFsSearch.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableLzmaFsSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableLzmaFsSearch.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableLzmaFsSearch.Name = "cbxDisableLzmaFsSearch";
-            this.cbxDisableLzmaFsSearch.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableLzmaFsSearch.TabIndex = 2;
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel2.Controls.Add(this.lblDwfText, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.cbxDisableFlashingUI, 1, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 101);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(408, 30);
-            this.tableLayoutPanel2.TabIndex = 4;
+            this.tlpDwf.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tlpDwf.ColumnCount = 2;
+            this.tlpDwf.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDwf.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpDwf.Controls.Add(this.lblDwfText, 0, 0);
+            this.tlpDwf.Controls.Add(this.cbxDisableFlashingUI, 1, 0);
+            this.tlpDwf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDwf.Location = new System.Drawing.Point(0, 101);
+            this.tlpDwf.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpDwf.Name = "tlpDwf";
+            this.tlpDwf.RowCount = 1;
+            this.tlpDwf.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDwf.Size = new System.Drawing.Size(408, 30);
+            this.tlpDwf.TabIndex = 4;
             // 
             // lblDwfText
             // 
@@ -332,21 +317,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDwfText.Size = new System.Drawing.Size(214, 20);
             this.lblDwfText.TabIndex = 1;
             this.lblDwfText.Text = "Disable flashing UI elements:";
-            // 
-            // cbxDisableFlashingUI
-            // 
-            this.cbxDisableFlashingUI.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableFlashingUI.BackColor = System.Drawing.Color.Transparent;
-            this.cbxDisableFlashingUI.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableFlashingUI.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableFlashingUI.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.cbxDisableFlashingUI.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableFlashingUI.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableFlashingUI.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableFlashingUI.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableFlashingUI.Name = "cbxDisableFlashingUI";
-            this.cbxDisableFlashingUI.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableFlashingUI.TabIndex = 2;
             // 
             // lblApplicationText
             // 
@@ -378,81 +348,66 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblStartupText.Text = "Startup:";
             this.lblStartupText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel1
+            // tlpDvc
             // 
-            this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel1.Controls.Add(this.lblDscText, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.cbxDisableVersionCheck, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 35);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(408, 30);
-            this.tableLayoutPanel1.TabIndex = 2;
+            this.tlpDvc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tlpDvc.ColumnCount = 2;
+            this.tlpDvc.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDvc.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpDvc.Controls.Add(this.lblDvcText, 0, 0);
+            this.tlpDvc.Controls.Add(this.cbxDisableVersionCheck, 1, 0);
+            this.tlpDvc.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDvc.Location = new System.Drawing.Point(0, 35);
+            this.tlpDvc.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpDvc.Name = "tlpDvc";
+            this.tlpDvc.RowCount = 1;
+            this.tlpDvc.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDvc.Size = new System.Drawing.Size(408, 30);
+            this.tlpDvc.TabIndex = 2;
             // 
-            // lblDscText
+            // lblDvcText
             // 
-            this.lblDscText.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblDscText.AutoSize = true;
-            this.lblDscText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDscText.ForeColor = System.Drawing.Color.White;
-            this.lblDscText.Location = new System.Drawing.Point(3, 5);
-            this.lblDscText.Name = "lblDscText";
-            this.lblDscText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lblDscText.Size = new System.Drawing.Size(170, 20);
-            this.lblDscText.TabIndex = 1;
-            this.lblDscText.Text = "Disable version check:";
+            this.lblDvcText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblDvcText.AutoSize = true;
+            this.lblDvcText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDvcText.ForeColor = System.Drawing.Color.White;
+            this.lblDvcText.Location = new System.Drawing.Point(3, 5);
+            this.lblDvcText.Name = "lblDvcText";
+            this.lblDvcText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblDvcText.Size = new System.Drawing.Size(170, 20);
+            this.lblDvcText.TabIndex = 1;
+            this.lblDvcText.Text = "Disable version check:";
             // 
-            // cbxDisableVersionCheck
+            // tlpCif
             // 
-            this.cbxDisableVersionCheck.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableVersionCheck.BackColor = System.Drawing.Color.Transparent;
-            this.cbxDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableVersionCheck.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.cbxDisableVersionCheck.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableVersionCheck.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableVersionCheck.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableVersionCheck.Name = "cbxDisableVersionCheck";
-            this.cbxDisableVersionCheck.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableVersionCheck.TabIndex = 2;
+            this.tlpCif.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tlpCif.ColumnCount = 2;
+            this.tlpCif.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpCif.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpCif.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpCif.Controls.Add(this.lnlCifText, 0, 0);
+            this.tlpCif.Controls.Add(this.cmdEditCustomPath, 1, 0);
+            this.tlpCif.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpCif.Location = new System.Drawing.Point(0, 163);
+            this.tlpCif.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpCif.Name = "tlpCif";
+            this.tlpCif.RowCount = 1;
+            this.tlpCif.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpCif.Size = new System.Drawing.Size(408, 30);
+            this.tlpCif.TabIndex = 5;
             // 
-            // tableLayoutPanel3
+            // lnlCifText
             // 
-            this.tableLayoutPanel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.tableLayoutPanel3.ColumnCount = 2;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Controls.Add(this.lnlCidText, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.cmdEditCustomPath, 1, 0);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 163);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 1;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(408, 30);
-            this.tableLayoutPanel3.TabIndex = 5;
-            // 
-            // lnlCidText
-            // 
-            this.lnlCidText.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lnlCidText.AutoSize = true;
-            this.lnlCidText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lnlCidText.ForeColor = System.Drawing.Color.White;
-            this.lnlCidText.Location = new System.Drawing.Point(3, 5);
-            this.lnlCidText.Name = "lnlCidText";
-            this.lnlCidText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lnlCidText.Size = new System.Drawing.Size(195, 20);
-            this.lnlCidText.TabIndex = 1;
-            this.lnlCidText.Text = "Custom initial folder path:";
+            this.lnlCifText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lnlCifText.AutoSize = true;
+            this.lnlCifText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lnlCifText.ForeColor = System.Drawing.Color.White;
+            this.lnlCifText.Location = new System.Drawing.Point(3, 5);
+            this.lnlCifText.Name = "lnlCifText";
+            this.lnlCifText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lnlCifText.Size = new System.Drawing.Size(195, 20);
+            this.lnlCifText.TabIndex = 1;
+            this.lnlCifText.Text = "Custom initial folder path:";
             // 
             // cmdEditCustomPath
             // 
@@ -471,22 +426,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdEditCustomPath.UseVisualStyleBackColor = false;
             this.cmdEditCustomPath.Click += new System.EventHandler(this.cmdEditCustomPath_Click);
             // 
-            // tableLayoutPanel5
+            // tlpDfe
             // 
-            this.tableLayoutPanel5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.tableLayoutPanel5.ColumnCount = 2;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel5.Controls.Add(this.lblDfeText, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.cbxDisableFsysEnforce, 1, 0);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 260);
-            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 1;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(408, 30);
-            this.tableLayoutPanel5.TabIndex = 7;
+            this.tlpDfe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tlpDfe.ColumnCount = 2;
+            this.tlpDfe.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDfe.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpDfe.Controls.Add(this.lblDfeText, 0, 0);
+            this.tlpDfe.Controls.Add(this.cbxDisableFsysEnforce, 1, 0);
+            this.tlpDfe.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDfe.Location = new System.Drawing.Point(0, 260);
+            this.tlpDfe.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpDfe.Name = "tlpDfe";
+            this.tlpDfe.RowCount = 1;
+            this.tlpDfe.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDfe.Size = new System.Drawing.Size(408, 30);
+            this.tlpDfe.TabIndex = 7;
             // 
             // lblDfeText
             // 
@@ -501,39 +456,24 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDfeText.TabIndex = 1;
             this.lblDfeText.Text = "Disable valid Fsys enforcement:";
             // 
-            // cbxDisableFsysEnforce
+            // tlpAet
             // 
-            this.cbxDisableFsysEnforce.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableFsysEnforce.BackColor = System.Drawing.Color.Transparent;
-            this.cbxDisableFsysEnforce.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableFsysEnforce.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableFsysEnforce.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.cbxDisableFsysEnforce.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableFsysEnforce.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableFsysEnforce.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableFsysEnforce.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableFsysEnforce.Name = "cbxDisableFsysEnforce";
-            this.cbxDisableFsysEnforce.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableFsysEnforce.TabIndex = 2;
-            // 
-            // tableLayoutPanel6
-            // 
-            this.tableLayoutPanel6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.tableLayoutPanel6.ColumnCount = 3;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel6.Controls.Add(this.lblAetText, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.cbxAcceptedEditingTerms, 2, 0);
-            this.tableLayoutPanel6.Controls.Add(this.cmdEditingTerms, 1, 0);
-            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 322);
-            this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 1;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(408, 30);
-            this.tableLayoutPanel6.TabIndex = 8;
+            this.tlpAet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tlpAet.ColumnCount = 3;
+            this.tlpAet.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpAet.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpAet.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpAet.Controls.Add(this.lblAetText, 0, 0);
+            this.tlpAet.Controls.Add(this.cbxAcceptedEditingTerms, 2, 0);
+            this.tlpAet.Controls.Add(this.cmdEditingTerms, 1, 0);
+            this.tlpAet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpAet.Location = new System.Drawing.Point(0, 322);
+            this.tlpAet.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpAet.Name = "tlpAet";
+            this.tlpAet.RowCount = 1;
+            this.tlpAet.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpAet.Size = new System.Drawing.Size(408, 30);
+            this.tlpAet.TabIndex = 8;
             // 
             // lblAetText
             // 
@@ -547,22 +487,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblAetText.Size = new System.Drawing.Size(284, 20);
             this.lblAetText.TabIndex = 1;
             this.lblAetText.Text = "Accept binary editing terms (Disabled):";
-            // 
-            // cbxAcceptedEditingTerms
-            // 
-            this.cbxAcceptedEditingTerms.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxAcceptedEditingTerms.BackColor = System.Drawing.Color.Transparent;
-            this.cbxAcceptedEditingTerms.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxAcceptedEditingTerms.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxAcceptedEditingTerms.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.cbxAcceptedEditingTerms.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxAcceptedEditingTerms.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxAcceptedEditingTerms.Enabled = false;
-            this.cbxAcceptedEditingTerms.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxAcceptedEditingTerms.Location = new System.Drawing.Point(370, 4);
-            this.cbxAcceptedEditingTerms.Name = "cbxAcceptedEditingTerms";
-            this.cbxAcceptedEditingTerms.Size = new System.Drawing.Size(21, 21);
-            this.cbxAcceptedEditingTerms.TabIndex = 2;
             // 
             // cmdEditingTerms
             // 
@@ -582,22 +506,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdEditingTerms.UseVisualStyleBackColor = false;
             this.cmdEditingTerms.Click += new System.EventHandler(this.cmdEditingTerms_Click);
             // 
-            // tableLayoutPanel7
+            // tlpDde
             // 
-            this.tableLayoutPanel7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.tableLayoutPanel7.ColumnCount = 2;
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel7.Controls.Add(this.lblDdeText, 0, 0);
-            this.tableLayoutPanel7.Controls.Add(this.cbxDisableDescriptorEnforce, 1, 0);
-            this.tableLayoutPanel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(0, 291);
-            this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 1;
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(408, 30);
-            this.tableLayoutPanel7.TabIndex = 9;
+            this.tlpDde.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tlpDde.ColumnCount = 2;
+            this.tlpDde.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDde.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpDde.Controls.Add(this.lblDdeText, 0, 0);
+            this.tlpDde.Controls.Add(this.cbxDisableDescriptorEnforce, 1, 0);
+            this.tlpDde.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDde.Location = new System.Drawing.Point(0, 291);
+            this.tlpDde.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpDde.Name = "tlpDde";
+            this.tlpDde.RowCount = 1;
+            this.tlpDde.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDde.Size = new System.Drawing.Size(408, 30);
+            this.tlpDde.TabIndex = 9;
             // 
             // lblDdeText
             // 
@@ -612,37 +536,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDdeText.TabIndex = 1;
             this.lblDdeText.Text = "Disable valid descriptor enforcement:";
             // 
-            // cbxDisableDescriptorEnforce
+            // tlpDcd
             // 
-            this.cbxDisableDescriptorEnforce.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableDescriptorEnforce.BackColor = System.Drawing.Color.Transparent;
-            this.cbxDisableDescriptorEnforce.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableDescriptorEnforce.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableDescriptorEnforce.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.cbxDisableDescriptorEnforce.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableDescriptorEnforce.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableDescriptorEnforce.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableDescriptorEnforce.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableDescriptorEnforce.Name = "cbxDisableDescriptorEnforce";
-            this.cbxDisableDescriptorEnforce.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableDescriptorEnforce.TabIndex = 2;
-            // 
-            // tableLayoutPanel8
-            // 
-            this.tableLayoutPanel8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.tableLayoutPanel8.ColumnCount = 2;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel8.Controls.Add(this.lblDcdText, 0, 0);
-            this.tableLayoutPanel8.Controls.Add(this.cbxDisableConfDiag, 1, 0);
-            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 132);
-            this.tableLayoutPanel8.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
-            this.tableLayoutPanel8.RowCount = 1;
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(408, 30);
-            this.tableLayoutPanel8.TabIndex = 10;
+            this.tlpDcd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.tlpDcd.ColumnCount = 2;
+            this.tlpDcd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDcd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpDcd.Controls.Add(this.lblDcdText, 0, 0);
+            this.tlpDcd.Controls.Add(this.cbxDisableConfDiag, 1, 0);
+            this.tlpDcd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDcd.Location = new System.Drawing.Point(0, 132);
+            this.tlpDcd.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpDcd.Name = "tlpDcd";
+            this.tlpDcd.RowCount = 1;
+            this.tlpDcd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDcd.Size = new System.Drawing.Size(408, 30);
+            this.tlpDcd.TabIndex = 10;
             // 
             // lblDcdText
             // 
@@ -656,21 +565,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDcdText.Size = new System.Drawing.Size(217, 20);
             this.lblDcdText.TabIndex = 1;
             this.lblDcdText.Text = "Disable confirmation dialogs:";
-            // 
-            // cbxDisableConfDiag
-            // 
-            this.cbxDisableConfDiag.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableConfDiag.BackColor = System.Drawing.Color.Transparent;
-            this.cbxDisableConfDiag.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableConfDiag.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableConfDiag.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.cbxDisableConfDiag.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableConfDiag.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableConfDiag.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableConfDiag.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableConfDiag.Name = "cbxDisableConfDiag";
-            this.cbxDisableConfDiag.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableConfDiag.TabIndex = 2;
             // 
             // lblFirmwareText
             // 
@@ -698,6 +592,112 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblSettingsUpdated.Size = new System.Drawing.Size(147, 23);
             this.lblSettingsUpdated.TabIndex = 12;
             this.lblSettingsUpdated.Text = "Settings Updated!";
+            // 
+            // cbxDisableLzmaFsSearch
+            // 
+            this.cbxDisableLzmaFsSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableLzmaFsSearch.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableLzmaFsSearch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableLzmaFsSearch.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableLzmaFsSearch.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cbxDisableLzmaFsSearch.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableLzmaFsSearch.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableLzmaFsSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableLzmaFsSearch.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableLzmaFsSearch.Name = "cbxDisableLzmaFsSearch";
+            this.cbxDisableLzmaFsSearch.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableLzmaFsSearch.TabIndex = 2;
+            // 
+            // cbxDisableFlashingUI
+            // 
+            this.cbxDisableFlashingUI.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableFlashingUI.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableFlashingUI.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableFlashingUI.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableFlashingUI.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cbxDisableFlashingUI.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableFlashingUI.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableFlashingUI.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableFlashingUI.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableFlashingUI.Name = "cbxDisableFlashingUI";
+            this.cbxDisableFlashingUI.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableFlashingUI.TabIndex = 2;
+            // 
+            // cbxDisableVersionCheck
+            // 
+            this.cbxDisableVersionCheck.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableVersionCheck.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableVersionCheck.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cbxDisableVersionCheck.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableVersionCheck.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableVersionCheck.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableVersionCheck.Name = "cbxDisableVersionCheck";
+            this.cbxDisableVersionCheck.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableVersionCheck.TabIndex = 2;
+            // 
+            // cbxDisableFsysEnforce
+            // 
+            this.cbxDisableFsysEnforce.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableFsysEnforce.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableFsysEnforce.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableFsysEnforce.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableFsysEnforce.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cbxDisableFsysEnforce.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableFsysEnforce.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableFsysEnforce.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableFsysEnforce.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableFsysEnforce.Name = "cbxDisableFsysEnforce";
+            this.cbxDisableFsysEnforce.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableFsysEnforce.TabIndex = 2;
+            // 
+            // cbxAcceptedEditingTerms
+            // 
+            this.cbxAcceptedEditingTerms.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxAcceptedEditingTerms.BackColor = System.Drawing.Color.Transparent;
+            this.cbxAcceptedEditingTerms.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxAcceptedEditingTerms.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxAcceptedEditingTerms.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cbxAcceptedEditingTerms.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxAcceptedEditingTerms.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxAcceptedEditingTerms.Enabled = false;
+            this.cbxAcceptedEditingTerms.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxAcceptedEditingTerms.Location = new System.Drawing.Point(370, 4);
+            this.cbxAcceptedEditingTerms.Name = "cbxAcceptedEditingTerms";
+            this.cbxAcceptedEditingTerms.Size = new System.Drawing.Size(21, 21);
+            this.cbxAcceptedEditingTerms.TabIndex = 2;
+            // 
+            // cbxDisableDescriptorEnforce
+            // 
+            this.cbxDisableDescriptorEnforce.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableDescriptorEnforce.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableDescriptorEnforce.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableDescriptorEnforce.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableDescriptorEnforce.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cbxDisableDescriptorEnforce.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableDescriptorEnforce.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableDescriptorEnforce.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableDescriptorEnforce.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableDescriptorEnforce.Name = "cbxDisableDescriptorEnforce";
+            this.cbxDisableDescriptorEnforce.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableDescriptorEnforce.TabIndex = 2;
+            // 
+            // cbxDisableConfDiag
+            // 
+            this.cbxDisableConfDiag.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableConfDiag.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableConfDiag.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableConfDiag.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableConfDiag.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cbxDisableConfDiag.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableConfDiag.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableConfDiag.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableConfDiag.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableConfDiag.Name = "cbxDisableConfDiag";
+            this.cbxDisableConfDiag.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableConfDiag.TabIndex = 2;
             // 
             // settingsWindow
             // 
@@ -727,22 +727,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.ResumeLayout(false);
             this.tlpMain.ResumeLayout(false);
             this.tlpMain.PerformLayout();
-            this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel4.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
-            this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.tableLayoutPanel6.PerformLayout();
-            this.tableLayoutPanel7.ResumeLayout(false);
-            this.tableLayoutPanel7.PerformLayout();
-            this.tableLayoutPanel8.ResumeLayout(false);
-            this.tableLayoutPanel8.PerformLayout();
+            this.tlpDac.ResumeLayout(false);
+            this.tlpDac.PerformLayout();
+            this.tlpDwf.ResumeLayout(false);
+            this.tlpDwf.PerformLayout();
+            this.tlpDvc.ResumeLayout(false);
+            this.tlpDvc.PerformLayout();
+            this.tlpCif.ResumeLayout(false);
+            this.tlpCif.PerformLayout();
+            this.tlpDfe.ResumeLayout(false);
+            this.tlpDfe.PerformLayout();
+            this.tlpAet.ResumeLayout(false);
+            this.tlpAet.PerformLayout();
+            this.tlpDde.ResumeLayout(false);
+            this.tlpDde.PerformLayout();
+            this.tlpDcd.ResumeLayout(false);
+            this.tlpDcd.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -759,30 +759,30 @@ namespace Mac_EFI_Toolkit.WinForms
         internal System.Windows.Forms.Panel pnlTitleMenuSplit;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.Label lblStartupText;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label lblDscText;
+        private System.Windows.Forms.TableLayoutPanel tlpDvc;
+        private System.Windows.Forms.Label lblDvcText;
         private UI.METCheckbox cbxDisableVersionCheck;
         private System.Windows.Forms.Label lblApplicationText;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tlpDwf;
         private System.Windows.Forms.Label lblDwfText;
         private UI.METCheckbox cbxDisableFlashingUI;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.Label lnlCidText;
+        private System.Windows.Forms.TableLayoutPanel tlpCif;
+        private System.Windows.Forms.Label lnlCifText;
         private System.Windows.Forms.Button cmdEditCustomPath;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.TableLayoutPanel tlpDac;
         private System.Windows.Forms.Label lblDacText;
         private UI.METCheckbox cbxDisableLzmaFsSearch;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.TableLayoutPanel tlpDfe;
         private System.Windows.Forms.Label lblDfeText;
         private UI.METCheckbox cbxDisableFsysEnforce;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.TableLayoutPanel tlpAet;
         private System.Windows.Forms.Label lblAetText;
         private UI.METCheckbox cbxAcceptedEditingTerms;
         private System.Windows.Forms.Button cmdEditingTerms;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+        private System.Windows.Forms.TableLayoutPanel tlpDde;
         private System.Windows.Forms.Label lblDdeText;
         private UI.METCheckbox cbxDisableDescriptorEnforce;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.TableLayoutPanel tlpDcd;
         private System.Windows.Forms.Label lblDcdText;
         private UI.METCheckbox cbxDisableConfDiag;
         private System.Windows.Forms.Label lblFirmwareText;

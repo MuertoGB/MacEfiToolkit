@@ -90,7 +90,7 @@ namespace Mac_EFI_Toolkit
             this.labTitle = new System.Windows.Forms.Label();
             this.transparent = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.labVersion = new System.Windows.Forms.Label();
+            this.lblVersion = new System.Windows.Forms.Label();
             this.cmdMenu = new System.Windows.Forms.Button();
             this.tlpMainIcon = new System.Windows.Forms.TableLayoutPanel();
             this.pbxTitleLogo = new System.Windows.Forms.PictureBox();
@@ -1038,7 +1038,7 @@ namespace Mac_EFI_Toolkit
             this.transparent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.transparent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.transparent.Controls.Add(this.panel2, 1, 0);
-            this.transparent.Controls.Add(this.labVersion, 0, 0);
+            this.transparent.Controls.Add(this.lblVersion, 0, 0);
             this.transparent.Dock = System.Windows.Forms.DockStyle.Right;
             this.transparent.Location = new System.Drawing.Point(596, 0);
             this.transparent.Name = "transparent";
@@ -1057,20 +1057,20 @@ namespace Mac_EFI_Toolkit
             this.panel2.Size = new System.Drawing.Size(2, 34);
             this.panel2.TabIndex = 1;
             // 
-            // labVersion
+            // lblVersion
             // 
-            this.labVersion.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.labVersion.AutoSize = true;
-            this.labVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(110)))), ((int)(((byte)(120)))), ((int)(((byte)(130)))));
-            this.labVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.labVersion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labVersion.ForeColor = System.Drawing.Color.White;
-            this.labVersion.Location = new System.Drawing.Point(16, 14);
-            this.labVersion.Name = "labVersion";
-            this.labVersion.Size = new System.Drawing.Size(43, 22);
-            this.labVersion.TabIndex = 2;
-            this.labVersion.Text = "0.0.0";
-            this.labVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblVersion.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(110)))), ((int)(((byte)(120)))), ((int)(((byte)(130)))));
+            this.lblVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblVersion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.ForeColor = System.Drawing.Color.White;
+            this.lblVersion.Location = new System.Drawing.Point(16, 14);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(43, 22);
+            this.lblVersion.TabIndex = 2;
+            this.lblVersion.Text = "0.0.0";
+            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cmdMenu
             // 
@@ -1314,7 +1314,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.TableLayoutPanel tlpSizeCrcLabels;
         private System.Windows.Forms.Button cmdReset;
         private System.Windows.Forms.TableLayoutPanel transparent;
-        private System.Windows.Forms.Label labVersion;
+        private System.Windows.Forms.Label lblVersion;
         internal System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button cmdEditEfirom;
         private System.Windows.Forms.ContextMenuStrip cmsMainMenu;

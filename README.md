@@ -4,7 +4,7 @@ Mac EFI Toolkit
 
 ## About
 
->🛠 Current Status: Waiting on 044:8523-ms3 feedback, then moving onto developing the editing features.
+>🛠 Current Status: Listening to feedback, fixing issues.
 
 This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete. However basic functionality such as viewing EFIROM info, and dumping the Fsys block is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
 
@@ -48,4 +48,5 @@ Incomplete source code will become available over time, then a test build should
 
 This software uses the LZMA v22.01 SDK made by [Igor Pavlov](https://www.7-zip.org/sdk.html)\
 This software uses the [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm
-).
+).\
+Application icon by [Creatype](https://www.flaticon.com/free-icon/toolkit_6457096?term=toolkit&page=1&position=38&origin=search&related_id=6457096) on [Flaticon](https://www.flaticon.com).

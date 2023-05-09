@@ -61,6 +61,21 @@
   <PropertyGroup>
     <ApplicationIcon>Assets\met.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Assets\met.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>AD869C54C1A5838752FD378D6A2D829D0130D53D</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>met.pfx</ManifestKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
@@ -99,6 +114,7 @@
     <Compile Include="Core\LzmaCoder.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="METVersion.cs" />
+    <Compile Include="AssemblyVerifier.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
     <Compile Include="UI\METMessageBox.cs">
       <SubType>Form</SubType>
@@ -164,6 +180,7 @@
     </None>
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Assets\met.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

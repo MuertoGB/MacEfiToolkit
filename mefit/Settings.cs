@@ -32,7 +32,7 @@ namespace Mac_EFI_Toolkit
 
     class Settings
     {
-        internal static string strSettingsFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Settings.ini");
+        internal static string strSettingsFilePath = Path.Combine(Program.appPath, "Settings.ini");
         internal static string strDefaultOfdPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         #region Check File Exists

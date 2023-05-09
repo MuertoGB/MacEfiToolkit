@@ -23,6 +23,8 @@ namespace Mac_EFI_Toolkit
     static class Program
     {
         internal static string APP_BUILD = $"{Application.ProductVersion}-090523-ms3";
+        internal static string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static int minRomSize = 1048576;
         internal static int maxRomSize = 33554432;
         private static IntPtr _hookId;
@@ -51,6 +53,12 @@ namespace Mac_EFI_Toolkit
         [STAThread]
         static void Main(string[] args)
         {
+            if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(appName))
+            {
+                MessageBox.Show("The assembly signature is invalid, or cannot be verified!\r\nYou should discard of, and reacquire the file.",
+                    "Signature Verification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
