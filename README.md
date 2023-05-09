@@ -27,24 +27,24 @@ This application is currently under development, it is by no means complete, ful
 
 ## Features
 
-
 | Suggested feature                                          | Status        |
 |------------------------------------------------------------|---------------|
-| New binary built from memory                               |🟢 Completed   |
 | Knuth–Morris–Pratt algorithm for searching binary offsets  |🟢 Completed   |
 | Ability to detect and decompress LZMA DXE volumes          |🟢 Completed   |
 | Check serial number with EveryMac							 |🟢 Completed   |
 | View FITC and ME version						             |🟢 Completed   |
-| View ROM information                                       |🟡Partially Completed|
-| Dump and replace Fsys block                                |🟡Partially Completed|
-| Detect and fix invalid Fsys checksums                      |🟡Partially Completed|
+| View ROM information                                       |🟡 Partially Completed|
+| Dump and replace Fsys block                                |🟡 Partially Completed|
+| Detect and fix invalid Fsys checksums                      |🟡 Partially Completed|
 | Replace serial with automatic HWC and CRC32 calculation    |🟠 Not started |
 | Clear NVRAM and EFI lock with header preservation          |🟠 Not started |
 | Detect MDM status in the NVRAM                             |🔴 Undecided   |
 | Detect email address in the NVRAM                          |🔴 Undecided   |
 | Configure ME region	                                     |🔴 Undecided   |
 
-Implemented application features:
+When the editing features are implemented, original files will be left untouched. The new binary will be built from a copy in memory.
+
+**Implemented application features:**
 ```
 - Automatic handling of uncaught errors
 - No installation necessary
