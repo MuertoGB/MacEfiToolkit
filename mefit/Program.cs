@@ -3,10 +3,13 @@
 
 // Program.cs
 // Released under the GNU GLP v3.0
+// Updated 9.5.23 - Unhook WinKey+Up
 // MET uses embedded font resource "Segoe MDL2 Assets" which is copyright Microsoft Corp.
 
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
@@ -18,17 +21,22 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-
         internal static string APP_BUILD = $"{Application.ProductVersion.Replace(".", ""):0000}:9523-ms3";
         internal static int minRomSize = 1048576;
         internal static int maxRomSize = 33554432;
+        private static IntPtr _hookId;
 
-        #region Const Window Handles
+        #region Const Members
         internal const int WM_NCLBUTTONDOWN = 0xA1;
         internal const int HT_CAPTION = 0x2;
         internal const int WS_MINIMIZEBOX = 0x20000;
         internal const int CS_DBLCLKS = 0x8;
         internal const int CS_DROP = 0x20000;
+        private const int WH_KEYBOARD_LL = 13;
+        private const int WM_KEYDOWN = 0x0100;
+        private const int VK_UP = 0x26;
+        private const int VK_LWIN = 0x5B;
+        private const int KEY_PRESSED = 0x8000;
         #endregion
 
         #region Internal Fonts
@@ -63,7 +71,38 @@ namespace Mac_EFI_Toolkit
             if (!File.Exists(Settings.strSettingsFilePath)) Settings._createSettingsFile();
             // We will grab settings on the fly. Thanks Kyle and Daz. I will blame if anything goes sideways. Peace out.
 
+            // Register low level keyboard hook.
+            _hookId = SetHook(HookCallback);
+
+            // Run mainWindow.
             Application.Run(new mainWindow());
+
+            // Unhook low level keyboard hook.
+            NativeMethods.UnhookWindowsHookEx(_hookId);
+        }
+
+        // Register the keyboard hook.
+        internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc proc)
+        {
+            using (Process process = Process.GetCurrentProcess())
+            using (ProcessModule module = process.MainModule)
+            {
+                return NativeMethods.SetWindowsHookExA(WH_KEYBOARD_LL, proc, NativeMethods.GetModuleHandleA(module.ModuleName), 0);
+            }
+        }
+
+        internal static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
+            {
+                int vkCode = Marshal.ReadInt32(lParam);
+                if (vkCode == VK_UP && (NativeMethods.GetKeyState(VK_LWIN) & KEY_PRESSED) != 0)
+                {
+                    // Disable the Windows+Up shortcut by not passing it to the operating system.
+                    return (IntPtr)1;
+                }
+            }
+            return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
         }
         #endregion
 
