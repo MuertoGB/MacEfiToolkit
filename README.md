@@ -30,15 +30,19 @@ This application is currently under development, it is by no means complete, ful
 
 | Suggested feature                                          | Status        |
 |------------------------------------------------------------|---------------|
-| New binary built from memory                               |✅ Completed   |
-| Knuth–Morris–Pratt algorithm for searching binary offsets  |✅ Completed   |
-| Replace serial with automatic HWC and CRC32 calculation    |❌ In progress |
-| Clear NVRAM and EFI lock with header preservation          |❌ In progress |
-| Ability to detect and decompress LZMA DXE volumes          |✅ Completed   |
-| Detect email address in the NVRAM (maybe)                  |❌ In progress|
-| Detect and fix invalid Fsys checksums                      |⚠ Partially complete|
-| Check serial number with EveryMac							 |✅ Completed   |
-| Dump and replace Fsys block                                |⚠ Partially complete|
+| New binary built from memory                               |🟢 Completed   |
+| Knuth–Morris–Pratt algorithm for searching binary offsets  |🟢 Completed   |
+| Ability to detect and decompress LZMA DXE volumes          |🟢 Completed   |
+| Check serial number with EveryMac							 |🟢 Completed   |
+| View FITC and ME version						             |🟢 Completed   |
+| View ROM information                                       |🟡Partially Completed|
+| Dump and replace Fsys block                                |🟡Partially Completed|
+| Detect and fix invalid Fsys checksums                      |🟡Partially Completed|
+| Replace serial with automatic HWC and CRC32 calculation    |🟠 Not started |
+| Clear NVRAM and EFI lock with header preservation          |🟠 Not started |
+| Detect MDM status in the NVRAM                             |🔴 Undecided   |
+| Detect email address in the NVRAM                          |🔴 Undecided   |
+| Configure ME region	                                     |🔴 Undecided   |
 
 Implemented application features:
 ```
@@ -77,5 +81,7 @@ This software uses the [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/w
 Application icon by [Creatype](https://www.flaticon.com/free-icon/toolkit_6457096?term=toolkit&page=1&position=38&origin=search&related_id=6457096) on [Flaticon](https://www.flaticon.com).
 
 ## Donate
+
+All donations go back into improving my tools and workspace.
 
 <a href="https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ"><img width="160" src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal Logo" vspace="5" hspace="5"></a>
