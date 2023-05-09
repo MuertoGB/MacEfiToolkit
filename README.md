@@ -56,7 +56,7 @@ Plus more, only time will tell.
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-| [0.4.5](/releases/tag/045)  | 9th May 2023 | Yes | BETA |
+| [0.4.5](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/045)  | 9th May 2023 | Yes | BETA |
 
 ## Requirements
 
