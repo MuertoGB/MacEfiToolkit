@@ -1,3 +1,8 @@
+## Version 0.4.6:
+
+#### Bugs:
+- Fixed integrity check fault relating to wrong api import.
+
 ## Version 0.4.5:
 
 #### New:
