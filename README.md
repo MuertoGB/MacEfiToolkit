@@ -42,10 +42,10 @@ This application is currently under development, it is by no means complete, ful
 
 Implemented application features:
 ```
-Application:
 - Automatic handling of uncaught errors
 - No installation necessary
 - DPI scaling support
+- Integrity checking
 - Memory Management
 - Version checking
 ```
@@ -57,6 +57,7 @@ Plus more, only time will tell.
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
 | [0.4.5](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/045)  | 9th May 2023 | Yes | BETA |
+| [0.4.4](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/044)  | 8th May 2023 | No | BETA |
 
 ## Requirements
 
