@@ -180,14 +180,24 @@ namespace Mac_EFI_Toolkit
 
         private void cmdOpenBin_Click(object sender, EventArgs e)
         {
-            strInitialDirectory = Settings._settingsGetString(SettingsStringType.InitialDirectory) != string.Empty &&
-                      Directory.Exists(Settings._settingsGetString(SettingsStringType.InitialDirectory))
-                          ? Settings._settingsGetString(SettingsStringType.InitialDirectory)
-                          : strInitialDirectory;
+            string initialDirectory;
+
+            if (!string.IsNullOrEmpty(strRememberPath))
+            {
+                initialDirectory = strRememberPath;
+            }
+            else
+            {
+                initialDirectory = Settings._settingsGetString(SettingsStringType.InitialDirectory);
+                if (string.IsNullOrEmpty(initialDirectory) || !Directory.Exists(initialDirectory))
+                {
+                    initialDirectory = strInitialDirectory;
+                }
+            }
 
             using (var dialog = new OpenFileDialog
             {
-                InitialDirectory = strInitialDirectory,
+                InitialDirectory = initialDirectory,
                 Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
             })
             {
@@ -199,6 +209,7 @@ namespace Mac_EFI_Toolkit
                     if (boolIsValidFirmware())
                     {
                         strInitialDirectory = strLoadedBinaryFilePath;
+                        strRememberPath = strLoadedBinaryFilePath;
                         LoadEfiData();
                     }
                     else

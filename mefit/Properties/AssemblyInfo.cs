@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Mac EFI Toolkit")]
 [assembly: AssemblyDescription("A toolkit for repairing and modifying data in Mac EFI binaries.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Roberts Repair")]
+[assembly: AssemblyCompany("N/A")]
 [assembly: AssemblyProduct("Mac EFI Toolkit")]
-[assembly: AssemblyCopyright("© David Roberts  2023")]
+[assembly: AssemblyCopyright("David Roberts © 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

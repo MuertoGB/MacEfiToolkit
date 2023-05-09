@@ -58,7 +58,7 @@ namespace Mac_EFI_Toolkit.Core
             0x73, 0x73, 0x6E
         };
         internal static readonly byte[] SSN_UPPER_SIG =
-{
+        {
             0x53, 0x53, 0x4E
         };
         internal static readonly byte[] SON_SIG =
