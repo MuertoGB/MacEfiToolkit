@@ -15,13 +15,13 @@ namespace Mac_EFI_Toolkit.WIN32
     class NativeMethods
     {
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasecapture
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
         [ResourceExposure(ResourceScope.None)]
         internal static extern bool ReleaseCapture(
             HandleRef hWnd);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         internal static extern IntPtr SendMessage(
             HandleRef hWnd,
@@ -30,7 +30,7 @@ namespace Mac_EFI_Toolkit.WIN32
             IntPtr lParam);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-addfontmemresourceex
-        [DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("gdi32.dll", ExactSpelling = true)]
         internal static extern IntPtr AddFontMemResourceEx(
             IntPtr pFileView,
             uint cjSize,
@@ -38,7 +38,7 @@ namespace Mac_EFI_Toolkit.WIN32
             [In] ref uint pNumFonts);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestring
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll")]
         internal static extern bool GetPrivateProfileString(
             string lpAppName,
             string lpKeyName,
@@ -48,7 +48,7 @@ namespace Mac_EFI_Toolkit.WIN32
             string lpFilename);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-writeprivateprofilestringa
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll")]
         internal static extern bool WritePrivateProfileString(
             string lpAppName,
             string lpKeyName,
@@ -56,14 +56,14 @@ namespace Mac_EFI_Toolkit.WIN32
             string lpFilename);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilesectionnames
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll")]
         internal static extern uint GetPrivateProfileSectionNames(
             IntPtr lpszReturnBuffer,
             uint nSize,
             string lpFileName);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilesection
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll")]
         internal static extern uint GetPrivateProfileSection(
             string lpAppName,
             IntPtr lpReturnedString,
@@ -97,7 +97,7 @@ namespace Mac_EFI_Toolkit.WIN32
             IntPtr wParam,
             IntPtr lParam);
 
-        //https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeystate
+        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeystate
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern short GetKeyState(
             int nVirtKey);
@@ -106,6 +106,5 @@ namespace Mac_EFI_Toolkit.WIN32
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern IntPtr GetModuleHandleA(
             string lpModuleName);
-
     }
 }

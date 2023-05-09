@@ -27,7 +27,7 @@ namespace Mac_EFI_Toolkit.WinForms
             get
             {
                 CreateParams Params = base.CreateParams;
-                // Params.Style |= Program.WS_MINIMIZEBOX;
+                // Params.Style |= Program.WS_MINIMIZEBOX; (Not necessary, window cannot be minimized)
                 Params.ClassStyle = Params.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
                 return Params;
             }
@@ -121,11 +121,10 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings._settingsSetBool(SettingsBoolType.DisableFsysEnforce, cbxDisableFsysEnforce.Checked);
             Settings._settingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
             //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
-            DisplaySettingsUpdatedLabel();
+            _showSettingsUpdatedLabel();
         }
-        #endregion
 
-        private void DisplaySettingsUpdatedLabel()
+        private void _showSettingsUpdatedLabel()
         {
             if (!isTimerRunning)
             {
@@ -147,6 +146,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 isTimerRunning = true;
             }
         }
+        #endregion
 
     }
 }

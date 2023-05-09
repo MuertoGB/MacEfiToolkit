@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -21,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static string APP_BUILD = $"{Application.ProductVersion.Replace(".", ""):0000}:9523-ms3";
+        internal static string APP_BUILD = $"{Application.ProductVersion}-090523-ms3";
         internal static int minRomSize = 1048576;
         internal static int maxRomSize = 33554432;
         private static IntPtr _hookId;

@@ -95,7 +95,6 @@ namespace Mac_EFI_Toolkit
 
             ToggleControlEnable(false);
 
-            labTitle.Text += $" ({Program.APP_BUILD})";
             labVersion.Text = Application.ProductVersion;
 
             if (!Settings._settingsGetBool(SettingsBoolType.DisableVersionCheck))
@@ -322,6 +321,7 @@ namespace Mac_EFI_Toolkit
         {
             MinimizeWindow();
         }
+        #endregion
 
         #region Window Events
 
@@ -360,7 +360,6 @@ namespace Mac_EFI_Toolkit
                 }
             }
 
-
             if (!Settings._settingsGetBool(SettingsBoolType.DisableFsysEnforce))
             {
                 if (bytesFsys == null)
@@ -369,7 +368,6 @@ namespace Mac_EFI_Toolkit
                     return false;
                 }
             }
-
 
             ToggleControlEnable(true);
             ValidBinaryLoaded = true;
@@ -429,6 +427,7 @@ namespace Mac_EFI_Toolkit
             labSon.Text = strSon;
             labBoardId.Text = strBoardId;
         }
+
         internal async void CheckHwcAsync(string serialNumber)
         {
             var configCode = await EFIUtils._stringGetConfigCodeAsync(serialNumber);
@@ -479,8 +478,6 @@ namespace Mac_EFI_Toolkit
                 button.Enabled = (Enable) ? true : false;
             }
         }
-        #endregion
-
         #endregion
 
     }
