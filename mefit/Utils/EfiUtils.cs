@@ -16,33 +16,27 @@ namespace Mac_EFI_Toolkit.Utils
     class EFIUtils
     {
         /// <summary>
-        /// Retrieves the config code string from the Apple server for a given serial number.
+        /// Retrieves the config code string from the Apple server for a given HWC indentifier.
         /// </summary>
-        /// <param name="serialNumber">The serial number to retrieve a configuration code for.</param>
-        /// <returns>The configuration code string, or an error message if an error occurs.</returns>
-        internal static async Task<string> _stringGetConfigCodeAsync(string serialNumber)
+        /// <param name="strHwc">The HWC identifier to retrieve a configuration data for.</param>
+        /// <returns>The configuration data string, or an error message if an error occurs.</returns>
+        internal static async Task<string> _stringGetConfigCodeAsync(string strHwc)
         {
             try
             {
-                // Return an error message if the serial number is too short
-                if (serialNumber.Length < 11) return "Invalid serial number";
-
-                // Determine the number of digits to take from the serial number
-                int digitsToTake = serialNumber.Length == 12 ? 4 : 3;
-
-                // Build the URL to retrieve the configuration code
-                var url = $"http://support-sp.apple.com/sp/product?cc={serialNumber.Substring(serialNumber.Length - digitsToTake)}";
+                // URL to retrieve the configuration data
+                var url = $"http://support-sp.apple.com/sp/product?cc={strHwc}";
 
                 // Check if the website is available
                 if (!NetUtils._boolIsWebsiteAvailable(url)) return "Domain not available";
 
-                // Download and parse the XML data to retrieve the configuration code
+                // Download and parse the XML data to retrieve the configuration data
                 var xml = await new WebClient().DownloadStringTaskAsync(url);
                 var doc = XDocument.Parse(xml);
                 var data = doc.XPathSelectElement("/root/configCode")?.Value;
 
-                // Return the configuration code or an error message
-                return data ?? "Invalid serial number";
+                // Return the configuration data or an error message
+                return data ?? "Invalid HWC?";
             }
             catch
             {

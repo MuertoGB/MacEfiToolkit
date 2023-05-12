@@ -5,6 +5,7 @@
 - Added file creation time, modified time, and HWC data to main window.
 
 #### Enhancements:
+- Config details are now generated from HWC, instead of the serial number.
 - Delayed main window control enable until data has finished loading.
 - Unhandled exceptions are now written to a log file.
 

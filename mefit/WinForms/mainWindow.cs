@@ -501,7 +501,7 @@ namespace Mac_EFI_Toolkit
             lblFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = clrGood : lblFsysCrc.ForeColor = clrError;
             lblApfsCapable.Text = strApfsCapable;
             if (strApfsCapable == "Yes") lblApfsCapable.ForeColor = clrGood; else lblApfsCapable.ForeColor = clrUnknown;
-            CheckHwcAsync(strSerialNumber);
+            CheckHwcAsync(strHwc);
             lblSerialNumber.Text = strSerialNumber;
             lblHwc.Text = strHwc;
             lblEfiVersion.Text = strEfiVer;
