@@ -153,7 +153,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 var timer = new System.Windows.Forms.Timer();
 
-                timer.Interval = 3000;
+                timer.Interval = 2000;
                 timer.Tick += (sender, e) =>
                 {
                     lblSettingsUpdated.Hide();

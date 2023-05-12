@@ -30,7 +30,7 @@ This application is currently under development, it is by no means complete, ful
 | Suggested feature                                          | Status        |
 |------------------------------------------------------------|---------------|
 | Knuth–Morris–Pratt algorithm for searching binary offsets  |🟢 Completed   |
-| Ability to detect and decompress LZMA DXE volumes          |🟢 Completed   |
+| Ability to detect APFSJumpStart in compressed DXE volumes  |🟢 Completed   |
 | Check serial number with EveryMac							 |🟢 Completed   |
 | View FITC and ME version						             |🟢 Completed   |
 | View ROM information                                       |🟡 Partially Completed|
@@ -60,8 +60,8 @@ Plus more, only time will tell.
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-| [0.4.6](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/046)  | 9th May 2023 | Yes | BETA |
-| [0.4.5](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/045)  | 9th May 2023 | No | BETA |
+|[0.5.0](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/050)| 12th May 2023 | Yes | BETA |
+|[0.4.6](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/046)| 9th May 2023 | No | BETA |
 
 ## Requirements
 

@@ -1,3 +1,16 @@
+## Version 0.5.0:
+
+#### New:
+- User interface revamped.
+- Added file creation time, modified time, and HWC data to main window.
+
+#### Enhancements:
+- Delayed main window control enable until data has finished loading.
+- Unhandled exceptions are now written to a log file.
+
+#### Bugs:
+- Prevented crash caused by disposed object being passed to unmanaged code.
+
 ## Version 0.4.6:
 
 #### Bugs:
@@ -36,11 +49,11 @@
 - About section links are now enabled.
 - About section keydown enabled, form can be closed with 'Esc'.
 - Modified load order when parsing data.
+- Other small unnotable changes.
 
 #### Bugs:
 - Fixed cases of malformed serial numbers.
 - Fixed control tab indexing.
-- Other small unnotable changes.
 
 ###  Version 0.3.4
 

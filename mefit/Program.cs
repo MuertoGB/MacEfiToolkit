@@ -3,7 +3,7 @@
 
 // Program.cs
 // Released under the GNU GLP v3.0
-// Updated 9.5.23 - Unhook WinKey+Up
+// Updated 11.5.23 - Prevent keybook hook being destroyed by the garbage collector. Naughty garbage collector.
 // MET uses embedded font resource "Segoe MDL2 Assets" which is copyright Microsoft Corp.
 
 using Mac_EFI_Toolkit.UI;
@@ -22,12 +22,12 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static string APP_BUILD = $"{Application.ProductVersion}-090523-ms3";
-        internal static string appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        internal static string appName = Assembly.GetExecutingAssembly().Location;
-        internal static int minRomSize = 1048576;
-        internal static int maxRomSize = 33554432;
-        private static IntPtr _hookId;
+        internal static string strAppBuild = $"{Application.ProductVersion}-120523-ms3";
+        internal static string strAppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        internal static string strAppName = Assembly.GetExecutingAssembly().Location;
+        private static NativeMethods.LowLevelKeyboardProc _proc = HookCallback;
+        private static IntPtr _hookId = IntPtr.Zero;
+        private static GCHandle _hookHandle;
 
         #region Const Members
         internal const int WM_NCLBUTTONDOWN = 0xA1;
@@ -53,16 +53,18 @@ namespace Mac_EFI_Toolkit
         [STAThread]
         static void Main(string[] args)
         {
-            if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(appName))
+            // Verify integrity of application to ensure it's not corrupt.
+            if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(strAppName))
             {
                 MessageBox.Show("The assembly signature is invalid, or cannot be verified!\r\nYou should discard of, and reacquire the file.",
                     "Signature Verification", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            // Default framework stuff.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Unhandled Exception
+            // Register exception handler events.
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
@@ -80,16 +82,24 @@ namespace Mac_EFI_Toolkit
             if (!File.Exists(Settings.strSettingsFilePath)) Settings._createSettingsFile();
             // We will grab settings on the fly. Thanks Kyle and Daz. I will blame if anything goes sideways. Peace out.
 
-            // Register low level keyboard hook.
-            _hookId = SetHook(HookCallback);
+            // Register application exit event.
+            Application.ApplicationExit += OnExiting;
+
+            // Register low level keyboard hook for preventing WinKey+Up.
+            _kbHook();
 
             // Run mainWindow.
             Application.Run(new mainWindow());
-
-            // Unhook low level keyboard hook.
-            NativeMethods.UnhookWindowsHookEx(_hookId);
         }
 
+        private static void OnExiting(object sender, EventArgs e)
+        {
+            // Unhook the keyboard hook before exiting the application.
+            _kbUnhook();
+        }
+        #endregion
+
+        #region Hooks
         // Register the keyboard hook.
         internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc proc)
         {
@@ -100,18 +110,32 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        // Define the keyboard hook callback function
+        private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 if (vkCode == VK_UP && (NativeMethods.GetKeyState(VK_LWIN) & KEY_PRESSED) != 0)
                 {
-                    // Disable the Windows+Up shortcut by not passing it to the operating system.
+                    // Disable the Windows+Up shortcut by not passing it to the operating system
                     return (IntPtr)1;
                 }
             }
             return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
+        }
+
+        private static void _kbHook()
+        {
+            _proc = HookCallback;
+            _hookHandle = GCHandle.Alloc(_proc);
+            _hookId = SetHook(_proc);
+        }
+
+        private static void _kbUnhook()
+        {
+            NativeMethods.UnhookWindowsHookEx(_hookId);
+            _hookHandle.Free();
         }
         #endregion
 
@@ -156,13 +180,16 @@ namespace Mac_EFI_Toolkit
             string message = e.Message.ToString();
             string exception = e.ToString();
 
+            Logger.Write($"{type}:- {message}\r\n\r\n{exception}\r\n\r\n -------------------");
+
             DialogResult result = MessageBox.Show(message + "\r\n\r\n" + exception + "\r\n\r\n" + "Quit application?",
                 type, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
 
             switch (result)
             {
                 case DialogResult.Yes:
-                    Application.Exit();
+                    _kbUnhook(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit.
+                    Environment.Exit(-1);
                     break;
                 case DialogResult.No:
                     break;

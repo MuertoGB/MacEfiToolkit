@@ -13,7 +13,7 @@ namespace Mac_EFI_Toolkit
 {
     class Logger
     {
-        private static readonly string logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "MEFIT.log");
+        internal static readonly string logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mefit.log");
 
         internal static void Write(string logMessage)
         {

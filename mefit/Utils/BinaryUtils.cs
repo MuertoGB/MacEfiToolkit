@@ -3,7 +3,6 @@
 
 // Utilities
 // BinaryUtils.cs - A collection of functions to handle binary data.
-// Updated 29.04.2023 - Impliment FindOffset Knuth-Morris-Pratt algorithm
 // This code uses the Knuth-Morris-Pratt algorithm for pattern matching and string searching, developed by Donald Knuth, Vaughan Pratt, and James Morris.
 // Released under the GNU GLP v3.0
 

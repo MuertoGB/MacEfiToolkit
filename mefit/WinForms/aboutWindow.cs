@@ -47,7 +47,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void aboutWindow_Load(object sender, EventArgs e)
         {
-            lblBuild.Text = $"Build: { Program.APP_BUILD} ";
+            lblBuild.Text = $"Build: { Program.strAppBuild} ";
             FormatLinks();
         }
         #endregion

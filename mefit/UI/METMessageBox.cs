@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Private Colours
-        private readonly Color clrCrit = Color.FromArgb(192, 60, 60);
+        private readonly Color clrCrit = Color.FromArgb(255, 50, 50);
         private readonly Color clrWarn = Color.FromArgb(255, 100, 70);
         private readonly Color clrInfo = Color.FromArgb(0, 120, 180);
         #endregion

@@ -27,25 +27,28 @@ namespace Mac_EFI_Toolkit
         internal byte[] bytesDxeCompressed;
         internal uint uintCrcOfLoadedFile;
         internal long lngFilesize;
+        internal long lngFsysOffset;
 
         #region Private Members
         private string strInitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         private string strLoadedBinaryFilePath;
+        private string strCreationTime;
+        private string strModifiedTime;
         private string strRememberPath = string.Empty;
-        private string strFsysChecksumInBinary;
-        private string strFsysCalculation;
         private string strFilename;
-        private string strFitcVersion;
-        private string strMeVersion;
         private string strSerialNumber;
-        private string strSon;
-        private string strBoardId;
+        private string strHwc;
         private string strEfiVer;
         private string strBootrom;
         private string strApfsCapable;
-        private bool ValidBinaryLoaded = false;
+        private string strFsysChecksumInBinary;
+        private string strFsysCalculation;
+        private string strFitcVersion;
+        private string strMeVersion;
+        private string strBoardId;
+        private string strSon;
         private readonly Color clrUnknown = Color.Tomato;
-        private readonly Color clrError = Color.FromArgb(255, 70, 50);
+        private readonly Color clrError = Color.FromArgb(255, 50, 50);
         private readonly Color clrGood = Color.FromArgb(128, 255, 128);
         #endregion
 
@@ -67,6 +70,8 @@ namespace Mac_EFI_Toolkit
         {
             InitializeComponent();
 
+            lblMessage.Hide();
+
             Load += mainWindow_Load;
             Shown += mainWindow_Shown;
             FormClosing += mainWindow_FormClosing;
@@ -74,15 +79,22 @@ namespace Mac_EFI_Toolkit
 
             tlpMain.MouseMove += Move_Form;
             tlpMainIcon.MouseMove += Move_Form;
-            labTitle.MouseMove += Move_Form;
+            lblWindowTitle.MouseMove += Move_Form;
+
+            CreateTipHandlers();
 
             cmsMainMenu.Renderer = new METMenuRenderer();
             cmsApplication.Renderer = new METMenuRenderer();
+            cmsFsysMenu.Renderer = new METMenuRenderer();
 
             cmdMenu.Font = Program.FONT_MDL2_REG_14;
-            cmdMenu.Text = "\xEDE3";
-            cmdSerialCheck.Font = Program.FONT_MDL2_REG_9;
-            cmdSerialCheck.Text = "\xF6FA";
+            cmdMenu.Text = "\xE169";
+            cmdExportFsysBlock.Font = Program.FONT_MDL2_REG_9;
+            cmdExportFsysBlock.Text = "\xE74E";
+            cmdFixFsysCrc.Font = Program.FONT_MDL2_REG_9;
+            cmdFixFsysCrc.Text = "\xE90F";
+            cmdEveryMacSearch.Font = Program.FONT_MDL2_REG_9;
+            cmdEveryMacSearch.Text = "\xF6FA";
         }
 
         private void mainWindow_Load(object sender, EventArgs e)
@@ -140,10 +152,9 @@ namespace Mac_EFI_Toolkit
         {
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.O) cmdOpenBin.PerformClick();
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.R) cmdReset.PerformClick();
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.E) cmdExportFsys.PerformClick();
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C) cmdSerialCheck.PerformClick();
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.E) cmdExportFsysBlock.PerformClick();
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C) cmdEveryMacSearch.PerformClick();
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.M) ShowContextMenu(cmdMenu, cmsMainMenu);
-            if (e.Modifiers == Keys.Shift && e.KeyCode == Keys.R) Program.RestartMet(this);
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.S) using (var frm = new settingsWindow()) frm.Show();
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A) using (var frm = new aboutWindow()) frm.Show();
         }
@@ -204,9 +215,11 @@ namespace Mac_EFI_Toolkit
                 {
                     strLoadedBinaryFilePath = dialog.FileName;
                     bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath);
-                    bytesFsys = FirmwareParser._byteGetFsysBlock(bytesLoadedFile);
+                    var fsysOut = FirmwareParser._byteGetFsysBlock(bytesLoadedFile, true);
+                    bytesFsys = fsysOut.BlockBytes; lngFsysOffset = fsysOut.Offset;
                     if (boolIsValidFirmware())
                     {
+                        ToggleControlEnable(false);
                         strInitialDirectory = strLoadedBinaryFilePath;
                         strRememberPath = strLoadedBinaryFilePath;
                         LoadEfiData();
@@ -241,7 +254,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void cmdExportFsys_Click(object sender, EventArgs e)
+        private void cmdExportFsysBlock_Click(object sender, EventArgs e)
         {
             if (bytesFsys == null)
             {
@@ -275,6 +288,19 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Toolstrip Events
+
+        private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Logger.logFilePath))
+            {
+                Process.Start(Logger.logFilePath);
+            }
+            else
+            {
+                METMessageBox.Show(this, "File Information", "The log file was not detected, it has not yet been created.", MsgType.Information, MsgButton.Okay);
+            }
+        }
+
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Program.RestartMet(this);
@@ -316,6 +342,46 @@ namespace Mac_EFI_Toolkit
         {
             Process.Start(METVersion.latestUrl);
         }
+
+        private void CreateTipHandlers()
+        {
+            cmdExportFsysBlock.MouseEnter += HandleMouseEnterTip;
+            cmdExportFsysBlock.MouseLeave += HandleMouseLeaveTip;
+            cmdFixFsysCrc.MouseEnter += HandleMouseEnterTip;
+            cmdFixFsysCrc.MouseLeave += HandleMouseLeaveTip;
+            cmdEveryMacSearch.MouseEnter += HandleMouseEnterTip;
+            cmdEveryMacSearch.MouseLeave += HandleMouseLeaveTip;
+            cmdOpenBin.MouseEnter += HandleMouseEnterTip;
+            cmdOpenBin.MouseLeave += HandleMouseLeaveTip;
+            cmdReset.MouseEnter += HandleMouseEnterTip;
+            cmdReset.MouseLeave += HandleMouseLeaveTip;
+            cmdEditEfirom.MouseEnter += HandleMouseEnterTip;
+            cmdEditEfirom.MouseLeave += HandleMouseLeaveTip;
+        }
+
+        private void HandleMouseEnterTip(object sender, EventArgs e)
+        {
+            if (sender == cmdExportFsysBlock)
+                lblMessage.Text = "Export Fsys block to disk...";
+            else if (sender == cmdFixFsysCrc)
+                lblMessage.Text = "Repair Fsys CRC32...";
+            else if (sender == cmdEveryMacSearch)
+                lblMessage.Text = "View serial number information on EveryMac...";
+            else if (sender == cmdOpenBin)
+                lblMessage.Text = "Open a Mac EFIROM...";
+            else if (sender == cmdReset)
+                lblMessage.Text = "Unload EFIROM and clear all data...";
+            else if (sender == cmdEditEfirom)
+                lblMessage.Text = "Edit serial number, clear NVRAM, etc...";
+
+            lblMessage.Show();
+        }
+
+        private void HandleMouseLeaveTip(object sender, EventArgs e)
+        {
+            lblMessage.Text = string.Empty;
+            lblMessage.Hide();
+        }
         #endregion
 
         #region Picturebox Events
@@ -347,13 +413,13 @@ namespace Mac_EFI_Toolkit
         {
             FileInfo fInfo = new FileInfo(strLoadedBinaryFilePath);
             // Binary too small? Potential bug here.
-            if (fInfo.Length < Program.minRomSize) // 1048576 bytes
+            if (fInfo.Length < FirmwareParser.intMinRomSize) // 1048576 bytes
             {
                 METMessageBox.Show(this, "File Error", "File ignored, the file was too small.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
             // Binary too large, no Mac EFI is this big.
-            if (fInfo.Length > Program.maxRomSize) // 33554432 bytes
+            if (fInfo.Length > FirmwareParser.intMaxRomSize) // 33554432 bytes
             {
                 METMessageBox.Show(this, "File Error", "File ignored, the file was too large.", MsgType.Warning, MsgButton.Okay);
                 return false;
@@ -376,70 +442,82 @@ namespace Mac_EFI_Toolkit
                     return false;
                 }
             }
-
-            ToggleControlEnable(true);
-            ValidBinaryLoaded = true;
             return true;
         }
 
         internal void LoadEfiData()
         {
+            var fileInfo = new FileInfo(strLoadedBinaryFilePath);
+            DateTime creationTime = fileInfo.CreationTime;
+            DateTime modifiedTime = fileInfo.LastWriteTime;
+
             // Filename
             strFilename = Path.GetFileName(strLoadedBinaryFilePath);
             // Size
             lngFilesize = FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath);
             // File CRC32
             uintCrcOfLoadedFile = FileUtils._uintGetCrc32FromBytes(bytesLoadedFile);
+            // Created time
+            strCreationTime = $"{creationTime}";
+            // Modified time
+            strModifiedTime = $"{modifiedTime}";
+            // Serial number
+            strSerialNumber = FirmwareParser._stringGetFsysSerialNumber(bytesFsys);
+            // HWC
+            strHwc = FirmwareParser._stringGetFsysHwc(bytesFsys);
+            // EFI Version
+            strEfiVer = FirmwareParser._stingGetEfiVersionFromAppleRomSection(bytesLoadedFile);
+            // ROM version
+            strBootrom = FirmwareParser._stringGetBootromVersionFromAppleRomSection(bytesLoadedFile);
             // Fsys CRC32 string
             strFsysChecksumInBinary = FirmwareParser._stringGetFsysCrc32(bytesLoadedFile);
             // Fsys CRC32
             byte[] bytesTempFsys = new byte[0x7FC];
             if (bytesFsys != null) Array.Copy(bytesFsys, 0, bytesTempFsys, 0, bytesTempFsys.Length);
             strFsysCalculation = FileUtils._uintGetCrc32FromBytes(bytesTempFsys).ToString("X2");
+            // APFSJumpStart
+            strApfsCapable = $"{ FirmwareParser._getIsApfsCapable(bytesLoadedFile) }";
             // FITC
             strFitcVersion = MEParser._stringGetFitcVersion(bytesLoadedFile);
             //ME
             strMeVersion = MEParser._stringGetMeVersion(bytesLoadedFile);
-            // APFSJumpStart
-            strApfsCapable = $"{ FirmwareParser._getIsApfsCapable(bytesLoadedFile) }";
-            // EFI Version
-            strEfiVer = FirmwareParser._stingGetEfiVersionFromAppleRomSection(bytesLoadedFile);
-            // ROM version
-            strBootrom = FirmwareParser._stringGetBootromVersionFromAppleRomSection(bytesLoadedFile);
-            // Serial number
-            strSerialNumber = FirmwareParser._stringGetFsysSerialNumber(bytesFsys);
-            // SON
-            strSon = FirmwareParser._stringGetFsysSon(bytesFsys);
             // Get the BoardId
             strBoardId = FirmwareParser._stringGetPdrBoardId(bytesLoadedFile);
+            // SON
+            strSon = FirmwareParser._stringGetFsysSon(bytesFsys);
 
             UpdateControls();
         }
 
         internal void UpdateControls()
         {
-            labFilename.Text = $"> {strFilename}";
-            labSizeBytes.ForeColor = EFIUtils._boolGetIsValidBinarySize((int)lngFilesize) ? clrGood : clrUnknown;
-            labSizeBytes.Text = FileUtils._stringFormatBytesWithCommas(FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath));
-            labChecksum.Text = uintCrcOfLoadedFile.ToString("X2");
-            labFitcVersion.Text = strFitcVersion;
-            labMeVersion.Text = strMeVersion;
-            labEfiVersion.Text = strEfiVer;
-            labRomVersion.Text = strBootrom;
-            labApfsCapable.Text = strApfsCapable;
-            labFsysCrc.Text = (strFsysCalculation == strFsysChecksumInBinary) ? $"{ strFsysChecksumInBinary }h" : $"{ strFsysChecksumInBinary }h (Invalid)";
-            labFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? labFsysCrc.ForeColor = clrGood : labFsysCrc.ForeColor = clrError;
-            labValid.Text = ValidBinaryLoaded ? "Yes" : "No";
-            labSerial.Text = strSerialNumber;
+            lblFilename.Text = $"· {strFilename}";
+            lblFilesizeBytes.ForeColor = EFIUtils._boolGetIsValidBinarySize((int)lngFilesize) ? clrGood : clrUnknown;
+            lblFilesizeBytes.Text = FileUtils._stringFormatBytesWithCommas(FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath));
+            lblCreated.Text = strCreationTime;
+            lblModified.Text = strModifiedTime;
+            lblFileChecksum.Text = uintCrcOfLoadedFile.ToString("X2");
+            lblFsysCrc.Text = $"{ strFsysChecksumInBinary }h";
+            lblFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = clrGood : lblFsysCrc.ForeColor = clrError;
+            lblApfsCapable.Text = strApfsCapable;
+            if (strApfsCapable == "Yes") lblApfsCapable.ForeColor = clrGood; else lblApfsCapable.ForeColor = clrUnknown;
             CheckHwcAsync(strSerialNumber);
-            labSon.Text = strSon;
-            labBoardId.Text = strBoardId;
+            lblSerialNumber.Text = strSerialNumber;
+            lblHwc.Text = strHwc;
+            lblEfiVersion.Text = strEfiVer;
+            lblRomVersion.Text = strBootrom;
+            lblFitcVersion.Text = strFitcVersion;
+            lblMeVersion.Text = strMeVersion;
+            lblBoardId.Text = strBoardId;
+            lblSon.Text = strSon;
+
+            ToggleControlEnable(true);
         }
 
         internal async void CheckHwcAsync(string serialNumber)
         {
             var configCode = await EFIUtils._stringGetConfigCodeAsync(serialNumber);
-            labConfig.Text = $"> {configCode}";
+            lblConfig.Text = $"· {configCode}";
         }
         #endregion
 
@@ -447,24 +525,23 @@ namespace Mac_EFI_Toolkit
         private void ResetClear()
         {
             // Reset labels
-            Label[] labels = { labFilename, labSizeBytes, labChecksum, labValid, labFitcVersion,
-                labMeVersion, labApfsCapable,  labEfiVersion, labFsysCrc, labRomVersion, labConfig, labSerial, labSon, labBoardId };
+            Label[] labels = {
+                lblFilename, lblFileChecksum, lblFilesizeBytes, lblCreated, lblModified,
+                lblConfig, lblSerialNumber, lblHwc, lblEfiVersion, lblRomVersion,
+                lblFsysCrc, lblApfsCapable, lblFitcVersion, lblMeVersion, lblBoardId,
+                lblSon
+            };
             Color defaultColor = Color.White;
             foreach (Label label in labels)
             {
-                label.Text = "...";
+                label.Text = string.Empty;
                 label.ForeColor = defaultColor;
             }
-
-            ToggleControlEnable(false);
 
             // Clear loaded binary data
             bytesLoadedFile = null;
             bytesFsys = null;
             bytesDxeCompressed = null;
-
-            //Reset boolean
-            ValidBinaryLoaded = false;
 
             // Clear the large object heap
             GC.Collect();
@@ -475,12 +552,14 @@ namespace Mac_EFI_Toolkit
                     GC.WaitForPendingFinalizers();
                 }
             }
+
+            ToggleControlEnable(false);
         }
 
         private void ToggleControlEnable(bool Enable)
         {
-            Button[] buttons = { cmdReset, cmdExportFsys, cmdSerialCheck };
-            // cmdReplaceFsys, cmdRepairFsys, cmdEditEfirom
+            Button[] buttons = { cmdReset, cmdExportFsysBlock, cmdEveryMacSearch };
+            tlpMain.Enabled = Enable;
             foreach (Button button in buttons)
             {
                 button.Enabled = (Enable) ? true : false;

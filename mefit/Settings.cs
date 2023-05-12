@@ -7,7 +7,6 @@
 using Mac_EFI_Toolkit.Core;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace Mac_EFI_Toolkit
 {
@@ -32,7 +31,7 @@ namespace Mac_EFI_Toolkit
 
     class Settings
     {
-        internal static string strSettingsFilePath = Path.Combine(Program.appPath, "Settings.ini");
+        internal static string strSettingsFilePath = Path.Combine(Program.strAppPath, "Settings.ini");
         internal static string strDefaultOfdPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         #region Check File Exists
@@ -159,7 +158,8 @@ namespace Mac_EFI_Toolkit
                 if (ini.KeyExists(section, key))
                 {
                     ini.Write(section, key, value.ToString());
-                } else
+                }
+                else
                 {
                     Logger.Write($"{section} > {key} > Key not found, setting was not written.");
                 }

@@ -3,9 +3,9 @@
 
 // Utilities
 // EfiUtils.cs
-// Updated 30.04.2023 - Naming, remove unused functions.
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Core;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -57,8 +57,8 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>True if the size is valid, otherwise false.</returns>
         internal static bool _boolGetIsValidBinarySize(int sizeIn)
         {
-            int expectedSize = Program.minRomSize;
-            int maxSize = Program.maxRomSize;
+            int expectedSize = FirmwareParser.intMinRomSize;
+            int maxSize = FirmwareParser.intMaxRomSize;
 
             while (expectedSize <= maxSize)
             {

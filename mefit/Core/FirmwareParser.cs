@@ -32,6 +32,12 @@ namespace Mac_EFI_Toolkit.Core
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal byte[] Signature; // 0x5AA5FOOF
     }
+
+    internal struct FsysBlock
+    {
+        public byte[] BlockBytes { get; set; }
+        public long Offset { get; set; }
+    }
     #endregion
 
     #region Enum
@@ -41,16 +47,20 @@ namespace Mac_EFI_Toolkit.Core
         Yes,
         No
     }
+
     public enum NVRAMHeaderType
     {
         SVS,
         VSS
-    };
+    }
     #endregion
 
     class FirmwareParser
     {
         internal static readonly Encoding utf8Enc = Encoding.UTF8;
+        internal static int intMinRomSize = 1048576;
+        internal static int intMaxRomSize = 33554432;
+        internal static int intFsysExactSize = 0x800;
 
         #region Flash Header
         internal static bool _boolIsValidFlashHeader(byte[] bytesIn)
@@ -68,10 +78,12 @@ namespace Mac_EFI_Toolkit.Core
         #endregion
 
         #region Fsys Data
-        internal static byte[] _byteGetFsysBlock(byte[] bytesIn)
+        internal static FsysBlock _byteGetFsysBlock(byte[] bytesIn, bool outputOffset = false)
         {
-            long offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.FSYS_SIG);
-            return (offset != -1) ? BinaryUtils._byteReadAtOffset(bytesIn, offset, 0x800) : null;
+            long offset = -1; // default value if calculate_offset is false
+            offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.FSYS_SIG);
+            byte[] result = (offset != -1) ? BinaryUtils._byteReadAtOffset(bytesIn, offset, 0x800) : null;
+            return new FsysBlock { BlockBytes = result, Offset = outputOffset ? offset : -1 };
         }
 
         internal static string _stringGetFsysCrc32(byte[] bytesIn)
@@ -97,9 +109,9 @@ namespace Mac_EFI_Toolkit.Core
             if (snData != null)
             {
                 // Remove any non-alphanumeric characters from the serial number
-                string serialNumber = utf8Enc.GetString(snData).Trim();
-                serialNumber = new string(serialNumber.Where(c => Char.IsLetterOrDigit(c)).ToArray());
-                return serialNumber;
+                string strSerial = utf8Enc.GetString(snData).Trim();
+                strSerial = new string(strSerial.Where(Char.IsLetterOrDigit).ToArray());
+                return strSerial;
             }
             else
             {
@@ -113,6 +125,16 @@ namespace Mac_EFI_Toolkit.Core
             byte[] data = (offset != -1) ? BinaryUtils._byteReadAtOffset(bytesIn, offset + 0x6, 0x5) : null;
             return (data != null) ? utf8Enc.GetString(data) : "Not found";
         }
+
+        internal static string _stringGetFsysHwc(byte[] bytesIn)
+        {
+            long offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.HWC_SIG);
+            byte[] data = (offset != -1) ? BinaryUtils._byteReadAtOffset(bytesIn, offset + 0x6, 0x4) : null;
+            string strHwc = (data != null) ? utf8Enc.GetString(data) : "Not found";
+            strHwc = new string(strHwc.Where(Char.IsLetterOrDigit).ToArray());
+            return strHwc;
+        }
+
         #endregion
 
         #region Platform Data Region Data

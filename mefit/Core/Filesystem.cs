@@ -65,6 +65,10 @@ namespace Mac_EFI_Toolkit.Core
         {
             0x03, 0x73, 0x6F, 0x6E
         };
+        internal static readonly byte[] HWC_SIG =
+        {
+            0x03, 0x68, 0x77,  0x63
+        };
         internal static readonly byte[] SVS_SIG =
         {
             0x24, 0x53, 0x56, 0x53
