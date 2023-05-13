@@ -5,7 +5,7 @@
 // mainWindow.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Core;
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.UI.Renderers;
 using Mac_EFI_Toolkit.Utils;
@@ -514,9 +514,9 @@ namespace Mac_EFI_Toolkit
             ToggleControlEnable(true);
         }
 
-        internal async void CheckHwcAsync(string serialNumber)
+        internal async void CheckHwcAsync(string strHwc)
         {
-            var configCode = await EFIUtils._stringGetConfigCodeAsync(serialNumber);
+            var configCode = await EFIUtils._stringGetConfigCodeAsync(strHwc);
             lblConfig.Text = $"· {configCode}";
         }
         #endregion

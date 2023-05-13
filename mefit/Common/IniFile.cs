@@ -1,7 +1,6 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Core Components
 // IniFile.cs - Handles INI file read/write
 // Released under the GNU GLP v3.0
 // IniFile uses code from pinvoke.net, thank you to whoever wrote it (See _getSectionNames)
@@ -13,7 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.Core
+namespace Mac_EFI_Toolkit.Common
 {
     class IniFile
     {

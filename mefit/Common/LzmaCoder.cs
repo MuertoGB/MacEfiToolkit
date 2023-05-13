@@ -1,7 +1,6 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Core Components
 // LzmaCoder.cs - Handles LZMA decompression
 // Released under the GNU GLP v3.0
 

@@ -3,7 +3,6 @@
 
 // UI Components
 // METCheckbox.cs
-// Updated 01.05.2023 - Refactoring OnPaintForeground
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.UI.Design;

@@ -1,7 +1,6 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WIN32 Interop
 // NativeMethods.cs
 // Released under the GNU GLP v3.0
 

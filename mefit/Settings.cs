@@ -4,7 +4,7 @@
 // Settings.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Core;
+using Mac_EFI_Toolkit.Common;
 using System;
 using System.IO;
 

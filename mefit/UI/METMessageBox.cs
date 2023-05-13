@@ -5,8 +5,6 @@
 // METMessageBox.cs
 // Released under the GNU GLP v3.0
 
-// Need to figure out Window height based on labMessage height.
-
 using System;
 using System.Drawing;
 using System.Threading.Tasks;

@@ -1,14 +1,13 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Core Components
-// MEParser.cs - Naming
+// MEParser.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Utils;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.Core
+namespace Mac_EFI_Toolkit.Common
 {
 
     #region Struct
@@ -50,7 +49,7 @@ namespace Mac_EFI_Toolkit.Core
     {
         internal static string _stringGetFitcVersion(byte[] bytesIn)
         {
-            var offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.FPT_HEADER_SIG);
+            var offset = BinaryUtils._longFindOffset(bytesIn, FSSignatures.FPT_HEADER_SIG);
             if (offset == -1) return "Not found";
             var headerBytes = BinaryUtils._byteReadAtOffset(bytesIn, offset, 0x20);
             if (headerBytes == null) return "Not found";
@@ -59,7 +58,7 @@ namespace Mac_EFI_Toolkit.Core
         }
         internal static string _stringGetMeVersion(byte[] bytesIn)
         {
-            var offset = BinaryUtils._longFindOffset(bytesIn, Filesystem.MN2_SIG);
+            var offset = BinaryUtils._longFindOffset(bytesIn, FSSignatures.MN2_SIG);
             if (offset == -1) return "Not found";
             var headerBytes = BinaryUtils._byteReadAtOffset(bytesIn, offset, 0x10);
             if (headerBytes == null) return "Not found";

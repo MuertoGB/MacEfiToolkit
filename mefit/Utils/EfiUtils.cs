@@ -1,11 +1,10 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Utilities
 // EfiUtils.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Core;
+using Mac_EFI_Toolkit.Common;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Linq;
