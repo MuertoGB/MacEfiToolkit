@@ -1,9 +1,27 @@
-## Version 0.4.6:
+## Version 0.5.0
+
+#### New:
+- User interface revamped.
+- Added option to repair an invalid Fsys CRC32 checksum.
+- Added file creation time, modified time, and HWC data to main window.
+
+#### Enhancements:
+- Config details are now generated from HWC, instead of the serial number.
+- Delayed main window control enable until data has finished loading.
+- Unhandled exceptions are now written to a log file.
+- Modified default file name when exporting the Fsys region.
+
+#### Bugs:
+- Prevented crash caused by disposed object being passed to unmanaged code.
+- Fixed Board-ID false detections.
+- Fixed CRC32 format specifier.
+
+## Version 0.4.6
 
 #### Bugs:
 - Fixed integrity check fault relating to wrong api import.
 
-## Version 0.4.5:
+## Version 0.4.5
 
 #### New:
 - Main window version text now clickable when an update is available.
@@ -36,11 +54,11 @@
 - About section links are now enabled.
 - About section keydown enabled, form can be closed with 'Esc'.
 - Modified load order when parsing data.
+- Other small unnotable changes.
 
 #### Bugs:
 - Fixed cases of malformed serial numbers.
 - Fixed control tab indexing.
-- Other small unnotable changes.
 
 ###  Version 0.3.4
 

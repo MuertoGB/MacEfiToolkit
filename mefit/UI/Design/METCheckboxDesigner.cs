@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// UI Components
+// METCheckBoxDesigner.cs
+// Released under the GNU GLP v3.0
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms.Design;
 

@@ -3,7 +3,6 @@
 
 // UI Components
 // METCheckbox.cs
-// Updated 01.05.2023 - Refactoring OnPaintForeground
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.UI.Design;
@@ -33,12 +32,12 @@ namespace Mac_EFI_Toolkit.UI
             MouseEnter += new EventHandler(ProcessMouse);
             MouseLeave += new EventHandler(ProcessMouse);
             BackColor = Color.Transparent;
-            ForeColor = Colours.EnabledText;
+            ForeColor = Colours.clrEnabledText;
         }
         #endregion
 
         #region Properties
-        private Color BorderInactive_ = Colours.BorderInactive;
+        private Color BorderInactive_ = Colours.clrBorderInactive;
         [Description("Check area border color")]
         [Category("Appearance (MET)")]
         public Color BorderColor
@@ -54,7 +53,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        private Color BorderActive_ = Colours.BorderActive;
+        private Color BorderActive_ = Colours.clrBorderActive;
         [Description("Check area mouseover border color")]
         [Category("Appearance (MET)")]
         public Color BorderColorActive
@@ -70,7 +69,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        private Color ClientInactive_ = Colours.ClientInactive;
+        private Color ClientInactive_ = Colours.clrClientInactive;
         [Description("Check area backcolor")]
         [Category("Appearance (MET)")]
         public Color ClientColor
@@ -86,7 +85,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        private Color ClientActive_ = Colours.ClientActive;
+        private Color ClientActive_ = Colours.clrClientActive;
         [Description("Check area mouseover color")]
         [Category("Appearance (MET)")]
         public Color ClientColorActive
@@ -102,7 +101,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        private Color Checked_ = Colours.Checked;
+        private Color Checked_ = Colours.clrChecked;
         [Description("Control checked color")]
         [Category("Appearance (MET)")]
         public Color CheckedColor
@@ -146,7 +145,7 @@ namespace Mac_EFI_Toolkit.UI
 
             Color switchBorder = Enabled ?
                 (MouseHovered && MousePressed ? Color.FromArgb(Colours.A, CheckedColor.R, CheckedColor.G, CheckedColor.B) :
-                 MouseHovered ? BorderColorActive : BorderColor) : Colours.DisabledControl;
+                 MouseHovered ? BorderColorActive : BorderColor) : Colours.clrDisabledControl;
 
             Color switchBack = MouseHovered ? ClientColorActive : ClientColor;
 
@@ -174,7 +173,7 @@ namespace Mac_EFI_Toolkit.UI
             }
 
             var textArea = new Rectangle(outerRectangle.Width + 6, 0, Width - outerRectangle.Width - 6, Height);
-            var textColor = Enabled ? ForeColor : Colours.DisabledText;
+            var textColor = Enabled ? ForeColor : Colours.clrDisabledText;
 
             using (var format = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
             using (var brush = new SolidBrush(textColor))

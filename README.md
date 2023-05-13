@@ -24,18 +24,19 @@ Mac EFI Toolkit is a firmware repair tool designed to aid technicians in repair 
 This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete. However basic functionality such as viewing EFIROM info, and dumping the Fsys block is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
 
 <img width="600" src="files/images/met.png" alt="MET">
+<img width="600" src="files/images/met_alt.png" alt="MET_ALT">
 
 ## Features
 
 | Suggested feature                                          | Status        |
 |------------------------------------------------------------|---------------|
 | Knuth–Morris–Pratt algorithm for searching binary offsets  |🟢 Completed   |
-| Ability to detect and decompress LZMA DXE volumes          |🟢 Completed   |
+| Ability to detect APFSJumpStart in compressed DXE volumes  |🟢 Completed   |
 | Check serial number with EveryMac							 |🟢 Completed   |
 | View FITC and ME version						             |🟢 Completed   |
+| Detect and fix invalid Fsys checksums                      |🟢 Completed   |
 | View ROM information                                       |🟡 Partially Completed|
 | Dump and replace Fsys block                                |🟡 Partially Completed|
-| Detect and fix invalid Fsys checksums                      |🟡 Partially Completed|
 | Replace serial with automatic HWC and CRC32 calculation    |🟠 Not started |
 | Clear NVRAM and EFI lock with header preservation          |🟠 Not started |
 | Detect MDM status in the NVRAM                             |🔴 Undecided   |
@@ -60,8 +61,8 @@ Plus more, only time will tell.
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-| [0.4.6](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/046)  | 9th May 2023 | Yes | BETA |
-| [0.4.5](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/045)  | 9th May 2023 | No | BETA |
+|[0.5.0](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/050)| 13th May 2023 | Yes | BETA |
+|[0.4.6](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/046)| 9th May 2023 | No | BETA |
 
 ## Requirements
 

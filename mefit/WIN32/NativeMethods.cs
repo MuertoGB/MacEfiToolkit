@@ -1,7 +1,6 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WIN32 Interop
 // NativeMethods.cs
 // Released under the GNU GLP v3.0
 
@@ -70,27 +69,28 @@ namespace Mac_EFI_Toolkit.WIN32
             uint nSize,
             string lpFileName);
 
+        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowshookexa
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern IntPtr SetWindowsHookExA(
+            int idHook,
+            LowLevelKeyboardProc lpfn,
+            IntPtr hMod,
+            uint dwThreadId);
+
         // Low level keyboard hook delegate
         internal delegate IntPtr LowLevelKeyboardProc(
             int nCode,
             IntPtr wParam,
             IntPtr lParam);
 
-        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowshookexa
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr SetWindowsHookExA(
-            int idHook,
-            LowLevelKeyboardProc lpfn,
-            IntPtr hmod,
-            int dwThreadId);
-
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwindowshookex
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool UnhookWindowsHookEx(
             IntPtr hhk);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-callnexthookex
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern IntPtr CallNextHookEx(
             IntPtr hhk,
             int nCode,
@@ -98,7 +98,7 @@ namespace Mac_EFI_Toolkit.WIN32
             IntPtr lParam);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeystate
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("user32.dll", SetLastError = true)]
         internal static extern short GetKeyState(
             int nVirtKey);
 

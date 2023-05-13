@@ -1,14 +1,13 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Core Components
-// Helper.cs - Helpers
+// Helper.cs
 // Released under the GNU GLP v3.0
 
 using System;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.Core
+namespace Mac_EFI_Toolkit.Common
 {
     class Helper
     {

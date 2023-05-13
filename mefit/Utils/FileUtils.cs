@@ -1,7 +1,6 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Utilities
 // FileUtils.cs
 // Released under the GNU GLP v3.0
 
@@ -18,7 +17,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="sourceBytes">The byte array to calculate the hash for.</param>
         /// <returns>The MD5 hash of the byte array.</returns>
-        internal static string _stringGetMd5FromBytes(byte[] sourceBytes)
+        internal static string GetMD5FromBytes(byte[] sourceBytes)
         {
             using (var md5 = MD5.Create())
             {
@@ -35,7 +34,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="sourceBytes">The byte array to calculate the checksum for.</param>
         /// <returns>The CRC32 checksum of the byte array.</returns>
-        internal static uint _uintGetCrc32FromBytes(byte[] sourceBytes)
+        internal static uint GetCRC32FromBytes(byte[] sourceBytes)
         {
             const uint polynomial = 0xEDB88320;
             uint crc = 0xFFFFFFFF;
@@ -54,7 +53,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="filePath">The path to the file.</param>
         /// <returns>The size of the file in bytes.</returns>
-        internal static long _longGetFileSizeBytes(string filePath)
+        internal static long GetFileSizeBytes(string filePath)
         {
             FileInfo fInfo = new FileInfo(filePath);
             return fInfo.Length;
@@ -64,7 +63,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="number">The number of bytes to format.</param>
         /// <returns>A string representation of the number of bytes with commas.</returns>
-        public static string _stringFormatBytesWithCommas(long number)
+        public static string FormatFileSizeBytesWithCommas(long number)
         {
             return string.Format("{0:#,##0}", number);
         }

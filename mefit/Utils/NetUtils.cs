@@ -1,7 +1,6 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Utilities
 // NetUtils.cs
 // Released under the GNU GLP v3.0
 
@@ -17,7 +16,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="strUrl">The URL of the website to check.</param>
         /// <returns>True if the website is available, false otherwise.</returns>
-        internal static bool _boolIsWebsiteAvailable(string strUrl)
+        internal static bool GetIsWebsiteAvailable(string strUrl)
         {
             try
             {
@@ -39,7 +38,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// Checks if a network connection is available by attempting to send a ping request to a known IP address.
         /// </summary>
         /// <returns>True if a network connection is available, false otherwise.</returns>
-        internal static bool _boolIsNetworkAvailable()
+        internal static bool GetIsNetworkAvailable()
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
             {

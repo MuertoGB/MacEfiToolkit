@@ -3,7 +3,6 @@
 
 // WinForms
 // aboutWindow.cs
-// Updated 05.05.23 - Enabled KeyPreview, enabled links.
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.WIN32;
@@ -47,7 +46,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void aboutWindow_Load(object sender, EventArgs e)
         {
-            lblBuild.Text = $"Build: { Program.APP_BUILD} ";
+            lblBuild.Text = $"Build: { Program.strAppBuild} ";
             FormatLinks();
         }
         #endregion

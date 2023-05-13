@@ -5,8 +5,6 @@
 // METMessageBox.cs
 // Released under the GNU GLP v3.0
 
-// Need to figure out Window height based on labMessage height.
-
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -31,18 +29,12 @@ namespace Mac_EFI_Toolkit.UI
     {
 
         #region Static Members
-        static string boxTitle;
-        static string boxMessage;
-        static System.Media.SystemSound boxSound;
-        static MsgType boxType;
-        static MsgButton boxButtons;
-        static DialogResult boxResult;
-        #endregion
-
-        #region Private Colours
-        private readonly Color clrCrit = Color.FromArgb(192, 60, 60);
-        private readonly Color clrWarn = Color.FromArgb(255, 100, 70);
-        private readonly Color clrInfo = Color.FromArgb(0, 120, 180);
+        static string strMmbTitle;
+        static string strMmbMessage;
+        static MsgType mtMmbType;
+        static MsgButton mbMmbButton;
+        static DialogResult drMmbResult;
+        static System.Media.SystemSound ssMmbSound;
         #endregion
 
         #region Contructor
@@ -59,34 +51,34 @@ namespace Mac_EFI_Toolkit.UI
         {
             labIcon.Font = Program.FONT_MDL2_REG_20;
 
-            switch (boxType)
+            switch (mtMmbType)
             {
                 case MsgType.Critical:
-                    labIcon.ForeColor = clrCrit;
+                    labIcon.ForeColor = Colours.clrError;
                     labIcon.Text = "\xEB90";
-                    boxSound = System.Media.SystemSounds.Hand;
+                    ssMmbSound = System.Media.SystemSounds.Hand;
                     break;
                 case MsgType.Warning:
-                    labIcon.ForeColor = clrWarn;
+                    labIcon.ForeColor = Colours.clrUnknown;
                     labIcon.Text = "\xE7BA";
-                    boxSound = System.Media.SystemSounds.Exclamation;
+                    ssMmbSound = System.Media.SystemSounds.Exclamation;
                     break;
                 case MsgType.Information:
-                    labIcon.ForeColor = clrInfo;
+                    labIcon.ForeColor = Colours.clrInfo;
                     labIcon.Text = "\xF167";
-                    boxSound = System.Media.SystemSounds.Beep;
+                    ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
                 case MsgType.Question:
-                    labIcon.ForeColor = clrInfo;
+                    labIcon.ForeColor = Colours.clrInfo;
                     labIcon.Text = "\xE9CE";
-                    boxSound = System.Media.SystemSounds.Beep;
+                    ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
             }
 
-            labTitle.Text = boxTitle;
-            labMessage.Text = boxMessage;
+            labTitle.Text = strMmbTitle;
+            labMessage.Text = strMmbMessage;
 
-            if (boxButtons == MsgButton.Okay)
+            if (mbMmbButton == MsgButton.Okay)
             {
                 cmdNo.Hide();
                 cmdYes.Hide();
@@ -100,7 +92,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
-            boxSound.Play();
+            ssMmbSound.Play();
             InterfaceUtils.FlashForecolor(labTitle); // "this" is the current form instance
             InterfaceUtils.FlashForecolor(cmdClose);
         }
@@ -110,10 +102,10 @@ namespace Mac_EFI_Toolkit.UI
         public static DialogResult Show(Form owner, string title, string message, MsgType type, MsgButton buttons = MsgButton.Okay)
         {
 
-            boxTitle = title;
-            boxMessage = message;
-            boxType = type;
-            boxButtons = buttons;
+            strMmbTitle = title;
+            strMmbMessage = message;
+            mtMmbType = type;
+            mbMmbButton = buttons;
 
             using (var msgForm = new METMessageBox())
             {
@@ -127,32 +119,32 @@ namespace Mac_EFI_Toolkit.UI
                 }
                 msgForm.ShowDialog(owner);
             }
-            return boxResult;
+            return drMmbResult;
         }
         #endregion
 
         #region Button Events
         private void cmdCancel_Click(object sender, EventArgs e)
         {
-            boxResult = DialogResult.Cancel;
+            drMmbResult = DialogResult.Cancel;
             Close();
         }
 
         private void cmdYes_Click(object sender, EventArgs e)
         {
-            boxResult = DialogResult.Yes;
+            drMmbResult = DialogResult.Yes;
             Close();
         }
 
         private void cmdNo_Click(object sender, EventArgs e)
         {
-            boxResult = DialogResult.No;
+            drMmbResult = DialogResult.No;
             Close();
         }
 
         private void cmdClose_Click(object sender, EventArgs e)
         {
-            boxResult = DialogResult.Cancel;
+            drMmbResult = DialogResult.Cancel;
             Close();
         }
         #endregion

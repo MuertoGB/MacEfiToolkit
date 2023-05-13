@@ -4,10 +4,9 @@
 // Settings.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Core;
+using Mac_EFI_Toolkit.Common;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace Mac_EFI_Toolkit
 {
@@ -32,18 +31,18 @@ namespace Mac_EFI_Toolkit
 
     class Settings
     {
-        internal static string strSettingsFilePath = Path.Combine(Program.appPath, "Settings.ini");
+        internal static string strSettingsFilePath = Path.Combine(Program.strAppPath, "Settings.ini");
         internal static string strDefaultOfdPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         #region Check File Exists
-        internal static bool _boolSettingsFileExists()
+        internal static bool SettingsGetFileExists()
         {
             return File.Exists(strSettingsFilePath);
         }
         #endregion
 
         #region Create File
-        internal static void _createSettingsFile()
+        internal static void SettingsCreateFile()
         {
             var ini = new IniFile(strSettingsFilePath);
             ini.Write("Startup", "DisableVersionCheck", "False");
@@ -58,9 +57,9 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Get Values
-        internal static bool _settingsGetBool(SettingsBoolType settingType)
+        internal static bool SettingsGetBool(SettingsBoolType settingType)
         {
-            if (!_boolSettingsFileExists()) return false;
+            if (!SettingsGetFileExists()) return false;
 
             string section, key;
 
@@ -97,9 +96,9 @@ namespace Mac_EFI_Toolkit
             return bool.Parse(ini.Read(section, key));
         }
 
-        internal static string _settingsGetString(SettingsStringType settingType)
+        internal static string SettingsGetString(SettingsStringType settingType)
         {
-            if (!_boolSettingsFileExists()) return string.Empty;
+            if (!SettingsGetFileExists()) return string.Empty;
 
             string section, key;
 
@@ -120,9 +119,9 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Set Values
-        internal static void _settingsSetBool(SettingsBoolType settingType, bool value)
+        internal static void SettingsSetBool(SettingsBoolType settingType, bool value)
         {
-            if (!_boolSettingsFileExists()) return;
+            if (!SettingsGetFileExists()) return;
 
             string section, key;
 
@@ -159,17 +158,18 @@ namespace Mac_EFI_Toolkit
                 if (ini.KeyExists(section, key))
                 {
                     ini.Write(section, key, value.ToString());
-                } else
+                }
+                else
                 {
-                    Logger.Write($"{section} > {key} > Key not found, setting was not written.");
+                    Logger.writeLogFile($"{section} > {key} > Key not found, setting was not written.");
                 }
             }
 
         }
 
-        internal static void _settingsSetString(SettingsStringType settingType, string value)
+        internal static void SettingsSetString(SettingsStringType settingType, string value)
         {
-            if (!_boolSettingsFileExists()) return;
+            if (!SettingsGetFileExists()) return;
 
             string section, key;
 
@@ -190,7 +190,7 @@ namespace Mac_EFI_Toolkit
             }
             else
             {
-                Logger.Write($"{section} > {key} > Key not found, setting was not written.");
+                Logger.writeLogFile($"{section} > {key} > Key not found, setting was not written.");
             }
 
         }
