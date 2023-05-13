@@ -1,4 +1,4 @@
-## Version 0.5.0:
+## Version 0.5.0
 
 #### New:
 - User interface revamped.
@@ -11,13 +11,14 @@
 
 #### Bugs:
 - Prevented crash caused by disposed object being passed to unmanaged code.
+- Fixed Board-ID false detections.
 
-## Version 0.4.6:
+## Version 0.4.6
 
 #### Bugs:
 - Fixed integrity check fault relating to wrong api import.
 
-## Version 0.4.5:
+## Version 0.4.5
 
 #### New:
 - Main window version text now clickable when an update is available.
