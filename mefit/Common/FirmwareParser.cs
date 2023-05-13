@@ -100,7 +100,6 @@ namespace Mac_EFI_Toolkit.Common
             return new FsysBlock { BlockBytes = result, Offset = outputOffset ? offset : -1 };
         }
 
-
         internal static string _stringGetFsysCrc32(byte[] bytesIn)
         {
             long offset = BinaryUtils._longFindOffset(bytesIn, FSSignatures.FSYS_SIG);

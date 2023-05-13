@@ -636,6 +636,7 @@ namespace Mac_EFI_Toolkit
             this.cmdFixFsysCrc.TabIndex = 4;
             this.cmdFixFsysCrc.Text = "F";
             this.cmdFixFsysCrc.UseVisualStyleBackColor = false;
+            this.cmdFixFsysCrc.Click += new System.EventHandler(this.cmdFixFsysCrc_Click);
             // 
             // cmdExportFsysBlock
             // 

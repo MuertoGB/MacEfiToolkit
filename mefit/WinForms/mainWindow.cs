@@ -32,6 +32,7 @@ namespace Mac_EFI_Toolkit
         #region Private Members
         private string strInitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         private string strLoadedBinaryFilePath;
+        private string strFilenameWithoutExt;
         private string strCreationTime;
         private string strModifiedTime;
         private string strRememberPath = string.Empty;
@@ -214,6 +215,7 @@ namespace Mac_EFI_Toolkit
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     strLoadedBinaryFilePath = dialog.FileName;
+                    strFilenameWithoutExt = Path.GetFileNameWithoutExtension(dialog.FileName);
                     bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath);
                     var fsysOut = FirmwareParser._byteGetFsysBlock(bytesLoadedFile, true);
                     bytesFsys = fsysOut.BlockBytes; lngFsysOffset = fsysOut.Offset;
@@ -266,7 +268,7 @@ namespace Mac_EFI_Toolkit
             {
                 Filter = "Binary Files (*.bin)|*.bin",
                 Title = "Export Fsys block data...",
-                FileName = string.Concat("Fsys_", strSerialNumber, ".bin"),
+                FileName = string.Concat("FSYS_RGN_", strFilenameWithoutExt, ".bin"),
                 OverwritePrompt = true,
                 InitialDirectory = strRememberPath
             })
@@ -499,6 +501,7 @@ namespace Mac_EFI_Toolkit
             lblFileChecksum.Text = uintCrcOfLoadedFile.ToString("X2");
             lblFsysCrc.Text = $"{ strFsysChecksumInBinary }h";
             lblFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = clrGood : lblFsysCrc.ForeColor = clrError;
+            cmdFixFsysCrc.Enabled = (strFsysCalculation == strFsysChecksumInBinary) ? false : true;
             lblApfsCapable.Text = strApfsCapable;
             if (strApfsCapable == "Yes") lblApfsCapable.ForeColor = clrGood; else lblApfsCapable.ForeColor = clrUnknown;
             CheckHwcAsync(strHwc);
@@ -567,5 +570,30 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
+        private void cmdFixFsysCrc_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new SaveFileDialog
+            {
+                Filter = "Binary Files (*.bin)|*.bin",
+                Title = "Export repaired binary...",
+                FileName = string.Concat("FSYS_Fixed_", strFilenameWithoutExt, ".bin"),
+                OverwritePrompt = true,
+                InitialDirectory = strRememberPath
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                int len = 0x7FC;
+                byte[] bytesTempFsys = new byte[len];
+                Array.Copy(bytesFsys, bytesTempFsys, Math.Min(bytesFsys.Length, len));
+                uint uintNewCrc = FileUtils._uintGetCrc32FromBytes(bytesTempFsys);
+                byte[] newCrc = BitConverter.GetBytes(uintNewCrc);
+                BinaryUtils.OverwriteBytesAtOffset(bytesLoadedFile, lngFsysOffset + len, newCrc);
+
+                File.WriteAllBytes(dialog.FileName, bytesLoadedFile);
+            }
+        }
     }
 }

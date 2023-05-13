@@ -2,12 +2,14 @@
 
 #### New:
 - User interface revamped.
+- Added option to repair an invalid Fsys CRC32 checksum.
 - Added file creation time, modified time, and HWC data to main window.
 
 #### Enhancements:
 - Config details are now generated from HWC, instead of the serial number.
 - Delayed main window control enable until data has finished loading.
 - Unhandled exceptions are now written to a log file.
+- Modified default file name when exporting the Fsys region.
 
 #### Bugs:
 - Prevented crash caused by disposed object being passed to unmanaged code.
