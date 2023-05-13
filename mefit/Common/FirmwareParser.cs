@@ -75,6 +75,22 @@ namespace Mac_EFI_Toolkit.Common
         }
         #endregion
 
+        #region Platform Data Region Data
+        internal static string _stringGetPdrBoardId(byte[] bytesIn)
+        {
+            var offsetPdr = BinaryUtils._longFindOffset(bytesIn, FSGuids.PDR_SECTION_BID_GUID);
+            if (offsetPdr == -1) return "Not found";
+
+            var offsetBid = BinaryUtils._longFindOffset(bytesIn, FSSignatures.BID_SIG, offsetPdr);
+            if (offsetBid == -1) return "Not found";
+
+            var boardIdBytes = BinaryUtils._byteReadAtOffset(bytesIn, offsetBid + 0x5, 0x8);
+            var boardId = BitConverter.ToString(boardIdBytes).Replace("-", "");
+            return boardId.All(c => c == '0') ? "Not found" : $"Mac-{boardId}";
+        }
+
+        #endregion
+
         #region Fsys Data
         internal static FsysBlock _byteGetFsysBlock(byte[] bytesIn, bool outputOffset = false)
         {
@@ -142,16 +158,6 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        #endregion
-
-        #region Platform Data Region Data
-        internal static string _stringGetPdrBoardId(byte[] bytesIn)
-        {
-            long offset = BinaryUtils._longFindOffset(bytesIn, FSSignatures.BID_SIG);
-            byte[] boardIdBytes = BinaryUtils._byteReadAtOffset(bytesIn, offset + 0x5, 0x8);
-            return BitConverter.ToString(boardIdBytes).Replace("-", "").All(c => c == '0') ? "Not found"
-                : String.Concat("Mac-", BitConverter.ToString(boardIdBytes).Replace("-", ""));
-        }
         #endregion
 
         #region Apple ROM Section Data
