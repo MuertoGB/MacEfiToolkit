@@ -21,7 +21,7 @@ Mac EFI Toolkit
 
 Mac EFI Toolkit is a firmware repair tool designed to aid technicians in repair of a Mac EFIROM (BIOS).
 
-This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete. However basic functionality such as viewing EFIROM info, and dumping the Fsys block is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
+This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete; however functionality such as viewing ROM information, dumping the Fsys region, and repairing the Fsys crc32 is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
 
 <img width="600" src="files/images/met.png" alt="MET">
 <img width="600" src="files/images/met_alt.png" alt="MET_ALT">
