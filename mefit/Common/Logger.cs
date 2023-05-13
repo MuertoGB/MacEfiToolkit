@@ -12,20 +12,20 @@ namespace Mac_EFI_Toolkit
 {
     class Logger
     {
-        internal static readonly string logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mefit.log");
+        internal static readonly string strLogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mefit.log");
 
-        internal static void Write(string logMessage)
+        internal static void writeLogFile(string logMessage)
         {
-            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            using (StreamWriter writer = new StreamWriter(strLogFilePath, true))
             {
                 writer.WriteLine($"{DateTime.Now.ToString()} : {logMessage}");
             }
         }
-        internal static void ViewLog()
+        internal static void viewLogFile()
         {
-            if (File.Exists(logFilePath))
+            if (File.Exists(strLogFilePath))
             {
-                Process.Start(logFilePath);
+                Process.Start(strLogFilePath);
             }
         }
     }

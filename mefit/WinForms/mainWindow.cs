@@ -22,33 +22,33 @@ namespace Mac_EFI_Toolkit
 {
     public partial class mainWindow : Form
     {
-        internal byte[] bytesLoadedFile;
-        internal byte[] bytesFsys;
-        internal byte[] bytesDxeCompressed;
-
-        internal uint uintCrcOfLoadedFile;
-        internal long lngFilesize;
-        internal long lngFsysOffset;
-
         #region Private Members
-        private string strInitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        private string strLoadedBinaryFilePath;
-        private string strFilenameWithoutExt;
-        private string strCreationTime;
-        private string strModifiedTime;
-        private string strRememberPath;
-        private string strFilename;
-        private string strSerialNumber;
-        private string strHwc;
-        private string strEfiVer;
-        private string strBootrom;
-        private string strApfsCapable;
-        private string strFsysChecksumInBinary;
-        private string strFsysCalculation;
-        private string strFitcVersion;
-        private string strMeVersion;
-        private string strBoardId;
-        private string strSon;
+        private string _strInitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private string _strLoadedBinaryFilePath;
+        private string _strFilenameWithoutExt;
+        private string _strCreationTime;
+        private string _strModifiedTime;
+        private string _strRememberPath;
+        private string _strFilename;
+        private string _strSerialNumber;
+        private string _strHwc;
+        private string _strEfiVersion;
+        private string _strBootromVersion;
+        private string _strApfsCapable;
+        private string _strFsysChecksumInBinary;
+        private string _strFsysCalculation;
+        private string _strFitcVersion;
+        private string _strMeVersion;
+        private string _strBoardId;
+        private string _strSon;
+
+        private byte[] _bytesLoadedFile;
+        private byte[] _bytesFsys;
+
+        private uint _uiCrcOfLoadedFile;
+
+        private long _lFilesize;
+        private long _lFsysOffset;
         #endregion
 
         #region Overriden Properties
@@ -107,7 +107,7 @@ namespace Mac_EFI_Toolkit
 
             lblVersion.Text = Application.ProductVersion;
 
-            if (!Settings._settingsGetBool(SettingsBoolType.DisableVersionCheck))
+            if (!Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck))
             {
                 if (!dbgMode) CheckForNewVersion();
             }
@@ -121,7 +121,7 @@ namespace Mac_EFI_Toolkit
 
         internal async void CheckForNewVersion()
         {
-            var result = await METVersion.CheckForUpdate("https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml");
+            var result = await METVersion.CheckForNewVersion("https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml");
 
             if (result == VersionCheckResult.NewVersionAvailable)
             {
@@ -136,7 +136,7 @@ namespace Mac_EFI_Toolkit
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
                 // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
-                if (!Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
+                if (!Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
                 {
                     e.Cancel = true;
                 }
@@ -191,16 +191,16 @@ namespace Mac_EFI_Toolkit
         {
             string initialDirectory;
 
-            if (!string.IsNullOrEmpty(strRememberPath))
+            if (!string.IsNullOrEmpty(_strRememberPath))
             {
-                initialDirectory = strRememberPath;
+                initialDirectory = _strRememberPath;
             }
             else
             {
-                initialDirectory = Settings._settingsGetString(SettingsStringType.InitialDirectory);
+                initialDirectory = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
                 if (string.IsNullOrEmpty(initialDirectory) || !Directory.Exists(initialDirectory))
                 {
-                    initialDirectory = strInitialDirectory;
+                    initialDirectory = _strInitialDirectory;
                 }
             }
 
@@ -212,21 +212,21 @@ namespace Mac_EFI_Toolkit
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    strLoadedBinaryFilePath = dialog.FileName;
-                    strFilenameWithoutExt = Path.GetFileNameWithoutExtension(dialog.FileName);
-                    bytesLoadedFile = File.ReadAllBytes(strLoadedBinaryFilePath);
-                    var fsysOut = FirmwareParser._byteGetFsysBlock(bytesLoadedFile, true);
-                    bytesFsys = fsysOut.BlockBytes; lngFsysOffset = fsysOut.Offset;
+                    _strLoadedBinaryFilePath = dialog.FileName;
+                    _strFilenameWithoutExt = Path.GetFileNameWithoutExtension(dialog.FileName);
+                    _bytesLoadedFile = File.ReadAllBytes(_strLoadedBinaryFilePath);
+                    var fsysOut = FirmwareParser.GetFsysRegionBytes(_bytesLoadedFile, true);
+                    _bytesFsys = fsysOut.BlockBytes; _lFsysOffset = fsysOut.Offset;
                     if (boolIsValidFirmware())
                     {
                         ToggleControlEnable(false);
-                        strInitialDirectory = strLoadedBinaryFilePath;
-                        strRememberPath = strLoadedBinaryFilePath;
+                        _strInitialDirectory = _strLoadedBinaryFilePath;
+                        _strRememberPath = _strLoadedBinaryFilePath;
                         LoadEfiData();
                     }
                     else
                     {
-                        strLoadedBinaryFilePath = string.Empty;
+                        _strLoadedBinaryFilePath = string.Empty;
                         ResetData();
                     }
                 }
@@ -235,7 +235,7 @@ namespace Mac_EFI_Toolkit
 
         private void cmdResetUnload_Click(object sender, EventArgs e)
         {
-            if (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
                 ResetData();
             }
@@ -257,12 +257,12 @@ namespace Mac_EFI_Toolkit
         private void cmdSerialCheck_Click(object sender, EventArgs e)
         {
             // Opens a browser window to EveryMac, and automatically loads in the serial.
-            Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", strSerialNumber));
+            Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", _strSerialNumber));
         }
 
         private void cmdExportFsysBlock_Click(object sender, EventArgs e)
         {
-            if (bytesFsys == null)
+            if (_bytesFsys == null)
             {
                 MessageBox.Show("Fsys block bytes[] empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -272,9 +272,9 @@ namespace Mac_EFI_Toolkit
             {
                 Filter = "Binary Files (*.bin)|*.bin",
                 Title = "Export Fsys block data...",
-                FileName = string.Concat("FSYS_RGN_", strFilenameWithoutExt, ".bin"),
+                FileName = string.Concat("FSYS_RGN_", _strFilenameWithoutExt, ".bin"),
                 OverwritePrompt = true,
-                InitialDirectory = strRememberPath
+                InitialDirectory = _strRememberPath
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -282,19 +282,32 @@ namespace Mac_EFI_Toolkit
                     return;
                 }
 
-                File.WriteAllBytes(dialog.FileName, bytesFsys);
+                File.WriteAllBytes(dialog.FileName, _bytesFsys);
             }
         }
 
         private void cmdFixFsysCrc_Click(object sender, EventArgs e)
         {
+
+            if (_bytesFsys == null)
+            {
+                METMessageBox.Show(this, "Error", "Fsys block bytes empty, cannot continue.", MsgType.Critical, MsgButton.Okay);
+                return;
+            }
+
+            if (_lFsysOffset == -1)
+            {
+                METMessageBox.Show(this, "Error", "The Fsys block location is not set, cannot continue.", MsgType.Critical, MsgButton.Okay);
+                return;
+            }
+
             using (var dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
                 Title = "Export repaired binary...",
-                FileName = string.Concat("FSYS_Fixed_", strFilenameWithoutExt, ".bin"),
+                FileName = string.Concat("FSYS_Fixed_", _strFilenameWithoutExt, ".bin"),
                 OverwritePrompt = true,
-                InitialDirectory = strRememberPath
+                InitialDirectory = _strRememberPath
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -303,12 +316,12 @@ namespace Mac_EFI_Toolkit
                 }
                 int len = 0x7FC;
                 byte[] bytesTempFsys = new byte[len];
-                Array.Copy(bytesFsys, bytesTempFsys, Math.Min(bytesFsys.Length, len));
-                uint uintNewCrc = FileUtils._uintGetCrc32FromBytes(bytesTempFsys);
+                Array.Copy(_bytesFsys, bytesTempFsys, Math.Min(_bytesFsys.Length, len));
+                uint uintNewCrc = FileUtils.GetCRC32FromBytes(bytesTempFsys);
                 byte[] newCrc = BitConverter.GetBytes(uintNewCrc);
-                BinaryUtils.OverwriteBytesAtOffset(bytesLoadedFile, lngFsysOffset + len, newCrc);
+                BinaryUtils.OverwriteBytesAtOffset(_bytesLoadedFile, _lFsysOffset + len, newCrc);
 
-                File.WriteAllBytes(dialog.FileName, bytesLoadedFile);
+                File.WriteAllBytes(dialog.FileName, _bytesLoadedFile);
 
                 if (File.Exists(dialog.FileName))
                 {
@@ -327,9 +340,9 @@ namespace Mac_EFI_Toolkit
 
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Logger.logFilePath))
+            if (File.Exists(Logger.strLogFilePath))
             {
-                Process.Start(Logger.logFilePath);
+                Process.Start(Logger.strLogFilePath);
             }
             else
             {
@@ -376,7 +389,7 @@ namespace Mac_EFI_Toolkit
         #region Label Events
         private void lblVersion_Click(object sender, EventArgs e)
         {
-            Process.Start(METVersion.latestUrl);
+            Process.Start(METVersion.strLatestUrl);
         }
 
         private void CreateTipHandlers()
@@ -447,32 +460,32 @@ namespace Mac_EFI_Toolkit
 
         internal bool boolIsValidFirmware()
         {
-            FileInfo fInfo = new FileInfo(strLoadedBinaryFilePath);
+            FileInfo fInfo = new FileInfo(_strLoadedBinaryFilePath);
             // Binary too small? Potential bug here.
-            if (fInfo.Length < FirmwareParser.intMinRomSize) // 1048576 bytes
+            if (fInfo.Length < FirmwareParser.intMinROMSize) // 1048576 bytes
             {
                 METMessageBox.Show(this, "File Error", "File ignored, the file was too small.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
             // Binary too large, no Mac EFI is this big.
-            if (fInfo.Length > FirmwareParser.intMaxRomSize) // 33554432 bytes
+            if (fInfo.Length > FirmwareParser.intMaxROMSize) // 33554432 bytes
             {
                 METMessageBox.Show(this, "File Error", "File ignored, the file was too large.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
-            if (!Settings._settingsGetBool(SettingsBoolType.DisableDescriptorEnforce))
+            if (!Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce))
             {
-                if (!FirmwareParser._boolIsValidFlashHeader(bytesLoadedFile))
+                if (!FirmwareParser.GetIsValidFlashHeader(_bytesLoadedFile))
                 {
                     METMessageBox.Show(this, "File Error", "File ignored, the flash descriptor signature was invalid.", MsgType.Warning, MsgButton.Okay);
                     return false;
                 }
             }
 
-            if (!Settings._settingsGetBool(SettingsBoolType.DisableFsysEnforce))
+            if (!Settings.SettingsGetBool(SettingsBoolType.DisableFsysEnforce))
             {
-                if (bytesFsys == null)
+                if (_bytesFsys == null)
                 {
                     METMessageBox.Show(this, "Data Error", "Could not locate the Fsys block, the file was not loaded.", MsgType.Warning, MsgButton.Okay);
                     return false;
@@ -483,77 +496,77 @@ namespace Mac_EFI_Toolkit
 
         internal void LoadEfiData()
         {
-            var fileInfo = new FileInfo(strLoadedBinaryFilePath);
+            var fileInfo = new FileInfo(_strLoadedBinaryFilePath);
             DateTime creationTime = fileInfo.CreationTime;
             DateTime modifiedTime = fileInfo.LastWriteTime;
 
             // Filename
-            strFilename = Path.GetFileName(strLoadedBinaryFilePath);
+            _strFilename = Path.GetFileName(_strLoadedBinaryFilePath);
             // Size
-            lngFilesize = FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath);
+            _lFilesize = FileUtils.GetFileSizeBytes(_strLoadedBinaryFilePath);
             // File CRC32
-            uintCrcOfLoadedFile = FileUtils._uintGetCrc32FromBytes(bytesLoadedFile);
+            _uiCrcOfLoadedFile = FileUtils.GetCRC32FromBytes(_bytesLoadedFile);
             // Created time
-            strCreationTime = $"{creationTime}";
+            _strCreationTime = $"{creationTime}";
             // Modified time
-            strModifiedTime = $"{modifiedTime}";
+            _strModifiedTime = $"{modifiedTime}";
             // Serial number
-            strSerialNumber = FirmwareParser._stringGetFsysSerialNumber(bytesFsys);
+            _strSerialNumber = FirmwareParser.GetFsysRegionSerialNumber(_bytesFsys);
             // HWC
-            strHwc = FirmwareParser._stringGetFsysHwc(bytesFsys);
+            _strHwc = FirmwareParser.GetFsysRegionHwc(_bytesFsys);
             // EFI Version
-            strEfiVer = FirmwareParser._stingGetEfiVersionFromAppleRomSection(bytesLoadedFile);
+            _strEfiVersion = FirmwareParser.GetRomSectionEFIVersion(_bytesLoadedFile);
             // ROM version
-            strBootrom = FirmwareParser._stringGetBootromVersionFromAppleRomSection(bytesLoadedFile);
+            _strBootromVersion = FirmwareParser.GetRomSectionBootROMVersion(_bytesLoadedFile);
             // Fsys CRC32 string
-            strFsysChecksumInBinary = FirmwareParser._stringGetFsysCrc32(bytesLoadedFile);
+            _strFsysChecksumInBinary = FirmwareParser.GetFsysRegionCRC32(_bytesLoadedFile);
             // Fsys CRC32
             byte[] bytesTempFsys = new byte[0x7FC];
-            if (bytesFsys != null) Array.Copy(bytesFsys, 0, bytesTempFsys, 0, bytesTempFsys.Length);
-            strFsysCalculation = FileUtils._uintGetCrc32FromBytes(bytesTempFsys).ToString("X8");
+            if (_bytesFsys != null) Array.Copy(_bytesFsys, 0, bytesTempFsys, 0, bytesTempFsys.Length);
+            _strFsysCalculation = FileUtils.GetCRC32FromBytes(bytesTempFsys).ToString("X8");
             // APFSJumpStart
-            strApfsCapable = $"{ FirmwareParser._getIsApfsCapable(bytesLoadedFile) }";
+            _strApfsCapable = $"{ FirmwareParser.GetIsApfsCapableBool(_bytesLoadedFile) }";
             // FITC
-            strFitcVersion = MEParser._stringGetFitcVersion(bytesLoadedFile);
+            _strFitcVersion = MEParser.GetFITCVersion(_bytesLoadedFile);
             //ME
-            strMeVersion = MEParser._stringGetMeVersion(bytesLoadedFile);
+            _strMeVersion = MEParser.GetMEVersion(_bytesLoadedFile);
             // Get the BoardId
-            strBoardId = FirmwareParser._stringGetPdrBoardId(bytesLoadedFile);
+            _strBoardId = FirmwareParser.GetBoardId(_bytesLoadedFile);
             // SON
-            strSon = FirmwareParser._stringGetFsysSon(bytesFsys);
+            _strSon = FirmwareParser.GetFsysRegionSon(_bytesFsys);
 
             UpdateControls();
         }
 
         internal void UpdateControls()
         {
-            lblFilename.Text = $"· {strFilename}";
-            lblFilesizeBytes.ForeColor = EFIUtils._boolGetIsValidBinarySize((int)lngFilesize) ? Colours.clrGood : Colours.clrUnknown;
-            lblFilesizeBytes.Text = FileUtils._stringFormatBytesWithCommas(FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath));
-            lblCreated.Text = strCreationTime;
-            lblModified.Text = strModifiedTime;
-            lblFileChecksum.Text = uintCrcOfLoadedFile.ToString("X8");
-            lblFsysCrc.Text = $"{ strFsysChecksumInBinary }h";
-            lblFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = Colours.clrGood : lblFsysCrc.ForeColor = Colours.clrError;
-            cmdFixFsysCrc.Enabled = (strFsysCalculation == strFsysChecksumInBinary) ? false : true;
-            lblApfsCapable.Text = strApfsCapable;
-            if (strApfsCapable == "Yes") lblApfsCapable.ForeColor = Colours.clrGood; else lblApfsCapable.ForeColor = Colours.clrUnknown;
-            CheckHwcAsync(strHwc);
-            lblSerialNumber.Text = strSerialNumber;
-            lblHwc.Text = strHwc;
-            lblEfiVersion.Text = strEfiVer;
-            lblRomVersion.Text = strBootrom;
-            lblFitcVersion.Text = strFitcVersion;
-            lblMeVersion.Text = strMeVersion;
-            lblBoardId.Text = strBoardId;
-            lblSon.Text = strSon;
+            lblFilename.Text = $"· {_strFilename}";
+            lblFilesizeBytes.ForeColor = EFIUtils.GetIsValidBinSize((int)_lFilesize) ? Colours.clrGood : Colours.clrUnknown;
+            lblFilesizeBytes.Text = FileUtils.FormatFileSizeBytesWithCommas(FileUtils.GetFileSizeBytes(_strLoadedBinaryFilePath));
+            lblCreated.Text = _strCreationTime;
+            lblModified.Text = _strModifiedTime;
+            lblFileChecksum.Text = _uiCrcOfLoadedFile.ToString("X8");
+            lblFsysCrc.Text = $"{ _strFsysChecksumInBinary }h";
+            lblFsysCrc.ForeColor = (_strFsysCalculation == _strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = Colours.clrGood : lblFsysCrc.ForeColor = Colours.clrError;
+            cmdFixFsysCrc.Enabled = (_strFsysCalculation == _strFsysChecksumInBinary) ? false : true;
+            lblApfsCapable.Text = _strApfsCapable;
+            if (_strApfsCapable == "Yes") lblApfsCapable.ForeColor = Colours.clrGood; else lblApfsCapable.ForeColor = Colours.clrUnknown;
+            CheckHwcAsync(_strHwc);
+            lblSerialNumber.Text = _strSerialNumber;
+            lblHwc.Text = _strHwc;
+            lblEfiVersion.Text = _strEfiVersion;
+            lblRomVersion.Text = _strBootromVersion;
+            lblFitcVersion.Text = _strFitcVersion;
+            lblMeVersion.Text = _strMeVersion;
+            lblBoardId.Text = _strBoardId;
+            lblSon.Text = _strSon;
 
             ToggleControlEnable(true);
         }
 
         internal async void CheckHwcAsync(string strHwc)
         {
-            var configCode = await EFIUtils._stringGetConfigCodeAsync(strHwc);
+            var configCode = await EFIUtils.GetConfigCodeAsync(strHwc);
             lblConfig.Text = $"· {configCode}";
         }
         #endregion
@@ -578,10 +591,10 @@ namespace Mac_EFI_Toolkit
             // Clear strings
             string[] strFields =
             {
-                strLoadedBinaryFilePath, strFilenameWithoutExt, strCreationTime, strModifiedTime,
-                strRememberPath, strFilename, strSerialNumber, strHwc, strEfiVer, strBootrom,
-                strApfsCapable, strFsysChecksumInBinary, strFsysCalculation, strFitcVersion,
-                strMeVersion, strBoardId, strSon
+                _strLoadedBinaryFilePath, _strFilenameWithoutExt, _strCreationTime, _strModifiedTime,
+                _strRememberPath, _strFilename, _strSerialNumber, _strHwc, _strEfiVersion, _strBootromVersion,
+                _strApfsCapable, _strFsysChecksumInBinary, _strFsysCalculation, _strFitcVersion,
+                _strMeVersion, _strBoardId, _strSon
             };
             for (int i = 0; i < strFields.Length; i++)
             {
@@ -591,7 +604,7 @@ namespace Mac_EFI_Toolkit
             // Clear byte arrays
             byte[][] byteFields =
             {
-                bytesLoadedFile, bytesFsys, bytesDxeCompressed
+                _bytesLoadedFile, _bytesFsys
             };
             for (int i = 0; i < byteFields.Length; i++)
             {
@@ -609,9 +622,9 @@ namespace Mac_EFI_Toolkit
             }
 
             // Clear the integers
-            uintCrcOfLoadedFile = 0;
-            lngFilesize = 0;
-            lngFsysOffset = 0;
+            _uiCrcOfLoadedFile = 0;
+            _lFilesize = 0;
+            _lFsysOffset = 0;
 
             // Disable controls
             ToggleControlEnable(false);
@@ -629,20 +642,20 @@ namespace Mac_EFI_Toolkit
 
         private void ReloadData(string filePath)
         {
-            strFilenameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
-            bytesLoadedFile = File.ReadAllBytes(filePath);
-            var fsysOut = FirmwareParser._byteGetFsysBlock(bytesLoadedFile, true);
-            bytesFsys = fsysOut.BlockBytes; lngFsysOffset = fsysOut.Offset;
+            _strFilenameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
+            _bytesLoadedFile = File.ReadAllBytes(filePath);
+            var fsysOut = FirmwareParser.GetFsysRegionBytes(_bytesLoadedFile, true);
+            _bytesFsys = fsysOut.BlockBytes; _lFsysOffset = fsysOut.Offset;
             if (boolIsValidFirmware())
             {
                 ToggleControlEnable(false);
-                strInitialDirectory = strLoadedBinaryFilePath;
-                strRememberPath = strLoadedBinaryFilePath;
+                _strInitialDirectory = _strLoadedBinaryFilePath;
+                _strRememberPath = _strLoadedBinaryFilePath;
                 LoadEfiData();
             }
             else
             {
-                strLoadedBinaryFilePath = string.Empty;
+                _strLoadedBinaryFilePath = string.Empty;
                 ResetData();
             }
         }

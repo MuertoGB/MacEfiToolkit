@@ -21,10 +21,10 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="sourceBytes">The byte array to search in.</param>
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static long _longFindOffset(byte[] sourceBytes, byte[] pattern)
+        internal static long GetLongOffset(byte[] sourceBytes, byte[] pattern)
         {
             // Call the overload that takes a baseOffset parameter and sets it to 0.
-            return _longFindOffset(sourceBytes, pattern, 0);
+            return GetLongOffset(sourceBytes, pattern, 0);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <param name="baseOffset">The base offset to start the search from.</param>
         /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static long _longFindOffset(byte[] sourceBytes, byte[] pattern, long baseOffset)
+        internal static long GetLongOffset(byte[] sourceBytes, byte[] pattern, long baseOffset)
         {
             // Build the partial match table for the pattern using the Knuth-Morris-Pratt algorithm.
             int[] partialMatchTable = BuildPartialMatchTable(pattern);
@@ -120,7 +120,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="offset">The offset in the byte array to read from.</param>
         /// <param name="length">The number of bytes to read.</param>
         /// <returns>The bytes read from the byte array.</returns>
-        internal static byte[] _byteReadAtOffset(byte[] sourceBytes, long offset, int length)
+        internal static byte[] GetBytesAtOffset(byte[] sourceBytes, long offset, int length)
         {
             if (offset < 0 || offset + length > sourceBytes.Length) return null;
 
@@ -136,7 +136,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="startOffset">The starting offset in the byte array to read from.</param>
         /// <param name="endOffset">The ending offset in the byte array to read from.</param>
         /// <returns>The bytes read from the byte array.</returns>
-        internal static byte[] _byteReadBetweenOffsets(byte[] sourceBytes, long startOffset, long endOffset)
+        internal static byte[] GetBytesBetweenOffsets(byte[] sourceBytes, long startOffset, long endOffset)
         {
             if (endOffset <= startOffset) return new byte[0]; // Nothing to read
 
@@ -153,7 +153,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="startByte">The starting byte to read from.</param>
         /// <param name="terminationByte">The terminating byte to stop reading at.</param>
         /// <returns>The bytes read from the byte array up to the terminating byte.</returns>
-        internal static byte[] _byteReadAtOffsetByteDelimited(byte[] sourceBytes, long offset, byte startByte, byte terminationByte)
+        internal static byte[] GetBytesAtOffsetByteDelimited(byte[] sourceBytes, long offset, byte startByte, byte terminationByte)
         {
             int startIndex = Array.IndexOf(sourceBytes, startByte, (int)offset);
             if (startIndex < 0 || startIndex == sourceBytes.Length - 1) return null;
@@ -213,7 +213,6 @@ namespace Mac_EFI_Toolkit.Utils
             Array.Copy(bytes, result, end + 1);
             return result;
         }
-
         #endregion
 
     }

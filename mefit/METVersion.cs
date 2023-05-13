@@ -25,9 +25,9 @@ namespace Mac_EFI_Toolkit
 
     class METVersion
     {
-        internal static string latestUrl = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal static string strLatestUrl = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
 
-        internal static async Task<VersionCheckResult> CheckForUpdate(string versionUrl)
+        internal static async Task<VersionCheckResult> CheckForNewVersion(string versionUrl)
         {
             try
             {

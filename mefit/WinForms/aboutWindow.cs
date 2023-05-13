@@ -3,7 +3,6 @@
 
 // WinForms
 // aboutWindow.cs
-// Updated 05.05.23 - Enabled KeyPreview, enabled links.
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.WIN32;

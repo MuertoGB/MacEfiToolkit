@@ -17,8 +17,8 @@ namespace Mac_EFI_Toolkit.WinForms
     {
 
         #region Private Members
-        private static string strNewOfdInitialPath = string.Empty;
-        private bool isTimerRunning = false;
+        private static string _strNewOfdInitialPath = string.Empty;
+        private bool _bIsTimerRunning = false;
         #endregion
 
         #region Overrides Properties
@@ -54,14 +54,14 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void _updateControls()
         {
-            cbxDisableVersionCheck.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableVersionCheck)) ? true : false;
-            cbxDisableFlashingUI.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableFlashingUI)) ? true : false;
-            cbxDisableConfDiag.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag)) ? true : false;
-            cbxDisableLzmaFsSearch.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) ? true : false;
-            cbxDisableFsysEnforce.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableFsysEnforce)) ? true : false;
-            cbxDisableDescriptorEnforce.Checked = (Settings._settingsGetBool(SettingsBoolType.DisableDescriptorEnforce)) ? true : false;
-            cbxAcceptedEditingTerms.Enabled = (Settings._settingsGetBool(SettingsBoolType.AcceptedEditingTerms)) ? true : false;
-            cbxAcceptedEditingTerms.Checked = (Settings._settingsGetBool(SettingsBoolType.AcceptedEditingTerms)) ? true : false;
+            cbxDisableVersionCheck.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck)) ? true : false;
+            cbxDisableFlashingUI.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI)) ? true : false;
+            cbxDisableConfDiag.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag)) ? true : false;
+            cbxDisableLzmaFsSearch.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) ? true : false;
+            cbxDisableFsysEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFsysEnforce)) ? true : false;
+            cbxDisableDescriptorEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce)) ? true : false;
+            cbxAcceptedEditingTerms.Enabled = (Settings.SettingsGetBool(SettingsBoolType.AcceptedEditingTerms)) ? true : false;
+            cbxAcceptedEditingTerms.Checked = (Settings.SettingsGetBool(SettingsBoolType.AcceptedEditingTerms)) ? true : false;
         }
         #endregion
 
@@ -99,13 +99,13 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
-                fbd.SelectedPath = (Settings._settingsGetString(SettingsStringType.InitialDirectory) == string.Empty) ? Settings.strDefaultOfdPath : Settings._settingsGetString(SettingsStringType.InitialDirectory);
+                fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty) ? Settings.strDefaultOfdPath : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
                 fbd.Description = "Select a folder";
                 fbd.ShowNewFolderButton = false;
 
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    strNewOfdInitialPath = fbd.SelectedPath;
+                    _strNewOfdInitialPath = fbd.SelectedPath;
                 }
             }
         }
@@ -118,13 +118,13 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdApply_Click(object sender, EventArgs e)
         {
             // Here we are simply using the bool value from a checkboxes state. Nice and simple.
-            Settings._settingsSetBool(SettingsBoolType.DisableVersionCheck, cbxDisableVersionCheck.Checked);
-            Settings._settingsSetBool(SettingsBoolType.DisableFlashingUI, cbxDisableFlashingUI.Checked);
-            Settings._settingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
-            if (strNewOfdInitialPath != string.Empty) Settings._settingsSetString(SettingsStringType.InitialDirectory, strNewOfdInitialPath);
-            Settings._settingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
-            Settings._settingsSetBool(SettingsBoolType.DisableFsysEnforce, cbxDisableFsysEnforce.Checked);
-            Settings._settingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, cbxDisableVersionCheck.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, cbxDisableFlashingUI.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
+            if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
+            Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, cbxDisableFsysEnforce.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
             //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
             _showSettingsUpdatedLabel();
         }
@@ -132,13 +132,13 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
             // Here we are simply using the bool value from a checkboxes state. Nice and simple.
-            Settings._settingsSetBool(SettingsBoolType.DisableVersionCheck, false);
-            Settings._settingsSetBool(SettingsBoolType.DisableFlashingUI, false);
-            Settings._settingsSetBool(SettingsBoolType.DisableConfDiag, false);
-            if (strNewOfdInitialPath != string.Empty) Settings._settingsSetString(SettingsStringType.InitialDirectory, Settings.strDefaultOfdPath);
-            Settings._settingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
-            Settings._settingsSetBool(SettingsBoolType.DisableFsysEnforce, false);
-            Settings._settingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, false);
+            if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, Settings.strDefaultOfdPath);
+            Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
             //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
             _updateControls();
             _showSettingsUpdatedLabel();
@@ -146,7 +146,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void _showSettingsUpdatedLabel()
         {
-            if (!isTimerRunning)
+            if (!_bIsTimerRunning)
             {
                 lblSettingsUpdated.Show();
                 InterfaceUtils.FlashForecolor(lblSettingsUpdated);
@@ -159,11 +159,11 @@ namespace Mac_EFI_Toolkit.WinForms
                     lblSettingsUpdated.Hide();
                     timer.Stop();
                     timer.Dispose();
-                    isTimerRunning = false;
+                    _bIsTimerRunning = false;
                 };
 
                 timer.Start();
-                isTimerRunning = true;
+                _bIsTimerRunning = true;
             }
         }
         #endregion

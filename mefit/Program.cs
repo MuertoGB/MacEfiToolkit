@@ -22,12 +22,15 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static string strAppBuild = $"{Application.ProductVersion}-120523-ms3";
+        internal static string strAppBuild = $"{Application.ProductVersion}-130523-ms4";
         internal static string strAppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string strAppName = Assembly.GetExecutingAssembly().Location;
+
+        #region Private Members
         private static NativeMethods.LowLevelKeyboardProc _proc = HookCallback;
         private static IntPtr _hookId = IntPtr.Zero;
         private static GCHandle _hookHandle;
+        #endregion
 
         #region Const Members
         internal const int WM_NCLBUTTONDOWN = 0xA1;
@@ -79,14 +82,14 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData, 20.0F), FontStyle.Regular);
 
             // Settings
-            if (!File.Exists(Settings.strSettingsFilePath)) Settings._createSettingsFile();
+            if (!File.Exists(Settings.strSettingsFilePath)) Settings.SettingsCreateFile();
             // We will grab settings on the fly. Thanks Kyle and Daz. I will blame if anything goes sideways. Peace out.
 
             // Register application exit event.
             Application.ApplicationExit += OnExiting;
 
             // Register low level keyboard hook for preventing WinKey+Up.
-            _kbHook();
+            hookKeyboard();
 
             // Run mainWindow.
             Application.Run(new mainWindow());
@@ -95,7 +98,7 @@ namespace Mac_EFI_Toolkit
         private static void OnExiting(object sender, EventArgs e)
         {
             // Unhook the keyboard hook before exiting the application.
-            _kbUnhook();
+            unhookKeyboard();
         }
         #endregion
 
@@ -125,14 +128,14 @@ namespace Mac_EFI_Toolkit
             return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
         }
 
-        private static void _kbHook()
+        private static void hookKeyboard()
         {
             _proc = HookCallback;
             _hookHandle = GCHandle.Alloc(_proc);
             _hookId = SetHook(_proc);
         }
 
-        private static void _kbUnhook()
+        private static void unhookKeyboard()
         {
             NativeMethods.UnhookWindowsHookEx(_hookId);
             _hookHandle.Free();
@@ -180,7 +183,7 @@ namespace Mac_EFI_Toolkit
             string message = e.Message.ToString();
             string exception = e.ToString();
 
-            Logger.Write($"{type}:- {message}\r\n\r\n{exception}\r\n\r\n -------------------");
+            Logger.writeLogFile($"{type}:- {message}\r\n\r\n{exception}\r\n\r\n -------------------");
 
             DialogResult result = MessageBox.Show(message + "\r\n\r\n" + exception + "\r\n\r\n" + "Quit application?",
                 type, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
@@ -188,7 +191,7 @@ namespace Mac_EFI_Toolkit
             switch (result)
             {
                 case DialogResult.Yes:
-                    _kbUnhook(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit.
+                    unhookKeyboard(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit.
                     Environment.Exit(-1);
                     break;
                 case DialogResult.No:
@@ -200,7 +203,7 @@ namespace Mac_EFI_Toolkit
         #region Restart
         internal static void RestartMet(Form owner)
         {
-            if (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
                 Application.Restart();
             }
@@ -218,7 +221,7 @@ namespace Mac_EFI_Toolkit
         #region Exit
         internal static void ExitMet(Form owner)
         {
-            if (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
                 Application.Exit();
             }

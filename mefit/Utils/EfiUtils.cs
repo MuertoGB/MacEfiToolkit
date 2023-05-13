@@ -19,7 +19,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="strHwc">The HWC identifier to retrieve a configuration data for.</param>
         /// <returns>The configuration data string, or an error message if an error occurs.</returns>
-        internal static async Task<string> _stringGetConfigCodeAsync(string strHwc)
+        internal static async Task<string> GetConfigCodeAsync(string strHwc)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace Mac_EFI_Toolkit.Utils
                 var url = $"http://support-sp.apple.com/sp/product?cc={strHwc}";
 
                 // Check if the website is available
-                if (!NetUtils._boolIsWebsiteAvailable(url)) return "Domain not available";
+                if (!NetUtils.GetIsWebsiteAvailable(url)) return "Domain not available";
 
                 // Download and parse the XML data to retrieve the configuration data
                 var xml = await new WebClient().DownloadStringTaskAsync(url);
@@ -42,16 +42,15 @@ namespace Mac_EFI_Toolkit.Utils
                 return "Unknown";
             }
         }
-
         /// <summary>
         /// Checks if a given integer size is a valid size for a firmware image.
         /// </summary>
         /// <param name="sizeIn">The integer size to check.</param>
         /// <returns>True if the size is valid, otherwise false.</returns>
-        internal static bool _boolGetIsValidBinarySize(int sizeIn)
+        internal static bool GetIsValidBinSize(int sizeIn)
         {
-            int expectedSize = FirmwareParser.intMinRomSize;
-            int maxSize = FirmwareParser.intMaxRomSize;
+            int expectedSize = FirmwareParser.intMinROMSize;
+            int maxSize = FirmwareParser.intMaxROMSize;
 
             while (expectedSize <= maxSize)
             {

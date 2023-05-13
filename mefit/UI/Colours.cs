@@ -23,6 +23,7 @@ namespace Mac_EFI_Toolkit.UI
         internal static Color clrUnknown = Color.Tomato;
         internal static Color clrError = Color.FromArgb(255, 50, 50);
         internal static Color clrGood = Color.FromArgb(128, 255, 128);
+        internal static Color clrInfo = Color.FromArgb(0, 120, 180);
         internal const int A = 100;
     }
 }

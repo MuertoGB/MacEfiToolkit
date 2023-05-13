@@ -47,20 +47,20 @@ namespace Mac_EFI_Toolkit.Common
 
     class MEParser
     {
-        internal static string _stringGetFitcVersion(byte[] bytesIn)
+        internal static string GetFITCVersion(byte[] bytesIn)
         {
-            var offset = BinaryUtils._longFindOffset(bytesIn, FSSignatures.FPT_HEADER_SIG);
+            var offset = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.FPT_HEADER_SIG);
             if (offset == -1) return "Not found";
-            var headerBytes = BinaryUtils._byteReadAtOffset(bytesIn, offset, 0x20);
+            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, offset, 0x20);
             if (headerBytes == null) return "Not found";
             var header = Helper.DeserializeHeader<FptHeader>(headerBytes);
             return $"{header.Major}.{header.Minor}.{header.Hotfix}.{header.Build}";
         }
-        internal static string _stringGetMeVersion(byte[] bytesIn)
+        internal static string GetMEVersion(byte[] bytesIn)
         {
-            var offset = BinaryUtils._longFindOffset(bytesIn, FSSignatures.MN2_SIG);
+            var offset = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.MN2_SIG);
             if (offset == -1) return "Not found";
-            var headerBytes = BinaryUtils._byteReadAtOffset(bytesIn, offset, 0x10);
+            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, offset, 0x10);
             if (headerBytes == null) return "Not found";
             var header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
             return $"{header.Major}.{header.Minor}.{header.Hotfix}.{header.Build}";
