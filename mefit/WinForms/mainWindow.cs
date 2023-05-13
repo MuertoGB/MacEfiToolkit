@@ -25,6 +25,7 @@ namespace Mac_EFI_Toolkit
         internal byte[] bytesLoadedFile;
         internal byte[] bytesFsys;
         internal byte[] bytesDxeCompressed;
+
         internal uint uintCrcOfLoadedFile;
         internal long lngFilesize;
         internal long lngFsysOffset;
@@ -35,7 +36,7 @@ namespace Mac_EFI_Toolkit
         private string strFilenameWithoutExt;
         private string strCreationTime;
         private string strModifiedTime;
-        private string strRememberPath = string.Empty;
+        private string strRememberPath;
         private string strFilename;
         private string strSerialNumber;
         private string strHwc;
@@ -48,9 +49,6 @@ namespace Mac_EFI_Toolkit
         private string strMeVersion;
         private string strBoardId;
         private string strSon;
-        private readonly Color clrUnknown = Color.Tomato;
-        private readonly Color clrError = Color.FromArgb(255, 50, 50);
-        private readonly Color clrGood = Color.FromArgb(128, 255, 128);
         #endregion
 
         #region Overriden Properties
@@ -229,7 +227,7 @@ namespace Mac_EFI_Toolkit
                     else
                     {
                         strLoadedBinaryFilePath = string.Empty;
-                        ResetClear();
+                        ResetData();
                     }
                 }
             }
@@ -239,7 +237,7 @@ namespace Mac_EFI_Toolkit
         {
             if (Settings._settingsGetBool(SettingsBoolType.DisableConfDiag))
             {
-                ResetClear();
+                ResetData();
             }
             else
             {
@@ -248,12 +246,18 @@ namespace Mac_EFI_Toolkit
                 switch (result)
                 {
                     case DialogResult.Yes:
-                        ResetClear();
+                        ResetData();
                         break;
                     case DialogResult.No:
                         break;
                 }
             }
+        }
+
+        private void cmdSerialCheck_Click(object sender, EventArgs e)
+        {
+            // Opens a browser window to EveryMac, and automatically loads in the serial.
+            Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", strSerialNumber));
         }
 
         private void cmdExportFsysBlock_Click(object sender, EventArgs e)
@@ -282,10 +286,40 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void cmdSerialCheck_Click(object sender, EventArgs e)
+        private void cmdFixFsysCrc_Click(object sender, EventArgs e)
         {
-            // Opens a browser window to EveryMac, and automatically loads in the serial.
-            Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", strSerialNumber));
+            using (var dialog = new SaveFileDialog
+            {
+                Filter = "Binary Files (*.bin)|*.bin",
+                Title = "Export repaired binary...",
+                FileName = string.Concat("FSYS_Fixed_", strFilenameWithoutExt, ".bin"),
+                OverwritePrompt = true,
+                InitialDirectory = strRememberPath
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                int len = 0x7FC;
+                byte[] bytesTempFsys = new byte[len];
+                Array.Copy(bytesFsys, bytesTempFsys, Math.Min(bytesFsys.Length, len));
+                uint uintNewCrc = FileUtils._uintGetCrc32FromBytes(bytesTempFsys);
+                byte[] newCrc = BitConverter.GetBytes(uintNewCrc);
+                BinaryUtils.OverwriteBytesAtOffset(bytesLoadedFile, lngFsysOffset + len, newCrc);
+
+                File.WriteAllBytes(dialog.FileName, bytesLoadedFile);
+
+                if (File.Exists(dialog.FileName))
+                {
+                    DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?", MsgType.Information, MsgButton.YesNoCancel);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        ReloadData(dialog.FileName);
+                    }
+                }
+            }
         }
         #endregion
 
@@ -494,16 +528,16 @@ namespace Mac_EFI_Toolkit
         internal void UpdateControls()
         {
             lblFilename.Text = $"· {strFilename}";
-            lblFilesizeBytes.ForeColor = EFIUtils._boolGetIsValidBinarySize((int)lngFilesize) ? clrGood : clrUnknown;
+            lblFilesizeBytes.ForeColor = EFIUtils._boolGetIsValidBinarySize((int)lngFilesize) ? Colours.clrGood : Colours.clrUnknown;
             lblFilesizeBytes.Text = FileUtils._stringFormatBytesWithCommas(FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath));
             lblCreated.Text = strCreationTime;
             lblModified.Text = strModifiedTime;
             lblFileChecksum.Text = uintCrcOfLoadedFile.ToString("X8");
             lblFsysCrc.Text = $"{ strFsysChecksumInBinary }h";
-            lblFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = clrGood : lblFsysCrc.ForeColor = clrError;
+            lblFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = Colours.clrGood : lblFsysCrc.ForeColor = Colours.clrError;
             cmdFixFsysCrc.Enabled = (strFsysCalculation == strFsysChecksumInBinary) ? false : true;
             lblApfsCapable.Text = strApfsCapable;
-            if (strApfsCapable == "Yes") lblApfsCapable.ForeColor = clrGood; else lblApfsCapable.ForeColor = clrUnknown;
+            if (strApfsCapable == "Yes") lblApfsCapable.ForeColor = Colours.clrGood; else lblApfsCapable.ForeColor = Colours.clrUnknown;
             CheckHwcAsync(strHwc);
             lblSerialNumber.Text = strSerialNumber;
             lblHwc.Text = strHwc;
@@ -524,27 +558,45 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Reset
-        private void ResetClear()
+        #region Reset / Reload
+        private void ResetData()
         {
-            // Reset labels
-            Label[] labels = {
+            // Clear labels
+            Label[] labels =
+            {
                 lblFilename, lblFileChecksum, lblFilesizeBytes, lblCreated, lblModified,
                 lblConfig, lblSerialNumber, lblHwc, lblEfiVersion, lblRomVersion,
                 lblFsysCrc, lblApfsCapable, lblFitcVersion, lblMeVersion, lblBoardId,
                 lblSon
             };
-            Color defaultColor = Color.White;
             foreach (Label label in labels)
             {
                 label.Text = string.Empty;
-                label.ForeColor = defaultColor;
+                label.ForeColor = Color.White;
             }
 
-            // Clear loaded binary data
-            bytesLoadedFile = null;
-            bytesFsys = null;
-            bytesDxeCompressed = null;
+            // Clear strings
+            string[] strFields =
+            {
+                strLoadedBinaryFilePath, strFilenameWithoutExt, strCreationTime, strModifiedTime,
+                strRememberPath, strFilename, strSerialNumber, strHwc, strEfiVer, strBootrom,
+                strApfsCapable, strFsysChecksumInBinary, strFsysCalculation, strFitcVersion,
+                strMeVersion, strBoardId, strSon
+            };
+            for (int i = 0; i < strFields.Length; i++)
+            {
+                strFields[i] = string.Empty;
+            }
+
+            // Clear byte arrays
+            byte[][] byteFields =
+            {
+                bytesLoadedFile, bytesFsys, bytesDxeCompressed
+            };
+            for (int i = 0; i < byteFields.Length; i++)
+            {
+                byteFields[i] = null;
+            }
 
             // Clear the large object heap
             GC.Collect();
@@ -556,6 +608,12 @@ namespace Mac_EFI_Toolkit
                 }
             }
 
+            // Clear the integers
+            uintCrcOfLoadedFile = 0;
+            lngFilesize = 0;
+            lngFsysOffset = 0;
+
+            // Disable controls
             ToggleControlEnable(false);
         }
 
@@ -568,7 +626,6 @@ namespace Mac_EFI_Toolkit
                 button.Enabled = (Enable) ? true : false;
             }
         }
-        #endregion
 
         private void ReloadData(string filePath)
         {
@@ -586,45 +643,10 @@ namespace Mac_EFI_Toolkit
             else
             {
                 strLoadedBinaryFilePath = string.Empty;
-                ResetClear();
+                ResetData();
             }
         }
-
-        private void cmdFixFsysCrc_Click(object sender, EventArgs e)
-        {
-            using (var dialog = new SaveFileDialog
-            {
-                Filter = "Binary Files (*.bin)|*.bin",
-                Title = "Export repaired binary...",
-                FileName = string.Concat("FSYS_Fixed_", strFilenameWithoutExt, ".bin"),
-                OverwritePrompt = true,
-                InitialDirectory = strRememberPath
-            })
-            {
-                if (dialog.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-                int len = 0x7FC;
-                byte[] bytesTempFsys = new byte[len];
-                Array.Copy(bytesFsys, bytesTempFsys, Math.Min(bytesFsys.Length, len));
-                uint uintNewCrc = FileUtils._uintGetCrc32FromBytes(bytesTempFsys);
-                byte[] newCrc = BitConverter.GetBytes(uintNewCrc);
-                BinaryUtils.OverwriteBytesAtOffset(bytesLoadedFile, lngFsysOffset + len, newCrc);
-
-                File.WriteAllBytes(dialog.FileName, bytesLoadedFile);
-
-                if (File.Exists(dialog.FileName))
-                {
-                    DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?", MsgType.Information, MsgButton.YesNoCancel);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        ReloadData(dialog.FileName);
-                    }
-                }
-            }
-        }
+        #endregion
 
     }
 }

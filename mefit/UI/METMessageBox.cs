@@ -37,12 +37,6 @@ namespace Mac_EFI_Toolkit.UI
         static DialogResult boxResult;
         #endregion
 
-        #region Private Colours
-        private readonly Color clrCrit = Color.FromArgb(255, 50, 50);
-        private readonly Color clrWarn = Color.FromArgb(255, 100, 70);
-        private readonly Color clrInfo = Color.FromArgb(0, 120, 180);
-        #endregion
-
         #region Contructor
         public METMessageBox()
         {
@@ -60,22 +54,22 @@ namespace Mac_EFI_Toolkit.UI
             switch (boxType)
             {
                 case MsgType.Critical:
-                    labIcon.ForeColor = clrCrit;
+                    labIcon.ForeColor = Colours.clrError;
                     labIcon.Text = "\xEB90";
                     boxSound = System.Media.SystemSounds.Hand;
                     break;
                 case MsgType.Warning:
-                    labIcon.ForeColor = clrWarn;
+                    labIcon.ForeColor = Colours.clrUnknown;
                     labIcon.Text = "\xE7BA";
                     boxSound = System.Media.SystemSounds.Exclamation;
                     break;
                 case MsgType.Information:
-                    labIcon.ForeColor = clrInfo;
+                    labIcon.ForeColor = Colours.clrGood;
                     labIcon.Text = "\xF167";
                     boxSound = System.Media.SystemSounds.Beep;
                     break;
                 case MsgType.Question:
-                    labIcon.ForeColor = clrInfo;
+                    labIcon.ForeColor = Colours.clrGood;
                     labIcon.Text = "\xE9CE";
                     boxSound = System.Media.SystemSounds.Beep;
                     break;
