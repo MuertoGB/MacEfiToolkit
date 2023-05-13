@@ -14,6 +14,7 @@
 #### Bugs:
 - Prevented crash caused by disposed object being passed to unmanaged code.
 - Fixed Board-ID false detections.
+- Fixed CRC32 format specifier.
 
 ## Version 0.4.6
 

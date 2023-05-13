@@ -143,18 +143,18 @@ namespace Mac_EFI_Toolkit.Common
         internal static string _stringGetFsysHwc(byte[] bytesIn)
         {
             long offset = BinaryUtils._longFindOffset(bytesIn, FSSignatures.HWC_SIG);
-            byte[] hwcData = BinaryUtils._byteReadAtOffset(bytesIn, offset + 0x6, 0x4);
+            if (offset != -1)
+            {
+                byte[] hwcData = BinaryUtils._byteReadAtOffset(bytesIn, offset + 0x6, 0x4);
 
-            if (hwcData != null)
-            {
-                string strHwc = utf8Enc.GetString(hwcData).Trim();
-                strHwc = new string(strHwc.Where(Char.IsLetterOrDigit).ToArray());
-                return strHwc;
+                if (hwcData != null)
+                {
+                    string strHwc = utf8Enc.GetString(hwcData).Trim();
+                    strHwc = new string(strHwc.Where(Char.IsLetterOrDigit).ToArray());
+                    return strHwc;
+                }
             }
-            else
-            {
-                return "Not found";
-            }
+            return "Not found";
         }
 
         #endregion

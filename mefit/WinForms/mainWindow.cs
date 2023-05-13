@@ -476,7 +476,7 @@ namespace Mac_EFI_Toolkit
             // Fsys CRC32
             byte[] bytesTempFsys = new byte[0x7FC];
             if (bytesFsys != null) Array.Copy(bytesFsys, 0, bytesTempFsys, 0, bytesTempFsys.Length);
-            strFsysCalculation = FileUtils._uintGetCrc32FromBytes(bytesTempFsys).ToString("X2");
+            strFsysCalculation = FileUtils._uintGetCrc32FromBytes(bytesTempFsys).ToString("X8");
             // APFSJumpStart
             strApfsCapable = $"{ FirmwareParser._getIsApfsCapable(bytesLoadedFile) }";
             // FITC
@@ -498,7 +498,7 @@ namespace Mac_EFI_Toolkit
             lblFilesizeBytes.Text = FileUtils._stringFormatBytesWithCommas(FileUtils._longGetFileSizeBytes(strLoadedBinaryFilePath));
             lblCreated.Text = strCreationTime;
             lblModified.Text = strModifiedTime;
-            lblFileChecksum.Text = uintCrcOfLoadedFile.ToString("X2");
+            lblFileChecksum.Text = uintCrcOfLoadedFile.ToString("X8");
             lblFsysCrc.Text = $"{ strFsysChecksumInBinary }h";
             lblFsysCrc.ForeColor = (strFsysCalculation == strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = clrGood : lblFsysCrc.ForeColor = clrError;
             cmdFixFsysCrc.Enabled = (strFsysCalculation == strFsysChecksumInBinary) ? false : true;
@@ -570,6 +570,26 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
+        private void ReloadData(string filePath)
+        {
+            strFilenameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
+            bytesLoadedFile = File.ReadAllBytes(filePath);
+            var fsysOut = FirmwareParser._byteGetFsysBlock(bytesLoadedFile, true);
+            bytesFsys = fsysOut.BlockBytes; lngFsysOffset = fsysOut.Offset;
+            if (boolIsValidFirmware())
+            {
+                ToggleControlEnable(false);
+                strInitialDirectory = strLoadedBinaryFilePath;
+                strRememberPath = strLoadedBinaryFilePath;
+                LoadEfiData();
+            }
+            else
+            {
+                strLoadedBinaryFilePath = string.Empty;
+                ResetClear();
+            }
+        }
+
         private void cmdFixFsysCrc_Click(object sender, EventArgs e)
         {
             using (var dialog = new SaveFileDialog
@@ -593,7 +613,18 @@ namespace Mac_EFI_Toolkit
                 BinaryUtils.OverwriteBytesAtOffset(bytesLoadedFile, lngFsysOffset + len, newCrc);
 
                 File.WriteAllBytes(dialog.FileName, bytesLoadedFile);
+
+                if (File.Exists(dialog.FileName))
+                {
+                    DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?", MsgType.Information, MsgButton.YesNoCancel);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        ReloadData(dialog.FileName);
+                    }
+                }
             }
         }
+
     }
 }
