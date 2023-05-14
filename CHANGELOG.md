@@ -1,12 +1,16 @@
 ## Version 0.5.1
 
 #### New:
-- Added drag and drop support.
+- Added drag and drop support for ROM (*.bin) files.
 
 #### Enhancements:
 - Toned down window flashing.
 - Main window open button no longer unnecessarily flashes.
 - Dark messagebox can now be moved.
+
+#### Bugs:
+- Settings window tab order fixed.
+- Custom checkbox control now has visual feedback when tabbed.
 
 ## Version 0.5.0
 
