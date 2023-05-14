@@ -37,8 +37,8 @@ This application is currently under development, it is by no means complete, ful
 | Detect and fix invalid Fsys checksums                      |🟢 Completed   |
 | View ROM information                                       |🟡 Partially Completed|
 | Dump and replace Fsys block                                |🟡 Partially Completed|
-| Replace serial with automatic HWC and CRC32 calculation    |🟠 Not started |
-| Clear NVRAM and EFI lock with header preservation          |🟠 Not started |
+| Replace serial with automatic HWC and CRC32 calculation    |🟡 Partially Completed|
+| Clear NVRAM and EFI lock with header preservation          |🟡 Partially Completed|
 | Detect MDM status in the NVRAM                             |🔴 Undecided   |
 | Detect email address in the NVRAM                          |🔴 Undecided   |
 | Configure ME region	                                     |🔴 Undecided   |
@@ -48,6 +48,7 @@ When the editing features are implemented, original files will be left untouched
 **Implemented application features:**
 ```
 - Automatic handling of uncaught errors
+- Drag and drop support for .bin files
 - No installation necessary
 - DPI scaling support
 - Integrity checking
@@ -61,8 +62,8 @@ Plus more, only time will tell.
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[0.5.0](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/050)| 13th May 2023 | Yes | BETA |
-|[0.4.6](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/046)| 9th May 2023 | No | BETA |
+|[0.5.1](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/051)| Not Set | Yes | BETA |
+|[0.5.0](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/050)| 13th May 2023 | No | BETA |
 
 ## Requirements
 
