@@ -6,6 +6,7 @@
 #### Enhancements:
 - Toned down window flashing.
 - Main window open button no longer unnecessarily flashes.
+- Dark messagebox can now be moved.
 
 ## Version 0.5.0
 
