@@ -18,12 +18,12 @@ namespace Mac_EFI_Toolkit.UI
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI)) // TODO - Should this really be here?
             {
                 Color originalColor = control.ForeColor;
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    control.ForeColor = Color.FromArgb(control.ForeColor.A, 60, 60, 60);
-                    await Task.Delay(80);
+                    control.ForeColor = Color.FromArgb(control.ForeColor.A, 130, 130, 130);
+                    await Task.Delay(70);
                     control.ForeColor = originalColor;
-                    await Task.Delay(80);
+                    await Task.Delay(70);
                 }
             }
         }

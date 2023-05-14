@@ -72,7 +72,6 @@ namespace Mac_EFI_Toolkit
             lblMessage.Hide();
 
             Load += mainWindow_Load;
-            Shown += mainWindow_Shown;
             FormClosing += mainWindow_FormClosing;
             KeyDown += mainWindow_KeyDown;
 
@@ -120,11 +119,6 @@ namespace Mac_EFI_Toolkit
                 LoadDataNoOfd(Program.strDraggedFile);
             }
 
-        }
-
-        private void mainWindow_Shown(object sender, EventArgs e)
-        {
-            if (!Program.blUserDraggedFile) InterfaceUtils.FlashForecolor(cmdOpenBin);
         }
 
         internal async void CheckForNewVersion()

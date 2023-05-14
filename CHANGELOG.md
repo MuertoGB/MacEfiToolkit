@@ -1,7 +1,11 @@
 ## Version 0.5.1
 
-#### Enhancements:
+#### New:
 - Added drag and drop support.
+
+#### Enhancements:
+- Toned down window flashing.
+- Main window open button no longer unnecessarily flashes.
 
 ## Version 0.5.0
 
