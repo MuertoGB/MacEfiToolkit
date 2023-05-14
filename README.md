@@ -23,8 +23,8 @@ Mac EFI Toolkit is a firmware repair tool designed to aid technicians in repair 
 
 This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete; however functionality such as viewing ROM information, dumping the Fsys region, and repairing the Fsys crc32 is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
 
-<img width="600" src="files/images/met.png" alt="MET">
-<img width="600" src="files/images/met_alt.png" alt="MET_ALT">
+<img width="550" src="files/images/met.png" alt="MET">
+<img width="550" src="files/images/met_alt.png" alt="MET_ALT">
 
 ## Features
 

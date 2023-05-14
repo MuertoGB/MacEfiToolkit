@@ -22,9 +22,11 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static string strAppBuild = $"{Application.ProductVersion}-130523-ms4";
+        internal static string strAppBuild = $"{Application.ProductVersion}-140523-ms4";
         internal static string strAppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string strAppName = Assembly.GetExecutingAssembly().Location;
+        internal static string strDraggedFile = string.Empty;
+        internal static bool blUserDraggedFile = false;
 
         #region Private Members
         private static NativeMethods.LowLevelKeyboardProc _proc = HookCallback;
@@ -90,6 +92,17 @@ namespace Mac_EFI_Toolkit
 
             // Register low level keyboard hook for preventing WinKey+Up.
             hookKeyboard();
+
+            // Get dragged filepath and set bool
+            if (args.Length > 0)
+            {
+                string strDraggedFileName = args[0];
+                if (File.Exists(strDraggedFileName) && Path.GetExtension(strDraggedFileName).Equals(".bin", StringComparison.OrdinalIgnoreCase))
+                {
+                    blUserDraggedFile = true;
+                    strDraggedFile = strDraggedFileName;
+                }
+            }
 
             // Run mainWindow.
             Application.Run(new mainWindow());

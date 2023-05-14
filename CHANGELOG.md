@@ -1,3 +1,8 @@
+## Version 0.5.1
+
+#### Enhancements:
+- Added drag and drop support.
+
 ## Version 0.5.0
 
 #### New:

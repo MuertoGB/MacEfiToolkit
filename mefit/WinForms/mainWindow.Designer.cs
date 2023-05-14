@@ -938,9 +938,9 @@ namespace Mac_EFI_Toolkit
             this.cmdEditEfirom.Location = new System.Drawing.Point(162, 0);
             this.cmdEditEfirom.Margin = new System.Windows.Forms.Padding(0);
             this.cmdEditEfirom.Name = "cmdEditEfirom";
-            this.cmdEditEfirom.Size = new System.Drawing.Size(121, 38);
+            this.cmdEditEfirom.Size = new System.Drawing.Size(100, 38);
             this.cmdEditEfirom.TabIndex = 2;
-            this.cmdEditEfirom.Text = "EDIT BINARY";
+            this.cmdEditEfirom.Text = "EDIT ROM";
             this.cmdEditEfirom.UseVisualStyleBackColor = false;
             // 
             // cmdReset
@@ -1269,7 +1269,7 @@ namespace Mac_EFI_Toolkit
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 121F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpMenu.Controls.Add(this.cmdOpenBin, 0, 0);
             this.tlpMenu.Controls.Add(this.cmdReset, 2, 0);
@@ -1319,6 +1319,7 @@ namespace Mac_EFI_Toolkit
             // 
             // mainWindow
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
