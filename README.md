@@ -75,6 +75,23 @@ Plus more, only time will tell.
 **Build requirements:**
 - Visual Studio 2019 or higher
 
+Open `mefit.sln` in Visual Studio, you'll then need to either disable signing, sign the application yourself by creating a new personal information exchange cert (.pfx), or disable the signature check, otherwise the application will show an invalid signature error.
+
+- From the Visual Studio menu, click "Project > mefit Properties > Signing".
+- Either uncheck `Sign the assembly`, then comment out the code below, or...
+- Create a new .pfx, then sign the assembly, or...
+- Ignore everything above and just comment out the code below to skip validation.
+
+**mefit/Program.vb:**
+```cs
+    // Verify integrity of application to ensure it's not corrupt.
+    if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(strAppName))
+    {
+        MessageBox.Show("The assembly signature is invalid, or cannot be verified!\r\nYou should discard of, and reacquire the file.",
+                    "Signature Verification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+```
+
 ## Acknowledgements
 
 This software uses the LZMA v22.01 SDK made by [Igor Pavlov](https://www.7-zip.org/sdk.html)\
