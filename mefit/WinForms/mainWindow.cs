@@ -156,7 +156,7 @@ namespace Mac_EFI_Toolkit
         private void mainWindow_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop) && ((string[])e.Data.GetData(DataFormats.FileDrop)).Length == 1
-                && ((string[])e.Data.GetData(DataFormats.FileDrop))[0].EndsWith(".bin"))
+                && ((string[])e.Data.GetData(DataFormats.FileDrop))[0].EndsWith(".bin", StringComparison.OrdinalIgnoreCase))
             {
                 e.Effect = DragDropEffects.Copy;
             }
