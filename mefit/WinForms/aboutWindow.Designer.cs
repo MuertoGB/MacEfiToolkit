@@ -31,126 +31,97 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(aboutWindow));
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.labInfo = new System.Windows.Forms.Label();
-            this.lnkUrls = new System.Windows.Forms.LinkLabel();
-            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.cmdClose = new System.Windows.Forms.Button();
-            this.tlpLabels = new System.Windows.Forms.TableLayoutPanel();
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
+            this.tlpTopLabels = new System.Windows.Forms.TableLayoutPanel();
             this.lblBuild = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.lnkUrls = new System.Windows.Forms.LinkLabel();
+            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.cmdClose = new System.Windows.Forms.Button();
+            this.pnlSeperator = new System.Windows.Forms.Panel();
             this.pnlMain.SuspendLayout();
-            this.tlpMain.SuspendLayout();
-            this.tlpLabels.SuspendLayout();
+            this.tlpTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
+            this.tlpTopLabels.SuspendLayout();
+            this.tlpMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
             // 
             this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.pnlMain.Controls.Add(this.labInfo);
+            this.pnlMain.Controls.Add(this.lblInfo);
+            this.pnlMain.Controls.Add(this.tlpTop);
             this.pnlMain.Controls.Add(this.lnkUrls);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(1, 91);
+            this.pnlMain.Location = new System.Drawing.Point(1, 41);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(422, 188);
+            this.pnlMain.Size = new System.Drawing.Size(438, 258);
             this.pnlMain.TabIndex = 71;
             // 
-            // labInfo
+            // lblInfo
             // 
-            this.labInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labInfo.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labInfo.ForeColor = System.Drawing.Color.White;
-            this.labInfo.Location = new System.Drawing.Point(0, 0);
-            this.labInfo.Name = "labInfo";
-            this.labInfo.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.labInfo.Size = new System.Drawing.Size(422, 127);
-            this.labInfo.TabIndex = 11;
-            this.labInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
-    "erto, so don\'t eat it. The \'Muerto\' avatar was hand crafted by Hammi.";
-            this.labInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.ForeColor = System.Drawing.Color.White;
+            this.lblInfo.Location = new System.Drawing.Point(0, 100);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.lblInfo.Size = new System.Drawing.Size(438, 108);
+            this.lblInfo.TabIndex = 0;
+            this.lblInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
+    "erto, so don\'t eat it.\r\nThe \'Muerto\' avatar was hand crafted by Hammi.";
+            this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lnkUrls
+            // tlpTop
             // 
-            this.lnkUrls.ActiveLinkColor = System.Drawing.Color.White;
-            this.lnkUrls.BackColor = System.Drawing.Color.Transparent;
-            this.lnkUrls.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lnkUrls.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lnkUrls.ForeColor = System.Drawing.Color.White;
-            this.lnkUrls.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-            this.lnkUrls.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkUrls.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            this.lnkUrls.Location = new System.Drawing.Point(0, 127);
-            this.lnkUrls.Margin = new System.Windows.Forms.Padding(0);
-            this.lnkUrls.Name = "lnkUrls";
-            this.lnkUrls.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lnkUrls.Size = new System.Drawing.Size(422, 61);
-            this.lnkUrls.TabIndex = 10;
-            this.lnkUrls.Text = "Contact Me · Source Code · Donate";
-            this.lnkUrls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lnkUrls.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUrls_LinkClicked);
+            this.tlpTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
+            this.tlpTop.ColumnCount = 2;
+            this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpTop.Controls.Add(this.pbxLogo, 0, 0);
+            this.tlpTop.Controls.Add(this.tlpTopLabels, 1, 0);
+            this.tlpTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlpTop.Location = new System.Drawing.Point(0, 0);
+            this.tlpTop.Name = "tlpTop";
+            this.tlpTop.RowCount = 1;
+            this.tlpTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTop.Size = new System.Drawing.Size(438, 100);
+            this.tlpTop.TabIndex = 87;
             // 
-            // tlpMain
+            // pbxLogo
             // 
-            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.tlpMain.ColumnCount = 3;
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpMain.Controls.Add(this.cmdClose, 2, 0);
-            this.tlpMain.Controls.Add(this.tlpLabels, 1, 0);
-            this.tlpMain.Controls.Add(this.pbxLogo, 0, 0);
-            this.tlpMain.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tlpMain.Location = new System.Drawing.Point(1, 1);
-            this.tlpMain.Margin = new System.Windows.Forms.Padding(2);
-            this.tlpMain.Name = "tlpMain";
-            this.tlpMain.RowCount = 1;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Size = new System.Drawing.Size(422, 90);
-            this.tlpMain.TabIndex = 72;
+            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbxLogo.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.imgmuerto64px;
+            this.pbxLogo.Location = new System.Drawing.Point(18, 18);
+            this.pbxLogo.Margin = new System.Windows.Forms.Padding(0);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(64, 64);
+            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbxLogo.TabIndex = 85;
+            this.pbxLogo.TabStop = false;
             // 
-            // cmdClose
+            // tlpTopLabels
             // 
-            this.cmdClose.BackColor = System.Drawing.Color.Transparent;
-            this.cmdClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.cmdClose.Dock = System.Windows.Forms.DockStyle.Top;
-            this.cmdClose.FlatAppearance.BorderSize = 0;
-            this.cmdClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmdClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdClose.ForeColor = System.Drawing.Color.White;
-            this.cmdClose.Location = new System.Drawing.Point(382, 0);
-            this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdClose.MaximumSize = new System.Drawing.Size(40, 40);
-            this.cmdClose.MinimumSize = new System.Drawing.Size(40, 40);
-            this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.cmdClose.Size = new System.Drawing.Size(40, 40);
-            this.cmdClose.TabIndex = 0;
-            this.cmdClose.TabStop = false;
-            this.cmdClose.Text = "✕";
-            this.cmdClose.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.cmdClose.UseVisualStyleBackColor = false;
-            this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
-            // 
-            // tlpLabels
-            // 
-            this.tlpLabels.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tlpLabels.BackColor = System.Drawing.Color.Transparent;
-            this.tlpLabels.ColumnCount = 1;
-            this.tlpLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLabels.Controls.Add(this.lblBuild, 0, 1);
-            this.tlpLabels.Controls.Add(this.lblName, 0, 0);
-            this.tlpLabels.Location = new System.Drawing.Point(96, 19);
-            this.tlpLabels.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.tlpLabels.Name = "tlpLabels";
-            this.tlpLabels.RowCount = 2;
-            this.tlpLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tlpLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tlpLabels.Size = new System.Drawing.Size(219, 52);
-            this.tlpLabels.TabIndex = 86;
+            this.tlpTopLabels.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tlpTopLabels.BackColor = System.Drawing.Color.Transparent;
+            this.tlpTopLabels.ColumnCount = 1;
+            this.tlpTopLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTopLabels.Controls.Add(this.lblBuild, 0, 1);
+            this.tlpTopLabels.Controls.Add(this.lblName, 0, 0);
+            this.tlpTopLabels.Location = new System.Drawing.Point(106, 24);
+            this.tlpTopLabels.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.tlpTopLabels.Name = "tlpTopLabels";
+            this.tlpTopLabels.RowCount = 2;
+            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tlpTopLabels.Size = new System.Drawing.Size(316, 52);
+            this.tlpTopLabels.TabIndex = 86;
             // 
             // lblBuild
             // 
@@ -162,7 +133,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuild.Location = new System.Drawing.Point(0, 26);
             this.lblBuild.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuild.Name = "lblBuild";
-            this.lblBuild.Size = new System.Drawing.Size(219, 26);
+            this.lblBuild.Size = new System.Drawing.Size(316, 26);
             this.lblBuild.TabIndex = 78;
             this.lblBuild.Text = "...";
             this.lblBuild.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -177,34 +148,98 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblName.Location = new System.Drawing.Point(0, 0);
             this.lblName.Margin = new System.Windows.Forms.Padding(0);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(219, 26);
+            this.lblName.Size = new System.Drawing.Size(316, 26);
             this.lblName.TabIndex = 75;
             this.lblName.Text = "Mac EFI Toolkit";
             this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pbxLogo
+            // lnkUrls
             // 
-            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbxLogo.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.imgmuerto64px;
-            this.pbxLogo.Location = new System.Drawing.Point(13, 13);
-            this.pbxLogo.Margin = new System.Windows.Forms.Padding(0);
-            this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(64, 64);
-            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbxLogo.TabIndex = 85;
-            this.pbxLogo.TabStop = false;
+            this.lnkUrls.ActiveLinkColor = System.Drawing.Color.White;
+            this.lnkUrls.BackColor = System.Drawing.Color.Transparent;
+            this.lnkUrls.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lnkUrls.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lnkUrls.ForeColor = System.Drawing.Color.White;
+            this.lnkUrls.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+            this.lnkUrls.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lnkUrls.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            this.lnkUrls.Location = new System.Drawing.Point(0, 208);
+            this.lnkUrls.Margin = new System.Windows.Forms.Padding(0);
+            this.lnkUrls.Name = "lnkUrls";
+            this.lnkUrls.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.lnkUrls.Size = new System.Drawing.Size(438, 50);
+            this.lnkUrls.TabIndex = 10;
+            this.lnkUrls.Text = "Contact Me · Source Code · Donate";
+            this.lnkUrls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lnkUrls.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUrls_LinkClicked);
             // 
-            // panel1
+            // tlpMain
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(1, 91);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(422, 2);
-            this.panel1.TabIndex = 94;
+            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.tlpMain.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
+            this.tlpMain.ColumnCount = 2;
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMain.Controls.Add(this.lblTitle, 0, 0);
+            this.tlpMain.Controls.Add(this.cmdClose, 1, 0);
+            this.tlpMain.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlpMain.Location = new System.Drawing.Point(1, 1);
+            this.tlpMain.Margin = new System.Windows.Forms.Padding(2);
+            this.tlpMain.Name = "tlpMain";
+            this.tlpMain.RowCount = 1;
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMain.Size = new System.Drawing.Size(438, 40);
+            this.tlpMain.TabIndex = 72;
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblTitle.Size = new System.Drawing.Size(398, 40);
+            this.lblTitle.TabIndex = 12;
+            this.lblTitle.Text = "About";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cmdClose
+            // 
+            this.cmdClose.BackColor = System.Drawing.Color.Transparent;
+            this.cmdClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.cmdClose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdClose.FlatAppearance.BorderSize = 0;
+            this.cmdClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmdClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdClose.ForeColor = System.Drawing.Color.White;
+            this.cmdClose.Location = new System.Drawing.Point(398, 0);
+            this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdClose.MaximumSize = new System.Drawing.Size(40, 40);
+            this.cmdClose.MinimumSize = new System.Drawing.Size(40, 40);
+            this.cmdClose.Name = "cmdClose";
+            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.cmdClose.Size = new System.Drawing.Size(40, 40);
+            this.cmdClose.TabIndex = 0;
+            this.cmdClose.TabStop = false;
+            this.cmdClose.Text = "✕";
+            this.cmdClose.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.cmdClose.UseVisualStyleBackColor = false;
+            this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
+            // 
+            // pnlSeperator
+            // 
+            this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.pnlSeperator.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeperator.Location = new System.Drawing.Point(1, 41);
+            this.pnlSeperator.Name = "pnlSeperator";
+            this.pnlSeperator.Size = new System.Drawing.Size(438, 2);
+            this.pnlSeperator.TabIndex = 94;
             // 
             // aboutWindow
             // 
@@ -213,8 +248,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.ClientSize = new System.Drawing.Size(424, 280);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(440, 300);
+            this.Controls.Add(this.pnlSeperator);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tlpMain);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -222,18 +257,19 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(424, 280);
-            this.MinimumSize = new System.Drawing.Size(424, 280);
+            this.MaximumSize = new System.Drawing.Size(440, 300);
+            this.MinimumSize = new System.Drawing.Size(440, 300);
             this.Name = "aboutWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.pnlMain.ResumeLayout(false);
-            this.tlpMain.ResumeLayout(false);
-            this.tlpLabels.ResumeLayout(false);
-            this.tlpLabels.PerformLayout();
+            this.tlpTop.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
+            this.tlpTopLabels.ResumeLayout(false);
+            this.tlpTopLabels.PerformLayout();
+            this.tlpMain.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -243,11 +279,13 @@ namespace Mac_EFI_Toolkit.WinForms
         internal System.Windows.Forms.LinkLabel lnkUrls;
         internal System.Windows.Forms.TableLayoutPanel tlpMain;
         internal System.Windows.Forms.Button cmdClose;
-        internal System.Windows.Forms.TableLayoutPanel tlpLabels;
+        internal System.Windows.Forms.TableLayoutPanel tlpTopLabels;
         internal System.Windows.Forms.Label lblBuild;
         internal System.Windows.Forms.Label lblName;
         internal System.Windows.Forms.PictureBox pbxLogo;
-        private System.Windows.Forms.Label labInfo;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.Panel pnlSeperator;
+        private System.Windows.Forms.TableLayoutPanel tlpTop;
+        internal System.Windows.Forms.Label lblTitle;
     }
 }

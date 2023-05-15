@@ -5,9 +5,9 @@
 // METMessageBox.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.WIN32;
 using System;
-using System.Drawing;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
@@ -37,46 +37,59 @@ namespace Mac_EFI_Toolkit.UI
         static System.Media.SystemSound ssMmbSound;
         #endregion
 
+        #region Overrides
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams crParams = base.CreateParams;
+                crParams.ClassStyle = crParams.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
+                return crParams;
+            }
+        }
+        #endregion
+
         #region Contructor
         public METMessageBox()
         {
             InitializeComponent();
+            lblTitle.MouseMove += metMessage_MouseMove;
             Load += new EventHandler(METMessageBox_Load);
             Shown += new EventHandler(METMessageBox_Shown);
         }
         #endregion
 
-        #region Load Events
+        #region Window Events
         private void METMessageBox_Load(object sender, EventArgs e)
         {
-            labIcon.Font = Program.FONT_MDL2_REG_20;
+            lblMessageIcon.Font = Program.FONT_MDL2_REG_20;
 
             switch (mtMmbType)
             {
                 case MsgType.Critical:
-                    labIcon.ForeColor = Colours.clrError;
-                    labIcon.Text = "\xEB90";
+                    lblMessageIcon.ForeColor = Colours.clrError;
+                    lblMessageIcon.Text = "\xEB90";
                     ssMmbSound = System.Media.SystemSounds.Hand;
                     break;
                 case MsgType.Warning:
-                    labIcon.ForeColor = Colours.clrUnknown;
-                    labIcon.Text = "\xE7BA";
+                    lblMessageIcon.ForeColor = Colours.clrUnknown;
+                    lblMessageIcon.Text = "\xE7BA";
                     ssMmbSound = System.Media.SystemSounds.Exclamation;
                     break;
                 case MsgType.Information:
-                    labIcon.ForeColor = Colours.clrInfo;
-                    labIcon.Text = "\xF167";
+                    lblMessageIcon.ForeColor = Colours.clrInfo;
+                    lblMessageIcon.Text = "\xF167";
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
                 case MsgType.Question:
-                    labIcon.ForeColor = Colours.clrInfo;
-                    labIcon.Text = "\xE9CE";
+                    lblMessageIcon.ForeColor = Colours.clrInfo;
+                    lblMessageIcon.Text = "\xE9CE";
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
             }
 
-            labTitle.Text = strMmbTitle;
-            labMessage.Text = strMmbMessage;
+            lblTitle.Text = strMmbTitle;
+            lblMessage.Text = strMmbMessage;
 
             if (mbMmbButton == MsgButton.Okay)
             {
@@ -93,8 +106,19 @@ namespace Mac_EFI_Toolkit.UI
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
             ssMmbSound.Play();
-            InterfaceUtils.FlashForecolor(labTitle); // "this" is the current form instance
+            InterfaceUtils.FlashForecolor(lblTitle);
             InterfaceUtils.FlashForecolor(cmdClose);
+        }
+        #endregion
+
+        #region Mouse Events
+        private void metMessage_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                NativeMethods.ReleaseCapture(new HandleRef(this, Handle));
+                NativeMethods.SendMessage(new HandleRef(this, Handle), Program.WM_NCLBUTTONDOWN, (IntPtr)Program.HT_CAPTION, (IntPtr)0);
+            }
         }
         #endregion
 

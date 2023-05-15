@@ -1,3 +1,28 @@
+<h4 align="center">Version History</h4>
+<p align="center">
+  <a href="#version-051">V0.5.1</a> •
+  <a href="#version-050">V0.5.0</a> •
+  <a href="#version-046">V0.4.6</a> •
+  <a href="#version-045">V0.4.5</a> •
+  <a href="#version-044">V0.4.4</a> •
+  <a href="#version-034">V0.3.4</a>
+</p>
+
+## Version 0.5.1
+
+#### New:
+- Added drag and drop support for EFIROM (*.bin) files.
+
+#### Enhancements:
+- Toned down window flashing.
+- Main window 'Open' button no longer unnecessarily flashes.
+- About window now follows the application theme.
+- Dark messagebox can now be moved.
+
+#### Bugs:
+- Settings window tab order fixed.
+- Custom checkbox control now has visual feedback when tabbed.
+
 ## Version 0.5.0
 
 #### New:
@@ -34,7 +59,7 @@
 - Signed the assembly, and added verification.
 
 #### Bugs:
-- Fixed broken initial directory path
+- Fixed broken initial directory path.
 
 ## Version 0.4.4
 
@@ -60,6 +85,6 @@
 - Fixed cases of malformed serial numbers.
 - Fixed control tab indexing.
 
-###  Version 0.3.4
+### Version 0.3.4
 
 - Initial private version handed out to keen individuals.

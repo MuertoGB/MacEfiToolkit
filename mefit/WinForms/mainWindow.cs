@@ -72,13 +72,15 @@ namespace Mac_EFI_Toolkit
             lblMessage.Hide();
 
             Load += mainWindow_Load;
-            Shown += mainWindow_Shown;
             FormClosing += mainWindow_FormClosing;
             KeyDown += mainWindow_KeyDown;
 
             tlpMain.MouseMove += Move_Form;
             tlpMainIcon.MouseMove += Move_Form;
             lblWindowTitle.MouseMove += Move_Form;
+
+            DragEnter += mainWindow_DragEnter;
+            DragDrop += mainWindow_DragDrop;
 
             CreateTipHandlers();
 
@@ -112,11 +114,11 @@ namespace Mac_EFI_Toolkit
                 if (!dbgMode) CheckForNewVersion();
             }
 
-        }
+            if (Program.blUserDraggedFile)
+            {
+                LoadDataNoOfd(Program.strDraggedFile);
+            }
 
-        private void mainWindow_Shown(object sender, EventArgs e)
-        {
-            InterfaceUtils.FlashForecolor(cmdOpenBin);
         }
 
         internal async void CheckForNewVersion()
@@ -143,6 +145,26 @@ namespace Mac_EFI_Toolkit
 
                 Program.ExitMet(this);
             }
+        }
+
+        private void mainWindow_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop) && ((string[])e.Data.GetData(DataFormats.FileDrop)).Length == 1
+                && ((string[])e.Data.GetData(DataFormats.FileDrop))[0].EndsWith(".bin", StringComparison.OrdinalIgnoreCase))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void mainWindow_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] strFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string strDraggedFileName = strFiles[0];
+            LoadDataNoOfd(strDraggedFileName);
         }
         #endregion
 
@@ -329,7 +351,7 @@ namespace Mac_EFI_Toolkit
 
                     if (result == DialogResult.Yes)
                     {
-                        ReloadData(dialog.FileName);
+                        LoadDataNoOfd(dialog.FileName);
                     }
                 }
             }
@@ -566,6 +588,7 @@ namespace Mac_EFI_Toolkit
 
         internal async void CheckHwcAsync(string strHwc)
         {
+            lblConfig.Text = "Waiting for server...";
             var configCode = await EFIUtils.GetConfigCodeAsync(strHwc);
             lblConfig.Text = $"· {configCode}";
         }
@@ -640,8 +663,9 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void ReloadData(string filePath)
+        private void LoadDataNoOfd(string filePath)
         {
+            _strLoadedBinaryFilePath = filePath;
             _strFilenameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
             _bytesLoadedFile = File.ReadAllBytes(filePath);
             var fsysOut = FirmwareParser.GetFsysRegionBytes(_bytesLoadedFile, true);

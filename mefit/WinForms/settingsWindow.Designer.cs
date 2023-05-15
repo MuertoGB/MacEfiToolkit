@@ -161,7 +161,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdDefaults.Margin = new System.Windows.Forms.Padding(0);
             this.cmdDefaults.Name = "cmdDefaults";
             this.cmdDefaults.Size = new System.Drawing.Size(100, 34);
-            this.cmdDefaults.TabIndex = 2;
+            this.cmdDefaults.TabIndex = 0;
             this.cmdDefaults.Text = "Reset";
             this.cmdDefaults.UseVisualStyleBackColor = false;
             this.cmdDefaults.Click += new System.EventHandler(this.cmdDefaults_Click);
@@ -178,7 +178,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdApply.Margin = new System.Windows.Forms.Padding(0);
             this.cmdApply.Name = "cmdApply";
             this.cmdApply.Size = new System.Drawing.Size(100, 34);
-            this.cmdApply.TabIndex = 4;
+            this.cmdApply.TabIndex = 2;
             this.cmdApply.Text = "Apply";
             this.cmdApply.UseVisualStyleBackColor = false;
             this.cmdApply.Click += new System.EventHandler(this.cmdApply_Click);
@@ -195,7 +195,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdCloseForm.Margin = new System.Windows.Forms.Padding(0);
             this.cmdCloseForm.Name = "cmdCloseForm";
             this.cmdCloseForm.Size = new System.Drawing.Size(100, 34);
-            this.cmdCloseForm.TabIndex = 3;
+            this.cmdCloseForm.TabIndex = 1;
             this.cmdCloseForm.Text = "Close";
             this.cmdCloseForm.UseVisualStyleBackColor = false;
             this.cmdCloseForm.Click += new System.EventHandler(this.cmdCloseForm_Click);
@@ -273,7 +273,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDac.RowCount = 1;
             this.tlpDac.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDac.Size = new System.Drawing.Size(408, 30);
-            this.tlpDac.TabIndex = 6;
+            this.tlpDac.TabIndex = 4;
             // 
             // lblDacText
             // 
@@ -303,7 +303,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDwf.RowCount = 1;
             this.tlpDwf.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDwf.Size = new System.Drawing.Size(408, 30);
-            this.tlpDwf.TabIndex = 4;
+            this.tlpDwf.TabIndex = 1;
             // 
             // lblDwfText
             // 
@@ -363,7 +363,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDvc.RowCount = 1;
             this.tlpDvc.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDvc.Size = new System.Drawing.Size(408, 30);
-            this.tlpDvc.TabIndex = 2;
+            this.tlpDvc.TabIndex = 0;
             // 
             // lblDvcText
             // 
@@ -394,7 +394,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpCif.RowCount = 1;
             this.tlpCif.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpCif.Size = new System.Drawing.Size(408, 30);
-            this.tlpCif.TabIndex = 5;
+            this.tlpCif.TabIndex = 3;
             // 
             // lnlCifText
             // 
@@ -421,7 +421,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdEditCustomPath.Margin = new System.Windows.Forms.Padding(0);
             this.cmdEditCustomPath.Name = "cmdEditCustomPath";
             this.cmdEditCustomPath.Size = new System.Drawing.Size(54, 30);
-            this.cmdEditCustomPath.TabIndex = 0;
+            this.cmdEditCustomPath.TabIndex = 6;
             this.cmdEditCustomPath.Text = "Edit";
             this.cmdEditCustomPath.UseVisualStyleBackColor = false;
             this.cmdEditCustomPath.Click += new System.EventHandler(this.cmdEditCustomPath_Click);
@@ -441,7 +441,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDfe.RowCount = 1;
             this.tlpDfe.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDfe.Size = new System.Drawing.Size(408, 30);
-            this.tlpDfe.TabIndex = 7;
+            this.tlpDfe.TabIndex = 5;
             // 
             // lblDfeText
             // 
@@ -473,7 +473,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpAet.RowCount = 1;
             this.tlpAet.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAet.Size = new System.Drawing.Size(408, 30);
-            this.tlpAet.TabIndex = 8;
+            this.tlpAet.TabIndex = 7;
             // 
             // lblAetText
             // 
@@ -501,7 +501,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdEditingTerms.Margin = new System.Windows.Forms.Padding(0);
             this.cmdEditingTerms.Name = "cmdEditingTerms";
             this.cmdEditingTerms.Size = new System.Drawing.Size(54, 30);
-            this.cmdEditingTerms.TabIndex = 1;
+            this.cmdEditingTerms.TabIndex = 10;
             this.cmdEditingTerms.Text = "View";
             this.cmdEditingTerms.UseVisualStyleBackColor = false;
             this.cmdEditingTerms.Click += new System.EventHandler(this.cmdEditingTerms_Click);
@@ -521,7 +521,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDde.RowCount = 1;
             this.tlpDde.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDde.Size = new System.Drawing.Size(408, 30);
-            this.tlpDde.TabIndex = 9;
+            this.tlpDde.TabIndex = 6;
             // 
             // lblDdeText
             // 
@@ -551,7 +551,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDcd.RowCount = 1;
             this.tlpDcd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDcd.Size = new System.Drawing.Size(408, 30);
-            this.tlpDcd.TabIndex = 10;
+            this.tlpDcd.TabIndex = 2;
             // 
             // lblDcdText
             // 
@@ -606,7 +606,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxDisableLzmaFsSearch.Location = new System.Drawing.Point(370, 4);
             this.cbxDisableLzmaFsSearch.Name = "cbxDisableLzmaFsSearch";
             this.cbxDisableLzmaFsSearch.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableLzmaFsSearch.TabIndex = 2;
+            this.cbxDisableLzmaFsSearch.TabIndex = 7;
             // 
             // cbxDisableFlashingUI
             // 
@@ -621,7 +621,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxDisableFlashingUI.Location = new System.Drawing.Point(370, 4);
             this.cbxDisableFlashingUI.Name = "cbxDisableFlashingUI";
             this.cbxDisableFlashingUI.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableFlashingUI.TabIndex = 2;
+            this.cbxDisableFlashingUI.TabIndex = 4;
             // 
             // cbxDisableVersionCheck
             // 
@@ -636,7 +636,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxDisableVersionCheck.Location = new System.Drawing.Point(370, 4);
             this.cbxDisableVersionCheck.Name = "cbxDisableVersionCheck";
             this.cbxDisableVersionCheck.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableVersionCheck.TabIndex = 2;
+            this.cbxDisableVersionCheck.TabIndex = 3;
             // 
             // cbxDisableFsysEnforce
             // 
@@ -651,7 +651,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxDisableFsysEnforce.Location = new System.Drawing.Point(370, 4);
             this.cbxDisableFsysEnforce.Name = "cbxDisableFsysEnforce";
             this.cbxDisableFsysEnforce.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableFsysEnforce.TabIndex = 2;
+            this.cbxDisableFsysEnforce.TabIndex = 8;
             // 
             // cbxAcceptedEditingTerms
             // 
@@ -667,7 +667,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxAcceptedEditingTerms.Location = new System.Drawing.Point(370, 4);
             this.cbxAcceptedEditingTerms.Name = "cbxAcceptedEditingTerms";
             this.cbxAcceptedEditingTerms.Size = new System.Drawing.Size(21, 21);
-            this.cbxAcceptedEditingTerms.TabIndex = 2;
+            this.cbxAcceptedEditingTerms.TabIndex = 11;
             // 
             // cbxDisableDescriptorEnforce
             // 
@@ -682,7 +682,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxDisableDescriptorEnforce.Location = new System.Drawing.Point(370, 4);
             this.cbxDisableDescriptorEnforce.Name = "cbxDisableDescriptorEnforce";
             this.cbxDisableDescriptorEnforce.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableDescriptorEnforce.TabIndex = 2;
+            this.cbxDisableDescriptorEnforce.TabIndex = 9;
             // 
             // cbxDisableConfDiag
             // 
@@ -697,7 +697,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxDisableConfDiag.Location = new System.Drawing.Point(370, 4);
             this.cbxDisableConfDiag.Name = "cbxDisableConfDiag";
             this.cbxDisableConfDiag.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableConfDiag.TabIndex = 2;
+            this.cbxDisableConfDiag.TabIndex = 5;
             // 
             // settingsWindow
             // 

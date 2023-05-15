@@ -30,7 +30,7 @@ namespace Mac_EFI_Toolkit.UI
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(METMessageBox));
-            this.panMain = new System.Windows.Forms.Panel();
+            this.pnlMain = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.cmdCancel = new System.Windows.Forms.Button();
@@ -38,26 +38,26 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdYes = new System.Windows.Forms.Button();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
-            this.labTitle = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
             this.tlpMessage = new System.Windows.Forms.TableLayoutPanel();
-            this.labIcon = new System.Windows.Forms.Label();
-            this.labMessage = new System.Windows.Forms.Label();
-            this.panMain.SuspendLayout();
+            this.lblMessageIcon = new System.Windows.Forms.Label();
+            this.lblMessage = new System.Windows.Forms.Label();
+            this.pnlMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpButtons.SuspendLayout();
             this.tlpTitle.SuspendLayout();
             this.tlpMessage.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panMain
+            // pnlMain
             // 
-            this.panMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.panMain.Controls.Add(this.tlpMain);
-            this.panMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panMain.Location = new System.Drawing.Point(1, 1);
-            this.panMain.Name = "panMain";
-            this.panMain.Size = new System.Drawing.Size(490, 248);
-            this.panMain.TabIndex = 0;
+            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.pnlMain.Controls.Add(this.tlpMain);
+            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMain.Location = new System.Drawing.Point(1, 1);
+            this.pnlMain.Name = "pnlMain";
+            this.pnlMain.Size = new System.Drawing.Size(490, 248);
+            this.pnlMain.TabIndex = 0;
             // 
             // tlpMain
             // 
@@ -153,7 +153,7 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpTitle.Controls.Add(this.cmdClose, 0, 0);
-            this.tlpTitle.Controls.Add(this.labTitle, 0, 0);
+            this.tlpTitle.Controls.Add(this.lblTitle, 0, 0);
             this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpTitle.Location = new System.Drawing.Point(0, 0);
             this.tlpTitle.Margin = new System.Windows.Forms.Padding(0);
@@ -184,26 +184,27 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdClose.UseVisualStyleBackColor = false;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // labTitle
+            // lblTitle
             // 
-            this.labTitle.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.labTitle.AutoSize = true;
-            this.labTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labTitle.ForeColor = System.Drawing.Color.White;
-            this.labTitle.Location = new System.Drawing.Point(3, 8);
-            this.labTitle.Name = "labTitle";
-            this.labTitle.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
-            this.labTitle.Size = new System.Drawing.Size(24, 23);
-            this.labTitle.TabIndex = 0;
-            this.labTitle.Text = "...";
+            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.lblTitle.Size = new System.Drawing.Size(450, 40);
+            this.lblTitle.TabIndex = 0;
+            this.lblTitle.Text = "...";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpMessage
             // 
             this.tlpMessage.ColumnCount = 2;
             this.tlpMessage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61F));
             this.tlpMessage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMessage.Controls.Add(this.labIcon, 0, 0);
-            this.tlpMessage.Controls.Add(this.labMessage, 1, 0);
+            this.tlpMessage.Controls.Add(this.lblMessageIcon, 0, 0);
+            this.tlpMessage.Controls.Add(this.lblMessage, 1, 0);
             this.tlpMessage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMessage.Location = new System.Drawing.Point(0, 40);
             this.tlpMessage.Margin = new System.Windows.Forms.Padding(0);
@@ -213,31 +214,31 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpMessage.Size = new System.Drawing.Size(490, 152);
             this.tlpMessage.TabIndex = 2;
             // 
-            // labIcon
+            // lblMessageIcon
             // 
-            this.labIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labIcon.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labIcon.ForeColor = System.Drawing.Color.White;
-            this.labIcon.Location = new System.Drawing.Point(3, 0);
-            this.labIcon.Name = "labIcon";
-            this.labIcon.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.labIcon.Size = new System.Drawing.Size(55, 152);
-            this.labIcon.TabIndex = 1;
-            this.labIcon.Text = "...";
-            this.labIcon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMessageIcon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMessageIcon.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessageIcon.ForeColor = System.Drawing.Color.White;
+            this.lblMessageIcon.Location = new System.Drawing.Point(3, 0);
+            this.lblMessageIcon.Name = "lblMessageIcon";
+            this.lblMessageIcon.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.lblMessageIcon.Size = new System.Drawing.Size(55, 152);
+            this.lblMessageIcon.TabIndex = 1;
+            this.lblMessageIcon.Text = "...";
+            this.lblMessageIcon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // labMessage
+            // lblMessage
             // 
-            this.labMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labMessage.ForeColor = System.Drawing.Color.White;
-            this.labMessage.Location = new System.Drawing.Point(64, 0);
-            this.labMessage.Name = "labMessage";
-            this.labMessage.Padding = new System.Windows.Forms.Padding(3);
-            this.labMessage.Size = new System.Drawing.Size(423, 152);
-            this.labMessage.TabIndex = 0;
-            this.labMessage.Text = "...";
-            this.labMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.ForeColor = System.Drawing.Color.White;
+            this.lblMessage.Location = new System.Drawing.Point(64, 0);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Padding = new System.Windows.Forms.Padding(3);
+            this.lblMessage.Size = new System.Drawing.Size(423, 152);
+            this.lblMessage.TabIndex = 0;
+            this.lblMessage.Text = "...";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // METMessageBox
             // 
@@ -247,7 +248,7 @@ namespace Mac_EFI_Toolkit.UI
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.ClientSize = new System.Drawing.Size(492, 250);
-            this.Controls.Add(this.panMain);
+            this.Controls.Add(this.pnlMain);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -260,11 +261,10 @@ namespace Mac_EFI_Toolkit.UI
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.Text = "`";
-            this.panMain.ResumeLayout(false);
+            this.pnlMain.ResumeLayout(false);
             this.tlpMain.ResumeLayout(false);
             this.tlpButtons.ResumeLayout(false);
             this.tlpTitle.ResumeLayout(false);
-            this.tlpTitle.PerformLayout();
             this.tlpMessage.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -272,17 +272,17 @@ namespace Mac_EFI_Toolkit.UI
 
         #endregion
 
-        private System.Windows.Forms.Panel panMain;
+        private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.TableLayoutPanel tlpButtons;
         private System.Windows.Forms.Button cmdNo;
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.Button cmdYes;
         private System.Windows.Forms.TableLayoutPanel tlpTitle;
-        private System.Windows.Forms.Label labTitle;
+        private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.TableLayoutPanel tlpMessage;
-        private System.Windows.Forms.Label labMessage;
+        private System.Windows.Forms.Label lblMessage;
         internal System.Windows.Forms.Button cmdClose;
-        private System.Windows.Forms.Label labIcon;
+        private System.Windows.Forms.Label lblMessageIcon;
     }
 }

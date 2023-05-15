@@ -143,9 +143,19 @@ namespace Mac_EFI_Toolkit.UI
             Rectangle innerRectangle = new Rectangle(2, 2, diameter - 2, diameter - 2);
             Rectangle outerRectangle = new Rectangle(2, 2, diameter - 2, diameter - 2);
 
-            Color switchBorder = Enabled ?
-                (MouseHovered && MousePressed ? Color.FromArgb(Colours.A, CheckedColor.R, CheckedColor.G, CheckedColor.B) :
-                 MouseHovered ? BorderColorActive : BorderColor) : Colours.clrDisabledControl;
+            Color switchBorder = Enabled ? (Focused ? BorderColor : MouseHovered && MousePressed ? CheckedColor :
+                                 MouseHovered ? BorderColorActive : BorderColor) : Colours.clrDisabledControl;
+
+            if (Focused)
+            {
+                using (Pen pen = new Pen(Color.White, 1))
+                {
+                    pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                    Rectangle rect = ClientRectangle;
+                    rect.Width -= 1; rect.Height -= 1;
+                    e.Graphics.DrawRectangle(pen, rect);
+                }
+            }
 
             Color switchBack = MouseHovered ? ClientColorActive : ClientColor;
 
@@ -196,26 +206,31 @@ namespace Mac_EFI_Toolkit.UI
             base.OnCheckedChanged(e);
             Invalidate();
         }
+
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             base.OnMouseLeave(eventargs);
             MouseHovered = false;
         }
+
         protected override void OnMouseEnter(EventArgs eventargs)
         {
             base.OnMouseEnter(eventargs);
             MouseHovered = true;
         }
+
         protected override void OnResize(EventArgs e)
         {
             ResizeRedraw = true;
             base.OnResize(e);
         }
+
         protected override void OnTextChanged(EventArgs e)
         {
             GetPreferredSizeN();
             Invalidate();
         }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (e != null)
@@ -228,12 +243,42 @@ namespace Mac_EFI_Toolkit.UI
             }
             base.OnMouseDown(e);
         }
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
             MousePressed = false;
             Invalidate();
             base.OnMouseUp(e);
         }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            MouseHovered = true;
+            Invalidate();
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            MouseHovered = false;
+            Invalidate();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Checked = !Checked;
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+            }
+            else
+            {
+                base.OnKeyDown(e);
+            }
+        }
+
         #endregion
 
         #region Custom Methods

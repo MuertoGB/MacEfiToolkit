@@ -35,10 +35,7 @@ namespace Mac_EFI_Toolkit.WinForms
             InitializeComponent();
 
             Load += new EventHandler(aboutWindow_Load);
-            tlpMain.MouseMove += new MouseEventHandler(Move_Form);
-            pbxLogo.MouseMove += new MouseEventHandler(Move_Form);
-            lblBuild.MouseMove += new MouseEventHandler(Move_Form);
-            lblName.MouseMove += new MouseEventHandler(Move_Form);
+            lblTitle.MouseMove += new MouseEventHandler(Move_Form);
             KeyDown += new KeyEventHandler(aboutWindow_KeyDown);
         }
         #endregion
@@ -46,7 +43,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void aboutWindow_Load(object sender, EventArgs e)
         {
-            lblBuild.Text = $"Build: { Program.strAppBuild} ";
+            lblBuild.Text = $"Build { Program.strAppBuild}";
             FormatLinks();
         }
         #endregion
