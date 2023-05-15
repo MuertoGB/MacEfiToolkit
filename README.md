@@ -17,7 +17,7 @@ Mac EFI Toolkit
 
 ## About
 
->🛠 Current Status: Listening to feedback, fixing issues.
+>🛠 Current Status: Taking a break. Development will resume Mon 22 May, 23.
 
 Mac EFI Toolkit is a firmware repair tool designed to aid technicians in repair of a Mac EFIROM (BIOS).
 
@@ -28,20 +28,21 @@ This application is currently under development, it is by no means complete, ful
 
 ## Features
 
-| Suggested feature                                          | Status        |
-|------------------------------------------------------------|---------------|
-| Knuth–Morris–Pratt algorithm for searching binary offsets  |🟢 Completed   |
-| Ability to detect APFSJumpStart in compressed DXE volumes  |🟢 Completed   |
-| Check serial number with EveryMac							 |🟢 Completed   |
-| View FITC and ME version						             |🟢 Completed   |
-| Detect and fix invalid Fsys checksums                      |🟢 Completed   |
-| View ROM information                                       |🟡 Partially Completed|
-| Dump and replace Fsys block                                |🟡 Partially Completed|
-| Replace serial with automatic HWC and CRC32 calculation    |🟡 Partially Completed|
-| Clear NVRAM and EFI lock with header preservation          |🟡 Partially Completed|
-| Detect MDM status in the NVRAM                             |🔴 Undecided   |
-| Detect email address in the NVRAM                          |🔴 Undecided   |
-| Configure ME region	                                     |🔴 Undecided   |
+| Suggested feature                                          | Status      |
+|------------------------------------------------------------|-------------|
+| Knuth–Morris–Pratt algorithm for searching binary offsets  |🟢 Completed |
+| Ability to detect APFSJumpStart in compressed DXE volumes  |🟢 Completed |
+| Check serial number with EveryMac							 |🟢 Completed |
+| View FITC and ME version						             |🟢 Completed |
+| Detect and fix invalid Fsys checksums                      |🟢 Completed |
+| View ROM information                                       |🟡 Partially Completed |
+| Dump and replace Fsys block                                |🟡 Partially Completed |
+| Replace serial with automatic HWC and CRC32 calculation    |🟡 Partially Completed |
+| Move from server to database for fetching config code      |🔴  Not Started |
+| Clear NVRAM and EFI lock with header preservation          |🔴 Undecided |
+| Detect MDM status in the NVRAM                             |🔴 Undecided |
+| Detect email address in the NVRAM                          |🔴 Undecided |
+| Configure ME region	                                     |🔴 Undecided |
 
 When the editing features are implemented, original files will be left untouched. The new binary will be built from a copy in memory.
 
@@ -62,7 +63,7 @@ Plus more, only time will tell.
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[0.5.1](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/051)| Not Set | Yes | BETA |
+|[0.5.1](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/051)| 15th May 2023 | Yes | BETA |
 |[0.5.0](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/050)| 13th May 2023 | No | BETA |
 
 ## Requirements

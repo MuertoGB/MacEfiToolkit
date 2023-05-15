@@ -588,6 +588,7 @@ namespace Mac_EFI_Toolkit
 
         internal async void CheckHwcAsync(string strHwc)
         {
+            lblConfig.Text = "Waiting for server...";
             var configCode = await EFIUtils.GetConfigCodeAsync(strHwc);
             lblConfig.Text = $"· {configCode}";
         }
