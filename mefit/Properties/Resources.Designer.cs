@@ -101,6 +101,34 @@ namespace Mac_EFI_Toolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;data&gt;
+        ///    &lt;section&gt;
+        ///        &lt;cfgCode&gt;000&lt;/cfgCode&gt;
+        ///        &lt;model&gt;Power Mac G5&lt;/model&gt;
+        ///    &lt;/section&gt;
+        ///    &lt;section&gt;
+        ///        &lt;cfgCode&gt;00W&lt;/cfgCode&gt;
+        ///        &lt;model&gt;Xserve (Late 2006)&lt;/model&gt;
+        ///    &lt;/section&gt;
+        ///    &lt;section&gt;
+        ///        &lt;cfgCode&gt;01P&lt;/cfgCode&gt;
+        ///        &lt;model&gt;MacBook (13-inch, Late 2007)&lt;/model&gt;
+        ///    &lt;/section&gt;
+        ///    &lt;section&gt;
+        ///        &lt;cfgCode&gt;01V&lt;/cfgCode&gt;
+        ///        &lt;model&gt;MacBook (13-inch, Late 2007)&lt;/model&gt;
+        ///    &lt;/section&gt;
+        ///    &lt;section&gt;
+        ///        &lt;cfgCode&gt;01X&lt;/cfgCode&gt; [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string modeldb {
+            get {
+                return ResourceManager.GetString("modeldb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] segmdl2 {

@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-052">V0.5.2</a> •
   <a href="#version-051">V0.5.1</a> •
   <a href="#version-050">V0.5.0</a> •
   <a href="#version-046">V0.4.6</a> •
@@ -7,6 +8,15 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 0.5.2
+
+#### New:
+- Config data is now loaded from a local database, defaults to the server if not found.
+> Missing database entries are written to ./dbreport.log and can be emailed to me.
+
+#### Enhancements:
+- UI improvements.
 
 ## Version 0.5.1
 

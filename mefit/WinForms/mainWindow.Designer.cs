@@ -54,7 +54,7 @@ namespace Mac_EFI_Toolkit
             this.lblFitcVersion = new System.Windows.Forms.Label();
             this.lblMeVersionText = new System.Windows.Forms.Label();
             this.lblFitcVersionText = new System.Windows.Forms.Label();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpFsysApfs = new System.Windows.Forms.TableLayoutPanel();
             this.lblApfsCapable = new System.Windows.Forms.Label();
             this.lblApfsCapableText = new System.Windows.Forms.Label();
             this.tlpFsys = new System.Windows.Forms.TableLayoutPanel();
@@ -68,12 +68,12 @@ namespace Mac_EFI_Toolkit
             this.lblFilesizeBytes = new System.Windows.Forms.Label();
             this.lblChecksumText = new System.Windows.Forms.Label();
             this.lblEfiVersionText = new System.Windows.Forms.Label();
-            this.tlpEfiRomLabels = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpEfiRom = new System.Windows.Forms.TableLayoutPanel();
             this.lblEfiVersion = new System.Windows.Forms.Label();
             this.lblRomVersion = new System.Windows.Forms.Label();
             this.lblRomVersionText = new System.Windows.Forms.Label();
             this.lblBoardIdText = new System.Windows.Forms.Label();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpBidSon = new System.Windows.Forms.TableLayoutPanel();
             this.lblSon = new System.Windows.Forms.Label();
             this.lblSonText = new System.Windows.Forms.Label();
             this.lblBoardId = new System.Windows.Forms.Label();
@@ -113,11 +113,11 @@ namespace Mac_EFI_Toolkit
             this.tlpSerialHwc.SuspendLayout();
             this.tlpSerial.SuspendLayout();
             this.tlpMe.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
+            this.tlpFsysApfs.SuspendLayout();
             this.tlpFsys.SuspendLayout();
             this.tlpSizeCrcLabels.SuspendLayout();
-            this.tlpEfiRomLabels.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
+            this.tlpEfiRom.SuspendLayout();
+            this.tlpBidSon.SuspendLayout();
             this.cmsMainMenu.SuspendLayout();
             this.pnlTitle.SuspendLayout();
             this.tlpVersionLabel.SuspendLayout();
@@ -156,14 +156,14 @@ namespace Mac_EFI_Toolkit
             this.tlpMain.Controls.Add(this.lblSizeBytesText, 0, 2);
             this.tlpMain.Controls.Add(this.tlpMe, 2, 14);
             this.tlpMain.Controls.Add(this.lblFitcVersionText, 0, 14);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel3, 2, 12);
+            this.tlpMain.Controls.Add(this.tlpFsysApfs, 2, 12);
             this.tlpMain.Controls.Add(this.lblFsysCrcText, 0, 12);
             this.tlpMain.Controls.Add(this.lblConfig, 2, 6);
             this.tlpMain.Controls.Add(this.tlpSizeCrcLabels, 2, 2);
             this.tlpMain.Controls.Add(this.lblEfiVersionText, 0, 10);
-            this.tlpMain.Controls.Add(this.tlpEfiRomLabels, 2, 10);
+            this.tlpMain.Controls.Add(this.tlpEfiRom, 2, 10);
             this.tlpMain.Controls.Add(this.lblBoardIdText, 0, 16);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel4, 2, 16);
+            this.tlpMain.Controls.Add(this.tlpBidSon, 2, 16);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMain.Enabled = false;
             this.tlpMain.Location = new System.Drawing.Point(0, 2);
@@ -531,25 +531,25 @@ namespace Mac_EFI_Toolkit
             this.lblFitcVersionText.Text = "FITC Version:";
             this.lblFitcVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel3
+            // tlpFsysApfs
             // 
-            this.tableLayoutPanel3.ColumnCount = 5;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Controls.Add(this.lblApfsCapable, 4, 0);
-            this.tableLayoutPanel3.Controls.Add(this.lblApfsCapableText, 2, 0);
-            this.tableLayoutPanel3.Controls.Add(this.tlpFsys, 0, 0);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(151, 199);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 1;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(553, 30);
-            this.tableLayoutPanel3.TabIndex = 24;
+            this.tlpFsysApfs.ColumnCount = 5;
+            this.tlpFsysApfs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFsysApfs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpFsysApfs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpFsysApfs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpFsysApfs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFsysApfs.Controls.Add(this.lblApfsCapable, 4, 0);
+            this.tlpFsysApfs.Controls.Add(this.lblApfsCapableText, 2, 0);
+            this.tlpFsysApfs.Controls.Add(this.tlpFsys, 0, 0);
+            this.tlpFsysApfs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFsysApfs.Location = new System.Drawing.Point(151, 199);
+            this.tlpFsysApfs.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFsysApfs.Name = "tlpFsysApfs";
+            this.tlpFsysApfs.RowCount = 1;
+            this.tlpFsysApfs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFsysApfs.Size = new System.Drawing.Size(553, 30);
+            this.tlpFsysApfs.TabIndex = 24;
             // 
             // lblApfsCapable
             // 
@@ -769,25 +769,25 @@ namespace Mac_EFI_Toolkit
             this.lblEfiVersionText.Text = "EFI Version:";
             this.lblEfiVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tlpEfiRomLabels
+            // tlpEfiRom
             // 
-            this.tlpEfiRomLabels.ColumnCount = 5;
-            this.tlpEfiRomLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpEfiRomLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpEfiRomLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tlpEfiRomLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpEfiRomLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpEfiRomLabels.Controls.Add(this.lblEfiVersion, 0, 0);
-            this.tlpEfiRomLabels.Controls.Add(this.lblRomVersion, 4, 0);
-            this.tlpEfiRomLabels.Controls.Add(this.lblRomVersionText, 2, 0);
-            this.tlpEfiRomLabels.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpEfiRomLabels.Location = new System.Drawing.Point(151, 168);
-            this.tlpEfiRomLabels.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpEfiRomLabels.Name = "tlpEfiRomLabels";
-            this.tlpEfiRomLabels.RowCount = 1;
-            this.tlpEfiRomLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpEfiRomLabels.Size = new System.Drawing.Size(553, 30);
-            this.tlpEfiRomLabels.TabIndex = 18;
+            this.tlpEfiRom.ColumnCount = 5;
+            this.tlpEfiRom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpEfiRom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpEfiRom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpEfiRom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpEfiRom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpEfiRom.Controls.Add(this.lblEfiVersion, 0, 0);
+            this.tlpEfiRom.Controls.Add(this.lblRomVersion, 4, 0);
+            this.tlpEfiRom.Controls.Add(this.lblRomVersionText, 2, 0);
+            this.tlpEfiRom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpEfiRom.Location = new System.Drawing.Point(151, 168);
+            this.tlpEfiRom.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpEfiRom.Name = "tlpEfiRom";
+            this.tlpEfiRom.RowCount = 1;
+            this.tlpEfiRom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpEfiRom.Size = new System.Drawing.Size(553, 30);
+            this.tlpEfiRom.TabIndex = 18;
             // 
             // lblEfiVersion
             // 
@@ -849,25 +849,25 @@ namespace Mac_EFI_Toolkit
             this.lblBoardIdText.Text = "Board-ID:";
             this.lblBoardIdText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel4
+            // tlpBidSon
             // 
-            this.tableLayoutPanel4.ColumnCount = 5;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Controls.Add(this.lblSon, 4, 0);
-            this.tableLayoutPanel4.Controls.Add(this.lblSonText, 2, 0);
-            this.tableLayoutPanel4.Controls.Add(this.lblBoardId, 0, 0);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(151, 261);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(553, 30);
-            this.tableLayoutPanel4.TabIndex = 95;
+            this.tlpBidSon.ColumnCount = 5;
+            this.tlpBidSon.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpBidSon.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpBidSon.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tlpBidSon.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpBidSon.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpBidSon.Controls.Add(this.lblSon, 4, 0);
+            this.tlpBidSon.Controls.Add(this.lblSonText, 2, 0);
+            this.tlpBidSon.Controls.Add(this.lblBoardId, 0, 0);
+            this.tlpBidSon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpBidSon.Location = new System.Drawing.Point(151, 261);
+            this.tlpBidSon.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpBidSon.Name = "tlpBidSon";
+            this.tlpBidSon.RowCount = 1;
+            this.tlpBidSon.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpBidSon.Size = new System.Drawing.Size(553, 30);
+            this.tlpBidSon.TabIndex = 95;
             // 
             // lblSon
             // 
@@ -1345,11 +1345,11 @@ namespace Mac_EFI_Toolkit
             this.tlpSerialHwc.ResumeLayout(false);
             this.tlpSerial.ResumeLayout(false);
             this.tlpMe.ResumeLayout(false);
-            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tlpFsysApfs.ResumeLayout(false);
             this.tlpFsys.ResumeLayout(false);
             this.tlpSizeCrcLabels.ResumeLayout(false);
-            this.tlpEfiRomLabels.ResumeLayout(false);
-            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tlpEfiRom.ResumeLayout(false);
+            this.tlpBidSon.ResumeLayout(false);
             this.cmsMainMenu.ResumeLayout(false);
             this.pnlTitle.ResumeLayout(false);
             this.tlpVersionLabel.ResumeLayout(false);
@@ -1389,7 +1389,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblFsysCrcText;
         private System.Windows.Forms.Label lblSonText;
         private System.Windows.Forms.Label lblFsysCrc;
-        private System.Windows.Forms.TableLayoutPanel tlpEfiRomLabels;
+        private System.Windows.Forms.TableLayoutPanel tlpEfiRom;
         private System.Windows.Forms.Label lblApfsCapable;
         private System.Windows.Forms.Label lblApfsCapableText;
         private System.Windows.Forms.TableLayoutPanel tlpSerial;
@@ -1420,7 +1420,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.TableLayoutPanel tlpFsysApfs;
         private System.Windows.Forms.TableLayoutPanel tlpMenu;
         private System.Windows.Forms.ContextMenuStrip cmsFsysMenu;
         private System.Windows.Forms.ToolStripMenuItem replaceFsysBlockToolStripMenuItem;
@@ -1439,7 +1439,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblModified;
         private System.Windows.Forms.Label lblModifiedText;
         private System.Windows.Forms.Label lblCreated;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.TableLayoutPanel tlpBidSon;
         private System.Windows.Forms.Label lblSon;
     }
 }

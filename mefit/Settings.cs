@@ -161,7 +161,7 @@ namespace Mac_EFI_Toolkit
                 }
                 else
                 {
-                    Logger.writeLogFile($"{section} > {key} > Key not found, setting was not written.");
+                    Logger.writeLogFile($"{section} > {key} > Key not found, setting was not written.", LogType.Application);
                 }
             }
 
@@ -190,7 +190,7 @@ namespace Mac_EFI_Toolkit
             }
             else
             {
-                Logger.writeLogFile($"{section} > {key} > Key not found, setting was not written.");
+                Logger.writeLogFile($"{section} > {key} > Key not found, setting was not written.", LogType.Application);
             }
 
         }
