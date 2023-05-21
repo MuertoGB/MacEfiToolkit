@@ -5,7 +5,6 @@
 // settingsWindow.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Runtime.InteropServices;
@@ -149,7 +148,7 @@ namespace Mac_EFI_Toolkit.WinForms
             if (!_bIsTimerRunning)
             {
                 lblSettingsUpdated.Show();
-                InterfaceUtils.FlashForecolor(lblSettingsUpdated);
+                //InterfaceUtils.FlashForecolor(lblSettingsUpdated);
 
                 var timer = new System.Windows.Forms.Timer();
 

@@ -5,7 +5,10 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -15,26 +18,47 @@ namespace Mac_EFI_Toolkit.Utils
     class EFIUtils
     {
         /// <summary>
-        /// Retrieves the config code string from the Apple server for a given HWC indentifier.
+        /// Retrieves the configuration model string for a given HWC identifier. 
+        /// Prioritizes retrieving data from the embedded XML db. 
+        /// Falls back to retrieving data from the Apple server if not found in the XML resource.
         /// </summary>
-        /// <param name="strHwc">The HWC identifier to retrieve a configuration data for.</param>
-        /// <returns>The configuration data string, or an error message if an error occurs.</returns>
+        /// <param name="strHwc">The HWC identifier to retrieve a model string for.</param>
+        /// <returns>The model string.</returns>
         internal static async Task<string> GetConfigCodeAsync(string strHwc)
         {
             try
             {
-                // URL to retrieve the configuration data
+                // Attempt to load the data from the embedded XML db
+                var xmlData = Encoding.UTF8.GetBytes(Mac_EFI_Toolkit.Properties.Resources.modeldb);
+                using (var stream = new MemoryStream(xmlData))
+                {
+                    var xmlDoc = XDocument.Load(stream);
+                    var name = xmlDoc.Descendants("section")
+                        .FirstOrDefault(e => e.Element("cfgCode")?.Value == strHwc)
+                        ?.Element("model")?.Value;
+
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        return name;
+                    }
+                }
+
+                // Retrieve data from the Apple server
                 var url = $"http://support-sp.apple.com/sp/product?cc={strHwc}";
+                if (!NetUtils.GetIsWebsiteAvailable(url))
+                {
+                    return "Unvailable";
+                }
 
-                // Check if the website is available
-                if (!NetUtils.GetIsWebsiteAvailable(url)) return "Domain not available";
-
-                // Download and parse the XML data to retrieve the configuration data
                 var xml = await new WebClient().DownloadStringTaskAsync(url);
                 var doc = XDocument.Parse(xml);
                 var data = doc.XPathSelectElement("/root/configCode")?.Value;
 
-                // Return the configuration data or an error message
+                if (data != null)
+                {
+                    Logger.writeLogFile($"'{strHwc}' not present in local db > Server returned: '{data}'", LogType.Database);
+                }
+
                 return data ?? "Invalid HWC?";
             }
             catch

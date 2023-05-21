@@ -85,7 +85,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Process.Start(e.Link.LinkData.ToString());
         }
-        #endregion  
+        #endregion
 
     }
 }

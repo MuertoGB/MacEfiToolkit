@@ -7,7 +7,7 @@
     <ProjectGuid>{65F08BB6-5BE1-4159-A1C6-61A82297756A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Mac_EFI_Toolkit</RootNamespace>
-    <AssemblyName>Mac EFI Toolkit</AssemblyName>
+    <AssemblyName>mefit</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -189,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\met.ico" />
+    <None Include="Resources\modeldb.xml" />
     <None Include="Resources\imgmuerto64px.png" />
     <None Include="Resources\logo64px.png" />
     <None Include="Resources\logo32px.png" />

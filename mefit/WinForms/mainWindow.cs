@@ -78,6 +78,7 @@ namespace Mac_EFI_Toolkit
             tlpMain.MouseMove += Move_Form;
             tlpMainIcon.MouseMove += Move_Form;
             lblWindowTitle.MouseMove += Move_Form;
+            tlpMenu.MouseMove += Move_Form;
 
             DragEnter += mainWindow_DragEnter;
             DragDrop += mainWindow_DragDrop;
@@ -165,6 +166,11 @@ namespace Mac_EFI_Toolkit
             string[] strFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             string strDraggedFileName = strFiles[0];
             LoadDataNoOfd(strDraggedFileName);
+        }
+
+        private void ChildWindowClosed(object sender, EventArgs e)
+        {
+            Opacity = 1.0;
         }
         #endregion
 
@@ -293,7 +299,7 @@ namespace Mac_EFI_Toolkit
             using (var dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                Title = "Export Fsys block data...",
+                Title = "Export Fsys region data...",
                 FileName = string.Concat("FSYS_RGN_", _strFilenameWithoutExt, ".bin"),
                 OverwritePrompt = true,
                 InitialDirectory = _strRememberPath
@@ -379,12 +385,23 @@ namespace Mac_EFI_Toolkit
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Form frm = new settingsWindow()) frm.ShowDialog();
+            Opacity = 0.5;
+            using (Form frm = new settingsWindow())
+            {
+                frm.FormClosed += ChildWindowClosed;
+                frm.ShowDialog();
+            }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Form frm = new aboutWindow()) frm.ShowDialog();
+            Opacity = 0.5;
+            using (Form frm = new aboutWindow())
+            {
+                frm.FormClosed += ChildWindowClosed;
+                frm.ShowDialog();
+            }
+
         }
 
         private void MinimizeWindow()
@@ -433,7 +450,7 @@ namespace Mac_EFI_Toolkit
         private void HandleMouseEnterTip(object sender, EventArgs e)
         {
             if (sender == cmdExportFsysBlock)
-                lblMessage.Text = "Export Fsys block to disk...";
+                lblMessage.Text = "Export Fsys region...";
             else if (sender == cmdFixFsysCrc)
                 lblMessage.Text = "Repair Fsys CRC32...";
             else if (sender == cmdEveryMacSearch)
@@ -588,7 +605,7 @@ namespace Mac_EFI_Toolkit
 
         internal async void CheckHwcAsync(string strHwc)
         {
-            lblConfig.Text = "Waiting for server...";
+            lblConfig.Text = "Please wait...";
             var configCode = await EFIUtils.GetConfigCodeAsync(strHwc);
             lblConfig.Text = $"· {configCode}";
         }

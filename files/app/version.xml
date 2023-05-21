@@ -2,12 +2,12 @@
 <data>
  <MET>
    <Channel>BETA</Channel>
-   <Build>055-150523-ms4</Build>
-   <ReleaseDate>15th May 2023</ReleaseDate>
-   <SHA256>adc52c6d6fbd4759814f10f7fa604e6d626992a1eb083285009c4cb104425efd</SHA256>
-   <VersionString>0.5.1</VersionString>
+   <Build>052-150523-ms4</Build>
+   <ReleaseDate>21.05.2023</ReleaseDate>
+   <SHA256>d0c3c53b5ab285f90045ce3ad765cdb2fa388bac747c1db9a7519d88e07855c7</SHA256>
+   <VersionString>0.5.2</VersionString>
    <Maj>0</Maj>
    <Min>5</Min>
-   <Rev>1</Rev>
+   <Rev>2</Rev>
  </MET>
 </data>
