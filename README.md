@@ -72,8 +72,8 @@ Plus more, only time will tell.
 - MS [.NET Framework 4.5](https://www.microsoft.com/en-GB/download/details.aspx?id=30653)
 - Windows 7, 8, 8.1, 10. 32, or 64-bit
 - Internet connectivity required for:-
-> Version Checking (Can be disabled in settings)\
-> Fetching the model code from the Apple server when not present in the database
+> - Version Checking (Can be disabled in settings).
+> - Fetching model data from the server when not present in the database.
 
 **Build requirements:**
 - Visual Studio 2019 or higher
