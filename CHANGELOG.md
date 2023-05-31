@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-060">V0.6.0</a> •
   <a href="#version-052">V0.5.2</a> •
   <a href="#version-051">V0.5.1</a> •
   <a href="#version-050">V0.5.0</a> •
@@ -8,6 +9,24 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 0.6.0
+
+#### New:
+- Added firmware editor window, which includes the following features:-
+> - Ability to replace the entire Fsys block with a donor dump.
+> - Ability to replace the serial number with automatic HWC and CRC32 masking.
+> - Ability to clear the SVS and VSS NVRAM sections whilst preserving headers.
+- Added firmware editing terms window.
+
+#### Enhancements:
+- UI improvements.
+- Enhanced parsing of SON data from the Fsys region.
+- Implemented model identifier fallback if the HWC is not present.
+
+#### Bugs:
+- Fixed about window form state issue.
+- Fixed font resolver failing to load embedded resources on some systems.
 
 ## Version 0.5.2
 

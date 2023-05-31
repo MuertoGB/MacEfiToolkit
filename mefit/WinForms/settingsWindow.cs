@@ -17,7 +17,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         #region Private Members
         private static string _strNewOfdInitialPath = string.Empty;
-        private bool _bIsTimerRunning = false;
+        private Timer _timer;
         #endregion
 
         #region Overrides Properties
@@ -26,7 +26,6 @@ namespace Mac_EFI_Toolkit.WinForms
             get
             {
                 CreateParams Params = base.CreateParams;
-                // Params.Style |= Program.WS_MINIMIZEBOX; (Not necessary, window cannot be minimized)
                 Params.ClassStyle = Params.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
                 return Params;
             }
@@ -47,7 +46,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void settingsWindow_Load(object sender, EventArgs e)
         {
-            lblSettingsUpdated.Hide();
+            lblSettingsApplied.Hide();
             _updateControls();
         }
 
@@ -59,8 +58,6 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxDisableLzmaFsSearch.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) ? true : false;
             cbxDisableFsysEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFsysEnforce)) ? true : false;
             cbxDisableDescriptorEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce)) ? true : false;
-            cbxAcceptedEditingTerms.Enabled = (Settings.SettingsGetBool(SettingsBoolType.AcceptedEditingTerms)) ? true : false;
-            cbxAcceptedEditingTerms.Checked = (Settings.SettingsGetBool(SettingsBoolType.AcceptedEditingTerms)) ? true : false;
         }
         #endregion
 
@@ -88,12 +85,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Close();
         }
 
-        private void cmdEditingTerms_Click(object sender, EventArgs e)
-        {
-            // User accepts terms
-            cbxAcceptedEditingTerms.Enabled = true;
-        }
-
         private void cmdEditCustomPath_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
@@ -116,7 +107,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdApply_Click(object sender, EventArgs e)
         {
-            // Here we are simply using the bool value from a checkboxes state. Nice and simple.
             Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, cbxDisableVersionCheck.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, cbxDisableFlashingUI.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
@@ -124,13 +114,11 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, cbxDisableFsysEnforce.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
-            //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
-            _showSettingsUpdatedLabel();
+            _showSettingsAppliedLabel();
         }
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
-            // Here we are simply using the bool value from a checkboxes state. Nice and simple.
             Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, false);
@@ -138,32 +126,33 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
-            //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
             _updateControls();
-            _showSettingsUpdatedLabel();
+            _showSettingsAppliedLabel();
+        }
+        #endregion
+
+        #region Label Events
+        private void _showSettingsAppliedLabel()
+        {
+            lblSettingsApplied.Show();
+
+            if (_timer != null && _timer.Enabled)
+            {
+                _timer.Stop();
+                _timer.Dispose();
+            }
+
+            _timer = new Timer();
+            _timer.Interval = 2000;
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
         }
 
-        private void _showSettingsUpdatedLabel()
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            if (!_bIsTimerRunning)
-            {
-                lblSettingsUpdated.Show();
-                //InterfaceUtils.FlashForecolor(lblSettingsUpdated);
-
-                var timer = new System.Windows.Forms.Timer();
-
-                timer.Interval = 2000;
-                timer.Tick += (sender, e) =>
-                {
-                    lblSettingsUpdated.Hide();
-                    timer.Stop();
-                    timer.Dispose();
-                    _bIsTimerRunning = false;
-                };
-
-                timer.Start();
-                _bIsTimerRunning = true;
-            }
+            lblSettingsApplied.Hide();
+            _timer.Stop();
+            _timer.Dispose();
         }
         #endregion
 

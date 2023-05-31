@@ -258,6 +258,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(440, 300);
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(440, 300);
             this.Name = "aboutWindow";
             this.Padding = new System.Windows.Forms.Padding(1);

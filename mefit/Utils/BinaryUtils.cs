@@ -151,12 +151,13 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="sourceBytes">The byte array to read from.</param>
         /// <param name="offset">The offset in the byte array to start reading from.</param>
         /// <param name="startByte">The starting byte to read from.</param>
-        /// <param name="terminationByte">The terminating byte to stop reading at.</param>
+        /// <param name="terminationBytes">The terminating byte params to stop reading at.</param>
         /// <returns>The bytes read from the byte array up to the terminating byte.</returns>
-        internal static byte[] GetBytesAtOffsetByteDelimited(byte[] sourceBytes, long offset, byte startByte, byte terminationByte)
+        internal static byte[] GetBytesAtOffsetByteDelimited(byte[] sourceBytes, long offset, byte startByte, params byte[] terminationBytes)
         {
             int startIndex = Array.IndexOf(sourceBytes, startByte, (int)offset);
-            if (startIndex < 0 || startIndex == sourceBytes.Length - 1) return null;
+            if (startIndex < 0 || startIndex == sourceBytes.Length - 1)
+                return null;
 
             startIndex++;
             while (startIndex < sourceBytes.Length && sourceBytes[startIndex] == startByte)
@@ -166,7 +167,7 @@ namespace Mac_EFI_Toolkit.Utils
 
             using (MemoryStream ms = new MemoryStream())
             {
-                while (startIndex < sourceBytes.Length && sourceBytes[startIndex] != terminationByte)
+                while (startIndex < sourceBytes.Length && !terminationBytes.Contains(sourceBytes[startIndex]))
                 {
                     ms.WriteByte(sourceBytes[startIndex]);
                     startIndex++;

@@ -150,7 +150,14 @@ namespace Mac_EFI_Toolkit.UI
         #region Button Events
         private void cmdCancel_Click(object sender, EventArgs e)
         {
-            drMmbResult = DialogResult.Cancel;
+            if (mbMmbButton == MsgButton.Okay)
+            {
+                drMmbResult = DialogResult.OK;
+            }
+            else
+            {
+                drMmbResult = DialogResult.Cancel;
+            }
             Close();
         }
 

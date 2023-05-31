@@ -3,7 +3,7 @@
 
 // IniFile.cs - Handles INI file read/write
 // Released under the GNU GLP v3.0
-// IniFile uses code from pinvoke.net, thank you to whoever wrote it (See _getSectionNames)
+// IniFile uses code from pinvoke.net, thank you to whoever wrote it (See GetSectionNames)
 
 using Mac_EFI_Toolkit.WIN32;
 using System;

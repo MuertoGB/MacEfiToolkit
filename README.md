@@ -4,11 +4,11 @@
 Mac EFI Toolkit
 </h1>
 
-<h4 align="center">A tool for repairing and modifying data in Mac EFI binaries. </h4>
+<h4 align="center">A tool for viewing and repairing data in Mac EFI binaries</h4>
 
 <p align="center">
   <a href="#about">About</a> •
-  <a href="#features">Features</a> •
+  <a href="#suggested-features">Suggested Features</a> •
   <a href="#download">Download</a> •
   <a href="#requirements">Requirements</a> •
   <a href="#acknowledgements">Acknowledgements</a> •
@@ -17,35 +17,25 @@ Mac EFI Toolkit
 
 ## About
 
->🛠 Current Status: Working on database implementation.
+>🛠 Current Status: Working on finishing the editor.
 
-Mac EFI Toolkit is a firmware repair tool designed to aid technicians in repair of a Mac EFIROM (BIOS).
+Mac EFI Toolkit, or 'mefit' is a firmware repair and information gathering tool designed to aid technicians in repair of a Mac EFIROM firmware (BIOS), which consists of the following features:-
 
-This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete; however functionality such as viewing ROM information, dumping the Fsys region, and repairing the Fsys crc32 is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
-
-<img width="550" src="files/images/met.png" alt="MET">
-<img width="550" src="files/images/met_alt.png" alt="MET_ALT">
-
-## Features
-
-| Suggested features                                         | Status      |
-|------------------------------------------------------------|-------------|
-| Knuth–Morris–Pratt algorithm for searching binary offsets  |🟢 Completed |
-| Ability to detect APFSJumpStart DXE                        |🟢 Completed |
-| Check serial number with EveryMac							 |🟢 Completed |
-| View FITC and ME version						             |🟢 Completed |
-| Detect and fix invalid Fsys checksums                      |🟢 Completed |
-| Move from server to database for fetching config code      |🟢 Completed |
-| View ROM information                                       |🟡 Partially Completed |
-| Dump and replace Fsys block                                |🟡 Partially Completed |
-| Replace serial with automatic HWC and CRC32 calculation    |🟡 Partially Completed |
-| Clear NVRAM and EFI lock with header preservation          |🟠 Not Started |
-| Detect MDM status in the NVRAM                             |🔴 Undecided |
-| Detect email address in the NVRAM                          |🔴 Undecided |
-| Configure ME region	                                     |🔴 Undecided |
-
-When the editing features are implemented, original files will be left untouched. The new binary will be built from a copy in memory.
-
+**Implemented firmware features:**
+```
+- The Knuth–Morris–Pratt algorithm for searching binary data
+- Export and store Fsys regions to be used as a donor
+- Replace the Fsys block
+- Ability to detect if the firmware is APFS capable
+- Clear NVRAM (SVS, VSS) with section header preservation
+- Detect and fix invalid Fsys crc32 checksums
+- Replace serial with automatic HWC and CRC32 calculation
+- Validate binary size
+- View specific ROM information, including the FITC and ME version
+- Check serial number with EveryMac
+- HWC decoding that can reference a local database or fall back to Apples server
+- Original binaries left untouched
+```
 **Implemented application features:**
 ```
 - Automatic handling of uncaught errors
@@ -57,14 +47,27 @@ When the editing features are implemented, original files will be left untouched
 - Version checking
 ```
 
+<img width="550" src="files/images/met.png" alt="MET">
+<img width="550" src="files/images/met_alt.png" alt="MET_ALT">
+
+## Suggested Features
+
+| Suggested features                   | Status      |
+|--------------------------------------|-------------|
+| Complete logging systems             |🟡 Partial   |
+| Detect MDM status                    |🔴 Undecided |
+| Detect email address in the NVRAM    |🔴 Undecided |
+| Configure ME region	               |🔴 Undecided |
+
 Plus more, only time will tell.
 
 ## Download
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[0.5.2](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/052)| 21st May 2023 | Yes | BETA |
-|[0.5.1](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/051)| 15th May 2023 | No | BETA |
+|[0.6.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Yes | BETA |
+
+> 📋 View the full changelog [here](CHANGELOG.md)
 
 ## Requirements
 
@@ -106,6 +109,6 @@ Application icon by [Creatype](https://www.flaticon.com/free-icon/toolkit_645709
 
 ## Donate
 
-All donations go back into improving my tools and workspace.
+All donations go back into improving my software and workspace.
 
 <a href="https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ"><img width="160" src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal Logo" vspace="5" hspace="5"></a>

@@ -2,12 +2,12 @@
 <data>
  <MET>
    <Channel>BETA</Channel>
-   <Build>052-150523-ms4</Build>
-   <ReleaseDate>21.05.2023</ReleaseDate>
-   <SHA256>d0c3c53b5ab285f90045ce3ad765cdb2fa388bac747c1db9a7519d88e07855c7</SHA256>
-   <VersionString>0.5.2</VersionString>
+   <Build>060-XXXXXX-ms5</Build>
+   <ReleaseDate>NotSet</ReleaseDate>
+   <SHA256>NotSet</SHA256>
+   <VersionString>0.6.0</VersionString>
    <Maj>0</Maj>
-   <Min>5</Min>
-   <Rev>2</Rev>
+   <Min>6</Min>
+   <Rev>0</Rev>
  </MET>
 </data>

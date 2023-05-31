@@ -16,7 +16,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="strUrl">The URL of the website to check.</param>
         /// <returns>True if the website is available, false otherwise.</returns>
-        internal static bool GetIsWebsiteAvailable(string strUrl)
+        internal static bool GetBoolIsWebsiteAvailable(string strUrl)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// Checks if a network connection is available by attempting to send a ping request to a known IP address.
         /// </summary>
         /// <returns>True if a network connection is available, false otherwise.</returns>
-        internal static bool GetIsNetworkAvailable()
+        internal static bool GetBoolIsNetworkAvailable()
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
             {

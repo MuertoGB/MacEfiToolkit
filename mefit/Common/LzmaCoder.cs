@@ -20,11 +20,11 @@ namespace Mac_EFI_Toolkit
             using (var msInput = new MemoryStream(sourceBytes))
             {
                 var lzmaProp = new byte[5];
-                msInput.Read(lzmaProp, 0, 5); // Sig + Dict Size
+                msInput.Read(lzmaProp, 0, 5);
 
                 var decompLength = new byte[8];
                 msInput.Read(decompLength, 0, 8);
-                var fileLength = BitConverter.ToInt64(decompLength, 0); // Decompressed Size
+                var fileLength = BitConverter.ToInt64(decompLength, 0);
 
                 decoder.SetDecoderProperties(lzmaProp);
                 decoder.Code(msInput, msOutput, msInput.Length, fileLength, null);

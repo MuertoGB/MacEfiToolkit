@@ -102,7 +102,7 @@
     <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBit.cs" />
     <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBitTree.cs" />
     <Compile Include="Common\SevenZip\ICoder.cs" />
-    <Compile Include="Common\FirmwareParser.cs" />
+    <Compile Include="Common\FWParser.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="METVersion.cs" />
@@ -119,6 +119,12 @@
     </Compile>
     <Compile Include="WinForms\aboutWindow.Designer.cs">
       <DependentUpon>aboutWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\editorWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\editorWindow.Designer.cs">
+      <DependentUpon>editorWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="WinForms\mainWindow.cs">
       <SubType>Form</SubType>
@@ -145,11 +151,21 @@
     <Compile Include="WinForms\settingsWindow.Designer.cs">
       <DependentUpon>settingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinForms\termsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\termsWindow.Designer.cs">
+      <DependentUpon>termsWindow.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="UI\METMessageBox.resx">
       <DependentUpon>METMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\aboutWindow.resx">
       <DependentUpon>aboutWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\editorWindow.resx">
+      <DependentUpon>editorWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\mainWindow.resx">
       <DependentUpon>mainWindow.cs</DependentUpon>
@@ -166,6 +182,9 @@
     </Compile>
     <EmbeddedResource Include="WinForms\settingsWindow.resx">
       <DependentUpon>settingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\termsWindow.resx">
+      <DependentUpon>termsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
@@ -188,6 +207,7 @@
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\editorterms.txt" />
     <Content Include="Assets\met.ico" />
     <None Include="Resources\modeldb.xml" />
     <None Include="Resources\imgmuerto64px.png" />

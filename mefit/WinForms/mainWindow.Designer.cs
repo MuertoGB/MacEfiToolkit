@@ -942,6 +942,7 @@ namespace Mac_EFI_Toolkit
             this.cmdEditEfirom.TabIndex = 2;
             this.cmdEditEfirom.Text = "EDIT ROM";
             this.cmdEditEfirom.UseVisualStyleBackColor = false;
+            this.cmdEditEfirom.Click += new System.EventHandler(this.cmdEditEfirom_Click);
             // 
             // cmdReset
             // 

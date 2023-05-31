@@ -22,7 +22,6 @@ namespace Mac_EFI_Toolkit.WinForms
             get
             {
                 CreateParams Params = base.CreateParams;
-                Params.Style |= Program.WS_MINIMIZEBOX;
                 Params.ClassStyle = Params.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
                 return Params;
             }
@@ -35,7 +34,7 @@ namespace Mac_EFI_Toolkit.WinForms
             InitializeComponent();
 
             Load += new EventHandler(aboutWindow_Load);
-            lblTitle.MouseMove += new MouseEventHandler(Move_Form);
+            lblTitle.MouseMove += new MouseEventHandler(aboutWindow_MouseMove);
             KeyDown += new KeyEventHandler(aboutWindow_KeyDown);
         }
         #endregion
@@ -49,7 +48,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Mouse Events
-        private void Move_Form(object sender, MouseEventArgs e)
+        private void aboutWindow_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
