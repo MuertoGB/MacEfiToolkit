@@ -5,10 +5,9 @@ Mac EFI Toolkit
 </h1>
 
 <h4 align="center">A tool for viewing and repairing data in Mac EFI binaries</h4>
-
 <p align="center">
   <a href="#about">About</a> •
-  <a href="#suggested-features">Suggested Features</a> •
+  <a href="#features">Features</a> •
   <a href="#download">Download</a> •
   <a href="#requirements">Requirements</a> •
   <a href="#acknowledgements">Acknowledgements</a> •
@@ -17,25 +16,39 @@ Mac EFI Toolkit
 
 ## About
 
+This application is in active development, it is currently unfinished.
 >🛠 Current Status: Working on finishing the editor.
 
 Mac EFI Toolkit, or 'mefit' is a firmware repair and information gathering tool designed to aid technicians in repair of a Mac EFIROM firmware (BIOS), which consists of the following features:-
 
-**Implemented firmware features:**
-```
-- The Knuth–Morris–Pratt algorithm for searching binary data
-- Export and store Fsys regions to be used as a donor
-- Replace the Fsys block
-- Ability to detect if the firmware is APFS capable
-- Clear NVRAM (SVS, VSS) with section header preservation
-- Detect and fix invalid Fsys crc32 checksums
-- Replace serial with automatic HWC and CRC32 calculation
-- Validate binary size
-- View specific ROM information, including the FITC and ME version
-- Check serial number with EveryMac
-- HWC decoding that can reference a local database or fall back to Apples server
-- Original binaries left untouched
-```
+<img width="550" src="files/images/met.png" alt="MET">
+<img width="550" src="files/images/met_alt.png" alt="MET_ALT">
+
+## Features
+
+- [x] Implement Knuth–Morris–Pratt algorithm for searching binary data
+- [x] Add option to export and store Fsys regions
+- [ ] Replace the Fsys block
+- [ ] Clear NVRAM (SVS, VSS) with section header preservation
+- [ ] Add option to replace serial number
+> The editor is in active development
+- [x] Ability to detect if the firmware is APFS capable
+- [x] Detect and fix invalid Fsys crc32 checksums
+- [x] Validate binary size
+- [x] View specific ROM information, including the FITC and ME version
+- [x] Check serial number with EveryMac
+- [x] HWC decoding that can reference a local database or fall back to Apples server
+- [x] Original binaries left untouched
+- [ ] Complete the logging systems
+
+ 
+
+| SUGGESTED FEATURES                   | Status      |
+|--------------------------------------|-------------|
+| Detect MDM status                    |🔴 Undecided |
+| Detect email address in the NVRAM    |🔴 Undecided |
+| Configure ME region	               |🔴 Undecided |
+
 **Implemented application features:**
 ```
 - Automatic handling of uncaught errors
@@ -46,18 +59,6 @@ Mac EFI Toolkit, or 'mefit' is a firmware repair and information gathering tool 
 - Memory Management
 - Version checking
 ```
-
-<img width="550" src="files/images/met.png" alt="MET">
-<img width="550" src="files/images/met_alt.png" alt="MET_ALT">
-
-## Suggested Features
-
-| Suggested features                   | Status      |
-|--------------------------------------|-------------|
-| Complete logging systems             |🟡 Partial   |
-| Detect MDM status                    |🔴 Undecided |
-| Detect email address in the NVRAM    |🔴 Undecided |
-| Configure ME region	               |🔴 Undecided |
 
 Plus more, only time will tell.
 
