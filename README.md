@@ -31,7 +31,7 @@ Mac EFI Toolkit, or 'mefit' is a firmware repair and information gathering tool 
 - [ ] Replace the Fsys block
 - [ ] Clear NVRAM (SVS, VSS) with section header preservation
 - [ ] Add option to replace serial number
-> The editor is in active development
+> ℹ️ The editor is in active development
 - [x] Ability to detect if the firmware is APFS capable
 - [x] Detect and fix invalid Fsys crc32 checksums
 - [x] Validate binary size
