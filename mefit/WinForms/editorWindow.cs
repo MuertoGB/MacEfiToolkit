@@ -22,7 +22,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
         #region Private Members
         private byte[] _byteNewFsysRegion = null;
-        private bool _bIsNewFsysValid = false;
         private string _strChevronRight = "\xE76C";
         #endregion
 
@@ -45,18 +44,38 @@ namespace Mac_EFI_Toolkit.WinForms
 
             lblTitle.MouseMove += editorWindow_MouseMove;
 
-            lblSvsChevRight.Font = Program.FONT_MDL2_REG_9;
-            lblSvsChevRight.Text = _strChevronRight;
+            var font = Program.FONT_MDL2_REG_9;
+            var chevronRight = _strChevronRight;
 
-            lblVssChevRight.Font = Program.FONT_MDL2_REG_9;
-            lblVssChevRight.Text = _strChevronRight;
-
+            lblSvsChevRight.Font = font;
+            lblSvsChevRight.Text = chevronRight;
             lblSvsChevRight.Visible = false;
+
+            lblVssChevRight.Font = font;
+            lblVssChevRight.Text = chevronRight;
             lblVssChevRight.Visible = false;
+
+            lblNssChevRight.Font = font;
+            lblNssChevRight.Text = chevronRight;
+            lblNssChevRight.Visible = false;
 
             tbxSerialNumber.MaxLength = FWParser.strSerialNumber.Length;
 
+            InitLogBox();
+        }
+        #endregion
+
+        #region Window Events
+        private void InitLogBox()
+        {
+            rtbLog.Clear();
             Logger.WriteLogTypeTextToRtb($"{DateTime.Now}", RtbLogPrefix.MET, rtbLog);
+        }
+
+        internal async void CheckHwcAsync(string strHwc)
+        {
+            var configCode = await EFIUtils.GetStringConfigCodeAsync(strHwc);
+            Logger.WriteLogTypeTextToRtb($"Config:      {configCode}", RtbLogPrefix.Info, rtbLog);
         }
         #endregion
 
@@ -76,6 +95,34 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdClose_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void cmdCancel_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void cmdFsysPath_Click(object sender, EventArgs e)
+        {
+
+            using (var dialog = new OpenFileDialog
+            {
+                InitialDirectory = Program.strRememberPath,
+                Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
+            })
+            {
+
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    cbxReplaceFsysRgn.Checked = false;
+                    return;
+                }
+
+                Logger.WriteLogTypeTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.MET, rtbLog);
+                _byteNewFsysRegion = File.ReadAllBytes(dialog.FileName);
+                bool isValid = ValidateNewFsysRegion(_byteNewFsysRegion);
+                if (!isValid) cbxReplaceFsysRgn.Checked = false;
+            }
         }
         #endregion
 
@@ -102,24 +149,46 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
+        private void cbxClearNssRegion_CheckedChanged(object sender, EventArgs e)
+        {
+            METCheckbox cb = (METCheckbox)sender;
+            lblNssChevRight.Visible = cb.Checked;
+            cbxClearNssBackup.Enabled = cb.Checked;
+            if (!cb.Checked)
+            {
+                cbxClearNssBackup.Checked = false;
+            }
+        }
+
         private void cbxReplaceFsysRgn_CheckedChanged(object sender, EventArgs e)
         {
             METCheckbox cb = (METCheckbox)sender;
-            cmdFsysPath.Enabled = cb.Checked;
-            tlpSerialA.Enabled = !cb.Checked;
+            bool isChecked = cb.Checked;
+
+            cmdFsysPath.Enabled = isChecked;
+            tlpFsysB.Enabled = isChecked;
+            tlpSerialA.Enabled = !isChecked;
+
+            if (isChecked)
+            {
+                cmdFsysPath.PerformClick();
+            }
+            else
+            {
+                cbxMaskCrc.Checked = false;
+            }
         }
 
         private void cmdReplaceSerial_CheckedChanged(object sender, EventArgs e)
         {
             METCheckbox cb = (METCheckbox)sender;
-            tlpSerialB.Enabled = cb.Checked;
-            tlpSerialC.Enabled = cb.Checked;
-            tlpFsys.Enabled = !cb.Checked;
+            bool isChecked = cb.Checked;
 
-            if (!cb.Checked)
+            tlpSerialB.Enabled = isChecked;
+            tlpFsysA.Enabled = !isChecked;
+
+            if (!isChecked)
             {
-                cbxMaskFsysCrc.Checked = false;
-                cbxOverwriteHwc.Checked = false;
                 tbxSerialNumber.Text = string.Empty;
                 tbxHwc.Text = string.Empty;
             }
@@ -165,99 +234,125 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
-        private void cmdFsysPath_Click(object sender, EventArgs e)
-        {
-
-            using (var dialog = new OpenFileDialog
-            {
-                InitialDirectory = Program.strRememberPath,
-                Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
-            })
-            {
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    Logger.WriteLogTypeTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.Info, rtbLog);
-                    _byteNewFsysRegion = File.ReadAllBytes(dialog.FileName);
-                    _bIsNewFsysValid = ValidateNewFsysRegion(_byteNewFsysRegion);
-
-                }
-            }
-        }
-
+        #region Fsys validation
         private bool ValidateNewFsysRegion(byte[] bytesIn)
         {
+            Logger.WriteLogTypeTextToRtb("Validating donor Fsys region...", RtbLogPrefix.MET, rtbLog);
 
-            Logger.WriteLogTypeTextToRtb($"Validating donor Fsys region...", RtbLogPrefix.MET, rtbLog);
-
-            // Check length of bytes is 800h
             if (bytesIn.Length != FWParser.intFsysRegionExactSize)
             {
-                Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length.ToString("X2")}h, expected 800h", RtbLogPrefix.Error, rtbLog);
-                cbxReplaceFsysRgn.Checked = false;
+                Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length:X2}h, expected 800h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            // Look for Fsys signature at pos 00h.
             long lSigPos = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.FSYS_SIG);
-            if (lSigPos == -1)
+            if (lSigPos == -1 || lSigPos != 0)
             {
-                Logger.WriteLogTypeTextToRtb($"Fsys signature not found", RtbLogPrefix.Error, rtbLog);
-                cbxReplaceFsysRgn.Checked = false;
+                Logger.WriteLogTypeTextToRtb(lSigPos == -1 ? "Fsys signature not found." : $"Fsys signature misaligned at {lSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
                 return false;
+            }
+
+            string strSerial = FWParser.GetFsysRegionSerialNumber(bytesIn);
+            int lenSerial = strSerial.Length;
+            string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
+
+            Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length:X2}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTypeTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTypeTextToRtb($"Serial:      {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTypeTextToRtb($"HWC:         {strHwc}", RtbLogPrefix.Info, rtbLog);
+            CheckHwcAsync(strHwc);
+
+            string strCrcInFile = FWParser.GetFsysRegionCRC32(bytesIn);
+            string strCrcCalculated = EFIUtils.GetUintCalculateFsysCrc32(bytesIn).ToString("X8");
+
+            Logger.WriteLogTypeTextToRtb($"CRC in Fsys: {strCrcInFile}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTypeTextToRtb($"CRC Calc:    {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
+
+            if (strCrcInFile == strCrcCalculated)
+            {
+                Logger.WriteLogTypeTextToRtb("Fsys CRC32 is valid.", RtbLogPrefix.MET, rtbLog);
+                cbxMaskCrc.Checked = false;
             }
             else
             {
-                if (lSigPos != 0)
-                {
-                    Logger.WriteLogTypeTextToRtb($"Fsys signature misaligned: {lSigPos.ToString("X2")}h", RtbLogPrefix.Error, rtbLog);
-                    cbxReplaceFsysRgn.Checked = false;
-                    return false;
-                }
+                Logger.WriteLogTypeTextToRtb("Fsys CRC32 is invalid, 'Mask CRC32' option selected.", RtbLogPrefix.Warn, rtbLog);
+                cbxMaskCrc.Checked = true;
             }
 
-            string strHwc = string.Empty;
-            string strSerial = FWParser.GetFsysRegionSerialNumber(bytesIn);
-            int lenSerial = strSerial.Length;
-
-            switch (lenSerial)
-            {
-                case 11:
-                    strHwc = strSerial.Substring(strSerial.Length - 3);
-                    break;
-                case 12:
-                    strHwc = strSerial.Substring(strSerial.Length - 4);
-                    break;
-            }
-
-            Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length.ToString("X2")}h", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTypeTextToRtb($"Fsys sig found: {lSigPos.ToString("X2")}h", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTypeTextToRtb($"  Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTypeTextToRtb($"  HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
-
-            if (strHwc != null)
-            {
-                CheckHwcAsync(strHwc);
-                if (strHwc != FWParser.strHwc)
-                {
-                    Logger.WriteLogTypeTextToRtb($"Fsys config does not match the original binary, this may cause software issues.", RtbLogPrefix.Warn, rtbLog);
-                }
-                else
-                {
-                    Logger.WriteLogTypeTextToRtb($"Fsys config matches original", RtbLogPrefix.Info, rtbLog);
-                }
-            }
-
+            Logger.WriteLogTypeTextToRtb("Validation complete.", RtbLogPrefix.MET, rtbLog);
             return true;
         }
+        //private bool ValidateNewFsysRegion(byte[] bytesIn)
+        //{
+        //    Logger.WriteLogTypeTextToRtb($"Validating donor Fsys region...", RtbLogPrefix.MET, rtbLog);
 
-        private void cmdCancel_Click(object sender, EventArgs e)
+        //    // Check length of bytes is 800h
+        //    if (bytesIn.Length != FWParser.intFsysRegionExactSize)
+        //    {
+        //        Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length.ToString("X2")}h, expected 800h", RtbLogPrefix.Error, rtbLog);
+        //        return false;
+        //    }
+
+        //    // Look for Fsys signature at pos 00h.
+        //    long lSigPos = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.FSYS_SIG);
+        //    if (lSigPos == -1)
+        //    {
+        //        Logger.WriteLogTypeTextToRtb($"Fsys signature not found.", RtbLogPrefix.Error, rtbLog);
+        //        return false;
+        //    }
+        //    else
+        //    {
+        //        if (lSigPos != 0)
+        //        {
+        //            Logger.WriteLogTypeTextToRtb($"Fsys signature misaligned at {lSigPos.ToString("X2")}h", RtbLogPrefix.Error, rtbLog);
+        //            return false;
+        //        }
+        //    }
+
+        //    string strHwc = string.Empty;
+        //    string strSerial = FWParser.GetFsysRegionSerialNumber(bytesIn);
+        //    int lenSerial = strSerial.Length;
+
+        //    switch (lenSerial)
+        //    {
+        //        case 11:
+        //            strHwc = strSerial.Substring(strSerial.Length - 3).ToUpper();
+        //            break;
+        //        case 12:
+        //            strHwc = strSerial.Substring(strSerial.Length - 4).ToUpper();
+        //            break;
+        //    }
+
+        //    Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length.ToString("X2")}h", RtbLogPrefix.Info, rtbLog);
+        //    Logger.WriteLogTypeTextToRtb($"Fsys sig found at {lSigPos.ToString("X2")}h.", RtbLogPrefix.Info, rtbLog);
+        //    Logger.WriteLogTypeTextToRtb($"Serial:      {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
+        //    Logger.WriteLogTypeTextToRtb($"HWC:         {strHwc}", RtbLogPrefix.Info, rtbLog);
+        //    CheckHwcAsync(strHwc);
+
+        //    string strCrcInFile = FWParser.GetFsysRegionCRC32(bytesIn);
+        //    string strCrcCalculated = EFIUtils.GetUintCalculateFsysCrc32(bytesIn).ToString("X8");
+
+        //    Logger.WriteLogTypeTextToRtb($"CRC in Fsys: {strCrcInFile}h", RtbLogPrefix.Info, rtbLog);
+        //    Logger.WriteLogTypeTextToRtb($"CRC Calc:    {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
+
+        //    if (string.Equals(strCrcInFile, strCrcCalculated))
+        //    {
+        //        Logger.WriteLogTypeTextToRtb($"Fsys CRC32 is valid.", RtbLogPrefix.MET, rtbLog);
+        //    }
+        //    else
+        //    {
+        //        Logger.WriteLogTypeTextToRtb($"Fsys CRC32 is invalid, 'Mask CRC32' option selected.", RtbLogPrefix.Warn, rtbLog);
+        //        cbxMaskCrc.Checked = true;
+        //    }
+
+        //    return true;
+        //}
+        #endregion
+
+        private void cmdClear_Click(object sender, EventArgs e)
         {
-            Close();
+            InitLogBox();
         }
-        internal async void CheckHwcAsync(string strHwc)
-        {
-            var configCode = await EFIUtils.GetStringConfigCodeAsync(strHwc);
-            Logger.WriteLogTypeTextToRtb($"  Config: {configCode}", RtbLogPrefix.Info, rtbLog);
-        }
+
     }
 }

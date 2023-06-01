@@ -351,7 +351,7 @@ namespace Mac_EFI_Toolkit
                 }
 
                 //// Calculate crc32 of the temporary Fsys bytes
-                uint uiNewCrc = EFIUtils.GetUintFsysRegionRealCrc32(FWParser.bytesLoadedFsys);
+                uint uiNewCrc = EFIUtils.GetUintCalculateFsysCrc32(FWParser.bytesLoadedFsys);
                 // Convert new crc32 uint to bytes
                 byte[] bytesNewCrc = BitConverter.GetBytes(uiNewCrc);
                 // Overwrite the loaded Fsys crc32 with the newly calculated crc32
@@ -569,7 +569,7 @@ namespace Mac_EFI_Toolkit
             // Fsys CRC32 string
             FWParser.strFsysChecksumInBinary = FWParser.GetFsysRegionCRC32(FWParser.bytesLoadedFile);
             // Fsys CRC32
-            FWParser.strRealFsysChecksum = EFIUtils.GetUintFsysRegionRealCrc32(FWParser.bytesLoadedFsys).ToString("X8");
+            FWParser.strRealFsysChecksum = EFIUtils.GetUintCalculateFsysCrc32(FWParser.bytesLoadedFsys).ToString("X8");
             // APFSJumpStart
             FWParser.strApfsCapable = $"{ FWParser.GetIsApfsCapableBool(FWParser.bytesLoadedFile) }";
             // FITC

@@ -61,7 +61,7 @@ namespace Mac_EFI_Toolkit.Utils
                     Logger.writeLogFile($"'{strHwc}' not present in local db > Server returned: '{data}'", LogType.Database);
                 }
 
-                return data ?? "Invalid HWC?";
+                return data ?? "N/A";
             }
             catch
             {
@@ -102,7 +102,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// /// <param name="bytesIn">The Fsys region to calcuate the CRC32 for.</param>
         /// <returns>The calculated Fsys CRC32 uint</returns>
-        internal static uint GetUintFsysRegionRealCrc32(byte[] bytesIn)
+        internal static uint GetUintCalculateFsysCrc32(byte[] bytesIn)
         {
             // Data we calculate is: Sig base + 0x800h - crc len of 0x4h = 7FCh
             byte[] bytesTempFsys = new byte[0x7FC];
