@@ -35,14 +35,19 @@ namespace Mac_EFI_Toolkit.Common
             0x03, 0x68, 0x77,  0x63
         };
 
-        internal static readonly byte[] SVS_SIG =
+        internal static readonly byte[] NVRAM_SVS_SIG =
         {
             0x24, 0x53, 0x56, 0x53
         };
 
-        internal static readonly byte[] VSS_SIG =
+        internal static readonly byte[] NVRAM_VSS_SIG =
         {
             0x24, 0x56, 0x53, 0x53
+        };
+
+        internal static readonly byte[] NVRAM_NSS_SIG =
+        {
+            0x24, 0x4E, 0x53, 0x53
         };
 
         internal static readonly byte[] BID_SIG =

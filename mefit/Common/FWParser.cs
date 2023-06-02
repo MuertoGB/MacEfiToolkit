@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// FirmwareParser.cs - Handles parsing of firmware data
+// FWParser.cs - Handles parsing of firmware data
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Utils;
@@ -51,7 +51,8 @@ namespace Mac_EFI_Toolkit.Common
     public enum NVRAMHeaderType
     {
         SVS,
-        VSS
+        VSS,
+        NSS
     }
     #endregion
 
@@ -307,9 +308,10 @@ namespace Mac_EFI_Toolkit.Common
 
         #region NVRAM Data
 
-        internal static int GetNVRAMSectionSize(byte[] bytesIn, NVRAMHeaderType HeaderType)
+        internal static int GetNvramSectionSize(byte[] bytesIn, NVRAMHeaderType headerType)
         {
-            var offsetNvSectSizeData = BinaryUtils.GetLongOffset(bytesIn, HeaderType == NVRAMHeaderType.SVS ? FSSignatures.SVS_SIG : FSSignatures.VSS_SIG);
+            var nvSig = GetSignature(headerType);
+            var offsetNvSectSizeData = BinaryUtils.GetLongOffset(bytesIn, nvSig);
             if (offsetNvSectSizeData != -1 && BinaryUtils.GetBytesAtOffset(bytesIn, offsetNvSectSizeData, 0x6) is byte[] bytesHeader)
             {
                 NvramSectionHeader nvHeader = Helper.DeserializeHeader<NvramSectionHeader>(bytesHeader);
@@ -319,6 +321,21 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
             return -1;
+        }
+
+        private static byte[] GetSignature(NVRAMHeaderType headerType)
+        {
+            switch (headerType)
+            {
+                case NVRAMHeaderType.SVS:
+                    return FSSignatures.NVRAM_SVS_SIG;
+                case NVRAMHeaderType.VSS:
+                    return FSSignatures.NVRAM_VSS_SIG;
+                case NVRAMHeaderType.NSS:
+                    return FSSignatures.NVRAM_NSS_SIG;
+                default:
+                    throw new ArgumentException("Invalid NVRAM header type.");
+            }
         }
         #endregion
 
