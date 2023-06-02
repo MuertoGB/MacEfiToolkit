@@ -28,7 +28,7 @@
 - Fixed about window form state issue.
 - Fixed font resolver failing to load embedded resources on some systems.
 - Fixed stability issues when the Fsys region is not found and 'Disable valid Fsys enforcement' is enabled.
-> - Please not you cannot use the editor when an valid Fsys region is not found.
+> - Please note you cannot use the editor when a valid Fsys region is not found.
 
 ## Version 0.5.2
 
