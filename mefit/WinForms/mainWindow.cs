@@ -559,9 +559,9 @@ namespace Mac_EFI_Toolkit
             // Modified time
             FWParser.strModifiedTime = $"{modifiedTime}";
             // Serial number
-            FWParser.strSerialNumber = FWParser.GetFsysRegionSerialNumber(FWParser.bytesLoadedFsys);
+            FWParser.strSerialNumber = FWParser.bytesLoadedFsys != null ? FWParser.GetFsysRegionSerialNumber(FWParser.bytesLoadedFsys) : "N/A";
             // HWC
-            FWParser.strHwc = FWParser.GetFsysRegionHwc(FWParser.bytesLoadedFsys);
+            FWParser.strHwc = FWParser.bytesLoadedFsys != null ? FWParser.GetFsysRegionHwc(FWParser.bytesLoadedFsys) : "N/A";
             // EFI Version
             FWParser.strEfiVersion = FWParser.GetRomSectionEFIVersion(FWParser.bytesLoadedFile);
             // ROM version
@@ -579,7 +579,7 @@ namespace Mac_EFI_Toolkit
             // Get the BoardId
             FWParser.strBoardId = FWParser.GetBoardId(FWParser.bytesLoadedFile);
             // SON
-            FWParser.strSon = FWParser.GetFsysRegionSon(FWParser.bytesLoadedFsys);
+            FWParser.strSon = FWParser.bytesLoadedFsys != null ? FWParser.GetFsysRegionSon(FWParser.bytesLoadedFsys) : "N/A";
 
             UpdateControls();
         }
@@ -592,9 +592,18 @@ namespace Mac_EFI_Toolkit
             lblCreated.Text = FWParser.strCreationTime;
             lblModified.Text = FWParser.strModifiedTime;
             lblFileChecksum.Text = FWParser.uiCrcOfLoadedFile.ToString("X8");
-            lblFsysCrc.Text = $"{ FWParser.strFsysChecksumInBinary }h";
-            lblFsysCrc.ForeColor = (FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = Colours.clrGood : lblFsysCrc.ForeColor = Colours.clrError;
-            cmdFixFsysCrc.Enabled = (FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary) ? false : true;
+
+            if (FWParser.strFsysChecksumInBinary != "N/A")
+            {
+                lblFsysCrc.Text = $"{ FWParser.strFsysChecksumInBinary }h";
+                lblFsysCrc.ForeColor = (FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = Colours.clrGood : lblFsysCrc.ForeColor = Colours.clrError;
+            }
+            else
+            {
+                lblFsysCrc.Text = "N/A";
+                lblFsysCrc.ForeColor = Color.White;
+            }
+
             lblApfsCapable.Text = FWParser.strApfsCapable;
             if (FWParser.strApfsCapable == "Yes") lblApfsCapable.ForeColor = Colours.clrGood; else lblApfsCapable.ForeColor = Colours.clrUnknown;
             GetHwcAsync(FWParser.strHwc);
@@ -665,11 +674,31 @@ namespace Mac_EFI_Toolkit
         private void ToggleControlEnable(bool Enable)
         {
             Button[] buttons = { cmdReset, cmdEditEfirom, cmdExportFsysBlock, cmdEveryMacSearch };
+
             tlpMain.Enabled = Enable;
             foreach (Button button in buttons)
             {
                 button.Enabled = (Enable) ? true : false;
             }
+
+            // Overrides > For when setting 'Override valid fsys enforement' is enabled, and the Fsys region is not found.
+            // I may revisit here in the future.
+            if (FWParser.bytesLoadedFsys != null)
+            {
+                cmdFixFsysCrc.Enabled = (FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary) ? false : true;
+            } 
+            else
+            {
+                cmdFixFsysCrc.Enabled = false;
+                cmdExportFsysBlock.Enabled = false;
+                cmdEditEfirom.Enabled = false;
+            }
+
+            if (FWParser.strSerialNumber == "N/A")
+            {
+                cmdEveryMacSearch.Enabled = false;
+            }
+
         }
 
         private void LoadDataNoOfd(string filePath)
