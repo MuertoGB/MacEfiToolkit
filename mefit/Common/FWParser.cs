@@ -9,7 +9,6 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Common
@@ -17,27 +16,36 @@ namespace Mac_EFI_Toolkit.Common
 
     #region Struct
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct NvramSectionHeader
+    internal struct NvramStoreHeader
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal char[] Signature;
         internal ushort SizeOfData;
     }
 
+    internal struct NvramStoreData
+    {
+        internal int PrimaryStoreSize { get; set; }
+        internal long PrimaryStoreOffset { get; set; }
+        internal int BackupStoreSize { get; set; }
+        internal long BackupStoreOffset { get; set; }
+    }
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct FlashDescriptor
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        internal byte[] ReservedVector; // 0xFF
+        internal byte[] ReservedVector;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal byte[] Signature; // 0x5AA5FOOF
+        internal byte[] Signature;
     }
 
     internal struct FsysRegion
     {
-        public byte[] BlockBytes { get; set; }
-        public long Offset { get; set; }
+        internal byte[] BlockBytes { get; set; }
+        internal long Offset { get; set; }
     }
+
     #endregion
 
     #region Enum
@@ -48,16 +56,17 @@ namespace Mac_EFI_Toolkit.Common
         No
     }
 
-    public enum NVRAMHeaderType
+    public enum NVRAMStoreType
     {
-        SVS,
         VSS,
+        SVS,
         NSS
     }
     #endregion
 
     class FWParser
     {
+
         #region Internal Members
         internal static string strLoadedBinaryFilePath = string.Empty;
         internal static string strFilenameWithoutExt = string.Empty;
@@ -91,6 +100,7 @@ namespace Mac_EFI_Toolkit.Common
 
         #region Private Members
         private static readonly Encoding _utf8Encoding = Encoding.UTF8;
+        private static readonly int _maxPaddingBytes = 0x60; // This value may need tweaking.
         #endregion
 
         #region Flash Header
@@ -137,7 +147,6 @@ namespace Mac_EFI_Toolkit.Common
         internal static FsysRegion GetFsysRegionBytes(byte[] bytesIn, bool outputOffset = false)
         {
             long offsetFsysRgn = -1;
-
             offsetFsysRgn = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.FSYS_SIG);
 
             byte[] bytesFsysRgn = null;
@@ -307,31 +316,63 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region NVRAM Data
-
-        internal static int GetNvramSectionSize(byte[] bytesIn, NVRAMHeaderType headerType)
+        internal static NvramStoreData GetNvramStoreInfo(byte[] bytesIn, NVRAMStoreType headerType)
         {
-            var nvSig = GetSignature(headerType);
-            var offsetNvSectSizeData = BinaryUtils.GetLongOffset(bytesIn, nvSig);
-            if (offsetNvSectSizeData != -1 && BinaryUtils.GetBytesAtOffset(bytesIn, offsetNvSectSizeData, 0x6) is byte[] bytesHeader)
+            var nvStoreSig = GetSignature(headerType);
+            var offsetNvStore = BinaryUtils.GetLongOffset(bytesIn, nvStoreSig);
+            var primaryStoreSize = -1;
+            long primaryStoreOffset = -1;
+
+            if (offsetNvStore != -1 && BinaryUtils.GetBytesAtOffset(bytesIn, offsetNvStore, 0x6) is byte[] bytesPrimaryHeader)
             {
-                NvramSectionHeader nvHeader = Helper.DeserializeHeader<NvramSectionHeader>(bytesHeader);
-                if (nvHeader.SizeOfData != 0)
+                NvramStoreHeader nvPrimaryStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
+                if (nvPrimaryStoreHeader.SizeOfData != 0)
                 {
-                    return nvHeader.SizeOfData;
+                    primaryStoreSize = nvPrimaryStoreHeader.SizeOfData;
+                    primaryStoreOffset = offsetNvStore;
+
                 }
             }
-            return -1;
+
+            var backupStoreSize = -1;
+            long backupStoreOffset = -1;
+
+            if (primaryStoreOffset != -1) // If we did not find the primary store, why would we be looking for the backup store?
+            {
+                // We're looking for the backup store within a certain max padding length from the end of the primary store,
+                // if we don't find the signature within the maxSearchLength, we abort.
+                var offsetNvBackup = BinaryUtils.GetLongOffset(bytesIn, nvStoreSig, offsetNvStore + primaryStoreSize, _maxPaddingBytes);
+
+                if (offsetNvBackup != -1 && BinaryUtils.GetBytesAtOffset(bytesIn, offsetNvStore, 0x6) is byte[] bytesBackupHeader)
+                {
+                    NvramStoreHeader nvBackupStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
+                    if (nvBackupStoreHeader.SizeOfData != 0)
+                    {
+                        backupStoreSize = nvBackupStoreHeader.SizeOfData;
+                        backupStoreOffset = offsetNvBackup;
+                    }
+                }
+            }
+
+            return new NvramStoreData
+            {
+                PrimaryStoreSize = primaryStoreSize,
+                PrimaryStoreOffset = primaryStoreOffset,
+                BackupStoreSize = backupStoreSize,
+                BackupStoreOffset = backupStoreOffset
+            };
+
         }
 
-        private static byte[] GetSignature(NVRAMHeaderType headerType)
+        private static byte[] GetSignature(NVRAMStoreType headerType)
         {
             switch (headerType)
             {
-                case NVRAMHeaderType.SVS:
+                case NVRAMStoreType.SVS:
                     return FSSignatures.NVRAM_SVS_SIG;
-                case NVRAMHeaderType.VSS:
+                case NVRAMStoreType.VSS:
                     return FSSignatures.NVRAM_VSS_SIG;
-                case NVRAMHeaderType.NSS:
+                case NVRAMStoreType.NSS:
                     return FSSignatures.NVRAM_NSS_SIG;
                 default:
                     throw new ArgumentException("Invalid NVRAM header type.");

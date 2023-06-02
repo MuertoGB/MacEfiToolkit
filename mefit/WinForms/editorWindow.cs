@@ -70,12 +70,39 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             rtbLog.Clear();
             Logger.WriteLogTypeTextToRtb($"{DateTime.Now}", RtbLogPrefix.MET, rtbLog);
+
+            NvramStoreData vssStore = FWParser.GetNvramStoreInfo(FWParser.bytesLoadedFile, NVRAMStoreType.VSS);
+            LogNvramStoreInfo(vssStore, "VSS", rtbLog);
+
+            NvramStoreData svsStore = FWParser.GetNvramStoreInfo(FWParser.bytesLoadedFile, NVRAMStoreType.SVS);
+            LogNvramStoreInfo(svsStore, "SVS", rtbLog);
+
+            NvramStoreData nssStore = FWParser.GetNvramStoreInfo(FWParser.bytesLoadedFile, NVRAMStoreType.NSS);
+            LogNvramStoreInfo(nssStore, "NSS", rtbLog);
         }
 
         internal async void CheckHwcAsync(string strHwc)
         {
             var configCode = await EFIUtils.GetStringConfigCodeAsync(strHwc);
             Logger.WriteLogTypeTextToRtb($"Config:      {configCode}", RtbLogPrefix.Info, rtbLog);
+        }
+
+        private static void LogNvramStoreInfo(NvramStoreData storeData, string storeName, RichTextBox rtbLog)
+        {
+            if (storeData.PrimaryStoreOffset != -1)
+            {
+                int primarySize = storeData.PrimaryStoreSize;
+                long primaryOffset = storeData.PrimaryStoreOffset;
+
+                Logger.WriteLogTypeTextToRtb($"{storeName} Primary: Offset {primaryOffset:X2}h, Size {primarySize:X2}h", RtbLogPrefix.MET, rtbLog);
+            }
+
+            if (storeData.BackupStoreOffset != -1)
+            {
+                int backupSize = storeData.BackupStoreSize;
+                long backupOffset = storeData.BackupStoreOffset;
+                Logger.WriteLogTypeTextToRtb($"{storeName} Backup:  Offset {backupOffset:X2}h, Size {backupSize:X2}h", RtbLogPrefix.MET, rtbLog);
+            }
         }
         #endregion
 

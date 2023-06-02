@@ -36,6 +36,23 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
         internal static long GetLongOffset(byte[] sourceBytes, byte[] pattern, long baseOffset)
         {
+            // Call the overload that takes a baseOffset and maxSearchLength parameters and sets maxSearchLength to the remaining length of the sourceBytes array.
+            return GetLongOffset(sourceBytes, pattern, baseOffset, sourceBytes.Length - baseOffset);
+        }
+
+        /// <summary>
+        /// Finds the offset of a byte pattern within a byte array, starting at a specified base offset and limiting the search length.
+        /// </summary>
+        /// <param name="sourceBytes">The byte array to search in.</param>
+        /// <param name="pattern">The byte pattern to search for.</param>
+        /// <param name="baseOffset">The base offset to start the search from.</param>
+        /// <param name="maxSearchLength">The maximum length of the search within the byte array.</param>
+        /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
+        internal static long GetLongOffset(byte[] sourceBytes, byte[] pattern, long baseOffset, long maxSearchLength)
+        {
+            // Ensure that maxSearchLength is within the bounds of the sourceBytes array.
+            maxSearchLength = Math.Min(maxSearchLength, sourceBytes.Length - baseOffset);
+
             // Build the partial match table for the pattern using the Knuth-Morris-Pratt algorithm.
             int[] partialMatchTable = BuildPartialMatchTable(pattern);
 
@@ -43,14 +60,8 @@ namespace Mac_EFI_Toolkit.Utils
             int sourceIndex = (int)baseOffset;
             int patternIndex = 0;
 
-            // We have nothing to search.
-            if (sourceBytes == null)
-            {
-                return -1;
-            }
-
-            // Iterate over the source bytes until the end or until the pattern is found.
-            while (sourceIndex < sourceBytes.Length)
+            // Iterate over the source bytes until the end or until the pattern is found or the maximum search length is reached.
+            while (sourceIndex < sourceBytes.Length && sourceIndex - baseOffset < maxSearchLength)
             {
                 if (sourceBytes[sourceIndex] == pattern[patternIndex])
                 {
@@ -76,7 +87,7 @@ namespace Mac_EFI_Toolkit.Utils
                 }
             }
 
-            // If the pattern is not found, return -1.
+            // If the pattern is not found within the maximum search length, return -1.
             return -1;
         }
 
