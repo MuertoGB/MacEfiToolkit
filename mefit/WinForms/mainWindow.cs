@@ -129,15 +129,17 @@ namespace Mac_EFI_Toolkit
 
         private void mainWindow_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop) && ((string[])e.Data.GetData(DataFormats.FileDrop)).Length == 1
-                && ((string[])e.Data.GetData(DataFormats.FileDrop))[0].EndsWith(".bin", StringComparison.OrdinalIgnoreCase))
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                e.Effect = DragDropEffects.Copy;
+                string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (draggedFiles.Length == 1)
+                {
+                    e.Effect = DragDropEffects.Copy;
+                    return;
+                }
             }
-            else
-            {
-                e.Effect = DragDropEffects.None;
-            }
+
+            e.Effect = DragDropEffects.None;
         }
 
         private void mainWindow_DragDrop(object sender, DragEventArgs e)
@@ -304,7 +306,7 @@ namespace Mac_EFI_Toolkit
         {
             if (FWParser.bytesLoadedFsys == null)
             {
-                MessageBox.Show("Fsys block bytes[] empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                METMessageBox.Show(this, "Error", "Fsys block bytes empty.", MsgType.Critical, MsgButton.Okay);
                 return;
             }
 
@@ -331,7 +333,7 @@ namespace Mac_EFI_Toolkit
             // Fsys region was not found by the firmware parser
             if (FWParser.bytesLoadedFsys == null)
             {
-                METMessageBox.Show(this, "Error", "Fsys block bytes empty, cannot continue.", MsgType.Critical, MsgButton.Okay);
+                METMessageBox.Show(this, "Error", "Fsys block bytes empty.", MsgType.Critical, MsgButton.Okay);
                 return;
             }
 

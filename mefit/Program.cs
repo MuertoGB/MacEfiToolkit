@@ -97,7 +97,7 @@ namespace Mac_EFI_Toolkit
             if (args.Length > 0)
             {
                 string strDraggedFileName = args[0];
-                if (File.Exists(strDraggedFileName) && Path.GetExtension(strDraggedFileName).Equals(".bin", StringComparison.OrdinalIgnoreCase))
+                if (File.Exists(strDraggedFileName))
                 {
                     blUserDraggedFile = true;
                     strDraggedFile = strDraggedFileName;

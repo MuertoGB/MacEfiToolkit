@@ -50,18 +50,18 @@ namespace Mac_EFI_Toolkit.Common
         internal static string GetFITCVersion(byte[] bytesIn)
         {
             var offset = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.FPT_HEADER_SIG);
-            if (offset == -1) return "Not found";
+            if (offset == -1) return "N/A";
             var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, offset, 0x20);
-            if (headerBytes == null) return "Not found";
+            if (headerBytes == null) return "N/A";
             var header = Helper.DeserializeHeader<FptHeader>(headerBytes);
             return $"{header.Major}.{header.Minor}.{header.Hotfix}.{header.Build}";
         }
         internal static string GetMEVersion(byte[] bytesIn)
         {
             var offset = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.MN2_SIG);
-            if (offset == -1) return "Not found";
+            if (offset == -1) return "N/A";
             var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, offset, 0x10);
-            if (headerBytes == null) return "Not found";
+            if (headerBytes == null) return "N/A";
             var header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
             return $"{header.Major}.{header.Minor}.{header.Hotfix}.{header.Build}";
         }
