@@ -23,6 +23,7 @@
 - UI improvements.
 - Enhanced parsing of SON data from the Fsys region.
 - Implemented model identifier fallback if the HWC is not present.
+- Switched drag and drop support to 'all files' (.*).
 
 #### Bugs:
 - Fixed about window form state issue.
