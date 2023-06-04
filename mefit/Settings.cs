@@ -31,8 +31,7 @@ namespace Mac_EFI_Toolkit
 
     class Settings
     {
-        internal static string strSettingsFilePath = Path.Combine(Program.strAppPath, "Settings.ini");
-        internal static string strDefaultOfdPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        internal static string strSettingsFilePath = Path.Combine(Program.appDirectory, "Settings.ini");
 
         #region Check File Exists
         private static bool GetSettingsFileExists()
@@ -48,7 +47,7 @@ namespace Mac_EFI_Toolkit
             settingsIni.Write("Startup", "DisableVersionCheck", "False");
             settingsIni.Write("Application", "DisableFlashingUI", "False");
             settingsIni.Write("Application", "DisableConfDiag", "False");
-            settingsIni.Write("Application", "InitialOfdPath", strDefaultOfdPath);
+            settingsIni.Write("Application", "InitialOfdPath", Program.appDirectory);
             settingsIni.Write("Firmware", "DisableLzmaFsSearch", "False");
             settingsIni.Write("Firmware", "DisableFsysEnforce", "False");
             settingsIni.Write("Firmware", "DisableDescriptorEnforce", "False");

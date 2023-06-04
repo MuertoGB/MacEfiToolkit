@@ -126,7 +126,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             using (var dialog = new OpenFileDialog
             {
-                InitialDirectory = Program.strRememberPath,
+                InitialDirectory = Program.appDirectory,
                 Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
             })
             {

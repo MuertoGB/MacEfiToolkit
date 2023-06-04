@@ -22,12 +22,10 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static string strAppBuild = $"{Application.ProductVersion}-230604-ms5";
-        internal static string strAppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        internal static string strAppName = Assembly.GetExecutingAssembly().Location;
-        internal static string strDraggedFile = string.Empty;
-        internal static bool blUserDraggedFile = false;
-        internal static string strRememberPath = string.Empty;
+        internal static string appBuild = $"{Application.ProductVersion}-230604-ms5";
+        internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        internal static string appName = Assembly.GetExecutingAssembly().Location;
+        internal static string draggedFile = string.Empty;
 
         #region Private Members
         private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
@@ -59,7 +57,7 @@ namespace Mac_EFI_Toolkit
         static void Main(string[] args)
         {
             // Verify integrity of application to ensure it's not corrupt.
-            if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(strAppName))
+            if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(appName))
             {
                 MessageBox.Show("The assembly signature is invalid, or cannot be verified!\r\nYou should discard of, and reacquire the file.",
                     "Signature Verification", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -93,16 +91,8 @@ namespace Mac_EFI_Toolkit
             // Register low level keyboard hook for preventing WinKey+Up.
             HookKeyboard();
 
-            // Get dragged filepath and set bool
-            if (args.Length > 0)
-            {
-                string strDraggedFileName = args[0];
-                if (File.Exists(strDraggedFileName))
-                {
-                    blUserDraggedFile = true;
-                    strDraggedFile = strDraggedFileName;
-                }
-            }
+            // Get dragged filepath
+            draggedFile = GetDraggedFilePath(args);
 
             // Run mainWindow.
             Application.Run(new mainWindow());
@@ -113,6 +103,17 @@ namespace Mac_EFI_Toolkit
             // Unhook the keyboard hook before exiting the application.
             UnhookKeyboard();
         }
+
+        private static string GetDraggedFilePath(string[] args)
+        {
+            if (args.Length > 0 && File.Exists(args[0]))
+            {
+                return args[0];
+            }
+
+            return string.Empty;
+        }
+
         #endregion
 
         #region Hooks

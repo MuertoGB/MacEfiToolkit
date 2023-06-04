@@ -24,7 +24,7 @@ namespace Mac_EFI_Toolkit
     {
 
         #region Private Members
-        private string _strInitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private string _strInitialDirectory = Program.appDirectory;
         #endregion
 
         #region Overriden Properties
@@ -70,14 +70,27 @@ namespace Mac_EFI_Toolkit
 
             lblVersion.Text = Application.ProductVersion;
 
+            string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+            if (!string.IsNullOrEmpty(path))
+            {
+                if (Directory.Exists(path))
+                {
+                    _strInitialDirectory = path;
+                }
+                else
+                {
+                    _strInitialDirectory = Program.appDirectory;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(Program.draggedFile))
+            {
+                OpenBinary(Program.draggedFile);
+            }
+
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck) && !IsDebugMode())
             {
                 CheckForNewVersion();
-            }
-
-            if (Program.blUserDraggedFile)
-            {
-                LoadFirmwareData(Program.strDraggedFile);
             }
         }
 
@@ -123,7 +136,7 @@ namespace Mac_EFI_Toolkit
         {
             string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             string draggedFilename = draggedFiles[0];
-            LoadFirmwareData(draggedFilename);
+            OpenBinary(draggedFilename);
         }
 
         #endregion
@@ -180,30 +193,16 @@ namespace Mac_EFI_Toolkit
 
         private void cmdOpenBin_Click(object sender, EventArgs e)
         {
-            string initialDirectory;
-
-            if (!string.IsNullOrEmpty(Program.strRememberPath))
-            {
-                initialDirectory = Program.strRememberPath;
-            }
-            else
-            {
-                initialDirectory = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
-                if (string.IsNullOrEmpty(initialDirectory) || !Directory.Exists(initialDirectory))
-                {
-                    initialDirectory = _strInitialDirectory;
-                }
-            }
 
             using (var dialog = new OpenFileDialog
             {
-                InitialDirectory = initialDirectory,
+                InitialDirectory = _strInitialDirectory,
                 Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    LoadFirmwareData(dialog.FileName);
+                    OpenBinary(dialog.FileName);
                 }
             }
         }
@@ -275,7 +274,7 @@ namespace Mac_EFI_Toolkit
                 Title = "Export Fsys region data...",
                 FileName = string.Concat("FSYS_RGN_", FWParser.strFilenameWithoutExt, ".bin"),
                 OverwritePrompt = true,
-                InitialDirectory = Program.strRememberPath
+                InitialDirectory = _strInitialDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -302,7 +301,7 @@ namespace Mac_EFI_Toolkit
                 Title = "Save File...",
                 FileName = $"FSYS_Fixed_{FWParser.strFilenameWithoutExt}.bin",
                 OverwritePrompt = true,
-                InitialDirectory = Program.strRememberPath
+                InitialDirectory = _strInitialDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -330,7 +329,7 @@ namespace Mac_EFI_Toolkit
                     if (result == DialogResult.Yes)
                     {
                         // Load new file data
-                        LoadFirmwareData(dialog.FileName);
+                        OpenBinary(dialog.FileName);
                     }
                 }
             }
@@ -573,7 +572,7 @@ namespace Mac_EFI_Toolkit
             return true;
         }
 
-        internal void LoadEfiData()
+        internal void ParseFirmwareData()
         {
             var fileInfo = new FileInfo(FWParser.strLoadedBinaryFilePath);
             DateTime creationTime = fileInfo.CreationTime;
@@ -671,7 +670,7 @@ namespace Mac_EFI_Toolkit
             lblConfig.Text = $"{configCode}";
         }
 
-        private void LoadFirmwareData(string filePath)
+        private void OpenBinary(string filePath)
         {
             FWParser.strLoadedBinaryFilePath = filePath;
             FWParser.strFilenameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
@@ -684,9 +683,8 @@ namespace Mac_EFI_Toolkit
             if (GetIsValidFirmware())
             {
                 ToggleControlEnable(false);
-                _strInitialDirectory = FWParser.strLoadedBinaryFilePath;
-                Program.strRememberPath = FWParser.strLoadedBinaryFilePath;
-                LoadEfiData();
+                _strInitialDirectory = Path.GetDirectoryName(filePath);
+                ParseFirmwareData();
             }
             else
             {
@@ -715,7 +713,7 @@ namespace Mac_EFI_Toolkit
             FWParser.ClearBaseData();
 
             // Clear private members
-            Program.strRememberPath = string.Empty;
+            _strInitialDirectory = Program.appDirectory;
 
             // Clear the large object heap
             GC.Collect();

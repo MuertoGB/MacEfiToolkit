@@ -87,7 +87,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
-                fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty) ? Settings.strDefaultOfdPath : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+                fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty) ? Program.appDirectory : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
                 fbd.Description = "Select a folder";
                 fbd.ShowNewFolderButton = false;
 
@@ -115,7 +115,7 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, false);
-            if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, Settings.strDefaultOfdPath);
+            if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, Program.appDirectory);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);

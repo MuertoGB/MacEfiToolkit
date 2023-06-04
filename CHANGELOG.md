@@ -24,12 +24,14 @@
 - Enhanced parsing of SON data from the Fsys region.
 - Implemented model identifier fallback if the HWC is not present.
 - Switched drag and drop support to 'all files' (.*).
+- Changed default initial directory to the application directory.
 
 #### Bugs:
 - Fixed about window form state issue.
 - Fixed font resolver failing to load embedded resources on some systems.
 - Fixed stability issues when the Fsys region is not found and 'Disable valid Fsys enforcement' is enabled.
 > - Please note you cannot use the editor when a valid Fsys region is not found.
+- Fixed initial directory not being set when a file is dragged onto the main window, or the executable.
 
 ## Version 0.5.2
 
