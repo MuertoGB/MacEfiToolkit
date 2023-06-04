@@ -119,19 +119,19 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region Platform Data Region Data
-        internal static string GetBoardId(byte[] bytesIn)
+        internal static string GetBoardId(byte[] sourceBytes)
         {
             var result = "N/A";
-            var pdrOffset = BinaryUtils.GetOffset(bytesIn, FSGuids.PDR_SECTION_BID_GUID);
+            var pdrOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.PDR_SECTION_BID_GUID);
 
             if (pdrOffset != -1)
             {
-                var bidOffset = BinaryUtils.GetOffset(bytesIn, FSSignatures.BID_SIG, pdrOffset);
+                var bidOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.BID_SIG, pdrOffset);
                 if (bidOffset != -1)
                 {
                     var bidNudgePos = 0x5;
                     var bidReadLength = 0x8;
-                    var bidBytes = BinaryUtils.GetBytesAtOffset(bytesIn, bidOffset + bidNudgePos, bidReadLength);
+                    var bidBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, bidOffset + bidNudgePos, bidReadLength);
                     var bidString = BitConverter.ToString(bidBytes).Replace("-", "");
 
                     if (!bidString.All(c => c == '0'))

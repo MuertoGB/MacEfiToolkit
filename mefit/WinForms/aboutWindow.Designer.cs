@@ -51,7 +51,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // pnlMain
             // 
-            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.pnlMain.Controls.Add(this.lblInfo);
             this.pnlMain.Controls.Add(this.tlpTop);
             this.pnlMain.Controls.Add(this.lnkUrls);
@@ -77,7 +77,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpTop
             // 
-            this.tlpTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(34)))), ((int)(((byte)(34)))));
+            this.tlpTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.tlpTop.ColumnCount = 2;
             this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());

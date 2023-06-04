@@ -268,48 +268,38 @@ namespace Mac_EFI_Toolkit.WinForms
                 UpdateHwcTextBoxText(string.Empty);
             }
         }
-
-        private void UpdateTextBoxColor(TextBox textBox, Color color)
-        {
-            textBox.ForeColor = color;
-        }
-
-        private void UpdateHwcTextBoxText(string text)
-        {
-            tbxHwc.Text = text;
-        }
         #endregion
 
         #region Validation
-        private bool ValidateNewFsysRegion(byte[] bytesIn)
+        private bool ValidateNewFsysRegion(byte[] sourceBytes)
         {
             Logger.WriteLogTypeTextToRtb("Validating donor Fsys region...", RtbLogPrefix.MET, rtbLog);
 
-            if (bytesIn.Length != FWParser.intFsysRegionSize)
+            if (sourceBytes.Length != FWParser.intFsysRegionSize)
             {
-                Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length:X2}h, expected 800h", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTypeTextToRtb($"Filesize: {sourceBytes.Length:X2}h, expected 800h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            long lSigPos = BinaryUtils.GetOffset(bytesIn, FSSignatures.FSYS_SIG);
+            long lSigPos = BinaryUtils.GetOffset(sourceBytes, FSSignatures.FSYS_SIG);
             if (lSigPos == -1 || lSigPos != 0)
             {
                 Logger.WriteLogTypeTextToRtb(lSigPos == -1 ? "Fsys signature not found." : $"Fsys signature misaligned at {lSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            string strSerial = FWParser.GetFsysSerialNumber(bytesIn);
+            string strSerial = FWParser.GetFsysSerialNumber(sourceBytes);
             int lenSerial = strSerial.Length;
             string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
 
-            Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length:X2}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTypeTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTypeTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTypeTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTypeTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
             CheckHwcAsync(strHwc);
 
-            string strCrcInFile = FWParser.GetFsysCrc32(bytesIn);
-            string strCrcCalculated = EFIUtils.GetUintFsysCrc32(bytesIn).ToString("X8");
+            string strCrcInFile = FWParser.GetFsysCrc32(sourceBytes);
+            string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");
 
             Logger.WriteLogTypeTextToRtb($"CRC in Fsys: {strCrcInFile}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTypeTextToRtb($"CRC Calc:    {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
@@ -407,6 +397,18 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             Logger.WriteLogTypeTextToRtb($"Detect NVRAM stores complete...", RtbLogPrefix.MET, rtbLog);
+        }
+        #endregion
+
+        #region Misc Events
+        private void UpdateTextBoxColor(TextBox textBox, Color color)
+        {
+            textBox.ForeColor = color;
+        }
+
+        private void UpdateHwcTextBoxText(string text)
+        {
+            tbxHwc.Text = text;
         }
         #endregion
 

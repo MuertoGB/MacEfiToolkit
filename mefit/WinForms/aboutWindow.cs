@@ -61,7 +61,10 @@ namespace Mac_EFI_Toolkit.WinForms
         #region KeyDown Events
         private void aboutWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape) Close();
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
         }
         #endregion
 

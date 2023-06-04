@@ -45,27 +45,54 @@ namespace Mac_EFI_Toolkit.Common
     }
     #endregion
 
+    #region Enum
+    internal enum HeaderType
+    {
+        Fitc,
+        ManagementEngine
+    }
+    #endregion
+
     class MEParser
     {
-        internal static string GetFitcVersion(byte[] bytesIn)
+        internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
         {
-            var fptOffset = BinaryUtils.GetOffset(bytesIn, FSSignatures.FPT_HEADER_SIG);
-            if (fptOffset == -1) return "N/A";
-            var readLength = 0x20;
-            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, fptOffset, readLength);
-            if (headerBytes == null) return "N/A";
-            var fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
-            return $"{fptHeader.FitcMajor}.{fptHeader.FitcMinor}.{fptHeader.FitcHotfix}.{fptHeader.FitcBuild}";
-        }
-        internal static string GetManagementEngineVersion(byte[] bytesIn)
-        {
-            var mn2Offset = BinaryUtils.GetOffset(bytesIn, FSSignatures.MN2_SIG);
-            if (mn2Offset == -1) return "N/A";
-            var readLength = 0x10;
-            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, mn2Offset, readLength);
-            if (headerBytes == null) return "N/A";
-            var mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
-            return $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
+            long headerOffset;
+            int readLength;
+            string versionString = "N/A";
+
+            switch (headerType)
+            {
+                case HeaderType.Fitc:
+                    headerOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.FPT_HEADER_SIG);
+                    readLength = 0x20;
+                    if (headerOffset != -1)
+                    {
+                        var headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerOffset, readLength);
+                        if (headerBytes != null)
+                        {
+                            var fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
+                            versionString = $"{fptHeader.FitcMajor}.{fptHeader.FitcMinor}.{fptHeader.FitcHotfix}.{fptHeader.FitcBuild}";
+                        }
+                    }
+                    break;
+
+                case HeaderType.ManagementEngine:
+                    headerOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.MN2_SIG);
+                    readLength = 0x10;
+                    if (headerOffset != -1)
+                    {
+                        var headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerOffset, readLength);
+                        if (headerBytes != null)
+                        {
+                            var mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
+                            versionString = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
+                        }
+                    }
+                    break;
+            }
+
+            return versionString;
         }
     }
 }

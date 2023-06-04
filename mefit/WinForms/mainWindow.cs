@@ -61,7 +61,9 @@ namespace Mac_EFI_Toolkit
 
             lblVersion.Text = Application.ProductVersion;
         }
+        #endregion
 
+        #region Window Events
         private void mainWindow_Load(object sender, EventArgs e)
         {
             ToggleControlEnable(false);
@@ -86,21 +88,6 @@ namespace Mac_EFI_Toolkit
 #else
     return false;
 #endif
-        }
-        #endregion
-
-        #region Window Events
-
-        internal async void CheckForNewVersion()
-        {
-            var result = await METVersion.CheckForNewVersion("https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml");
-
-            if (result == VersionCheckResult.NewVersionAvailable)
-            {
-                lblVersion.ForeColor = Color.Tomato;
-                lblVersion.Cursor = Cursors.Hand;
-                lblVersion.Click += lblVersion_Click;
-            }
         }
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -139,17 +126,6 @@ namespace Mac_EFI_Toolkit
             LoadFirmwareData(draggedFilename);
         }
 
-        private void ChildWindowClosed(object sender, EventArgs e)
-        {
-            Opacity = 1.0;
-        }
-
-        private void ShowContextMenu(Control control, ContextMenuStrip menu)
-        {
-            Point lowerLeft = new Point(-1, control.Height + 2);
-            lowerLeft = control.PointToScreen(lowerLeft);
-            menu.Show(lowerLeft);
-        }
         #endregion
 
         #region KeyDown Events
@@ -481,7 +457,20 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Misc Control Events
+        #region Picturebox Events
+        private void pbxTitleLogo_Click(object sender, EventArgs e)
+        {
+            Control control = sender as Control;
+            ShowContextMenu(control, cmsApplication);
+        }
+
+        private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MinimizeWindow();
+        }
+        #endregion
+
+        #region Misc Events
         private void ToggleControlEnable(bool enable)
         {
             Button[] buttons = { cmdReset, cmdEditEfirom, cmdExportFsysBlock, cmdEveryMacSearch };
@@ -516,18 +505,29 @@ namespace Mac_EFI_Toolkit
                 menu.Renderer = new METMenuRenderer();
             }
         }
-        #endregion
 
-        #region Picturebox Events
-        private void pbxTitleLogo_Click(object sender, EventArgs e)
+        private void ChildWindowClosed(object sender, EventArgs e)
         {
-            Control control = sender as Control;
-            ShowContextMenu(control, cmsApplication);
+            Opacity = 1.0;
         }
 
-        private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowContextMenu(Control control, ContextMenuStrip menu)
         {
-            MinimizeWindow();
+            Point lowerLeft = new Point(-1, control.Height + 2);
+            lowerLeft = control.PointToScreen(lowerLeft);
+            menu.Show(lowerLeft);
+        }
+
+        internal async void CheckForNewVersion()
+        {
+            var result = await METVersion.CheckForNewVersion("https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml");
+
+            if (result == VersionCheckResult.NewVersionAvailable)
+            {
+                lblVersion.ForeColor = Color.Tomato;
+                lblVersion.Cursor = Cursors.Hand;
+                lblVersion.Click += lblVersion_Click;
+            }
         }
         #endregion
 
@@ -604,9 +604,9 @@ namespace Mac_EFI_Toolkit
             // APFSJumpStart
             FWParser.strApfsCapable = $"{ FWParser.GetIsApfsCapable(FWParser.bytesLoadedFile) }";
             // FITC
-            FWParser.strFitcVersion = MEParser.GetFitcVersion(FWParser.bytesLoadedFile);
+            FWParser.strFitcVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.Fitc);
             //ME
-            FWParser.strMeVersion = MEParser.GetManagementEngineVersion(FWParser.bytesLoadedFile);
+            FWParser.strMeVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.ManagementEngine);
             // Get the BoardId
             FWParser.strBoardId = FWParser.GetBoardId(FWParser.bytesLoadedFile);
             // SON

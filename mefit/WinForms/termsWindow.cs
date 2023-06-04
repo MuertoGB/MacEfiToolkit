@@ -15,7 +15,7 @@ namespace Mac_EFI_Toolkit.WinForms
     public partial class termsWindow : Form
     {
 
-        #region Overrides Properties
+        #region Overriden Properties
         protected override CreateParams CreateParams
         {
             get
@@ -80,7 +80,11 @@ namespace Mac_EFI_Toolkit.WinForms
         #region KeyDown Events
         private void termsWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape) cmdClose.PerformClick();
+            if (e.KeyCode == Keys.Escape)
+            {
+                DialogResult = DialogResult.No;
+                Close();
+            }
         }
         #endregion
 

@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit
         internal static string strDefaultOfdPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
         #region Check File Exists
-        internal static bool SettingsGetFileExists()
+        private static bool GetSettingsFileExists()
         {
             return File.Exists(strSettingsFilePath);
         }
@@ -44,22 +44,25 @@ namespace Mac_EFI_Toolkit
         #region Create File
         internal static void SettingsCreateFile()
         {
-            var ini = new IniFile(strSettingsFilePath);
-            ini.Write("Startup", "DisableVersionCheck", "False");
-            ini.Write("Application", "DisableFlashingUI", "False");
-            ini.Write("Application", "DisableConfDiag", "False");
-            ini.Write("Application", "InitialOfdPath", strDefaultOfdPath);
-            ini.Write("Firmware", "DisableLzmaFsSearch", "False");
-            ini.Write("Firmware", "DisableFsysEnforce", "False");
-            ini.Write("Firmware", "DisableDescriptorEnforce", "False");
-            ini.Write("Firmware", "AcceptedEditingTerms", "False");
+            var settingsIni = new IniFile(strSettingsFilePath);
+            settingsIni.Write("Startup", "DisableVersionCheck", "False");
+            settingsIni.Write("Application", "DisableFlashingUI", "False");
+            settingsIni.Write("Application", "DisableConfDiag", "False");
+            settingsIni.Write("Application", "InitialOfdPath", strDefaultOfdPath);
+            settingsIni.Write("Firmware", "DisableLzmaFsSearch", "False");
+            settingsIni.Write("Firmware", "DisableFsysEnforce", "False");
+            settingsIni.Write("Firmware", "DisableDescriptorEnforce", "False");
+            settingsIni.Write("Firmware", "AcceptedEditingTerms", "False");
         }
         #endregion
 
         #region Get Values
         internal static bool SettingsGetBool(SettingsBoolType settingType)
         {
-            if (!SettingsGetFileExists()) return false;
+            if (!GetSettingsFileExists())
+            {
+                return false;
+            }
 
             string section, key;
 
@@ -90,15 +93,28 @@ namespace Mac_EFI_Toolkit
                     return false;
             }
 
-            var ini = new IniFile(strSettingsFilePath);
-            if (!ini.SectionExists(section)) return false;
-            if (!ini.KeyExists(section, key)) return false;
-            return bool.Parse(ini.Read(section, key));
+            var settingsIni = new IniFile(strSettingsFilePath);
+
+            if (!settingsIni.SectionExists(section))
+            {
+                return false;
+            }
+
+            if (!settingsIni.KeyExists(section, key))
+            {
+
+                return false;
+            }
+
+            return bool.Parse(settingsIni.Read(section, key));
         }
 
         internal static string SettingsGetString(SettingsStringType settingType)
         {
-            if (!SettingsGetFileExists()) return string.Empty;
+            if (!GetSettingsFileExists())
+            {
+               return string.Empty;
+            }
 
             string section, key;
 
@@ -111,17 +127,26 @@ namespace Mac_EFI_Toolkit
                     return string.Empty;
             }
 
-            var ini = new IniFile(strSettingsFilePath);
-            if (!ini.SectionExists(section)) return string.Empty;
-            if (!ini.KeyExists(section, key)) return string.Empty;
-            return ini.Read(section, key);
+            var settingsIni = new IniFile(strSettingsFilePath);
+
+            if (!settingsIni.SectionExists(section)) {
+                return string.Empty;
+            }
+
+            if (!settingsIni.KeyExists(section, key)) {
+                return string.Empty;
+            }
+
+            return settingsIni.Read(section, key);
         }
         #endregion
 
         #region Set Values
         internal static void SettingsSetBool(SettingsBoolType settingType, bool value)
         {
-            if (!SettingsGetFileExists()) return;
+            if (!GetSettingsFileExists()) {
+                return;
+            }
 
             string section, key;
 
@@ -152,24 +177,24 @@ namespace Mac_EFI_Toolkit
                     return;
             }
 
-            var ini = new IniFile(strSettingsFilePath);
-            if (ini.SectionExists(section))
+            var settingsIni = new IniFile(strSettingsFilePath);
+
+            if (settingsIni.SectionExists(section))
             {
-                if (ini.KeyExists(section, key))
+                if (settingsIni.KeyExists(section, key))
                 {
-                    ini.Write(section, key, value.ToString());
+                    settingsIni.Write(section, key, value.ToString());
                 }
                 else
                 {
                     Logger.writeLogFile($"{section} > {key} > Key not found, setting was not written.", LogType.Application);
                 }
             }
-
         }
 
         internal static void SettingsSetString(SettingsStringType settingType, string value)
         {
-            if (!SettingsGetFileExists()) return;
+            if (!GetSettingsFileExists()) return;
 
             string section, key;
 

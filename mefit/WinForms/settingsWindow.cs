@@ -47,17 +47,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void settingsWindow_Load(object sender, EventArgs e)
         {
             lblSettingsApplied.Hide();
-            _updateControls();
-        }
-
-        private void _updateControls()
-        {
-            cbxDisableVersionCheck.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck)) ? true : false;
-            cbxDisableFlashingUI.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI)) ? true : false;
-            cbxDisableConfDiag.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag)) ? true : false;
-            cbxDisableLzmaFsSearch.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) ? true : false;
-            cbxDisableFsysEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFsysEnforce)) ? true : false;
-            cbxDisableDescriptorEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce)) ? true : false;
+            UpdateCheckBoxControls();
         }
         #endregion
 
@@ -75,12 +65,20 @@ namespace Mac_EFI_Toolkit.WinForms
         #region KeyDown Events
         private void aboutWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape) Close();
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
         }
         #endregion
 
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void cmdCloseForm_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -98,11 +96,6 @@ namespace Mac_EFI_Toolkit.WinForms
                     _strNewOfdInitialPath = fbd.SelectedPath;
                 }
             }
-        }
-
-        private void cmdCloseForm_Click(object sender, EventArgs e)
-        {
-            Close();
         }
 
         private void cmdApply_Click(object sender, EventArgs e)
@@ -126,7 +119,7 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
-            _updateControls();
+            UpdateCheckBoxControls();
             _showSettingsAppliedLabel();
         }
         #endregion
@@ -153,6 +146,18 @@ namespace Mac_EFI_Toolkit.WinForms
             lblSettingsApplied.Hide();
             _timer.Stop();
             _timer.Dispose();
+        }
+        #endregion
+
+        #region Checkbox Events
+        private void UpdateCheckBoxControls()
+        {
+            cbxDisableVersionCheck.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck)) ? true : false;
+            cbxDisableFlashingUI.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI)) ? true : false;
+            cbxDisableConfDiag.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag)) ? true : false;
+            cbxDisableLzmaFsSearch.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) ? true : false;
+            cbxDisableFsysEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFsysEnforce)) ? true : false;
+            cbxDisableDescriptorEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce)) ? true : false;
         }
         #endregion
 
