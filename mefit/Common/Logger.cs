@@ -36,9 +36,9 @@ namespace Mac_EFI_Toolkit
 
         internal static void writeLogFile(string logMessage, LogType logType)
         {
-            string strPath = GetLogFilePath(logType);
+            var pathString = GetLogFilePath(logType);
 
-            using (StreamWriter writer = new StreamWriter(strPath, true))
+            using (var writer = new StreamWriter(pathString, true))
             {
                 writer.WriteLine($"{DateTime.Now.ToString()} : {logMessage}");
             }
@@ -46,64 +46,67 @@ namespace Mac_EFI_Toolkit
 
         internal static void ViewLogFile(LogType logType)
         {
-            string strPath = GetLogFilePath(logType);
+            var pathString = GetLogFilePath(logType);
 
-            if (File.Exists(strPath)) Process.Start(strPath);
+            if (File.Exists(pathString))
+            {
+                Process.Start(pathString);
+            }
         }
 
         private static string GetLogFilePath(LogType logType)
         {
-            string logFilePath;
+            var pathString = string.Empty;
 
             switch (logType)
             {
                 case LogType.Application:
-                    logFilePath = strLogFilePath;
+                    pathString = strLogFilePath;
                     break;
                 case LogType.Database:
-                    logFilePath = strDbReportPath;
+                    pathString = strDbReportPath;
                     break;
                 default:
-                    logFilePath = strLogFilePath;
+                    pathString = strLogFilePath;
                     break;
             }
 
-            return logFilePath;
+            return pathString;
         }
 
-        public static void WriteLogTypeTextToRtb(string text, RtbLogPrefix prefix, RichTextBox richTextBox)
+        internal static void WriteLogTypeTextToRtb(string logText, RtbLogPrefix prefixType, RichTextBox richTextBox)
         {
             Color prefixColor;
-            string logTypeText = string.Empty;
+            string prefixString = string.Empty;
 
-            switch (prefix)
+            switch (prefixType)
             {
                 case RtbLogPrefix.MET:
-                    logTypeText = $"[MET]: ";
+                    prefixString = $"[MET]: ";
                     prefixColor = Color.FromArgb(0, 200, 0); // Green
                     break;
                 case RtbLogPrefix.Info:
-                    logTypeText = $"[INF]: ";
+                    prefixString = $"[INF]: ";
                     prefixColor = Color.FromArgb(0, 122, 204); // Blue
                     break;
                 case RtbLogPrefix.Warn:
-                    logTypeText = $"[WRN]: ";
+                    prefixString = $"[WRN]: ";
                     prefixColor = Color.FromArgb(255, 165, 0); // Orange
                     break;
                 case RtbLogPrefix.Error:
-                    logTypeText = $"[ERR]: ";
+                    prefixString = $"[ERR]: ";
                     prefixColor = Color.FromArgb(255, 51, 51); // Red
                     break;
                 default:
-                    logTypeText = $"[INF]: ";
+                    prefixString = $"[INF]: ";
                     prefixColor = Color.White;
                     break;
             }
 
-            richTextBox.AppendText(logTypeText);
-            richTextBox.Select(richTextBox.TextLength - logTypeText.Length, logTypeText.Length - 1);
+            richTextBox.AppendText(prefixString);
+            richTextBox.Select(richTextBox.TextLength - prefixString.Length, prefixString.Length - 1);
             richTextBox.SelectionColor = prefixColor;
-            richTextBox.AppendText(text + Environment.NewLine);
+            richTextBox.AppendText(logText + Environment.NewLine);
             richTextBox.ScrollToCaret();
         }
 

@@ -85,7 +85,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         internal async void CheckHwcAsync(string strHwc)
         {
-            var configCode = await EFIUtils.GetStringConfigCodeAsync(strHwc);
+            var configCode = await EFIUtils.GetDeviceConfigCodeAsync(strHwc);
 
             if (configCode == "N/A")
             {
@@ -238,7 +238,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (textLength == FWParser.strSerialNumber.Length)
             {
-                if (EFIUtils.GetBoolIsValidSerialChars(tb.Text))
+                if (EFIUtils.GetIsValidSerialChars(tb.Text))
                 {
                     UpdateTextBoxColor(tb, Colours.clrGood);
                     Logger.WriteLogTypeTextToRtb("Valid serial characters entered.", RtbLogPrefix.Info, rtbLog);
@@ -285,20 +285,20 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTypeTextToRtb("Validating donor Fsys region...", RtbLogPrefix.MET, rtbLog);
 
-            if (bytesIn.Length != FWParser.intFsysRegionExactSize)
+            if (bytesIn.Length != FWParser.intFsysRegionSize)
             {
                 Logger.WriteLogTypeTextToRtb($"Filesize: {bytesIn.Length:X2}h, expected 800h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            long lSigPos = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.FSYS_SIG);
+            long lSigPos = BinaryUtils.GetOffset(bytesIn, FSSignatures.FSYS_SIG);
             if (lSigPos == -1 || lSigPos != 0)
             {
                 Logger.WriteLogTypeTextToRtb(lSigPos == -1 ? "Fsys signature not found." : $"Fsys signature misaligned at {lSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            string strSerial = FWParser.GetFsysRegionSerialNumber(bytesIn);
+            string strSerial = FWParser.GetFsysSerialNumber(bytesIn);
             int lenSerial = strSerial.Length;
             string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
 
@@ -308,8 +308,8 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTypeTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
             CheckHwcAsync(strHwc);
 
-            string strCrcInFile = FWParser.GetFsysRegionCRC32(bytesIn);
-            string strCrcCalculated = EFIUtils.GetUintCalculateFsysCrc32(bytesIn).ToString("X8");
+            string strCrcInFile = FWParser.GetFsysCrc32(bytesIn);
+            string strCrcCalculated = EFIUtils.GetUintFsysCrc32(bytesIn).ToString("X8");
 
             Logger.WriteLogTypeTextToRtb($"CRC in Fsys: {strCrcInFile}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTypeTextToRtb($"CRC Calc:    {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
@@ -333,7 +333,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTypeTextToRtb($"Detect NVRAM stores...", RtbLogPrefix.MET, rtbLog);
 
-            NvramStoreData vssStore = FWParser.GetNvramStoreInfo(FWParser.bytesLoadedFile, NVRAMStoreType.VSS);
+            NvramStoreData vssStore = FWParser.GetNvramStoreData(FWParser.bytesLoadedFile, NvramStoreType.VSS);
             if (vssStore.PrimaryStoreOffset != -1)
             {
                 _primaryVssOffset = vssStore.PrimaryStoreOffset;
@@ -357,7 +357,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 lblVssChevRight.Visible = false;
             }
 
-            NvramStoreData svsStore = FWParser.GetNvramStoreInfo(FWParser.bytesLoadedFile, NVRAMStoreType.SVS);
+            NvramStoreData svsStore = FWParser.GetNvramStoreData(FWParser.bytesLoadedFile, NvramStoreType.SVS);
             if (svsStore.PrimaryStoreOffset != -1)
             {
                 _primarySvsOffset = svsStore.PrimaryStoreOffset;
@@ -381,7 +381,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 lblSvsChevRight.Visible = false;
             }
 
-            NvramStoreData nssStore = FWParser.GetNvramStoreInfo(FWParser.bytesLoadedFile, NVRAMStoreType.NSS);
+            NvramStoreData nssStore = FWParser.GetNvramStoreData(FWParser.bytesLoadedFile, NvramStoreType.NSS);
 
             if (nssStore.PrimaryStoreOffset != -1)
             {

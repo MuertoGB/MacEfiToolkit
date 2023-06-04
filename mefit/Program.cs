@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static string strAppBuild = $"{Application.ProductVersion}-230523-ms5";
+        internal static string strAppBuild = $"{Application.ProductVersion}-230604-ms5";
         internal static string strAppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string strAppName = Assembly.GetExecutingAssembly().Location;
         internal static string strDraggedFile = string.Empty;
@@ -30,7 +30,7 @@ namespace Mac_EFI_Toolkit
         internal static string strRememberPath = string.Empty;
 
         #region Private Members
-        private static NativeMethods.LowLevelKeyboardProc _proc = HookCallback;
+        private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
         private static IntPtr _hookId = IntPtr.Zero;
         private static GCHandle _hookHandle;
         #endregion
@@ -117,12 +117,12 @@ namespace Mac_EFI_Toolkit
 
         #region Hooks
         // Register the keyboard hook.
-        internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc proc)
+        internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc kbProc)
         {
             using (Process process = Process.GetCurrentProcess())
             using (ProcessModule module = process.MainModule)
             {
-                return NativeMethods.SetWindowsHookExA(WH_KEYBOARD_LL, proc, NativeMethods.GetModuleHandleA(module.ModuleName), 0);
+                return NativeMethods.SetWindowsHookExA(WH_KEYBOARD_LL, kbProc, NativeMethods.GetModuleHandleA(module.ModuleName), 0);
             }
         }
 
@@ -143,9 +143,9 @@ namespace Mac_EFI_Toolkit
 
         private static void HookKeyboard()
         {
-            _proc = HookCallback;
-            _hookHandle = GCHandle.Alloc(_proc);
-            _hookId = SetHook(_proc);
+            _kbProc = HookCallback;
+            _hookHandle = GCHandle.Alloc(_kbProc);
+            _hookId = SetHook(_kbProc);
         }
 
         private static void UnhookKeyboard()

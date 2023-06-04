@@ -25,45 +25,47 @@ namespace Mac_EFI_Toolkit.Common
         internal ushort FlashCycleLimit;
         internal uint UmaSize;
         internal uint Flags;
-        internal ushort Major;
-        internal ushort Minor;
-        internal ushort Hotfix;
-        internal ushort Build;
+        internal ushort FitcMajor;
+        internal ushort FitcMinor;
+        internal ushort FitcHotfix;
+        internal ushort FitcBuild;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct Mn2PartialHeader
     {
-        // Right now we don't care about the pre-signature stuff, only the ME Version.
+        // Right now we only care about the ME version.
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal char[] Signature;
         internal uint NumEntries;
-        internal ushort Major;
-        internal ushort Minor;
-        internal ushort Hotfix;
-        internal ushort Build;
+        internal ushort EngineMajor;
+        internal ushort EngineMinor;
+        internal ushort EngineHotfix;
+        internal ushort EngineBuild;
     }
     #endregion
 
     class MEParser
     {
-        internal static string GetFITCVersion(byte[] bytesIn)
+        internal static string GetFitcVersion(byte[] bytesIn)
         {
-            var offset = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.FPT_HEADER_SIG);
-            if (offset == -1) return "N/A";
-            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, offset, 0x20);
+            var fptOffset = BinaryUtils.GetOffset(bytesIn, FSSignatures.FPT_HEADER_SIG);
+            if (fptOffset == -1) return "N/A";
+            var readLength = 0x20;
+            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, fptOffset, readLength);
             if (headerBytes == null) return "N/A";
-            var header = Helper.DeserializeHeader<FptHeader>(headerBytes);
-            return $"{header.Major}.{header.Minor}.{header.Hotfix}.{header.Build}";
+            var fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
+            return $"{fptHeader.FitcMajor}.{fptHeader.FitcMinor}.{fptHeader.FitcHotfix}.{fptHeader.FitcBuild}";
         }
-        internal static string GetMEVersion(byte[] bytesIn)
+        internal static string GetManagementEngineVersion(byte[] bytesIn)
         {
-            var offset = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.MN2_SIG);
-            if (offset == -1) return "N/A";
-            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, offset, 0x10);
+            var mn2Offset = BinaryUtils.GetOffset(bytesIn, FSSignatures.MN2_SIG);
+            if (mn2Offset == -1) return "N/A";
+            var readLength = 0x10;
+            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, mn2Offset, readLength);
             if (headerBytes == null) return "N/A";
-            var header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
-            return $"{header.Major}.{header.Minor}.{header.Hotfix}.{header.Build}";
+            var mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
+            return $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
         }
     }
 }

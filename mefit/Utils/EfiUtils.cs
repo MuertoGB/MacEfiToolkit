@@ -24,9 +24,9 @@ namespace Mac_EFI_Toolkit.Utils
         /// Prioritizes retrieving data from the embedded XML db. 
         /// Falls back to retrieving data from the Apple server if not found in the XML resource.
         /// </summary>
-        /// <param name="strHwc">The HWC identifier to retrieve a model string for.</param>
+        /// <param name="hwcString">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static async Task<string> GetStringConfigCodeAsync(string strHwc)
+        internal static async Task<string> GetDeviceConfigCodeAsync(string hwcString)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Mac_EFI_Toolkit.Utils
                 {
                     var xmlDoc = XDocument.Load(stream);
                     var name = xmlDoc.Descendants("section")
-                        .FirstOrDefault(e => e.Element("cfgCode")?.Value == strHwc)
+                        .FirstOrDefault(e => e.Element("cfgCode")?.Value == hwcString)
                         ?.Element("model")?.Value;
 
                     if (!string.IsNullOrEmpty(name))
@@ -46,8 +46,8 @@ namespace Mac_EFI_Toolkit.Utils
                 }
 
                 // Retrieve data from the Apple server
-                var url = $"http://support-sp.apple.com/sp/product?cc={strHwc}";
-                if (!NetUtils.GetBoolIsWebsiteAvailable(url))
+                var url = $"http://support-sp.apple.com/sp/product?cc={hwcString}";
+                if (!NetUtils.GetIsWebsiteAvailable(url))
                 {
                     return "Unvailable";
                 }
@@ -58,7 +58,7 @@ namespace Mac_EFI_Toolkit.Utils
 
                 if (data != null)
                 {
-                    Logger.writeLogFile($"'{strHwc}' not present in local db > Server returned: '{data}'", LogType.Database);
+                    Logger.writeLogFile($"'{hwcString}' not present in local db > Server returned: '{data}'", LogType.Database);
                 }
 
                 return data ?? "N/A";
@@ -71,16 +71,16 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Checks if a given integer size is a valid size for a firmware image.
         /// </summary>
-        /// <param name="sizeIn">The integer size to check.</param>
+        /// <param name="size">The integer size to check.</param>
         /// <returns>True if the size is valid, otherwise false.</returns>
-        internal static bool GetBoolIsValidBinSize(int sizeIn)
+        internal static bool GetIsValidBinSize(int size)
         {
             int expectedSize = FWParser.intMinROMSize;
             int maxSize = FWParser.intMaxROMSize;
 
             while (expectedSize <= maxSize)
             {
-                if (sizeIn == expectedSize)
+                if (size == expectedSize)
                 {
                     return true;
                 }
@@ -91,26 +91,26 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Checks if a given input string contains only valid characters for a serial number.
         /// </summary>
-        /// <param name="input">The serial number string to check.</param>
+        /// <param name="charString">The serial number string to check.</param>
         /// <returns>True if the input string contains only valid characters, otherwise false.</returns>
-        internal static bool GetBoolIsValidSerialChars(string input)
+        internal static bool GetIsValidSerialChars(string charString)
         {
-            return Regex.IsMatch(input, "^[0-9A-Z]+$");
+            return Regex.IsMatch(charString, "^[0-9A-Z]+$");
         }
         /// <summary>
         /// Calculates an Fsys region CRC32 checksum.
         /// </summary>
-        /// /// <param name="bytesIn">The Fsys region to calcuate the CRC32 for.</param>
+        /// /// <param name="fsysBytes">The Fsys region to calcuate the CRC32 for.</param>
         /// <returns>The calculated Fsys CRC32 uint</returns>
-        internal static uint GetUintCalculateFsysCrc32(byte[] bytesIn)
+        internal static uint GetUintFsysCrc32(byte[] fsysBytes)
         {
             // Data we calculate is: Sig base + 0x800h - crc len of 0x4h = 7FCh
             byte[] bytesTempFsys = new byte[0x7FC];
 
-            if (bytesIn != null)
+            if (fsysBytes != null)
             {
-                Array.Copy(bytesIn, 0, bytesTempFsys, 0, bytesTempFsys.Length);
-                return FileUtils.GetUintCrc32FromBytes(bytesTempFsys);
+                Array.Copy(fsysBytes, 0, bytesTempFsys, 0, bytesTempFsys.Length);
+                return FileUtils.GetUintCrc32(bytesTempFsys);
             }
 
             return 0xFFFFFFFF;
