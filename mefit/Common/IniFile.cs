@@ -45,8 +45,17 @@ namespace Mac_EFI_Toolkit.Common
 
         internal bool SectionExists(string section)
         {
-            string[] sectionnames = GetSectionNames(_strFilePath);
-            foreach (string s in sectionnames) if (s == section) return true;
+            string[] sectionNames = GetSectionNames(_strFilePath);
+            if (sectionNames != null)
+            {
+                foreach (string s in sectionNames)
+                {
+                    if (s == section)
+                    {
+                        return true;
+                    }
+                }
+            }
             return false;
         }
 

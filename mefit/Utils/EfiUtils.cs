@@ -58,7 +58,7 @@ namespace Mac_EFI_Toolkit.Utils
 
                 if (data != null)
                 {
-                    Logger.writeLogFile($"'{hwcString}' not present in local db > Server returned: '{data}'", LogType.Database);
+                    Logger.WriteToLogFile($"'{hwcString}' not present in local db > Server returned: '{data}'", LogType.Database);
                 }
 
                 return data ?? "N/A";

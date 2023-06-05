@@ -198,7 +198,7 @@ namespace Mac_EFI_Toolkit
             string message = e.Message.ToString();
             string exception = e.ToString();
 
-            Logger.writeLogFile($"{type}:- {message}\r\n\r\n{exception}\r\n\r\n -------------------", LogType.Application);
+            Logger.WriteToLogFile($"{type}:- {message}\r\n\r\n{exception}\r\n\r\n -------------------", LogType.Application);
 
             DialogResult result = MessageBox.Show(message + "\r\n\r\n" + exception + "\r\n\r\n" + "Quit application?",
                 type, MessageBoxButtons.YesNo, MessageBoxIcon.Error);

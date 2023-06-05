@@ -34,7 +34,7 @@ namespace Mac_EFI_Toolkit
         internal static readonly string strLogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mefit.log");
         internal static readonly string strDbReportPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dbreport.log");
 
-        internal static void writeLogFile(string logMessage, LogType logType)
+        internal static void WriteToLogFile(string logMessage, LogType logType)
         {
             var pathString = GetLogFilePath(logType);
 
