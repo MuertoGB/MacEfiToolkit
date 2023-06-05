@@ -18,6 +18,7 @@
 > - Ability to replace the serial number with automatic HWC and CRC32 masking.
 > - Ability to clear the NVRAM (SVS, VSS, NSS) sections whilst preserving section headers.
 - Added firmware editing terms window.
+- New models added to database.
 
 #### Enhancements:
 - UI improvements.
