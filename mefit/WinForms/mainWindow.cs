@@ -335,10 +335,28 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void cmdReload_Click(object sender, EventArgs e)
+        {
+            var fileBytes = File.ReadAllBytes(FWParser.strLoadedBinaryFilePath);
+            var shaOnDisk = FileUtils.GetSha256Digest(fileBytes);
+            var shaInMemory = FileUtils.GetSha256Digest(FWParser.bytesLoadedFile);
+
+            if (!string.Equals(shaOnDisk, shaInMemory))
+            {
+                OpenBinary(FWParser.strLoadedBinaryFilePath);
+            }
+            else
+            {
+                METMessageBox.Show(this, "MET", "File on disk matches file in memory. Data was not refreshed.", MsgType.Information, MsgButton.Okay);
+            }
+        }
+
         private void SetButtonProperties()
         {
             cmdMenu.Font = Program.FONT_MDL2_REG_14;
             cmdMenu.Text = "\xE169";
+            cmdReload.Font = Program.FONT_MDL2_REG_9;
+            cmdReload.Text = "\xE72C";
             cmdExportFsysBlock.Font = Program.FONT_MDL2_REG_9;
             cmdExportFsysBlock.Text = "\xE74E";
             cmdFixFsysCrc.Font = Program.FONT_MDL2_REG_9;
@@ -417,6 +435,8 @@ namespace Mac_EFI_Toolkit
 
         private void SetTipHandlers()
         {
+            cmdReload.MouseEnter += HandleMouseEnterTip;
+            cmdReload.MouseLeave += HandleMouseLeaveTip;
             cmdExportFsysBlock.MouseEnter += HandleMouseEnterTip;
             cmdExportFsysBlock.MouseLeave += HandleMouseLeaveTip;
             cmdFixFsysCrc.MouseEnter += HandleMouseEnterTip;
@@ -433,7 +453,10 @@ namespace Mac_EFI_Toolkit
 
         private void HandleMouseEnterTip(object sender, EventArgs e)
         {
-            if (sender == cmdExportFsysBlock)
+
+            if (sender == cmdReload)
+                lblMessage.Text = "Reload open file from disk";
+            else if (sender == cmdExportFsysBlock)
                 lblMessage.Text = "Export Fsys Region";
             else if (sender == cmdFixFsysCrc)
                 lblMessage.Text = "Repair Fsys CRC32";
@@ -472,7 +495,7 @@ namespace Mac_EFI_Toolkit
         #region Misc Events
         private void ToggleControlEnable(bool enable)
         {
-            Button[] buttons = { cmdReset, cmdEditEfirom, cmdExportFsysBlock, cmdEveryMacSearch };
+            Button[] buttons = { cmdReload, cmdReset, cmdEditEfirom, cmdExportFsysBlock, cmdEveryMacSearch };
             foreach (Button button in buttons)
             {
                 button.Enabled = (enable) ? true : false;
@@ -583,7 +606,7 @@ namespace Mac_EFI_Toolkit
             // Size
             FWParser.lLoadedFileSize = fileInfo.Length;
             // File CRC32
-            FWParser.uiCrcOfLoadedFile = FileUtils.GetUintCrc32(FWParser.bytesLoadedFile);
+            FWParser.uiCrcOfLoadedFile = FileUtils.GetCrc32Digest(FWParser.bytesLoadedFile);
             // Created time
             FWParser.strCreationTime = $"{creationTime}";
             // Modified time
@@ -672,6 +695,8 @@ namespace Mac_EFI_Toolkit
 
         private void OpenBinary(string filePath)
         {
+            ToggleControlEnable(false);
+
             FWParser.strLoadedBinaryFilePath = filePath;
             FWParser.strFilenameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
             FWParser.bytesLoadedFile = File.ReadAllBytes(filePath);
@@ -682,7 +707,6 @@ namespace Mac_EFI_Toolkit
 
             if (GetIsValidFirmware())
             {
-                ToggleControlEnable(false);
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
                 ParseFirmwareData();
             }

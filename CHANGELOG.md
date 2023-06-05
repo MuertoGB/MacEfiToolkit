@@ -19,6 +19,7 @@
 > - Ability to clear the NVRAM (SVS, VSS, NSS) sections whilst preserving section headers.
 - Added firmware editing terms window.
 - New models added to database.
+- Added option to reload the currently open file, in case external changes are made.
 
 #### Enhancements:
 - UI improvements.

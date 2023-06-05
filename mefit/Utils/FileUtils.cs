@@ -13,28 +13,24 @@ namespace Mac_EFI_Toolkit.Utils
     class FileUtils
     {
         /// <summary>
-        /// Calculates the MD5 hash of a byte array.
+        /// Calculates the SHA256 hash of a byte array.
         /// </summary>
         /// <param name="sourceBytes">The byte array to calculate the hash for.</param>
-        /// <returns>The MD5 hash of the byte array.</returns>
-        internal static string GetStringMd5(byte[] sourceBytes)
+        /// <returns>The SHA256 checksum of the byte array.</returns>
+        internal static string GetSha256Digest(byte[] sourceBytes)
         {
-            using (var md5 = MD5.Create())
+            using (var provider = SHA256.Create())
             {
-                var hashBytes = md5.ComputeHash(sourceBytes);
-                return BitConverter.ToString(hashBytes).Replace("-", "");
+                var digestBytes = provider.ComputeHash(sourceBytes);
+                return BitConverter.ToString(digestBytes).Replace("-", "");
             }
         }
-        // Updated _uintGetCrc32FromBytes
-        // Note that this version of the code uses the two's complement trick to conditionally XOR
-        // the polynomial with the current value of the CRC32 register, the original code explicitly
-        // initializes a lookup table for the CRC32 calculation; there may be a performance hit?
         /// <summary>
         /// Calculates the CRC32 checksum of a byte array. 
         /// </summary>
         /// <param name="sourceBytes">The byte array to calculate the checksum for.</param>
         /// <returns>The CRC32 checksum of the byte array.</returns>
-        internal static uint GetUintCrc32(byte[] sourceBytes)
+        internal static uint GetCrc32Digest(byte[] sourceBytes)
         {
             const uint polynomial = 0xEDB88320;
             uint crc = 0xFFFFFFFF;
@@ -46,6 +42,7 @@ namespace Mac_EFI_Toolkit.Utils
                     crc = (uint)((crc >> 1) ^ (polynomial & -(crc & 1)));
                 }
             }
+
             return crc ^ 0xFFFFFFFF;
         }
         /// <summary>

@@ -47,7 +47,6 @@ namespace Mac_EFI_Toolkit
             this.lblFileText = new System.Windows.Forms.Label();
             this.lblSerialText = new System.Windows.Forms.Label();
             this.lblPlatformText = new System.Windows.Forms.Label();
-            this.lblFilename = new System.Windows.Forms.Label();
             this.lblSizeBytesText = new System.Windows.Forms.Label();
             this.tlpMe = new System.Windows.Forms.TableLayoutPanel();
             this.lblMeVersion = new System.Windows.Forms.Label();
@@ -77,6 +76,9 @@ namespace Mac_EFI_Toolkit
             this.lblSon = new System.Windows.Forms.Label();
             this.lblSonText = new System.Windows.Forms.Label();
             this.lblBoardId = new System.Windows.Forms.Label();
+            this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
+            this.cmdReload = new System.Windows.Forms.Button();
+            this.lblFilename = new System.Windows.Forms.Label();
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.cmdEditEfirom = new System.Windows.Forms.Button();
             this.cmdReset = new System.Windows.Forms.Button();
@@ -118,6 +120,7 @@ namespace Mac_EFI_Toolkit
             this.tlpSizeCrcLabels.SuspendLayout();
             this.tlpEfiRom.SuspendLayout();
             this.tlpBidSon.SuspendLayout();
+            this.tlpFilename.SuspendLayout();
             this.cmsMainMenu.SuspendLayout();
             this.pnlTitle.SuspendLayout();
             this.tlpVersionLabel.SuspendLayout();
@@ -152,7 +155,6 @@ namespace Mac_EFI_Toolkit
             this.tlpMain.Controls.Add(this.lblFileText, 0, 0);
             this.tlpMain.Controls.Add(this.lblSerialText, 0, 8);
             this.tlpMain.Controls.Add(this.lblPlatformText, 0, 6);
-            this.tlpMain.Controls.Add(this.lblFilename, 2, 0);
             this.tlpMain.Controls.Add(this.lblSizeBytesText, 0, 2);
             this.tlpMain.Controls.Add(this.tlpMe, 2, 14);
             this.tlpMain.Controls.Add(this.lblFitcVersionText, 0, 14);
@@ -164,6 +166,7 @@ namespace Mac_EFI_Toolkit
             this.tlpMain.Controls.Add(this.tlpEfiRom, 2, 10);
             this.tlpMain.Controls.Add(this.lblBoardIdText, 0, 16);
             this.tlpMain.Controls.Add(this.tlpBidSon, 2, 16);
+            this.tlpMain.Controls.Add(this.tlpFilename, 2, 0);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMain.Enabled = false;
             this.tlpMain.Location = new System.Drawing.Point(0, 2);
@@ -191,7 +194,7 @@ namespace Mac_EFI_Toolkit
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMain.Size = new System.Drawing.Size(704, 291);
-            this.tlpMain.TabIndex = 4;
+            this.tlpMain.TabIndex = 3;
             // 
             // lblCreatedText
             // 
@@ -226,7 +229,7 @@ namespace Mac_EFI_Toolkit
             this.tlpCreatedModified.RowCount = 1;
             this.tlpCreatedModified.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpCreatedModified.Size = new System.Drawing.Size(553, 30);
-            this.tlpCreatedModified.TabIndex = 96;
+            this.tlpCreatedModified.TabIndex = 1;
             // 
             // lblModified
             // 
@@ -291,7 +294,7 @@ namespace Mac_EFI_Toolkit
             this.tlpSerialHwc.RowCount = 1;
             this.tlpSerialHwc.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSerialHwc.Size = new System.Drawing.Size(553, 30);
-            this.tlpSerialHwc.TabIndex = 95;
+            this.tlpSerialHwc.TabIndex = 3;
             // 
             // lblHwc
             // 
@@ -356,8 +359,8 @@ namespace Mac_EFI_Toolkit
             this.cmdEveryMacSearch.Margin = new System.Windows.Forms.Padding(0);
             this.cmdEveryMacSearch.Name = "cmdEveryMacSearch";
             this.cmdEveryMacSearch.Size = new System.Drawing.Size(30, 30);
-            this.cmdEveryMacSearch.TabIndex = 5;
-            this.cmdEveryMacSearch.Text = "S";
+            this.cmdEveryMacSearch.TabIndex = 4;
+            this.cmdEveryMacSearch.Text = "C";
             this.cmdEveryMacSearch.UseVisualStyleBackColor = false;
             this.cmdEveryMacSearch.Click += new System.EventHandler(this.cmdSerialCheck_Click);
             // 
@@ -373,7 +376,7 @@ namespace Mac_EFI_Toolkit
             this.lblSerialNumber.Name = "lblSerialNumber";
             this.lblSerialNumber.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblSerialNumber.Size = new System.Drawing.Size(169, 30);
-            this.lblSerialNumber.TabIndex = 10;
+            this.lblSerialNumber.TabIndex = 0;
             this.lblSerialNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblFileText
@@ -421,21 +424,6 @@ namespace Mac_EFI_Toolkit
             this.lblPlatformText.Text = "Platform";
             this.lblPlatformText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblFilename
-            // 
-            this.lblFilename.AutoEllipsis = true;
-            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
-            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFilename.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblFilename.Location = new System.Drawing.Point(151, 1);
-            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFilename.Size = new System.Drawing.Size(553, 36);
-            this.lblFilename.TabIndex = 4;
-            this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // lblSizeBytesText
             // 
             this.lblSizeBytesText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
@@ -469,7 +457,7 @@ namespace Mac_EFI_Toolkit
             this.tlpMe.RowCount = 1;
             this.tlpMe.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpMe.Size = new System.Drawing.Size(553, 30);
-            this.tlpMe.TabIndex = 23;
+            this.tlpMe.TabIndex = 7;
             // 
             // lblMeVersion
             // 
@@ -549,7 +537,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFsysApfs.RowCount = 1;
             this.tlpFsysApfs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFsysApfs.Size = new System.Drawing.Size(553, 30);
-            this.tlpFsysApfs.TabIndex = 24;
+            this.tlpFsysApfs.TabIndex = 5;
             // 
             // lblApfsCapable
             // 
@@ -633,7 +621,7 @@ namespace Mac_EFI_Toolkit
             this.cmdFixFsysCrc.Margin = new System.Windows.Forms.Padding(0);
             this.cmdFixFsysCrc.Name = "cmdFixFsysCrc";
             this.cmdFixFsysCrc.Size = new System.Drawing.Size(30, 30);
-            this.cmdFixFsysCrc.TabIndex = 4;
+            this.cmdFixFsysCrc.TabIndex = 6;
             this.cmdFixFsysCrc.Text = "F";
             this.cmdFixFsysCrc.UseVisualStyleBackColor = false;
             this.cmdFixFsysCrc.Click += new System.EventHandler(this.cmdFixFsysCrc_Click);
@@ -654,7 +642,7 @@ namespace Mac_EFI_Toolkit
             this.cmdExportFsysBlock.Margin = new System.Windows.Forms.Padding(0);
             this.cmdExportFsysBlock.Name = "cmdExportFsysBlock";
             this.cmdExportFsysBlock.Size = new System.Drawing.Size(30, 30);
-            this.cmdExportFsysBlock.TabIndex = 3;
+            this.cmdExportFsysBlock.TabIndex = 5;
             this.cmdExportFsysBlock.Text = "E";
             this.cmdExportFsysBlock.UseVisualStyleBackColor = false;
             this.cmdExportFsysBlock.Click += new System.EventHandler(this.cmdExportFsysBlock_Click);
@@ -707,7 +695,7 @@ namespace Mac_EFI_Toolkit
             this.tlpSizeCrcLabels.RowCount = 1;
             this.tlpSizeCrcLabels.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpSizeCrcLabels.Size = new System.Drawing.Size(553, 30);
-            this.tlpSizeCrcLabels.TabIndex = 22;
+            this.tlpSizeCrcLabels.TabIndex = 0;
             // 
             // lblFileChecksum
             // 
@@ -787,7 +775,7 @@ namespace Mac_EFI_Toolkit
             this.tlpEfiRom.RowCount = 1;
             this.tlpEfiRom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpEfiRom.Size = new System.Drawing.Size(553, 30);
-            this.tlpEfiRom.TabIndex = 18;
+            this.tlpEfiRom.TabIndex = 4;
             // 
             // lblEfiVersion
             // 
@@ -867,7 +855,7 @@ namespace Mac_EFI_Toolkit
             this.tlpBidSon.RowCount = 1;
             this.tlpBidSon.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpBidSon.Size = new System.Drawing.Size(553, 30);
-            this.tlpBidSon.TabIndex = 95;
+            this.tlpBidSon.TabIndex = 8;
             // 
             // lblSon
             // 
@@ -914,6 +902,58 @@ namespace Mac_EFI_Toolkit
             this.lblBoardId.TabIndex = 11;
             this.lblBoardId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // tlpFilename
+            // 
+            this.tlpFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.tlpFilename.ColumnCount = 2;
+            this.tlpFilename.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilename.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tlpFilename.Controls.Add(this.cmdReload, 0, 0);
+            this.tlpFilename.Controls.Add(this.lblFilename, 0, 0);
+            this.tlpFilename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilename.Location = new System.Drawing.Point(151, 1);
+            this.tlpFilename.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilename.Name = "tlpFilename";
+            this.tlpFilename.RowCount = 1;
+            this.tlpFilename.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilename.Size = new System.Drawing.Size(553, 36);
+            this.tlpFilename.TabIndex = 97;
+            // 
+            // cmdReload
+            // 
+            this.cmdReload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.cmdReload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdReload.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.cmdReload.FlatAppearance.BorderSize = 0;
+            this.cmdReload.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(92)))), ((int)(((byte)(99)))));
+            this.cmdReload.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.cmdReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdReload.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdReload.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(235)))), ((int)(((byte)(245)))));
+            this.cmdReload.Location = new System.Drawing.Point(517, 0);
+            this.cmdReload.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdReload.Name = "cmdReload";
+            this.cmdReload.Size = new System.Drawing.Size(36, 36);
+            this.cmdReload.TabIndex = 7;
+            this.cmdReload.Text = "R";
+            this.cmdReload.UseVisualStyleBackColor = false;
+            this.cmdReload.Click += new System.EventHandler(this.cmdReload_Click);
+            // 
+            // lblFilename
+            // 
+            this.lblFilename.AutoEllipsis = true;
+            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFilename.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblFilename.Location = new System.Drawing.Point(0, 0);
+            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFilename.Name = "lblFilename";
+            this.lblFilename.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblFilename.Size = new System.Drawing.Size(517, 36);
+            this.lblFilename.TabIndex = 5;
+            this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // pnlSeperator
             // 
             this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
@@ -939,7 +979,7 @@ namespace Mac_EFI_Toolkit
             this.cmdEditEfirom.Margin = new System.Windows.Forms.Padding(0);
             this.cmdEditEfirom.Name = "cmdEditEfirom";
             this.cmdEditEfirom.Size = new System.Drawing.Size(100, 38);
-            this.cmdEditEfirom.TabIndex = 2;
+            this.cmdEditEfirom.TabIndex = 3;
             this.cmdEditEfirom.Text = "EDIT ROM";
             this.cmdEditEfirom.UseVisualStyleBackColor = false;
             this.cmdEditEfirom.Click += new System.EventHandler(this.cmdEditEfirom_Click);
@@ -959,7 +999,7 @@ namespace Mac_EFI_Toolkit
             this.cmdReset.Margin = new System.Windows.Forms.Padding(0);
             this.cmdReset.Name = "cmdReset";
             this.cmdReset.Size = new System.Drawing.Size(80, 38);
-            this.cmdReset.TabIndex = 1;
+            this.cmdReset.TabIndex = 2;
             this.cmdReset.Text = "RESET";
             this.cmdReset.UseVisualStyleBackColor = false;
             this.cmdReset.Click += new System.EventHandler(this.cmdResetUnload_Click);
@@ -979,7 +1019,7 @@ namespace Mac_EFI_Toolkit
             this.cmdOpenBin.Margin = new System.Windows.Forms.Padding(0);
             this.cmdOpenBin.Name = "cmdOpenBin";
             this.cmdOpenBin.Size = new System.Drawing.Size(80, 38);
-            this.cmdOpenBin.TabIndex = 0;
+            this.cmdOpenBin.TabIndex = 1;
             this.cmdOpenBin.Text = "OPEN";
             this.cmdOpenBin.UseVisualStyleBackColor = false;
             this.cmdOpenBin.Click += new System.EventHandler(this.cmdOpenBin_Click);
@@ -1091,7 +1131,7 @@ namespace Mac_EFI_Toolkit
             this.tlpVersionLabel.RowCount = 1;
             this.tlpVersionLabel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpVersionLabel.Size = new System.Drawing.Size(65, 50);
-            this.tlpVersionLabel.TabIndex = 15;
+            this.tlpVersionLabel.TabIndex = 99;
             // 
             // lblVersion
             // 
@@ -1125,7 +1165,7 @@ namespace Mac_EFI_Toolkit
             this.cmdMenu.Name = "cmdMenu";
             this.cmdMenu.Padding = new System.Windows.Forms.Padding(2, 0, 0, 1);
             this.cmdMenu.Size = new System.Drawing.Size(50, 50);
-            this.cmdMenu.TabIndex = 6;
+            this.cmdMenu.TabIndex = 0;
             this.cmdMenu.Text = "S";
             this.cmdMenu.UseVisualStyleBackColor = false;
             this.cmdMenu.Click += new System.EventHandler(this.cmdMenu_Click);
@@ -1143,7 +1183,7 @@ namespace Mac_EFI_Toolkit
             this.tlpMainIcon.RowCount = 1;
             this.tlpMainIcon.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMainIcon.Size = new System.Drawing.Size(45, 50);
-            this.tlpMainIcon.TabIndex = 12;
+            this.tlpMainIcon.TabIndex = 99;
             // 
             // pbxTitleLogo
             // 
@@ -1176,7 +1216,7 @@ namespace Mac_EFI_Toolkit
             this.cmdMin.Name = "cmdMin";
             this.cmdMin.Padding = new System.Windows.Forms.Padding(2, 0, 0, 1);
             this.cmdMin.Size = new System.Drawing.Size(50, 50);
-            this.cmdMin.TabIndex = 0;
+            this.cmdMin.TabIndex = 99;
             this.cmdMin.TabStop = false;
             this.cmdMin.Text = "—";
             this.cmdMin.UseVisualStyleBackColor = false;
@@ -1198,7 +1238,7 @@ namespace Mac_EFI_Toolkit
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 0, 0, 1);
             this.cmdClose.Size = new System.Drawing.Size(50, 50);
-            this.cmdClose.TabIndex = 0;
+            this.cmdClose.TabIndex = 99;
             this.cmdClose.TabStop = false;
             this.cmdClose.Text = "✕";
             this.cmdClose.UseVisualStyleBackColor = false;
@@ -1281,8 +1321,11 @@ namespace Mac_EFI_Toolkit
             this.tlpMenu.Name = "tlpMenu";
             this.tlpMenu.RowCount = 1;
             this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMenu.Size = new System.Drawing.Size(704, 38);
-            this.tlpMenu.TabIndex = 92;
+            this.tlpMenu.TabIndex = 1;
             // 
             // lblMessage
             // 
@@ -1292,8 +1335,8 @@ namespace Mac_EFI_Toolkit
             this.lblMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMessage.ForeColor = System.Drawing.Color.White;
-            this.lblMessage.Location = new System.Drawing.Point(672, 7);
-            this.lblMessage.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.lblMessage.Location = new System.Drawing.Point(675, 7);
+            this.lblMessage.Margin = new System.Windows.Forms.Padding(0, 0, 7, 0);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Padding = new System.Windows.Forms.Padding(1);
             this.lblMessage.Size = new System.Drawing.Size(22, 24);
@@ -1351,6 +1394,7 @@ namespace Mac_EFI_Toolkit
             this.tlpSizeCrcLabels.ResumeLayout(false);
             this.tlpEfiRom.ResumeLayout(false);
             this.tlpBidSon.ResumeLayout(false);
+            this.tlpFilename.ResumeLayout(false);
             this.cmsMainMenu.ResumeLayout(false);
             this.pnlTitle.ResumeLayout(false);
             this.tlpVersionLabel.ResumeLayout(false);
@@ -1371,7 +1415,6 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblFitcVersionText;
         private System.Windows.Forms.Label lblChecksumText;
         private System.Windows.Forms.Label lblSizeBytesText;
-        private System.Windows.Forms.Label lblFilename;
         private System.Windows.Forms.Label lblFileChecksum;
         private System.Windows.Forms.Label lblFilesizeBytes;
         private System.Windows.Forms.Label lblConfig;
@@ -1442,6 +1485,9 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblCreated;
         private System.Windows.Forms.TableLayoutPanel tlpBidSon;
         private System.Windows.Forms.Label lblSon;
+        private System.Windows.Forms.TableLayoutPanel tlpFilename;
+        private System.Windows.Forms.Button cmdReload;
+        private System.Windows.Forms.Label lblFilename;
     }
 }
 

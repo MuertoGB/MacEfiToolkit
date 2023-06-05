@@ -110,7 +110,7 @@ namespace Mac_EFI_Toolkit.Utils
             if (fsysBytes != null)
             {
                 Array.Copy(fsysBytes, 0, bytesTempFsys, 0, bytesTempFsys.Length);
-                return FileUtils.GetUintCrc32(bytesTempFsys);
+                return FileUtils.GetCrc32Digest(bytesTempFsys);
             }
 
             return 0xFFFFFFFF;
