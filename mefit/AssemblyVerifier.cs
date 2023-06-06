@@ -12,9 +12,9 @@ public static class AssemblyVerifier
     {
         try
         {
-            bool bWasVerified = false;
-            bool bResult = NativeMethods.StrongNameSignatureVerificationEx(assemblyPath, false, ref bWasVerified);
-            return bResult && bWasVerified;
+            bool wasVerified = false;
+            bool result = NativeMethods.StrongNameSignatureVerificationEx(assemblyPath, false, ref wasVerified);
+            return result && wasVerified;
         }
         catch
         {

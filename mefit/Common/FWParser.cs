@@ -9,7 +9,6 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Common
 {
@@ -69,10 +68,12 @@ namespace Mac_EFI_Toolkit.Common
 
         #region Internal Members
         internal static string strLoadedBinaryFilePath = string.Empty;
+        internal static string strFilename = string.Empty;
         internal static string strFilenameWithoutExt = string.Empty;
         internal static string strCreationTime = string.Empty;
         internal static string strModifiedTime = string.Empty;
-        internal static string strFilename = string.Empty;
+        internal static string strModel = string.Empty;
+        internal static string strModelFallback = string.Empty;
         internal static string strSerialNumber = string.Empty;
         internal static string strHwc = string.Empty;
         internal static string strEfiVersion = string.Empty;
@@ -93,9 +94,9 @@ namespace Mac_EFI_Toolkit.Common
         internal static long lLoadedFileSize = 0;
         internal static long lFsysOffset = 0;
 
-        internal static readonly int intMinROMSize = 1048576;
-        internal static readonly int intMaxROMSize = 33554432;
-        internal static readonly int intFsysRegionSize = 0x800;
+        internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576 bytes
+        internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
+        internal const int FSYS_RGN_SIZE = 0x800;      // 2048 bytes
         #endregion
 
         #region Private Members
@@ -121,7 +122,6 @@ namespace Mac_EFI_Toolkit.Common
         #region Platform Data Region Data
         internal static string GetBoardId(byte[] sourceBytes)
         {
-            var result = "N/A";
             var pdrOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.PDR_SECTION_BID_GUID);
 
             if (pdrOffset != -1)
@@ -136,12 +136,12 @@ namespace Mac_EFI_Toolkit.Common
 
                     if (!bidString.All(c => c == '0'))
                     {
-                        result = $"Mac-{bidString}";
+                        return $"Mac-{bidString}";
                     }
                 }
             }
 
-            return result;
+            return null;
         }
         #endregion
 
@@ -153,7 +153,7 @@ namespace Mac_EFI_Toolkit.Common
 
             if (fsysOffset != -1)
             {
-                fsysBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysOffset, intFsysRegionSize);
+                fsysBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysOffset, FSYS_RGN_SIZE);
             }
 
             return new FsysRegion { BlockBytes = fsysBytes, Offset = outputOffset ? fsysOffset : -1 };
@@ -166,7 +166,7 @@ namespace Mac_EFI_Toolkit.Common
             if (fsysOffset != -1)
             {
                 var crcReadLength = 0x4;
-                var crcNudgePos = intFsysRegionSize - crcReadLength;
+                var crcNudgePos = FSYS_RGN_SIZE - crcReadLength;
                 var crcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysOffset + crcNudgePos, crcReadLength);
 
                 if (crcBytes != null)
@@ -176,12 +176,11 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            return "N/A";
+            return null;
         }
 
-        internal static string GetFsysSerialNumber(byte[] sourceBytes)
+        internal static string GetSystemSerialNumber(byte[] sourceBytes)
         {
-            var result = "N/A";
             var ssnOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.SSN_UPPER_SIG);
 
             if (ssnOffset == -1)
@@ -199,14 +198,14 @@ namespace Mac_EFI_Toolkit.Common
                 {
                     var serialString = _utf8.GetString(ssnBytes).Trim();
                     serialString = new string(serialString.Where(Char.IsLetterOrDigit).ToArray());
-                    result = serialString;
+                    return serialString;
                 }
             }
 
-            return result;
+            return null;
         }
 
-        internal static string GetFsysSon(byte[] sourceBytes)
+        internal static string GetSystemOrderNumber(byte[] sourceBytes)
         {
             var sonOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.SON_SIG);
 
@@ -222,10 +221,10 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            return "N/A";
+            return null;
         }
 
-        internal static string GetFsysHwc(byte[] sourceBytes)
+        internal static string GetSystemHardwareConfig(byte[] sourceBytes)
         {
             var hwcOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.HWC_SIG);
 
@@ -243,7 +242,7 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            return "N/A";
+            return null;
         }
         #endregion
 
@@ -265,7 +264,7 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            return "N/A";
+            return null;
         }
 
         internal static string GetBootromVersion(byte[] sourceBytes)
@@ -285,7 +284,7 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            return "N/A";
+            return null;
         }
 
         internal static string GetModelIdentifier(byte[] sourceBytes)
@@ -310,7 +309,7 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            return "N/A";
+            return null;
         }
         #endregion
 
@@ -421,8 +420,6 @@ namespace Mac_EFI_Toolkit.Common
 
             return ApfsCompatibleFirmware.No;
         }
-
-
         #endregion
 
         #region Clear Data

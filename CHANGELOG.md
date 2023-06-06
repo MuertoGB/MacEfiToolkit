@@ -18,8 +18,10 @@
 > - Ability to replace the serial number with automatic HWC and CRC32 masking.
 > - Ability to clear the NVRAM (SVS, VSS, NSS) sections whilst preserving section headers.
 - Added firmware editing terms window.
-- New models added to database.
-- Added option to reload the currently open file, in case external changes are made.
+- New models added to the internal database.
+- Added button to reload the currently open file, in case external changes are made.
+- Added button to navigate to the currently open file in explorer.
+- Added a status bar at the bottom of the main window.
 
 #### Enhancements:
 - UI improvements.
@@ -34,6 +36,7 @@
 - Fixed stability issues when the Fsys region is not found and 'Disable valid Fsys enforcement' is enabled.
 > - Please note you cannot use the editor when a valid Fsys region is not found.
 - Fixed initial directory not being set when a file is dragged onto the main window, or the executable.
+- Fixed broken shortcut keys (CTRL+A, CTRL+S).
 
 ## Version 0.5.2
 

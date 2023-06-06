@@ -6,6 +6,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Mac_EFI_Toolkit.Common
 {
@@ -27,6 +28,24 @@ namespace Mac_EFI_Toolkit.Common
             {
                 if (ptr != IntPtr.Zero) Marshal.FreeHGlobal(ptr);
             }
+        }
+
+        internal static byte[] ConvertStringToByteArray(string sourceString, Encoding encodingType)
+        {
+            return encodingType.GetBytes(sourceString);
+        }
+
+        internal static string FormatSize(ulong size)
+        {
+            string[] suffixes = { "bytes", "KB", "MB", "GB", "TB" };
+
+            if (size == 0)
+                return $"{size:N2} {suffixes[0]}";
+
+            int suffixIndex = (int)(Math.Log(size) / Math.Log(1024));
+            double sizeInSuffix = (double)size / Math.Pow(1024, suffixIndex);
+
+            return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static string appBuild = $"{Application.ProductVersion}-230604-ms5";
+        internal static readonly string appBuild = $"{Application.ProductVersion}-230606-ms5";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
@@ -247,6 +247,24 @@ namespace Mac_EFI_Toolkit
                 {
                     Application.Exit();
                 }
+            }
+        }
+        #endregion
+
+        #region Process
+        internal static long GetWorkingSetSize()
+        {
+            using (Process currentProcess = Process.GetCurrentProcess())
+            {
+                return currentProcess.WorkingSet64;
+            }
+        }
+
+        internal static long GetPrivateMemorySize()
+        {
+            using (Process currentProcess = Process.GetCurrentProcess())
+            {
+                return currentProcess.PrivateMemorySize64;
             }
         }
         #endregion

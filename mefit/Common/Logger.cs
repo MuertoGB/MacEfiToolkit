@@ -23,6 +23,7 @@ namespace Mac_EFI_Toolkit
     public enum RtbLogPrefix
     {
         MET,
+        Good,
         Info,
         Warn,
         Error
@@ -31,8 +32,8 @@ namespace Mac_EFI_Toolkit
 
     class Logger
     {
-        internal static readonly string strLogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mefit.log");
-        internal static readonly string strDbReportPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dbreport.log");
+        internal static string strLogFilePath = Path.Combine(Program.appDirectory, "mefit.log");
+        internal static string strDbReportPath = Path.Combine(Program.appDirectory, "dbreport.log");
 
         internal static void WriteToLogFile(string logMessage, LogType logType)
         {
@@ -74,39 +75,37 @@ namespace Mac_EFI_Toolkit
             return pathString;
         }
 
-        internal static void WriteLogTypeTextToRtb(string logText, RtbLogPrefix prefixType, RichTextBox richTextBox)
+        internal static void WriteLogTextToRtb(string messageString, RtbLogPrefix logPrefix, RichTextBox richTextBox)
         {
             Color prefixColor;
-            string prefixString = string.Empty;
+            string timestamp = $"{DateTime.Now.ToString("HH:mm:ss")}: ";
 
-            switch (prefixType)
+            switch (logPrefix)
             {
                 case RtbLogPrefix.MET:
-                    prefixString = $"[MET]: ";
-                    prefixColor = Color.FromArgb(0, 200, 0); // Green
+                    prefixColor = Color.FromArgb(200, 200, 0);
+                    break;
+                case RtbLogPrefix.Good:
+                    prefixColor = Color.FromArgb(0, 200, 0);
                     break;
                 case RtbLogPrefix.Info:
-                    prefixString = $"[INF]: ";
-                    prefixColor = Color.FromArgb(0, 122, 204); // Blue
+                    prefixColor = Color.FromArgb(0, 122, 204);
                     break;
                 case RtbLogPrefix.Warn:
-                    prefixString = $"[WRN]: ";
-                    prefixColor = Color.FromArgb(255, 165, 0); // Orange
+                    prefixColor = Color.FromArgb(255, 165, 0);
                     break;
                 case RtbLogPrefix.Error:
-                    prefixString = $"[ERR]: ";
-                    prefixColor = Color.FromArgb(255, 51, 51); // Red
+                    prefixColor = Color.FromArgb(255, 51, 51);
                     break;
                 default:
-                    prefixString = $"[INF]: ";
                     prefixColor = Color.White;
                     break;
             }
 
-            richTextBox.AppendText(prefixString);
-            richTextBox.Select(richTextBox.TextLength - prefixString.Length, prefixString.Length - 1);
+            richTextBox.AppendText(timestamp);
+            richTextBox.Select(richTextBox.TextLength - timestamp.Length, timestamp.Length - 1);
             richTextBox.SelectionColor = prefixColor;
-            richTextBox.AppendText(logText + Environment.NewLine);
+            richTextBox.AppendText(messageString + Environment.NewLine);
             richTextBox.ScrollToCaret();
         }
 

@@ -5,6 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -12,6 +13,7 @@ namespace Mac_EFI_Toolkit.Utils
 {
     class FileUtils
     {
+
         /// <summary>
         /// Calculates the SHA256 hash of a byte array.
         /// </summary>
@@ -25,6 +27,7 @@ namespace Mac_EFI_Toolkit.Utils
                 return BitConverter.ToString(digestBytes).Replace("-", "");
             }
         }
+
         /// <summary>
         /// Calculates the CRC32 checksum of a byte array. 
         /// </summary>
@@ -45,14 +48,21 @@ namespace Mac_EFI_Toolkit.Utils
 
             return crc ^ 0xFFFFFFFF;
         }
+
         /// <summary>
         /// Formats a number of bytes as a string with commas.
         /// </summary>
         /// <param name="lSize">The number of bytes to format.</param>
         /// <returns>A string representation of the number of bytes with commas.</returns>
-        public static string FormatFileSize(long lSize)
+        internal static string FormatFileSize(long lSize)
         {
             return string.Format("{0:#,##0}", lSize);
         }
+
+        internal static void OpenFileInExplorer(string filePath)
+        {
+            Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+        }
+
     }
 }

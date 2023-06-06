@@ -11,6 +11,7 @@ namespace Mac_EFI_Toolkit.Utils
 {
     class NetUtils
     {
+
         /// <summary>
         /// Checks if a website is available by making a HEAD request to its URL.
         /// </summary>
@@ -34,6 +35,7 @@ namespace Mac_EFI_Toolkit.Utils
                 return false;
             }
         }
+
         /// <summary>
         /// Checks if a network connection is available by attempting to send a ping request to a known IP address.
         /// </summary>
@@ -57,5 +59,6 @@ namespace Mac_EFI_Toolkit.Utils
                 return false;
             }
         }
+
     }
 }

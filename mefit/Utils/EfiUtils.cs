@@ -19,6 +19,7 @@ namespace Mac_EFI_Toolkit.Utils
 {
     class EFIUtils
     {
+
         /// <summary>
         /// Retrieves the configuration model string for a given HWC identifier. 
         /// Prioritizes retrieving data from the embedded XML db. 
@@ -49,7 +50,7 @@ namespace Mac_EFI_Toolkit.Utils
                 var url = $"http://support-sp.apple.com/sp/product?cc={hwcString}";
                 if (!NetUtils.GetIsWebsiteAvailable(url))
                 {
-                    return "Unvailable";
+                    return null;
                 }
 
                 var xml = await new WebClient().DownloadStringTaskAsync(url);
@@ -61,13 +62,14 @@ namespace Mac_EFI_Toolkit.Utils
                     Logger.WriteToLogFile($"'{hwcString}' not present in local db > Server returned: '{data}'", LogType.Database);
                 }
 
-                return data ?? "N/A";
+                return data ?? null;
             }
             catch
             {
-                return "Unknown";
+                return null;
             }
         }
+
         /// <summary>
         /// Checks if a given integer size is a valid size for a firmware image.
         /// </summary>
@@ -75,8 +77,8 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>True if the size is valid, otherwise false.</returns>
         internal static bool GetIsValidBinSize(int size)
         {
-            int expectedSize = FWParser.intMinROMSize;
-            int maxSize = FWParser.intMaxROMSize;
+            int expectedSize = FWParser.MIN_IMAGE_SIZE;
+            int maxSize = FWParser.MAX_IMAGE_SIZE;
 
             while (expectedSize <= maxSize)
             {
@@ -88,6 +90,7 @@ namespace Mac_EFI_Toolkit.Utils
             }
             return false;
         }
+
         /// <summary>
         /// Checks if a given input string contains only valid characters for a serial number.
         /// </summary>
@@ -97,6 +100,7 @@ namespace Mac_EFI_Toolkit.Utils
         {
             return Regex.IsMatch(charString, "^[0-9A-Z]+$");
         }
+
         /// <summary>
         /// Calculates an Fsys region CRC32 checksum.
         /// </summary>

@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         #region Private Members
         private byte[] _byteNewFsysRegion = null;
-        private string _strChevronRight = "\xE76C";
+        private readonly string _strChevronRight = "\xE76C";
 
         private long _primaryVssOffset = -1;
         private int _primaryVssSize = -1;
@@ -62,23 +62,22 @@ namespace Mac_EFI_Toolkit.WinForms
             var font = Program.FONT_MDL2_REG_9;
             var chevronRight = _strChevronRight;
 
-            lblSvsChevRight.Font = font;
-            lblSvsChevRight.Text = chevronRight;
-            lblSvsChevRight.Visible = false;
-
-            lblVssChevRight.Font = font;
-            lblVssChevRight.Text = chevronRight;
-            lblVssChevRight.Visible = false;
-
-            lblNssChevRight.Font = font;
-            lblNssChevRight.Text = chevronRight;
-            lblNssChevRight.Visible = false;
+            SetLabelProperties(lblSvsChevRight, font, chevronRight);
+            SetLabelProperties(lblVssChevRight, font, chevronRight);
+            SetLabelProperties(lblNssChevRight, font, chevronRight);
 
             tbxSerialNumber.MaxLength = FWParser.strSerialNumber.Length;
 
-            Logger.WriteLogTypeTextToRtb($"{DateTime.Now}", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.MET, rtbLog);
 
-            LoadNvramStoreData();
+            LogLoadedBinarySize();
+
+            LogFsysData();
+
+            ValidateNvramStoreData();
+            LogNvramData();
+
+            Logger.WriteLogTextToRtb($"Checks complete.", RtbLogPrefix.Good, rtbLog);
         }
         #endregion
 
@@ -89,11 +88,11 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (configCode == "N/A")
             {
-                Logger.WriteLogTypeTextToRtb($"Config: HWC could not be matched.", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb($"Config: HWC could not be matched.", RtbLogPrefix.Error, rtbLog);
             }
             else
             {
-                Logger.WriteLogTypeTextToRtb($"Config: {configCode}", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"Config: {configCode}", RtbLogPrefix.Info, rtbLog);
             }
         }
         #endregion
@@ -137,11 +136,43 @@ namespace Mac_EFI_Toolkit.WinForms
                     return;
                 }
 
-                Logger.WriteLogTypeTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.MET, rtbLog);
+                Logger.WriteLogTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.MET, rtbLog);
                 _byteNewFsysRegion = File.ReadAllBytes(dialog.FileName);
                 bool isValid = ValidateNewFsysRegion(_byteNewFsysRegion);
                 if (!isValid) cbxReplaceFsysRgn.Checked = false;
             }
+        }
+
+        private void cmdApply_Click(object sender, EventArgs e)
+        {
+            ToggleControlEnable(false);
+
+            if (cbxReplaceFsysRgn.Checked)
+            {
+                Logger.WriteLogTextToRtb($"Replacing Fsys Data...", RtbLogPrefix.MET, rtbLog);
+            }
+
+            if (cbxReplaceSerial.Checked)
+            {
+                Logger.WriteLogTextToRtb($"Replacing serial number...", RtbLogPrefix.MET, rtbLog);
+            }
+
+            if (cbxClearVssStore.Checked)
+            {
+                Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            }
+
+            if (cbxClearSvsStore.Checked)
+            {
+                Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            }
+
+            if (cbxClearNssStore.Checked)
+            {
+                Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            }
+
+            ToggleControlEnable(true);
         }
         #endregion
 
@@ -241,7 +272,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (EFIUtils.GetIsValidSerialChars(tb.Text))
                 {
                     UpdateTextBoxColor(tb, Colours.clrGood);
-                    Logger.WriteLogTypeTextToRtb("Valid serial characters entered.", RtbLogPrefix.Info, rtbLog);
+                    Logger.WriteLogTextToRtb("Valid serial characters entered.", RtbLogPrefix.Info, rtbLog);
                     if (FWParser.strSerialNumber.Length == 11)
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 3));
@@ -258,7 +289,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 else
                 {
                     UpdateTextBoxColor(tb, Colours.clrError);
-                    Logger.WriteLogTypeTextToRtb("Invalid serial characters entered.", RtbLogPrefix.Error, rtbLog);
+                    Logger.WriteLogTextToRtb("Invalid serial characters entered.", RtbLogPrefix.Error, rtbLog);
                     UpdateHwcTextBoxText(string.Empty);
                 }
             }
@@ -273,62 +304,61 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Validation
         private bool ValidateNewFsysRegion(byte[] sourceBytes)
         {
-            Logger.WriteLogTypeTextToRtb("Validating donor Fsys region...", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb("Validating donor Fsys region...", RtbLogPrefix.MET, rtbLog);
 
-            if (sourceBytes.Length != FWParser.intFsysRegionSize)
+            if (sourceBytes.Length != FWParser.FSYS_RGN_SIZE)
             {
-                Logger.WriteLogTypeTextToRtb($"Filesize: {sourceBytes.Length:X2}h, expected 800h", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h, expected 800h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
             long lSigPos = BinaryUtils.GetOffset(sourceBytes, FSSignatures.FSYS_SIG);
             if (lSigPos == -1 || lSigPos != 0)
             {
-                Logger.WriteLogTypeTextToRtb(lSigPos == -1 ? "Fsys signature not found." : $"Fsys signature misaligned at {lSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb(lSigPos == -1 ? "Fsys signature not found." : $"Fsys signature misaligned at {lSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            string strSerial = FWParser.GetFsysSerialNumber(sourceBytes);
+            string strSerial = FWParser.GetSystemSerialNumber(sourceBytes);
             int lenSerial = strSerial.Length;
             string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
 
-            Logger.WriteLogTypeTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTypeTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTypeTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTypeTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
             CheckHwcAsync(strHwc);
 
             string strCrcInFile = FWParser.GetFsysCrc32(sourceBytes);
             string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");
 
-            Logger.WriteLogTypeTextToRtb($"CRC in Fsys: {strCrcInFile}h", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTypeTextToRtb($"CRC Calc:    {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"CRC in Fsys: {strCrcInFile}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"CRC Calc:    {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
 
             if (strCrcInFile == strCrcCalculated)
             {
-                Logger.WriteLogTypeTextToRtb("Fsys CRC32 is valid.", RtbLogPrefix.MET, rtbLog);
+                Logger.WriteLogTextToRtb("Fsys CRC32 is valid.", RtbLogPrefix.MET, rtbLog);
                 cbxMaskCrc.Checked = false;
             }
             else
             {
-                Logger.WriteLogTypeTextToRtb("Fsys CRC32 is invalid, 'Mask CRC32' option selected.", RtbLogPrefix.Warn, rtbLog);
+                Logger.WriteLogTextToRtb("Fsys CRC32 is invalid, 'Mask CRC32' option selected.", RtbLogPrefix.Warn, rtbLog);
                 cbxMaskCrc.Checked = true;
             }
 
-            Logger.WriteLogTypeTextToRtb("Validation complete.", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb("Validation complete.", RtbLogPrefix.MET, rtbLog);
+
             return true;
         }
 
-        private void LoadNvramStoreData()
+        private void ValidateNvramStoreData()
         {
-            Logger.WriteLogTypeTextToRtb($"Detect NVRAM stores...", RtbLogPrefix.MET, rtbLog);
-
             NvramStoreData vssStore = FWParser.GetNvramStoreData(FWParser.bytesLoadedFile, NvramStoreType.VSS);
             if (vssStore.PrimaryStoreOffset != -1)
             {
                 _primaryVssOffset = vssStore.PrimaryStoreOffset;
                 _primaryVssSize = vssStore.PrimaryStoreSize;
-                Logger.WriteLogTypeTextToRtb($"VSS Store:-  Offset {_primaryVssOffset:X2}h, Size {_primaryVssSize:X2}h", RtbLogPrefix.Info, rtbLog);
+
             }
             else
             {
@@ -339,7 +369,7 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 _backupVssOffset = vssStore.BackupStoreOffset;
                 _backupVssSize = vssStore.BackupStoreSize;
-                Logger.WriteLogTypeTextToRtb($"VSS Backup:- Offset {_backupVssOffset:X2}h, Size {_backupVssSize:X2}h", RtbLogPrefix.Info, rtbLog);
+
             }
             else
             {
@@ -352,18 +382,15 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 _primarySvsOffset = svsStore.PrimaryStoreOffset;
                 _primarySvsSize = svsStore.PrimaryStoreSize;
-                Logger.WriteLogTypeTextToRtb($"SVS Store:-  Offset {_primarySvsOffset:X2}h, Size {_primarySvsSize:X2}h", RtbLogPrefix.Info, rtbLog);
             }
             else
             {
                 cbxClearSvsStore.Enabled = false;
             }
-
             if (svsStore.BackupStoreOffset != -1)
             {
                 _backupSvsOffset = svsStore.BackupStoreOffset;
                 _backupSvsSize = svsStore.BackupStoreSize;
-                Logger.WriteLogTypeTextToRtb($"SVS Backup:- Offset {_backupSvsOffset:X2}h, Size {_backupSvsSize:X2}h", RtbLogPrefix.Info, rtbLog);
             }
             else
             {
@@ -372,31 +399,25 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             NvramStoreData nssStore = FWParser.GetNvramStoreData(FWParser.bytesLoadedFile, NvramStoreType.NSS);
-
             if (nssStore.PrimaryStoreOffset != -1)
             {
                 _primaryNssOffset = nssStore.PrimaryStoreOffset;
                 _primaryNssSize = nssStore.PrimaryStoreSize;
-                Logger.WriteLogTypeTextToRtb($"NSS Store:-  Offset {_primaryNssOffset:X2}h, Size {_primaryNssSize:X2}h", RtbLogPrefix.Info, rtbLog);
             }
             else
             {
                 cbxClearNssStore.Enabled = false;
             }
-
             if (nssStore.BackupStoreOffset != -1)
             {
                 _backupNssOffset = nssStore.BackupStoreOffset;
                 _backupNssSize = nssStore.BackupStoreSize;
-                Logger.WriteLogTypeTextToRtb($"NSS Backup:- Offset {_backupNssOffset:X2}h, Size {_backupNssSize:X2}h", RtbLogPrefix.Info, rtbLog);
             }
             else
             {
                 cbxClearNssBackup.Enabled = false;
                 lblNssChevRight.Visible = false;
             }
-
-            Logger.WriteLogTypeTextToRtb($"Detect NVRAM stores complete...", RtbLogPrefix.MET, rtbLog);
         }
         #endregion
 
@@ -409,6 +430,78 @@ namespace Mac_EFI_Toolkit.WinForms
         private void UpdateHwcTextBoxText(string text)
         {
             tbxHwc.Text = text;
+        }
+
+        private void SetLabelProperties(Label label, Font font, string text)
+        {
+            label.Font = font;
+            label.Text = text;
+            label.Visible = false;
+        }
+
+        private void ToggleControlEnable(bool enable)
+        {
+            cmdClose.Enabled = enable;
+            cmdCloseForm.Enabled = enable;
+            tlpOptions.Enabled = enable;
+        }
+        #endregion
+
+        #region Logging
+        private void LogFsysData()
+        {
+            if (FWParser.lFsysOffset != 0)
+            {
+                Logger.WriteLogTextToRtb("Get Fsys data...", RtbLogPrefix.MET, rtbLog);
+                Logger.WriteLogTextToRtb($"Fsys Region:- Offset {FWParser.lFsysOffset:X2}h, Size {FWParser.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
+        }
+
+        private void LogLoadedBinarySize()
+        {
+            if (!EFIUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize))
+            {
+                Logger.WriteLogTextToRtb($"Loaded binary size {FWParser.lLoadedFileSize:X2}h is invalid. It should not be used as a donor.", RtbLogPrefix.Error, rtbLog);
+            }
+            else
+            {
+                Logger.WriteLogTextToRtb($"Loaded binary size {FWParser.lLoadedFileSize:X2}h is valid.", RtbLogPrefix.Info, rtbLog);
+            }
+        }
+
+        private void LogNvramData()
+        {
+            Logger.WriteLogTextToRtb($"Get NVRAM store data...", RtbLogPrefix.MET, rtbLog);
+
+            if (_primaryVssOffset != -1)
+            {
+                Logger.WriteLogTextToRtb($"VSS Store:-  Offset {_primaryVssOffset:X2}h, Size {_primaryVssSize:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (_backupVssOffset != -1)
+                {
+                    Logger.WriteLogTextToRtb($"VSS Backup:- Offset {_backupVssOffset:X2}h, Size {_backupVssSize:X2}h", RtbLogPrefix.Info, rtbLog);
+                }
+            }
+
+            if (_primarySvsOffset != -1)
+            {
+                Logger.WriteLogTextToRtb($"SVS Store:-  Offset {_primarySvsOffset:X2}h, Size {_primarySvsSize:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (_backupSvsOffset != -1)
+                {
+                    Logger.WriteLogTextToRtb($"SVS Backup:- Offset {_backupSvsOffset:X2}h, Size {_backupSvsSize:X2}h", RtbLogPrefix.Info, rtbLog);
+                }
+            }
+
+            if (_primaryNssOffset != -1)
+            {
+                Logger.WriteLogTextToRtb($"NSS Store:-  Offset {_primaryNssOffset:X2}h, Size {_primaryNssSize:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (_backupNssOffset != -1)
+                {
+                    Logger.WriteLogTextToRtb($"NSS Backup:- Offset {_backupNssOffset:X2}h, Size {_backupNssSize:X2}h", RtbLogPrefix.Info, rtbLog);
+                }
+            }    
         }
         #endregion
 

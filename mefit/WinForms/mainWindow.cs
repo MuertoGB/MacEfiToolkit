@@ -16,6 +16,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
@@ -25,6 +27,8 @@ namespace Mac_EFI_Toolkit
 
         #region Private Members
         private string _strInitialDirectory = Program.appDirectory;
+        private static readonly object _lockObject = new object();
+        private static System.Threading.Timer _statsTimer;
         #endregion
 
         #region Overriden Properties
@@ -45,8 +49,6 @@ namespace Mac_EFI_Toolkit
         {
             InitializeComponent();
 
-            lblMessage.Hide();
-
             Load += mainWindow_Load;
             FormClosing += mainWindow_FormClosing;
             KeyDown += mainWindow_KeyDown;
@@ -60,6 +62,9 @@ namespace Mac_EFI_Toolkit
             SetButtonProperties();
 
             lblVersion.Text = Application.ProductVersion;
+
+            TimerCallback callback = new TimerCallback(UpdateMemoryStats);
+            _statsTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
         #endregion
 
@@ -70,18 +75,7 @@ namespace Mac_EFI_Toolkit
 
             lblVersion.Text = Application.ProductVersion;
 
-            string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
-            if (!string.IsNullOrEmpty(path))
-            {
-                if (Directory.Exists(path))
-                {
-                    _strInitialDirectory = path;
-                }
-                else
-                {
-                    _strInitialDirectory = Program.appDirectory;
-                }
-            }
+            SetPrimaryInitialDirectory();
 
             if (!string.IsNullOrEmpty(Program.draggedFile))
             {
@@ -114,6 +108,7 @@ namespace Mac_EFI_Toolkit
                 }
 
                 Program.ExitMet(this);
+                _statsTimer.Dispose();
             }
         }
 
@@ -138,19 +133,70 @@ namespace Mac_EFI_Toolkit
             string draggedFilename = draggedFiles[0];
             OpenBinary(draggedFilename);
         }
-
         #endregion
 
         #region KeyDown Events
         private void mainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.O) cmdOpenBin.PerformClick();
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.R) cmdReset.PerformClick();
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.E) cmdExportFsysBlock.PerformClick();
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C) cmdEveryMacSearch.PerformClick();
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.M) ShowContextMenu(cmdMenu, cmsMainMenu);
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.S) using (var frm = new settingsWindow()) frm.Show();
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A) using (var frm = new aboutWindow()) frm.Show();
+            // Ctrl + Key combinations
+            if (e.Modifiers == Keys.Control)
+            {
+                if (e.KeyCode == Keys.O)
+                {
+                    cmdOpenBin.PerformClick();
+                }
+                else if (e.KeyCode == Keys.R)
+                {
+                    cmdReset.PerformClick();
+                }
+                else if (e.KeyCode == Keys.E)
+                {
+                    cmdEditEfirom.PerformClick();
+                }
+                else if (e.KeyCode == Keys.M)
+                {
+                    ShowContextMenu(cmdMenu, cmsMainMenu);
+                }
+                else if (e.KeyCode == Keys.S)
+                {
+                    using (var frm = new settingsWindow())
+                    {
+                        frm.ShowDialog();
+                    }
+                }
+                else if (e.KeyCode == Keys.A)
+                {
+                    using (var frm = new aboutWindow())
+                    {
+                        frm.ShowDialog();
+                    }
+                }
+            }
+
+            // Alt + Key combinations
+            if (e.Modifiers == Keys.Alt)
+            {
+                if (e.KeyCode == Keys.N)
+                {
+                    cmdNavigate.PerformClick();
+                }
+                else if (e.KeyCode == Keys.R)
+                {
+                    cmdReload.PerformClick();
+                }
+                else if (e.KeyCode == Keys.C)
+                {
+                    cmdEveryMacSearch.PerformClick();
+                }
+                else if (e.KeyCode == Keys.E)
+                {
+                    cmdExportFsysBlock.PerformClick();
+                }
+                else if (e.KeyCode == Keys.F)
+                {
+                    cmdFixFsysCrc.PerformClick();
+                }
+            }
         }
         #endregion
 
@@ -255,7 +301,7 @@ namespace Mac_EFI_Toolkit
 
         }
 
-        private void cmdSerialCheck_Click(object sender, EventArgs e)
+        private void cmdEveryMacSearch_Click(object sender, EventArgs e)
         {
             Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", FWParser.strSerialNumber));
         }
@@ -351,10 +397,17 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void cmdNavigate_Click(object sender, EventArgs e)
+        {
+            FileUtils.OpenFileInExplorer(FWParser.strLoadedBinaryFilePath);
+        }
+
         private void SetButtonProperties()
         {
             cmdMenu.Font = Program.FONT_MDL2_REG_14;
             cmdMenu.Text = "\xE169";
+            cmdNavigate.Font = Program.FONT_MDL2_REG_9;
+            cmdNavigate.Text = "\xEC50";
             cmdReload.Font = Program.FONT_MDL2_REG_9;
             cmdReload.Text = "\xE72C";
             cmdExportFsysBlock.Font = Program.FONT_MDL2_REG_9;
@@ -367,7 +420,6 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Toolstrip Events
-
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (File.Exists(Logger.strLogFilePath))
@@ -435,6 +487,8 @@ namespace Mac_EFI_Toolkit
 
         private void SetTipHandlers()
         {
+            cmdNavigate.MouseEnter += HandleMouseEnterTip;
+            cmdNavigate.MouseLeave += HandleMouseLeaveTip;
             cmdReload.MouseEnter += HandleMouseEnterTip;
             cmdReload.MouseLeave += HandleMouseLeaveTip;
             cmdExportFsysBlock.MouseEnter += HandleMouseEnterTip;
@@ -453,9 +507,10 @@ namespace Mac_EFI_Toolkit
 
         private void HandleMouseEnterTip(object sender, EventArgs e)
         {
-
-            if (sender == cmdReload)
-                lblMessage.Text = "Reload open file from disk";
+            if (sender == cmdNavigate)
+                lblMessage.Text = "Navigate to file in explorer";
+            else if (sender == cmdReload)
+                lblMessage.Text = "Reload current file from disk";
             else if (sender == cmdExportFsysBlock)
                 lblMessage.Text = "Export Fsys Region";
             else if (sender == cmdFixFsysCrc)
@@ -468,14 +523,11 @@ namespace Mac_EFI_Toolkit
                 lblMessage.Text = "Unload EFIROM and clear all data";
             else if (sender == cmdEditEfirom)
                 lblMessage.Text = "Open the firmware editor";
-
-            lblMessage.Show();
         }
 
         private void HandleMouseLeaveTip(object sender, EventArgs e)
         {
             lblMessage.Text = string.Empty;
-            lblMessage.Hide();
         }
         #endregion
 
@@ -495,17 +547,17 @@ namespace Mac_EFI_Toolkit
         #region Misc Events
         private void ToggleControlEnable(bool enable)
         {
-            Button[] buttons = { cmdReload, cmdReset, cmdEditEfirom, cmdExportFsysBlock, cmdEveryMacSearch };
+            Button[] buttons = { cmdReset, cmdEditEfirom, cmdExportFsysBlock, cmdEveryMacSearch };
             foreach (Button button in buttons)
             {
-                button.Enabled = (enable) ? true : false;
+                button.Enabled = enable ? true : false;
             }
 
             // Overrides > For when setting 'Override valid fsys enforement' is enabled, and the Fsys region is not found.
             // I may revisit here in the future.
             if (FWParser.bytesLoadedFsys != null)
             {
-                cmdFixFsysCrc.Enabled = (FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary) ? false : true;
+                cmdFixFsysCrc.Enabled = FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary ? false : true;
             }
             else
             {
@@ -514,7 +566,7 @@ namespace Mac_EFI_Toolkit
                 cmdEditEfirom.Enabled = false;
             }
 
-            cmdEveryMacSearch.Enabled = (FWParser.strSerialNumber != "N/A");
+            cmdEveryMacSearch.Enabled = (FWParser.strSerialNumber != null);
 
             tlpMain.Enabled = enable;
         }
@@ -551,22 +603,56 @@ namespace Mac_EFI_Toolkit
                 lblVersion.Click += lblVersion_Click;
             }
         }
+
+        private void SetPrimaryInitialDirectory()
+        {
+            string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+            if (!string.IsNullOrEmpty(path))
+            {
+                if (Directory.Exists(path))
+                {
+                    _strInitialDirectory = path;
+                }
+                else
+                {
+                    _strInitialDirectory = Program.appDirectory;
+                }
+            }
+        }
+
+        private void UpdateMemoryStats(object state)
+        {
+            lock (_lockObject)
+            {
+                string workingSetString = Helper.FormatSize((ulong)Program.GetWorkingSetSize());
+                string privateMemoryString = Helper.FormatSize((ulong)Program.GetPrivateMemorySize());
+
+                lblWorkingSet.Invoke((Action)(() =>
+                {
+                    lblWorkingSet.Text = $"{workingSetString}";
+                }));
+
+                lblPrivateMemory.Invoke((Action)(() =>
+                {
+                    lblPrivateMemory.Text = $"{privateMemoryString}";
+                }));
+            }
+        }
         #endregion
 
         #region Firmware Parsing
-
         private bool GetIsValidFirmware()
         {
             var fileInfo = new FileInfo(FWParser.strLoadedBinaryFilePath);
             // Binary too small
-            if (fileInfo.Length < FWParser.intMinROMSize) // 1048576 bytes
+            if (fileInfo.Length < FWParser.MIN_IMAGE_SIZE) // 1048576 bytes
             {
                 METMessageBox.Show(this, "Warning", "The file is too small and was ignored.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
             // Binary too large
-            if (fileInfo.Length > FWParser.intMaxROMSize) // 33554432 bytes
+            if (fileInfo.Length > FWParser.MAX_IMAGE_SIZE) // 33554432 bytes
             {
                 METMessageBox.Show(this, "Warning", "The file is too large and was ignored.", MsgType.Warning, MsgButton.Okay);
                 return false;
@@ -598,99 +684,60 @@ namespace Mac_EFI_Toolkit
         internal void ParseFirmwareData()
         {
             var fileInfo = new FileInfo(FWParser.strLoadedBinaryFilePath);
-            DateTime creationTime = fileInfo.CreationTime;
-            DateTime modifiedTime = fileInfo.LastWriteTime;
 
-            // Filename
-            FWParser.strFilename = Path.GetFileName(FWParser.strLoadedBinaryFilePath);
-            // Size
-            FWParser.lLoadedFileSize = fileInfo.Length;
-            // File CRC32
-            FWParser.uiCrcOfLoadedFile = FileUtils.GetCrc32Digest(FWParser.bytesLoadedFile);
-            // Created time
-            FWParser.strCreationTime = $"{creationTime}";
-            // Modified time
-            FWParser.strModifiedTime = $"{modifiedTime}";
-            // Serial number
-            FWParser.strSerialNumber = FWParser.bytesLoadedFsys != null ? FWParser.GetFsysSerialNumber(FWParser.bytesLoadedFsys) : "N/A";
-            // HWC
-            FWParser.strHwc = FWParser.bytesLoadedFsys != null ? FWParser.GetFsysHwc(FWParser.bytesLoadedFsys) : "N/A";
-            // EFI Version
+            ParseFileInfo(fileInfo);
+
+            FWParser.strSerialNumber = FWParser.bytesLoadedFsys != null ? FWParser.GetSystemSerialNumber(FWParser.bytesLoadedFsys) : null;
+            FWParser.strHwc = FWParser.bytesLoadedFsys != null ? FWParser.GetSystemHardwareConfig(FWParser.bytesLoadedFsys) : null;
+            var task = Task.Run(() =>
+            {
+                FWParser.strModel = EFIUtils.GetDeviceConfigCodeAsync(FWParser.strHwc).ConfigureAwait(false).GetAwaiter().GetResult();
+            });
+            FWParser.strModelFallback = FWParser.GetModelIdentifier(FWParser.bytesLoadedFile);
             FWParser.strEfiVersion = FWParser.GetEfiVersion(FWParser.bytesLoadedFile);
-            // ROM version
             FWParser.strBootromVersion = FWParser.GetBootromVersion(FWParser.bytesLoadedFile);
-            // Fsys CRC32 string
             FWParser.strFsysChecksumInBinary = FWParser.GetFsysCrc32(FWParser.bytesLoadedFile);
-            // Fsys CRC32
-            FWParser.strRealFsysChecksum = EFIUtils.GetUintFsysCrc32(FWParser.bytesLoadedFsys).ToString("X8");
-            // APFSJumpStart
-            FWParser.strApfsCapable = $"{ FWParser.GetIsApfsCapable(FWParser.bytesLoadedFile) }";
-            // FITC
+            FWParser.strRealFsysChecksum = FWParser.bytesLoadedFsys != null ? EFIUtils.GetUintFsysCrc32(FWParser.bytesLoadedFsys).ToString("X8") : null;
+            FWParser.strApfsCapable = FWParser.GetIsApfsCapable(FWParser.bytesLoadedFile).ToString();
             FWParser.strFitcVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.Fitc);
-            //ME
             FWParser.strMeVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.ManagementEngine);
-            // Get the BoardId
             FWParser.strBoardId = FWParser.GetBoardId(FWParser.bytesLoadedFile);
-            // SON
-            FWParser.strSon = FWParser.bytesLoadedFsys != null ? FWParser.GetFsysSon(FWParser.bytesLoadedFsys) : "N/A";
+            FWParser.strSon = FWParser.bytesLoadedFsys != null ? FWParser.GetSystemOrderNumber(FWParser.bytesLoadedFsys) : null;
+        }
 
-            UpdateControls();
+        private void ParseFileInfo(FileInfo fileInfo)
+        {
+            FWParser.strFilename = fileInfo.Name;
+            FWParser.lLoadedFileSize = fileInfo.Length;
+            FWParser.uiCrcOfLoadedFile = FileUtils.GetCrc32Digest(FWParser.bytesLoadedFile);
+            FWParser.strCreationTime = fileInfo.CreationTime.ToString();
+            FWParser.strModifiedTime = fileInfo.LastWriteTime.ToString();
         }
 
         internal void UpdateControls()
         {
-            lblFilename.Text = $"{FWParser.strFilename}";
+            lblFilename.Text = FWParser.strFilename;
             lblFilesizeBytes.ForeColor = EFIUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize) ? Colours.clrGood : Colours.clrUnknown;
             lblFilesizeBytes.Text = FileUtils.FormatFileSize(FWParser.lLoadedFileSize);
             lblCreated.Text = FWParser.strCreationTime;
             lblModified.Text = FWParser.strModifiedTime;
             lblFileChecksum.Text = FWParser.uiCrcOfLoadedFile.ToString("X8");
-
-            if (FWParser.strFsysChecksumInBinary != "N/A")
-            {
-                lblFsysCrc.Text = $"{ FWParser.strFsysChecksumInBinary }h";
-                lblFsysCrc.ForeColor = (FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary) ? lblFsysCrc.ForeColor = Colours.clrGood : lblFsysCrc.ForeColor = Colours.clrError;
-            }
-            else
-            {
-                lblFsysCrc.Text = "N/A";
-                lblFsysCrc.ForeColor = Color.White;
-            }
-
             lblApfsCapable.Text = FWParser.strApfsCapable;
-            if (FWParser.strApfsCapable == "Yes")
-            {
-                lblApfsCapable.ForeColor = Colours.clrGood;
-            }
-            else
-            {
-                lblApfsCapable.ForeColor = Colours.clrUnknown;
-            }
-
-            GetHwcAsync(FWParser.strHwc);
-            lblSerialNumber.Text = FWParser.strSerialNumber;
-            lblHwc.Text = FWParser.strHwc;
-            lblEfiVersion.Text = FWParser.strEfiVersion;
-            lblRomVersion.Text = FWParser.strBootromVersion;
+            lblApfsCapable.ForeColor = FWParser.strApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
             lblFitcVersion.Text = FWParser.strFitcVersion;
             lblMeVersion.Text = FWParser.strMeVersion;
-            lblBoardId.Text = FWParser.strBoardId;
-            lblSon.Text = FWParser.strSon;
+
+            lblModel.Text = FWParser.strModel ?? FWParser.strModelFallback ?? "N/A";
+            lblSerialNumber.Text = FWParser.strSerialNumber ?? "N/A";
+            lblHwc.Text = FWParser.strHwc ?? "N/A";
+            lblFsysCrc.Text = FWParser.strFsysChecksumInBinary != null ? $"{FWParser.strFsysChecksumInBinary}h" : "N/A";
+            lblFsysCrc.ForeColor = FWParser.strFsysChecksumInBinary != null && FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary ? Colours.clrGood : Color.White;
+            lblEfiVersion.Text = FWParser.strEfiVersion ?? "N/A";
+            lblRomVersion.Text = FWParser.strBootromVersion ?? "N/A";
+            lblBoardId.Text = FWParser.strBoardId ?? "N/A";
+            lblSon.Text = FWParser.strSon ?? "N/A";
 
             ToggleControlEnable(true);
-        }
-
-        internal async void GetHwcAsync(string strHwc)
-        {
-            // Fallback method, maybe we should use the serial number first, and this as last resort?
-            if (string.Equals(strHwc, "N/A", StringComparison.OrdinalIgnoreCase))
-            {
-                lblConfig.Text = $"{FWParser.GetModelIdentifier(FWParser.bytesLoadedFile)}";
-                return; // Exit immediately.
-            }
-
-            var configCode = await EFIUtils.GetDeviceConfigCodeAsync(strHwc);
-            lblConfig.Text = $"{configCode}";
         }
 
         private void OpenBinary(string filePath)
@@ -709,6 +756,7 @@ namespace Mac_EFI_Toolkit
             {
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
                 ParseFirmwareData();
+                UpdateControls();
             }
             else
             {
@@ -723,7 +771,7 @@ namespace Mac_EFI_Toolkit
             Label[] labels =
             {
                 lblFilename, lblFileChecksum, lblFilesizeBytes, lblCreated, lblModified,
-                lblConfig, lblSerialNumber, lblHwc, lblEfiVersion, lblRomVersion,
+                lblModel, lblSerialNumber, lblHwc, lblEfiVersion, lblRomVersion,
                 lblFsysCrc, lblApfsCapable, lblFitcVersion, lblMeVersion, lblBoardId,
                 lblSon
             };
@@ -736,8 +784,8 @@ namespace Mac_EFI_Toolkit
             // Clear FWParser members
             FWParser.ClearBaseData();
 
-            // Clear private members
-            _strInitialDirectory = Program.appDirectory;
+            // Reset private members
+            SetPrimaryInitialDirectory();
 
             // Clear the large object heap
             GC.Collect();
