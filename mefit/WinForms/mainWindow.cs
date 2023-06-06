@@ -744,8 +744,16 @@ namespace Mac_EFI_Toolkit
             lblModel.Text = FWParser.strModel ?? FWParser.strModelFallback ?? "N/A";
             lblSerialNumber.Text = FWParser.strSerialNumber ?? "N/A";
             lblHwc.Text = FWParser.strHwc ?? "N/A";
-            lblFsysCrc.Text = FWParser.strFsysChecksumInBinary != null ? $"{FWParser.strFsysChecksumInBinary}h" : "N/A";
-            lblFsysCrc.ForeColor = FWParser.strFsysChecksumInBinary != null && FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary ? Colours.clrGood : Color.White;
+            if (FWParser.strFsysChecksumInBinary != null)
+            {
+                lblFsysCrc.Text = $"{FWParser.strFsysChecksumInBinary}h";
+                lblFsysCrc.ForeColor = FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary ? Colours.clrGood : Colours.clrError;
+            }
+            else
+            {
+                lblFsysCrc.Text = "N/A";
+                lblFsysCrc.ForeColor = Color.White;
+            }
             lblEfiVersion.Text = FWParser.strEfiVersion ?? "N/A";
             lblRomVersion.Text = FWParser.strBootromVersion ?? "N/A";
             lblBoardId.Text = FWParser.strBoardId ?? "N/A";
