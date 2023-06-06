@@ -389,17 +389,24 @@ namespace Mac_EFI_Toolkit
 
         private void cmdReload_Click(object sender, EventArgs e)
         {
-            var fileBytes = File.ReadAllBytes(FWParser.strLoadedBinaryFilePath);
-            var shaOnDisk = FileUtils.GetSha256Digest(fileBytes);
-            var shaInMemory = FileUtils.GetSha256Digest(FWParser.bytesLoadedFile);
-
-            if (!string.Equals(shaOnDisk, shaInMemory))
+            if (File.Exists(FWParser.strLoadedBinaryFilePath))
             {
-                OpenBinary(FWParser.strLoadedBinaryFilePath);
+                var fileBytes = File.ReadAllBytes(FWParser.strLoadedBinaryFilePath);
+                var shaOnDisk = FileUtils.GetSha256Digest(fileBytes);
+                var shaInMemory = FileUtils.GetSha256Digest(FWParser.bytesLoadedFile);
+
+                if (!string.Equals(shaOnDisk, shaInMemory))
+                {
+                    OpenBinary(FWParser.strLoadedBinaryFilePath);
+                }
+                else
+                {
+                    METMessageBox.Show(this, "MET", "File on disk matches file in memory. Data was not refreshed.", MsgType.Information, MsgButton.Okay);
+                }
             }
             else
             {
-                METMessageBox.Show(this, "MET", "File on disk matches file in memory. Data was not refreshed.", MsgType.Information, MsgButton.Okay);
+                METMessageBox.Show(this, "MET", "The file on disk could not be found. It may have been deleted.", MsgType.Critical, MsgButton.Okay);
             }
         }
 
