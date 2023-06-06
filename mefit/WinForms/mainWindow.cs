@@ -119,8 +119,14 @@ namespace Mac_EFI_Toolkit
                 string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
                 if (draggedFiles.Length == 1)
                 {
-                    e.Effect = DragDropEffects.Copy;
-                    return;
+                    // Check if the dragged item is a file and not a folder
+                    string draggedFile = draggedFiles[0];
+                    FileAttributes attributes = File.GetAttributes(draggedFile);
+                    if ((attributes & FileAttributes.Directory) == 0)
+                    {
+                        e.Effect = DragDropEffects.Copy;
+                        return;
+                    }
                 }
             }
 
@@ -484,51 +490,6 @@ namespace Mac_EFI_Toolkit
         {
             Process.Start(METVersion.strLatestUrl);
         }
-
-        private void SetTipHandlers()
-        {
-            cmdNavigate.MouseEnter += HandleMouseEnterTip;
-            cmdNavigate.MouseLeave += HandleMouseLeaveTip;
-            cmdReload.MouseEnter += HandleMouseEnterTip;
-            cmdReload.MouseLeave += HandleMouseLeaveTip;
-            cmdExportFsysBlock.MouseEnter += HandleMouseEnterTip;
-            cmdExportFsysBlock.MouseLeave += HandleMouseLeaveTip;
-            cmdFixFsysCrc.MouseEnter += HandleMouseEnterTip;
-            cmdFixFsysCrc.MouseLeave += HandleMouseLeaveTip;
-            cmdEveryMacSearch.MouseEnter += HandleMouseEnterTip;
-            cmdEveryMacSearch.MouseLeave += HandleMouseLeaveTip;
-            cmdOpenBin.MouseEnter += HandleMouseEnterTip;
-            cmdOpenBin.MouseLeave += HandleMouseLeaveTip;
-            cmdReset.MouseEnter += HandleMouseEnterTip;
-            cmdReset.MouseLeave += HandleMouseLeaveTip;
-            cmdEditEfirom.MouseEnter += HandleMouseEnterTip;
-            cmdEditEfirom.MouseLeave += HandleMouseLeaveTip;
-        }
-
-        private void HandleMouseEnterTip(object sender, EventArgs e)
-        {
-            if (sender == cmdNavigate)
-                lblMessage.Text = "Navigate to file in explorer";
-            else if (sender == cmdReload)
-                lblMessage.Text = "Reload current file from disk";
-            else if (sender == cmdExportFsysBlock)
-                lblMessage.Text = "Export Fsys Region";
-            else if (sender == cmdFixFsysCrc)
-                lblMessage.Text = "Repair Fsys CRC32";
-            else if (sender == cmdEveryMacSearch)
-                lblMessage.Text = "View serial number information with EveryMac";
-            else if (sender == cmdOpenBin)
-                lblMessage.Text = "Open an EFIROM";
-            else if (sender == cmdReset)
-                lblMessage.Text = "Unload EFIROM and clear all data";
-            else if (sender == cmdEditEfirom)
-                lblMessage.Text = "Open the firmware editor";
-        }
-
-        private void HandleMouseLeaveTip(object sender, EventArgs e)
-        {
-            lblMessage.Text = string.Empty;
-        }
         #endregion
 
         #region Picturebox Events
@@ -637,6 +598,59 @@ namespace Mac_EFI_Toolkit
                     lblPrivateMemory.Text = $"{privateMemoryString}";
                 }));
             }
+        }
+
+        private void SetTipHandlers()
+        {
+            cmdNavigate.MouseEnter += HandleMouseEnterTip;
+            cmdNavigate.MouseLeave += HandleMouseLeaveTip;
+            cmdReload.MouseEnter += HandleMouseEnterTip;
+            cmdReload.MouseLeave += HandleMouseLeaveTip;
+            cmdExportFsysBlock.MouseEnter += HandleMouseEnterTip;
+            cmdExportFsysBlock.MouseLeave += HandleMouseLeaveTip;
+            cmdFixFsysCrc.MouseEnter += HandleMouseEnterTip;
+            cmdFixFsysCrc.MouseLeave += HandleMouseLeaveTip;
+            cmdEveryMacSearch.MouseEnter += HandleMouseEnterTip;
+            cmdEveryMacSearch.MouseLeave += HandleMouseLeaveTip;
+            cmdOpenBin.MouseEnter += HandleMouseEnterTip;
+            cmdOpenBin.MouseLeave += HandleMouseLeaveTip;
+            cmdReset.MouseEnter += HandleMouseEnterTip;
+            cmdReset.MouseLeave += HandleMouseLeaveTip;
+            cmdEditEfirom.MouseEnter += HandleMouseEnterTip;
+            cmdEditEfirom.MouseLeave += HandleMouseLeaveTip;
+            lblWorkingSet.MouseEnter += HandleMouseEnterTip;
+            lblWorkingSet.MouseLeave += HandleMouseLeaveTip;
+            lblPrivateMemory.MouseEnter += HandleMouseEnterTip;
+            lblPrivateMemory.MouseLeave += HandleMouseLeaveTip;
+        }
+
+        private void HandleMouseEnterTip(object sender, EventArgs e)
+        {
+            if (sender == cmdNavigate)
+                lblMessage.Text = "Navigate to file in explorer";
+            else if (sender == cmdReload)
+                lblMessage.Text = "Reload current file from disk";
+            else if (sender == cmdExportFsysBlock)
+                lblMessage.Text = "Export Fsys Region";
+            else if (sender == cmdFixFsysCrc)
+                lblMessage.Text = "Repair Fsys CRC32";
+            else if (sender == cmdEveryMacSearch)
+                lblMessage.Text = "View serial number information with EveryMac";
+            else if (sender == cmdOpenBin)
+                lblMessage.Text = "Open an EFIROM";
+            else if (sender == cmdReset)
+                lblMessage.Text = "Unload EFIROM and clear all data";
+            else if (sender == cmdEditEfirom)
+                lblMessage.Text = "Open the firmware editor";
+            else if (sender == lblWorkingSet)
+                lblMessage.Text = "Application shared memory consumption";
+            else if (sender == lblPrivateMemory)
+                lblMessage.Text = "Application private memory consumption";
+        }
+
+        private void HandleMouseLeaveTip(object sender, EventArgs e)
+        {
+            lblMessage.Text = string.Empty;
         }
         #endregion
 
