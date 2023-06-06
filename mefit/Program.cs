@@ -252,14 +252,6 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Process
-        internal static long GetWorkingSetSize()
-        {
-            using (Process currentProcess = Process.GetCurrentProcess())
-            {
-                return currentProcess.WorkingSet64;
-            }
-        }
-
         internal static long GetPrivateMemorySize()
         {
             using (Process currentProcess = Process.GetCurrentProcess())

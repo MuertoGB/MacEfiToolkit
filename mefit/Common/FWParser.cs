@@ -81,7 +81,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static string strApfsCapable = string.Empty;
         internal static string strFsysChecksumInBinary = string.Empty;
         internal static string strRealFsysChecksum = string.Empty;
-        internal static string strFitcVersion = string.Empty;
+        internal static string strFitVersion = string.Empty;
         internal static string strMeVersion = string.Empty;
         internal static string strBoardId = string.Empty;
         internal static string strSon = string.Empty;
@@ -217,7 +217,13 @@ namespace Mac_EFI_Toolkit.Common
 
                 if (sonBytes != null)
                 {
-                    return _utf8.GetString(sonBytes);
+                    var sonString = _utf8.GetString(sonBytes);
+                    if (sonString.EndsWith("/"))
+                    {
+                        sonString = sonString.TrimEnd('/');
+                    }
+
+                    return sonString;
                 }
             }
 
@@ -429,7 +435,7 @@ namespace Mac_EFI_Toolkit.Common
             {
                 strLoadedBinaryFilePath, strFilenameWithoutExt, strCreationTime, strModifiedTime,
                 strFilename, strSerialNumber, strHwc, strEfiVersion, strBootromVersion,
-                strApfsCapable, strFsysChecksumInBinary, strRealFsysChecksum, strFitcVersion,
+                strApfsCapable, strFsysChecksumInBinary, strRealFsysChecksum, strFitVersion,
                 strMeVersion, strBoardId, strSon
             };
             for (int i = 0; i < strings.Length; i++)

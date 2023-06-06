@@ -25,10 +25,10 @@ namespace Mac_EFI_Toolkit.Common
         internal ushort FlashCycleLimit;
         internal uint UmaSize;
         internal uint Flags;
-        internal ushort FitcMajor;
-        internal ushort FitcMinor;
-        internal ushort FitcHotfix;
-        internal ushort FitcBuild;
+        internal ushort FitMajor;
+        internal ushort FitMinor;
+        internal ushort FitHotfix;
+        internal ushort FitBuild;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -48,7 +48,7 @@ namespace Mac_EFI_Toolkit.Common
     #region Enum
     internal enum HeaderType
     {
-        Fitc,
+        FlashImageTool,
         ManagementEngine
     }
     #endregion
@@ -63,7 +63,7 @@ namespace Mac_EFI_Toolkit.Common
 
             switch (headerType)
             {
-                case HeaderType.Fitc:
+                case HeaderType.FlashImageTool:
                     headerOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.FPT_HEADER_SIG);
                     readLength = 0x20;
                     if (headerOffset != -1)
@@ -72,7 +72,7 @@ namespace Mac_EFI_Toolkit.Common
                         if (headerBytes != null)
                         {
                             var fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
-                            versionString = $"{fptHeader.FitcMajor}.{fptHeader.FitcMinor}.{fptHeader.FitcHotfix}.{fptHeader.FitcBuild}";
+                            versionString = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                         }
                     }
                     break;

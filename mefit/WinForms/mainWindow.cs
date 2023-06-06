@@ -592,13 +592,7 @@ namespace Mac_EFI_Toolkit
         {
             lock (_lockObject)
             {
-                string workingSetString = Helper.FormatSize((ulong)Program.GetWorkingSetSize());
                 string privateMemoryString = Helper.FormatSize((ulong)Program.GetPrivateMemorySize());
-
-                lblWorkingSet.Invoke((Action)(() =>
-                {
-                    lblWorkingSet.Text = $"{workingSetString}";
-                }));
 
                 lblPrivateMemory.Invoke((Action)(() =>
                 {
@@ -625,8 +619,6 @@ namespace Mac_EFI_Toolkit
             cmdReset.MouseLeave += HandleMouseLeaveTip;
             cmdEditEfirom.MouseEnter += HandleMouseEnterTip;
             cmdEditEfirom.MouseLeave += HandleMouseLeaveTip;
-            lblWorkingSet.MouseEnter += HandleMouseEnterTip;
-            lblWorkingSet.MouseLeave += HandleMouseLeaveTip;
             lblPrivateMemory.MouseEnter += HandleMouseEnterTip;
             lblPrivateMemory.MouseLeave += HandleMouseLeaveTip;
         }
@@ -649,10 +641,8 @@ namespace Mac_EFI_Toolkit
                 lblMessage.Text = "Unload EFIROM and clear all data";
             else if (sender == cmdEditEfirom)
                 lblMessage.Text = "Open the firmware editor";
-            else if (sender == lblWorkingSet)
-                lblMessage.Text = "Application shared memory consumption";
             else if (sender == lblPrivateMemory)
-                lblMessage.Text = "Application private memory consumption";
+                lblMessage.Text = "Private memory consumption";
         }
 
         private void HandleMouseLeaveTip(object sender, EventArgs e)
@@ -720,7 +710,7 @@ namespace Mac_EFI_Toolkit
             FWParser.strFsysChecksumInBinary = FWParser.GetFsysCrc32(FWParser.bytesLoadedFile);
             FWParser.strRealFsysChecksum = FWParser.bytesLoadedFsys != null ? EFIUtils.GetUintFsysCrc32(FWParser.bytesLoadedFsys).ToString("X8") : null;
             FWParser.strApfsCapable = FWParser.GetIsApfsCapable(FWParser.bytesLoadedFile).ToString();
-            FWParser.strFitcVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.Fitc);
+            FWParser.strFitVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.FlashImageTool);
             FWParser.strMeVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.ManagementEngine);
             FWParser.strBoardId = FWParser.GetBoardId(FWParser.bytesLoadedFile);
             FWParser.strSon = FWParser.bytesLoadedFsys != null ? FWParser.GetSystemOrderNumber(FWParser.bytesLoadedFsys) : null;
@@ -737,7 +727,7 @@ namespace Mac_EFI_Toolkit
 
         internal void UpdateControls()
         {
-            lblFilename.Text = FWParser.strFilename;
+            lblFilename.Text = $"FILE: '{FWParser.strFilename}'";
             lblFilesizeBytes.ForeColor = EFIUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize) ? Colours.clrGood : Colours.clrUnknown;
             lblFilesizeBytes.Text = FileUtils.FormatFileSize(FWParser.lLoadedFileSize);
             lblCreated.Text = FWParser.strCreationTime;
@@ -745,10 +735,10 @@ namespace Mac_EFI_Toolkit
             lblFileChecksum.Text = FWParser.uiCrcOfLoadedFile.ToString("X8");
             lblApfsCapable.Text = FWParser.strApfsCapable;
             lblApfsCapable.ForeColor = FWParser.strApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
-            lblFitcVersion.Text = FWParser.strFitcVersion;
+            lblFitVersion.Text = FWParser.strFitVersion;
             lblMeVersion.Text = FWParser.strMeVersion;
 
-            lblModel.Text = FWParser.strModel ?? FWParser.strModelFallback ?? "N/A";
+            lblModel.Text = $"MODEL: {FWParser.strModel ?? FWParser.strModelFallback ?? "N/A"}";
             lblSerialNumber.Text = FWParser.strSerialNumber ?? "N/A";
             lblHwc.Text = FWParser.strHwc ?? "N/A";
             if (FWParser.strFsysChecksumInBinary != null)
@@ -801,7 +791,7 @@ namespace Mac_EFI_Toolkit
             {
                 lblFilename, lblFileChecksum, lblFilesizeBytes, lblCreated, lblModified,
                 lblModel, lblSerialNumber, lblHwc, lblEfiVersion, lblRomVersion,
-                lblFsysCrc, lblApfsCapable, lblFitcVersion, lblMeVersion, lblBoardId,
+                lblFsysCrc, lblApfsCapable, lblFitVersion, lblMeVersion, lblBoardId,
                 lblSon
             };
             foreach (Label label in labels)
