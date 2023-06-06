@@ -156,18 +156,19 @@ namespace Mac_EFI_Toolkit
             this.tlpBottom.RowCount = 1;
             this.tlpBottom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpBottom.Size = new System.Drawing.Size(713, 36);
-            this.tlpBottom.TabIndex = 96;
+            this.tlpBottom.TabIndex = 99;
             // 
             // lblWorkingSet
             // 
             this.lblWorkingSet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.lblWorkingSet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWorkingSet.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWorkingSet.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.lblWorkingSet.Location = new System.Drawing.Point(542, 0);
             this.lblWorkingSet.Margin = new System.Windows.Forms.Padding(0);
             this.lblWorkingSet.Name = "lblWorkingSet";
             this.lblWorkingSet.Size = new System.Drawing.Size(85, 36);
-            this.lblWorkingSet.TabIndex = 4;
+            this.lblWorkingSet.TabIndex = 99;
             this.lblWorkingSet.Text = "...";
             this.lblWorkingSet.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -183,19 +184,20 @@ namespace Mac_EFI_Toolkit
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Padding = new System.Windows.Forms.Padding(1);
             this.lblMessage.Size = new System.Drawing.Size(541, 36);
-            this.lblMessage.TabIndex = 3;
+            this.lblMessage.TabIndex = 99;
             this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblPrivateMemory
             // 
             this.lblPrivateMemory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.lblPrivateMemory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblPrivateMemory.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPrivateMemory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.lblPrivateMemory.Location = new System.Drawing.Point(628, 0);
             this.lblPrivateMemory.Margin = new System.Windows.Forms.Padding(0);
             this.lblPrivateMemory.Name = "lblPrivateMemory";
             this.lblPrivateMemory.Size = new System.Drawing.Size(85, 36);
-            this.lblPrivateMemory.TabIndex = 5;
+            this.lblPrivateMemory.TabIndex = 99;
             this.lblPrivateMemory.Text = "...";
             this.lblPrivateMemory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -221,7 +223,7 @@ namespace Mac_EFI_Toolkit
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 154F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.Size = new System.Drawing.Size(713, 292);
-            this.tlpMain.TabIndex = 95;
+            this.tlpMain.TabIndex = 3;
             // 
             // tlpFilename
             // 
@@ -242,7 +244,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFilename.RowCount = 1;
             this.tlpFilename.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilename.Size = new System.Drawing.Size(713, 36);
-            this.tlpFilename.TabIndex = 98;
+            this.tlpFilename.TabIndex = 0;
             // 
             // lblFilename
             // 
@@ -256,12 +258,13 @@ namespace Mac_EFI_Toolkit
             this.lblFilename.Name = "lblFilename";
             this.lblFilename.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblFilename.Size = new System.Drawing.Size(639, 36);
-            this.lblFilename.TabIndex = 5;
+            this.lblFilename.TabIndex = 99;
             this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdReload
             // 
             this.cmdReload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(42)))), ((int)(((byte)(49)))));
+            this.cmdReload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdReload.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(42)))), ((int)(((byte)(49)))));
             this.cmdReload.FlatAppearance.BorderSize = 0;
             this.cmdReload.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(92)))), ((int)(((byte)(99)))));
@@ -273,7 +276,7 @@ namespace Mac_EFI_Toolkit
             this.cmdReload.Margin = new System.Windows.Forms.Padding(0);
             this.cmdReload.Name = "cmdReload";
             this.cmdReload.Size = new System.Drawing.Size(36, 36);
-            this.cmdReload.TabIndex = 7;
+            this.cmdReload.TabIndex = 5;
             this.cmdReload.Text = "R";
             this.cmdReload.UseVisualStyleBackColor = false;
             this.cmdReload.Click += new System.EventHandler(this.cmdReload_Click);
@@ -281,6 +284,7 @@ namespace Mac_EFI_Toolkit
             // cmdNavigate
             // 
             this.cmdNavigate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(42)))), ((int)(((byte)(49)))));
+            this.cmdNavigate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdNavigate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(42)))), ((int)(((byte)(49)))));
             this.cmdNavigate.FlatAppearance.BorderSize = 0;
             this.cmdNavigate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(92)))), ((int)(((byte)(99)))));
@@ -292,7 +296,7 @@ namespace Mac_EFI_Toolkit
             this.cmdNavigate.Margin = new System.Windows.Forms.Padding(0);
             this.cmdNavigate.Name = "cmdNavigate";
             this.cmdNavigate.Size = new System.Drawing.Size(36, 36);
-            this.cmdNavigate.TabIndex = 8;
+            this.cmdNavigate.TabIndex = 4;
             this.cmdNavigate.Text = "N";
             this.cmdNavigate.UseVisualStyleBackColor = false;
             this.cmdNavigate.Click += new System.EventHandler(this.cmdNavigate_Click);
@@ -339,7 +343,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFile.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpFile.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpFile.Size = new System.Drawing.Size(713, 61);
-            this.tlpFile.TabIndex = 99;
+            this.tlpFile.TabIndex = 1;
             // 
             // lblCreated
             // 
@@ -353,7 +357,7 @@ namespace Mac_EFI_Toolkit
             this.lblCreated.Name = "lblCreated";
             this.lblCreated.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblCreated.Size = new System.Drawing.Size(225, 30);
-            this.lblCreated.TabIndex = 11;
+            this.lblCreated.TabIndex = 99;
             this.lblCreated.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblModified
@@ -368,7 +372,7 @@ namespace Mac_EFI_Toolkit
             this.lblModified.Name = "lblModified";
             this.lblModified.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblModified.Size = new System.Drawing.Size(225, 30);
-            this.lblModified.TabIndex = 12;
+            this.lblModified.TabIndex = 99;
             this.lblModified.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblFileChecksum
@@ -383,7 +387,7 @@ namespace Mac_EFI_Toolkit
             this.lblFileChecksum.Name = "lblFileChecksum";
             this.lblFileChecksum.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblFileChecksum.Size = new System.Drawing.Size(225, 30);
-            this.lblFileChecksum.TabIndex = 5;
+            this.lblFileChecksum.TabIndex = 99;
             this.lblFileChecksum.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblCreatedText
@@ -397,7 +401,7 @@ namespace Mac_EFI_Toolkit
             this.lblCreatedText.Name = "lblCreatedText";
             this.lblCreatedText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblCreatedText.Size = new System.Drawing.Size(130, 30);
-            this.lblCreatedText.TabIndex = 95;
+            this.lblCreatedText.TabIndex = 99;
             this.lblCreatedText.Text = "Created:";
             this.lblCreatedText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -413,7 +417,7 @@ namespace Mac_EFI_Toolkit
             this.lblFilesizeBytes.Name = "lblFilesizeBytes";
             this.lblFilesizeBytes.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblFilesizeBytes.Size = new System.Drawing.Size(225, 30);
-            this.lblFilesizeBytes.TabIndex = 6;
+            this.lblFilesizeBytes.TabIndex = 99;
             this.lblFilesizeBytes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblModifiedText
@@ -427,7 +431,7 @@ namespace Mac_EFI_Toolkit
             this.lblModifiedText.Name = "lblModifiedText";
             this.lblModifiedText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblModifiedText.Size = new System.Drawing.Size(130, 30);
-            this.lblModifiedText.TabIndex = 11;
+            this.lblModifiedText.TabIndex = 99;
             this.lblModifiedText.Text = "Modified:";
             this.lblModifiedText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -442,7 +446,7 @@ namespace Mac_EFI_Toolkit
             this.lblSizeBytesText.Name = "lblSizeBytesText";
             this.lblSizeBytesText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblSizeBytesText.Size = new System.Drawing.Size(130, 30);
-            this.lblSizeBytesText.TabIndex = 3;
+            this.lblSizeBytesText.TabIndex = 99;
             this.lblSizeBytesText.Text = "Size (Bytes):";
             this.lblSizeBytesText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -457,7 +461,7 @@ namespace Mac_EFI_Toolkit
             this.lblChecksumText.Name = "lblChecksumText";
             this.lblChecksumText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblChecksumText.Size = new System.Drawing.Size(130, 30);
-            this.lblChecksumText.TabIndex = 2;
+            this.lblChecksumText.TabIndex = 99;
             this.lblChecksumText.Text = "CRC32:";
             this.lblChecksumText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -506,7 +510,7 @@ namespace Mac_EFI_Toolkit
             this.tlpEfi.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpEfi.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tlpEfi.Size = new System.Drawing.Size(713, 154);
-            this.tlpEfi.TabIndex = 100;
+            this.tlpEfi.TabIndex = 2;
             // 
             // lblSon
             // 
@@ -520,7 +524,7 @@ namespace Mac_EFI_Toolkit
             this.lblSon.Name = "lblSon";
             this.lblSon.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblSon.Size = new System.Drawing.Size(225, 30);
-            this.lblSon.TabIndex = 12;
+            this.lblSon.TabIndex = 99;
             this.lblSon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblMeVersion
@@ -535,7 +539,7 @@ namespace Mac_EFI_Toolkit
             this.lblMeVersion.Name = "lblMeVersion";
             this.lblMeVersion.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblMeVersion.Size = new System.Drawing.Size(225, 30);
-            this.lblMeVersion.TabIndex = 5;
+            this.lblMeVersion.TabIndex = 99;
             this.lblMeVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblSonText
@@ -549,7 +553,7 @@ namespace Mac_EFI_Toolkit
             this.lblSonText.Name = "lblSonText";
             this.lblSonText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblSonText.Size = new System.Drawing.Size(130, 30);
-            this.lblSonText.TabIndex = 11;
+            this.lblSonText.TabIndex = 99;
             this.lblSonText.Text = "SON:";
             this.lblSonText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -565,7 +569,7 @@ namespace Mac_EFI_Toolkit
             this.lblEfiVersion.Name = "lblEfiVersion";
             this.lblEfiVersion.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblEfiVersion.Size = new System.Drawing.Size(225, 30);
-            this.lblEfiVersion.TabIndex = 19;
+            this.lblEfiVersion.TabIndex = 99;
             this.lblEfiVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblApfsCapable
@@ -580,7 +584,7 @@ namespace Mac_EFI_Toolkit
             this.lblApfsCapable.Name = "lblApfsCapable";
             this.lblApfsCapable.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblApfsCapable.Size = new System.Drawing.Size(225, 30);
-            this.lblApfsCapable.TabIndex = 17;
+            this.lblApfsCapable.TabIndex = 99;
             this.lblApfsCapable.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblRomVersionText
@@ -594,7 +598,7 @@ namespace Mac_EFI_Toolkit
             this.lblRomVersionText.Name = "lblRomVersionText";
             this.lblRomVersionText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblRomVersionText.Size = new System.Drawing.Size(130, 30);
-            this.lblRomVersionText.TabIndex = 18;
+            this.lblRomVersionText.TabIndex = 99;
             this.lblRomVersionText.Text = "ROM Version:";
             this.lblRomVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -609,7 +613,7 @@ namespace Mac_EFI_Toolkit
             this.lblFsysCrcText.Name = "lblFsysCrcText";
             this.lblFsysCrcText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblFsysCrcText.Size = new System.Drawing.Size(130, 30);
-            this.lblFsysCrcText.TabIndex = 13;
+            this.lblFsysCrcText.TabIndex = 99;
             this.lblFsysCrcText.Text = "Fsys Block:";
             this.lblFsysCrcText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -625,7 +629,7 @@ namespace Mac_EFI_Toolkit
             this.lblApfsCapableText.Name = "lblApfsCapableText";
             this.lblApfsCapableText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblApfsCapableText.Size = new System.Drawing.Size(130, 30);
-            this.lblApfsCapableText.TabIndex = 16;
+            this.lblApfsCapableText.TabIndex = 99;
             this.lblApfsCapableText.Text = "APFS Capable:";
             this.lblApfsCapableText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -640,7 +644,7 @@ namespace Mac_EFI_Toolkit
             this.lblEfiVersionText.Name = "lblEfiVersionText";
             this.lblEfiVersionText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblEfiVersionText.Size = new System.Drawing.Size(130, 30);
-            this.lblEfiVersionText.TabIndex = 19;
+            this.lblEfiVersionText.TabIndex = 99;
             this.lblEfiVersionText.Text = "EFI Version:";
             this.lblEfiVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -656,7 +660,7 @@ namespace Mac_EFI_Toolkit
             this.lblBoardId.Name = "lblBoardId";
             this.lblBoardId.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblBoardId.Size = new System.Drawing.Size(225, 30);
-            this.lblBoardId.TabIndex = 11;
+            this.lblBoardId.TabIndex = 99;
             this.lblBoardId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblMeVersionText
@@ -670,7 +674,7 @@ namespace Mac_EFI_Toolkit
             this.lblMeVersionText.Name = "lblMeVersionText";
             this.lblMeVersionText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblMeVersionText.Size = new System.Drawing.Size(130, 30);
-            this.lblMeVersionText.TabIndex = 2;
+            this.lblMeVersionText.TabIndex = 99;
             this.lblMeVersionText.Text = "ME Version:";
             this.lblMeVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -686,7 +690,7 @@ namespace Mac_EFI_Toolkit
             this.lblFitcVersion.Name = "lblFitcVersion";
             this.lblFitcVersion.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblFitcVersion.Size = new System.Drawing.Size(225, 30);
-            this.lblFitcVersion.TabIndex = 6;
+            this.lblFitcVersion.TabIndex = 99;
             this.lblFitcVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblBoardIdText
@@ -700,7 +704,7 @@ namespace Mac_EFI_Toolkit
             this.lblBoardIdText.Name = "lblBoardIdText";
             this.lblBoardIdText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblBoardIdText.Size = new System.Drawing.Size(130, 30);
-            this.lblBoardIdText.TabIndex = 10;
+            this.lblBoardIdText.TabIndex = 99;
             this.lblBoardIdText.Text = "Board-ID:";
             this.lblBoardIdText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -715,7 +719,7 @@ namespace Mac_EFI_Toolkit
             this.lblFitcVersionText.Name = "lblFitcVersionText";
             this.lblFitcVersionText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblFitcVersionText.Size = new System.Drawing.Size(130, 30);
-            this.lblFitcVersionText.TabIndex = 1;
+            this.lblFitcVersionText.TabIndex = 99;
             this.lblFitcVersionText.Text = "FITC Version:";
             this.lblFitcVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -731,7 +735,7 @@ namespace Mac_EFI_Toolkit
             this.lblHwc.Name = "lblHwc";
             this.lblHwc.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblHwc.Size = new System.Drawing.Size(225, 30);
-            this.lblHwc.TabIndex = 95;
+            this.lblHwc.TabIndex = 99;
             this.lblHwc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblSerialText
@@ -745,7 +749,7 @@ namespace Mac_EFI_Toolkit
             this.lblSerialText.Name = "lblSerialText";
             this.lblSerialText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblSerialText.Size = new System.Drawing.Size(130, 30);
-            this.lblSerialText.TabIndex = 9;
+            this.lblSerialText.TabIndex = 99;
             this.lblSerialText.Text = "Serial:";
             this.lblSerialText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -765,7 +769,7 @@ namespace Mac_EFI_Toolkit
             this.tlpSerial.RowCount = 1;
             this.tlpSerial.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSerial.Size = new System.Drawing.Size(225, 30);
-            this.tlpSerial.TabIndex = 19;
+            this.tlpSerial.TabIndex = 0;
             // 
             // cmdEveryMacSearch
             // 
@@ -782,7 +786,7 @@ namespace Mac_EFI_Toolkit
             this.cmdEveryMacSearch.Margin = new System.Windows.Forms.Padding(0);
             this.cmdEveryMacSearch.Name = "cmdEveryMacSearch";
             this.cmdEveryMacSearch.Size = new System.Drawing.Size(30, 30);
-            this.cmdEveryMacSearch.TabIndex = 4;
+            this.cmdEveryMacSearch.TabIndex = 0;
             this.cmdEveryMacSearch.Text = "C";
             this.cmdEveryMacSearch.UseVisualStyleBackColor = false;
             this.cmdEveryMacSearch.Click += new System.EventHandler(this.cmdEveryMacSearch_Click);
@@ -799,7 +803,7 @@ namespace Mac_EFI_Toolkit
             this.lblSerialNumber.Name = "lblSerialNumber";
             this.lblSerialNumber.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblSerialNumber.Size = new System.Drawing.Size(194, 30);
-            this.lblSerialNumber.TabIndex = 0;
+            this.lblSerialNumber.TabIndex = 99;
             this.lblSerialNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblHwcText
@@ -813,7 +817,7 @@ namespace Mac_EFI_Toolkit
             this.lblHwcText.Name = "lblHwcText";
             this.lblHwcText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblHwcText.Size = new System.Drawing.Size(130, 30);
-            this.lblHwcText.TabIndex = 95;
+            this.lblHwcText.TabIndex = 99;
             this.lblHwcText.Text = "HWC:";
             this.lblHwcText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -829,7 +833,7 @@ namespace Mac_EFI_Toolkit
             this.lblRomVersion.Name = "lblRomVersion";
             this.lblRomVersion.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblRomVersion.Size = new System.Drawing.Size(225, 30);
-            this.lblRomVersion.TabIndex = 18;
+            this.lblRomVersion.TabIndex = 99;
             this.lblRomVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpFsys
@@ -851,7 +855,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFsys.RowCount = 1;
             this.tlpFsys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFsys.Size = new System.Drawing.Size(225, 30);
-            this.tlpFsys.TabIndex = 18;
+            this.tlpFsys.TabIndex = 1;
             // 
             // lblFsysCrc
             // 
@@ -884,7 +888,7 @@ namespace Mac_EFI_Toolkit
             this.cmdFixFsysCrc.Margin = new System.Windows.Forms.Padding(0);
             this.cmdFixFsysCrc.Name = "cmdFixFsysCrc";
             this.cmdFixFsysCrc.Size = new System.Drawing.Size(30, 30);
-            this.cmdFixFsysCrc.TabIndex = 6;
+            this.cmdFixFsysCrc.TabIndex = 1;
             this.cmdFixFsysCrc.Text = "F";
             this.cmdFixFsysCrc.UseVisualStyleBackColor = false;
             this.cmdFixFsysCrc.Click += new System.EventHandler(this.cmdFixFsysCrc_Click);
@@ -905,7 +909,7 @@ namespace Mac_EFI_Toolkit
             this.cmdExportFsysBlock.Margin = new System.Windows.Forms.Padding(0);
             this.cmdExportFsysBlock.Name = "cmdExportFsysBlock";
             this.cmdExportFsysBlock.Size = new System.Drawing.Size(30, 30);
-            this.cmdExportFsysBlock.TabIndex = 5;
+            this.cmdExportFsysBlock.TabIndex = 0;
             this.cmdExportFsysBlock.Text = "E";
             this.cmdExportFsysBlock.UseVisualStyleBackColor = false;
             this.cmdExportFsysBlock.Click += new System.EventHandler(this.cmdExportFsysBlock_Click);
@@ -1072,7 +1076,7 @@ namespace Mac_EFI_Toolkit
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
             this.lblWindowTitle.Size = new System.Drawing.Size(453, 50);
-            this.lblWindowTitle.TabIndex = 11;
+            this.lblWindowTitle.TabIndex = 99;
             this.lblWindowTitle.Text = " Mac EFI Toolkit";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1104,7 +1108,7 @@ namespace Mac_EFI_Toolkit
             this.lblVersion.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(43, 22);
-            this.lblVersion.TabIndex = 2;
+            this.lblVersion.TabIndex = 99;
             this.lblVersion.Text = "0.0.0";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
