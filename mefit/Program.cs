@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}-230606-ms5";
+        internal static readonly string appBuild = $"{Application.ProductVersion}-230607-ms5";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
@@ -56,13 +56,6 @@ namespace Mac_EFI_Toolkit
         [STAThread]
         static void Main(string[] args)
         {
-            // Verify integrity of application to ensure it's not corrupt.
-            if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(appName))
-            {
-                MessageBox.Show("The assembly signature is invalid, or cannot be verified!\r\nYou should discard of, and reacquire the file.",
-                    "Signature Verification", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
             // Default framework stuff.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

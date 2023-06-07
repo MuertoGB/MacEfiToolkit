@@ -38,6 +38,9 @@
 - Fixed initial directory not being set when a file is dragged onto the main window, or the executable.
 - Fixed broken shortcut keys (CTRL+A, CTRL+S).
 
+#### Misc:
+- Ditched strong name verification due to wine compatibility. Will revisit in the future.
+
 ## Version 0.5.2
 
 #### New:
