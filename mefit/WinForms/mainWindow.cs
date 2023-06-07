@@ -708,6 +708,13 @@ namespace Mac_EFI_Toolkit
                 FWParser.strHwc = configInfo.ConfigCode;
                 FWParser.lHwcOffsetInFsys = serialInfo.Offset;
             }
+            else
+            {
+                FWParser.strSerialNumber = null;
+                FWParser.lSerialOffsetInFsys = -1;
+                FWParser.strHwc = null;
+                FWParser.lHwcOffsetInFsys = -1;
+            }
 
             var task = Task.Run(() =>
             {

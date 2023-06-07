@@ -81,8 +81,8 @@ namespace Mac_EFI_Toolkit.Common
         internal static string strLoadedBinaryFilePath = null;
         internal static string strFilename = null;
         internal static string strFilenameWithoutExt = null;
-        internal static string strCreationTime = null;
-        internal static string strModifiedTime = null;
+        //internal static string strCreationTime = null;
+        //internal static string strModifiedTime = null;
         internal static string strModel = null;
         internal static string strModelFallback = null;
         internal static string strSerialNumber = null;
@@ -103,9 +103,9 @@ namespace Mac_EFI_Toolkit.Common
         internal static uint uiCrcOfLoadedFile = 0;
 
         internal static long lLoadedFileSize = 0;
-        internal static long lFsysOffset = 0;
-        internal static long lSerialOffsetInFsys = 0;
-        internal static long lHwcOffsetInFsys = 0;
+        internal static long lFsysOffset = -1;
+        internal static long lSerialOffsetInFsys = -1;
+        internal static long lHwcOffsetInFsys = -1;
 
         internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576 bytes
         internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
@@ -172,14 +172,8 @@ namespace Mac_EFI_Toolkit.Common
             return new FsysRegion { BlockBytes = fsysBytes, Offset = outputOffset ? fsysOffset : -1 };
         }
 
-        internal static SystemSerialInfo GetSystemSerialNumber(byte[] sourceBytes, bool includeOffset = false)
+        internal static SystemSerialInfo GetSystemSerialNumber(byte[] sourceBytes, bool outputOffset = false)
         {
-            var serialInfo = new SystemSerialInfo
-            {
-                Serial = null,
-                Offset = -1
-            };
-
             var ssnOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.SSN_UPPER_SIG);
 
             if (ssnOffset == -1)
@@ -197,26 +191,20 @@ namespace Mac_EFI_Toolkit.Common
                 {
                     var serialString = _utf8.GetString(ssnBytes).Trim();
                     serialString = new string(serialString.Where(Char.IsLetterOrDigit).ToArray());
-                    serialInfo.Serial = serialString;
 
-                    if (includeOffset)
+                    return new SystemSerialInfo
                     {
-                        serialInfo.Offset = ssnOffset;
-                    }
+                        Serial = serialString,
+                        Offset = outputOffset ? ssnOffset : -1
+                    };
                 }
             }
 
-            return serialInfo;
+            return new SystemSerialInfo();
         }
 
-        internal static SystemHardwareConfigInfo GetSystemHardwareConfigCode(byte[] sourceBytes, bool includeOffset = false)
+        internal static SystemHardwareConfigInfo GetSystemHardwareConfigCode(byte[] sourceBytes, bool outputOffset = false)
         {
-            var configInfo = new SystemHardwareConfigInfo
-            {
-                ConfigCode = null,
-                Offset = -1
-            };
-
             var hwcOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.HWC_SIG);
 
             if (hwcOffset != -1)
@@ -229,16 +217,16 @@ namespace Mac_EFI_Toolkit.Common
                 {
                     string configString = _utf8.GetString(hwcBytes).Trim();
                     configString = new string(configString.Where(Char.IsLetterOrDigit).ToArray());
-                    configInfo.ConfigCode = configString;
 
-                    if (includeOffset)
+                    return new SystemHardwareConfigInfo
                     {
-                        configInfo.Offset = hwcOffset;
-                    }
+                        ConfigCode = configString,
+                        Offset = outputOffset ? hwcOffset : -1
+                    };
                 }
             }
 
-            return configInfo;
+            return new SystemHardwareConfigInfo();
         }
 
         internal static string GetSystemOrderNumber(byte[] sourceBytes)
@@ -468,14 +456,14 @@ namespace Mac_EFI_Toolkit.Common
         {
             string[] strings =
             {
-                strLoadedBinaryFilePath, strFilenameWithoutExt, strCreationTime, strModifiedTime,
-                strFilename, strSerialNumber, strHwc, strEfiVersion, strBootromVersion,
-                strApfsCapable, strFsysChecksumInBinary, strRealFsysChecksum, strFitVersion,
-                strMeVersion, strBoardId, strSon
+                strLoadedBinaryFilePath, strFilename, strFilenameWithoutExt, strCreationTime,
+                strModifiedTime, strModel, strModelFallback, strSerialNumber, strHwc,
+                strEfiVersion, strBootromVersion, strApfsCapable, strFsysChecksumInBinary,
+                strRealFsysChecksum, strFitVersion, strMeVersion, strBoardId, strSon
             };
             for (int i = 0; i < strings.Length; i++)
             {
-                strings[i] = string.Empty;
+                strings[i] = null;
             }
 
             byte[][] byteArrays =
@@ -489,7 +477,9 @@ namespace Mac_EFI_Toolkit.Common
 
             uiCrcOfLoadedFile = 0;
             lLoadedFileSize = 0;
-            lFsysOffset = 0;
+            lFsysOffset = -1;
+            lSerialOffsetInFsys = -1;
+            lHwcOffsetInFsys = -1;
         }
         #endregion
 
