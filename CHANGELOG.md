@@ -13,33 +13,39 @@
 ## Version 0.6.0
 
 #### New:
-- Added firmware editor window, which includes the following features:-
+- Added firmware-editor window, which includes the following features:-
 > - Ability to replace the entire Fsys block with a donor dump.
 > - Ability to replace the serial number with automatic HWC and CRC32 masking.
-> - Ability to clear the NVRAM (SVS, VSS, NSS) sections whilst preserving section headers.
-- Added firmware editing terms window.
+> - Ability to clear the NVRAM (SVS, VSS, NSS) sections while preserving section headers.
+- Added a status bar to bottom of the main window:-
+> - Displays pertinent model identifier for determining the firmware's counterpart device.
+> - Displays the amount of private memory used.
+> - Moved pup-up tips to the status bar.
+- Added editor terms window.
 - New models added to the internal database.
 - Added button to reload the currently open file, in case external changes are made.
 - Added button to navigate to the currently open file in explorer.
-- Added a status bar at the bottom of the main window.
+- Added setting to disable dark messagebox sounds.
+- Added setting to disable tips.
 
 #### Enhancements:
 - UI improvements.
 - Enhanced parsing of SON data from the Fsys region.
-- Implemented model identifier fallback if the HWC is not present.
-- Switched drag and drop support to 'all files' (.*).
-- Changed default initial directory to the application directory.
+- Implemented model-identifier fallback if the HWC is not present.
+- Switched drag and drop support to accept all file types (.) instead of specific file formats.
+- Changed the default initial directory to the application directory.
 
 #### Bugs:
-- Fixed about window form state issue.
-- Fixed font resolver failing to load embedded resources on some systems.
-- Fixed stability issues when the Fsys region is not found and 'Disable valid Fsys enforcement' is enabled.
-> - Please note you cannot use the editor when a valid Fsys region is not found.
-- Fixed initial directory not being set when a file is dragged onto the main window, or the executable.
+- Fixed an issue with the form minimize state in the About window.
+- Fixed the font resolver failing to load embedded resources on some systems.
+- Fixed stability issues that occurred when the Fsys region was not found and the 'Disable valid Fsys enforcement' option was enabled.
+> - Please note that you cannot use the firmware editor when a valid Fsys region is not found.
+- Fixed the initial directory not being set when a file is dragged onto the main window or the application executable file.
 - Fixed broken shortcut keys (CTRL+A, CTRL+S).
 
 #### Misc:
-- Ditched strong name verification due to wine compatibility. Will revisit in the future.
+- Removed strong name verification due to wine compatibility. Will revisit in the future.
+- Removed valid Fsys enforcement, and counterpart setting.
 
 ## Version 0.5.2
 

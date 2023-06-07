@@ -5,7 +5,6 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using System;
 using System.IO;
 
 namespace Mac_EFI_Toolkit
@@ -16,6 +15,8 @@ namespace Mac_EFI_Toolkit
     {
         DisableVersionCheck,
         DisableFlashingUI,
+        DisableMessageSounds,
+        DisableTips,
         DisableConfDiag,
         DisableLzmaFsSearch,
         DisableDescriptorEnforce,
@@ -45,6 +46,8 @@ namespace Mac_EFI_Toolkit
             var settingsIni = new IniFile(strSettingsFilePath);
             settingsIni.Write("Startup", "DisableVersionCheck", "False");
             settingsIni.Write("Application", "DisableFlashingUI", "False");
+            settingsIni.Write("Application", "DisableMessageSounds", "False");
+            settingsIni.Write("Application", "DisableTips", "False");
             settingsIni.Write("Application", "DisableConfDiag", "False");
             settingsIni.Write("Application", "InitialOfdPath", Program.appDirectory);
             settingsIni.Write("Firmware", "DisableLzmaFsSearch", "False");
@@ -70,6 +73,12 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.DisableFlashingUI:
                     section = "Application"; key = "DisableFlashingUI";
+                    break;
+                case SettingsBoolType.DisableMessageSounds:
+                    section = "Application"; key = "DisableMessageSounds";
+                    break;
+                case SettingsBoolType.DisableTips:
+                    section = "Application"; key = "DisableTips";
                     break;
                 case SettingsBoolType.DisableConfDiag:
                     section = "Application"; key = "DisableConfDiag";
@@ -172,6 +181,12 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.DisableFlashingUI:
                     section = "Application"; key = "DisableFlashingUI";
+                    break;
+                case SettingsBoolType.DisableMessageSounds:
+                    section = "Application"; key = "DisableMessageSounds";
+                    break;
+                case SettingsBoolType.DisableTips:
+                    section = "Application"; key = "DisableTips";
                     break;
                 case SettingsBoolType.DisableConfDiag:
                     section = "Application"; key = "DisableConfDiag";

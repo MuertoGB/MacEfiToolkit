@@ -105,6 +105,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, cbxDisableVersionCheck.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, cbxDisableFlashingUI.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, cbxDisableMessageSounds.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableTips, cbxDisableTips.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
             if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
@@ -116,8 +118,10 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableTips, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, false);
-            if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, Program.appDirectory);
+            Settings.SettingsSetString(SettingsStringType.InitialDirectory, Program.appDirectory);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
             UpdateCheckBoxControls();
@@ -136,8 +140,10 @@ namespace Mac_EFI_Toolkit.WinForms
                 _timer.Dispose();
             }
 
-            _timer = new Timer();
-            _timer.Interval = 2000;
+            _timer = new Timer
+            {
+                Interval = 2000
+            };
             _timer.Tick += Timer_Tick;
             _timer.Start();
         }
@@ -153,11 +159,13 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Checkbox Events
         private void UpdateCheckBoxControls()
         {
-            cbxDisableVersionCheck.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck)) ? true : false;
-            cbxDisableFlashingUI.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI)) ? true : false;
-            cbxDisableConfDiag.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag)) ? true : false;
-            cbxDisableLzmaFsSearch.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) ? true : false;
-            cbxDisableDescriptorEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce)) ? true : false;
+            cbxDisableVersionCheck.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck) ? true : false;
+            cbxDisableFlashingUI.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI) ? true : false;
+            cbxDisableMessageSounds.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds) ? true : false;
+            cbxDisableTips.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableTips) ? true : false;
+            cbxDisableConfDiag.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag) ? true : false;
+            cbxDisableLzmaFsSearch.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch) ? true : false;
+            cbxDisableDescriptorEnforce.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce) ? true : false;
         }
         #endregion
 

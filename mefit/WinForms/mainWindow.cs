@@ -622,30 +622,37 @@ namespace Mac_EFI_Toolkit
             cmdReset.MouseLeave += HandleMouseLeaveTip;
             cmdEditEfirom.MouseEnter += HandleMouseEnterTip;
             cmdEditEfirom.MouseLeave += HandleMouseLeaveTip;
+            lblRomModelIdentifier.MouseEnter += HandleMouseEnterTip;
+            lblRomModelIdentifier.MouseLeave += HandleMouseLeaveTip;
             lblPrivateMemory.MouseEnter += HandleMouseEnterTip;
             lblPrivateMemory.MouseLeave += HandleMouseLeaveTip;
         }
 
         private void HandleMouseEnterTip(object sender, EventArgs e)
         {
-            if (sender == cmdNavigate)
-                lblMessage.Text = "Navigate to file in explorer";
-            else if (sender == cmdReload)
-                lblMessage.Text = "Reload current file from disk";
-            else if (sender == cmdExportFsysBlock)
-                lblMessage.Text = "Export Fsys Region";
-            else if (sender == cmdFixFsysCrc)
-                lblMessage.Text = "Repair Fsys CRC32";
-            else if (sender == cmdEveryMacSearch)
-                lblMessage.Text = "View serial number information with EveryMac";
-            else if (sender == cmdOpenBin)
-                lblMessage.Text = "Open an EFIROM";
-            else if (sender == cmdReset)
-                lblMessage.Text = "Unload EFIROM and clear all data";
-            else if (sender == cmdEditEfirom)
-                lblMessage.Text = "Open the firmware editor";
-            else if (sender == lblPrivateMemory)
-                lblMessage.Text = "Private memory consumption";
+            if (!Settings.SettingsGetBool(SettingsBoolType.DisableTips))
+            {
+                if (sender == cmdNavigate)
+                    lblMessage.Text = "Navigate to file in explorer";
+                else if (sender == cmdReload)
+                    lblMessage.Text = "Reload current file from disk";
+                else if (sender == cmdExportFsysBlock)
+                    lblMessage.Text = "Export Fsys Region";
+                else if (sender == cmdFixFsysCrc)
+                    lblMessage.Text = "Repair Fsys CRC32";
+                else if (sender == cmdEveryMacSearch)
+                    lblMessage.Text = "View serial number information with EveryMac";
+                else if (sender == cmdOpenBin)
+                    lblMessage.Text = "Open an EFIROM";
+                else if (sender == cmdReset)
+                    lblMessage.Text = "Unload EFIROM and clear all data";
+                else if (sender == cmdEditEfirom)
+                    lblMessage.Text = "Open the firmware editor";
+                else if (sender == lblRomModelIdentifier)
+                    lblMessage.Text = "Machine model identifier";
+                else if (sender == lblPrivateMemory)
+                    lblMessage.Text = "Private memory consumption";
+            }
         }
 
         private void HandleMouseLeaveTip(object sender, EventArgs e)
@@ -683,6 +690,8 @@ namespace Mac_EFI_Toolkit
             lblRomVersion.Text = FWParser.strBootromVersion ?? "N/A";
             lblBoardId.Text = FWParser.strBoardId ?? "N/A";
             lblOrderNo.Text = FWParser.strSon ?? "N/A";
+
+            lblRomModelIdentifier.Text = FWParser.strModelFallback ?? "???";
 
             ToggleControlEnable(true);
         }
@@ -760,6 +769,9 @@ namespace Mac_EFI_Toolkit
                 label.Text = string.Empty;
                 label.ForeColor = Color.White;
             }
+
+            // Reset the straggler
+            lblRomModelIdentifier.Text = "...";
 
             // Reset private members
             SetPrimaryInitialDirectory();

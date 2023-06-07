@@ -21,7 +21,8 @@ namespace Mac_EFI_Toolkit.WinForms
     {
 
         #region Private Members
-        private byte[] _byteNewFsysRegion = null;
+        private byte[] _bytesNewFsysRegion = null;
+        private byte[] _bytesNewBinary = null;
         private readonly string _strChevronRight = "\xE76C";
 
         private long _primaryVssOffset = -1;
@@ -57,21 +58,26 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
+            Load += mainWindow_Load;
             lblTitle.MouseMove += editorWindow_MouseMove;
 
             var font = Program.FONT_MDL2_REG_9;
             var chevronRight = _strChevronRight;
-
             SetLabelProperties(lblSvsChevRight, font, chevronRight);
             SetLabelProperties(lblVssChevRight, font, chevronRight);
             SetLabelProperties(lblNssChevRight, font, chevronRight);
 
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
+            SetButtonProperties();
+        }
+        #endregion
 
+        #region Window Events
+        private void mainWindow_Load(object sender, EventArgs e)
+        {
             tbxSerialNumber.MaxLength = FWParser.strSerialNumber.Length;
 
             Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb($"The editor is unfinished, use caution.", RtbLogPrefix.Warn, rtbLog);
 
             LogLoadedBinarySize();
 
@@ -80,23 +86,7 @@ namespace Mac_EFI_Toolkit.WinForms
             ValidateNvramStoreData();
             LogNvramData();
 
-            Logger.WriteLogTextToRtb($"Checks complete.", RtbLogPrefix.Good, rtbLog);
-        }
-        #endregion
-
-        #region Window Events
-        internal async void CheckHwcAsync(string strHwc)
-        {
-            var configCode = await EFIUtils.GetDeviceConfigCodeAsync(strHwc);
-
-            if (configCode == "N/A")
-            {
-                Logger.WriteLogTextToRtb($"Config: HWC could not be matched.", RtbLogPrefix.Error, rtbLog);
-            }
-            else
-            {
-                Logger.WriteLogTextToRtb($"Config: {configCode}", RtbLogPrefix.Info, rtbLog);
-            }
+            Logger.WriteLogTextToRtb($"Initial checks complete.", RtbLogPrefix.Good, rtbLog);
         }
         #endregion
 
@@ -140,8 +130,8 @@ namespace Mac_EFI_Toolkit.WinForms
                 }
 
                 Logger.WriteLogTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.MET, rtbLog);
-                _byteNewFsysRegion = File.ReadAllBytes(dialog.FileName);
-                bool isValid = ValidateNewFsysRegion(_byteNewFsysRegion);
+                _bytesNewFsysRegion = File.ReadAllBytes(dialog.FileName);
+                bool isValid = ValidateNewFsysRegion(_bytesNewFsysRegion);
                 if (!isValid) cbxReplaceFsysRgn.Checked = false;
             }
         }
@@ -150,29 +140,47 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             ToggleControlEnable(false);
 
+            _bytesNewBinary = FWParser.bytesLoadedFile;
+
             if (cbxReplaceFsysRgn.Checked)
             {
-                Logger.WriteLogTextToRtb($"Replacing Fsys Data...", RtbLogPrefix.MET, rtbLog);
+                ReplaceFsysRegion();
             }
 
-            if (cbxReplaceSerial.Checked)
-            {
-                Logger.WriteLogTextToRtb($"Replacing serial number...", RtbLogPrefix.MET, rtbLog);
-            }
+            //if (cbxReplaceSerial.Checked)
+            //{
+            //    Logger.WriteLogTextToRtb($"Replacing serial number...", RtbLogPrefix.MET, rtbLog);
+            //}
 
-            if (cbxClearVssStore.Checked)
-            {
-                Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
-            }
+            //if (cbxClearVssStore.Checked)
+            //{
+            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            //}
 
-            if (cbxClearSvsStore.Checked)
-            {
-                Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
-            }
+            //if (cbxClearSvsStore.Checked)
+            //{
+            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            //}
 
-            if (cbxClearNssStore.Checked)
+            //if (cbxClearNssStore.Checked)
+            //{
+            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            //}
+
+            using (var dialog = new SaveFileDialog
             {
-                Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+                Filter = "Binary Files (*.bin)|*.bin",
+                Title = "Export new EFIROM...",
+                FileName = string.Concat("outimage.bin"),
+                OverwritePrompt = true
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                File.WriteAllBytes(dialog.FileName, _bytesNewBinary);
             }
 
             ToggleControlEnable(true);
@@ -442,12 +450,32 @@ namespace Mac_EFI_Toolkit.WinForms
             label.Visible = false;
         }
 
+        private void SetButtonProperties()
+        {
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
+        }
+
         private void ToggleControlEnable(bool enable)
         {
             cmdClose.Enabled = enable;
             cmdCloseForm.Enabled = enable;
             tlpOptions.Enabled = enable;
         }
+        internal async void CheckHwcAsync(string strHwc)
+        {
+            var configCode = await EFIUtils.GetDeviceConfigCodeAsync(strHwc);
+
+            if (configCode == "N/A")
+            {
+                Logger.WriteLogTextToRtb($"Config: HWC could not be matched.", RtbLogPrefix.Error, rtbLog);
+            }
+            else
+            {
+                Logger.WriteLogTextToRtb($"Config: {configCode}", RtbLogPrefix.Info, rtbLog);
+            }
+        }
+
         #endregion
 
         #region Logging
@@ -505,6 +533,20 @@ namespace Mac_EFI_Toolkit.WinForms
                     Logger.WriteLogTextToRtb($"NSS Backup:- Offset {_backupNssOffset:X2}h, Size {_backupNssSize:X2}h", RtbLogPrefix.Info, rtbLog);
                 }
             }    
+        }
+        #endregion
+
+        #region Editing
+        private void ReplaceFsysRegion()
+        {
+            Logger.WriteLogTextToRtb($"Replacing Fsys Region...", RtbLogPrefix.MET, rtbLog);
+
+            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWParser.lFsysOffset, _bytesNewFsysRegion);
+
+            // Do validation of Fsys write
+            // Load new Fsys from _bytesNewBinary > compare to _bytesNEwFsys.
+
+            Logger.WriteLogTextToRtb($"Replacing Fsys completed.", RtbLogPrefix.Good, rtbLog);
         }
         #endregion
 

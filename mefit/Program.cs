@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}-230607-ms5";
+        internal static readonly string appBuild = $"{Application.ProductVersion}.230607.2200";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;

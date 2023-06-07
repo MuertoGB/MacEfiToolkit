@@ -499,10 +499,6 @@ namespace Mac_EFI_Toolkit.Common
                     guidOffset = BinaryUtils.GetOffset(decompressedBytes, FSGuids.APFS_DXE_GUID);
                     return (guidOffset != -1) ? ApfsCompatibleFirmware.Yes : ApfsCompatibleFirmware.No;
                 }
-                else
-                {
-                    return ApfsCompatibleFirmware.Unknown;
-                }
             }
 
             return ApfsCompatibleFirmware.No;

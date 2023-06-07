@@ -108,7 +108,11 @@ namespace Mac_EFI_Toolkit.UI
 
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
-            ssMmbSound.Play();
+            if (!Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds))
+            {
+                ssMmbSound.Play();
+            }
+
             InterfaceUtils.FlashForecolor(lblTitle);
             InterfaceUtils.FlashForecolor(cmdClose);
         }

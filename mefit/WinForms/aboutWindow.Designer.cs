@@ -58,7 +58,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(1, 41);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(438, 258);
+            this.pnlMain.Size = new System.Drawing.Size(438, 238);
             this.pnlMain.TabIndex = 71;
             // 
             // lblInfo
@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblInfo.Location = new System.Drawing.Point(0, 100);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lblInfo.Size = new System.Drawing.Size(438, 108);
+            this.lblInfo.Size = new System.Drawing.Size(438, 88);
             this.lblInfo.TabIndex = 0;
             this.lblInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
     "erto, so don\'t eat it.\r\nThe \'Muerto\' avatar was hand crafted by Hammi.";
@@ -163,7 +163,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lnkUrls.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
             this.lnkUrls.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkUrls.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            this.lnkUrls.Location = new System.Drawing.Point(0, 208);
+            this.lnkUrls.Location = new System.Drawing.Point(0, 188);
             this.lnkUrls.Margin = new System.Windows.Forms.Padding(0);
             this.lnkUrls.Name = "lnkUrls";
             this.lnkUrls.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
@@ -248,7 +248,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
-            this.ClientSize = new System.Drawing.Size(440, 300);
+            this.ClientSize = new System.Drawing.Size(440, 280);
             this.Controls.Add(this.pnlSeperator);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tlpMain);
@@ -257,9 +257,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(440, 300);
+            this.MaximumSize = new System.Drawing.Size(440, 280);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(440, 300);
+            this.MinimumSize = new System.Drawing.Size(440, 280);
             this.Name = "aboutWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
