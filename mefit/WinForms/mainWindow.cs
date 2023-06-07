@@ -28,6 +28,7 @@ namespace Mac_EFI_Toolkit
         private string _strInitialDirectory = Program.appDirectory;
         private static readonly object _lockObject = new object();
         private static System.Threading.Timer _statsTimer;
+        private static bool _FirmwareLoaded = false;
         #endregion
 
         #region Overriden Properties
@@ -744,13 +745,18 @@ namespace Mac_EFI_Toolkit
 
             if (IsValidMinMaxSize() && IsValidFlashHeader())
             {
+                if (_FirmwareLoaded)
+                {
+                    ResetAllData();
+                }
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
                 FWParser.ParseFirmwareData();
                 UpdateControls();
+                _FirmwareLoaded = true;
             }
             else
             {
-                FWParser.strLoadedBinaryFilePath = string.Empty;
+                //FWParser.strLoadedBinaryFilePath = string.Empty;
                 ResetAllData();
             }
         }
@@ -788,6 +794,8 @@ namespace Mac_EFI_Toolkit
                     GC.WaitForPendingFinalizers();
                 }
             }
+
+            _FirmwareLoaded = false;
         }
         #endregion
 
