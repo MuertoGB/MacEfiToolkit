@@ -278,6 +278,8 @@ namespace Mac_EFI_Toolkit
                         break;
                 }
             }
+
+            ToggleControlEnable(false);
         }
 
         private void cmdEditEfirom_Click(object sender, EventArgs e)
@@ -417,6 +419,8 @@ namespace Mac_EFI_Toolkit
 
         private void SetButtonProperties()
         {
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
             cmdMenu.Font = Program.FONT_MDL2_REG_14;
             cmdMenu.Text = "\xE169";
             cmdNavigate.Font = Program.FONT_MDL2_REG_9;
@@ -649,6 +653,40 @@ namespace Mac_EFI_Toolkit
         {
             lblMessage.Text = string.Empty;
         }
+
+        internal void UpdateControls()
+        {
+            lblFilename.Text = $"FILE: '{FWParser.strFilename}'";
+            lblFileSizeBytes.ForeColor = EFIUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize) ? Colours.clrGood : Colours.clrUnknown;
+            lblFileSizeBytes.Text = FileUtils.FormatFileSize(FWParser.lLoadedFileSize);
+            lblFileCreatedDate.Text = FWParser.strCreationTime;
+            lblFileModifiedDate.Text = FWParser.strModifiedTime;
+            lblFileCrc.Text = FWParser.uiCrcOfLoadedFile.ToString("X8");
+            lblApfsCapable.Text = FWParser.strApfsCapable;
+            lblApfsCapable.ForeColor = FWParser.strApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
+            lblFitVersion.Text = FWParser.strFitVersion;
+            lblMeVersion.Text = FWParser.strMeVersion;
+
+            lblModel.Text = $"MODEL: {FWParser.strModel ?? FWParser.strModelFallback ?? "N/A"}";
+            lblSerialNumber.Text = FWParser.strSerialNumber ?? "N/A";
+            lblHwc.Text = FWParser.strHwc ?? "N/A";
+            if (FWParser.strFsysChecksumInBinary != null)
+            {
+                lblFsysCrc.Text = $"{FWParser.strFsysChecksumInBinary}h";
+                lblFsysCrc.ForeColor = FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary ? Colours.clrGood : Colours.clrError;
+            }
+            else
+            {
+                lblFsysCrc.Text = "N/A";
+                lblFsysCrc.ForeColor = Color.White;
+            }
+            lblEfiVersion.Text = FWParser.strEfiVersion ?? "N/A";
+            lblRomVersion.Text = FWParser.strBootromVersion ?? "N/A";
+            lblBoardId.Text = FWParser.strBoardId ?? "N/A";
+            lblOrderNo.Text = FWParser.strSon ?? "N/A";
+
+            ToggleControlEnable(true);
+        }
         #endregion
 
         #region Firmware Parsing
@@ -692,90 +730,6 @@ namespace Mac_EFI_Toolkit
             return true;
         }
 
-        internal void ParseFirmwareData()
-        {
-            var fileInfo = new FileInfo(FWParser.strLoadedBinaryFilePath);
-
-            ParseFileInfo(fileInfo);
-
-            if (FWParser.bytesLoadedFsys != null)
-            {
-                var serialInfo = FWParser.GetSystemSerialNumber(FWParser.bytesLoadedFsys, true);
-                FWParser.strSerialNumber = serialInfo.Serial;
-                FWParser.lSerialOffsetInFsys = serialInfo.Offset;
-
-                var configInfo = FWParser.GetSystemHardwareConfigCode(FWParser.bytesLoadedFsys, true);
-                FWParser.strHwc = configInfo.ConfigCode;
-                FWParser.lHwcOffsetInFsys = serialInfo.Offset;
-            }
-            else
-            {
-                FWParser.strSerialNumber = null;
-                FWParser.lSerialOffsetInFsys = -1;
-                FWParser.strHwc = null;
-                FWParser.lHwcOffsetInFsys = -1;
-            }
-
-            var task = Task.Run(() =>
-            {
-                FWParser.strModel = EFIUtils.GetDeviceConfigCodeAsync(FWParser.strHwc).ConfigureAwait(false).GetAwaiter().GetResult();
-            });
-
-            FWParser.strModelFallback = FWParser.GetModelIdentifier(FWParser.bytesLoadedFile);
-            FWParser.strEfiVersion = FWParser.GetEfiVersion(FWParser.bytesLoadedFile);
-            FWParser.strBootromVersion = FWParser.GetBootromVersion(FWParser.bytesLoadedFile);
-            FWParser.strFsysChecksumInBinary = FWParser.GetFsysCrc32(FWParser.bytesLoadedFile);
-            FWParser.strRealFsysChecksum = FWParser.bytesLoadedFsys != null ? EFIUtils.GetUintFsysCrc32(FWParser.bytesLoadedFsys).ToString("X8") : null;
-            FWParser.strApfsCapable = FWParser.GetIsApfsCapable(FWParser.bytesLoadedFile).ToString();
-            FWParser.strFitVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.FlashImageTool);
-            FWParser.strMeVersion = MEParser.GetVersionData(FWParser.bytesLoadedFile, HeaderType.ManagementEngine);
-            FWParser.strBoardId = FWParser.GetBoardId(FWParser.bytesLoadedFile);
-            FWParser.strSon = FWParser.bytesLoadedFsys != null ? FWParser.GetSystemOrderNumber(FWParser.bytesLoadedFsys) : null;
-        }
-
-        private void ParseFileInfo(FileInfo fileInfo)
-        {
-            FWParser.strFilename = fileInfo.Name;
-            FWParser.lLoadedFileSize = fileInfo.Length;
-            FWParser.uiCrcOfLoadedFile = FileUtils.GetCrc32Digest(FWParser.bytesLoadedFile);
-            FWParser.strCreationTime = fileInfo.CreationTime.ToString();
-            FWParser.strModifiedTime = fileInfo.LastWriteTime.ToString();
-        }
-
-        internal void UpdateControls()
-        {
-            lblFilename.Text = $"FILE: '{FWParser.strFilename}'";
-            lblFilesizeBytes.ForeColor = EFIUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize) ? Colours.clrGood : Colours.clrUnknown;
-            lblFilesizeBytes.Text = FileUtils.FormatFileSize(FWParser.lLoadedFileSize);
-            lblCreated.Text = FWParser.strCreationTime;
-            lblModified.Text = FWParser.strModifiedTime;
-            lblFileChecksum.Text = FWParser.uiCrcOfLoadedFile.ToString("X8");
-            lblApfsCapable.Text = FWParser.strApfsCapable;
-            lblApfsCapable.ForeColor = FWParser.strApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
-            lblFitVersion.Text = FWParser.strFitVersion;
-            lblMeVersion.Text = FWParser.strMeVersion;
-
-            lblModel.Text = $"MODEL: {FWParser.strModel ?? FWParser.strModelFallback ?? "N/A"}";
-            lblSerialNumber.Text = FWParser.strSerialNumber ?? "N/A";
-            lblHwc.Text = FWParser.strHwc ?? "N/A";
-            if (FWParser.strFsysChecksumInBinary != null)
-            {
-                lblFsysCrc.Text = $"{FWParser.strFsysChecksumInBinary}h";
-                lblFsysCrc.ForeColor = FWParser.strRealFsysChecksum == FWParser.strFsysChecksumInBinary ? Colours.clrGood : Colours.clrError;
-            }
-            else
-            {
-                lblFsysCrc.Text = "N/A";
-                lblFsysCrc.ForeColor = Color.White;
-            }
-            lblEfiVersion.Text = FWParser.strEfiVersion ?? "N/A";
-            lblRomVersion.Text = FWParser.strBootromVersion ?? "N/A";
-            lblBoardId.Text = FWParser.strBoardId ?? "N/A";
-            lblSon.Text = FWParser.strSon ?? "N/A";
-
-            ToggleControlEnable(true);
-        }
-
         private void OpenBinary(string filePath)
         {
             ToggleControlEnable(false);
@@ -791,7 +745,7 @@ namespace Mac_EFI_Toolkit
             if (GetIsValidFirmware())
             {
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
-                ParseFirmwareData();
+                FWParser.ParseFirmwareData();
                 UpdateControls();
             }
             else
@@ -806,10 +760,9 @@ namespace Mac_EFI_Toolkit
             // Clear labels
             Label[] labels =
             {
-                lblFilename, lblFileChecksum, lblFilesizeBytes, lblCreated, lblModified,
-                lblModel, lblSerialNumber, lblHwc, lblEfiVersion, lblRomVersion,
-                lblFsysCrc, lblApfsCapable, lblFitVersion, lblMeVersion, lblBoardId,
-                lblSon
+                lblFilename, lblFileSizeBytes, lblFileCrc, lblFileCreatedDate, lblFileModifiedDate,
+                lblModel, lblSerialNumber, lblHwc, lblFsysCrc, lblApfsCapable, lblEfiVersion, lblRomVersion,
+                lblFitVersion, lblMeVersion, lblBoardId, lblOrderNo
             };
             foreach (Label label in labels)
             {
@@ -817,11 +770,11 @@ namespace Mac_EFI_Toolkit
                 label.ForeColor = Color.White;
             }
 
-            // Clear FWParser members
-            FWParser.ClearBaseData();
-
             // Reset private members
             SetPrimaryInitialDirectory();
+
+            // Clear FWParser members
+            FWParser.ClearBaseData();
 
             // Clear the large object heap
             GC.Collect();
@@ -832,9 +785,6 @@ namespace Mac_EFI_Toolkit
                     GC.WaitForPendingFinalizers();
                 }
             }
-
-            // Disable controls
-            ToggleControlEnable(false);
         }
         #endregion
 

@@ -26,6 +26,7 @@ namespace Mac_EFI_Toolkit
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
+        internal static readonly string closeChar = "\xE947";
 
         #region Private Members
         private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
@@ -49,6 +50,7 @@ namespace Mac_EFI_Toolkit
         #region Internal Fonts
         internal static Font FONT_MDL2_REG_20;
         internal static Font FONT_MDL2_REG_14;
+        internal static Font FONT_MDL2_REG_12;
         internal static Font FONT_MDL2_REG_9;
         #endregion
 
@@ -71,6 +73,7 @@ namespace Mac_EFI_Toolkit
             // Font Data
             byte[] fontData = Properties.Resources.segmdl2;
             FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
+            FONT_MDL2_REG_12 = new Font(LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
             FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
             FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
 

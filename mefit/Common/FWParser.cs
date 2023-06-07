@@ -6,9 +6,11 @@
 
 using Mac_EFI_Toolkit.Utils;
 using System;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Mac_EFI_Toolkit.Common
 {
@@ -81,8 +83,8 @@ namespace Mac_EFI_Toolkit.Common
         internal static string strLoadedBinaryFilePath = null;
         internal static string strFilename = null;
         internal static string strFilenameWithoutExt = null;
-        //internal static string strCreationTime = null;
-        //internal static string strModifiedTime = null;
+        internal static string strCreationTime = null;
+        internal static string strModifiedTime = null;
         internal static string strModel = null;
         internal static string strModelFallback = null;
         internal static string strSerialNumber = null;
@@ -116,6 +118,56 @@ namespace Mac_EFI_Toolkit.Common
         private static readonly Encoding _utf8 = Encoding.UTF8;
         private static readonly int _maxPaddingBytes = 0x60; // This value may need tweaking.
         #endregion
+
+        internal static void ParseFirmwareData()
+        {
+            var fileInfo = new FileInfo(strLoadedBinaryFilePath);
+
+            ParseFileInfo(fileInfo);
+
+            if (bytesLoadedFsys != null)
+            {
+                var serialInfo = GetSystemSerialNumber(bytesLoadedFsys, true);
+                strSerialNumber = serialInfo.Serial;
+                lSerialOffsetInFsys = serialInfo.Offset;
+
+                var configInfo = GetSystemHardwareConfigCode(bytesLoadedFsys, true);
+                strHwc = configInfo.ConfigCode;
+                lHwcOffsetInFsys = serialInfo.Offset;
+            }
+            else
+            {
+                strSerialNumber = null;
+                lSerialOffsetInFsys = -1;
+                strHwc = null;
+                lHwcOffsetInFsys = -1;
+            }
+
+            var task = Task.Run(() =>
+            {
+                strModel = EFIUtils.GetDeviceConfigCodeAsync(strHwc).ConfigureAwait(false).GetAwaiter().GetResult();
+            });
+
+            strModelFallback = GetModelIdentifier(bytesLoadedFile);
+            strEfiVersion = GetEfiVersion(bytesLoadedFile);
+            strBootromVersion = GetBootromVersion(bytesLoadedFile);
+            strFsysChecksumInBinary = GetFsysCrc32(bytesLoadedFile);
+            strRealFsysChecksum = bytesLoadedFsys != null ? EFIUtils.GetUintFsysCrc32(bytesLoadedFsys).ToString("X8") : null;
+            strApfsCapable = GetIsApfsCapable(bytesLoadedFile).ToString();
+            strFitVersion = MEParser.GetVersionData(bytesLoadedFile, HeaderType.FlashImageTool);
+            strMeVersion = MEParser.GetVersionData(bytesLoadedFile, HeaderType.ManagementEngine);
+            strBoardId = GetBoardId(bytesLoadedFile);
+            strSon = bytesLoadedFsys != null ? GetSystemOrderNumber(bytesLoadedFsys) : null;
+        }
+
+        private static void ParseFileInfo(FileInfo fileInfo)
+        {
+            strFilename = fileInfo.Name;
+            lLoadedFileSize = fileInfo.Length;
+            uiCrcOfLoadedFile = FileUtils.GetCrc32Digest(bytesLoadedFile);
+            strCreationTime = fileInfo.CreationTime.ToString();
+            strModifiedTime = fileInfo.LastWriteTime.ToString();
+        }
 
         #region Flash Header
         internal static bool GetIsValidFlashHeader(byte[] sourceBytes)
