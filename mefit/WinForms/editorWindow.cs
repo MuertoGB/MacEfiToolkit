@@ -319,15 +319,15 @@ namespace Mac_EFI_Toolkit.WinForms
                 return false;
             }
 
-            string strSerial = FWParser.GetSystemSerialNumber(sourceBytes);
-            int lenSerial = strSerial.Length;
-            string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
+            //string strSerial = FWParser.GetSystemSerialNumber(sourceBytes);
+            //int lenSerial = strSerial.Length;
+            //string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
 
-            Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
-            CheckHwcAsync(strHwc);
+            //Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
+            //Logger.WriteLogTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
+            //Logger.WriteLogTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
+            //Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
+            //CheckHwcAsync(strHwc);
 
             string strCrcInFile = FWParser.GetFsysCrc32(sourceBytes);
             string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");

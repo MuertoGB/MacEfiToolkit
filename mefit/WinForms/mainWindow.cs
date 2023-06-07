@@ -698,12 +698,22 @@ namespace Mac_EFI_Toolkit
 
             ParseFileInfo(fileInfo);
 
-            FWParser.strSerialNumber = FWParser.bytesLoadedFsys != null ? FWParser.GetSystemSerialNumber(FWParser.bytesLoadedFsys) : null;
-            FWParser.strHwc = FWParser.bytesLoadedFsys != null ? FWParser.GetSystemHardwareConfig(FWParser.bytesLoadedFsys) : null;
+            if (FWParser.bytesLoadedFsys != null)
+            {
+                var serialInfo = FWParser.GetSystemSerialNumber(FWParser.bytesLoadedFsys, true);
+                FWParser.strSerialNumber = serialInfo.Serial;
+                FWParser.lSerialOffsetInFsys = serialInfo.Offset;
+
+                var configInfo = FWParser.GetSystemHardwareConfigCode(FWParser.bytesLoadedFsys, true);
+                FWParser.strHwc = configInfo.ConfigCode;
+                FWParser.lHwcOffsetInFsys = serialInfo.Offset;
+            }
+
             var task = Task.Run(() =>
             {
                 FWParser.strModel = EFIUtils.GetDeviceConfigCodeAsync(FWParser.strHwc).ConfigureAwait(false).GetAwaiter().GetResult();
             });
+
             FWParser.strModelFallback = FWParser.GetModelIdentifier(FWParser.bytesLoadedFile);
             FWParser.strEfiVersion = FWParser.GetEfiVersion(FWParser.bytesLoadedFile);
             FWParser.strBootromVersion = FWParser.GetBootromVersion(FWParser.bytesLoadedFile);
