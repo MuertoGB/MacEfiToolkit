@@ -49,10 +49,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.pnlMain.Controls.Add(this.tbxTermsText);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(1, 43);
+            this.pnlMain.Location = new System.Drawing.Point(1, 41);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlMain.Size = new System.Drawing.Size(578, 245);
+            this.pnlMain.Size = new System.Drawing.Size(578, 247);
             this.pnlMain.TabIndex = 95;
             // 
             // tbxTermsText
@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tbxTermsText.Name = "tbxTermsText";
             this.tbxTermsText.ReadOnly = true;
             this.tbxTermsText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbxTermsText.Size = new System.Drawing.Size(570, 237);
+            this.tbxTermsText.Size = new System.Drawing.Size(570, 239);
             this.tbxTermsText.TabIndex = 0;
             this.tbxTermsText.TabStop = false;
             // 
@@ -94,7 +94,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // cmdClose
             // 
             this.cmdClose.BackColor = System.Drawing.Color.Transparent;
-            this.cmdClose.Dock = System.Windows.Forms.DockStyle.Right;
+            this.cmdClose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdClose.FlatAppearance.BorderSize = 0;
             this.cmdClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.cmdClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -104,11 +104,11 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose.Location = new System.Drawing.Point(538, 0);
             this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
             this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 0, 0, 1);
+            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 3, 0, 1);
             this.cmdClose.Size = new System.Drawing.Size(40, 40);
             this.cmdClose.TabIndex = 13;
             this.cmdClose.TabStop = false;
-            this.cmdClose.Text = "✕";
+            this.cmdClose.Text = "X";
             this.cmdClose.UseVisualStyleBackColor = false;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
@@ -197,8 +197,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
             this.ClientSize = new System.Drawing.Size(580, 345);
-            this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlSeperator);
+            this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.tlpButtons);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

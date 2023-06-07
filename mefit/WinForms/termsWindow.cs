@@ -35,6 +35,9 @@ namespace Mac_EFI_Toolkit.WinForms
             lblTitle.MouseMove += termsWindow_MouseMove;
             Load += termsWindow_Load;
             KeyDown += termsWindow_KeyDown;
+
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
         }
         #endregion
 

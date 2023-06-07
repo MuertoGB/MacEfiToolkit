@@ -18,7 +18,6 @@ namespace Mac_EFI_Toolkit
         DisableFlashingUI,
         DisableConfDiag,
         DisableLzmaFsSearch,
-        DisableFsysEnforce,
         DisableDescriptorEnforce,
         AcceptedEditingTerms
     }
@@ -49,7 +48,6 @@ namespace Mac_EFI_Toolkit
             settingsIni.Write("Application", "DisableConfDiag", "False");
             settingsIni.Write("Application", "InitialOfdPath", Program.appDirectory);
             settingsIni.Write("Firmware", "DisableLzmaFsSearch", "False");
-            settingsIni.Write("Firmware", "DisableFsysEnforce", "False");
             settingsIni.Write("Firmware", "DisableDescriptorEnforce", "False");
             settingsIni.Write("Firmware", "AcceptedEditingTerms", "False");
         }
@@ -78,9 +76,6 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.DisableLzmaFsSearch:
                     section = "Firmware"; key = "DisableLzmaFsSearch";
-                    break;
-                case SettingsBoolType.DisableFsysEnforce:
-                    section = "Firmware"; key = "DisableFsysEnforce";
                     break;
                 case SettingsBoolType.DisableDescriptorEnforce:
                     section = "Firmware"; key = "DisableDescriptorEnforce";
@@ -183,9 +178,6 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.DisableLzmaFsSearch:
                     section = "Firmware"; key = "DisableLzmaFsSearch";
-                    break;
-                case SettingsBoolType.DisableFsysEnforce:
-                    section = "Firmware"; key = "DisableFsysEnforce";
                     break;
                 case SettingsBoolType.DisableDescriptorEnforce:
                     section = "Firmware"; key = "DisableDescriptorEnforce";

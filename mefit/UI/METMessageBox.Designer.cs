@@ -166,7 +166,7 @@ namespace Mac_EFI_Toolkit.UI
             // cmdClose
             // 
             this.cmdClose.BackColor = System.Drawing.Color.Transparent;
-            this.cmdClose.Dock = System.Windows.Forms.DockStyle.Right;
+            this.cmdClose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdClose.FlatAppearance.BorderSize = 0;
             this.cmdClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.cmdClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
@@ -176,11 +176,11 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdClose.Location = new System.Drawing.Point(450, 0);
             this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
             this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 0, 0, 1);
+            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 3, 0, 1);
             this.cmdClose.Size = new System.Drawing.Size(40, 40);
             this.cmdClose.TabIndex = 0;
             this.cmdClose.TabStop = false;
-            this.cmdClose.Text = "✕";
+            this.cmdClose.Text = "x";
             this.cmdClose.UseVisualStyleBackColor = false;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 

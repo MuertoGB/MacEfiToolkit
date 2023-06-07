@@ -66,6 +66,9 @@ namespace Mac_EFI_Toolkit.WinForms
             SetLabelProperties(lblVssChevRight, font, chevronRight);
             SetLabelProperties(lblNssChevRight, font, chevronRight);
 
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
+
             tbxSerialNumber.MaxLength = FWParser.strSerialNumber.Length;
 
             Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.MET, rtbLog);

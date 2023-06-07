@@ -17,7 +17,6 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
@@ -690,39 +689,35 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Firmware Parsing
-        private bool GetIsValidFirmware()
+        private bool IsValidMinMaxSize()
         {
             var fileInfo = new FileInfo(FWParser.strLoadedBinaryFilePath);
-            // Binary too small
+
+            // The file is too small, ignore it.
             if (fileInfo.Length < FWParser.MIN_IMAGE_SIZE) // 1048576 bytes
             {
                 METMessageBox.Show(this, "Warning", "The file is too small and was ignored.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
-            // Binary too large
+            // The file is too large, ignore it.
             if (fileInfo.Length > FWParser.MAX_IMAGE_SIZE) // 33554432 bytes
             {
                 METMessageBox.Show(this, "Warning", "The file is too large and was ignored.", MsgType.Warning, MsgButton.Okay);
                 return false;
             }
 
+            return true;
+        }
+
+        private bool IsValidFlashHeader()
+        {
             // Invalid flash descriptor signature
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce))
             {
                 if (!FWParser.GetIsValidFlashHeader(FWParser.bytesLoadedFile))
                 {
                     METMessageBox.Show(this, "Warning", "File ignored, the flash descriptor signature was invalid.", MsgType.Warning, MsgButton.Okay);
-                    return false;
-                }
-            }
-
-            // Fsys region not found
-            if (!Settings.SettingsGetBool(SettingsBoolType.DisableFsysEnforce))
-            {
-                if (FWParser.bytesLoadedFsys == null)
-                {
-                    METMessageBox.Show(this, "Warning", "Could not locate the Fsys block, the file was not loaded.", MsgType.Warning, MsgButton.Okay);
                     return false;
                 }
             }
@@ -738,11 +733,7 @@ namespace Mac_EFI_Toolkit
             FWParser.strFilenameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
             FWParser.bytesLoadedFile = File.ReadAllBytes(filePath);
 
-            var fsysData = FWParser.GetFsysRegionBytes(FWParser.bytesLoadedFile, true);
-            FWParser.bytesLoadedFsys = fsysData.BlockBytes;
-            FWParser.lFsysOffset = fsysData.Offset;
-
-            if (GetIsValidFirmware())
+            if (IsValidMinMaxSize() && IsValidFlashHeader())
             {
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
                 FWParser.ParseFirmwareData();

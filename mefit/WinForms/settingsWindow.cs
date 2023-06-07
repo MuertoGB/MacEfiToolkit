@@ -40,6 +40,9 @@ namespace Mac_EFI_Toolkit.WinForms
             lblTitle.MouseMove += settingsWindow_MouseMove;
             Load += settingsWindow_Load;
             KeyDown += aboutWindow_KeyDown;
+
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
         }
         #endregion
 
@@ -105,7 +108,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
             if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
-            Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, cbxDisableFsysEnforce.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
             _showSettingsAppliedLabel();
         }
@@ -117,7 +119,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, false);
             if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, Program.appDirectory);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
-            Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
             UpdateCheckBoxControls();
             _showSettingsAppliedLabel();
@@ -156,7 +157,6 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxDisableFlashingUI.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI)) ? true : false;
             cbxDisableConfDiag.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag)) ? true : false;
             cbxDisableLzmaFsSearch.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) ? true : false;
-            cbxDisableFsysEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFsysEnforce)) ? true : false;
             cbxDisableDescriptorEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce)) ? true : false;
         }
         #endregion

@@ -223,11 +223,11 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose.MaximumSize = new System.Drawing.Size(40, 40);
             this.cmdClose.MinimumSize = new System.Drawing.Size(40, 40);
             this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 3, 0, 1);
             this.cmdClose.Size = new System.Drawing.Size(40, 40);
             this.cmdClose.TabIndex = 0;
             this.cmdClose.TabStop = false;
-            this.cmdClose.Text = "✕";
+            this.cmdClose.Text = "X";
             this.cmdClose.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.cmdClose.UseVisualStyleBackColor = false;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);

@@ -56,6 +56,9 @@ namespace Mac_EFI_Toolkit.UI
             lblTitle.MouseMove += metMessage_MouseMove;
             Load += new EventHandler(METMessageBox_Load);
             Shown += new EventHandler(METMessageBox_Shown);
+
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
         }
         #endregion
 

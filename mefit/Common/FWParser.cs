@@ -43,7 +43,7 @@ namespace Mac_EFI_Toolkit.Common
 
     internal struct FsysRegion
     {
-        internal byte[] BlockBytes { get; set; }
+        internal byte[] RegionBytes { get; set; }
         internal long Offset { get; set; }
     }
 
@@ -119,11 +119,16 @@ namespace Mac_EFI_Toolkit.Common
         private static readonly int _maxPaddingBytes = 0x60; // This value may need tweaking.
         #endregion
 
+        #region Parser Function
         internal static void ParseFirmwareData()
         {
             var fileInfo = new FileInfo(strLoadedBinaryFilePath);
 
-            ParseFileInfo(fileInfo);
+            GetFileInfo(fileInfo);
+
+            var fsysData = GetFsysRegionBytes(bytesLoadedFile, true);
+            bytesLoadedFsys = fsysData.RegionBytes;
+            lFsysOffset = fsysData.Offset;
 
             if (bytesLoadedFsys != null)
             {
@@ -160,14 +165,15 @@ namespace Mac_EFI_Toolkit.Common
             strSon = bytesLoadedFsys != null ? GetSystemOrderNumber(bytesLoadedFsys) : null;
         }
 
-        private static void ParseFileInfo(FileInfo fileInfo)
+        private static void GetFileInfo(FileInfo fileInfo)
         {
             strFilename = fileInfo.Name;
-            lLoadedFileSize = fileInfo.Length;
-            uiCrcOfLoadedFile = FileUtils.GetCrc32Digest(bytesLoadedFile);
             strCreationTime = fileInfo.CreationTime.ToString();
             strModifiedTime = fileInfo.LastWriteTime.ToString();
+            lLoadedFileSize = fileInfo.Length;
+            uiCrcOfLoadedFile = FileUtils.GetCrc32Digest(bytesLoadedFile);
         }
+        #endregion
 
         #region Flash Header
         internal static bool GetIsValidFlashHeader(byte[] sourceBytes)
@@ -221,7 +227,7 @@ namespace Mac_EFI_Toolkit.Common
                 fsysBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysOffset, FSYS_RGN_SIZE);
             }
 
-            return new FsysRegion { BlockBytes = fsysBytes, Offset = outputOffset ? fsysOffset : -1 };
+            return new FsysRegion { RegionBytes = fsysBytes, Offset = outputOffset ? fsysOffset : -1 };
         }
 
         internal static SystemSerialInfo GetSystemSerialNumber(byte[] sourceBytes, bool outputOffset = false)
