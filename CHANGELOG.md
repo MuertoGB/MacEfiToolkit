@@ -20,7 +20,7 @@
 - Added a status bar to bottom of the main window:-
 > - Displays pertinent model identifier for determining the firmware's counterpart device.
 > - Displays the amount of private memory used.
-> - Moved pup-up tips to the status bar.
+> - Moved pop-up tips to the status bar.
 - Added editor terms window.
 - New models added to the internal database.
 - Added button to reload the currently open file, in case external changes are made.
