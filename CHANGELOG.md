@@ -43,6 +43,7 @@
 > - Please note that you cannot use the firmware editor when a valid Fsys region is not found.
 - Fixed the initial directory not being set when a file is dragged onto the main window or the application executable file.
 - Fixed broken shortcut keys (CTRL+A, CTRL+S).
+- Fixed an error condition related to opening files larger than 2.00GB.
 
 #### Misc:
 - Removed strong name verification due to wine compatibility. Will revisit in the future.
