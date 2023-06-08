@@ -34,6 +34,7 @@
 - Implemented model-identifier fallback if the HWC is not present.
 - Switched drag and drop support to accept all file types (.) instead of specific file formats.
 - Changed the default initial directory to the application directory.
+- Application will now calculate and display any file size discrepancy bytes in the main window.
 
 #### Bugs:
 - Fixed an issue with the form minimize state in the About window.

@@ -28,7 +28,7 @@ namespace Mac_EFI_Toolkit
         private string _strInitialDirectory = Program.appDirectory;
         private static readonly object _lockObject = new object();
         private static System.Threading.Timer _statsTimer;
-        private static bool _FirmwareLoaded = false;
+        private static bool _firmwareLoaded = false;
         #endregion
 
         #region Overriden Properties
@@ -664,8 +664,13 @@ namespace Mac_EFI_Toolkit
         internal void UpdateControls()
         {
             lblFilename.Text = $"FILE: '{FWParser.strFilename}'";
-            lblFileSizeBytes.ForeColor = EFIUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize) ? Colours.clrGood : Colours.clrUnknown;
-            lblFileSizeBytes.Text = FileUtils.FormatFileSize(FWParser.lLoadedFileSize);
+
+            int loadedFileSize = (int)FWParser.lLoadedFileSize;
+            bool isValidBinSize = EFIUtils.GetIsValidBinSize(loadedFileSize);
+            lblFileSizeBytes.Text = FileUtils.FormatFileSize(loadedFileSize);
+            lblFileSizeBytes.ForeColor = isValidBinSize ? Colours.clrGood : Colours.clrUnknown;
+            lblFileSizeBytes.Text += isValidBinSize ? "" : $" ({EFIUtils.GetSizeDifference(loadedFileSize)})";
+
             lblFileCreatedDate.Text = FWParser.strCreationTime;
             lblFileModifiedDate.Text = FWParser.strModifiedTime;
             lblFileCrc.Text = FWParser.uiCrcOfLoadedFile.ToString("X8");
@@ -745,19 +750,19 @@ namespace Mac_EFI_Toolkit
 
             if (IsValidMinMaxSize() && IsValidFlashHeader())
             {
-                if (_FirmwareLoaded)
+                if (_firmwareLoaded)
                 {
                     ResetAllData();
                 }
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
                 FWParser.ParseFirmwareData();
                 UpdateControls();
-                _FirmwareLoaded = true;
+                _firmwareLoaded = true;
             }
             else
             {
-                //FWParser.strLoadedBinaryFilePath = string.Empty;
                 ResetAllData();
+                _firmwareLoaded = false;
             }
         }
 
@@ -785,7 +790,7 @@ namespace Mac_EFI_Toolkit
             // Clear FWParser members
             FWParser.ClearBaseData();
 
-            // Clear the large object heap
+            // Garbage collect
             GC.Collect();
             if (GC.WaitForFullGCApproach() == GCNotificationStatus.Succeeded)
             {
@@ -795,7 +800,7 @@ namespace Mac_EFI_Toolkit
                 }
             }
 
-            _FirmwareLoaded = false;
+            _firmwareLoaded = false;
         }
         #endregion
 
