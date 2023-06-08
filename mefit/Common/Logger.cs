@@ -22,7 +22,6 @@ namespace Mac_EFI_Toolkit
 
     public enum RtbLogPrefix
     {
-        MET,
         Good,
         Info,
         Warn,
@@ -41,7 +40,7 @@ namespace Mac_EFI_Toolkit
 
             using (var writer = new StreamWriter(pathString, true))
             {
-                writer.WriteLine($"{DateTime.Now.ToString()} : {logMessage}");
+                writer.WriteLine($"{DateTime.Now} : {logMessage}");
             }
         }
 
@@ -57,7 +56,7 @@ namespace Mac_EFI_Toolkit
 
         private static string GetLogFilePath(LogType logType)
         {
-            var pathString = string.Empty;
+            string pathString;
 
             switch (logType)
             {
@@ -78,13 +77,10 @@ namespace Mac_EFI_Toolkit
         internal static void WriteLogTextToRtb(string messageString, RtbLogPrefix logPrefix, RichTextBox richTextBox)
         {
             Color prefixColor;
-            string timestamp = $"{DateTime.Now.ToString("HH:mm:ss")}: ";
+            string timestamp = $"{DateTime.Now:HH:mm:ss}: ";
 
             switch (logPrefix)
             {
-                case RtbLogPrefix.MET:
-                    prefixColor = Color.FromArgb(200, 200, 0);
-                    break;
                 case RtbLogPrefix.Good:
                     prefixColor = Color.FromArgb(0, 200, 0);
                     break;

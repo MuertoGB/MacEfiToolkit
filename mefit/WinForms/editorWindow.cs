@@ -4,6 +4,7 @@
 // WinForms
 // editorWindow.cs
 // Released under the GNU GLP v3.0
+// Yes, the code is messy, it's far from complete and unoptimised, stop crying.
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
@@ -12,6 +13,7 @@ using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -39,6 +41,8 @@ namespace Mac_EFI_Toolkit.WinForms
         private int _primaryNssSize = -1;
         private long _backupNssOffset = -1;
         private int _backupNssSize = -1;
+
+        private bool _buildFailed = false;
         #endregion
 
         #region Overriden Properties
@@ -76,7 +80,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             tbxSerialNumber.MaxLength = FWParser.strSerialNumber.Length;
 
-            Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"The editor is unfinished, use caution.", RtbLogPrefix.Warn, rtbLog);
 
             LogLoadedBinarySize();
@@ -108,11 +112,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Close();
         }
 
-        private void cmdCancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
         private void cmdFsysPath_Click(object sender, EventArgs e)
         {
 
@@ -122,14 +121,13 @@ namespace Mac_EFI_Toolkit.WinForms
                 Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
             })
             {
-
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     cbxReplaceFsysRgn.Checked = false;
                     return;
                 }
 
-                Logger.WriteLogTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.MET, rtbLog);
+                Logger.WriteLogTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.Info, rtbLog);
                 _bytesNewFsysRegion = File.ReadAllBytes(dialog.FileName);
                 bool isValid = ValidateNewFsysRegion(_bytesNewFsysRegion);
                 if (!isValid) cbxReplaceFsysRgn.Checked = false;
@@ -138,52 +136,24 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdApply_Click(object sender, EventArgs e)
         {
-            ToggleControlEnable(false);
-
-            _bytesNewBinary = FWParser.bytesLoadedFile;
-
-            if (cbxReplaceFsysRgn.Checked)
-            {
-                ReplaceFsysRegion();
-            }
-
-            //if (cbxReplaceSerial.Checked)
-            //{
-            //    Logger.WriteLogTextToRtb($"Replacing serial number...", RtbLogPrefix.MET, rtbLog);
-            //}
-
-            //if (cbxClearVssStore.Checked)
-            //{
-            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
-            //}
-
-            //if (cbxClearSvsStore.Checked)
-            //{
-            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
-            //}
-
-            //if (cbxClearNssStore.Checked)
-            //{
-            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
-            //}
-
             using (var dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
                 Title = "Export new EFIROM...",
-                FileName = string.Concat("outimage.bin"),
+                FileName = string.Concat("outimage_", FWParser.strFilenameWithoutExt),
                 OverwritePrompt = true
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
+                    Logger.WriteLogTextToRtb($"File export cancelled.", RtbLogPrefix.Warn, rtbLog);
                     return;
                 }
 
                 File.WriteAllBytes(dialog.FileName, _bytesNewBinary);
+                Logger.WriteLogTextToRtb($"File saved to: {dialog.FileName}", RtbLogPrefix.Info, rtbLog);
+                cmdExport.Enabled = false;
             }
-
-            ToggleControlEnable(true);
         }
         #endregion
 
@@ -315,7 +285,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Validation
         private bool ValidateNewFsysRegion(byte[] sourceBytes)
         {
-            Logger.WriteLogTextToRtb("Validating donor Fsys region...", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb("Validating donor Fsys region...", RtbLogPrefix.Info, rtbLog);
 
             if (sourceBytes.Length != FWParser.FSYS_RGN_SIZE)
             {
@@ -330,15 +300,16 @@ namespace Mac_EFI_Toolkit.WinForms
                 return false;
             }
 
-            //string strSerial = FWParser.GetSystemSerialNumber(sourceBytes);
-            //int lenSerial = strSerial.Length;
-            //string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
+            var serialData = FWParser.GetSystemSerialNumber(sourceBytes, false);
+            string strSerial = serialData.Serial;
+            int lenSerial = strSerial.Length;
+            string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
 
-            //Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
-            //Logger.WriteLogTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
-            //Logger.WriteLogTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
-            //Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
-            //CheckHwcAsync(strHwc);
+            Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
+            CheckHwcAsync(strHwc);
 
             string strCrcInFile = FWParser.GetFsysCrc32(sourceBytes);
             string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");
@@ -348,7 +319,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (strCrcInFile == strCrcCalculated)
             {
-                Logger.WriteLogTextToRtb("Fsys CRC32 is valid.", RtbLogPrefix.MET, rtbLog);
+                Logger.WriteLogTextToRtb("Fsys CRC32 is valid.", RtbLogPrefix.Info, rtbLog);
                 cbxMaskCrc.Checked = false;
             }
             else
@@ -357,7 +328,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 cbxMaskCrc.Checked = true;
             }
 
-            Logger.WriteLogTextToRtb("Validation complete.", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb("Validation completed", RtbLogPrefix.Good, rtbLog);
 
             return true;
         }
@@ -458,10 +429,10 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void ToggleControlEnable(bool enable)
         {
-            cmdClose.Enabled = enable;
-            cmdCloseForm.Enabled = enable;
             tlpOptions.Enabled = enable;
+            cmdBuild.Enabled = enable;
         }
+
         internal async void CheckHwcAsync(string strHwc)
         {
             var configCode = await EFIUtils.GetDeviceConfigCodeAsync(strHwc);
@@ -483,7 +454,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (FWParser.lFsysOffset != 0)
             {
-                Logger.WriteLogTextToRtb("Get Fsys data...", RtbLogPrefix.MET, rtbLog);
+                Logger.WriteLogTextToRtb("Get Fsys data...", RtbLogPrefix.Info, rtbLog);
                 Logger.WriteLogTextToRtb($"Fsys Region:- Offset {FWParser.lFsysOffset:X2}h, Size {FWParser.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
             }
         }
@@ -502,7 +473,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void LogNvramData()
         {
-            Logger.WriteLogTextToRtb($"Get NVRAM store data...", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb($"Get NVRAM store data...", RtbLogPrefix.Info, rtbLog);
 
             if (_primaryVssOffset != -1)
             {
@@ -532,23 +503,98 @@ namespace Mac_EFI_Toolkit.WinForms
                 {
                     Logger.WriteLogTextToRtb($"NSS Backup:- Offset {_backupNssOffset:X2}h, Size {_backupNssSize:X2}h", RtbLogPrefix.Info, rtbLog);
                 }
-            }    
+            }
         }
         #endregion
 
         #region Editing
-        private void ReplaceFsysRegion()
+        private void PatchFsys()
         {
-            Logger.WriteLogTextToRtb($"Replacing Fsys Region...", RtbLogPrefix.MET, rtbLog);
+            Logger.WriteLogTextToRtb($"Patching Fsys Region...", RtbLogPrefix.Info, rtbLog);
 
+            // Mask Fsys CRC
+            if (cbxMaskCrc.Checked)
+            {
+                Logger.WriteLogTextToRtb($"Masking Fsys CRC32...", RtbLogPrefix.Info, rtbLog);
+
+                uint newCrc = EFIUtils.GetUintFsysCrc32(_bytesNewFsysRegion);
+                byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
+                BinaryUtils.OverwriteBytesAtOffset(_bytesNewFsysRegion, 0x7FC, newCrcBytes);
+
+                uint patchedCrc = EFIUtils.GetUintFsysCrc32(_bytesNewFsysRegion);
+
+                if (newCrc == patchedCrc)
+                {
+                    Logger.WriteLogTextToRtb($"CRC32 masking successful.", RtbLogPrefix.Info, rtbLog);
+                }
+                else
+                {
+                    Logger.WriteLogTextToRtb($"BUILD FAILED:", RtbLogPrefix.Error, rtbLog);
+                    Logger.WriteLogTextToRtb($"CRC32 masking failed.", RtbLogPrefix.Error, rtbLog);
+                    _buildFailed = true;
+                    return;
+                }
+            }
+
+            // Write new Fsys bytes to _bytesNewBinary
             BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWParser.lFsysOffset, _bytesNewFsysRegion);
 
-            // Do validation of Fsys write
-            // Load new Fsys from _bytesNewBinary > compare to _bytesNEwFsys.
+            // Validate new Fsys was written
+            FsysRegion fsys = FWParser.GetFsysRegionBytes(_bytesNewBinary, false);
+            if (fsys.RegionBytes.SequenceEqual(_bytesNewFsysRegion))
+            {
+                Logger.WriteLogTextToRtb($"Fsys patching was successful.", RtbLogPrefix.Info, rtbLog);
+            }
+            else
+            {
+                Logger.WriteLogTextToRtb($"BUILD FAILED:", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb($"Fsys patching was unsuccessful.", RtbLogPrefix.Error, rtbLog);
+                _buildFailed = true;
+                return;
+            }
 
-            Logger.WriteLogTextToRtb($"Replacing Fsys completed.", RtbLogPrefix.Good, rtbLog);
+            Logger.WriteLogTextToRtb($"Fsys patching completed.", RtbLogPrefix.Good, rtbLog);
         }
         #endregion
+
+        private void cmdBuild_Click(object sender, EventArgs e)
+        {
+            ToggleControlEnable(false);
+
+            _bytesNewBinary = FWParser.bytesLoadedFile;
+
+            if (cbxReplaceFsysRgn.Checked)
+            {
+                PatchFsys();
+            }
+
+            //if (cbxReplaceSerial.Checked)
+            //{
+            //    Logger.WriteLogTextToRtb($"Replacing serial number...", RtbLogPrefix.MET, rtbLog);
+            //}
+
+            //if (cbxClearVssStore.Checked)
+            //{
+            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            //}
+
+            //if (cbxClearSvsStore.Checked)
+            //{
+            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            //}
+
+            //if (cbxClearNssStore.Checked)
+            //{
+            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
+            //}
+
+            // If the build fails, disallow exporting.
+            cmdExport.Enabled = !_buildFailed;
+            Logger.WriteLogTextToRtb($"BUILD SUCCEEDED.", RtbLogPrefix.Good, rtbLog);
+
+
+            ToggleControlEnable(true);
+        }
 
     }
 }
