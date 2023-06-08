@@ -262,10 +262,6 @@ namespace Mac_EFI_Toolkit.WinForms
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 4));
                     }
-
-                    string strHwc = tbxHwc.Text.ToUpper();
-                    CheckHwcAsync(strHwc);
-
                 }
                 else
                 {
@@ -309,7 +305,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTextToRtb($"Fsys sig found at {lSigPos:X2}h.", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
-            CheckHwcAsync(strHwc);
 
             string strCrcInFile = FWParser.GetFsysCrc32(sourceBytes);
             string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");
@@ -432,21 +427,6 @@ namespace Mac_EFI_Toolkit.WinForms
             tlpOptions.Enabled = enable;
             cmdBuild.Enabled = enable;
         }
-
-        internal async void CheckHwcAsync(string strHwc)
-        {
-            var configCode = await EFIUtils.GetDeviceConfigCodeAsync(strHwc);
-
-            if (configCode == "N/A")
-            {
-                Logger.WriteLogTextToRtb($"Config: HWC could not be matched.", RtbLogPrefix.Error, rtbLog);
-            }
-            else
-            {
-                Logger.WriteLogTextToRtb($"Config: {configCode}", RtbLogPrefix.Info, rtbLog);
-            }
-        }
-
         #endregion
 
         #region Logging
@@ -510,28 +490,36 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Editing
         private void PatchFsys()
         {
-            Logger.WriteLogTextToRtb($"Patching Fsys Region...", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb("Patching Fsys Region...", RtbLogPrefix.Info, rtbLog);
 
             // Mask Fsys CRC
             if (cbxMaskCrc.Checked)
             {
-                Logger.WriteLogTextToRtb($"Masking Fsys CRC32...", RtbLogPrefix.Info, rtbLog);
+                // Mask CRC32 was checked
+                Logger.WriteLogTextToRtb("Masking Fsys CRC32...", RtbLogPrefix.Info, rtbLog);
 
+                // Calculate actual CRC32 from _bytesNewFsysRegion
                 uint newCrc = EFIUtils.GetUintFsysCrc32(_bytesNewFsysRegion);
+
+                // Get bytes from newCrc uint
                 byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
+
+                // Write newCrcBytes to the donor Fsys region
                 BinaryUtils.OverwriteBytesAtOffset(_bytesNewFsysRegion, 0x7FC, newCrcBytes);
 
-                uint patchedCrc = EFIUtils.GetUintFsysCrc32(_bytesNewFsysRegion);
+                // Read CRC32 string from _bytesNewFsysRegion
+                string patchedCrcBytes = FWParser.GetFsysCrc32(_bytesNewFsysRegion);
 
-                if (newCrc == patchedCrc)
+                Logger.WriteLogTextToRtb($"{newCrc:X8}h > {patchedCrcBytes}h", RtbLogPrefix.Info, rtbLog);
+
+                // Convert newCrc to hex string to string and compare it to was was read.
+                if (string.Equals(newCrc.ToString("X8"), patchedCrcBytes))
                 {
-                    Logger.WriteLogTextToRtb($"CRC32 masking successful.", RtbLogPrefix.Info, rtbLog);
+                    Logger.WriteLogTextToRtb("CRC32 masking successful.", RtbLogPrefix.Info, rtbLog);
                 }
                 else
                 {
-                    Logger.WriteLogTextToRtb($"BUILD FAILED:", RtbLogPrefix.Error, rtbLog);
-                    Logger.WriteLogTextToRtb($"CRC32 masking failed.", RtbLogPrefix.Error, rtbLog);
-                    _buildFailed = true;
+                    HandleBuildFailure("CRC32 masking failed.");
                     return;
                 }
             }
@@ -543,18 +531,24 @@ namespace Mac_EFI_Toolkit.WinForms
             FsysRegion fsys = FWParser.GetFsysRegionBytes(_bytesNewBinary, false);
             if (fsys.RegionBytes.SequenceEqual(_bytesNewFsysRegion))
             {
-                Logger.WriteLogTextToRtb($"Fsys patching was successful.", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb("Fsys patching was successful.", RtbLogPrefix.Info, rtbLog);
             }
             else
             {
-                Logger.WriteLogTextToRtb($"BUILD FAILED:", RtbLogPrefix.Error, rtbLog);
-                Logger.WriteLogTextToRtb($"Fsys patching was unsuccessful.", RtbLogPrefix.Error, rtbLog);
-                _buildFailed = true;
+                HandleBuildFailure("Fsys patching was unsuccessful.");
                 return;
             }
 
-            Logger.WriteLogTextToRtb($"Fsys patching completed.", RtbLogPrefix.Good, rtbLog);
+            Logger.WriteLogTextToRtb("Fsys patching completed.", RtbLogPrefix.Good, rtbLog);
         }
+
+        private void HandleBuildFailure(string errorMessage)
+        {
+            Logger.WriteLogTextToRtb("BUILD FAILED:", RtbLogPrefix.Error, rtbLog);
+            Logger.WriteLogTextToRtb(errorMessage, RtbLogPrefix.Error, rtbLog);
+            _buildFailed = true;
+        }
+
         #endregion
 
         private void cmdBuild_Click(object sender, EventArgs e)
@@ -589,9 +583,12 @@ namespace Mac_EFI_Toolkit.WinForms
             //}
 
             // If the build fails, disallow exporting.
-            cmdExport.Enabled = !_buildFailed;
-            Logger.WriteLogTextToRtb($"BUILD SUCCEEDED.", RtbLogPrefix.Good, rtbLog);
 
+            if (!_buildFailed)
+            {
+                Logger.WriteLogTextToRtb($"BUILD SUCCEEDED.", RtbLogPrefix.Good, rtbLog);
+                cmdExport.Enabled = true;
+            }
 
             ToggleControlEnable(true);
         }
