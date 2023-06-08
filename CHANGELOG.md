@@ -39,11 +39,9 @@
 #### Bugs:
 - Fixed an issue with the form minimize state in the About window.
 - Fixed the font resolver failing to load embedded resources on some systems.
-- Fixed stability issues that occurred when the Fsys region was not found and the 'Disable valid Fsys enforcement' option was enabled.
-> - Please note that you cannot use the firmware editor when a valid Fsys region is not found.
+- Fixed stability issues that occur when the Fsys region is not found.
 - Fixed the initial directory not being set when a file is dragged onto the main window or the application executable file.
 - Fixed broken shortcut keys (CTRL+A, CTRL+S).
-- Fixed an error condition related to opening files larger than 2.00GB.
 
 #### Misc:
 - Removed strong name verification due to wine compatibility. Will revisit in the future.
