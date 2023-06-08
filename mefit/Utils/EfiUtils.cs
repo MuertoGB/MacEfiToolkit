@@ -4,7 +4,6 @@
 // EfiUtils.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common;
 using System;
 using System.IO;
 using System.Linq;
@@ -71,27 +70,6 @@ namespace Mac_EFI_Toolkit.Utils
         }
 
         /// <summary>
-        /// Checks if a given integer size is a valid size for a firmware image.
-        /// </summary>
-        /// <param name="size">The integer size to check.</param>
-        /// <returns>True if the size is valid, otherwise false.</returns>
-        internal static bool GetIsValidBinSize(int size)
-        {
-            int expectedSize = FWParser.MIN_IMAGE_SIZE;
-            int maxSize = FWParser.MAX_IMAGE_SIZE;
-
-            while (expectedSize <= maxSize)
-            {
-                if (size == expectedSize)
-                {
-                    return true;
-                }
-                expectedSize *= 2;
-            }
-            return false;
-        }
-
-        /// <summary>
         /// Checks if a given input string contains only valid characters for a serial number.
         /// </summary>
         /// <param name="charString">The serial number string to check.</param>
@@ -118,61 +96,6 @@ namespace Mac_EFI_Toolkit.Utils
             }
 
             return 0xFFFFFFFF;
-        }
-
-        /// <summary>
-        /// Calculates the difference between the input size and the closest valid size,
-        /// and returns a formatted string indicating whether the size is too large or too small,
-        /// along with the byte difference.
-        /// </summary>
-        /// <param name="size">The input size to compare against valid sizes.</param>
-        /// <returns>A formatted string indicating whether the size is too large or too small,
-        /// along with the byte difference.</returns>
-        internal static string GetSizeDifference(int size)
-        {
-            // Initialize the closest size with the minimum image size
-            int closestSize = FWParser.MIN_IMAGE_SIZE;
-
-            // Calculate the initial difference between the input size and the closest size
-            int difference = Math.Abs(size - closestSize);
-
-            // Iterate through the valid sizes to find the closest size
-            while (closestSize <= FWParser.MAX_IMAGE_SIZE)
-            {
-                // Calculate the doubled size and its difference from the input size
-                int doubledSize = closestSize * 2;
-                int doubledDifference = Math.Abs(size - doubledSize);
-
-                // If the doubled difference is smaller, update the closest size and difference
-                if (doubledDifference < difference)
-                {
-                    closestSize = doubledSize;
-                    difference = doubledDifference;
-                }
-                else
-                {
-                    // Exit the loop if the doubled difference becomes larger
-                    break;
-                }
-            }
-
-            // Check if the input size is smaller than the closest size
-            if (size < closestSize)
-            {
-                // Return a formatted string indicating the size is too small
-                return $"<{difference}";
-            }
-            // Check if the input size is larger than the closest size
-            else if (size > closestSize)
-            {
-                // Return a formatted string indicating the size is too large
-                return $">{difference}";
-            }
-            else
-            {
-                // Return a string indicating an exact match
-                return "Valid";
-            }
         }
 
     }

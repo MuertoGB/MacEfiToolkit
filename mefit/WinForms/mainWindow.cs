@@ -666,10 +666,10 @@ namespace Mac_EFI_Toolkit
             lblFilename.Text = $"FILE: '{FWParser.strFilename}'";
 
             int loadedFileSize = (int)FWParser.lLoadedFileSize;
-            bool isValidBinSize = EFIUtils.GetIsValidBinSize(loadedFileSize);
+            bool isValidBinSize = FileUtils.GetIsValidBinSize(loadedFileSize);
             lblFileSizeBytes.Text = FileUtils.FormatFileSize(loadedFileSize);
             lblFileSizeBytes.ForeColor = isValidBinSize ? Colours.clrGood : Colours.clrUnknown;
-            lblFileSizeBytes.Text += isValidBinSize ? "" : $" ({EFIUtils.GetSizeDifference(loadedFileSize)})";
+            lblFileSizeBytes.Text += isValidBinSize ? "" : $" ({FileUtils.GetSizeDifference(loadedFileSize)})";
 
             lblFileCreatedDate.Text = FWParser.strCreationTime;
             lblFileModifiedDate.Text = FWParser.strModifiedTime;
@@ -746,7 +746,6 @@ namespace Mac_EFI_Toolkit
 
             FWParser.strLoadedBinaryFilePath = filePath;
             FWParser.strFilenameWithoutExt = Path.GetFileNameWithoutExtension(filePath);
-            FWParser.bytesLoadedFile = File.ReadAllBytes(filePath);
 
             if (IsValidMinMaxSize() && IsValidFlashHeader())
             {
@@ -755,6 +754,7 @@ namespace Mac_EFI_Toolkit
                     ResetAllData();
                 }
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
+                FWParser.bytesLoadedFile = File.ReadAllBytes(filePath);
                 FWParser.ParseFirmwareData();
                 UpdateControls();
                 _firmwareLoaded = true;

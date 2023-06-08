@@ -490,7 +490,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void LogLoadedBinarySize()
         {
-            if (!EFIUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize))
+            if (!FileUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize))
             {
                 Logger.WriteLogTextToRtb($"Loaded binary size {FWParser.lLoadedFileSize:X2}h is invalid. It should not be used as a donor.", RtbLogPrefix.Error, rtbLog);
             }

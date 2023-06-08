@@ -187,6 +187,27 @@ namespace Mac_EFI_Toolkit.Utils
                 return ms.ToArray();
             }
         }
+
+        /// <summary>
+        /// Checks if a byte array is empty (0xFF).
+        /// </summary>
+        /// <param name="sourceBytes">The byte array to check.</param>
+        /// <returns>True if the byte array is empty or contains only 0xFF values; otherwise, false.</returns>
+        internal static bool IsByteBlockEmpty(byte[] sourceBytes)
+        {
+            if (sourceBytes == null)
+            {
+                throw new ArgumentNullException(nameof(sourceBytes));
+            }
+
+            for (int i = 0; i < sourceBytes.Length; i++)
+            {
+                if (sourceBytes[i] != 0xFF)
+                    return false;
+            }
+
+            return true;
+        }
         #endregion
 
         #region Binary Edit
@@ -224,6 +245,23 @@ namespace Mac_EFI_Toolkit.Utils
             byte[] result = new byte[end + 1];
             Array.Copy(sourceBytes, result, end + 1);
             return result;
+        }
+
+        /// <summary>
+        /// Fills a byte array with 0xFF values.
+        /// </summary>
+        /// <param name="byteArray">The byte array to fill with 0xFF values.</param>
+        public static void FillByteArrayWithFF(byte[] byteArray)
+        {
+            if (byteArray == null)
+            {
+                throw new ArgumentNullException(nameof(byteArray));
+            }
+
+            for (int i = 0; i < byteArray.Length; i++)
+            {
+                byteArray[i] = 0xFF;
+            }
         }
         #endregion
 
