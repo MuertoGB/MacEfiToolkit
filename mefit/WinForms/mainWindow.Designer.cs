@@ -272,7 +272,7 @@ namespace Mac_EFI_Toolkit
             this.cmdReload.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(62)))), ((int)(((byte)(69)))));
             this.cmdReload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdReload.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdReload.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(235)))), ((int)(((byte)(245)))));
+            this.cmdReload.ForeColor = System.Drawing.Color.White;
             this.cmdReload.Location = new System.Drawing.Point(677, 0);
             this.cmdReload.Margin = new System.Windows.Forms.Padding(0);
             this.cmdReload.Name = "cmdReload";
@@ -292,7 +292,7 @@ namespace Mac_EFI_Toolkit
             this.cmdNavigate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(62)))), ((int)(((byte)(69)))));
             this.cmdNavigate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdNavigate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdNavigate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(235)))), ((int)(((byte)(245)))));
+            this.cmdNavigate.ForeColor = System.Drawing.Color.White;
             this.cmdNavigate.Location = new System.Drawing.Point(640, 0);
             this.cmdNavigate.Margin = new System.Windows.Forms.Padding(0);
             this.cmdNavigate.Name = "cmdNavigate";
@@ -400,7 +400,7 @@ namespace Mac_EFI_Toolkit
             this.lblCreatedText.Location = new System.Drawing.Point(0, 31);
             this.lblCreatedText.Margin = new System.Windows.Forms.Padding(0);
             this.lblCreatedText.Name = "lblCreatedText";
-            this.lblCreatedText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblCreatedText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblCreatedText.Size = new System.Drawing.Size(130, 30);
             this.lblCreatedText.TabIndex = 99;
             this.lblCreatedText.Text = "Created:";
@@ -430,7 +430,7 @@ namespace Mac_EFI_Toolkit
             this.lblModifiedText.Location = new System.Drawing.Point(357, 31);
             this.lblModifiedText.Margin = new System.Windows.Forms.Padding(0);
             this.lblModifiedText.Name = "lblModifiedText";
-            this.lblModifiedText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblModifiedText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblModifiedText.Size = new System.Drawing.Size(130, 30);
             this.lblModifiedText.TabIndex = 99;
             this.lblModifiedText.Text = "Modified:";
@@ -445,7 +445,7 @@ namespace Mac_EFI_Toolkit
             this.lblSizeBytesText.Location = new System.Drawing.Point(0, 0);
             this.lblSizeBytesText.Margin = new System.Windows.Forms.Padding(0);
             this.lblSizeBytesText.Name = "lblSizeBytesText";
-            this.lblSizeBytesText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblSizeBytesText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblSizeBytesText.Size = new System.Drawing.Size(130, 30);
             this.lblSizeBytesText.TabIndex = 99;
             this.lblSizeBytesText.Text = "Size (Bytes):";
@@ -460,7 +460,7 @@ namespace Mac_EFI_Toolkit
             this.lblChecksumText.Location = new System.Drawing.Point(357, 0);
             this.lblChecksumText.Margin = new System.Windows.Forms.Padding(0);
             this.lblChecksumText.Name = "lblChecksumText";
-            this.lblChecksumText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblChecksumText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblChecksumText.Size = new System.Drawing.Size(130, 30);
             this.lblChecksumText.TabIndex = 99;
             this.lblChecksumText.Text = "CRC32:";
@@ -552,7 +552,7 @@ namespace Mac_EFI_Toolkit
             this.lblSonText.Location = new System.Drawing.Point(357, 124);
             this.lblSonText.Margin = new System.Windows.Forms.Padding(0);
             this.lblSonText.Name = "lblSonText";
-            this.lblSonText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblSonText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblSonText.Size = new System.Drawing.Size(130, 30);
             this.lblSonText.TabIndex = 99;
             this.lblSonText.Text = "Order No:";
@@ -597,7 +597,7 @@ namespace Mac_EFI_Toolkit
             this.lblRomVersionText.Location = new System.Drawing.Point(357, 62);
             this.lblRomVersionText.Margin = new System.Windows.Forms.Padding(0);
             this.lblRomVersionText.Name = "lblRomVersionText";
-            this.lblRomVersionText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblRomVersionText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblRomVersionText.Size = new System.Drawing.Size(130, 30);
             this.lblRomVersionText.TabIndex = 99;
             this.lblRomVersionText.Text = "ROM Version:";
@@ -612,7 +612,7 @@ namespace Mac_EFI_Toolkit
             this.lblFsysCrcText.Location = new System.Drawing.Point(0, 31);
             this.lblFsysCrcText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFsysCrcText.Name = "lblFsysCrcText";
-            this.lblFsysCrcText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblFsysCrcText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblFsysCrcText.Size = new System.Drawing.Size(130, 30);
             this.lblFsysCrcText.TabIndex = 99;
             this.lblFsysCrcText.Text = "Fsys CRC32:";
@@ -628,7 +628,7 @@ namespace Mac_EFI_Toolkit
             this.lblApfsCapableText.Location = new System.Drawing.Point(357, 31);
             this.lblApfsCapableText.Margin = new System.Windows.Forms.Padding(0);
             this.lblApfsCapableText.Name = "lblApfsCapableText";
-            this.lblApfsCapableText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblApfsCapableText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblApfsCapableText.Size = new System.Drawing.Size(130, 30);
             this.lblApfsCapableText.TabIndex = 99;
             this.lblApfsCapableText.Text = "APFS Capable:";
@@ -643,7 +643,7 @@ namespace Mac_EFI_Toolkit
             this.lblEfiVersionText.Location = new System.Drawing.Point(0, 62);
             this.lblEfiVersionText.Margin = new System.Windows.Forms.Padding(0);
             this.lblEfiVersionText.Name = "lblEfiVersionText";
-            this.lblEfiVersionText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblEfiVersionText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblEfiVersionText.Size = new System.Drawing.Size(130, 30);
             this.lblEfiVersionText.TabIndex = 99;
             this.lblEfiVersionText.Text = "EFI Version:";
@@ -673,7 +673,7 @@ namespace Mac_EFI_Toolkit
             this.lblMeVersionText.Location = new System.Drawing.Point(357, 93);
             this.lblMeVersionText.Margin = new System.Windows.Forms.Padding(0);
             this.lblMeVersionText.Name = "lblMeVersionText";
-            this.lblMeVersionText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblMeVersionText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblMeVersionText.Size = new System.Drawing.Size(130, 30);
             this.lblMeVersionText.TabIndex = 99;
             this.lblMeVersionText.Text = "ME Version:";
@@ -703,7 +703,7 @@ namespace Mac_EFI_Toolkit
             this.lblBoardIdText.Location = new System.Drawing.Point(0, 124);
             this.lblBoardIdText.Margin = new System.Windows.Forms.Padding(0);
             this.lblBoardIdText.Name = "lblBoardIdText";
-            this.lblBoardIdText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblBoardIdText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblBoardIdText.Size = new System.Drawing.Size(130, 30);
             this.lblBoardIdText.TabIndex = 99;
             this.lblBoardIdText.Text = "Board-ID:";
@@ -718,7 +718,7 @@ namespace Mac_EFI_Toolkit
             this.lblFitVersionText.Location = new System.Drawing.Point(0, 93);
             this.lblFitVersionText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFitVersionText.Name = "lblFitVersionText";
-            this.lblFitVersionText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblFitVersionText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblFitVersionText.Size = new System.Drawing.Size(130, 30);
             this.lblFitVersionText.TabIndex = 99;
             this.lblFitVersionText.Text = "FIT Version:";
@@ -748,7 +748,7 @@ namespace Mac_EFI_Toolkit
             this.lblSerialText.Location = new System.Drawing.Point(0, 0);
             this.lblSerialText.Margin = new System.Windows.Forms.Padding(0);
             this.lblSerialText.Name = "lblSerialText";
-            this.lblSerialText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblSerialText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblSerialText.Size = new System.Drawing.Size(130, 30);
             this.lblSerialText.TabIndex = 99;
             this.lblSerialText.Text = "Serial:";
@@ -782,7 +782,7 @@ namespace Mac_EFI_Toolkit
             this.cmdEveryMacSearch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(62)))), ((int)(((byte)(69)))));
             this.cmdEveryMacSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdEveryMacSearch.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdEveryMacSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(235)))), ((int)(((byte)(245)))));
+            this.cmdEveryMacSearch.ForeColor = System.Drawing.Color.White;
             this.cmdEveryMacSearch.Location = new System.Drawing.Point(195, 0);
             this.cmdEveryMacSearch.Margin = new System.Windows.Forms.Padding(0);
             this.cmdEveryMacSearch.Name = "cmdEveryMacSearch";
@@ -816,7 +816,7 @@ namespace Mac_EFI_Toolkit
             this.lblHwcText.Location = new System.Drawing.Point(357, 0);
             this.lblHwcText.Margin = new System.Windows.Forms.Padding(0);
             this.lblHwcText.Name = "lblHwcText";
-            this.lblHwcText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblHwcText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblHwcText.Size = new System.Drawing.Size(130, 30);
             this.lblHwcText.TabIndex = 99;
             this.lblHwcText.Text = "Config Code:";
@@ -905,7 +905,7 @@ namespace Mac_EFI_Toolkit
             this.cmdExportFsysBlock.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(62)))), ((int)(((byte)(69)))));
             this.cmdExportFsysBlock.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdExportFsysBlock.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdExportFsysBlock.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(235)))), ((int)(((byte)(245)))));
+            this.cmdExportFsysBlock.ForeColor = System.Drawing.Color.White;
             this.cmdExportFsysBlock.Location = new System.Drawing.Point(164, 0);
             this.cmdExportFsysBlock.Margin = new System.Windows.Forms.Padding(0);
             this.cmdExportFsysBlock.Name = "cmdExportFsysBlock";

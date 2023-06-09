@@ -44,6 +44,8 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private bool _maskCrc = false;
         private bool _buildFailed = false;
+
+        private string _fullBuildPath = string.Empty;
         #endregion
 
         #region Overriden Properties
@@ -167,7 +169,6 @@ namespace Mac_EFI_Toolkit.WinForms
             //}
 
             // If the build fails, disallow exporting.
-
             if (!_buildFailed)
             {
                 Logger.WriteLogTextToRtb($"BUILD SUCCEEDED.", RtbLogPrefix.Good, rtbLog);
@@ -175,15 +176,28 @@ namespace Mac_EFI_Toolkit.WinForms
                 var dir = Path.Combine(Program.appDirectory, "builds");
                 var filename = $"outimage_{DateTime.Now:yyMMdd_HHmmss}.bin";
 
-                var fullpath = Path.Combine(dir, filename);
+                _fullBuildPath = Path.Combine(dir, filename);
 
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
                 }
 
-                File.WriteAllBytes(fullpath, _bytesNewBinary);
-                Logger.WriteLogTextToRtb($"File saved to: {fullpath}", RtbLogPrefix.Info, rtbLog);
+                File.WriteAllBytes(_fullBuildPath, _bytesNewBinary);
+                Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
+
+                var shaNewBinary = FileUtils.GetSha256Digest(_bytesNewBinary);
+                var outFileBytes = File.ReadAllBytes(_fullBuildPath);
+                var shaOutFile = FileUtils.GetSha256Digest(outFileBytes);
+
+                if (string.Equals(shaNewBinary, shaOutFile))
+                {
+                    Logger.WriteLogTextToRtb($"Written file checksum is good, export successful!", RtbLogPrefix.Good, rtbLog);
+                }
+                else
+                {
+                    Logger.WriteLogTextToRtb($"Written file checksum is bad, export was not successful!", RtbLogPrefix.Error, rtbLog);
+                }
             }
 
             ToggleControlEnable(true);

@@ -404,11 +404,25 @@ namespace Mac_EFI_Toolkit.Common
         internal static NvramStoreData GetNvramStoreData(byte[] sourceBytes, NvramStoreType headerType)
         {
             var nvStoreSig = GetNvramSignature(headerType);
-            var storeOffset = BinaryUtils.GetOffset(sourceBytes, nvStoreSig);
+            // We must find the NVRAM section GUID first.
+            long baseNvramOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_DATA_GUID);
+
+            if (baseNvramOffset == -1)
+            {
+                // If baseNvramOffset is -1, we should exit.
+                return new NvramStoreData
+                {
+                    PrimaryStoreSize = -1,
+                    PrimaryStoreOffset = -1,
+                    BackupStoreSize = -1,
+                    BackupStoreOffset = -1
+                };
+            }
+
+            var storeOffset = BinaryUtils.GetOffset(sourceBytes, nvStoreSig, baseNvramOffset);
 
             var primaryStoreSize = -1;
             long primaryStoreOffset = -1;
-
             if (storeOffset != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, storeOffset, 0x6) is byte[] bytesPrimaryHeader)
             {
                 NvramStoreHeader primaryStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
@@ -416,20 +430,18 @@ namespace Mac_EFI_Toolkit.Common
                 {
                     primaryStoreSize = primaryStoreHeader.SizeOfData;
                     primaryStoreOffset = storeOffset;
-
                 }
             }
 
             var backupStoreSize = -1;
             long backupStoreOffset = -1;
-
             if (primaryStoreOffset != -1) // If we did not find the primary store, why would we be looking for the backup store?
             {
                 // We're looking for the backup store within a certain max padding length from the end of the primary store,
                 // if we don't find the signature within the maxSearchLength, we abort.
                 var backupOffset = BinaryUtils.GetOffset(sourceBytes, nvStoreSig, storeOffset + primaryStoreSize, _maxPaddingBytes);
 
-                if (backupOffset != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, storeOffset, 0x6) is byte[] bytesBackupHeader)
+                if (backupOffset != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupOffset, 0x6) is byte[] bytesBackupHeader)
                 {
                     NvramStoreHeader backupStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
                     if (backupStoreHeader.SizeOfData != 0)

@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Common\FSGuids.cs" />
     <Compile Include="Common\FSSignatures.cs" />
+    <Compile Include="Common\FWBase.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Common\MEParser.cs" />
