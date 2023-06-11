@@ -201,7 +201,7 @@ namespace Mac_EFI_Toolkit.Common
 
             if (pdrOffset != -1)
             {
-                var bidOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.BID_SIG, pdrOffset);
+                var bidOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.PDR_BOARD_ID_SIG, pdrOffset);
                 if (bidOffset != -1)
                 {
                     var bidNudgePos = 0x5;
@@ -340,13 +340,13 @@ namespace Mac_EFI_Toolkit.Common
         #region Apple ROM Section Data
         internal static string GetEfiVersion(byte[] sourceBytes)
         {
-            var versionOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.EFIVER_SIG);
+            var versionOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.EFI_VERSION_SIGNATURE);
 
             if (versionOffset != -1)
             {
                 byte indexByte = 0x20;
                 byte terminationByte = 0x0A;
-                var versionNudgePos = FSSignatures.EFIVER_SIG.Length;
+                var versionNudgePos = FSSignatures.EFI_VERSION_SIGNATURE.Length;
                 byte[] versionBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, versionOffset + versionNudgePos, indexByte, terminationByte);
 
                 if (versionBytes != null)
@@ -360,13 +360,13 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static string GetBootromVersion(byte[] sourceBytes)
         {
-            var versionOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.ROMVER_SIG);
+            var versionOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.ROM_VERSION_SIGNATURE);
 
             if (versionOffset != -1)
             {
                 byte indexByte = 0x20;
                 byte terminationByte = 0x0A;
-                var versionNudgePos = FSSignatures.ROMVER_SIG.Length;
+                var versionNudgePos = FSSignatures.ROM_VERSION_SIGNATURE.Length;
                 byte[] versionBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, versionOffset + versionNudgePos, indexByte, terminationByte);
 
                 if (versionBytes != null)
@@ -506,7 +506,7 @@ namespace Mac_EFI_Toolkit.Common
             {
                 var lzmaNudgePos = 0x10;
                 lzmaOffset = BinaryUtils.GetOffset(sourceBytes, new byte[] { 0x5D }, lzmaOffset + lzmaNudgePos);
-                long lzmaEndOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.ROM_INFO_GUID, lzmaOffset);
+                long lzmaEndOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, lzmaOffset);
 
                 if (lzmaEndOffset != -1)
                 {

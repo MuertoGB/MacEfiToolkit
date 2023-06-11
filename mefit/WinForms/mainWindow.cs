@@ -756,6 +756,23 @@ namespace Mac_EFI_Toolkit
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
                 FWParser.bytesLoadedFile = File.ReadAllBytes(filePath);
                 FWParser.ParseFirmwareData();
+
+                FWBase.loadedFileBytes = File.ReadAllBytes(filePath);
+                FWBase.LoadFirmwareBaseData(FWBase.loadedFileBytes);
+
+                // Debug
+                //File.WriteAllBytes("rominfosection.bin", FWBase.romInfoStore.SectionBytes);
+                //using (StreamWriter writer = new StreamWriter("output.txt"))
+                //{
+                //    writer.WriteLine($"{FWBase.romInfoStore.SectionOffset:X2}h");
+                //    writer.WriteLine($"{FWBase.romInfoStore.BiosId}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.Model}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.EfiVersion}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.BuiltBy}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.DateStamp}");
+                //}
+                // End debug
+
                 UpdateControls();
                 _firmwareLoaded = true;
             }
