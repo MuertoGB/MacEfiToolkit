@@ -130,6 +130,10 @@ namespace Mac_EFI_Toolkit.Common
             bytesLoadedFsys = fsysData.RegionBytes;
             lFsysOffset = fsysData.Offset;
 
+            //FsysRegionBase fsysData = FWBase.GetFsysRegionData(bytesLoadedFile);
+            //bytesLoadedFsys = fsysData.FsysBytes;
+            //lFsysOffset = fsysData.FsysOffset;
+
             if (bytesLoadedFsys != null)
             {
                 var serialInfo = GetSystemSerialNumber(bytesLoadedFsys, true);
