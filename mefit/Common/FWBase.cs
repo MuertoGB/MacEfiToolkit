@@ -184,6 +184,23 @@ namespace Mac_EFI_Toolkit.Common
             byte indexByte = 0x20;
             byte terminationByte = 0x0A;
 
+            // Create a dictionary to hold signature-data pairs
+            var romInfoData = new Dictionary<byte[], string>
+            {
+                { BIOS_ID_SIGNATURE, null },
+                { MODEL_SIGNATURE, null },
+                { EFI_VERSION_SIGNATURE, null },
+                { BUILT_BY_SIGNATURE, null },
+                { DATE_SIGNATURE, null },
+                { REVISION_SIGNATURE, null },
+                { ROM_VERSION_SIGNATURE, null},
+                { BUILDCAVE_ID_SIGNATURE, null},
+                { BUILD_TYPE_SIGNATURE, null},
+                { COMPILER_SIGNATURE, null}
+            };
+
+            // Create a separate dictionary to store updated data
+            var updatedRomInfoData = new Dictionary<byte[], string>(romInfoData);
             // First we need to locate the AppleRomInformation section GUID
             long baseOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID);
             if (baseOffset == -1)
@@ -198,43 +215,32 @@ namespace Mac_EFI_Toolkit.Common
             byte[] dataLenBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, baseOffset + headerLen, dataLen);
             // Convert first two bytes to an int16 value and get the AppleRomInformation section size
             int sectionLen = BitConverter.ToInt16(dataLenBytes, 0);
+
             // Read the entire AppleRomInformation section using sectionLen as the max search length
             byte[] romSectionData = BinaryUtils.GetBytesAtOffset(sourceBytes, baseOffset + headerLen, sectionLen);
-
-            // Create a dictionary to hold signature-data pairs
-            var romInfoData = new Dictionary<byte[], string>
+            if (romSectionData != null)
             {
-                { FSSignatures.BIOS_ID_SIGNATURE, null },
-                { FSSignatures.MODEL_SIGNATURE, null },
-                { FSSignatures.EFI_VERSION_SIGNATURE, null },
-                { FSSignatures.BUILT_BY_SIGNATURE, null },
-                { FSSignatures.DATE_SIGNATURE, null }
-            };
-
-            // Create a separate dictionary to store updated data
-            var updatedRomInfoData = new Dictionary<byte[], string>(romInfoData);
-
-            // Extract data from the romSectionData based on the signature
-            foreach (var kvPair in romInfoData)
-            {
-                long dataPos = BinaryUtils.GetOffset(romSectionData, kvPair.Key);
-                if (dataPos != -1)
+                // Extract data from the romSectionData based on the signature
+                foreach (var kvPair in romInfoData)
                 {
-                    int sigLength = kvPair.Key.Length;
-                    // Extract the data using the signature position, signature length, index byte, and termination byte
-                    byte[] infoData = BinaryUtils.GetBytesAtOffsetByteDelimited(romSectionData, dataPos + sigLength, indexByte, terminationByte);
-                    if (infoData != null)
+                    long dataPos = BinaryUtils.GetOffset(romSectionData, kvPair.Key);
+                    if (dataPos != -1)
                     {
-                        // Convert the extracted byte array to string using UTF-8 encoding
-                        updatedRomInfoData[kvPair.Key] = _utf8.GetString(infoData);
+                        int sigLength = kvPair.Key.Length;
+                        // Extract the data using the signature position, signature length, index byte, and termination byte
+                        byte[] infoData = BinaryUtils.GetBytesAtOffsetByteDelimited(romSectionData, dataPos + sigLength, indexByte, terminationByte);
+                        if (infoData != null)
+                        {
+                            // Convert the extracted byte array to string using UTF-8 encoding
+                            updatedRomInfoData[kvPair.Key] = _utf8.GetString(infoData);
+                        }
                     }
                 }
-            }
-
-            // Update the original romInfoData dictionary with the extracted and updated values
-            foreach (var kvPair in updatedRomInfoData)
-            {
-                romInfoData[kvPair.Key] = kvPair.Value;
+                // Update the original romInfoData dictionary with the extracted and updated values
+                foreach (var kvPair in updatedRomInfoData)
+                {
+                    romInfoData[kvPair.Key] = kvPair.Value;
+                }
             }
 
             // Create and return an instance of AppleRomInformationBase with the extracted data
@@ -242,12 +248,16 @@ namespace Mac_EFI_Toolkit.Common
             {
                 SectionBytes = romSectionData,
                 SectionOffset = baseOffset,
-                BiosId = romInfoData[FSSignatures.BIOS_ID_SIGNATURE],
-                Model = romInfoData[FSSignatures.MODEL_SIGNATURE],
-                EfiVersion = romInfoData[FSSignatures.EFI_VERSION_SIGNATURE],
-                BuiltBy = romInfoData[FSSignatures.BUILT_BY_SIGNATURE],
-                DateStamp = romInfoData[FSSignatures.DATE_SIGNATURE]
-                // TODO - Revision, Buildcave, BuildType, Compiler
+                BiosId = romInfoData[BIOS_ID_SIGNATURE],
+                Model = romInfoData[MODEL_SIGNATURE],
+                EfiVersion = romInfoData[EFI_VERSION_SIGNATURE],
+                BuiltBy = romInfoData[BUILT_BY_SIGNATURE],
+                DateStamp = romInfoData[DATE_SIGNATURE],
+                Revision = romInfoData[REVISION_SIGNATURE],
+                RomVersion = romInfoData[ROM_VERSION_SIGNATURE],
+                BuildcaveId = romInfoData[BUILDCAVE_ID_SIGNATURE],
+                BuildType = romInfoData[BUILD_TYPE_SIGNATURE],
+                Compiler = romInfoData[COMPILER_SIGNATURE]
             };
         }
 
@@ -269,6 +279,74 @@ namespace Mac_EFI_Toolkit.Common
                 Compiler = null
             };
         }
+
+        internal static readonly byte[] BIOS_ID_SIGNATURE =
+        {
+            0x42, 0x49, 0x4F, 0x53,
+            0x20, 0x49, 0x44, 0x3A
+        };
+
+        internal static readonly byte[] MODEL_SIGNATURE =
+        {
+            0x4D, 0x6F, 0x64, 0x65,
+            0x6C, 0x3A
+        };
+
+        internal static readonly byte[] EFI_VERSION_SIGNATURE =
+        {
+            0x45, 0x46, 0x49, 0x20,
+            0x56, 0x65, 0x72, 0x73,
+            0x69, 0x6F, 0x6E, 0x3A
+        };
+
+        internal static readonly byte[] BUILT_BY_SIGNATURE =
+        {
+            0x42, 0x75, 0x69, 0x6C,
+            0x74, 0x20, 0x62, 0x79,
+            0x3A
+        };
+
+        internal static readonly byte[] DATE_SIGNATURE =
+        {
+            0x44, 0x61, 0x74, 0x65,
+            0x3A
+        };
+
+        internal static readonly byte[] REVISION_SIGNATURE =
+        {
+            0x52, 0x65, 0x76, 0x69,
+            0x73, 0x69, 0x6F, 0x6E,
+            0x3A
+        };
+
+        internal static readonly byte[] ROM_VERSION_SIGNATURE =
+        {
+            0x52, 0x4F, 0x4D, 0x20,
+            0x56, 0x65, 0x72, 0x73,
+            0x69, 0x6F, 0x6E, 0x3A
+        };
+
+        internal static readonly byte[] BUILDCAVE_ID_SIGNATURE = 
+        {
+            0x42, 0x75, 0x69, 0x6C,
+            0x64, 0x63, 0x61, 0x76,
+            0x65, 0x20, 0x49, 0x44,
+            0x3A
+        };
+
+        internal static readonly byte[] BUILD_TYPE_SIGNATURE =
+        {
+            0x42, 0x75, 0x69, 0x6C,
+            0x64, 0x20, 0x54, 0x79,
+            0x70, 0x65, 0x3A
+        };
+
+        internal static readonly byte[] COMPILER_SIGNATURE =
+        {
+            0x43, 0x6F, 0x6D, 0x70,
+            0x69, 0x6C, 0x65, 0x72,
+            0x3A
+        };
         #endregion
 
     }

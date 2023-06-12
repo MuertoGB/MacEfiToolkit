@@ -340,13 +340,13 @@ namespace Mac_EFI_Toolkit.Common
         #region Apple ROM Section Data
         internal static string GetEfiVersion(byte[] sourceBytes)
         {
-            var versionOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.EFI_VERSION_SIGNATURE);
+            var versionOffset = BinaryUtils.GetOffset(sourceBytes, FWBase.EFI_VERSION_SIGNATURE);
 
             if (versionOffset != -1)
             {
                 byte indexByte = 0x20;
                 byte terminationByte = 0x0A;
-                var versionNudgePos = FSSignatures.EFI_VERSION_SIGNATURE.Length;
+                var versionNudgePos = FWBase.EFI_VERSION_SIGNATURE.Length;
                 byte[] versionBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, versionOffset + versionNudgePos, indexByte, terminationByte);
 
                 if (versionBytes != null)
@@ -360,13 +360,13 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static string GetBootromVersion(byte[] sourceBytes)
         {
-            var versionOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.ROM_VERSION_SIGNATURE);
+            var versionOffset = BinaryUtils.GetOffset(sourceBytes, FWBase.ROM_VERSION_SIGNATURE);
 
             if (versionOffset != -1)
             {
                 byte indexByte = 0x20;
                 byte terminationByte = 0x0A;
-                var versionNudgePos = FSSignatures.ROM_VERSION_SIGNATURE.Length;
+                var versionNudgePos = FWBase.ROM_VERSION_SIGNATURE.Length;
                 byte[] versionBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, versionOffset + versionNudgePos, indexByte, terminationByte);
 
                 if (versionBytes != null)

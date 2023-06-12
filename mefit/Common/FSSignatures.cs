@@ -56,47 +56,8 @@ namespace Mac_EFI_Toolkit.Common
             0x19
         };
 
-        internal static readonly byte[] BIOS_ID_SIGNATURE =
-        {
-            0x42, 0x49, 0x4F, 0x53,
-            0x20, 0x49, 0x44, 0x3A
-        };
-
-        internal static readonly byte[] MODEL_SIGNATURE =
-        {
-            0x4D, 0x6F, 0x64, 0x65, 
-            0x6C, 0x3A
-        };
-
-        internal static readonly byte[] EFI_VERSION_SIGNATURE =
-        {
-            0x45, 0x46, 0x49, 0x20,
-            0x56, 0x65, 0x72, 0x73,
-            0x69, 0x6F, 0x6E, 0x3A
-        };
-
-        internal static readonly byte[] BUILT_BY_SIGNATURE =
-        {
-            0x42, 0x75, 0x69, 0x6C,
-            0x74, 0x20, 0x62, 0x79,
-            0x3A
-        };
-
-        internal static readonly byte[] DATE_SIGNATURE =
-        {
-            0x44, 0x61, 0x74, 0x65,
-            0x3A
-        };
-
-        internal static readonly byte[] ROM_VERSION_SIGNATURE =
-        {
-            0x52, 0x4F, 0x4D, 0x20,
-            0x56, 0x65, 0x72, 0x73,
-            0x69, 0x6F, 0x6E, 0x3A
-        };
-
         internal static readonly byte[] FPT_HEADER_SIG =
-{
+        {
             0x24, 0x46, 0x50, 0x54
         };
 

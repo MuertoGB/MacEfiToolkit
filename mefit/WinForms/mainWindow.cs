@@ -770,6 +770,11 @@ namespace Mac_EFI_Toolkit
                 //    writer.WriteLine($"{FWBase.romInfoStore.EfiVersion}");
                 //    writer.WriteLine($"{FWBase.romInfoStore.BuiltBy}");
                 //    writer.WriteLine($"{FWBase.romInfoStore.DateStamp}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.Revision}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.RomVersion}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.BuildcaveId}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.BuildType}");
+                //    writer.WriteLine($"{FWBase.romInfoStore.Compiler}");
                 //}
                 // End debug
 
