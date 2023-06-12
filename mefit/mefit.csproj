@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\FSGuids.cs" />
-    <Compile Include="Common\FSSignatures.cs" />
     <Compile Include="Common\FWBase.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
@@ -103,7 +102,6 @@
     <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBit.cs" />
     <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBitTree.cs" />
     <Compile Include="Common\SevenZip\ICoder.cs" />
-    <Compile Include="Common\FWParser.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="METVersion.cs" />

@@ -81,7 +81,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            tbxSerialNumber.MaxLength = FWParser.strSerialNumber.Length;
+            tbxSerialNumber.MaxLength = FWBase.FsysSectionData.Serial.Length;
 
             Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"The editor is unfinished, use caution!", RtbLogPrefix.Warn, rtbLog);
@@ -141,7 +141,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             ToggleControlEnable(false);
 
-            _bytesNewBinary = FWParser.bytesLoadedFile;
+            _bytesNewBinary = FWBase.LoadedBinaryBytes;
 
             if (cbxReplaceFsysRgn.Checked)
             {
@@ -310,17 +310,17 @@ namespace Mac_EFI_Toolkit.WinForms
             TextBox tb = (TextBox)sender;
             int textLength = tb.Text.Length;
 
-            if (textLength == FWParser.strSerialNumber.Length)
+            if (textLength == FWBase.FsysSectionData.Serial.Length)
             {
                 if (EFIUtils.GetIsValidSerialChars(tb.Text))
                 {
                     UpdateTextBoxColor(tb, Colours.clrGood);
                     Logger.WriteLogTextToRtb("Valid serial characters entered.", RtbLogPrefix.Info, rtbLog);
-                    if (FWParser.strSerialNumber.Length == 11)
+                    if (FWBase.FsysSectionData.Serial.Length == 11)
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 3));
                     }
-                    if (FWParser.strSerialNumber.Length == 12)
+                    if (FWBase.FsysSectionData.Serial.Length == 12)
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 4));
                     }
@@ -348,30 +348,28 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTextToRtb("Validating donor Fsys region:", RtbLogPrefix.Info, rtbLog);
 
-            if (sourceBytes.Length != FWParser.FSYS_RGN_SIZE)
+            if (sourceBytes.Length != FWBase.FSYS_RGN_SIZE)
             {
                 Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h, expected 800h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            long lSigPos = BinaryUtils.GetOffset(sourceBytes, FSSignatures.FSYS_SIG);
+            long lSigPos = BinaryUtils.GetOffset(sourceBytes, FWBase.FSYS_SIG);
             if (lSigPos == -1 || lSigPos != 0)
             {
                 Logger.WriteLogTextToRtb(lSigPos == -1 ? "Fsys signature not found." : $"Fsys signature misaligned at {lSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            var serialData = FWParser.GetSystemSerialNumber(sourceBytes, false);
-            string strSerial = serialData.Serial;
-            int lenSerial = strSerial.Length;
-            string strHwc = lenSerial == 11 ? strSerial.Substring(strSerial.Length - 3).ToUpper() : lenSerial == 12 ? strSerial.Substring(strSerial.Length - 4).ToUpper() : string.Empty;
+            int lenSerial = FWBase.FsysSectionData.Serial.Length;
+            string strHwc = lenSerial == 11 ? FWBase.FsysSectionData.Serial.Substring(FWBase.FsysSectionData.Serial.Length - 3).ToUpper() : lenSerial == 12 ? FWBase.FsysSectionData.Serial.Substring(FWBase.FsysSectionData.Serial.Length - 4).ToUpper() : string.Empty;
 
             Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"Fsys signature found at {lSigPos:X2}h", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"Serial: {strSerial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"Serial: {FWBase.FsysSectionData.Serial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
 
-            string strCrcInFile = FWParser.GetFsysCrc32(sourceBytes);
+            string strCrcInFile = FWBase.FsysSectionData.CRC32;
             string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");
 
             Logger.WriteLogTextToRtb($"{strCrcInFile}h > {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
@@ -393,7 +391,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void ValidateNvramStoreData()
         {
-            NvramStoreData vssStore = FWParser.GetNvramStoreData(FWParser.bytesLoadedFile, NvramStoreType.VSS);
+            NvramStoreData vssStore = FWBase.GetNvramStoreData(FWBase.LoadedBinaryBytes, NvramStoreType.VSS);
             if (vssStore.PrimaryStoreOffset != -1)
             {
                 _primaryVssOffset = vssStore.PrimaryStoreOffset;
@@ -417,7 +415,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 lblVssChevRight.Visible = false;
             }
 
-            NvramStoreData svsStore = FWParser.GetNvramStoreData(FWParser.bytesLoadedFile, NvramStoreType.SVS);
+            NvramStoreData svsStore = FWBase.GetNvramStoreData(FWBase.LoadedBinaryBytes, NvramStoreType.SVS);
             if (svsStore.PrimaryStoreOffset != -1)
             {
                 _primarySvsOffset = svsStore.PrimaryStoreOffset;
@@ -438,7 +436,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 lblSvsChevRight.Visible = false;
             }
 
-            NvramStoreData nssStore = FWParser.GetNvramStoreData(FWParser.bytesLoadedFile, NvramStoreType.NSS);
+            NvramStoreData nssStore = FWBase.GetNvramStoreData(FWBase.LoadedBinaryBytes, NvramStoreType.NSS);
             if (nssStore.PrimaryStoreOffset != -1)
             {
                 _primaryNssOffset = nssStore.PrimaryStoreOffset;
@@ -495,21 +493,21 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Logging
         private void LogFsysData()
         {
-            if (FWParser.lFsysOffset != 0)
+            if (FWBase.FsysSectionData.FsysOffset != 0)
             {
-                Logger.WriteLogTextToRtb($"Fsys: Offset {FWParser.lFsysOffset:X2}h, Size {FWParser.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"Fsys: Offset {FWBase.FsysSectionData.FsysOffset:X2}h, Size {FWBase.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
             }
         }
 
         private void LogLoadedBinarySize()
         {
-            if (!FileUtils.GetIsValidBinSize((int)FWParser.lLoadedFileSize))
+            if (!FileUtils.GetIsValidBinSize((int)FWBase.FileInfoData.FileLength))
             {
-                Logger.WriteLogTextToRtb($"Loaded binary size {FWParser.lLoadedFileSize:X2}h is invalid and should not be used as a donor.", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is invalid and should not be used as a donor.", RtbLogPrefix.Error, rtbLog);
             }
             else
             {
-                Logger.WriteLogTextToRtb($"Loaded binary size {FWParser.lLoadedFileSize:X2}h is valid", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is valid", RtbLogPrefix.Info, rtbLog);
             }
         }
 
@@ -568,12 +566,12 @@ namespace Mac_EFI_Toolkit.WinForms
                 BinaryUtils.OverwriteBytesAtOffset(_bytesNewFsysRegion, 0x7FC, newCrcBytes);
 
                 // Read CRC32 string from _bytesNewFsysRegion
-                string patchedCrcBytes = FWParser.GetFsysCrc32(_bytesNewFsysRegion);
+                uint patchedCrcBytes = EFIUtils.GetUintFsysCrc32(_bytesNewFsysRegion);
 
-                Logger.WriteLogTextToRtb($"{newCrc:X8}h > {patchedCrcBytes}h", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"{newCrc:X8}h > {patchedCrcBytes:X8}h", RtbLogPrefix.Info, rtbLog);
 
                 // Convert newCrc to hex string to string and compare it to was was read.
-                if (string.Equals(newCrc.ToString("X8"), patchedCrcBytes))
+                if (string.Equals(newCrc.ToString("X8"), patchedCrcBytes.ToString("X8")))
                 {
                     Logger.WriteLogTextToRtb("CRC32 masking successful", RtbLogPrefix.Info, rtbLog);
                 }
@@ -585,11 +583,11 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Write new Fsys bytes to _bytesNewBinary
-            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWParser.lFsysOffset, _bytesNewFsysRegion);
+            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, _bytesNewFsysRegion);
 
             // Validate new Fsys was written
-            FsysRegion fsys = FWParser.GetFsysRegionBytes(_bytesNewBinary, false);
-            if (fsys.RegionBytes.SequenceEqual(_bytesNewFsysRegion))
+            FsysStoreSection fsysNew = FWBase.GetFsysRegionData(_bytesNewBinary);
+            if (fsysNew.FsysBytes.SequenceEqual(_bytesNewFsysRegion))
             {
                 Logger.WriteLogTextToRtb("Fsys comparison check passed", RtbLogPrefix.Info, rtbLog);
             }

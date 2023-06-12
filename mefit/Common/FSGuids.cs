@@ -49,7 +49,7 @@ namespace Mac_EFI_Toolkit.Common
             0x8F, 0xE3, 0x3E, 0x28
         };
 
-        internal static readonly byte[] NVRAM_DATA_GUID =
+        internal static readonly byte[] NVRAM_SECTION_GUID =
         {
             0x8D, 0x2B, 0xF1, 0xFF,
             0x96, 0x76, 0x8B, 0x4C,
@@ -57,7 +57,7 @@ namespace Mac_EFI_Toolkit.Common
             0x07, 0x5B, 0x4F, 0x50
         };
 
-        internal static readonly byte[] PDR_SECTION_BID_GUID =
+        internal static readonly byte[] PDR_SECTION_GUID =
         {
             0x4A, 0x25, 0x1F, 0x78,
             0x57, 0xC4, 0x13, 0x5D,

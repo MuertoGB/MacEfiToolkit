@@ -9,24 +9,38 @@
 using Mac_EFI_Toolkit.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 #region Structs
-internal struct FsysRegionBase
+internal struct FileInfoData
+{
+    internal string FileNameWithExt { get; set; }
+    internal string FileNameNoExt { get; set; }
+    internal string CreationTime { get; set; }
+    internal string LastWriteTime { get; set; }
+    internal long FileLength { get; set; }
+    internal string CRC32 { get; set; }
+}
+internal struct FsysStoreSection
 {
     internal byte[] FsysBytes { get; set; }
     internal long FsysOffset { get; set; }
-    internal string FsysSerial { get; set; }
+    internal string Serial { get; set; }
     internal long SerialOffset { get; set; }
-    internal string FsysHWC { get; set; }
+    internal string HWC { get; set; }
     internal long HWCOffset { get; set; }
-    internal string FsysSON { get; set; }
-    internal long SONOffset { get; set; }
+    internal string SON { get; set; }
+    internal string CRC32 { get; set; }
+    internal long CRC32Offset { get; set; }
+    internal string CRC32Calc { get; set; }
 }
 
-internal struct AppleRomInformationBase
+internal struct AppleRomInformationSection
 {
+    internal bool SectionExists { get; set; }
     internal byte[] SectionBytes { get; set; }
     internal long SectionOffset { get; set; }
     internal string BiosId { get; set; }
@@ -39,7 +53,57 @@ internal struct AppleRomInformationBase
     internal string BuildcaveId { get; set; }
     internal string BuildType { get; set; }
     internal string Compiler { get; set; }
+}
 
+internal struct PdrSection
+{
+    internal string MacBoardId { get; set; }
+}
+
+internal struct EfiSection
+{
+    internal string Model { get; set; }
+}
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+internal struct FlashDescriptorHeader
+{
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+    internal byte[] ReservedVector;
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+    internal byte[] Signature;
+}
+
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+internal struct NvramStoreHeader
+{
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+    internal char[] Signature;
+    internal ushort SizeOfData;
+}
+
+internal struct NvramStoreData
+{
+    internal int PrimaryStoreSize { get; set; }
+    internal long PrimaryStoreOffset { get; set; }
+    internal int BackupStoreSize { get; set; }
+    internal long BackupStoreOffset { get; set; }
+}
+#endregion
+
+#region Enums
+internal enum ApfsCompatibleFirmware
+{
+    Unknown,
+    Yes,
+    No
+}
+
+internal enum NvramStoreType
+{
+    VSS,
+    SVS,
+    NSS
 }
 #endregion
 
@@ -47,33 +111,132 @@ namespace Mac_EFI_Toolkit.Common
 {
     class FWBase
     {
+        internal static string LoadedBinaryPath = null;
+        internal static byte[] LoadedBinaryBytes = null;
 
-        #region Internal Members
-        internal static FsysRegionBase fsysStore;
-        internal static AppleRomInformationBase romInfoStore;
-        internal static byte[] loadedFileBytes = null;
-        #endregion
+        internal static FileInfoData FileInfoData;
+        internal static PdrSection PDRSectionData;
+        internal static FsysStoreSection FsysSectionData;
+        internal static AppleRomInformationSection ROMInfoData;
+        internal static EfiSection EFISectionStore;
 
-        #region Private Members
-        private const int _fsysMaxSize = 0x800;
+        internal static string IsApfsCapable = null;
+        internal static string FitVersion = null;
+        internal static string MeVersion = null;
+
+        internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576 bytes
+        internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
+        internal const int FSYS_RGN_SIZE = 0x800;      // 2048 bytes
+
+        private static readonly int _maxPaddingBytes = 0x60;
         private static Encoding _utf8 = Encoding.UTF8;
-        #endregion
 
-        internal static void LoadFirmwareBaseData(byte[] sourceBytes)
+        internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
-            fsysStore = GetFsysRegionData(sourceBytes);
-            romInfoStore = GetRomInformationData(sourceBytes);
+            FileInfoData = GetBinaryFileInfo(fileName);
+            PDRSectionData = GetPdrData(sourceBytes);
+            FsysSectionData = GetFsysRegionData(sourceBytes);
+            ROMInfoData = GetRomInformationData(sourceBytes);
+            EFISectionStore = GetEfiSectionData(sourceBytes);
+
+            IsApfsCapable = GetIsApfsCapable(LoadedBinaryBytes).ToString();
+            FitVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.FlashImageTool);
+            MeVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.ManagementEngine);
         }
 
+        #region File Information
+        private static FileInfoData GetBinaryFileInfo(string fileName)
+        {
+            FileInfo fileInfo = new FileInfo(fileName);
+
+            return new FileInfoData
+            {
+                FileNameWithExt = fileInfo.Name,
+                FileNameNoExt = Path.GetFileNameWithoutExtension(fileName),
+                CreationTime = fileInfo.CreationTime.ToString(),
+                LastWriteTime = fileInfo.LastWriteTime.ToString(),
+                FileLength = fileInfo.Length,
+                CRC32 = FileUtils.GetCrc32Digest(LoadedBinaryBytes).ToString("X8")
+            };
+        }
+        #endregion 
+
+        #region Flash Descriptor
+        internal static bool GetIsValidFlashHeader(byte[] sourceBytes)
+        {
+            byte[] headerData = BinaryUtils.GetBytesAtOffset(sourceBytes, 0, 0x14);
+            FlashDescriptorHeader header = Helper.DeserializeHeader<FlashDescriptorHeader>(headerData);
+
+            if (header.Signature.SequenceEqual(FLASH_DESC_SIGNATURE))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        internal static readonly byte[] FLASH_DESC_SIGNATURE =
+        {
+            0x5A, 0xA5, 0xF0, 0x0F
+        };
+        #endregion
+
+        #region Platform Data Region
+        internal static PdrSection GetPdrData(byte[] sourceBytes)
+        {
+            long pdrPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.PDR_SECTION_GUID);
+
+            if (pdrPos != -1)
+            {
+                var bidPos = BinaryUtils.GetOffset(sourceBytes, PDR_BOARD_ID_SIGNATURE, pdrPos);
+                if (bidPos != -1)
+                {
+                    var bidNudgePos = 0x5; var bidReadLength = 0x8;
+                    var bidBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, bidPos + bidNudgePos, bidReadLength);
+                    var bidString = BitConverter.ToString(bidBytes).Replace("-", "");
+
+                    if (!bidString.All(c => c == '0'))
+                    {
+                        return new PdrSection
+                        {
+                            MacBoardId = $"Mac-{bidString}"
+                        };
+                    }
+                }
+            }
+
+            return DefaultPdrSection();
+        }
+
+        private static PdrSection DefaultPdrSection()
+        {
+            return new PdrSection
+            {
+                MacBoardId = null
+            };
+        }
+
+        internal static readonly byte[] PDR_BOARD_ID_SIGNATURE =
+{
+            0xF8, 0x7C, 0x00, 0x00,
+            0x19
+        };
+        #endregion
+
         #region Fsys Region
-        internal static FsysRegionBase GetFsysRegionData(byte[] sourceBytes)
+        internal static FsysStoreSection GetFsysRegionData(byte[] sourceBytes)
         {
             string ssnString = null; long ssnPos = -1;
             string hwcString = null; long hwcPos = -1;
-            string sonString = null; long sonPos = -1;
+            string sonString = null;
+            string crcString = null;
+            string crcCalcString = null;
+
+            int ssnStartPos = 0x05;
+            var hwcStartPos = 0x06;
 
             // First we need to locate the NVRAM section GUID.
-            long nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_DATA_GUID);
+            long nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
             if (nvramPos == -1)
             {
                 // NVRAM store was not found so return default data
@@ -87,7 +250,7 @@ namespace Mac_EFI_Toolkit.Common
             // Convert NVRAM section size to int32
             int nvramLen = BitConverter.ToInt32(dataLenBytes, 0); // NOTE: What if this value if 0xFF??
             // Search for the Fsys store within bounds of the NVRAM section
-            long fsysPos = BinaryUtils.GetOffset(sourceBytes, FSSignatures.FSYS_SIG, nvramPos - zeroVecLen - guidLen, nvramLen);
+            long fsysPos = BinaryUtils.GetOffset(sourceBytes, FSYS_SIG, nvramPos - zeroVecLen - guidLen, nvramLen);
 
             // Fsys store was not found within scope of the NVRAM section
             if (fsysPos == -1)
@@ -96,21 +259,31 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             // Get Fsys store bytes
-            byte[] fsysData = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysPos, _fsysMaxSize);
+            byte[] fsysData = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysPos, FSYS_RGN_SIZE);
 
-            if (fsysData != null && fsysData.Length == _fsysMaxSize)
+            if (fsysData != null && fsysData.Length == FSYS_RGN_SIZE)
             {
-                // Serial + Offset
-                ssnPos = BinaryUtils.GetOffset(sourceBytes, FSSignatures.SSN_UPPER_SIG);
-                if (ssnPos == -1)
+                // Calculate Fsys CRC32 from fsysData
+                crcCalcString = EFIUtils.GetUintFsysCrc32(fsysData).ToString("X8");
+
+                // Fsys store CRC32
+                var crcLength = 0x4;
+                var crcNudgePos = FSYS_RGN_SIZE - crcLength;
+                var crcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysPos + crcNudgePos, crcLength);
+
+                if (crcBytes != null)
                 {
-                    // Find lower case ssn signature
-                    ssnPos = BinaryUtils.GetOffset(sourceBytes, FSSignatures.SSN_LOWER_SIG);
+                    var crcReversedBytes = crcBytes.Reverse().ToArray();
+                    crcString = BitConverter.ToString(crcReversedBytes).Replace("-", "");
                 }
+
+                // Serial + Offset
+                ssnPos = BinaryUtils.GetOffset(sourceBytes, SSN_UPPER_SIG, fsysPos, FSYS_RGN_SIZE);
+                if (ssnPos == -1) ssnPos = BinaryUtils.GetOffset(sourceBytes, SSN_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
                 if (ssnPos != -1)
                 {
-                    int dataStartPos = 0x05; int ssnDatLen = 0x0C;
-                    byte[] ssnData = BinaryUtils.GetBytesAtOffset(sourceBytes, ssnPos + dataStartPos, ssnDatLen);
+                    int ssnDatLen = 0x0C;
+                    byte[] ssnData = BinaryUtils.GetBytesAtOffset(sourceBytes, ssnPos + ssnStartPos, ssnDatLen);
                     if (ssnData != null)
                     {
                         ssnString = _utf8.GetString(ssnData).Trim();
@@ -119,10 +292,10 @@ namespace Mac_EFI_Toolkit.Common
                 }
 
                 // Hardware Config + Offset
-                hwcPos = BinaryUtils.GetOffset(sourceBytes, FSSignatures.HWC_SIG);
+                hwcPos = BinaryUtils.GetOffset(sourceBytes, HWC_SIG, fsysPos, FSYS_RGN_SIZE);
                 if (hwcPos != -1)
                 {
-                    var hwcStartPos = 0x06; var hwcReadLen = 0x04;
+                    var hwcReadLen = 0x04;
                     byte[] hwcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, hwcPos + hwcStartPos, hwcReadLen);
 
                     if (hwcBytes != null)
@@ -133,7 +306,7 @@ namespace Mac_EFI_Toolkit.Common
                 }
 
                 // System order number + Offset
-                sonPos = BinaryUtils.GetOffset(sourceBytes, FSSignatures.SON_SIG);
+                long sonPos = BinaryUtils.GetOffset(sourceBytes, SON_SIG, fsysPos, FSYS_RGN_SIZE);
                 if (sonPos != -1)
                 {
                     byte indexByte = 0x00;
@@ -148,37 +321,159 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            return new FsysRegionBase
+            return new FsysStoreSection
             {
                 FsysBytes = fsysData,
                 FsysOffset = fsysPos,
-                FsysSerial = ssnString,
-                SerialOffset = ssnPos,
-                FsysHWC = hwcString,
-                HWCOffset = hwcPos,
-                FsysSON = sonString,
-                SONOffset = sonPos
+                Serial = ssnString,
+                SerialOffset = ssnPos + ssnStartPos,
+                HWC = hwcString,
+                HWCOffset = hwcPos + hwcStartPos,
+                SON = sonString,
+                CRC32 = crcString,
+                CRC32Offset = fsysPos - 0x4,
+                CRC32Calc = crcCalcString
             };
         }
 
-        internal static FsysRegionBase DefaultFsysRegionBase()
+        internal static FsysStoreSection DefaultFsysRegionBase()
         {
-            return new FsysRegionBase
+            return new FsysStoreSection
             {
                 FsysBytes = null,
                 FsysOffset = -1,
-                FsysSerial = null,
+                Serial = null,
                 SerialOffset = -1,
-                FsysHWC = null,
+                HWC = null,
                 HWCOffset = -1,
-                FsysSON = null,
-                SONOffset = -1
+                SON = null,
+                CRC32 = null,
+                CRC32Offset = -1,
+                CRC32Calc = null
             };
         }
+
+        internal static readonly byte[] FSYS_SIG =
+        {
+            0x46, 0x73, 0x79, 0x73,
+            0x01
+        };
+
+        internal static readonly byte[] SSN_LOWER_SIG =
+        {
+            0x73, 0x73, 0x6E
+        };
+
+        internal static readonly byte[] SSN_UPPER_SIG =
+        {
+            0x53, 0x53, 0x4E
+        };
+
+        internal static readonly byte[] SON_SIG =
+        {
+            0x03, 0x73, 0x6F, 0x6E
+        };
+
+        internal static readonly byte[] HWC_SIG =
+        {
+            0x03, 0x68, 0x77,  0x63
+        };
         #endregion
 
-        #region Apple ROM Information
-        internal static AppleRomInformationBase GetRomInformationData(byte[] sourceBytes)
+        #region NVRAM Section
+        internal static NvramStoreData GetNvramStoreData(byte[] sourceBytes, NvramStoreType headerType)
+        {
+            var nvStoreSig = GetNvramSignature(headerType);
+            // We must find the NVRAM section GUID first.
+            long baseNvramOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
+
+            if (baseNvramOffset == -1)
+            {
+                // If baseNvramOffset is -1, we should exit.
+                return new NvramStoreData
+                {
+                    PrimaryStoreSize = -1,
+                    PrimaryStoreOffset = -1,
+                    BackupStoreSize = -1,
+                    BackupStoreOffset = -1
+                };
+            }
+
+            var storeOffset = BinaryUtils.GetOffset(sourceBytes, nvStoreSig, baseNvramOffset);
+
+            var primaryStoreSize = -1;
+            long primaryStoreOffset = -1;
+            if (storeOffset != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, storeOffset, 0x6) is byte[] bytesPrimaryHeader)
+            {
+                NvramStoreHeader primaryStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
+                if (primaryStoreHeader.SizeOfData != 0)
+                {
+                    primaryStoreSize = primaryStoreHeader.SizeOfData;
+                    primaryStoreOffset = storeOffset;
+                }
+            }
+
+            var backupStoreSize = -1;
+            long backupStoreOffset = -1;
+            if (primaryStoreOffset != -1) // If we did not find the primary store, why would we be looking for the backup store?
+            {
+                // We're looking for the backup store within a certain max padding length from the end of the primary store,
+                // if we don't find the signature within the maxSearchLength, we abort.
+                var backupOffset = BinaryUtils.GetOffset(sourceBytes, nvStoreSig, storeOffset + primaryStoreSize, _maxPaddingBytes);
+
+                if (backupOffset != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupOffset, 0x6) is byte[] bytesBackupHeader)
+                {
+                    NvramStoreHeader backupStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
+                    if (backupStoreHeader.SizeOfData != 0)
+                    {
+                        backupStoreSize = backupStoreHeader.SizeOfData;
+                        backupStoreOffset = backupOffset;
+                    }
+                }
+            }
+
+            return new NvramStoreData
+            {
+                PrimaryStoreSize = primaryStoreSize,
+                PrimaryStoreOffset = primaryStoreOffset,
+                BackupStoreSize = backupStoreSize,
+                BackupStoreOffset = backupStoreOffset
+            };
+        }
+
+        private static byte[] GetNvramSignature(NvramStoreType headerType)
+        {
+            switch (headerType)
+            {
+                case NvramStoreType.SVS:
+                    return SVS_STORE_SIG;
+                case NvramStoreType.VSS:
+                    return VSS_STORE_SIG;
+                case NvramStoreType.NSS:
+                    return NSS_STORE_SIGNATURE;
+                default:
+                    throw new ArgumentException("Invalid NVRAM header type.");
+            }
+        }
+
+        internal static readonly byte[] VSS_STORE_SIG =
+        {
+            0x24, 0x56, 0x53, 0x53
+        };
+
+        internal static readonly byte[] SVS_STORE_SIG =
+        {
+            0x24, 0x53, 0x56, 0x53
+        };
+
+        internal static readonly byte[] NSS_STORE_SIGNATURE =
+        {
+            0x24, 0x4E, 0x53, 0x53
+        };
+        #endregion
+
+        #region ROM Section
+        internal static AppleRomInformationSection GetRomInformationData(byte[] sourceBytes)
         {
             // Define index and termination bytes for data extraction
             byte indexByte = 0x20;
@@ -215,7 +510,6 @@ namespace Mac_EFI_Toolkit.Common
             byte[] dataLenBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, baseOffset + headerLen, dataLen);
             // Convert first two bytes to an int16 value and get the AppleRomInformation section size
             int sectionLen = BitConverter.ToInt16(dataLenBytes, 0);
-
             // Read the entire AppleRomInformation section using sectionLen as the max search length
             byte[] romSectionData = BinaryUtils.GetBytesAtOffset(sourceBytes, baseOffset + headerLen, sectionLen);
             if (romSectionData != null)
@@ -236,6 +530,7 @@ namespace Mac_EFI_Toolkit.Common
                         }
                     }
                 }
+
                 // Update the original romInfoData dictionary with the extracted and updated values
                 foreach (var kvPair in updatedRomInfoData)
                 {
@@ -244,8 +539,9 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             // Create and return an instance of AppleRomInformationBase with the extracted data
-            return new AppleRomInformationBase
+            return new AppleRomInformationSection
             {
+                SectionExists = true,
                 SectionBytes = romSectionData,
                 SectionOffset = baseOffset,
                 BiosId = romInfoData[BIOS_ID_SIGNATURE],
@@ -261,10 +557,11 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
-        internal static AppleRomInformationBase DefaultRomInformationBase()
+        internal static AppleRomInformationSection DefaultRomInformationBase()
         {
-            return new AppleRomInformationBase
+            return new AppleRomInformationSection
             {
+                SectionExists = false,
                 SectionBytes = null,
                 SectionOffset = -1,
                 BiosId = null,
@@ -326,7 +623,7 @@ namespace Mac_EFI_Toolkit.Common
             0x69, 0x6F, 0x6E, 0x3A
         };
 
-        internal static readonly byte[] BUILDCAVE_ID_SIGNATURE = 
+        internal static readonly byte[] BUILDCAVE_ID_SIGNATURE =
         {
             0x42, 0x75, 0x69, 0x6C,
             0x64, 0x63, 0x61, 0x76,
@@ -347,6 +644,91 @@ namespace Mac_EFI_Toolkit.Common
             0x69, 0x6C, 0x65, 0x72,
             0x3A
         };
+        #endregion
+
+        #region EFI Section
+
+        internal static EfiSection GetEfiSectionData(byte[] sourceBytes)
+        {
+            var guidOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.EFI_BIOS_ID_GUID);
+
+            if (guidOffset != -1)
+            {
+                var modelOffset = BinaryUtils.GetOffset(sourceBytes, EFI_SECTION_SIGNATURE);
+
+                if (modelOffset != -1)
+                {
+                    byte indexByte = 0x20;
+                    byte terminationByte = 0x2E;
+                    byte[] modelBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, modelOffset, indexByte, terminationByte);
+
+                    if (modelBytes != null)
+                    {
+                        modelBytes = modelBytes.Where(b => b != 0x00 && b != 0x20).ToArray();
+                        return new EfiSection
+                        {
+                            Model = _utf8.GetString(modelBytes)
+                        };
+                    }
+                }
+            }
+
+            return DefaultEfiSection();
+        }
+
+        private static EfiSection DefaultEfiSection()
+        {
+            return new EfiSection
+            {
+                Model = null
+            };
+        }
+
+        internal static readonly byte[] EFI_SECTION_SIGNATURE =
+        {
+            0x24, 0x49, 0x42, 0x49,
+            0x4F, 0x53, 0x49, 0x24
+        };
+        #endregion
+
+        #region APFSJumpStart
+        internal static ApfsCompatibleFirmware GetIsApfsCapable(byte[] sourceBytes)
+        {
+            long guidOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.APFS_DXE_GUID);
+
+            if (guidOffset != -1)
+            {
+                return ApfsCompatibleFirmware.Yes;
+            }
+
+            if (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch))
+            {
+                return ApfsCompatibleFirmware.Unknown;
+            }
+
+            long lzmaOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.LZMA_DXE_NEW_GUID);
+            if (lzmaOffset == -1)
+            {
+                lzmaOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.LZMA_DXE_OLD_GUID);
+            }
+
+            if (lzmaOffset != -1)
+            {
+                var lzmaNudgePos = 0x10;
+                lzmaOffset = BinaryUtils.GetOffset(sourceBytes, new byte[] { 0x5D }, lzmaOffset + lzmaNudgePos);
+                long lzmaEndOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, lzmaOffset);
+
+                if (lzmaEndOffset != -1)
+                {
+                    byte[] decompressedBytes = LzmaCoder.DecompressBytes(BinaryUtils.RemoveTrailingFFPadding(BinaryUtils.GetBytesBetweenOffsets(sourceBytes, lzmaOffset, lzmaEndOffset)));
+
+                    guidOffset = BinaryUtils.GetOffset(decompressedBytes, FSGuids.APFS_DXE_GUID);
+                    return (guidOffset != -1) ? ApfsCompatibleFirmware.Yes : ApfsCompatibleFirmware.No;
+                }
+            }
+
+            return ApfsCompatibleFirmware.No;
+        }
         #endregion
 
     }

@@ -35,7 +35,6 @@ namespace Mac_EFI_Toolkit
             this.tlpBottom = new System.Windows.Forms.TableLayoutPanel();
             this.lblMessage = new System.Windows.Forms.Label();
             this.lblPrivateMemory = new System.Windows.Forms.Label();
-            this.lblRomModelIdentifier = new System.Windows.Forms.Label();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
             this.lblFilename = new System.Windows.Forms.Label();
@@ -140,15 +139,14 @@ namespace Mac_EFI_Toolkit
             // tlpBottom
             // 
             this.tlpBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.tlpBottom.ColumnCount = 5;
+            this.tlpBottom.ColumnCount = 3;
             this.tlpBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
-            this.tlpBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
+            this.tlpBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpBottom.Controls.Add(this.lblMessage, 0, 0);
-            this.tlpBottom.Controls.Add(this.lblPrivateMemory, 4, 0);
-            this.tlpBottom.Controls.Add(this.lblRomModelIdentifier, 2, 0);
+            this.tlpBottom.Controls.Add(this.lblPrivateMemory, 2, 0);
             this.tlpBottom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpBottom.Location = new System.Drawing.Point(0, 294);
             this.tlpBottom.Margin = new System.Windows.Forms.Padding(0);
@@ -169,7 +167,7 @@ namespace Mac_EFI_Toolkit
             this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Padding = new System.Windows.Forms.Padding(1);
-            this.lblMessage.Size = new System.Drawing.Size(541, 36);
+            this.lblMessage.Size = new System.Drawing.Size(627, 36);
             this.lblMessage.TabIndex = 99;
             this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -186,20 +184,6 @@ namespace Mac_EFI_Toolkit
             this.lblPrivateMemory.TabIndex = 100;
             this.lblPrivateMemory.Text = "...";
             this.lblPrivateMemory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblRomModelIdentifier
-            // 
-            this.lblRomModelIdentifier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.lblRomModelIdentifier.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblRomModelIdentifier.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRomModelIdentifier.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.lblRomModelIdentifier.Location = new System.Drawing.Point(542, 0);
-            this.lblRomModelIdentifier.Margin = new System.Windows.Forms.Padding(0);
-            this.lblRomModelIdentifier.Name = "lblRomModelIdentifier";
-            this.lblRomModelIdentifier.Size = new System.Drawing.Size(85, 36);
-            this.lblRomModelIdentifier.TabIndex = 99;
-            this.lblRomModelIdentifier.Text = "...";
-            this.lblRomModelIdentifier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tlpMain
             // 
@@ -706,7 +690,7 @@ namespace Mac_EFI_Toolkit
             this.lblBoardIdText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblBoardIdText.Size = new System.Drawing.Size(130, 30);
             this.lblBoardIdText.TabIndex = 99;
-            this.lblBoardIdText.Text = "Board-ID:";
+            this.lblBoardIdText.Text = "Mac Board ID:";
             this.lblBoardIdText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblFitVersionText
@@ -1269,12 +1253,13 @@ namespace Mac_EFI_Toolkit
             // 
             this.tlpMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpMenu.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpMenu.ColumnCount = 7;
+            this.tlpMenu.ColumnCount = 8;
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 351F));
             this.tlpMenu.Controls.Add(this.cmdOpenBin, 0, 0);
@@ -1427,7 +1412,6 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Button cmdNavigate;
         private System.Windows.Forms.Label lblModel;
         private System.Windows.Forms.Label lblPrivateMemory;
-        private System.Windows.Forms.Label lblRomModelIdentifier;
     }
 }
 

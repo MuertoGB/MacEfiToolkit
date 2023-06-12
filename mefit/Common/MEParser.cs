@@ -64,7 +64,7 @@ namespace Mac_EFI_Toolkit.Common
             switch (headerType)
             {
                 case HeaderType.FlashImageTool:
-                    headerOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.FPT_HEADER_SIG);
+                    headerOffset = BinaryUtils.GetOffset(sourceBytes, FPT_SIGNATURE);
                     readLength = 0x20;
                     if (headerOffset != -1)
                     {
@@ -78,7 +78,7 @@ namespace Mac_EFI_Toolkit.Common
                     break;
 
                 case HeaderType.ManagementEngine:
-                    headerOffset = BinaryUtils.GetOffset(sourceBytes, FSSignatures.MN2_SIG);
+                    headerOffset = BinaryUtils.GetOffset(sourceBytes, MN2_SIGNATURE);
                     readLength = 0x10;
                     if (headerOffset != -1)
                     {
@@ -94,5 +94,16 @@ namespace Mac_EFI_Toolkit.Common
 
             return versionString;
         }
+
+        internal static readonly byte[] FPT_SIGNATURE =
+        {
+            0x24, 0x46, 0x50, 0x54
+        };
+
+        internal static readonly byte[] MN2_SIGNATURE =
+        {
+            0x24, 0x4D, 0x4E, 0x32
+        };
+
     }
 }

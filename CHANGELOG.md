@@ -18,7 +18,6 @@
 > - Ability to replace the serial number with automatic HWC and CRC32 masking.
 > - Ability to clear the NVRAM (SVS, VSS, NSS) sections while preserving section headers.
 - Added a status bar to bottom of the main window:-
-> - Displays pertinent model identifier for determining the firmware's counterpart device.
 > - Displays the amount of private memory used.
 > - Moved pop-up tips to the status bar.
 - Added editor terms window.
@@ -31,7 +30,7 @@
 #### Enhancements:
 - UI improvements.
 - Enhanced parsing of SON data from the Fsys region.
-- Implemented model-identifier fallback if the HWC is not present.
+- Changed how model data is displayed in the main window.
 - Switched drag and drop support to accept all file types (.) instead of specific file formats.
 - Changed the default initial directory to the application directory.
 - Application will now calculate and display any file size discrepancy bytes in the main window.
