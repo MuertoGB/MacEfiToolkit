@@ -19,8 +19,10 @@
 > - Ability to clear the NVRAM (SVS, VSS, NSS) sections while preserving section headers.
 - Added a status bar to bottom of the main window:-
 > - Displays the amount of private memory used.
+> - Displays loading animation.
 > - Moved pop-up tips to the status bar.
 - Added editor terms window.
+- Added rom information window.
 - New models added to the internal database.
 - Added button to reload the currently open file, in case external changes are made.
 - Added button to navigate to the currently open file in explorer.
@@ -34,6 +36,7 @@
 - Switched drag and drop support to accept all file types (.) instead of specific file formats.
 - Changed the default initial directory to the application directory.
 - Application will now calculate and display any file size discrepancy bytes in the main window.
+- Addressed redundancy for the underlying settings system.
 
 #### Bugs:
 - Fixed an issue with the form minimize state in the About window.

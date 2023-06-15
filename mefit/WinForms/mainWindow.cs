@@ -16,7 +16,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -314,32 +313,6 @@ namespace Mac_EFI_Toolkit
             Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", FWBase.FsysSectionData.Serial));
         }
 
-        private void cmdExportFsysBlock_Click(object sender, EventArgs e)
-        {
-            if (FWBase.FsysSectionData.FsysBytes == null)
-            {
-                METMessageBox.Show(this, "Error", "Fsys block bytes empty.", MsgType.Critical, MsgButton.Okay);
-                return;
-            }
-
-            using (var dialog = new SaveFileDialog
-            {
-                Filter = "Binary Files (*.bin)|*.bin",
-                Title = "Export Fsys region data...",
-                FileName = string.Concat("FSYS_RGN_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
-                OverwritePrompt = true,
-                InitialDirectory = _strInitialDirectory
-            })
-            {
-                if (dialog.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-
-                File.WriteAllBytes(dialog.FileName, FWBase.FsysSectionData.FsysBytes);
-            }
-        }
-
         private void cmdFixFsysCrc_Click(object sender, EventArgs e)
         {
             // Fsys region was not found by the firmware parser
@@ -389,6 +362,42 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void cmdExportFsysBlock_Click(object sender, EventArgs e)
+        {
+            if (FWBase.FsysSectionData.FsysBytes == null)
+            {
+                METMessageBox.Show(this, "Error", "Fsys block bytes empty.", MsgType.Critical, MsgButton.Okay);
+                return;
+            }
+
+            using (var dialog = new SaveFileDialog
+            {
+                Filter = "Binary Files (*.bin)|*.bin",
+                Title = "Export Fsys region data...",
+                FileName = string.Concat("FSYS_RGN_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                OverwritePrompt = true,
+                InitialDirectory = _strInitialDirectory
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                File.WriteAllBytes(dialog.FileName, FWBase.FsysSectionData.FsysBytes);
+            }
+        }
+
+        private void cmdAppleRomInfo_Click(object sender, EventArgs e)
+        {
+            Opacity = 0.5;
+            using (Form formWindow = new infoWindow())
+            {
+                formWindow.FormClosed += ChildWindowClosed;
+                formWindow.ShowDialog();
+            }
+        }
+
         private void cmdReload_Click(object sender, EventArgs e)
         {
             if (File.Exists(FWBase.LoadedBinaryPath))
@@ -427,12 +436,14 @@ namespace Mac_EFI_Toolkit
             cmdNavigate.Text = "\xEC50";
             cmdReload.Font = Program.FONT_MDL2_REG_9;
             cmdReload.Text = "\xE72C";
+            cmdEveryMacSearch.Font = Program.FONT_MDL2_REG_9;
+            cmdEveryMacSearch.Text = "\xF6FA";
             cmdExportFsysBlock.Font = Program.FONT_MDL2_REG_9;
             cmdExportFsysBlock.Text = "\xE74E";
             cmdFixFsysCrc.Font = Program.FONT_MDL2_REG_9;
             cmdFixFsysCrc.Text = "\xE90F";
-            cmdEveryMacSearch.Font = Program.FONT_MDL2_REG_9;
-            cmdEveryMacSearch.Text = "\xF6FA";
+            cmdAppleRomInfo.Font = Program.FONT_MDL2_REG_9;
+            cmdAppleRomInfo.Text = "\xE72A";
         }
         #endregion
 
@@ -472,7 +483,6 @@ namespace Mac_EFI_Toolkit
                 formWindow.FormClosed += ChildWindowClosed;
                 formWindow.ShowDialog();
             }
-
         }
 
         private void MinimizeWindow()
@@ -525,8 +535,8 @@ namespace Mac_EFI_Toolkit
                 button.Enabled = enable ? true : false;
             }
 
-            // Overrides > For when setting 'Override valid fsys enforement' is enabled, and the Fsys region is not found.
-            // I may revisit here in the future.
+            cmdEveryMacSearch.Enabled = (FWBase.FsysSectionData.Serial != null);
+
             if (FWBase.FsysSectionData.FsysBytes != null)
             {
                 cmdFixFsysCrc.Enabled = EFIUtils.GetUintFsysCrc32(FWBase.FsysSectionData.FsysBytes).ToString("X8") == FWBase.FsysSectionData.CRC32 ? false : true;
@@ -538,14 +548,14 @@ namespace Mac_EFI_Toolkit
                 cmdEditEfirom.Enabled = false;
             }
 
-            cmdEveryMacSearch.Enabled = (FWBase.FsysSectionData.Serial != null);
+            cmdAppleRomInfo.Enabled = FWBase.ROMInfoData.SectionExists ? true : false;
 
             tlpMain.Enabled = enable;
         }
 
         private void SetContextMenuRenderers()
         {
-            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication, cmsFsysMenu };
+            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication };
             foreach (var menu in menus)
             {
                 menu.Renderer = new METMenuRenderer();
@@ -596,7 +606,7 @@ namespace Mac_EFI_Toolkit
         {
             lock (_lockObject)
             {
-                string privateMemoryString = Helper.FormatSize((ulong)Program.GetPrivateMemorySize());
+                string privateMemoryString = Helper.GetBytesReadableSize((ulong)Program.GetPrivateMemorySize());
 
                 lblPrivateMemory.Invoke((Action)(() =>
                 {
@@ -607,22 +617,24 @@ namespace Mac_EFI_Toolkit
 
         private void SetTipHandlers()
         {
-            cmdNavigate.MouseEnter += HandleMouseEnterTip;
-            cmdNavigate.MouseLeave += HandleMouseLeaveTip;
-            cmdReload.MouseEnter += HandleMouseEnterTip;
-            cmdReload.MouseLeave += HandleMouseLeaveTip;
-            cmdExportFsysBlock.MouseEnter += HandleMouseEnterTip;
-            cmdExportFsysBlock.MouseLeave += HandleMouseLeaveTip;
-            cmdFixFsysCrc.MouseEnter += HandleMouseEnterTip;
-            cmdFixFsysCrc.MouseLeave += HandleMouseLeaveTip;
-            cmdEveryMacSearch.MouseEnter += HandleMouseEnterTip;
-            cmdEveryMacSearch.MouseLeave += HandleMouseLeaveTip;
             cmdOpenBin.MouseEnter += HandleMouseEnterTip;
             cmdOpenBin.MouseLeave += HandleMouseLeaveTip;
             cmdReset.MouseEnter += HandleMouseEnterTip;
             cmdReset.MouseLeave += HandleMouseLeaveTip;
             cmdEditEfirom.MouseEnter += HandleMouseEnterTip;
             cmdEditEfirom.MouseLeave += HandleMouseLeaveTip;
+            cmdNavigate.MouseEnter += HandleMouseEnterTip;
+            cmdNavigate.MouseLeave += HandleMouseLeaveTip;
+            cmdReload.MouseEnter += HandleMouseEnterTip;
+            cmdReload.MouseLeave += HandleMouseLeaveTip;
+            cmdEveryMacSearch.MouseEnter += HandleMouseEnterTip;
+            cmdEveryMacSearch.MouseLeave += HandleMouseLeaveTip;
+            cmdFixFsysCrc.MouseEnter += HandleMouseEnterTip;
+            cmdFixFsysCrc.MouseLeave += HandleMouseLeaveTip;
+            cmdExportFsysBlock.MouseEnter += HandleMouseEnterTip;
+            cmdExportFsysBlock.MouseLeave += HandleMouseLeaveTip;
+            cmdAppleRomInfo.MouseEnter += HandleMouseEnterTip;
+            cmdAppleRomInfo.MouseLeave += HandleMouseLeaveTip;
             lblPrivateMemory.MouseEnter += HandleMouseEnterTip;
             lblPrivateMemory.MouseLeave += HandleMouseLeaveTip;
         }
@@ -646,7 +658,9 @@ namespace Mac_EFI_Toolkit
                 else if (sender == cmdReset)
                     lblMessage.Text = "Unload EFIROM and clear all data";
                 else if (sender == cmdEditEfirom)
-                    lblMessage.Text = "Open the firmware editor";
+                    lblMessage.Text = "Open the firmware editor window";
+                else if (sender == cmdAppleRomInfo)
+                    lblMessage.Text = "Open the ROM information window";
                 else if (sender == lblPrivateMemory)
                     lblMessage.Text = "Private memory consumption";
             }
@@ -661,11 +675,11 @@ namespace Mac_EFI_Toolkit
         {
             // File information
             lblFilename.Text = $"FILE: '{FWBase.FileInfoData.FileNameWithExt}'";
-            int loadedFileSize = (int)FWBase.FileInfoData.FileLength;
-            bool isValidBinSize = FileUtils.GetIsValidBinSize(loadedFileSize);
-            lblFileSizeBytes.Text = FileUtils.FormatFileSize(loadedFileSize);
-            lblFileSizeBytes.ForeColor = isValidBinSize ? Colours.clrGood : Colours.clrUnknown;
-            lblFileSizeBytes.Text += isValidBinSize ? string.Empty : $" ({FileUtils.GetSizeDifference(loadedFileSize)})";
+            int fileLength = (int)FWBase.FileInfoData.FileLength;
+            bool isValidSize = FileUtils.GetIsValidBinSize(fileLength);
+            lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileLength);
+            lblFileSizeBytes.ForeColor = isValidSize ? Colours.clrGood : Colours.clrUnknown;
+            lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileLength)})";
             lblFileCreatedDate.Text = FWBase.FileInfoData.CreationTime;
             lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
             lblFileCrc.Text = FWBase.FileInfoData.CRC32;
@@ -696,13 +710,14 @@ namespace Mac_EFI_Toolkit
             // Load the config code asynchronously
             if (FWBase.FsysSectionData.HWC != null)
             {
-                GetConfigCodeAsync(FWBase.FsysSectionData.HWC);
+                AppendConfigCodeAsync(FWBase.FsysSectionData.HWC);
             }
 
+            pbxLoad.Image = null;
             ToggleControlEnable(true);
         }
 
-        internal async void GetConfigCodeAsync(string strHwc)
+        internal async void AppendConfigCodeAsync(string strHwc)
         {
             var configCode = await EFIUtils.GetDeviceConfigCodeAsync(strHwc);
 
@@ -763,18 +778,26 @@ namespace Mac_EFI_Toolkit
                 {
                     ResetAllData();
                 }
-
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
-                FWBase.LoadFirmwareBaseData(FWBase.LoadedBinaryBytes, filePath);
-
-                UpdateControls();
-                _firmwareLoaded = true;
+                var thr = new Thread(() => LoadFirmwareBase(filePath))
+                {
+                    IsBackground = true
+                };
+                pbxLoad.Image = Properties.Resources.loading;
+                thr.Start();
             }
             else
             {
                 ResetAllData();
                 _firmwareLoaded = false;
             }
+        }
+
+        private void LoadFirmwareBase(string filePath)
+        {
+            FWBase.LoadFirmwareBaseData(FWBase.LoadedBinaryBytes, filePath);
+            Invoke((MethodInvoker)UpdateControls);
+            _firmwareLoaded = true;
         }
 
         private void ResetAllData()
@@ -809,25 +832,5 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        //private void cmdRomInfo_Click(object sender, EventArgs e)
-        //{
-        //    StringBuilder outputBuilder = new StringBuilder();
-
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.SectionOffset:X2}h");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.BiosId}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.Model}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.EfiVersion}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.BuiltBy}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.DateStamp}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.Revision}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.RomVersion}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.BuildcaveId}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.BuildType}");
-        //    outputBuilder.AppendLine($"{FWBase.ROMInfoData.Compiler}");
-
-        //    string outputText = outputBuilder.ToString();
-
-        //    MessageBox.Show(outputText, "ROM Info Test Box");
-        //}
     }
 }

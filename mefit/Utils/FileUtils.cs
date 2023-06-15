@@ -5,9 +5,12 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Utils
 {

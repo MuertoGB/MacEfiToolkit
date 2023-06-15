@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}.230609.0015";
+        internal static readonly string appBuild = $"{Application.ProductVersion}.230615.2339";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
@@ -79,7 +79,6 @@ namespace Mac_EFI_Toolkit
 
             // Settings
             if (!File.Exists(Settings.strSettingsFilePath)) Settings.SettingsCreateFile();
-            // We will grab settings on the fly. Thanks Kyle and Daz. I will blame if anything goes sideways. Peace out.
 
             // Register application exit event.
             Application.ApplicationExit += OnExiting;

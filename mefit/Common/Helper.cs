@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit.Common
             return encodingType.GetBytes(sourceString);
         }
 
-        internal static string FormatSize(ulong size)
+        internal static string GetBytesReadableSize(ulong size)
         {
             string[] suffixes = { "bytes", "KB", "MB", "GB", "TB" };
 
@@ -47,5 +47,6 @@ namespace Mac_EFI_Toolkit.Common
 
             return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";
         }
+
     }
 }

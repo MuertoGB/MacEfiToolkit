@@ -3,8 +3,6 @@
 
 // FWBase.cs - Handles parsing of firmware data
 // Released under the GNU GLP v3.0
-// This is an unreferenced prototype / work-in-progress, I'm entirely unhappy
-// with how FWParser.cs is going, this will replace it.
 
 using Mac_EFI_Toolkit.Utils;
 using System;
@@ -24,6 +22,7 @@ internal struct FileInfoData
     internal long FileLength { get; set; }
     internal string CRC32 { get; set; }
 }
+
 internal struct FsysStoreSection
 {
     internal byte[] FsysBytes { get; set; }
@@ -217,7 +216,7 @@ namespace Mac_EFI_Toolkit.Common
         }
 
         internal static readonly byte[] PDR_BOARD_ID_SIGNATURE =
-{
+        {
             0xF8, 0x7C, 0x00, 0x00,
             0x19
         };
@@ -478,6 +477,7 @@ namespace Mac_EFI_Toolkit.Common
             // Define index and termination bytes for data extraction
             byte indexByte = 0x20;
             byte terminationByte = 0x0A;
+            bool sectionHasData = false;
 
             // Create a dictionary to hold signature-data pairs
             var romInfoData = new Dictionary<byte[], string>
@@ -536,12 +536,15 @@ namespace Mac_EFI_Toolkit.Common
                 {
                     romInfoData[kvPair.Key] = kvPair.Value;
                 }
+
+                // Some EFI have this section GUID, however the data is empty
+                sectionHasData = romSectionData.Length <= 0x18 ? false : true;
             }
 
-            // Create and return an instance of AppleRomInformationBase with the extracted data
+            // Create and return an instance of AppleRomInformation with the extracted data
             return new AppleRomInformationSection
             {
-                SectionExists = true,
+                SectionExists = sectionHasData,
                 SectionBytes = romSectionData,
                 SectionOffset = baseOffset,
                 BiosId = romInfoData[BIOS_ID_SIGNATURE],
