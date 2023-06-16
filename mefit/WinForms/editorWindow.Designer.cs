@@ -93,7 +93,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(1, 43);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(948, 436);
+            this.pnlMain.Size = new System.Drawing.Size(948, 440);
             this.pnlMain.TabIndex = 95;
             // 
             // tlpMain
@@ -109,7 +109,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.Name = "tlpMain";
             this.tlpMain.RowCount = 1;
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Size = new System.Drawing.Size(948, 436);
+            this.tlpMain.Size = new System.Drawing.Size(948, 440);
             this.tlpMain.TabIndex = 0;
             // 
             // tlpOptions
@@ -148,7 +148,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpOptions.Size = new System.Drawing.Size(400, 436);
+            this.tlpOptions.Size = new System.Drawing.Size(400, 440);
             this.tlpOptions.TabIndex = 0;
             // 
             // lblNvramText
@@ -254,12 +254,10 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // cmdFsysPath
             // 
-            this.cmdFsysPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(42)))), ((int)(((byte)(49)))));
+            this.cmdFsysPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdFsysPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdFsysPath.Enabled = false;
-            this.cmdFsysPath.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(110)))), ((int)(((byte)(120)))));
-            this.cmdFsysPath.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(92)))), ((int)(((byte)(99)))));
-            this.cmdFsysPath.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(62)))), ((int)(((byte)(69)))));
+            this.cmdFsysPath.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdFsysPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdFsysPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdFsysPath.ForeColor = System.Drawing.Color.White;
@@ -596,7 +594,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpLog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpLog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpLog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpLog.Size = new System.Drawing.Size(547, 436);
+            this.tlpLog.Size = new System.Drawing.Size(547, 440);
             this.tlpLog.TabIndex = 1;
             // 
             // pnlLog
@@ -608,7 +606,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlLog.Margin = new System.Windows.Forms.Padding(0);
             this.pnlLog.Name = "pnlLog";
             this.pnlLog.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlLog.Size = new System.Drawing.Size(547, 400);
+            this.pnlLog.Size = new System.Drawing.Size(547, 404);
             this.pnlLog.TabIndex = 3;
             // 
             // rtbLog
@@ -623,7 +621,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
             this.rtbLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtbLog.Size = new System.Drawing.Size(539, 392);
+            this.rtbLog.Size = new System.Drawing.Size(539, 396);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.TabStop = false;
             this.rtbLog.Text = "";
@@ -663,12 +661,10 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // cmdSaveLog
             // 
-            this.cmdSaveLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(42)))), ((int)(((byte)(49)))));
+            this.cmdSaveLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdSaveLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdSaveLog.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(62)))), ((int)(((byte)(69)))));
+            this.cmdSaveLog.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdSaveLog.FlatAppearance.BorderSize = 0;
-            this.cmdSaveLog.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(92)))), ((int)(((byte)(99)))));
-            this.cmdSaveLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(62)))), ((int)(((byte)(69)))));
             this.cmdSaveLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdSaveLog.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdSaveLog.ForeColor = System.Drawing.Color.White;
@@ -752,33 +748,31 @@ namespace Mac_EFI_Toolkit.WinForms
             // tlpButtons
             // 
             this.tlpButtons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.tlpButtons.ColumnCount = 5;
+            this.tlpButtons.ColumnCount = 3;
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tlpButtons.Controls.Add(this.cmdBuild, 3, 0);
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButtons.Controls.Add(this.cmdBuild, 2, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 479);
+            this.tlpButtons.Location = new System.Drawing.Point(1, 483);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.Size = new System.Drawing.Size(948, 50);
+            this.tlpButtons.Size = new System.Drawing.Size(948, 46);
             this.tlpButtons.TabIndex = 1;
             // 
             // cmdBuild
             // 
             this.cmdBuild.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cmdBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(42)))), ((int)(((byte)(49)))));
-            this.cmdBuild.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(110)))), ((int)(((byte)(120)))));
-            this.cmdBuild.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(92)))), ((int)(((byte)(99)))));
-            this.cmdBuild.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(62)))), ((int)(((byte)(69)))));
+            this.cmdBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdBuild.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
             this.cmdBuild.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdBuild.ForeColor = System.Drawing.Color.White;
-            this.cmdBuild.Location = new System.Drawing.Point(838, 8);
+            this.cmdBuild.Location = new System.Drawing.Point(843, 6);
             this.cmdBuild.Margin = new System.Windows.Forms.Padding(0);
             this.cmdBuild.Name = "cmdBuild";
             this.cmdBuild.Size = new System.Drawing.Size(100, 34);

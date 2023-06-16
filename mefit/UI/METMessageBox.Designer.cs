@@ -61,6 +61,7 @@ namespace Mac_EFI_Toolkit.UI
             // 
             // tlpMain
             // 
+            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.Controls.Add(this.tlpButtons, 0, 2);
@@ -72,7 +73,7 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpMain.RowCount = 3;
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
             this.tlpMain.Size = new System.Drawing.Size(490, 248);
             this.tlpMain.TabIndex = 0;
             // 
@@ -80,31 +81,31 @@ namespace Mac_EFI_Toolkit.UI
             // 
             this.tlpButtons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
             this.tlpButtons.ColumnCount = 4;
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
             this.tlpButtons.Controls.Add(this.cmdCancel, 0, 0);
             this.tlpButtons.Controls.Add(this.cmdNo, 3, 0);
             this.tlpButtons.Controls.Add(this.cmdYes, 2, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButtons.Location = new System.Drawing.Point(0, 198);
+            this.tlpButtons.Location = new System.Drawing.Point(0, 202);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.Size = new System.Drawing.Size(490, 50);
+            this.tlpButtons.Size = new System.Drawing.Size(490, 46);
             this.tlpButtons.TabIndex = 0;
             // 
             // cmdCancel
             // 
             this.cmdCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cmdCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(44)))), ((int)(((byte)(48)))));
-            this.cmdCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdCancel.ForeColor = System.Drawing.Color.White;
-            this.cmdCancel.Location = new System.Drawing.Point(10, 8);
+            this.cmdCancel.Location = new System.Drawing.Point(5, 6);
             this.cmdCancel.Margin = new System.Windows.Forms.Padding(0);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(100, 34);
@@ -116,12 +117,12 @@ namespace Mac_EFI_Toolkit.UI
             // cmdNo
             // 
             this.cmdNo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cmdNo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(44)))), ((int)(((byte)(48)))));
-            this.cmdNo.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdNo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdNo.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
             this.cmdNo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdNo.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdNo.ForeColor = System.Drawing.Color.White;
-            this.cmdNo.Location = new System.Drawing.Point(380, 8);
+            this.cmdNo.Location = new System.Drawing.Point(385, 6);
             this.cmdNo.Margin = new System.Windows.Forms.Padding(0);
             this.cmdNo.Name = "cmdNo";
             this.cmdNo.Size = new System.Drawing.Size(100, 34);
@@ -132,13 +133,13 @@ namespace Mac_EFI_Toolkit.UI
             // 
             // cmdYes
             // 
-            this.cmdYes.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.cmdYes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(44)))), ((int)(((byte)(48)))));
-            this.cmdYes.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdYes.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cmdYes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdYes.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
             this.cmdYes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdYes.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdYes.ForeColor = System.Drawing.Color.White;
-            this.cmdYes.Location = new System.Drawing.Point(270, 8);
+            this.cmdYes.Location = new System.Drawing.Point(280, 6);
             this.cmdYes.Margin = new System.Windows.Forms.Padding(0);
             this.cmdYes.Name = "cmdYes";
             this.cmdYes.Size = new System.Drawing.Size(100, 34);
@@ -211,7 +212,7 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpMessage.Name = "tlpMessage";
             this.tlpMessage.RowCount = 1;
             this.tlpMessage.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMessage.Size = new System.Drawing.Size(490, 158);
+            this.tlpMessage.Size = new System.Drawing.Size(490, 162);
             this.tlpMessage.TabIndex = 2;
             // 
             // lblMessageIcon
@@ -222,7 +223,7 @@ namespace Mac_EFI_Toolkit.UI
             this.lblMessageIcon.Location = new System.Drawing.Point(3, 0);
             this.lblMessageIcon.Name = "lblMessageIcon";
             this.lblMessageIcon.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lblMessageIcon.Size = new System.Drawing.Size(55, 158);
+            this.lblMessageIcon.Size = new System.Drawing.Size(55, 162);
             this.lblMessageIcon.TabIndex = 1;
             this.lblMessageIcon.Text = "...";
             this.lblMessageIcon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -235,7 +236,7 @@ namespace Mac_EFI_Toolkit.UI
             this.lblMessage.Location = new System.Drawing.Point(64, 0);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Padding = new System.Windows.Forms.Padding(3);
-            this.lblMessage.Size = new System.Drawing.Size(423, 158);
+            this.lblMessage.Size = new System.Drawing.Size(423, 162);
             this.lblMessage.TabIndex = 0;
             this.lblMessage.Text = "...";
             this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

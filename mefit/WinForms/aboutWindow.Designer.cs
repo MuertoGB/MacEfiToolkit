@@ -38,7 +38,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuild = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.lnkUrls = new System.Windows.Forms.LinkLabel();
-            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
@@ -46,7 +46,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpTopLabels.SuspendLayout();
-            this.tlpMain.SuspendLayout();
+            this.tlpTitle.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -173,24 +173,24 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lnkUrls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lnkUrls.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUrls_LinkClicked);
             // 
-            // tlpMain
+            // tlpTitle
             // 
-            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.tlpMain.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpMain.ColumnCount = 2;
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMain.Controls.Add(this.lblTitle, 0, 0);
-            this.tlpMain.Controls.Add(this.cmdClose, 1, 0);
-            this.tlpMain.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tlpMain.Location = new System.Drawing.Point(1, 1);
-            this.tlpMain.Margin = new System.Windows.Forms.Padding(2);
-            this.tlpMain.Name = "tlpMain";
-            this.tlpMain.RowCount = 1;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Size = new System.Drawing.Size(438, 40);
-            this.tlpMain.TabIndex = 72;
+            this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
+            this.tlpTitle.ColumnCount = 2;
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpTitle.Controls.Add(this.lblTitle, 0, 0);
+            this.tlpTitle.Controls.Add(this.cmdClose, 1, 0);
+            this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlpTitle.Location = new System.Drawing.Point(1, 1);
+            this.tlpTitle.Margin = new System.Windows.Forms.Padding(2);
+            this.tlpTitle.Name = "tlpTitle";
+            this.tlpTitle.RowCount = 1;
+            this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTitle.Size = new System.Drawing.Size(438, 40);
+            this.tlpTitle.TabIndex = 72;
             // 
             // lblTitle
             // 
@@ -251,7 +251,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.ClientSize = new System.Drawing.Size(440, 280);
             this.Controls.Add(this.pnlSeperator);
             this.Controls.Add(this.pnlMain);
-            this.Controls.Add(this.tlpMain);
+            this.Controls.Add(this.tlpTitle);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -269,7 +269,7 @@ namespace Mac_EFI_Toolkit.WinForms
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpTopLabels.ResumeLayout(false);
             this.tlpTopLabels.PerformLayout();
-            this.tlpMain.ResumeLayout(false);
+            this.tlpTitle.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -277,7 +277,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
         internal System.Windows.Forms.Panel pnlMain;
         internal System.Windows.Forms.LinkLabel lnkUrls;
-        internal System.Windows.Forms.TableLayoutPanel tlpMain;
+        internal System.Windows.Forms.TableLayoutPanel tlpTitle;
         internal System.Windows.Forms.Button cmdClose;
         internal System.Windows.Forms.TableLayoutPanel tlpTopLabels;
         internal System.Windows.Forms.Label lblBuild;

@@ -32,7 +32,7 @@ namespace Mac_EFI_Toolkit.WinForms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(termsWindow));
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tbxTermsText = new System.Windows.Forms.TextBox();
-            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.pnlSeperator = new System.Windows.Forms.Panel();
@@ -40,24 +40,24 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdAccept = new System.Windows.Forms.Button();
             this.cmdDecline = new System.Windows.Forms.Button();
             this.pnlMain.SuspendLayout();
-            this.tlpMain.SuspendLayout();
+            this.tlpTitle.SuspendLayout();
             this.tlpButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
             // 
-            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.pnlMain.Controls.Add(this.tbxTermsText);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(1, 41);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlMain.Size = new System.Drawing.Size(578, 253);
+            this.pnlMain.Size = new System.Drawing.Size(578, 257);
             this.pnlMain.TabIndex = 95;
             // 
             // tbxTermsText
             // 
-            this.tbxTermsText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.tbxTermsText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.tbxTermsText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbxTermsText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbxTermsText.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -68,28 +68,28 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tbxTermsText.Multiline = true;
             this.tbxTermsText.Name = "tbxTermsText";
             this.tbxTermsText.ReadOnly = true;
-            this.tbxTermsText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbxTermsText.Size = new System.Drawing.Size(570, 245);
+            this.tbxTermsText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbxTermsText.Size = new System.Drawing.Size(570, 249);
             this.tbxTermsText.TabIndex = 0;
             this.tbxTermsText.TabStop = false;
             // 
-            // tlpMain
+            // tlpTitle
             // 
-            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.tlpMain.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpMain.ColumnCount = 2;
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpMain.Controls.Add(this.cmdClose, 0, 0);
-            this.tlpMain.Controls.Add(this.lblTitle, 0, 0);
-            this.tlpMain.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tlpMain.Location = new System.Drawing.Point(1, 1);
-            this.tlpMain.Margin = new System.Windows.Forms.Padding(2);
-            this.tlpMain.Name = "tlpMain";
-            this.tlpMain.RowCount = 1;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Size = new System.Drawing.Size(578, 40);
-            this.tlpMain.TabIndex = 96;
+            this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
+            this.tlpTitle.ColumnCount = 2;
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpTitle.Controls.Add(this.cmdClose, 0, 0);
+            this.tlpTitle.Controls.Add(this.lblTitle, 0, 0);
+            this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlpTitle.Location = new System.Drawing.Point(1, 1);
+            this.tlpTitle.Margin = new System.Windows.Forms.Padding(2);
+            this.tlpTitle.Name = "tlpTitle";
+            this.tlpTitle.RowCount = 1;
+            this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTitle.Size = new System.Drawing.Size(578, 40);
+            this.tlpTitle.TabIndex = 96;
             // 
             // cmdClose
             // 
@@ -141,29 +141,28 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
             this.tlpButtons.ColumnCount = 3;
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
             this.tlpButtons.Controls.Add(this.cmdAccept, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdDecline, 1, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 294);
+            this.tlpButtons.Location = new System.Drawing.Point(1, 298);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.Size = new System.Drawing.Size(578, 50);
+            this.tlpButtons.Size = new System.Drawing.Size(578, 46);
             this.tlpButtons.TabIndex = 1;
             // 
             // cmdAccept
             // 
             this.cmdAccept.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cmdAccept.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(44)))), ((int)(((byte)(48)))));
-            this.cmdAccept.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdAccept.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdAccept.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
             this.cmdAccept.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdAccept.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdAccept.ForeColor = System.Drawing.Color.White;
-            this.cmdAccept.Location = new System.Drawing.Point(468, 8);
+            this.cmdAccept.Location = new System.Drawing.Point(473, 6);
             this.cmdAccept.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAccept.Name = "cmdAccept";
             this.cmdAccept.Size = new System.Drawing.Size(100, 34);
@@ -175,12 +174,12 @@ namespace Mac_EFI_Toolkit.WinForms
             // cmdDecline
             // 
             this.cmdDecline.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.cmdDecline.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(44)))), ((int)(((byte)(48)))));
-            this.cmdDecline.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdDecline.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdDecline.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
             this.cmdDecline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDecline.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdDecline.ForeColor = System.Drawing.Color.White;
-            this.cmdDecline.Location = new System.Drawing.Point(358, 8);
+            this.cmdDecline.Location = new System.Drawing.Point(368, 6);
             this.cmdDecline.Margin = new System.Windows.Forms.Padding(0);
             this.cmdDecline.Name = "cmdDecline";
             this.cmdDecline.Size = new System.Drawing.Size(100, 34);
@@ -199,7 +198,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.ClientSize = new System.Drawing.Size(580, 345);
             this.Controls.Add(this.pnlSeperator);
             this.Controls.Add(this.pnlMain);
-            this.Controls.Add(this.tlpMain);
+            this.Controls.Add(this.tlpTitle);
             this.Controls.Add(this.tlpButtons);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -215,7 +214,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Text = "Terms";
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
-            this.tlpMain.ResumeLayout(false);
+            this.tlpTitle.ResumeLayout(false);
             this.tlpButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -224,7 +223,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         internal System.Windows.Forms.Panel pnlMain;
-        internal System.Windows.Forms.TableLayoutPanel tlpMain;
+        internal System.Windows.Forms.TableLayoutPanel tlpTitle;
         internal System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Panel pnlSeperator;
         private System.Windows.Forms.TextBox tbxTermsText;
