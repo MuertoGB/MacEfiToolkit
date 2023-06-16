@@ -367,12 +367,12 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTextToRtb($"Serial: {FWBase.FsysSectionData.Serial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
 
-            string strCrcInFile = FWBase.FsysSectionData.CRC32;
+            string strCrcInSourceBytes = FWBase.GetCrcStringFromFsys(sourceBytes);
             string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");
 
-            Logger.WriteLogTextToRtb($"{strCrcInFile}h > {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"{strCrcInSourceBytes}h > {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
 
-            if (strCrcInFile != strCrcCalculated)
+            if (strCrcInSourceBytes != strCrcCalculated)
             {
                 Logger.WriteLogTextToRtb("Donor Fsys CRC32 is invalid, 'Mask CRC32' flag set!", RtbLogPrefix.Warn, rtbLog);
                 _maskCrc = true;

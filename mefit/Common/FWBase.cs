@@ -352,6 +352,22 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
+        internal static string GetCrcStringFromFsys(byte[] sourceBytes)
+        {
+            // Fsys store CRC32
+            var crcLength = 0x4;
+            var crcNudgePos = FSYS_RGN_SIZE - crcLength;
+            var crcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, crcNudgePos, crcLength);
+
+            if (crcBytes != null)
+            {
+                var crcReversedBytes = crcBytes.Reverse().ToArray();
+                return BitConverter.ToString(crcReversedBytes).Replace("-", "");
+            }
+
+            return null;
+        }
+
         internal static readonly byte[] FSYS_SIG =
         {
             0x46, 0x73, 0x79, 0x73,
