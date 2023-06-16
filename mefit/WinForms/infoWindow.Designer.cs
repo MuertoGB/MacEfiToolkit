@@ -547,7 +547,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "infoWindow";
+            this.Text = "ROM Information";
             this.tlpWindow.ResumeLayout(false);
             this.pnlMain.ResumeLayout(false);
             this.tlpBottom.ResumeLayout(false);

@@ -804,7 +804,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(950, 530);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(950, 530);
             this.Name = "editorWindow";

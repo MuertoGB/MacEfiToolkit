@@ -315,7 +315,7 @@ namespace Mac_EFI_Toolkit
 
         private void cmdFixFsysCrc_Click(object sender, EventArgs e)
         {
-            // Fsys region was not found by the firmware parser
+            // Fsys store was not found by the firmware parser
             if (FWBase.FsysSectionData.FsysBytes == null)
             {
                 METMessageBox.Show(this, "Error", "Fsys block bytes empty.", MsgType.Critical, MsgButton.Okay);
@@ -370,13 +370,15 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
+            Program.CheckCreateFsysFolder();
+
             using (var dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                Title = "Export Fsys region data...",
-                FileName = string.Concat("FSYS_RGN_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                Title = "Export Fsys store",
+                FileName = string.Concat("FSYS_STORE_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
                 OverwritePrompt = true,
-                InitialDirectory = _strInitialDirectory
+                InitialDirectory = Program.fsysDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -606,7 +608,7 @@ namespace Mac_EFI_Toolkit
         {
             lock (_lockObject)
             {
-                string privateMemoryString = Helper.GetBytesReadableSize((ulong)Program.GetPrivateMemorySize());
+                string privateMemoryString = Helper.GetBytesReadableSize(Program.GetPrivateMemorySize());
 
                 lblPrivateMemory.Invoke((Action)(() =>
                 {
@@ -648,7 +650,7 @@ namespace Mac_EFI_Toolkit
                 else if (sender == cmdReload)
                     lblMessage.Text = "Reload current file from disk";
                 else if (sender == cmdExportFsysBlock)
-                    lblMessage.Text = "Export Fsys Region";
+                    lblMessage.Text = "Export Fsys Store";
                 else if (sender == cmdFixFsysCrc)
                     lblMessage.Text = "Repair Fsys CRC32";
                 else if (sender == cmdEveryMacSearch)

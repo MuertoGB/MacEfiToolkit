@@ -117,10 +117,11 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdFsysPath_Click(object sender, EventArgs e)
         {
+            Program.CheckCreateFsysFolder();
 
             using (var dialog = new OpenFileDialog
             {
-                InitialDirectory = Program.appDirectory,
+                InitialDirectory = Program.fsysDirectory,
                 Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
             })
             {
@@ -586,7 +587,7 @@ namespace Mac_EFI_Toolkit.WinForms
             BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, _bytesNewFsysRegion);
 
             // Validate new Fsys was written
-            FsysStoreSection fsysNew = FWBase.GetFsysRegionData(_bytesNewBinary);
+            FsysStoreSection fsysNew = FWBase.GetFsysStoreData(_bytesNewBinary);
             if (fsysNew.FsysBytes.SequenceEqual(_bytesNewFsysRegion))
             {
                 Logger.WriteLogTextToRtb("Fsys comparison check passed", RtbLogPrefix.Info, rtbLog);

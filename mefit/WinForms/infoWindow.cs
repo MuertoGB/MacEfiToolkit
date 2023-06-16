@@ -84,9 +84,12 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
+        #region Button Events
         private void cmdClose_Click(object sender, System.EventArgs e)
         {
             Close();
         }
+        #endregion
+
     }
 }

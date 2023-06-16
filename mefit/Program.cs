@@ -24,6 +24,7 @@ namespace Mac_EFI_Toolkit
     {
         internal static readonly string appBuild = $"{Application.ProductVersion}.230615.2339";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_exports");
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
         internal static readonly string closeChar = "\xE947";
@@ -255,6 +256,14 @@ namespace Mac_EFI_Toolkit
             }
         }
         #endregion
+
+        internal static void CheckCreateFsysFolder()
+        {
+            if (!Directory.Exists(fsysDirectory))
+            {
+                Directory.CreateDirectory(fsysDirectory);
+            }
+        }
 
     }
 }

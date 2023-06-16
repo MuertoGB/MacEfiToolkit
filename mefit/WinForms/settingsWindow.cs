@@ -83,6 +83,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdCloseForm_Click(object sender, EventArgs e)
         {
+            cmdApply.PerformClick();
             Close();
         }
 

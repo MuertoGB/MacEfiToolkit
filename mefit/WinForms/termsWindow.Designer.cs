@@ -52,7 +52,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Location = new System.Drawing.Point(1, 41);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlMain.Size = new System.Drawing.Size(578, 247);
+            this.pnlMain.Size = new System.Drawing.Size(578, 253);
             this.pnlMain.TabIndex = 95;
             // 
             // tbxTermsText
@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tbxTermsText.Name = "tbxTermsText";
             this.tbxTermsText.ReadOnly = true;
             this.tbxTermsText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbxTermsText.Size = new System.Drawing.Size(570, 239);
+            this.tbxTermsText.Size = new System.Drawing.Size(570, 245);
             this.tbxTermsText.TabIndex = 0;
             this.tbxTermsText.TabStop = false;
             // 
@@ -124,7 +124,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblTitle.Size = new System.Drawing.Size(538, 40);
             this.lblTitle.TabIndex = 12;
-            this.lblTitle.Text = "Firmware Editor Terms";
+            this.lblTitle.Text = "Firmware Editor Terms of Use";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // pnlSeperator
@@ -147,12 +147,12 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.Controls.Add(this.cmdAccept, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdDecline, 1, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 288);
+            this.tlpButtons.Location = new System.Drawing.Point(1, 294);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.Size = new System.Drawing.Size(578, 56);
+            this.tlpButtons.Size = new System.Drawing.Size(578, 50);
             this.tlpButtons.TabIndex = 1;
             // 
             // cmdAccept
@@ -163,7 +163,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdAccept.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdAccept.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdAccept.ForeColor = System.Drawing.Color.White;
-            this.cmdAccept.Location = new System.Drawing.Point(468, 11);
+            this.cmdAccept.Location = new System.Drawing.Point(468, 8);
             this.cmdAccept.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAccept.Name = "cmdAccept";
             this.cmdAccept.Size = new System.Drawing.Size(100, 34);
@@ -180,7 +180,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdDecline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDecline.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdDecline.ForeColor = System.Drawing.Color.White;
-            this.cmdDecline.Location = new System.Drawing.Point(358, 11);
+            this.cmdDecline.Location = new System.Drawing.Point(358, 8);
             this.cmdDecline.Margin = new System.Windows.Forms.Padding(0);
             this.cmdDecline.Name = "cmdDecline";
             this.cmdDecline.Size = new System.Drawing.Size(100, 34);
@@ -212,7 +212,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Terms of Use";
+            this.Text = "Terms";
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
             this.tlpMain.ResumeLayout(false);

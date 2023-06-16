@@ -37,6 +37,8 @@
 - Changed the default initial directory to the application directory.
 - Application will now calculate and display any file size discrepancy bytes in the main window.
 - Addressed redundancy for the underlying settings system.
+- Changed default initial directory for Fsys binary files.
+- Replaced the close button in the settings window with an OK button for saving and closing.
 
 #### Bugs:
 - Fixed an issue with the form minimize state in the About window.

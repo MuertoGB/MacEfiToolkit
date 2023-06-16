@@ -125,7 +125,7 @@ namespace Mac_EFI_Toolkit
         {
             if (!GetSettingsFileExists())
             {
-               return string.Empty;
+                return string.Empty;
             }
 
             string section, key;
@@ -168,7 +168,8 @@ namespace Mac_EFI_Toolkit
         #region Set Values
         internal static void SettingsSetBool(SettingsBoolType settingType, bool value)
         {
-            if (!GetSettingsFileExists()) {
+            if (!GetSettingsFileExists())
+            {
                 return;
             }
 

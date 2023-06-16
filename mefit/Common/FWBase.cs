@@ -134,7 +134,7 @@ namespace Mac_EFI_Toolkit.Common
         {
             FileInfoData = GetBinaryFileInfo(fileName);
             PDRSectionData = GetPdrData(sourceBytes);
-            FsysSectionData = GetFsysRegionData(sourceBytes);
+            FsysSectionData = GetFsysStoreData(sourceBytes);
             ROMInfoData = GetRomInformationData(sourceBytes);
             EFISectionStore = GetEfiSectionData(sourceBytes);
 
@@ -222,8 +222,8 @@ namespace Mac_EFI_Toolkit.Common
         };
         #endregion
 
-        #region Fsys Region
-        internal static FsysStoreSection GetFsysRegionData(byte[] sourceBytes)
+        #region Fsys Store
+        internal static FsysStoreSection GetFsysStoreData(byte[] sourceBytes)
         {
             string ssnString = null; long ssnPos = -1;
             string hwcString = null; long hwcPos = -1;
