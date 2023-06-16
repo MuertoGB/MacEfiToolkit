@@ -54,9 +54,10 @@ namespace Mac_EFI_Toolkit
             KeyDown += mainWindow_KeyDown;
             DragEnter += mainWindow_DragEnter;
             DragDrop += mainWindow_DragDrop;
+            Activated += mainWindow_Activated;
+            Deactivate += mainWindow_Deactivate;
 
             SetTipHandlers();
-
             SetMouseMoveEventHandlers();
             SetContextMenuRenderers();
             SetButtonProperties();
@@ -139,6 +140,27 @@ namespace Mac_EFI_Toolkit
             string draggedFilename = draggedFiles[0];
             OpenBinary(draggedFilename);
         }
+
+        private void mainWindow_Activated(object sender, EventArgs e)
+        {
+            SetControlForeColor(pnlTitle, Color.White);
+            SetControlForeColor(tlpVersionLabel, Color.White);
+        }
+
+        private void mainWindow_Deactivate(object sender, EventArgs e)
+        {
+            SetControlForeColor(pnlTitle, Color.FromArgb(100, 100, 100));
+            SetControlForeColor(tlpVersionLabel, Color.FromArgb(100, 100, 100));
+        }
+
+        private void SetControlForeColor(Control parentControl, Color foreColor)
+        {
+            foreach (Control ctrl in parentControl.Controls)
+            {
+                ctrl.ForeColor = foreColor;
+            }
+        }
+
         #endregion
 
         #region KeyDown Events
@@ -165,17 +187,15 @@ namespace Mac_EFI_Toolkit
                 }
                 else if (e.KeyCode == Keys.S)
                 {
-                    using (var frm = new settingsWindow())
-                    {
-                        frm.ShowDialog();
-                    }
+                    settingsToolStripMenuItem.PerformClick();
                 }
                 else if (e.KeyCode == Keys.A)
                 {
-                    using (var frm = new aboutWindow())
-                    {
-                        frm.ShowDialog();
-                    }
+                    aboutToolStripMenuItem.PerformClick();
+                }
+                else if (e.KeyCode == Keys.V)
+                {
+                    viewLogToolStripMenuItem.PerformClick();
                 }
             }
 

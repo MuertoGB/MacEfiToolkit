@@ -149,7 +149,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdOkay.TabIndex = 1;
             this.cmdOkay.Text = "&Okay";
             this.cmdOkay.UseVisualStyleBackColor = false;
-            this.cmdOkay.Click += new System.EventHandler(this.cmdCloseForm_Click);
+            this.cmdOkay.Click += new System.EventHandler(this.cmdOkay_Click);
             // 
             // pnlTitleMenuSplit
             // 

@@ -81,12 +81,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Close();
         }
 
-        private void cmdCloseForm_Click(object sender, EventArgs e)
-        {
-            cmdApply.PerformClick();
-            Close();
-        }
-
         private void cmdEditCustomPath_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
@@ -100,6 +94,12 @@ namespace Mac_EFI_Toolkit.WinForms
                     _strNewOfdInitialPath = fbd.SelectedPath;
                 }
             }
+        }
+
+        private void cmdOkay_Click(object sender, EventArgs e)
+        {
+            cmdApply.PerformClick();
+            Close();
         }
 
         private void cmdApply_Click(object sender, EventArgs e)

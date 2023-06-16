@@ -34,9 +34,13 @@ public class METLabel : Label
     {
         base.OnMouseEnter(e);
 
-        if (IsTextEllipsized())
+        if (IsTextEllipsized() && Text != toolTip.GetToolTip(this))
         {
             toolTip.SetToolTip(this, Text);
+        }
+        else if (!IsTextEllipsized())
+        {
+            toolTip.SetToolTip(this, string.Empty);
         }
     }
 
@@ -48,4 +52,5 @@ public class METLabel : Label
             return textSize.Width > ClientSize.Width;
         }
     }
+
 }
