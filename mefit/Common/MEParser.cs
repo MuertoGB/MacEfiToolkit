@@ -92,6 +92,11 @@ namespace Mac_EFI_Toolkit.Common
                     break;
             }
 
+            if (versionString == "0.0.0.0")
+            {
+                return null;
+            }
+
             return versionString;
         }
 

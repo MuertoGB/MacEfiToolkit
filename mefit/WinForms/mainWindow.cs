@@ -536,8 +536,8 @@ namespace Mac_EFI_Toolkit
             lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
             lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
             lblRomVersion.Text = FWBase.ROMInfoData.RomVersion ?? "N/A";
-            lblFitVersion.Text = FWBase.FitVersion;
-            lblMeVersion.Text = FWBase.MeVersion;
+            lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
+            lblMeVersion.Text = FWBase.MeVersion ?? "N/A";
             lblModel.Text = $"MODEL: {FWBase.EFISectionStore.Model ?? "N/A"}";
             lblBoardId.Text = FWBase.PDRSectionData.MacBoardId ?? "N/A";
             lblOrderNo.Text = FWBase.FsysSectionData.SON ?? "N/A";
