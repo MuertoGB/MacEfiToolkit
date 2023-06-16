@@ -57,48 +57,44 @@ namespace Mac_EFI_Toolkit.Common
     {
         internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
         {
-            long headerOffset;
-            int readLength;
-            string versionString = "N/A";
+            long headerPos = -1; int readLen = 0; string result = null;
 
             switch (headerType)
             {
                 case HeaderType.FlashImageTool:
-                    headerOffset = BinaryUtils.GetOffset(sourceBytes, FPT_SIGNATURE);
-                    readLength = 0x20;
-                    if (headerOffset != -1)
-                    {
-                        var headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerOffset, readLength);
-                        if (headerBytes != null)
-                        {
-                            var fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
-                            versionString = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
-                        }
-                    }
+                    headerPos = BinaryUtils.GetOffset(sourceBytes, FPT_SIGNATURE);
+                    readLen = 0x20;
                     break;
 
                 case HeaderType.ManagementEngine:
-                    headerOffset = BinaryUtils.GetOffset(sourceBytes, MN2_SIGNATURE);
-                    readLength = 0x10;
-                    if (headerOffset != -1)
-                    {
-                        var headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerOffset, readLength);
-                        if (headerBytes != null)
-                        {
-                            var mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
-                            versionString = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
-                        }
-                    }
+                    headerPos = BinaryUtils.GetOffset(sourceBytes, MN2_SIGNATURE);
+                    readLen = 0x10;
                     break;
             }
 
-            if (versionString == "0.0.0.0")
+            if (headerPos != -1)
             {
-                return null;
+                var headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerPos, readLen);
+                if (headerBytes != null)
+                {
+                    if (headerType == HeaderType.FlashImageTool)
+                    {
+                        var fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
+                        result = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
+                    }
+                    else if (headerType == HeaderType.ManagementEngine)
+                    {
+                        var mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
+                        result = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
+                    }
+                }
             }
 
-            return versionString;
+            if (result == "0.0.0.0") return null;
+
+            return result;
         }
+
 
         internal static readonly byte[] FPT_SIGNATURE =
         {
