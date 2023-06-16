@@ -11,6 +11,7 @@ using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -174,15 +175,11 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 Logger.WriteLogTextToRtb($"BUILD SUCCEEDED.", RtbLogPrefix.Good, rtbLog);
 
-                var dir = Path.Combine(Program.appDirectory, "builds");
                 var filename = $"outimage_{DateTime.Now:yyMMdd_HHmmss}.bin";
 
-                _fullBuildPath = Path.Combine(dir, filename);
+                Program.CreateCheckBuildsFolder();
 
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
+                _fullBuildPath = Path.Combine(Program.buildsDirectory, filename);
 
                 File.WriteAllBytes(_fullBuildPath, _bytesNewBinary);
                 Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
@@ -482,6 +479,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Program.closeChar;
+            cmdOpenBuildsDir.Font = Program.FONT_MDL2_REG_12;
+            cmdOpenBuildsDir.Text = "\xEC50";
         }
 
         private void ToggleControlEnable(bool enable)
@@ -609,6 +608,12 @@ namespace Mac_EFI_Toolkit.WinForms
         }
 
         #endregion
+
+        private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
+        {
+            Program.CreateCheckBuildsFolder();
+            Process.Start("explorer.exe", Program.buildsDirectory);
+        }
 
     }
 }

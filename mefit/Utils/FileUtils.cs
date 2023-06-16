@@ -60,12 +60,12 @@ namespace Mac_EFI_Toolkit.Utils
         }
 
         /// <summary>
-        /// Opens the file in Windows Explorer and selects it.
+        /// Navigate to, and highlight a path in Windows Explorer.
         /// </summary>
-        /// <param name="filePath">The path of the file to open in Windows Explorer.</param>
-        internal static void OpenFileInExplorer(string filePath)
+        /// <param name="path">The path of the file to open in Windows Explorer.</param>
+        internal static void HighlightPathInExplorer(string path)
         {
-            Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+            Process.Start("explorer.exe", $"/select,\"{path}\"");
         }
 
         /// <summary>

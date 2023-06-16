@@ -33593,6 +33593,14 @@
     <model>iMac (Retina 4K, 21.5-inch, 2017)</model>
 </section>
 <section>
+	<cfgCode>J1GG</cfgCode>
+	<model>iMac (Retina 5K, 27-inch, 2017)</model>
+</section>
+<section>
+    <cfgCode>J1GJ</cfgCode>
+	<model>iMac (Retina 5K, 27-inch, 2017)</model>
+</section>
+<section>
     <cfgCode>J1GT</cfgCode>
     <model>iMac (Retina 5K, 27-inch, 2017)</model>
 </section>

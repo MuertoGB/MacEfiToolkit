@@ -25,6 +25,7 @@ namespace Mac_EFI_Toolkit
         internal static readonly string appBuild = $"{Application.ProductVersion}.230616.0349";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
+        internal static string buildsDirectory = Path.Combine(appDirectory, "builds");
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
         internal static readonly string closeChar = "\xE947";
@@ -257,6 +258,7 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
+        #region Paths and Directories
         internal static void CheckCreateFsysFolder()
         {
             if (!Directory.Exists(fsysDirectory))
@@ -264,6 +266,15 @@ namespace Mac_EFI_Toolkit
                 Directory.CreateDirectory(fsysDirectory);
             }
         }
+
+        internal static void CreateCheckBuildsFolder()
+        {
+            if (!Directory.Exists(buildsDirectory))
+            {
+                Directory.CreateDirectory(buildsDirectory);
+            }
+        }
+        #endregion
 
     }
 }

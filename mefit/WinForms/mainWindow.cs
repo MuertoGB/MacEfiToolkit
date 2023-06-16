@@ -89,15 +89,6 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private bool IsDebugMode()
-        {
-#if DEBUG
-            return true;
-#else
-    return false;
-#endif
-        }
-
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
@@ -151,14 +142,6 @@ namespace Mac_EFI_Toolkit
         {
             SetControlForeColor(pnlTitle, Color.FromArgb(100, 100, 100));
             SetControlForeColor(tlpVersionLabel, Color.FromArgb(100, 100, 100));
-        }
-
-        private void SetControlForeColor(Control parentControl, Color foreColor)
-        {
-            foreach (Control ctrl in parentControl.Controls)
-            {
-                ctrl.ForeColor = foreColor;
-            }
         }
 
         #endregion
@@ -254,7 +237,7 @@ namespace Mac_EFI_Toolkit
 
         private void cmdMin_Click(object sender, EventArgs e)
         {
-            MinimizeWindow();
+            WindowState = FormWindowState.Minimized;
         }
 
         private void cmdMenu_Click(object sender, EventArgs e)
@@ -265,7 +248,6 @@ namespace Mac_EFI_Toolkit
 
         private void cmdOpenBin_Click(object sender, EventArgs e)
         {
-
             using (var dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
@@ -445,27 +427,7 @@ namespace Mac_EFI_Toolkit
 
         private void cmdNavigate_Click(object sender, EventArgs e)
         {
-            FileUtils.OpenFileInExplorer(FWBase.LoadedBinaryPath);
-        }
-
-        private void SetButtonProperties()
-        {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
-            cmdMenu.Font = Program.FONT_MDL2_REG_14;
-            cmdMenu.Text = "\xE169";
-            cmdNavigate.Font = Program.FONT_MDL2_REG_9;
-            cmdNavigate.Text = "\xEC50";
-            cmdReload.Font = Program.FONT_MDL2_REG_9;
-            cmdReload.Text = "\xE72C";
-            cmdEveryMacSearch.Font = Program.FONT_MDL2_REG_9;
-            cmdEveryMacSearch.Text = "\xF6FA";
-            cmdExportFsysBlock.Font = Program.FONT_MDL2_REG_9;
-            cmdExportFsysBlock.Text = "\xE74E";
-            cmdFixFsysCrc.Font = Program.FONT_MDL2_REG_9;
-            cmdFixFsysCrc.Text = "\xE90F";
-            cmdAppleRomInfo.Font = Program.FONT_MDL2_REG_9;
-            cmdAppleRomInfo.Text = "\xE72A";
+            FileUtils.HighlightPathInExplorer(FWBase.LoadedBinaryPath);
         }
         #endregion
 
@@ -507,7 +469,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void MinimizeWindow()
+        private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
         }
@@ -541,14 +503,79 @@ namespace Mac_EFI_Toolkit
             Control control = sender as Control;
             ShowContextMenu(control, cmsApplication);
         }
-
-        private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MinimizeWindow();
-        }
         #endregion
 
-        #region Misc Events
+        #region UI Events
+        internal void UpdateControls()
+        {
+            // File information
+            lblFilename.Text = $"FILE: '{FWBase.FileInfoData.FileNameWithExt}'";
+            int fileLength = (int)FWBase.FileInfoData.FileLength;
+            bool isValidSize = FileUtils.GetIsValidBinSize(fileLength);
+            lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileLength);
+            lblFileSizeBytes.ForeColor = isValidSize ? Colours.clrGood : Colours.clrUnknown;
+            lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileLength)})";
+            lblFileCreatedDate.Text = FWBase.FileInfoData.CreationTime;
+            lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
+            lblFileCrc.Text = FWBase.FileInfoData.CRC32;
+
+            // Firmware Data
+            lblSerialNumber.Text = FWBase.FsysSectionData.Serial ?? "N/A";
+            lblHwc.Text = FWBase.FsysSectionData.HWC ?? "N/A";
+            if (FWBase.FsysSectionData.CRC32 != null)
+            {
+                lblFsysCrc.Text = $"{FWBase.FsysSectionData.CRC32}h";
+                lblFsysCrc.ForeColor = FWBase.FsysSectionData.CRC32Calc == FWBase.FsysSectionData.CRC32 ? Colours.clrGood : Colours.clrError;
+            }
+            else
+            {
+                lblFsysCrc.Text = "N/A";
+                lblFsysCrc.ForeColor = Color.White;
+            }
+            lblApfsCapable.Text = FWBase.IsApfsCapable;
+            lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
+            lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
+            lblRomVersion.Text = FWBase.ROMInfoData.RomVersion ?? "N/A";
+            lblFitVersion.Text = FWBase.FitVersion;
+            lblMeVersion.Text = FWBase.MeVersion;
+            lblModel.Text = $"MODEL: {FWBase.EFISectionStore.Model ?? "N/A"}";
+            lblBoardId.Text = FWBase.PDRSectionData.MacBoardId ?? "N/A";
+            lblOrderNo.Text = FWBase.FsysSectionData.SON ?? "N/A";
+
+            // Load the config code asynchronously
+            if (FWBase.FsysSectionData.HWC != null)
+            {
+                AppendConfigCodeAsync(FWBase.FsysSectionData.HWC);
+            }
+
+            ApplyNestedPanelLabelForeColor(tlpRom, Colours.clrDisabledText);
+
+            pbxLoad.Image = null;
+
+            ToggleControlEnable(true);
+        }
+
+        private void SetContextMenuRenderers()
+        {
+            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication };
+            foreach (var menu in menus)
+            {
+                menu.Renderer = new METMenuRenderer();
+            }
+        }
+
+        private void ChildWindowClosed(object sender, EventArgs e)
+        {
+            Opacity = 1.0;
+        }
+
+        private void ShowContextMenu(Control control, ContextMenuStrip menu)
+        {
+            Point lowerLeft = new Point(-1, control.Height + 2);
+            lowerLeft = control.PointToScreen(lowerLeft);
+            menu.Show(lowerLeft);
+        }
+
         private void ToggleControlEnable(bool enable)
         {
             Button[] buttons = { cmdReset, cmdEditEfirom, cmdExportFsysBlock, cmdEveryMacSearch };
@@ -575,66 +602,24 @@ namespace Mac_EFI_Toolkit
             tlpMain.Enabled = enable;
         }
 
-        private void SetContextMenuRenderers()
+        private void SetButtonProperties()
         {
-            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication };
-            foreach (var menu in menus)
-            {
-                menu.Renderer = new METMenuRenderer();
-            }
-        }
-
-        private void ChildWindowClosed(object sender, EventArgs e)
-        {
-            Opacity = 1.0;
-        }
-
-        private void ShowContextMenu(Control control, ContextMenuStrip menu)
-        {
-            Point lowerLeft = new Point(-1, control.Height + 2);
-            lowerLeft = control.PointToScreen(lowerLeft);
-            menu.Show(lowerLeft);
-        }
-
-        internal async void CheckForNewVersion()
-        {
-            var result = await METVersion.CheckForNewVersion("https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml");
-
-            if (result == VersionCheckResult.NewVersionAvailable)
-            {
-                lblVersion.ForeColor = Color.Tomato;
-                lblVersion.Cursor = Cursors.Hand;
-                lblVersion.Click += lblVersion_Click;
-            }
-        }
-
-        private void SetPrimaryInitialDirectory()
-        {
-            string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
-            if (!string.IsNullOrEmpty(path))
-            {
-                if (Directory.Exists(path))
-                {
-                    _strInitialDirectory = path;
-                }
-                else
-                {
-                    _strInitialDirectory = Program.appDirectory;
-                }
-            }
-        }
-
-        private void UpdateMemoryStats(object state)
-        {
-            lock (_lockObject)
-            {
-                string privateMemoryString = Helper.GetBytesReadableSize(Program.GetPrivateMemorySize());
-
-                lblPrivateMemory.Invoke((Action)(() =>
-                {
-                    lblPrivateMemory.Text = $"{privateMemoryString}";
-                }));
-            }
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
+            cmdMenu.Font = Program.FONT_MDL2_REG_14;
+            cmdMenu.Text = "\xE169";
+            cmdNavigate.Font = Program.FONT_MDL2_REG_9;
+            cmdNavigate.Text = "\xEC50";
+            cmdReload.Font = Program.FONT_MDL2_REG_9;
+            cmdReload.Text = "\xE72C";
+            cmdEveryMacSearch.Font = Program.FONT_MDL2_REG_9;
+            cmdEveryMacSearch.Text = "\xF6FA";
+            cmdExportFsysBlock.Font = Program.FONT_MDL2_REG_9;
+            cmdExportFsysBlock.Text = "\xE74E";
+            cmdFixFsysCrc.Font = Program.FONT_MDL2_REG_9;
+            cmdFixFsysCrc.Text = "\xE90F";
+            cmdAppleRomInfo.Font = Program.FONT_MDL2_REG_9;
+            cmdAppleRomInfo.Text = "\xE72A";
         }
 
         private void SetTipHandlers()
@@ -693,50 +678,17 @@ namespace Mac_EFI_Toolkit
             lblMessage.Text = string.Empty;
         }
 
-        internal void UpdateControls()
+        private void UpdateMemoryStats(object state)
         {
-            // File information
-            lblFilename.Text = $"FILE: '{FWBase.FileInfoData.FileNameWithExt}'";
-            int fileLength = (int)FWBase.FileInfoData.FileLength;
-            bool isValidSize = FileUtils.GetIsValidBinSize(fileLength);
-            lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileLength);
-            lblFileSizeBytes.ForeColor = isValidSize ? Colours.clrGood : Colours.clrUnknown;
-            lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileLength)})";
-            lblFileCreatedDate.Text = FWBase.FileInfoData.CreationTime;
-            lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
-            lblFileCrc.Text = FWBase.FileInfoData.CRC32;
-
-            // Firmware Data
-            lblSerialNumber.Text = FWBase.FsysSectionData.Serial ?? "N/A";
-            lblHwc.Text = FWBase.FsysSectionData.HWC ?? "N/A";
-            if (FWBase.FsysSectionData.CRC32 != null)
+            lock (_lockObject)
             {
-                lblFsysCrc.Text = $"{FWBase.FsysSectionData.CRC32}h";
-                lblFsysCrc.ForeColor = FWBase.FsysSectionData.CRC32Calc == FWBase.FsysSectionData.CRC32 ? Colours.clrGood : Colours.clrError;
-            }
-            else
-            {
-                lblFsysCrc.Text = "N/A";
-                lblFsysCrc.ForeColor = Color.White;
-            }
-            lblApfsCapable.Text = FWBase.IsApfsCapable;
-            lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
-            lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
-            lblRomVersion.Text = FWBase.ROMInfoData.RomVersion ?? "N/A";
-            lblFitVersion.Text = FWBase.FitVersion;
-            lblMeVersion.Text = FWBase.MeVersion;
-            lblModel.Text = $"MODEL: {FWBase.EFISectionStore.Model ?? "N/A"}";
-            lblBoardId.Text = FWBase.PDRSectionData.MacBoardId ?? "N/A";
-            lblOrderNo.Text = FWBase.FsysSectionData.SON ?? "N/A";
+                string privateMemoryString = Helper.GetBytesReadableSize(Program.GetPrivateMemorySize());
 
-            // Load the config code asynchronously
-            if (FWBase.FsysSectionData.HWC != null)
-            {
-                AppendConfigCodeAsync(FWBase.FsysSectionData.HWC);
+                lblPrivateMemory.Invoke((Action)(() =>
+                {
+                    lblPrivateMemory.Text = $"{privateMemoryString}";
+                }));
             }
-
-            pbxLoad.Image = null;
-            ToggleControlEnable(true);
         }
 
         internal async void AppendConfigCodeAsync(string strHwc)
@@ -748,9 +700,70 @@ namespace Mac_EFI_Toolkit
                 lblModel.Text += $" '{configCode}'";
             }
         }
+
+        void ApplyNestedPanelLabelForeColor(TableLayoutPanel tableLayoutPanel, Color color)
+        {
+            foreach (Control control in tableLayoutPanel.Controls)
+            {
+                if (control is Label label && label.Text == "N/A")
+                {
+                    label.ForeColor = color;
+                }
+                else if (control is TableLayoutPanel nestedTableLayoutPanel)
+                {
+                    ApplyNestedPanelLabelForeColor(nestedTableLayoutPanel, color);
+                }
+            }
+        }
+
+        private void SetControlForeColor(Control parentControl, Color foreColor)
+        {
+            foreach (Control ctrl in parentControl.Controls)
+            {
+                ctrl.ForeColor = foreColor;
+            }
+        }
         #endregion
 
-        #region Firmware Parsing
+        #region Misc Events
+
+        internal async void CheckForNewVersion()
+        {
+            var result = await METVersion.CheckForNewVersion("https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml");
+
+            if (result == VersionCheckResult.NewVersionAvailable)
+            {
+                lblVersion.ForeColor = Color.Tomato;
+                lblVersion.Cursor = Cursors.Hand;
+                lblVersion.Click += lblVersion_Click;
+            }
+        }
+
+        private void SetPrimaryInitialDirectory()
+        {
+            string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+            if (!string.IsNullOrEmpty(path))
+            {
+                if (Directory.Exists(path))
+                {
+                    _strInitialDirectory = path;
+                }
+                else
+                {
+                    _strInitialDirectory = Program.appDirectory;
+                }
+            }
+        }
+
+        private bool IsDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+    return false;
+#endif
+        }
+
         private bool IsValidMinMaxSize()
         {
             var fileInfo = new FileInfo(FWBase.LoadedBinaryPath);
@@ -836,6 +849,8 @@ namespace Mac_EFI_Toolkit
                 label.Text = string.Empty;
                 label.ForeColor = Color.White;
             }
+
+            ApplyNestedPanelLabelForeColor(tlpRom, Color.White);
 
             // Reset private members
             SetPrimaryInitialDirectory();
