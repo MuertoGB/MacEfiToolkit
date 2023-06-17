@@ -85,8 +85,11 @@ internal struct NvramStoreData
 {
     internal int PrimaryStoreSize { get; set; }
     internal long PrimaryStoreOffset { get; set; }
+    internal byte[] PrimaryStoreBytes { get; set; }
     internal int BackupStoreSize { get; set; }
     internal long BackupStoreOffset { get; set; }
+    internal byte[] BackupStoreBytes { get; set; }
+    internal int PaddingLength { get; set; }
 }
 #endregion
 
@@ -127,7 +130,6 @@ namespace Mac_EFI_Toolkit.Common
         internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
         internal const int FSYS_RGN_SIZE = 0x800;      // 2048 bytes
 
-        private static readonly int _maxPaddingBytes = 0x60;
         private static Encoding _utf8 = Encoding.UTF8;
 
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
@@ -335,7 +337,7 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
-        internal static FsysStoreSection DefaultFsysRegionBase()
+        private static FsysStoreSection DefaultFsysRegionBase()
         {
             return new FsysStoreSection
             {
@@ -398,61 +400,78 @@ namespace Mac_EFI_Toolkit.Common
         #region NVRAM Section
         internal static NvramStoreData GetNvramStoreData(byte[] sourceBytes, NvramStoreType headerType)
         {
-            var nvStoreSig = GetNvramSignature(headerType);
-            // We must find the NVRAM section GUID first.
-            long baseNvramOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
+            var nvramSig = GetNvramSignature(headerType);
+            int paddingLen = 0;
+            int headerLen = 0x10;
 
-            if (baseNvramOffset == -1)
+            var psLen = -1; long psPos = -1; byte[] psData = null;
+
+            // We must find the NVRAM section GUID first.
+            long nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
+            if (nvramPos == -1)
             {
-                // If baseNvramOffset is -1, we should exit.
-                return new NvramStoreData
-                {
-                    PrimaryStoreSize = -1,
-                    PrimaryStoreOffset = -1,
-                    BackupStoreSize = -1,
-                    BackupStoreOffset = -1
-                };
+                return DefaultNvramStoreData();
             }
 
-            var storeOffset = BinaryUtils.GetOffset(sourceBytes, nvStoreSig, baseNvramOffset);
 
-            var primaryStoreSize = -1;
-            long primaryStoreOffset = -1;
-            if (storeOffset != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, storeOffset, 0x6) is byte[] bytesPrimaryHeader)
+            var primaryPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, nvramPos);
+            if (primaryPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, primaryPos, 0x6) is byte[] bytesPrimaryHeader)
             {
                 NvramStoreHeader primaryStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
                 if (primaryStoreHeader.SizeOfData != 0)
                 {
-                    primaryStoreSize = primaryStoreHeader.SizeOfData;
-                    primaryStoreOffset = storeOffset;
+                    psLen = primaryStoreHeader.SizeOfData;
+                    psPos = primaryPos;
+                    psData = BinaryUtils.GetBytesAtOffset(sourceBytes, psPos + headerLen, psLen - headerLen);
+
+                    // Count the number of 0xFF values in the padding
+                    for (int i = (int)(psPos + psLen); i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
+                    {
+                        paddingLen++;
+                    }
                 }
             }
 
-            var backupStoreSize = -1;
-            long backupStoreOffset = -1;
-            if (primaryStoreOffset != -1) // If we did not find the primary store, why would we be looking for the backup store?
-            {
-                // We're looking for the backup store within a certain max padding length from the end of the primary store,
-                // if we don't find the signature within the maxSearchLength, we abort.
-                var backupOffset = BinaryUtils.GetOffset(sourceBytes, nvStoreSig, storeOffset + primaryStoreSize, _maxPaddingBytes);
+            var bsLen = -1; long bsPos = -1; byte[] bsData = null;
 
-                if (backupOffset != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupOffset, 0x6) is byte[] bytesBackupHeader)
+            if (psPos != -1)
+            {
+                var backupPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, psPos + psLen + paddingLen);
+                if (backupPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupPos, 0x6) is byte[] bytesBackupHeader)
                 {
                     NvramStoreHeader backupStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
                     if (backupStoreHeader.SizeOfData != 0)
                     {
-                        backupStoreSize = backupStoreHeader.SizeOfData;
-                        backupStoreOffset = backupOffset;
+                        bsLen = backupStoreHeader.SizeOfData;
+                        bsPos = backupPos;
+                        bsData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos + headerLen, bsLen - headerLen);
                     }
                 }
             }
 
             return new NvramStoreData
             {
-                PrimaryStoreSize = primaryStoreSize,
-                PrimaryStoreOffset = primaryStoreOffset,
-                BackupStoreSize = backupStoreSize,
-                BackupStoreOffset = backupStoreOffset
+                PrimaryStoreSize = psLen,
+                PrimaryStoreOffset = psPos,
+                PrimaryStoreBytes = psData,
+                BackupStoreSize = bsLen,
+                BackupStoreOffset = bsPos,
+                BackupStoreBytes = bsData,
+                PaddingLength = paddingLen
+            };
+        }
+
+        private static NvramStoreData DefaultNvramStoreData()
+        {
+            return new NvramStoreData
+            {
+                PrimaryStoreSize = -1,
+                PrimaryStoreOffset = -1,
+                PrimaryStoreBytes = null,
+                BackupStoreSize = -1,
+                BackupStoreOffset = -1,
+                BackupStoreBytes = null,
+                PaddingLength = 0
             };
         }
 
