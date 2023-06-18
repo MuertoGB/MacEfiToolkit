@@ -65,7 +65,7 @@ Mac EFI Toolkit, or 'mefit' is a Mac EFIROM information gathering tool designed 
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[0.6.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Yes | BETA |
+|[0.6.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 18th June 2023 | Yes | BETA |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
