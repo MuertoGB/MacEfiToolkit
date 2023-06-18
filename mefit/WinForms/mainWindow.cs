@@ -29,6 +29,8 @@ namespace Mac_EFI_Toolkit
         private static readonly object _lockObject = new object();
         private static System.Threading.Timer _statsTimer;
         private static bool _firmwareLoaded = false;
+        private static readonly string _efiUnlockedChar = "\xE785";
+        private static readonly string _efiLockedChar = "\xE72E";
         #endregion
 
         #region Overriden Properties
@@ -56,6 +58,8 @@ namespace Mac_EFI_Toolkit
             DragDrop += mainWindow_DragDrop;
             Activated += mainWindow_Activated;
             Deactivate += mainWindow_Deactivate;
+
+            lblEfiLock.Font = Program.FONT_MDL2_REG_9;
 
             SetTipHandlers();
             SetMouseMoveEventHandlers();
@@ -535,7 +539,19 @@ namespace Mac_EFI_Toolkit
             lblApfsCapable.Text = FWBase.IsApfsCapable;
             lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
             lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
-            lblRomVersion.Text = FWBase.ROMInfoData.RomVersion ?? "N/A";
+
+            lblVssStore.Text = "VSS";
+            lblVssStore.ForeColor = (FWBase.VssStoreData.PrimaryStoreOffset != -1) ? Color.White : Colours.clrDisabledText;
+
+            lblSvsStore.Text = "SVS";
+            lblSvsStore.ForeColor = (FWBase.SvsStoreData.PrimaryStoreOffset != -1) ? Color.White : Colours.clrDisabledText;
+
+            lblNssStore.Text = "NSS";
+            lblNssStore.ForeColor = (FWBase.NssStoreData.PrimaryStoreOffset != -1) ? Color.White : Colours.clrDisabledText;
+
+            lblEfiLock.Text = FWBase.IsEfiLocked ? _efiLockedChar : _efiUnlockedChar;
+            lblEfiLock.ForeColor = FWBase.IsEfiLocked ? Colours.clrError : Colours.clrGood;
+
             lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
             lblMeVersion.Text = FWBase.MeVersion ?? "N/A";
             lblModel.Text = $"MODEL: {FWBase.EFISectionStore.Model ?? "N/A"}";
@@ -620,6 +636,8 @@ namespace Mac_EFI_Toolkit
             cmdFixFsysCrc.Text = "\xE90F";
             cmdAppleRomInfo.Font = Program.FONT_MDL2_REG_9;
             cmdAppleRomInfo.Text = "\xE72A";
+            //cmdViewNvramData.Font = Program.FONT_MDL2_REG_9;
+            //cmdViewNvramData.Text = "\xE890";
         }
 
         private void SetTipHandlers()
@@ -642,6 +660,8 @@ namespace Mac_EFI_Toolkit
             cmdExportFsysBlock.MouseLeave += HandleMouseLeaveTip;
             cmdAppleRomInfo.MouseEnter += HandleMouseEnterTip;
             cmdAppleRomInfo.MouseLeave += HandleMouseLeaveTip;
+            lblEfiLock.MouseEnter += HandleMouseEnterTip;
+            lblEfiLock.MouseLeave += HandleMouseLeaveTip;
             lblPrivateMemory.MouseEnter += HandleMouseEnterTip;
             lblPrivateMemory.MouseLeave += HandleMouseLeaveTip;
         }
@@ -668,6 +688,8 @@ namespace Mac_EFI_Toolkit
                     lblMessage.Text = "Open the firmware editor window";
                 else if (sender == cmdAppleRomInfo)
                     lblMessage.Text = "Open the ROM information window";
+                else if (sender == lblEfiLock)
+                    lblMessage.Text = FWBase.IsEfiLocked ? "EFI password MAC found" : "EFI password MAC was not found";
                 else if (sender == lblPrivateMemory)
                     lblMessage.Text = "Private memory consumption";
             }
@@ -841,8 +863,8 @@ namespace Mac_EFI_Toolkit
             Label[] labels =
             {
                 lblFilename, lblFileSizeBytes, lblFileCrc, lblFileCreatedDate, lblFileModifiedDate,
-                lblModel, lblSerialNumber, lblHwc, lblFsysCrc, lblApfsCapable, lblEfiVersion, lblRomVersion,
-                lblFitVersion, lblMeVersion, lblBoardId, lblOrderNo
+                lblModel, lblSerialNumber, lblHwc, lblFsysCrc, lblApfsCapable, lblEfiVersion, lblVssStore,
+                lblSvsStore, lblNssStore, lblEfiLock, lblFitVersion, lblMeVersion, lblBoardId, lblOrderNo
             };
             foreach (Label label in labels)
             {

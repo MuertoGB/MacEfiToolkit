@@ -2,9 +2,9 @@
 <data>
  <MET>
    <Channel>BETA</Channel>
-   <Build>060-XXXXXX-ms5</Build>
-   <ReleaseDate>NotSet</ReleaseDate>
-   <SHA256>NotSet</SHA256>
+   <Build>0.6.0.230618.2223</Build>
+   <ReleaseDate>18th June 2023</ReleaseDate>
+   <SHA256>80c9f926db417c372c03c0c816f3cf46eb51cb0ecb0ca92ac6e64a30fce6aec9</SHA256>
    <VersionString>0.6.0</VersionString>
    <Maj>0</Maj>
    <Min>6</Min>

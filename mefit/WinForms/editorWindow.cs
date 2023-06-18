@@ -26,27 +26,10 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Private Members
         private byte[] _bytesNewFsysRegion = null;
         private byte[] _bytesNewBinary = null;
-        private readonly string _strChevronRight = "\xE76C";
-
-        private long _primaryVssOffset = -1;
-        private int _primaryVssSize = -1;
-        private long _backupVssOffset = -1;
-        private int _backupVssSize = -1;
-
-        private long _primarySvsOffset = -1;
-        private int _primarySvsSize = -1;
-        private long _backupSvsOffset = -1;
-        private int _backupSvsSize = -1;
-
-        private long _primaryNssOffset = -1;
-        private int _primaryNssSize = -1;
-        private long _backupNssOffset = -1;
-        private int _backupNssSize = -1;
-
         private bool _maskCrc = false;
         private bool _buildFailed = false;
-
         private string _fullBuildPath = string.Empty;
+        private readonly string _strChevronRight = "\xE76C";
         #endregion
 
         #region Overriden Properties
@@ -88,11 +71,7 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTextToRtb($"The editor is unfinished, use caution!", RtbLogPrefix.Warn, rtbLog);
 
             LogLoadedBinarySize();
-
             LogFsysData();
-
-            ValidateNvramStoreData();
-            LogNvramData();
 
             Logger.WriteLogTextToRtb($"Initial checks complete", RtbLogPrefix.Good, rtbLog);
         }
@@ -114,6 +93,11 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdClose_Click(object sender, EventArgs e)
         {
             Close();
+        }
+        private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
+        {
+            Program.CreateCheckBuildsFolder();
+            Process.Start("explorer.exe", Program.buildsDirectory);
         }
 
         private void cmdFsysPath_Click(object sender, EventArgs e)
@@ -155,10 +139,11 @@ namespace Mac_EFI_Toolkit.WinForms
             //    Logger.WriteLogTextToRtb($"Replacing serial number...", RtbLogPrefix.MET, rtbLog);
             //}
 
-            //if (cbxClearVssStore.Checked)
-            //{
-            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
-            //}
+            if (cbxClearVssStore.Checked)
+            {
+                Logger.WriteLogTextToRtb($"Clearing VSS NVRAM Data:", RtbLogPrefix.Info, rtbLog);
+                ClearVssStores(cbxClearVssBackup.Checked);
+            }
 
             //if (cbxClearSvsStore.Checked)
             //{
@@ -208,11 +193,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             METCheckbox cb = (METCheckbox)sender;
 
-            if (_backupVssOffset != -1)
-            {
                 lblVssChevRight.Visible = cb.Checked;
                 cbxClearVssBackup.Enabled = cb.Checked;
-            }
 
             if (!cb.Checked)
             {
@@ -224,11 +206,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             METCheckbox cb = (METCheckbox)sender;
 
-            if (_backupSvsOffset != -1)
-            {
                 lblSvsChevRight.Visible = cb.Checked;
                 cbxClearSvsBackup.Enabled = cb.Checked;
-            }
 
             if (!cb.Checked)
             {
@@ -240,11 +219,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             METCheckbox cb = (METCheckbox)sender;
 
-            if (_backupNssOffset != -1)
-            {
                 lblNssChevRight.Visible = cb.Checked;
                 cbxClearNssBackup.Enabled = cb.Checked;
-            }
 
             if (!cb.Checked)
             {
@@ -258,7 +234,7 @@ namespace Mac_EFI_Toolkit.WinForms
             bool isChecked = cb.Checked;
 
             cmdFsysPath.Enabled = isChecked;
-            tlpSerialA.Enabled = !isChecked;
+            //tlpSerialA.Enabled = !isChecked;
 
             if (isChecked)
             {
@@ -386,75 +362,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
             return true;
         }
-
-        private void ValidateNvramStoreData()
-        {
-            NvramStoreData vssStore = FWBase.GetNvramStoreData(FWBase.LoadedBinaryBytes, NvramStoreType.VSS);
-            if (vssStore.PrimaryStoreOffset != -1)
-            {
-                _primaryVssOffset = vssStore.PrimaryStoreOffset;
-                _primaryVssSize = vssStore.PrimaryStoreSize;
-
-            }
-            else
-            {
-                cbxClearVssStore.Enabled = false;
-            }
-
-            if (vssStore.BackupStoreOffset != -1)
-            {
-                _backupVssOffset = vssStore.BackupStoreOffset;
-                _backupVssSize = vssStore.BackupStoreSize;
-
-            }
-            else
-            {
-                cbxClearVssBackup.Enabled = false;
-                lblVssChevRight.Visible = false;
-            }
-
-            NvramStoreData svsStore = FWBase.GetNvramStoreData(FWBase.LoadedBinaryBytes, NvramStoreType.SVS);
-            if (svsStore.PrimaryStoreOffset != -1)
-            {
-                _primarySvsOffset = svsStore.PrimaryStoreOffset;
-                _primarySvsSize = svsStore.PrimaryStoreSize;
-            }
-            else
-            {
-                cbxClearSvsStore.Enabled = false;
-            }
-            if (svsStore.BackupStoreOffset != -1)
-            {
-                _backupSvsOffset = svsStore.BackupStoreOffset;
-                _backupSvsSize = svsStore.BackupStoreSize;
-            }
-            else
-            {
-                cbxClearSvsBackup.Enabled = false;
-                lblSvsChevRight.Visible = false;
-            }
-
-            NvramStoreData nssStore = FWBase.GetNvramStoreData(FWBase.LoadedBinaryBytes, NvramStoreType.NSS);
-            if (nssStore.PrimaryStoreOffset != -1)
-            {
-                _primaryNssOffset = nssStore.PrimaryStoreOffset;
-                _primaryNssSize = nssStore.PrimaryStoreSize;
-            }
-            else
-            {
-                cbxClearNssStore.Enabled = false;
-            }
-            if (nssStore.BackupStoreOffset != -1)
-            {
-                _backupNssOffset = nssStore.BackupStoreOffset;
-                _backupNssSize = nssStore.BackupStoreSize;
-            }
-            else
-            {
-                cbxClearNssBackup.Enabled = false;
-                lblNssChevRight.Visible = false;
-            }
-        }
         #endregion
 
         #region Misc Events
@@ -508,39 +415,6 @@ namespace Mac_EFI_Toolkit.WinForms
             else
             {
                 Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is valid", RtbLogPrefix.Info, rtbLog);
-            }
-        }
-
-        private void LogNvramData()
-        {
-            if (_primaryVssOffset != -1)
-            {
-                Logger.WriteLogTextToRtb($"VSS Store: Offset {_primaryVssOffset:X2}h, Size {_primaryVssSize:X2}h", RtbLogPrefix.Info, rtbLog);
-
-                if (_backupVssOffset != -1)
-                {
-                    Logger.WriteLogTextToRtb($"VSS Backup: Offset {_backupVssOffset:X2}h, Size {_backupVssSize:X2}h", RtbLogPrefix.Info, rtbLog);
-                }
-            }
-
-            if (_primarySvsOffset != -1)
-            {
-                Logger.WriteLogTextToRtb($"SVS Store: Offset {_primarySvsOffset:X2}h, Size {_primarySvsSize:X2}h", RtbLogPrefix.Info, rtbLog);
-
-                if (_backupSvsOffset != -1)
-                {
-                    Logger.WriteLogTextToRtb($"SVS Backup: Offset {_backupSvsOffset:X2}h, Size {_backupSvsSize:X2}h", RtbLogPrefix.Info, rtbLog);
-                }
-            }
-
-            if (_primaryNssOffset != -1)
-            {
-                Logger.WriteLogTextToRtb($"NSS Store: Offset {_primaryNssOffset:X2}h, Size {_primaryNssSize:X2}h", RtbLogPrefix.Info, rtbLog);
-
-                if (_backupNssOffset != -1)
-                {
-                    Logger.WriteLogTextToRtb($"NSS Backup: Offset {_backupNssOffset:X2}h, Size {_backupNssSize:X2}h", RtbLogPrefix.Info, rtbLog);
-                }
             }
         }
         #endregion
@@ -609,10 +483,41 @@ namespace Mac_EFI_Toolkit.WinForms
 
         #endregion
 
-        private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
+        private void ClearVssStores(bool clearBackup)
         {
-            Program.CreateCheckBuildsFolder();
-            Process.Start("explorer.exe", Program.buildsDirectory);
+            //byte[] vssPrimary = null;
+            //long vssPrimBodyStart = _primaryVssPos + 0x10;
+            //int vssPrimBodyEnd = _primarySvsLen - 0x10;
+
+            //byte[] vssBackup = null;
+            //long vssBackBodyStart = _primaryVssPos + 0x10;
+            //int vssBackBodyEnd = _primarySvsLen - 0x10;
+
+            //vssPrimary = BinaryUtils.GetBytesAtOffset(_bytesNewBinary, vssPrimBodyStart, vssPrimBodyEnd);
+
+            //if (!BinaryUtils.IsByteBlockEmpty(vssPrimary))
+            //{
+            //    Logger.WriteLogTextToRtb("Overwriting primary VSS buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
+            //    BinaryUtils.FillByteArrayWithFF(vssPrimary);
+            //} else
+            //{
+            //    Logger.WriteLogTextToRtb("Primary VSS is already empty (0xFF)", RtbLogPrefix.Info, rtbLog);
+            //}
+
+            //if (clearBackup)
+            //{
+            //    vssBackup = BinaryUtils.GetBytesAtOffset(_bytesNewBinary, vssBackBodyStart, vssBackBodyEnd);
+
+            //    if (!BinaryUtils.IsByteBlockEmpty(vssBackup))
+            //    {
+            //        Logger.WriteLogTextToRtb("Overwriting backup VSS buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
+            //        BinaryUtils.FillByteArrayWithFF(vssBackup);
+            //    }
+            //    else
+            //    {
+            //        Logger.WriteLogTextToRtb("Backup VSS is already empty (0xFF)", RtbLogPrefix.Info, rtbLog);
+            //    }
+            //}
         }
 
     }

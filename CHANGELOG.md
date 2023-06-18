@@ -14,9 +14,7 @@
 
 #### New:
 - Added firmware-editor window, which includes the following features:-
-> - Ability to replace the entire Fsys block with a donor dump.
-> - Ability to replace the serial number with automatic HWC and CRC32 masking.
-> - Ability to clear the NVRAM (SVS, VSS, NSS) sections while preserving section headers.
+> - Ability to replace the Fsys store with a donor.
 - Added a status bar to bottom of the main window:-
 > - Displays the amount of private memory used.
 > - Displays loading animation.
@@ -28,6 +26,8 @@
 - Added button to navigate to the currently open file in explorer.
 - Added setting to disable dark messagebox sounds.
 - Added setting to disable tips.
+- Added detected NVRAM stores to the main window.
+- Application can now detect EFI lock.
 
 #### Enhancements:
 - UI improvements.
@@ -41,7 +41,7 @@
 - Replaced the close button in the settings window with an OK button for saving and closing.
 
 #### Bugs:
-- Fixed an issue with the form minimize state in the About window.
+- Fixed an issue with the form minimize state in the about window.
 - Fixed the font resolver failing to load embedded resources on some systems.
 - Fixed stability issues that occur when the Fsys region is not found.
 - Fixed the initial directory not being set when a file is dragged onto the main window or the application executable file.

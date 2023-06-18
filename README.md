@@ -19,48 +19,47 @@ Mac EFI Toolkit
 This application is in active development, it is currently unfinished.
 >🛠 Current Status: Working on finishing the editor.
 
-Mac EFI Toolkit, or 'mefit' is a firmware repair and information gathering tool designed to aid technicians in repair of a Mac EFIROM firmware (BIOS).
+Mac EFI Toolkit, or 'mefit' is a Mac EFIROM information gathering tool designed to aid technicians in repair of a Mac BIOS firmware, with limited editing capability.
 
 <img width="550" src="files/images/met.png" alt="MET">
 <img width="550" src="files/images/met_alt.png" alt="MET_ALT">
 
 ## Features
 
-- [x] Implement Knuth–Morris–Pratt algorithm for searching binary data
-- [x] Add option to export and store Fsys regions
+**EFIROM:**
+- Original binary files left untouched.
+- Knuth–Morris–Pratt algorithm for searching binary data.
+- Detect and repair invalid Fsys store checksum.
+- View information in the Fsys store.
+- Check serial number with EveryMac.
+- Export Fsys store from the NVRAM.
+- View ROM section information.
+- View FIT and ME versions.
+- Detect EFI password lock.
+- View configuration code.
+- Detect APFS capability.
+- Validate binary size.
+
+**Application:**
+- Automatic handling of uncaught errors
+- Drag and drop support for .bin files
+- No installation necessary
+- DPI scaling support
+- Memory Management
+- Version checking
+
+**TODO**
 - [x] Replace the Fsys block
 - [ ] Clear NVRAM (SVS, VSS, NSS) with section header preservation
 - [ ] Add option to replace serial number
 > ℹ️ The editor is in active development
-- [x] Ability to detect if the firmware is APFS capable
-- [x] Detect and fix invalid Fsys crc32 checksums
-- [x] Validate binary size
-- [x] View specific ROM information, including the FITC and ME version
-- [x] Check serial number with EveryMac
-- [x] HWC decoding that can reference a local database or fall back to Apples server
-- [x] Original binaries left untouched
 - [ ] Complete the logging systems
-
- 
 
 | SUGGESTED FEATURES                   | Status      |
 |--------------------------------------|-------------|
 | Detect MDM status                    |🔴 Undecided |
 | Detect email address in the NVRAM    |🔴 Undecided |
 | Configure ME region	               |🔴 Undecided |
-
-**Implemented application features:**
-```
-- Automatic handling of uncaught errors
-- Drag and drop support for .bin files
-- No installation necessary
-- DPI scaling support
-- Integrity checking
-- Memory Management
-- Version checking
-```
-
-Plus more, only time will tell.
 
 ## Download
 

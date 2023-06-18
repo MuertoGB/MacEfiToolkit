@@ -81,7 +81,7 @@ internal struct NvramStoreHeader
     internal ushort SizeOfData;
 }
 
-internal struct NvramStoreData
+internal struct NvramStoreSection
 {
     internal int PrimaryStoreSize { get; set; }
     internal long PrimaryStoreOffset { get; set; }
@@ -118,6 +118,9 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static FileInfoData FileInfoData;
         internal static PdrSection PDRSectionData;
+        internal static NvramStoreSection VssStoreData;
+        internal static NvramStoreSection SvsStoreData;
+        internal static NvramStoreSection NssStoreData;
         internal static FsysStoreSection FsysSectionData;
         internal static AppleRomInformationSection ROMInfoData;
         internal static EfiSection EFISectionStore;
@@ -125,6 +128,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static string IsApfsCapable = null;
         internal static string FitVersion = null;
         internal static string MeVersion = null;
+        internal static bool IsEfiLocked = false;
 
         internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576 bytes
         internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
@@ -136,6 +140,9 @@ namespace Mac_EFI_Toolkit.Common
         {
             FileInfoData = GetBinaryFileInfo(fileName);
             PDRSectionData = GetPdrData(sourceBytes);
+            VssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.VSS);
+            SvsStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.SVS);
+            NssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.NSS);
             FsysSectionData = GetFsysStoreData(sourceBytes);
             ROMInfoData = GetRomInformationData(sourceBytes);
             EFISectionStore = GetEfiSectionData(sourceBytes);
@@ -143,6 +150,11 @@ namespace Mac_EFI_Toolkit.Common
             IsApfsCapable = GetIsApfsCapable(LoadedBinaryBytes).ToString();
             FitVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.FlashImageTool);
             MeVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.ManagementEngine);
+
+            if (SvsStoreData.PrimaryStoreOffset != -1 && SvsStoreData.PrimaryStoreBytes != null)
+            {
+                IsEfiLocked = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes);
+            }
         }
 
         #region File Information
@@ -238,6 +250,7 @@ namespace Mac_EFI_Toolkit.Common
 
             // First we need to locate the NVRAM section GUID.
             long nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
+
             if (nvramPos == -1)
             {
                 // NVRAM store was not found so return default data
@@ -294,6 +307,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 // Hardware Config + Offset
                 hwcPos = BinaryUtils.GetOffset(sourceBytes, HWC_SIG, fsysPos, FSYS_RGN_SIZE);
+
                 if (hwcPos != -1)
                 {
                     var hwcReadLen = 0x04;
@@ -308,6 +322,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 // System order number + Offset
                 long sonPos = BinaryUtils.GetOffset(sourceBytes, SON_SIG, fsysPos, FSYS_RGN_SIZE);
+
                 if (sonPos != -1)
                 {
                     byte indexByte = 0x00;
@@ -398,31 +413,31 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region NVRAM Section
-        internal static NvramStoreData GetNvramStoreData(byte[] sourceBytes, NvramStoreType headerType)
+        internal static NvramStoreSection GetNvramStoreData(byte[] sourceBytes, NvramStoreType headerType)
         {
             var nvramSig = GetNvramSignature(headerType);
             int paddingLen = 0;
-            int headerLen = 0x10;
 
             var psLen = -1; long psPos = -1; byte[] psData = null;
 
             // We must find the NVRAM section GUID first.
             long nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
+
             if (nvramPos == -1)
             {
                 return DefaultNvramStoreData();
             }
 
-
             var primaryPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, nvramPos);
+
             if (primaryPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, primaryPos, 0x6) is byte[] bytesPrimaryHeader)
             {
-                NvramStoreHeader primaryStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
-                if (primaryStoreHeader.SizeOfData != 0)
-                {
-                    psLen = primaryStoreHeader.SizeOfData;
+                NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
+                if (psHeader.SizeOfData != 0)
+                 {
+                    psLen = psHeader.SizeOfData;
                     psPos = primaryPos;
-                    psData = BinaryUtils.GetBytesAtOffset(sourceBytes, psPos + headerLen, psLen - headerLen);
+                    psData = BinaryUtils.GetBytesAtOffset(sourceBytes, psPos, psLen);
 
                     // Count the number of 0xFF values in the padding
                     for (int i = (int)(psPos + psLen); i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
@@ -437,19 +452,20 @@ namespace Mac_EFI_Toolkit.Common
             if (psPos != -1)
             {
                 var backupPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, psPos + psLen + paddingLen);
+
                 if (backupPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupPos, 0x6) is byte[] bytesBackupHeader)
                 {
-                    NvramStoreHeader backupStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
-                    if (backupStoreHeader.SizeOfData != 0)
+                    NvramStoreHeader bsHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
+                    if (bsHeader.SizeOfData != 0)
                     {
-                        bsLen = backupStoreHeader.SizeOfData;
+                        bsLen = bsHeader.SizeOfData;
                         bsPos = backupPos;
-                        bsData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos + headerLen, bsLen - headerLen);
+                        bsData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos, bsLen);
                     }
                 }
             }
 
-            return new NvramStoreData
+            return new NvramStoreSection
             {
                 PrimaryStoreSize = psLen,
                 PrimaryStoreOffset = psPos,
@@ -461,9 +477,9 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
-        private static NvramStoreData DefaultNvramStoreData()
+        private static NvramStoreSection DefaultNvramStoreData()
         {
-            return new NvramStoreData
+            return new NvramStoreSection
             {
                 PrimaryStoreSize = -1,
                 PrimaryStoreOffset = -1,
@@ -489,6 +505,23 @@ namespace Mac_EFI_Toolkit.Common
                     throw new ArgumentException("Invalid NVRAM header type.");
             }
         }
+
+        internal static bool GetIsEfiLocked(byte[] nvramStoreBytes)
+        {
+            var lockMarker = BinaryUtils.GetOffset(nvramStoreBytes, EFI_LOCK_MAC_SIG);
+            // Message Authentication Code was found
+            if (lockMarker != -1) return true;
+
+            return false;
+        }
+
+        internal static readonly byte[] EFI_LOCK_MAC_SIG =
+        {
+            0x43, 0x00, 0x42, 0x00,
+            0x46, 0x00, 0x32, 0x00,
+            0x43, 0x00, 0x43, 0x00,
+            0x33, 0x00, 0x32
+        };
 
         internal static readonly byte[] VSS_STORE_SIG =
         {
@@ -533,6 +566,7 @@ namespace Mac_EFI_Toolkit.Common
             var updatedRomInfoData = new Dictionary<byte[], string>(romInfoData);
             // First we need to locate the AppleRomInformation section GUID
             long baseOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID);
+
             if (baseOffset == -1)
             {
                 // AppleRomInformation GUID was not found, so return default data
@@ -547,6 +581,7 @@ namespace Mac_EFI_Toolkit.Common
             int sectionLen = BitConverter.ToInt16(dataLenBytes, 0);
             // Read the entire AppleRomInformation section using sectionLen as the max search length
             byte[] romSectionData = BinaryUtils.GetBytesAtOffset(sourceBytes, baseOffset + headerLen, sectionLen);
+
             if (romSectionData != null)
             {
                 // Extract data from the romSectionData based on the signature
