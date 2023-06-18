@@ -106,12 +106,5 @@ namespace Mac_EFI_Toolkit.WIN32
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern IntPtr GetModuleHandleA(
             string lpModuleName);
-
-        // https://learn.microsoft.com/en-us/dotnet/framework/unmanaged-api/strong-naming/strongnamesignatureverificationex-function
-        [DllImport("mscorwks.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern bool StrongNameSignatureVerificationEx(
-            string wszFilePath,
-            bool fForceVerification,
-            ref bool pfWasVerified);
     }
 }

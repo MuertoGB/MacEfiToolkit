@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-060">V0.6.0</a> •
   <a href="#version-052">V0.5.2</a> •
   <a href="#version-051">V0.5.1</a> •
   <a href="#version-050">V0.5.0</a> •
@@ -8,6 +9,47 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 0.6.0
+
+#### New:
+- Added firmware-editor window, which includes the following features:-
+> - Ability to replace the Fsys store with a donor.
+- Added a status bar to bottom of the main window:-
+> - Displays the amount of private memory used.
+> - Displays loading animation.
+> - Moved pop-up tips to the status bar.
+- Added editor terms window.
+- Added rom information window.
+- New models added to the internal database.
+- Added button to reload the currently open file, in case external changes are made.
+- Added button to navigate to the currently open file in explorer.
+- Added setting to disable dark messagebox sounds.
+- Added setting to disable tips.
+- Added detected NVRAM stores to the main window.
+- Application can now detect EFI lock.
+
+#### Enhancements:
+- UI improvements.
+- Enhanced parsing of SON data from the Fsys region.
+- Changed how model data is displayed in the main window.
+- Switched drag and drop support to accept all file types (.) instead of specific file formats.
+- Changed the default initial directory to the application directory.
+- Application will now calculate and display any file size discrepancy bytes in the main window.
+- Addressed redundancy for the underlying settings system.
+- Changed default initial directory for Fsys binary files.
+- Replaced the close button in the settings window with an OK button for saving and closing.
+
+#### Bugs:
+- Fixed an issue with the form minimize state in the about window.
+- Fixed the font resolver failing to load embedded resources on some systems.
+- Fixed stability issues that occur when the Fsys region is not found.
+- Fixed the initial directory not being set when a file is dragged onto the main window or the application executable file.
+- Fixed broken shortcut keys (CTRL+A, CTRL+S).
+
+#### Misc:
+- Removed strong name verification due to wine compatibility. Will revisit in the future.
+- Removed valid Fsys enforcement, and counterpart setting.
 
 ## Version 0.5.2
 

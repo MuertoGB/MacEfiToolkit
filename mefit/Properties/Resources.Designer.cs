@@ -61,6 +61,23 @@ namespace Mac_EFI_Toolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The terms outlined below pertain to the usage of the Mac EFI Toolkit
+        ///software. Throughout these terms, &quot;The user&quot; and &quot;You&quot; refer to any
+        ///individual or group utilizing the software, while &quot;The Author&quot; denotes
+        ///the software developer, David Roberts, also known as &quot;Muerto.&quot;
+        ///
+        ///When engaging in actions such as removing a digital lock or altering
+        ///a product&apos;s digital serial number, it is crucial to either legally
+        ///possess the device or obtain appropriate legal authorization, which
+        ///may include possessing the o [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string editorterms {
+            get {
+                return ResourceManager.GetString("editorterms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap imgmuerto64px {
@@ -76,6 +93,16 @@ namespace Mac_EFI_Toolkit.Properties {
         internal static System.Drawing.Bitmap imgSprite {
             get {
                 object obj = ResourceManager.GetObject("imgSprite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap loading {
+            get {
+                object obj = ResourceManager.GetObject("loading", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

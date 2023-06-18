@@ -3,7 +3,6 @@
 
 // Program.cs
 // Released under the GNU GLP v3.0
-// Updated 11.5.23 - Prevent keybook hook being destroyed by the garbage collector. Naughty garbage collector.
 // MET uses embedded font resource "Segoe MDL2 Assets" which is copyright Microsoft Corp.
 
 using Mac_EFI_Toolkit.UI;
@@ -13,6 +12,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -22,14 +22,16 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static string strAppBuild = $"{Application.ProductVersion}-210523-ms4";
-        internal static string strAppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        internal static string strAppName = Assembly.GetExecutingAssembly().Location;
-        internal static string strDraggedFile = string.Empty;
-        internal static bool blUserDraggedFile = false;
+        internal static readonly string appBuild = $"{Application.ProductVersion}.230618.2223";
+        internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
+        internal static string buildsDirectory = Path.Combine(appDirectory, "builds");
+        internal static string appName = Assembly.GetExecutingAssembly().Location;
+        internal static string draggedFile = string.Empty;
+        internal static readonly string closeChar = "\xE947";
 
         #region Private Members
-        private static NativeMethods.LowLevelKeyboardProc _proc = HookCallback;
+        private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
         private static IntPtr _hookId = IntPtr.Zero;
         private static GCHandle _hookHandle;
         #endregion
@@ -48,9 +50,9 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Internal Fonts
-        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
         internal static Font FONT_MDL2_REG_20;
         internal static Font FONT_MDL2_REG_14;
+        internal static Font FONT_MDL2_REG_12;
         internal static Font FONT_MDL2_REG_9;
         #endregion
 
@@ -58,13 +60,6 @@ namespace Mac_EFI_Toolkit
         [STAThread]
         static void Main(string[] args)
         {
-            // Verify integrity of application to ensure it's not corrupt.
-            if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(strAppName))
-            {
-                MessageBox.Show("The assembly signature is invalid, or cannot be verified!\r\nYou should discard of, and reacquire the file.",
-                    "Signature Verification", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
             // Default framework stuff.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -79,30 +74,22 @@ namespace Mac_EFI_Toolkit
 
             // Font Data
             byte[] fontData = Properties.Resources.segmdl2;
-            FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData, 9.0F), FontStyle.Regular);
-            FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData, 14.0F), FontStyle.Regular);
-            FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData, 20.0F), FontStyle.Regular);
+            FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
+            FONT_MDL2_REG_12 = new Font(LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
+            FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
+            FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
 
             // Settings
             if (!File.Exists(Settings.strSettingsFilePath)) Settings.SettingsCreateFile();
-            // We will grab settings on the fly. Thanks Kyle and Daz. I will blame if anything goes sideways. Peace out.
 
             // Register application exit event.
             Application.ApplicationExit += OnExiting;
 
             // Register low level keyboard hook for preventing WinKey+Up.
-            hookKeyboard();
+            HookKeyboard();
 
-            // Get dragged filepath and set bool
-            if (args.Length > 0)
-            {
-                string strDraggedFileName = args[0];
-                if (File.Exists(strDraggedFileName) && Path.GetExtension(strDraggedFileName).Equals(".bin", StringComparison.OrdinalIgnoreCase))
-                {
-                    blUserDraggedFile = true;
-                    strDraggedFile = strDraggedFileName;
-                }
-            }
+            // Get dragged filepath
+            draggedFile = GetDraggedFilePath(args);
 
             // Run mainWindow.
             Application.Run(new mainWindow());
@@ -111,18 +98,29 @@ namespace Mac_EFI_Toolkit
         private static void OnExiting(object sender, EventArgs e)
         {
             // Unhook the keyboard hook before exiting the application.
-            unhookKeyboard();
+            UnhookKeyboard();
         }
+
+        private static string GetDraggedFilePath(string[] args)
+        {
+            if (args.Length > 0 && File.Exists(args[0]))
+            {
+                return args[0];
+            }
+
+            return string.Empty;
+        }
+
         #endregion
 
         #region Hooks
         // Register the keyboard hook.
-        internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc proc)
+        internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc kbProc)
         {
             using (Process process = Process.GetCurrentProcess())
             using (ProcessModule module = process.MainModule)
             {
-                return NativeMethods.SetWindowsHookExA(WH_KEYBOARD_LL, proc, NativeMethods.GetModuleHandleA(module.ModuleName), 0);
+                return NativeMethods.SetWindowsHookExA(WH_KEYBOARD_LL, kbProc, NativeMethods.GetModuleHandleA(module.ModuleName), 0);
             }
         }
 
@@ -141,14 +139,14 @@ namespace Mac_EFI_Toolkit
             return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
         }
 
-        private static void hookKeyboard()
+        private static void HookKeyboard()
         {
-            _proc = HookCallback;
-            _hookHandle = GCHandle.Alloc(_proc);
-            _hookId = SetHook(_proc);
+            _kbProc = HookCallback;
+            _hookHandle = GCHandle.Alloc(_kbProc);
+            _hookId = SetHook(_kbProc);
         }
 
-        private static void unhookKeyboard()
+        private static void UnhookKeyboard()
         {
             NativeMethods.UnhookWindowsHookEx(_hookId);
             _hookHandle.Free();
@@ -156,25 +154,26 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Font Resolver
-
-        public static Font LoadFontFromResource(byte[] fontData, float fontSize)
+        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
+        internal static FontFamily LoadFontFromResource(byte[] fontData)
         {
-            // Pin the font data so we can get a pointer to it
-            GCHandle handle = GCHandle.Alloc(fontData, GCHandleType.Pinned);
-            IntPtr pointer = handle.AddrOfPinnedObject();
+            IntPtr pFileView = Marshal.AllocCoTaskMem(fontData.Length);
+            Marshal.Copy(fontData, 0, pFileView, fontData.Length);
 
-            // Add the font to PrivateFontCollection
-            _privateFontCollection.AddMemoryFont(pointer, fontData.Length);
-
-            // Create a font object from the font family and font size
-            FontFamily fontFamily = _privateFontCollection.Families[_privateFontCollection.Families.Length - 1];
-            Font font = new Font(fontFamily, fontSize);
-
-            // Free the pinned handle
-            handle.Free();
-
-            // Return the loaded font
-            return font;
+            try
+            {
+                uint pNumFonts = 0;
+                NativeMethods.AddFontMemResourceEx(pFileView, (uint)fontData.Length, IntPtr.Zero, ref pNumFonts);
+                _privateFontCollection.AddMemoryFont(pFileView, fontData.Length);
+                return _privateFontCollection.Families.Last();
+            }
+            finally
+            {
+                if (pFileView != IntPtr.Zero)
+                {
+                    Marshal.FreeCoTaskMem(pFileView);
+                }
+            }
         }
         #endregion
 
@@ -196,7 +195,7 @@ namespace Mac_EFI_Toolkit
             string message = e.Message.ToString();
             string exception = e.ToString();
 
-            Logger.writeLogFile($"{type}:- {message}\r\n\r\n{exception}\r\n\r\n -------------------", LogType.Application);
+            Logger.WriteToLogFile($"{type}:- {message}\r\n\r\n{exception}\r\n\r\n -------------------", LogType.Application);
 
             DialogResult result = MessageBox.Show(message + "\r\n\r\n" + exception + "\r\n\r\n" + "Quit application?",
                 type, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
@@ -204,7 +203,7 @@ namespace Mac_EFI_Toolkit
             switch (result)
             {
                 case DialogResult.Yes:
-                    unhookKeyboard(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit.
+                    UnhookKeyboard(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit.
                     Environment.Exit(-1);
                     break;
                 case DialogResult.No:
@@ -245,6 +244,34 @@ namespace Mac_EFI_Toolkit
                 {
                     Application.Exit();
                 }
+            }
+        }
+        #endregion
+
+        #region Process
+        internal static long GetPrivateMemorySize()
+        {
+            using (Process currentProcess = Process.GetCurrentProcess())
+            {
+                return currentProcess.PrivateMemorySize64;
+            }
+        }
+        #endregion
+
+        #region Paths and Directories
+        internal static void CheckCreateFsysFolder()
+        {
+            if (!Directory.Exists(fsysDirectory))
+            {
+                Directory.CreateDirectory(fsysDirectory);
+            }
+        }
+
+        internal static void CreateCheckBuildsFolder()
+        {
+            if (!Directory.Exists(buildsDirectory))
+            {
+                Directory.CreateDirectory(buildsDirectory);
             }
         }
         #endregion

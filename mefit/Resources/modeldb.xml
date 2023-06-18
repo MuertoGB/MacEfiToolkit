@@ -33537,6 +33537,10 @@
     <model>iPhone SE</model>
 </section>
 <section>
+	<cfgCode>HV22</cfgCode>
+	<model>MacBook Pro (13-inch, 2017, Two Thunderbolt 3 ports)</model>
+</section>
+<section>
     <cfgCode>HV27</cfgCode>
     <model>MacBook Pro (13-inch, 2017, Two Thunderbolt 3 ports)</model>
 </section>
@@ -33547,6 +33551,10 @@
 <section>
     <cfgCode>HV2D</cfgCode>
     <model>MacBook Pro (13-inch, 2017, Two Thunderbolt 3 ports)</model>
+</section>
+<section>
+    <cfgCode>HV2F</cfgCode>
+	<model>MacBook Pro (13-inch, 2017, Two Thunderbolt 3 ports)</model>
 </section>
 <section>
     <cfgCode>HV2G</cfgCode>
@@ -33560,6 +33568,10 @@
     <cfgCode>HV2J</cfgCode>
     <model>MacBook Pro (13-inch, 2017, Two Thunderbolt 3 ports)</model>
 </section>
+<section>
+    <cfgCode>HV2N</cfgCode>
+    <model>MacBook Pro (13-inch, 2017, Four Thunderbolt 3 Ports)</model>
+</section>	
 <section>
     <cfgCode>HV2Q</cfgCode>
     <model>MacBook Pro (13-inch, 2017, Four Thunderbolt 3 Ports)</model>
@@ -33579,6 +33591,14 @@
 <section>
     <cfgCode>J1G6</cfgCode>
     <model>iMac (Retina 4K, 21.5-inch, 2017)</model>
+</section>
+<section>
+	<cfgCode>J1GG</cfgCode>
+	<model>iMac (Retina 5K, 27-inch, 2017)</model>
+</section>
+<section>
+    <cfgCode>J1GJ</cfgCode>
+	<model>iMac (Retina 5K, 27-inch, 2017)</model>
 </section>
 <section>
     <cfgCode>J1GT</cfgCode>

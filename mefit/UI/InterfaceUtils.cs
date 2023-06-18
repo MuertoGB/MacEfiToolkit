@@ -15,7 +15,7 @@ namespace Mac_EFI_Toolkit.UI
     {
         internal static async void FlashForecolor(Control control)
         {
-            if (!Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI)) // TODO - Should this really be here?
+            if (!Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI))
             {
                 Color originalColor = control.ForeColor;
                 for (int i = 0; i < 3; i++)

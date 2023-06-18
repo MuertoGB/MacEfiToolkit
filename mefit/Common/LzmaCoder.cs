@@ -12,25 +12,25 @@ namespace Mac_EFI_Toolkit
 {
     class LzmaCoder
     {
-        internal static byte[] Decompress(byte[] sourceBytes)
+        internal static byte[] DecompressBytes(byte[] sourceBytes)
         {
-            var decoder = new LzmaDecoder();
-            var msOutput = new MemoryStream();
+            var lzmaDecoder = new LzmaDecoder();
+            var decompressedStream = new MemoryStream();
 
-            using (var msInput = new MemoryStream(sourceBytes))
+            using (var compressedInput = new MemoryStream(sourceBytes))
             {
-                var lzmaProp = new byte[5];
-                msInput.Read(lzmaProp, 0, 5); // Sig + Dict Size
+                var propertyBytes = new byte[5];
+                compressedInput.Read(propertyBytes, 0, 5);
 
-                var decompLength = new byte[8];
-                msInput.Read(decompLength, 0, 8);
-                var fileLength = BitConverter.ToInt64(decompLength, 0); // Decompressed Size
+                var decompressedLength = new byte[8];
+                compressedInput.Read(decompressedLength, 0, 8);
+                var fileLength = BitConverter.ToInt64(decompressedLength, 0);
 
-                decoder.SetDecoderProperties(lzmaProp);
-                decoder.Code(msInput, msOutput, msInput.Length, fileLength, null);
+                lzmaDecoder.SetDecoderProperties(propertyBytes);
+                lzmaDecoder.Code(compressedInput, decompressedStream, compressedInput.Length, fileLength, null);
             }
 
-            return msOutput.ToArray();
+            return decompressedStream.ToArray();
         }
     }
 }

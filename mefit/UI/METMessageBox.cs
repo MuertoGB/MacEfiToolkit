@@ -56,6 +56,9 @@ namespace Mac_EFI_Toolkit.UI
             lblTitle.MouseMove += metMessage_MouseMove;
             Load += new EventHandler(METMessageBox_Load);
             Shown += new EventHandler(METMessageBox_Shown);
+
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
         }
         #endregion
 
@@ -105,7 +108,11 @@ namespace Mac_EFI_Toolkit.UI
 
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
-            ssMmbSound.Play();
+            if (!Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds))
+            {
+                ssMmbSound.Play();
+            }
+
             InterfaceUtils.FlashForecolor(lblTitle);
             InterfaceUtils.FlashForecolor(cmdClose);
         }
@@ -150,7 +157,14 @@ namespace Mac_EFI_Toolkit.UI
         #region Button Events
         private void cmdCancel_Click(object sender, EventArgs e)
         {
-            drMmbResult = DialogResult.Cancel;
+            if (mbMmbButton == MsgButton.Okay)
+            {
+                drMmbResult = DialogResult.OK;
+            }
+            else
+            {
+                drMmbResult = DialogResult.Cancel;
+            }
             Close();
         }
 

@@ -83,7 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\FSGuids.cs" />
-    <Compile Include="Common\FSSignatures.cs" />
+    <Compile Include="Common\FWBase.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Common\MEParser.cs" />
@@ -102,12 +102,13 @@
     <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBit.cs" />
     <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBitTree.cs" />
     <Compile Include="Common\SevenZip\ICoder.cs" />
-    <Compile Include="Common\FirmwareParser.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="METVersion.cs" />
-    <Compile Include="AssemblyVerifier.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
+    <Compile Include="UI\METLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\METMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +120,18 @@
     </Compile>
     <Compile Include="WinForms\aboutWindow.Designer.cs">
       <DependentUpon>aboutWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\editorWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\editorWindow.Designer.cs">
+      <DependentUpon>editorWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\infoWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\infoWindow.Designer.cs">
+      <DependentUpon>infoWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="WinForms\mainWindow.cs">
       <SubType>Form</SubType>
@@ -145,11 +158,24 @@
     <Compile Include="WinForms\settingsWindow.Designer.cs">
       <DependentUpon>settingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinForms\termsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\termsWindow.Designer.cs">
+      <DependentUpon>termsWindow.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="UI\METMessageBox.resx">
       <DependentUpon>METMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\aboutWindow.resx">
       <DependentUpon>aboutWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\editorWindow.resx">
+      <DependentUpon>editorWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\infoWindow.resx">
+      <DependentUpon>infoWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\mainWindow.resx">
       <DependentUpon>mainWindow.cs</DependentUpon>
@@ -166,6 +192,9 @@
     </Compile>
     <EmbeddedResource Include="WinForms\settingsWindow.resx">
       <DependentUpon>settingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\termsWindow.resx">
+      <DependentUpon>termsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
@@ -188,6 +217,8 @@
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\loading.gif" />
+    <None Include="Assets\editorterms.txt" />
     <Content Include="Assets\met.ico" />
     <None Include="Resources\modeldb.xml" />
     <None Include="Resources\imgmuerto64px.png" />

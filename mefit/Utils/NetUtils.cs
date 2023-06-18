@@ -11,20 +11,21 @@ namespace Mac_EFI_Toolkit.Utils
 {
     class NetUtils
     {
+
         /// <summary>
         /// Checks if a website is available by making a HEAD request to its URL.
         /// </summary>
-        /// <param name="strUrl">The URL of the website to check.</param>
+        /// <param name="urlString">The URL of the website to check.</param>
         /// <returns>True if the website is available, false otherwise.</returns>
-        internal static bool GetIsWebsiteAvailable(string strUrl)
+        internal static bool GetIsWebsiteAvailable(string urlString)
         {
             try
             {
                 WebRequest req;
-                req = WebRequest.Create(strUrl);
+                req = WebRequest.Create(urlString);
                 req.Timeout = 5000;
                 req.Method = "HEAD";
-                using (var res = req.GetResponse())
+                using (var result = req.GetResponse())
                 {
                     return true;
                 }
@@ -34,6 +35,7 @@ namespace Mac_EFI_Toolkit.Utils
                 return false;
             }
         }
+
         /// <summary>
         /// Checks if a network connection is available by attempting to send a ping request to a known IP address.
         /// </summary>
@@ -57,5 +59,6 @@ namespace Mac_EFI_Toolkit.Utils
                 return false;
             }
         }
+
     }
 }

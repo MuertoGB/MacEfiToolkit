@@ -25,45 +25,86 @@ namespace Mac_EFI_Toolkit.Common
         internal ushort FlashCycleLimit;
         internal uint UmaSize;
         internal uint Flags;
-        internal ushort Major;
-        internal ushort Minor;
-        internal ushort Hotfix;
-        internal ushort Build;
+        internal ushort FitMajor;
+        internal ushort FitMinor;
+        internal ushort FitHotfix;
+        internal ushort FitBuild;
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct Mn2PartialHeader
     {
-        // Right now we don't care about the pre-signature stuff, only the ME Version.
+        // Right now we only care about the ME version.
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal char[] Signature;
         internal uint NumEntries;
-        internal ushort Major;
-        internal ushort Minor;
-        internal ushort Hotfix;
-        internal ushort Build;
+        internal ushort EngineMajor;
+        internal ushort EngineMinor;
+        internal ushort EngineHotfix;
+        internal ushort EngineBuild;
+    }
+    #endregion
+
+    #region Enum
+    internal enum HeaderType
+    {
+        FlashImageTool,
+        ManagementEngine
     }
     #endregion
 
     class MEParser
     {
-        internal static string GetFITCVersion(byte[] bytesIn)
+        internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
         {
-            var offset = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.FPT_HEADER_SIG);
-            if (offset == -1) return "Not found";
-            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, offset, 0x20);
-            if (headerBytes == null) return "Not found";
-            var header = Helper.DeserializeHeader<FptHeader>(headerBytes);
-            return $"{header.Major}.{header.Minor}.{header.Hotfix}.{header.Build}";
+            long headerPos = -1; int readLen = 0; string result = null;
+
+            switch (headerType)
+            {
+                case HeaderType.FlashImageTool:
+                    headerPos = BinaryUtils.GetOffset(sourceBytes, FPT_SIGNATURE);
+                    readLen = 0x20;
+                    break;
+
+                case HeaderType.ManagementEngine:
+                    headerPos = BinaryUtils.GetOffset(sourceBytes, MN2_SIGNATURE);
+                    readLen = 0x10;
+                    break;
+            }
+
+            if (headerPos != -1)
+            {
+                var headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerPos, readLen);
+                if (headerBytes != null)
+                {
+                    if (headerType == HeaderType.FlashImageTool)
+                    {
+                        var fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
+                        result = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
+                    }
+                    else if (headerType == HeaderType.ManagementEngine)
+                    {
+                        var mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
+                        result = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
+                    }
+                }
+            }
+
+            if (result == "0.0.0.0") return null;
+
+            return result;
         }
-        internal static string GetMEVersion(byte[] bytesIn)
+
+
+        internal static readonly byte[] FPT_SIGNATURE =
         {
-            var offset = BinaryUtils.GetLongOffset(bytesIn, FSSignatures.MN2_SIG);
-            if (offset == -1) return "Not found";
-            var headerBytes = BinaryUtils.GetBytesAtOffset(bytesIn, offset, 0x10);
-            if (headerBytes == null) return "Not found";
-            var header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
-            return $"{header.Major}.{header.Minor}.{header.Hotfix}.{header.Build}";
-        }
+            0x24, 0x46, 0x50, 0x54
+        };
+
+        internal static readonly byte[] MN2_SIGNATURE =
+        {
+            0x24, 0x4D, 0x4E, 0x32
+        };
+
     }
 }

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI.Renderers
 {
+
     class METMenuRenderer : ToolStripRenderer
     {
         private Color BorderColor = Color.FromArgb(120, 120, 120);
@@ -26,6 +27,7 @@ namespace Mac_EFI_Toolkit.UI.Renderers
                 e.Graphics.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
         }
+
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
             Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
@@ -38,6 +40,7 @@ namespace Mac_EFI_Toolkit.UI.Renderers
                 }
             }
         }
+
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
             if (e.Vertical || !(e.Item is ToolStripSeparator))
@@ -47,7 +50,7 @@ namespace Mac_EFI_Toolkit.UI.Renderers
             else
             {
                 Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
-                int y = (int)(rect.Bottom - (rect.Height / 2) - 1);
+                int y = rect.Bottom - (rect.Height / 2) - 1;
                 int left = rect.Left + 5;
                 int right = rect.Right - 5;
 
@@ -62,5 +65,6 @@ namespace Mac_EFI_Toolkit.UI.Renderers
                 }
             }
         }
+
     }
 }

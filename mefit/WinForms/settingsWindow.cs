@@ -17,7 +17,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         #region Private Members
         private static string _strNewOfdInitialPath = string.Empty;
-        private bool _bIsTimerRunning = false;
+        private Timer _timer;
         #endregion
 
         #region Overrides Properties
@@ -26,7 +26,6 @@ namespace Mac_EFI_Toolkit.WinForms
             get
             {
                 CreateParams Params = base.CreateParams;
-                // Params.Style |= Program.WS_MINIMIZEBOX; (Not necessary, window cannot be minimized)
                 Params.ClassStyle = Params.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
                 return Params;
             }
@@ -41,26 +40,17 @@ namespace Mac_EFI_Toolkit.WinForms
             lblTitle.MouseMove += settingsWindow_MouseMove;
             Load += settingsWindow_Load;
             KeyDown += aboutWindow_KeyDown;
+
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.closeChar;
         }
         #endregion
 
         #region Window Events
         private void settingsWindow_Load(object sender, EventArgs e)
         {
-            lblSettingsUpdated.Hide();
-            _updateControls();
-        }
-
-        private void _updateControls()
-        {
-            cbxDisableVersionCheck.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck)) ? true : false;
-            cbxDisableFlashingUI.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI)) ? true : false;
-            cbxDisableConfDiag.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag)) ? true : false;
-            cbxDisableLzmaFsSearch.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch)) ? true : false;
-            cbxDisableFsysEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableFsysEnforce)) ? true : false;
-            cbxDisableDescriptorEnforce.Checked = (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce)) ? true : false;
-            cbxAcceptedEditingTerms.Enabled = (Settings.SettingsGetBool(SettingsBoolType.AcceptedEditingTerms)) ? true : false;
-            cbxAcceptedEditingTerms.Checked = (Settings.SettingsGetBool(SettingsBoolType.AcceptedEditingTerms)) ? true : false;
+            lblSettingsApplied.Hide();
+            UpdateCheckBoxControls();
         }
         #endregion
 
@@ -78,7 +68,10 @@ namespace Mac_EFI_Toolkit.WinForms
         #region KeyDown Events
         private void aboutWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape) Close();
+            if (e.KeyCode == Keys.Escape)
+            {
+                Close();
+            }
         }
         #endregion
 
@@ -88,17 +81,11 @@ namespace Mac_EFI_Toolkit.WinForms
             Close();
         }
 
-        private void cmdEditingTerms_Click(object sender, EventArgs e)
-        {
-            // User accepts terms
-            cbxAcceptedEditingTerms.Enabled = true;
-        }
-
         private void cmdEditCustomPath_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
-                fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty) ? Settings.strDefaultOfdPath : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+                fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty) ? Program.appDirectory : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
                 fbd.Description = "Select a folder";
                 fbd.ShowNewFolderButton = false;
 
@@ -109,61 +96,77 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
-        private void cmdCloseForm_Click(object sender, EventArgs e)
+        private void cmdOkay_Click(object sender, EventArgs e)
         {
+            cmdApply.PerformClick();
             Close();
         }
 
         private void cmdApply_Click(object sender, EventArgs e)
         {
-            // Here we are simply using the bool value from a checkboxes state. Nice and simple.
             Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, cbxDisableVersionCheck.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, cbxDisableFlashingUI.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, cbxDisableMessageSounds.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableTips, cbxDisableTips.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
             if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
-            Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, cbxDisableFsysEnforce.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
-            //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
-            _showSettingsUpdatedLabel();
+            _showSettingsAppliedLabel();
         }
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
-            // Here we are simply using the bool value from a checkboxes state. Nice and simple.
             Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, false);
+            Settings.SettingsSetBool(SettingsBoolType.DisableTips, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, false);
-            if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, Settings.strDefaultOfdPath);
+            Settings.SettingsSetString(SettingsStringType.InitialDirectory, Program.appDirectory);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
-            Settings.SettingsSetBool(SettingsBoolType.DisableFsysEnforce, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
-            //Settings._settingsSetBool(SettingsBoolType.AcceptedEditingTerms, cbxAcceptedEditingTerms.Checked); // Not used yet.
-            _updateControls();
-            _showSettingsUpdatedLabel();
+            UpdateCheckBoxControls();
+            _showSettingsAppliedLabel();
+        }
+        #endregion
+
+        #region Label Events
+        private void _showSettingsAppliedLabel()
+        {
+            lblSettingsApplied.Show();
+
+            if (_timer != null && _timer.Enabled)
+            {
+                _timer.Stop();
+                _timer.Dispose();
+            }
+
+            _timer = new Timer
+            {
+                Interval = 2000
+            };
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
         }
 
-        private void _showSettingsUpdatedLabel()
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            if (!_bIsTimerRunning)
-            {
-                lblSettingsUpdated.Show();
-                //InterfaceUtils.FlashForecolor(lblSettingsUpdated);
+            lblSettingsApplied.Hide();
+            _timer.Stop();
+            _timer.Dispose();
+        }
+        #endregion
 
-                var timer = new System.Windows.Forms.Timer();
-
-                timer.Interval = 2000;
-                timer.Tick += (sender, e) =>
-                {
-                    lblSettingsUpdated.Hide();
-                    timer.Stop();
-                    timer.Dispose();
-                    _bIsTimerRunning = false;
-                };
-
-                timer.Start();
-                _bIsTimerRunning = true;
-            }
+        #region Checkbox Events
+        private void UpdateCheckBoxControls()
+        {
+            cbxDisableVersionCheck.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck) ? true : false;
+            cbxDisableFlashingUI.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI) ? true : false;
+            cbxDisableMessageSounds.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds) ? true : false;
+            cbxDisableTips.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableTips) ? true : false;
+            cbxDisableConfDiag.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag) ? true : false;
+            cbxDisableLzmaFsSearch.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch) ? true : false;
+            cbxDisableDescriptorEnforce.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce) ? true : false;
         }
         #endregion
 

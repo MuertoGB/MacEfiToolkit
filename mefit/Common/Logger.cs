@@ -6,62 +6,104 @@
 
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
 
+    #region Enum
     internal enum LogType
     {
         Application,
         Database
     }
 
+    public enum RtbLogPrefix
+    {
+        Good,
+        Info,
+        Warn,
+        Error
+    }
+    #endregion
+
     class Logger
     {
-        internal static readonly string strLogFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mefit.log");
-        internal static readonly string strDbReportPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dbreport.log");
+        internal static string strLogFilePath = Path.Combine(Program.appDirectory, "mefit.log");
+        internal static string strDbReportPath = Path.Combine(Program.appDirectory, "dbreport.log");
 
-        internal static void writeLogFile(string logMessage, LogType logType)
+        internal static void WriteToLogFile(string logMessage, LogType logType)
         {
-            string logFilePath = GetLogFilePath(logType);
+            var pathString = GetLogFilePath(logType);
 
-            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            using (var writer = new StreamWriter(pathString, true))
             {
-                writer.WriteLine($"{DateTime.Now.ToString()} : {logMessage}");
+                writer.WriteLine($"{DateTime.Now} : {logMessage}");
             }
         }
 
-        internal static void viewLogFile(LogType logType)
+        internal static void ViewLogFile(LogType logType)
         {
-            string logFilePath = GetLogFilePath(logType);
+            var pathString = GetLogFilePath(logType);
 
-            if (File.Exists(logFilePath))
+            if (File.Exists(pathString))
             {
-                Process.Start(logFilePath);
+                Process.Start(pathString);
             }
         }
 
         private static string GetLogFilePath(LogType logType)
         {
-            string logFilePath;
+            string pathString;
 
             switch (logType)
             {
                 case LogType.Application:
-                    logFilePath = strLogFilePath;
+                    pathString = strLogFilePath;
                     break;
                 case LogType.Database:
-                    logFilePath = strDbReportPath;
+                    pathString = strDbReportPath;
                     break;
                 default:
-                    logFilePath = strLogFilePath;
+                    pathString = strLogFilePath;
                     break;
             }
 
-            return logFilePath;
+            return pathString;
         }
 
+        internal static void WriteLogTextToRtb(string messageString, RtbLogPrefix logPrefix, RichTextBox richTextBox)
+        {
+            Color prefixColor;
+            string timestamp = $"{DateTime.Now:HH:mm:ss}: ";
+
+            switch (logPrefix)
+            {
+                case RtbLogPrefix.Good:
+                    prefixColor = Color.FromArgb(0, 200, 0);
+                    break;
+                case RtbLogPrefix.Info:
+                    prefixColor = Color.FromArgb(0, 122, 204);
+                    break;
+                case RtbLogPrefix.Warn:
+                    prefixColor = Color.FromArgb(255, 165, 0);
+                    break;
+                case RtbLogPrefix.Error:
+                    prefixColor = Color.FromArgb(255, 51, 51);
+                    break;
+                default:
+                    prefixColor = Color.White;
+                    break;
+            }
+
+            richTextBox.AppendText(timestamp);
+            richTextBox.Select(richTextBox.TextLength - timestamp.Length, timestamp.Length - 1);
+            richTextBox.SelectionColor = prefixColor;
+            richTextBox.AppendText(messageString + Environment.NewLine);
+            richTextBox.ScrollToCaret();
+        }
 
     }
 }

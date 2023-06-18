@@ -4,8 +4,7 @@
 Mac EFI Toolkit
 </h1>
 
-<h4 align="center">A tool for repairing and modifying data in Mac EFI binaries. </h4>
-
+<h4 align="center">A tool for viewing and repairing data in Mac EFI binaries</h4>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
@@ -17,54 +16,58 @@ Mac EFI Toolkit
 
 ## About
 
->🛠 Current Status: Working on database implementation.
+This application is in active development, it is currently unfinished.
+>🛠 Current Status: Working on finishing the editor.
 
-Mac EFI Toolkit is a firmware repair tool designed to aid technicians in repair of a Mac EFIROM (BIOS).
-
-This application is currently under development, it is by no means complete, fully functional, or final. There is much more to complete; however functionality such as viewing ROM information, dumping the Fsys region, and repairing the Fsys crc32 is working. It has been uploaded per request, now anyone interested can get involved and ask questions.
+Mac EFI Toolkit, or 'mefit' is a Mac EFIROM information gathering tool designed to aid technicians in repair of a Mac BIOS firmware, with limited editing capability.
 
 <img width="550" src="files/images/met.png" alt="MET">
 <img width="550" src="files/images/met_alt.png" alt="MET_ALT">
 
 ## Features
 
-| Suggested features                                         | Status      |
-|------------------------------------------------------------|-------------|
-| Knuth–Morris–Pratt algorithm for searching binary offsets  |🟢 Completed |
-| Ability to detect APFSJumpStart DXE                        |🟢 Completed |
-| Check serial number with EveryMac							 |🟢 Completed |
-| View FITC and ME version						             |🟢 Completed |
-| Detect and fix invalid Fsys checksums                      |🟢 Completed |
-| Move from server to database for fetching config code      |🟢 Completed |
-| View ROM information                                       |🟡 Partially Completed |
-| Dump and replace Fsys block                                |🟡 Partially Completed |
-| Replace serial with automatic HWC and CRC32 calculation    |🟡 Partially Completed |
-| Clear NVRAM and EFI lock with header preservation          |🟠 Not Started |
-| Detect MDM status in the NVRAM                             |🔴 Undecided |
-| Detect email address in the NVRAM                          |🔴 Undecided |
-| Configure ME region	                                     |🔴 Undecided |
+**EFIROM:**
+- Original binary files left untouched.
+- Knuth–Morris–Pratt algorithm for searching binary data.
+- Detect and repair invalid Fsys store checksum.
+- View information in the Fsys store.
+- Check serial number with EveryMac.
+- Export Fsys store from the NVRAM.
+- View ROM section information.
+- View FIT and ME versions.
+- Detect EFI password lock.
+- View configuration code.
+- Detect APFS capability.
+- Validate binary size.
 
-When the editing features are implemented, original files will be left untouched. The new binary will be built from a copy in memory.
-
-**Implemented application features:**
-```
+**Application:**
 - Automatic handling of uncaught errors
 - Drag and drop support for .bin files
 - No installation necessary
 - DPI scaling support
-- Integrity checking
 - Memory Management
 - Version checking
-```
 
-Plus more, only time will tell.
+**TODO**
+- [x] Replace the Fsys block
+- [ ] Clear NVRAM (SVS, VSS, NSS) with section header preservation
+- [ ] Add option to replace serial number
+> ℹ️ The editor is in active development
+- [ ] Complete the logging systems
+
+| SUGGESTED FEATURES                   | Status      |
+|--------------------------------------|-------------|
+| Detect MDM status                    |🔴 Undecided |
+| Detect email address in the NVRAM    |🔴 Undecided |
+| Configure ME region	               |🔴 Undecided |
 
 ## Download
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[0.5.2](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/052)| 21st May 2023 | Yes | BETA |
-|[0.5.1](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/051)| 15th May 2023 | No | BETA |
+|[0.6.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Yes | BETA |
+
+> 📋 View the full changelog [here](CHANGELOG.md)
 
 ## Requirements
 
@@ -78,23 +81,6 @@ Plus more, only time will tell.
 **Build requirements:**
 - Visual Studio 2019 or higher
 
-Open `mefit.sln` in Visual Studio, you'll then need to either disable signing, sign the application yourself by creating a new personal information exchange cert (.pfx), or disable the signature check, otherwise the application will show an invalid signature error.
-
-- From the Visual Studio menu, click "Project > mefit Properties > Signing".
-- Either uncheck `Sign the assembly`, then comment out the code below, or...
-- Create a new .pfx, then sign the assembly, or...
-- Ignore everything above and just comment out the code below to skip validation.
-
-**mefit/Program.vb (main() entry point):**
-```cs
-// Verify integrity of application to ensure it's not corrupt.
-if (!AssemblyVerifier.VerifyAssemblyStrongNameSignature(strAppName))
-{
-	MessageBox.Show("The assembly signature is invalid, or cannot be verified!\r\nYou should discard of, and reacquire the file.",
-                    "Signature Verification", MessageBoxButtons.OK, MessageBoxIcon.Error);
-}
-```
-
 ## Acknowledgements
 
 #### This software uses the following third party libraries, or resources:-
@@ -106,6 +92,6 @@ Application icon by [Creatype](https://www.flaticon.com/free-icon/toolkit_645709
 
 ## Donate
 
-All donations go back into improving my tools and workspace.
+All donations go back into improving my software and workspace.
 
 <a href="https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ"><img width="160" src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal Logo" vspace="5" hspace="5"></a>
