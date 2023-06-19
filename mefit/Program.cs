@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}.230618.2223";
+        internal static readonly string appBuild = $"{Application.ProductVersion}.230619.0244";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
         internal static string buildsDirectory = Path.Combine(appDirectory, "builds");

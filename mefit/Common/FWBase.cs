@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 #region Structs
 internal struct FileInfoData
@@ -86,9 +87,11 @@ internal struct NvramStoreSection
     internal int PrimaryStoreSize { get; set; }
     internal long PrimaryStoreOffset { get; set; }
     internal byte[] PrimaryStoreBytes { get; set; }
+    internal bool IsPrimaryStoreEmpty { get; set; }
     internal int BackupStoreSize { get; set; }
     internal long BackupStoreOffset { get; set; }
     internal byte[] BackupStoreBytes { get; set; }
+    internal bool IsBackupStoreEmpty { get; set; }
     internal int PaddingLength { get; set; }
 }
 #endregion
@@ -134,7 +137,7 @@ namespace Mac_EFI_Toolkit.Common
         internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
         internal const int FSYS_RGN_SIZE = 0x800;      // 2048 bytes
 
-        private static Encoding _utf8 = Encoding.UTF8;
+        private static readonly Encoding _utf8 = Encoding.UTF8;
 
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
@@ -155,6 +158,7 @@ namespace Mac_EFI_Toolkit.Common
             {
                 IsEfiLocked = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes);
             }
+
         }
 
         #region File Information
@@ -310,7 +314,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 if (hwcPos != -1)
                 {
-                    var hwcReadLen = 0x04;
+                    var hwcReadLen = 0x4;
                     byte[] hwcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, hwcPos + hwcStartPos, hwcReadLen);
 
                     if (hwcBytes != null)
@@ -416,7 +420,8 @@ namespace Mac_EFI_Toolkit.Common
         internal static NvramStoreSection GetNvramStoreData(byte[] sourceBytes, NvramStoreType headerType)
         {
             var nvramSig = GetNvramSignature(headerType);
-            int paddingLen = 0;
+            int paddingLen = 0; int headerLen = 0x10;
+            bool isPsEmpty = true; bool isBsEmpty = true;
 
             var psLen = -1; long psPos = -1; byte[] psData = null;
 
@@ -438,6 +443,12 @@ namespace Mac_EFI_Toolkit.Common
                     psLen = psHeader.SizeOfData;
                     psPos = primaryPos;
                     psData = BinaryUtils.GetBytesAtOffset(sourceBytes, psPos, psLen);
+
+                    if (psData != null)
+                    {
+                        byte[] psBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, psPos + headerLen, psLen - headerLen);
+                        isPsEmpty = BinaryUtils.IsByteBlockEmpty(psBodyData);
+                    }
 
                     // Count the number of 0xFF values in the padding
                     for (int i = (int)(psPos + psLen); i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
@@ -461,6 +472,12 @@ namespace Mac_EFI_Toolkit.Common
                         bsLen = bsHeader.SizeOfData;
                         bsPos = backupPos;
                         bsData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos, bsLen);
+
+                        if (psData != null)
+                        {
+                            byte[] bsBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos + headerLen, bsLen - headerLen);
+                            isBsEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
+                        }
                     }
                 }
             }
@@ -470,9 +487,11 @@ namespace Mac_EFI_Toolkit.Common
                 PrimaryStoreSize = psLen,
                 PrimaryStoreOffset = psPos,
                 PrimaryStoreBytes = psData,
+                IsPrimaryStoreEmpty = isPsEmpty,
                 BackupStoreSize = bsLen,
                 BackupStoreOffset = bsPos,
                 BackupStoreBytes = bsData,
+                IsBackupStoreEmpty = isBsEmpty,
                 PaddingLength = paddingLen
             };
         }
@@ -484,9 +503,11 @@ namespace Mac_EFI_Toolkit.Common
                 PrimaryStoreSize = -1,
                 PrimaryStoreOffset = -1,
                 PrimaryStoreBytes = null,
+                IsPrimaryStoreEmpty = true,
                 BackupStoreSize = -1,
                 BackupStoreOffset = -1,
                 BackupStoreBytes = null,
+                IsBackupStoreEmpty = true,
                 PaddingLength = 0
             };
         }
