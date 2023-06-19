@@ -75,7 +75,7 @@ namespace Mac_EFI_Toolkit.UI
                     ssMmbSound = System.Media.SystemSounds.Hand;
                     break;
                 case MsgType.Warning:
-                    lblMessageIcon.ForeColor = Colours.clrUnknown;
+                    lblMessageIcon.ForeColor = Colours.clrWarn;
                     lblMessageIcon.Text = "\xE7BA";
                     ssMmbSound = System.Media.SystemSounds.Exclamation;
                     break;

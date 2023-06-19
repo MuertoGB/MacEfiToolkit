@@ -517,7 +517,7 @@ namespace Mac_EFI_Toolkit
             int fileLength = (int)FWBase.FileInfoData.FileLength;
             bool isValidSize = FileUtils.GetIsValidBinSize(fileLength);
             lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileLength);
-            lblFileSizeBytes.ForeColor = isValidSize ? Colours.clrGood : Colours.clrUnknown;
+            lblFileSizeBytes.ForeColor = isValidSize ? Colours.clrGood : Colours.clrWarn;
             lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileLength)})";
             lblFileCreatedDate.Text = FWBase.FileInfoData.CreationTime;
             lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
@@ -537,17 +537,12 @@ namespace Mac_EFI_Toolkit
                 lblFsysCrc.ForeColor = Color.White;
             }
             lblApfsCapable.Text = FWBase.IsApfsCapable;
-            lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.clrGood : Colours.clrUnknown;
+            lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.clrGood : Colours.clrWarn;
             lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
 
-            lblVssStore.Text = "VSS";
-            lblVssStore.ForeColor = (FWBase.VssStoreData.PrimaryStoreOffset != -1) ? Color.White : Colours.clrDisabledText;
-
-            lblSvsStore.Text = "SVS";
-            lblSvsStore.ForeColor = (FWBase.SvsStoreData.PrimaryStoreOffset != -1) ? Color.White : Colours.clrDisabledText;
-
-            lblNssStore.Text = "NSS";
-            lblNssStore.ForeColor = (FWBase.NssStoreData.PrimaryStoreOffset != -1) ? Color.White : Colours.clrDisabledText;
+            UpdateNvramLabel(lblVssStore, FWBase.VssStoreData, "VSS");
+            UpdateNvramLabel(lblSvsStore, FWBase.SvsStoreData, "SVS");
+            UpdateNvramLabel(lblNssStore, FWBase.NssStoreData, "NSS");
 
             lblEfiLock.Text = FWBase.IsEfiLocked ? _efiLockedChar : _efiUnlockedChar;
             lblEfiLock.ForeColor = FWBase.IsEfiLocked ? Colours.clrError : Colours.clrGood;
@@ -569,6 +564,17 @@ namespace Mac_EFI_Toolkit
             pbxLoad.Image = null;
 
             ToggleControlEnable(true);
+        }
+
+        void UpdateNvramLabel(Label label, NvramStoreSection storeData, string text)
+        {
+            label.Text = text;
+
+            var foreColor = (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
+                ? Colours.clrWarn
+                : (storeData.PrimaryStoreOffset != -1 ? Colours.clrGood : Colours.clrDisabledText);
+
+            label.ForeColor = foreColor;
         }
 
         private void SetContextMenuRenderers()
@@ -594,10 +600,12 @@ namespace Mac_EFI_Toolkit
 
         private void ToggleControlEnable(bool enable)
         {
+            tlpMain.Enabled = enable;
+
             Button[] buttons = { cmdReset, cmdEditEfirom, cmdExportFsysBlock, cmdEveryMacSearch };
             foreach (Button button in buttons)
             {
-                button.Enabled = enable ? true : false;
+                button.Enabled = enable;
             }
 
             cmdEveryMacSearch.Enabled = (FWBase.FsysSectionData.Serial != null);
@@ -613,9 +621,7 @@ namespace Mac_EFI_Toolkit
                 cmdEditEfirom.Enabled = false;
             }
 
-            cmdAppleRomInfo.Enabled = FWBase.ROMInfoData.SectionExists ? true : false;
-
-            tlpMain.Enabled = enable;
+            cmdAppleRomInfo.Enabled = FWBase.ROMInfoData.SectionExists;
         }
 
         private void SetButtonProperties()
@@ -636,8 +642,6 @@ namespace Mac_EFI_Toolkit
             cmdFixFsysCrc.Text = "\xE90F";
             cmdAppleRomInfo.Font = Program.FONT_MDL2_REG_9;
             cmdAppleRomInfo.Text = "\xE72A";
-            //cmdViewNvramData.Font = Program.FONT_MDL2_REG_9;
-            //cmdViewNvramData.Text = "\xE890";
         }
 
         private void SetTipHandlers()
@@ -664,7 +668,14 @@ namespace Mac_EFI_Toolkit
             lblEfiLock.MouseLeave += HandleMouseLeaveTip;
             lblPrivateMemory.MouseEnter += HandleMouseEnterTip;
             lblPrivateMemory.MouseLeave += HandleMouseLeaveTip;
+            lblVssStore.MouseEnter += HandleMouseEnterTip;
+            lblVssStore.MouseLeave += HandleMouseLeaveTip;
+            lblSvsStore.MouseEnter += HandleMouseEnterTip;
+            lblSvsStore.MouseLeave += HandleMouseLeaveTip;
+            lblNssStore.MouseEnter += HandleMouseEnterTip;
+            lblNssStore.MouseLeave += HandleMouseLeaveTip;
         }
+
 
         private void HandleMouseEnterTip(object sender, EventArgs e)
         {
@@ -689,11 +700,29 @@ namespace Mac_EFI_Toolkit
                 else if (sender == cmdAppleRomInfo)
                     lblMessage.Text = "Open the ROM information window";
                 else if (sender == lblEfiLock)
-                    lblMessage.Text = FWBase.IsEfiLocked ? "EFI password MAC found" : "EFI password MAC was not found";
+                    lblMessage.Text = FWBase.IsEfiLocked ? "Message Authentication Code found (EFI is password locked)"
+                        : "Message Authentication Code not found (EFI is not password locked)";
                 else if (sender == lblPrivateMemory)
                     lblMessage.Text = "Private memory consumption";
+                else if (sender == lblVssStore)
+                    lblMessage.Text = GetStoreTip(FWBase.VssStoreData, "VSS");
+                else if (sender == lblSvsStore)
+                    lblMessage.Text = GetStoreTip(FWBase.SvsStoreData, "SVS");
+                else if (sender == lblNssStore)
+                    lblMessage.Text = GetStoreTip(FWBase.NssStoreData, "NSS");
             }
         }
+
+        private string GetStoreTip(NvramStoreSection storeData, string storeType)
+        {
+            if (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
+                return $"One or both {storeType} stores have data";
+            else if (storeData.PrimaryStoreOffset != -1)
+                return $"Both {storeType} stores are clear of data";
+            else
+                return $" No {storeType} store was found in the binary";
+        }
+
 
         private void HandleMouseLeaveTip(object sender, EventArgs e)
         {

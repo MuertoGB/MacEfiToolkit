@@ -19,7 +19,7 @@ namespace Mac_EFI_Toolkit.UI
         internal static readonly Color clrClientInactive = Color.FromArgb(10, 10, 10);
         internal static readonly Color clrClientActive = Color.FromArgb(30, 30, 30);
         internal static readonly Color clrChecked = Color.FromArgb(120, 180, 0);
-        internal static readonly Color clrUnknown = Color.Tomato;
+        internal static readonly Color clrWarn = Color.Tomato;
         internal static readonly Color clrError = Color.FromArgb(255, 50, 50);
         internal static readonly Color clrGood = Color.FromArgb(128, 255, 128);
         internal static readonly Color clrInfo = Color.FromArgb(0, 120, 180);
