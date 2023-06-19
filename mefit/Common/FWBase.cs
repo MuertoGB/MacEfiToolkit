@@ -103,6 +103,13 @@ internal enum ApfsCompatibleFirmware
     No
 }
 
+internal enum EfiLockStatus
+{
+    Locked,
+    Unlocked,
+    Unknown
+}
+
 internal enum NvramStoreType
 {
     VSS,
@@ -130,13 +137,28 @@ namespace Mac_EFI_Toolkit.Common
         internal static string IsApfsCapable = null;
         internal static string FitVersion = null;
         internal static string MeVersion = null;
-        internal static bool IsEfiLocked = false;
+        internal static EfiLockStatus EfiLock = EfiLockStatus.Unknown;
 
         internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576 bytes
         internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
         internal const int FSYS_RGN_SIZE = 0x800;      // 2048 bytes
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
+
+        internal static void Reset()
+        {
+            PDRSectionData = default;
+            VssStoreData = default;
+            SvsStoreData = default;
+            NssStoreData = default;
+            FsysSectionData = default;
+            ROMInfoData = default;
+            EFISectionStore = default;
+            IsApfsCapable = null;
+            FitVersion = null;
+            MeVersion = null;
+            EfiLock = EfiLockStatus.Unknown;
+        }
 
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
@@ -153,11 +175,9 @@ namespace Mac_EFI_Toolkit.Common
             FitVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.FlashImageTool);
             MeVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.ManagementEngine);
 
-            if (SvsStoreData.PrimaryStoreOffset != -1 && SvsStoreData.PrimaryStoreBytes != null)
-            {
-                IsEfiLocked = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes);
-            }
-
+            EfiLock = (SvsStoreData.PrimaryStoreOffset != -1 && SvsStoreData.PrimaryStoreBytes != null)
+                ? EfiLock = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes)
+                : EfiLockStatus.Unknown;      
         }
 
         #region File Information
@@ -526,13 +546,13 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        internal static bool GetIsEfiLocked(byte[] nvramStoreBytes)
+        internal static EfiLockStatus GetIsEfiLocked(byte[] nvramStoreBytes)
         {
             var lockMarker = BinaryUtils.GetOffset(nvramStoreBytes, EFI_LOCK_MAC_SIG);
             // Message Authentication Code was found
-            if (lockMarker != -1) return true;
+            if (lockMarker != -1) return EfiLockStatus.Locked;
 
-            return false;
+            return EfiLockStatus.Unlocked;
         }
 
         internal static readonly byte[] EFI_LOCK_MAC_SIG =

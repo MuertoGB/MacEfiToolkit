@@ -541,8 +541,21 @@ namespace Mac_EFI_Toolkit
             UpdateNvramLabel(lblSvsStore, FWBase.SvsStoreData, "SVS");
             UpdateNvramLabel(lblNssStore, FWBase.NssStoreData, "NSS");
 
-            lblEfiLock.Text = FWBase.IsEfiLocked ? _efiLockedChar : _efiUnlockedChar;
-            lblEfiLock.ForeColor = FWBase.IsEfiLocked ? Colours.clrError : Colours.clrGood;
+            switch (FWBase.EfiLock)
+            {
+                case EfiLockStatus.Locked:
+                    lblEfiLock.Text = _efiLockedChar;
+                    lblEfiLock.ForeColor = Colours.clrError;
+                    break;
+                case EfiLockStatus.Unlocked:
+                    lblEfiLock.Text = _efiUnlockedChar;
+                    lblEfiLock.ForeColor = Colours.clrGood;
+                    break;
+                case EfiLockStatus.Unknown:
+                    lblEfiLock.Text = _efiUnlockedChar;
+                    lblEfiLock.ForeColor = Colours.clrDisabledText;
+                    break;
+            }
 
             lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
             lblMeVersion.Text = FWBase.MeVersion ?? "N/A";
@@ -696,30 +709,49 @@ namespace Mac_EFI_Toolkit
                     lblMessage.Text = "Open the firmware editor window";
                 else if (sender == cmdAppleRomInfo)
                     lblMessage.Text = "Open the ROM information window";
-                else if (sender == lblEfiLock)
-                    lblMessage.Text = FWBase.IsEfiLocked ? "Message Authentication Code found (EFI is password locked)"
-                        : "Message Authentication Code not found (EFI is not password locked)";
                 else if (sender == lblPrivateMemory)
                     lblMessage.Text = "Private memory consumption";
                 else if (sender == lblVssStore)
-                    lblMessage.Text = GetStoreTip(FWBase.VssStoreData, "VSS");
+                    lblMessage.Text = SetNvramStoreTip(FWBase.VssStoreData, "VSS");
                 else if (sender == lblSvsStore)
-                    lblMessage.Text = GetStoreTip(FWBase.SvsStoreData, "SVS");
+                    lblMessage.Text = SetNvramStoreTip(FWBase.SvsStoreData, "SVS");
                 else if (sender == lblNssStore)
-                    lblMessage.Text = GetStoreTip(FWBase.NssStoreData, "NSS");
+                    lblMessage.Text = SetNvramStoreTip(FWBase.NssStoreData, "NSS");
+                else if (sender == lblEfiLock)
+                    SetEfiLockStatusTip();
             }
         }
 
-        private string GetStoreTip(NvramStoreSection storeData, string storeType)
+        private string SetNvramStoreTip(NvramStoreSection storeData, string storeType)
         {
             if (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
                 return $"One or both {storeType} stores have data";
             else if (storeData.PrimaryStoreOffset != -1)
-                return $"Both {storeType} stores are clear of data";
-            else
-                return $" No {storeType} store was found in the binary";
+                return $"Both {storeType} stores are empty (0xFF)";
+
+            return string.Empty;
         }
 
+        private void SetEfiLockStatusTip()
+        {
+            string statusText;
+
+            switch (FWBase.EfiLock)
+            {
+                case EfiLockStatus.Locked:
+                    statusText = "Message Authentication Code found (EFI is password locked)";
+                    break;
+                case EfiLockStatus.Unlocked:
+                    statusText = "Message Authentication Code not found (EFI is not password locked)";
+                    break;
+                case EfiLockStatus.Unknown:
+                    return;
+                default:
+                    return;
+            }
+
+            lblMessage.Text = statusText;
+        }
 
         private void HandleMouseLeaveTip(object sender, EventArgs e)
         {
@@ -892,10 +924,14 @@ namespace Mac_EFI_Toolkit
                 label.ForeColor = Color.White;
             }
 
+            // Reset label colours
             ApplyNestedPanelLabelForeColor(tlpRom, Color.White);
 
-            // Reset private members
+            // Reset initial directory
             SetPrimaryInitialDirectory();
+
+            // Reset FWBase
+            FWBase.Reset();
 
             // Garbage collect
             GC.Collect();

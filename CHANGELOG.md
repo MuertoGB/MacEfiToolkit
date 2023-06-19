@@ -15,6 +15,7 @@
 
 #### Enhancements:
 - Improved main window NVRAM store information
+- Improved EFI lock status
 
 #### Bugs:
 - Fixed an issue where the main window version label colour was not being set correctly upon form activation when an update is available.
