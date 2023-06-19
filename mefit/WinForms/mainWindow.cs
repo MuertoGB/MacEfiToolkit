@@ -66,8 +66,6 @@ namespace Mac_EFI_Toolkit
             SetContextMenuRenderers();
             SetButtonProperties();
 
-            lblVersion.Text = Application.ProductVersion;
-
             TimerCallback callback = new TimerCallback(UpdateMemoryStats);
             _statsTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
@@ -87,7 +85,7 @@ namespace Mac_EFI_Toolkit
                 OpenBinary(Program.draggedFile);
             }
 
-            if (!Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck) && !IsDebugMode())
+            if (!Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck))
             {
                 CheckForNewVersion();
             }
@@ -102,6 +100,7 @@ namespace Mac_EFI_Toolkit
                 {
                     e.Cancel = true;
                 }
+
 
                 Program.ExitMet(this);
                 _statsTimer.Dispose();
@@ -139,13 +138,11 @@ namespace Mac_EFI_Toolkit
         private void mainWindow_Activated(object sender, EventArgs e)
         {
             SetControlForeColor(pnlTitle, Color.White);
-            SetControlForeColor(tlpVersionLabel, Color.White);
         }
 
         private void mainWindow_Deactivate(object sender, EventArgs e)
         {
             SetControlForeColor(pnlTitle, Color.FromArgb(100, 100, 100));
-            SetControlForeColor(tlpVersionLabel, Color.FromArgb(100, 100, 100));
         }
 
         #endregion
@@ -793,16 +790,10 @@ namespace Mac_EFI_Toolkit
         private void SetPrimaryInitialDirectory()
         {
             string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+
             if (!string.IsNullOrEmpty(path))
             {
-                if (Directory.Exists(path))
-                {
-                    _strInitialDirectory = path;
-                }
-                else
-                {
-                    _strInitialDirectory = Program.appDirectory;
-                }
+                _strInitialDirectory = Directory.Exists(path) ? path : Program.appDirectory;
             }
         }
 

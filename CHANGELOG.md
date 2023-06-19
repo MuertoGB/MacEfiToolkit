@@ -16,6 +16,9 @@
 #### Enhancements:
 - Improved main window NVRAM store information
 
+#### Bugs:
+- Fixed an issue where the main window version label colour was not being set correctly upon form activation when an update is available.
+
 ## Version 0.6.0
 
 #### New:
