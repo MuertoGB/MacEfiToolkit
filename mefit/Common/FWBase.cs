@@ -473,7 +473,7 @@ namespace Mac_EFI_Toolkit.Common
                         bsPos = backupPos;
                         bsData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos, bsLen);
 
-                        if (psData != null)
+                        if (bsData != null)
                         {
                             byte[] bsBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos + headerLen, bsLen - headerLen);
                             isBsEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
