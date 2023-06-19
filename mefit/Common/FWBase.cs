@@ -420,10 +420,8 @@ namespace Mac_EFI_Toolkit.Common
         internal static NvramStoreSection GetNvramStoreData(byte[] sourceBytes, NvramStoreType headerType)
         {
             var nvramSig = GetNvramSignature(headerType);
-            int paddingLen = 0; int headerLen = 0x10;
-            bool isPsEmpty = true; bool isBsEmpty = true;
-
-            var psLen = -1; long psPos = -1; byte[] psData = null;
+            var headerLen = 0x10;
+            var paddingLen = 0;
 
             // We must find the NVRAM section GUID first.
             long nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
@@ -433,50 +431,52 @@ namespace Mac_EFI_Toolkit.Common
                 return DefaultNvramStoreData();
             }
 
-            var primaryPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, nvramPos);
+            var primaryStoreHeaderPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, nvramPos);
 
-            if (primaryPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, primaryPos, 0x6) is byte[] bytesPrimaryHeader)
+            var primaryStoreLen = -1; long primaryStorePos = -1; byte[] primaryStoreData = null; bool isPrimaryStoreEmpty = true;
+
+            if (primaryStoreHeaderPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStoreHeaderPos, 0x6) is byte[] bytesPrimaryHeader)
             {
                 NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
                 if (psHeader.SizeOfData != 0)
                  {
-                    psLen = psHeader.SizeOfData;
-                    psPos = primaryPos;
-                    psData = BinaryUtils.GetBytesAtOffset(sourceBytes, psPos, psLen);
+                    primaryStoreLen = psHeader.SizeOfData;
+                    primaryStorePos = primaryStoreHeaderPos;
+                    primaryStoreData = BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStorePos, primaryStoreLen);
 
-                    if (psData != null)
+                    if (primaryStoreData != null)
                     {
-                        byte[] psBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, psPos + headerLen, psLen - headerLen);
-                        isPsEmpty = BinaryUtils.IsByteBlockEmpty(psBodyData);
+                        byte[] primaryStoreBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStorePos + headerLen, primaryStoreLen - headerLen);
+                        isPrimaryStoreEmpty = BinaryUtils.IsByteBlockEmpty(primaryStoreBodyData);
                     }
 
                     // Count the number of 0xFF values in the padding
-                    for (int i = (int)(psPos + psLen); i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
+                    for (int i = (int)(primaryStorePos + primaryStoreLen); i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
                     {
                         paddingLen++;
                     }
                 }
             }
 
-            var bsLen = -1; long bsPos = -1; byte[] bsData = null;
+            var backupStoreLen = -1; long backupStorePos = -1; byte[] backupStoreData = null; bool isBackupStoreEmpty = true;
 
-            if (psPos != -1)
+            if (primaryStorePos != -1)
             {
-                var backupPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, psPos + psLen + paddingLen);
+                var backupStoreHeaderPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, primaryStorePos + primaryStoreLen + paddingLen);
 
-                if (backupPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupPos, 0x6) is byte[] bytesBackupHeader)
+                if (backupStoreHeaderPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupStoreHeaderPos, 0x6) is byte[] bytesBackupHeader)
                 {
                     NvramStoreHeader bsHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
                     if (bsHeader.SizeOfData != 0)
                     {
-                        bsLen = bsHeader.SizeOfData;
-                        bsPos = backupPos;
-                        bsData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos, bsLen);
+                        backupStoreLen = bsHeader.SizeOfData;
+                        backupStorePos = backupStoreHeaderPos;
+                        backupStoreData = BinaryUtils.GetBytesAtOffset(sourceBytes, backupStorePos, backupStoreLen);
 
-                        if (bsData != null)
+                        if (backupStoreData != null)
                         {
-                            byte[] bsBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, bsPos + headerLen, bsLen - headerLen);
-                            isBsEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
+                            byte[] bsBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, backupStorePos + headerLen, backupStoreLen - headerLen);
+                            isBackupStoreEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
                         }
                     }
                 }
@@ -484,14 +484,14 @@ namespace Mac_EFI_Toolkit.Common
 
             return new NvramStoreSection
             {
-                PrimaryStoreSize = psLen,
-                PrimaryStoreOffset = psPos,
-                PrimaryStoreBytes = psData,
-                IsPrimaryStoreEmpty = isPsEmpty,
-                BackupStoreSize = bsLen,
-                BackupStoreOffset = bsPos,
-                BackupStoreBytes = bsData,
-                IsBackupStoreEmpty = isBsEmpty,
+                PrimaryStoreSize = primaryStoreLen,
+                PrimaryStoreOffset = primaryStorePos,
+                PrimaryStoreBytes = primaryStoreData,
+                IsPrimaryStoreEmpty = isPrimaryStoreEmpty,
+                BackupStoreSize = backupStoreLen,
+                BackupStoreOffset = backupStorePos,
+                BackupStoreBytes = backupStoreData,
+                IsBackupStoreEmpty = isBackupStoreEmpty,
                 PaddingLength = paddingLen
             };
         }
