@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-061">V0.6.1</a> •
   <a href="#version-060">V0.6.0</a> •
   <a href="#version-052">V0.5.2</a> •
   <a href="#version-051">V0.5.1</a> •
@@ -9,6 +10,11 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 0.6.1
+
+#### Enhancements:
+- Improved main window NVRAM store information
 
 ## Version 0.6.0
 

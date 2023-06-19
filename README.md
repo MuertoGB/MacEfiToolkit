@@ -23,6 +23,8 @@ Mac EFI Toolkit, or 'mefit' is an information gathering tool designed to aid tec
 
 Editing features include automated detection and masking of invalid Fsys store CRC32 checksums, with the ability to export any Fsys store (0x800h), and patch it into another donor file. Other editing features such as serial replacement and clearing of the NVRAM are in development.
 
+This application supports most Mac BIOS, with exception to the A1534 (so far), I continue to test hundreds of firmwares, and update accordingly for any edge cases.
+
 <img width="550" src="files/images/met.png" alt="MET">
 <img width="550" src="files/images/met_alt.png" alt="MET_ALT">
 
@@ -35,6 +37,7 @@ Editing features include automated detection and masking of invalid Fsys store C
 - View information in the Fsys store.
 - Check serial number with EveryMac.
 - Export Fsys store from the NVRAM.
+- View which NVRAM stores have data, are empty, or not found.
 - View ROM section information.
 - View FIT and ME versions.
 - Detect EFI password lock.

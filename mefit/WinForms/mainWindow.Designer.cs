@@ -936,11 +936,11 @@ namespace Mac_EFI_Toolkit
             this.tlpNvram.ColumnCount = 7;
             this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpNvram.Controls.Add(this.lblEfiLock, 6, 0);
             this.tlpNvram.Controls.Add(this.lblNssStore, 4, 0);
             this.tlpNvram.Controls.Add(this.lblSvsStore, 2, 0);
@@ -961,10 +961,10 @@ namespace Mac_EFI_Toolkit
             this.lblEfiLock.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEfiLock.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEfiLock.ForeColor = System.Drawing.Color.White;
-            this.lblEfiLock.Location = new System.Drawing.Point(187, 0);
+            this.lblEfiLock.Location = new System.Drawing.Point(192, 0);
             this.lblEfiLock.Margin = new System.Windows.Forms.Padding(0);
             this.lblEfiLock.Name = "lblEfiLock";
-            this.lblEfiLock.Size = new System.Drawing.Size(38, 30);
+            this.lblEfiLock.Size = new System.Drawing.Size(33, 30);
             this.lblEfiLock.TabIndex = 99;
             this.lblEfiLock.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -975,11 +975,11 @@ namespace Mac_EFI_Toolkit
             this.lblNssStore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblNssStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNssStore.ForeColor = System.Drawing.Color.White;
-            this.lblNssStore.Location = new System.Drawing.Point(125, 0);
+            this.lblNssStore.Location = new System.Drawing.Point(128, 0);
             this.lblNssStore.Margin = new System.Windows.Forms.Padding(0);
             this.lblNssStore.Name = "lblNssStore";
             this.lblNssStore.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblNssStore.Size = new System.Drawing.Size(61, 30);
+            this.lblNssStore.Size = new System.Drawing.Size(63, 30);
             this.lblNssStore.TabIndex = 100;
             this.lblNssStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -990,11 +990,11 @@ namespace Mac_EFI_Toolkit
             this.lblSvsStore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSvsStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSvsStore.ForeColor = System.Drawing.Color.White;
-            this.lblSvsStore.Location = new System.Drawing.Point(62, 0);
+            this.lblSvsStore.Location = new System.Drawing.Point(64, 0);
             this.lblSvsStore.Margin = new System.Windows.Forms.Padding(0);
             this.lblSvsStore.Name = "lblSvsStore";
             this.lblSvsStore.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblSvsStore.Size = new System.Drawing.Size(62, 30);
+            this.lblSvsStore.Size = new System.Drawing.Size(63, 30);
             this.lblSvsStore.TabIndex = 100;
             this.lblSvsStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1009,7 +1009,7 @@ namespace Mac_EFI_Toolkit
             this.lblVssStore.Margin = new System.Windows.Forms.Padding(0);
             this.lblVssStore.Name = "lblVssStore";
             this.lblVssStore.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblVssStore.Size = new System.Drawing.Size(61, 30);
+            this.lblVssStore.Size = new System.Drawing.Size(63, 30);
             this.lblVssStore.TabIndex = 99;
             this.lblVssStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1413,6 +1413,7 @@ namespace Mac_EFI_Toolkit
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tlpMenu);
             this.Controls.Add(this.pnlTitle);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
