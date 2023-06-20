@@ -83,12 +83,13 @@ internal struct NvramStoreHeader
 
 internal struct NvramStoreSection
 {
-    internal int PrimaryStoreSize { get; set; }
+    internal NvramStoreType StoreType { get; set; }
     internal long PrimaryStoreOffset { get; set; }
+    internal int PrimaryStoreLength { get; set; }
     internal byte[] PrimaryStoreBytes { get; set; }
     internal bool IsPrimaryStoreEmpty { get; set; }
-    internal int BackupStoreSize { get; set; }
     internal long BackupStoreOffset { get; set; }
+    internal int BackupStoreLength { get; set; }
     internal byte[] BackupStoreBytes { get; set; }
     internal bool IsBackupStoreEmpty { get; set; }
     internal int PaddingLength { get; set; }
@@ -436,9 +437,9 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region NVRAM Section
-        internal static NvramStoreSection GetNvramStoreData(byte[] sourceBytes, NvramStoreType headerType)
+        internal static NvramStoreSection GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
         {
-            var nvramSig = GetNvramSignature(headerType);
+            var nvramSig = GetNvramSignature(storeType);
             var headerLen = 0x10;
             var paddingLen = 0;
 
@@ -503,11 +504,12 @@ namespace Mac_EFI_Toolkit.Common
 
             return new NvramStoreSection
             {
-                PrimaryStoreSize = primaryStoreLen,
+                StoreType = storeType,
+                PrimaryStoreLength = primaryStoreLen,
                 PrimaryStoreOffset = primaryStorePos,
                 PrimaryStoreBytes = primaryStoreData,
                 IsPrimaryStoreEmpty = isPrimaryStoreEmpty,
-                BackupStoreSize = backupStoreLen,
+                BackupStoreLength = backupStoreLen,
                 BackupStoreOffset = backupStorePos,
                 BackupStoreBytes = backupStoreData,
                 IsBackupStoreEmpty = isBackupStoreEmpty,
@@ -519,11 +521,11 @@ namespace Mac_EFI_Toolkit.Common
         {
             return new NvramStoreSection
             {
-                PrimaryStoreSize = -1,
+                PrimaryStoreLength = -1,
                 PrimaryStoreOffset = -1,
                 PrimaryStoreBytes = null,
                 IsPrimaryStoreEmpty = true,
-                BackupStoreSize = -1,
+                BackupStoreLength = -1,
                 BackupStoreOffset = -1,
                 BackupStoreBytes = null,
                 IsBackupStoreEmpty = true,
@@ -531,9 +533,9 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
-        private static byte[] GetNvramSignature(NvramStoreType headerType)
+        private static byte[] GetNvramSignature(NvramStoreType storeType)
         {
-            switch (headerType)
+            switch (storeType)
             {
                 case NvramStoreType.SVS:
                     return SVS_STORE_SIG;

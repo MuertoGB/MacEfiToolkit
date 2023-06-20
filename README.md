@@ -55,7 +55,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 
 **TODO**
 - [x] Replace the Fsys block
-- [ ] Clear NVRAM (SVS, VSS, NSS) with section header preservation
+- [x] Clear NVRAM (SVS, VSS, NSS) with section header preservation
 - [ ] Add option to replace serial number
 > ℹ️ The editor is in active development
 - [ ] Complete the logging systems

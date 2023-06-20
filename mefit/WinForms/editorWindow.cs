@@ -73,6 +73,24 @@ namespace Mac_EFI_Toolkit.WinForms
             LogLoadedBinarySize();
             LogFsysData();
 
+            if (FWBase.VssStoreData.PrimaryStoreOffset == -1)
+            {
+                cbxClearVssStore.Enabled = false;
+                Logger.WriteLogTextToRtb($"No VSS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
+            }
+
+            if (FWBase.SvsStoreData.PrimaryStoreOffset == -1)
+            {
+                cbxClearSvsStore.Enabled = false;
+                Logger.WriteLogTextToRtb($"No SVS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
+            }
+
+            if (FWBase.NssStoreData.PrimaryStoreOffset == -1)
+            {
+                Logger.WriteLogTextToRtb($"No NSS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
+                cbxClearNssStore.Enabled = false;
+            }
+
             Logger.WriteLogTextToRtb($"Initial checks complete", RtbLogPrefix.Good, rtbLog);
         }
         #endregion
@@ -141,19 +159,21 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (cbxClearVssStore.Checked)
             {
-                Logger.WriteLogTextToRtb($"Clearing VSS NVRAM Data:", RtbLogPrefix.Info, rtbLog);
-                ClearVssStores(cbxClearVssBackup.Checked);
+                Logger.WriteLogTextToRtb("Clearing VSS NVRAM Data:", RtbLogPrefix.Info, rtbLog);
+                ClearNvramStore(FWBase.VssStoreData, cbxClearVssBackup.Checked);
             }
 
-            //if (cbxClearSvsStore.Checked)
-            //{
-            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
-            //}
+            if (cbxClearSvsStore.Checked)
+            {
+                Logger.WriteLogTextToRtb("Clearing SVS NVRAM Data:", RtbLogPrefix.Info, rtbLog);
+                ClearNvramStore(FWBase.SvsStoreData, cbxClearSvsBackup.Checked);
+            }
 
-            //if (cbxClearNssStore.Checked)
-            //{
-            //    Logger.WriteLogTextToRtb($"Clearing VSS store...", RtbLogPrefix.MET, rtbLog);
-            //}
+            if (cbxClearNssStore.Checked)
+            {
+                Logger.WriteLogTextToRtb("Clearing NSS NVRAM Data:", RtbLogPrefix.Info, rtbLog);
+                ClearNvramStore(FWBase.NssStoreData, cbxClearNssBackup.Checked);
+            }
 
             // If the build fails, disallow exporting.
             if (!_buildFailed)
@@ -193,8 +213,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             METCheckbox cb = (METCheckbox)sender;
 
-                lblVssChevRight.Visible = cb.Checked;
-                cbxClearVssBackup.Enabled = cb.Checked;
+            lblVssChevRight.Visible = cb.Checked;
+            cbxClearVssBackup.Enabled = cb.Checked;
 
             if (!cb.Checked)
             {
@@ -206,8 +226,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             METCheckbox cb = (METCheckbox)sender;
 
-                lblSvsChevRight.Visible = cb.Checked;
-                cbxClearSvsBackup.Enabled = cb.Checked;
+            lblSvsChevRight.Visible = cb.Checked;
+            cbxClearSvsBackup.Enabled = cb.Checked;
 
             if (!cb.Checked)
             {
@@ -219,8 +239,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             METCheckbox cb = (METCheckbox)sender;
 
-                lblNssChevRight.Visible = cb.Checked;
-                cbxClearNssBackup.Enabled = cb.Checked;
+            lblNssChevRight.Visible = cb.Checked;
+            cbxClearNssBackup.Enabled = cb.Checked;
 
             if (!cb.Checked)
             {
@@ -474,6 +494,65 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTextToRtb("New Fsys region written successfully", RtbLogPrefix.Good, rtbLog);
         }
 
+        private void ClearNvramStore(NvramStoreSection storeData, bool clearBackup)
+        {
+            int headerLen = 0x10;
+            long primBodyStart = storeData.PrimaryStoreOffset + headerLen;
+            int primBodyEnd = storeData.PrimaryStoreLength - headerLen;
+            long backBodyStart = storeData.BackupStoreOffset + headerLen;
+            int backBodyEnd = storeData.BackupStoreLength - headerLen;
+
+            if (!storeData.IsPrimaryStoreEmpty)
+            {
+                byte[] primaryData = BinaryUtils.GetBytesAtOffset(storeData.PrimaryStoreBytes, headerLen, primBodyEnd);
+                Logger.WriteLogTextToRtb($"Overwriting: Primary {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
+                BinaryUtils.FillByteArrayWithFF(primaryData);
+                Logger.WriteLogTextToRtb($"Writing clean primary {storeData.StoreType} store", RtbLogPrefix.Info, rtbLog);
+                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, primBodyStart, primaryData);
+            }
+            else
+            {
+                Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store is already empty (0xFF)", RtbLogPrefix.Info, rtbLog);
+            }
+
+            if (clearBackup)
+            {
+                if (!storeData.IsBackupStoreEmpty)
+                {
+                    byte[] backupData = BinaryUtils.GetBytesAtOffset(storeData.BackupStoreBytes, headerLen, backBodyEnd);
+                    Logger.WriteLogTextToRtb($"Overwriting: Backup {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
+                    BinaryUtils.FillByteArrayWithFF(backupData);
+                    Logger.WriteLogTextToRtb($"Writing clean backup {storeData.StoreType} store", RtbLogPrefix.Info, rtbLog);
+                    BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, backBodyStart, backupData);
+                }
+                else
+                {
+                    Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} store is already empty (0xFF)", RtbLogPrefix.Info, rtbLog);
+                }
+            }
+
+            NvramStoreSection newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
+
+            if (newStore.IsPrimaryStoreEmpty)
+            {
+                Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store cleared successfully", RtbLogPrefix.Good, rtbLog);
+            }
+            else
+            {
+                HandleBuildFailure($"Primary {storeData.StoreType} store was not cleared successfully");
+            }
+
+            if (newStore.IsBackupStoreEmpty)
+            {
+                Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} store cleared successfully", RtbLogPrefix.Good, rtbLog);
+            }
+            else
+            {
+                HandleBuildFailure($"Backup {storeData.StoreType} store was not cleared successfully");
+            }
+
+        }
+
         private void HandleBuildFailure(string errorMessage)
         {
             Logger.WriteLogTextToRtb("BUILD FAILED:", RtbLogPrefix.Error, rtbLog);
@@ -482,43 +561,6 @@ namespace Mac_EFI_Toolkit.WinForms
         }
 
         #endregion
-
-        private void ClearVssStores(bool clearBackup)
-        {
-            //byte[] vssPrimary = null;
-            //long vssPrimBodyStart = _primaryVssPos + 0x10;
-            //int vssPrimBodyEnd = _primarySvsLen - 0x10;
-
-            //byte[] vssBackup = null;
-            //long vssBackBodyStart = _primaryVssPos + 0x10;
-            //int vssBackBodyEnd = _primarySvsLen - 0x10;
-
-            //vssPrimary = BinaryUtils.GetBytesAtOffset(_bytesNewBinary, vssPrimBodyStart, vssPrimBodyEnd);
-
-            //if (!BinaryUtils.IsByteBlockEmpty(vssPrimary))
-            //{
-            //    Logger.WriteLogTextToRtb("Overwriting primary VSS buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
-            //    BinaryUtils.FillByteArrayWithFF(vssPrimary);
-            //} else
-            //{
-            //    Logger.WriteLogTextToRtb("Primary VSS is already empty (0xFF)", RtbLogPrefix.Info, rtbLog);
-            //}
-
-            //if (clearBackup)
-            //{
-            //    vssBackup = BinaryUtils.GetBytesAtOffset(_bytesNewBinary, vssBackBodyStart, vssBackBodyEnd);
-
-            //    if (!BinaryUtils.IsByteBlockEmpty(vssBackup))
-            //    {
-            //        Logger.WriteLogTextToRtb("Overwriting backup VSS buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
-            //        BinaryUtils.FillByteArrayWithFF(vssBackup);
-            //    }
-            //    else
-            //    {
-            //        Logger.WriteLogTextToRtb("Backup VSS is already empty (0xFF)", RtbLogPrefix.Info, rtbLog);
-            //    }
-            //}
-        }
 
     }
 }

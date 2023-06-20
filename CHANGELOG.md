@@ -13,6 +13,9 @@
 
 ## Version 0.6.1
 
+#### New:
+- Enabled option to clear NVRAM stores in the editor window.
+
 #### Enhancements:
 - Improved main window NVRAM store information
 - Improved EFI lock status
