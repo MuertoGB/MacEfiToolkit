@@ -39,7 +39,7 @@ namespace Mac_EFI_Toolkit.WinForms
             KeyDown += infoWindow_KeyDown;
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
+            cmdClose.Text = Chars.EXIT_CROSS;
 
             lblBiosId.Text = FWBase.ROMInfoData.BiosId ?? "N/A";
             lblModel.Text = FWBase.ROMInfoData.Model ?? "N/A";
@@ -58,7 +58,7 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 if (label.Text == "N/A")
                 {
-                    label.ForeColor = Colours.clrDisabledText;
+                    label.ForeColor = Colours.DISABLED_TEXT;
                 }
             }
         }

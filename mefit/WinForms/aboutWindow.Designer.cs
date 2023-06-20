@@ -109,7 +109,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // tlpTopLabels
             // 
             this.tlpTopLabels.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tlpTopLabels.BackColor = System.Drawing.Color.Transparent;
+            this.tlpTopLabels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.tlpTopLabels.ColumnCount = 1;
             this.tlpTopLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTopLabels.Controls.Add(this.lblBuild, 0, 1);
@@ -117,7 +117,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTopLabels.Location = new System.Drawing.Point(106, 24);
             this.tlpTopLabels.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.tlpTopLabels.Name = "tlpTopLabels";
-            this.tlpTopLabels.RowCount = 2;
+            this.tlpTopLabels.RowCount = 3;
+            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tlpTopLabels.Size = new System.Drawing.Size(316, 52);
@@ -126,7 +127,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // lblBuild
             // 
             this.lblBuild.AutoSize = true;
-            this.lblBuild.BackColor = System.Drawing.Color.Transparent;
+            this.lblBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblBuild.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBuild.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(245)))), ((int)(((byte)(255)))));
@@ -141,7 +142,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // lblName
             // 
             this.lblName.AutoSize = true;
-            this.lblName.BackColor = System.Drawing.Color.Transparent;
+            this.lblName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblName.ForeColor = System.Drawing.Color.White;
@@ -156,7 +157,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // lnkUrls
             // 
             this.lnkUrls.ActiveLinkColor = System.Drawing.Color.White;
-            this.lnkUrls.BackColor = System.Drawing.Color.Transparent;
+            this.lnkUrls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.lnkUrls.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lnkUrls.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lnkUrls.ForeColor = System.Drawing.Color.White;

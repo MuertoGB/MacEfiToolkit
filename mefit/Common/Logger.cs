@@ -22,9 +22,9 @@ namespace Mac_EFI_Toolkit
 
     public enum RtbLogPrefix
     {
-        Good,
+        Complete,
         Info,
-        Warn,
+        Warning,
         Error
     }
     #endregion
@@ -81,13 +81,13 @@ namespace Mac_EFI_Toolkit
 
             switch (logPrefix)
             {
-                case RtbLogPrefix.Good:
+                case RtbLogPrefix.Complete:
                     prefixColor = Color.FromArgb(0, 200, 0);
                     break;
                 case RtbLogPrefix.Info:
                     prefixColor = Color.FromArgb(0, 122, 204);
                     break;
-                case RtbLogPrefix.Warn:
+                case RtbLogPrefix.Warning:
                     prefixColor = Color.FromArgb(255, 165, 0);
                     break;
                 case RtbLogPrefix.Error:

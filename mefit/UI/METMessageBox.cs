@@ -58,7 +58,7 @@ namespace Mac_EFI_Toolkit.UI
             Shown += new EventHandler(METMessageBox_Shown);
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
+            cmdClose.Text = Chars.EXIT_CROSS;
         }
         #endregion
 
@@ -70,23 +70,23 @@ namespace Mac_EFI_Toolkit.UI
             switch (mtMmbType)
             {
                 case MsgType.Critical:
-                    lblMessageIcon.ForeColor = Colours.clrError;
-                    lblMessageIcon.Text = "\xEB90";
+                    lblMessageIcon.ForeColor = Colours.ERROR_RED;
+                    lblMessageIcon.Text = Chars.STATUS_ERROR_FULL;
                     ssMmbSound = System.Media.SystemSounds.Hand;
                     break;
                 case MsgType.Warning:
-                    lblMessageIcon.ForeColor = Colours.clrWarn;
-                    lblMessageIcon.Text = "\xE7BA";
+                    lblMessageIcon.ForeColor = Colours.WARNING_ORANGE;
+                    lblMessageIcon.Text = Chars.INCIDENT_TRIANGLE;
                     ssMmbSound = System.Media.SystemSounds.Exclamation;
                     break;
                 case MsgType.Information:
-                    lblMessageIcon.ForeColor = Colours.clrInfo;
-                    lblMessageIcon.Text = "\xF167";
+                    lblMessageIcon.ForeColor = Colours.INFO_BLUE;
+                    lblMessageIcon.Text = Chars.INFO_SOLID;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
                 case MsgType.Question:
-                    lblMessageIcon.ForeColor = Colours.clrInfo;
-                    lblMessageIcon.Text = "\xE9CE";
+                    lblMessageIcon.ForeColor = Colours.INFO_BLUE;
+                    lblMessageIcon.Text = Chars.UNKNOWN;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
             }

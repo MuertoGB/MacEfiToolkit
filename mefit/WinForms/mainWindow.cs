@@ -29,8 +29,6 @@ namespace Mac_EFI_Toolkit
         private static readonly object _lockObject = new object();
         private static System.Threading.Timer _statsTimer;
         private static bool _firmwareLoaded = false;
-        private static readonly string _efiUnlockedChar = "\xE785";
-        private static readonly string _efiLockedChar = "\xE72E";
         #endregion
 
         #region Overriden Properties
@@ -194,7 +192,7 @@ namespace Mac_EFI_Toolkit
                 {
                     cmdReload.PerformClick();
                 }
-                else if (e.KeyCode == Keys.C)
+                else if (e.KeyCode == Keys.S)
                 {
                     cmdEveryMacSearch.PerformClick();
                 }
@@ -205,6 +203,10 @@ namespace Mac_EFI_Toolkit
                 else if (e.KeyCode == Keys.F)
                 {
                     cmdFixFsysCrc.PerformClick();
+                }
+                else if (e.KeyCode == Keys.I)
+                {
+                    cmdAppleRomInfo.PerformClick();
                 }
             }
         }
@@ -328,8 +330,8 @@ namespace Mac_EFI_Toolkit
             using (var dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                Title = "Save File...",
-                FileName = $"FSYS_Fixed_{FWBase.FileInfoData.FileNameNoExt}.bin",
+                Title = "Export new binary",
+                FileName = $"CRC_FIXED_{FWBase.FileInfoData.FileNameNoExt}.bin",
                 OverwritePrompt = true,
                 InitialDirectory = _strInitialDirectory
             })
@@ -433,6 +435,30 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Toolstrip Events
+        private void openBuildsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(Program.buildsDirectory))
+            {
+                Process.Start("explorer.exe", Program.buildsDirectory);
+            }
+            else
+            {
+                METMessageBox.Show(this, "MET", "The builds folder has not been created yet.", MsgType.Information, MsgButton.Okay);
+            }
+        }
+
+        private void openFsysDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(Program.fsysDirectory))
+            {
+                Process.Start("explorer.exe", Program.fsysDirectory);
+            }
+            else
+            {
+                METMessageBox.Show(this, "MET", "The Fsys Stores folder has not been created yet.", MsgType.Information, MsgButton.Okay);
+            }
+        }
+
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (File.Exists(Logger.strLogFilePath))
@@ -514,7 +540,7 @@ namespace Mac_EFI_Toolkit
             int fileLength = (int)FWBase.FileInfoData.FileLength;
             bool isValidSize = FileUtils.GetIsValidBinSize(fileLength);
             lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileLength);
-            lblFileSizeBytes.ForeColor = isValidSize ? Colours.clrGood : Colours.clrWarn;
+            lblFileSizeBytes.ForeColor = isValidSize ? Colours.COMPLETE_GREEN : Colours.WARNING_ORANGE;
             lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileLength)})";
             lblFileCreatedDate.Text = FWBase.FileInfoData.CreationTime;
             lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
@@ -526,7 +552,7 @@ namespace Mac_EFI_Toolkit
             if (FWBase.FsysSectionData.CRC32 != null)
             {
                 lblFsysCrc.Text = $"{FWBase.FsysSectionData.CRC32}h";
-                lblFsysCrc.ForeColor = FWBase.FsysSectionData.CRC32Calc == FWBase.FsysSectionData.CRC32 ? Colours.clrGood : Colours.clrError;
+                lblFsysCrc.ForeColor = FWBase.FsysSectionData.CRC32Calc == FWBase.FsysSectionData.CRC32 ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
             }
             else
             {
@@ -534,7 +560,7 @@ namespace Mac_EFI_Toolkit
                 lblFsysCrc.ForeColor = Color.White;
             }
             lblApfsCapable.Text = FWBase.IsApfsCapable;
-            lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.clrGood : Colours.clrWarn;
+            lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.COMPLETE_GREEN : Colours.WARNING_ORANGE;
             lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
 
             UpdateNvramLabel(lblVssStore, FWBase.VssStoreData, "VSS");
@@ -544,16 +570,16 @@ namespace Mac_EFI_Toolkit
             switch (FWBase.EfiLock)
             {
                 case EfiLockStatus.Locked:
-                    lblEfiLock.Text = _efiLockedChar;
-                    lblEfiLock.ForeColor = Colours.clrError;
+                    lblEfiLock.Text = Chars.LOCKED;
+                    lblEfiLock.ForeColor = Colours.ERROR_RED;
                     break;
                 case EfiLockStatus.Unlocked:
-                    lblEfiLock.Text = _efiUnlockedChar;
-                    lblEfiLock.ForeColor = Colours.clrGood;
+                    lblEfiLock.Text = Chars.UNLOCKED;
+                    lblEfiLock.ForeColor = Colours.COMPLETE_GREEN;
                     break;
                 case EfiLockStatus.Unknown:
-                    lblEfiLock.Text = _efiUnlockedChar;
-                    lblEfiLock.ForeColor = Colours.clrDisabledText;
+                    lblEfiLock.Text = Chars.UNLOCKED;
+                    lblEfiLock.ForeColor = Colours.DISABLED_TEXT;
                     break;
             }
 
@@ -569,7 +595,7 @@ namespace Mac_EFI_Toolkit
                 AppendConfigCodeAsync(FWBase.FsysSectionData.HWC);
             }
 
-            ApplyNestedPanelLabelForeColor(tlpRom, Colours.clrDisabledText);
+            ApplyNestedPanelLabelForeColor(tlpRom, Colours.DISABLED_TEXT);
 
             pbxLoad.Image = null;
 
@@ -581,8 +607,8 @@ namespace Mac_EFI_Toolkit
             label.Text = text;
 
             var foreColor = (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
-                ? Colours.clrWarn
-                : (storeData.PrimaryStoreOffset != -1 ? Colours.clrGood : Colours.clrDisabledText);
+                ? Colours.WARNING_ORANGE
+                : (storeData.PrimaryStoreOffset != -1 ? Colours.COMPLETE_GREEN : Colours.DISABLED_TEXT);
 
             label.ForeColor = foreColor;
         }
@@ -637,21 +663,21 @@ namespace Mac_EFI_Toolkit
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
+            cmdClose.Text = Chars.EXIT_CROSS;
             cmdMenu.Font = Program.FONT_MDL2_REG_14;
-            cmdMenu.Text = "\xE169";
-            cmdNavigate.Font = Program.FONT_MDL2_REG_9;
-            cmdNavigate.Text = "\xEC50";
-            cmdReload.Font = Program.FONT_MDL2_REG_9;
-            cmdReload.Text = "\xE72C";
+            cmdMenu.Text = Chars.SHOW;
+            cmdNavigate.Font = Program.FONT_MDL2_REG_10;
+            cmdNavigate.Text = Chars.FILE_EXPLORER;
+            cmdReload.Font = Program.FONT_MDL2_REG_10;
+            cmdReload.Text = Chars.REFRESH;
             cmdEveryMacSearch.Font = Program.FONT_MDL2_REG_9;
-            cmdEveryMacSearch.Text = "\xF6FA";
+            cmdEveryMacSearch.Text = Chars.WEB_SEARCH;
             cmdExportFsysBlock.Font = Program.FONT_MDL2_REG_9;
-            cmdExportFsysBlock.Text = "\xE74E";
+            cmdExportFsysBlock.Text = Chars.SAVE;
             cmdFixFsysCrc.Font = Program.FONT_MDL2_REG_9;
-            cmdFixFsysCrc.Text = "\xE90F";
+            cmdFixFsysCrc.Text = Chars.REPAIR;
             cmdAppleRomInfo.Font = Program.FONT_MDL2_REG_9;
-            cmdAppleRomInfo.Text = "\xE72A";
+            cmdAppleRomInfo.Text = Chars.FORWARD;
         }
 
         private void SetTipHandlers()
@@ -692,23 +718,23 @@ namespace Mac_EFI_Toolkit
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableTips))
             {
                 if (sender == cmdNavigate)
-                    lblMessage.Text = "Navigate to file in explorer";
+                    lblMessage.Text = "Navigate to file (ALT + N)";
                 else if (sender == cmdReload)
-                    lblMessage.Text = "Reload current file from disk";
+                    lblMessage.Text = "Reload file from disk (ALT + R)";
                 else if (sender == cmdExportFsysBlock)
-                    lblMessage.Text = "Export Fsys Store";
+                    lblMessage.Text = "Export Fsys Store (ALT + E)";
                 else if (sender == cmdFixFsysCrc)
-                    lblMessage.Text = "Repair Fsys CRC32";
+                    lblMessage.Text = "Repair Fsys CRC32 (ALT + F)";
                 else if (sender == cmdEveryMacSearch)
-                    lblMessage.Text = "View serial number information with EveryMac";
+                    lblMessage.Text = "Search serial with EveryMac (ALT + S)";
                 else if (sender == cmdOpenBin)
-                    lblMessage.Text = "Open an EFIROM";
+                    lblMessage.Text = "Open a Mac BIOS (CTRL + O)";
                 else if (sender == cmdReset)
-                    lblMessage.Text = "Unload EFIROM and clear all data";
+                    lblMessage.Text = "Reset (CTRL + R)";
                 else if (sender == cmdEditEfirom)
-                    lblMessage.Text = "Open the firmware editor window";
+                    lblMessage.Text = "Open the editor (CTRL + E)";
                 else if (sender == cmdAppleRomInfo)
-                    lblMessage.Text = "Open the ROM information window";
+                    lblMessage.Text = "Open ROM information window (ALT + I)";
                 else if (sender == lblPrivateMemory)
                     lblMessage.Text = "Private memory consumption";
                 else if (sender == lblVssStore)
@@ -739,10 +765,10 @@ namespace Mac_EFI_Toolkit
             switch (FWBase.EfiLock)
             {
                 case EfiLockStatus.Locked:
-                    statusText = "Message Authentication Code found (EFI is password locked)";
+                    statusText = "EFI is password locked (Authentication Code present)";
                     break;
                 case EfiLockStatus.Unlocked:
-                    statusText = "Message Authentication Code not found (EFI is not password locked)";
+                    statusText = "EFI is not password locked";
                     break;
                 case EfiLockStatus.Unknown:
                     return;

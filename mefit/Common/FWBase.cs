@@ -269,8 +269,9 @@ namespace Mac_EFI_Toolkit.Common
             string crcString = null;
             string crcCalcString = null;
 
-            int ssnStartPos = 0x05;
-            var hwcStartPos = 0x06;
+            var ssnStartPos = 0x5;
+            var hwcStartPos = 0x6;
+            var crcLength = 0x4;
 
             // First we need to locate the NVRAM section GUID.
             long nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
@@ -305,7 +306,6 @@ namespace Mac_EFI_Toolkit.Common
                 crcCalcString = EFIUtils.GetUintFsysCrc32(fsysData).ToString("X8");
 
                 // Fsys store CRC32
-                var crcLength = 0x4;
                 var crcNudgePos = FSYS_RGN_SIZE - crcLength;
                 var crcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysPos + crcNudgePos, crcLength);
 
@@ -366,12 +366,12 @@ namespace Mac_EFI_Toolkit.Common
                 FsysBytes = fsysData,
                 FsysOffset = fsysPos,
                 Serial = ssnString,
-                SerialOffset = ssnPos + ssnStartPos,
+                SerialOffset = ssnPos != -1 ? ssnPos + ssnStartPos : -1,
                 HWC = hwcString,
-                HWCOffset = hwcPos + hwcStartPos,
+                HWCOffset = hwcPos != -1 ? hwcPos + hwcStartPos : -1,
                 SON = sonString,
                 CRC32 = crcString,
-                CRC32Offset = fsysPos - 0x4,
+                CRC32Offset = fsysPos - crcLength,
                 CRC32Calc = crcCalcString
             };
         }

@@ -178,7 +178,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblSerialText.Name = "lblSerialText";
             this.lblSerialText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblSerialText.Size = new System.Drawing.Size(400, 34);
-            this.lblSerialText.TabIndex = 21;
+            this.lblSerialText.TabIndex = 99;
             this.lblSerialText.Text = "Serial Number";
             this.lblSerialText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -207,14 +207,13 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxReplaceSerial.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
             this.cbxReplaceSerial.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cbxReplaceSerial.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxReplaceSerial.Enabled = false;
             this.cbxReplaceSerial.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxReplaceSerial.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cbxReplaceSerial.Location = new System.Drawing.Point(11, 4);
             this.cbxReplaceSerial.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
             this.cbxReplaceSerial.Name = "cbxReplaceSerial";
             this.cbxReplaceSerial.Size = new System.Drawing.Size(192, 21);
-            this.cbxReplaceSerial.TabIndex = 3;
+            this.cbxReplaceSerial.TabIndex = 0;
             this.cbxReplaceSerial.Text = "Replace Serial Number";
             this.cbxReplaceSerial.CheckedChanged += new System.EventHandler(this.cmdReplaceSerial_CheckedChanged);
             // 
@@ -260,6 +259,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdFsysPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdFsysPath.Enabled = false;
             this.cmdFsysPath.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdFsysPath.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdFsysPath.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdFsysPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdFsysPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdFsysPath.ForeColor = System.Drawing.Color.White;
@@ -319,7 +320,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblHwcText.Margin = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblHwcText.Name = "lblHwcText";
             this.lblHwcText.Size = new System.Drawing.Size(47, 20);
-            this.lblHwcText.TabIndex = 21;
+            this.lblHwcText.TabIndex = 99;
             this.lblHwcText.Text = "HWC:";
             // 
             // lblSsnText
@@ -332,7 +333,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblSsnText.Margin = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lblSsnText.Name = "lblSsnText";
             this.lblSsnText.Size = new System.Drawing.Size(41, 20);
-            this.lblSsnText.TabIndex = 18;
+            this.lblSsnText.TabIndex = 99;
             this.lblSsnText.Text = "SSN:";
             // 
             // tbxSerialNumber
@@ -385,7 +386,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpNss.RowCount = 1;
             this.tlpNss.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpNss.Size = new System.Drawing.Size(400, 30);
-            this.tlpNss.TabIndex = 4;
+            this.tlpNss.TabIndex = 5;
             // 
             // lblNssChevRight
             // 
@@ -456,7 +457,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpSvs.RowCount = 1;
             this.tlpSvs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSvs.Size = new System.Drawing.Size(400, 30);
-            this.tlpSvs.TabIndex = 3;
+            this.tlpSvs.TabIndex = 4;
             // 
             // cbxClearSvsStore
             // 
@@ -527,7 +528,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpVss.RowCount = 1;
             this.tlpVss.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpVss.Size = new System.Drawing.Size(400, 30);
-            this.tlpVss.TabIndex = 2;
+            this.tlpVss.TabIndex = 3;
             // 
             // lblVssChevRight
             // 
@@ -644,7 +645,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOutput.RowCount = 1;
             this.tlpOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpOutput.Size = new System.Drawing.Size(547, 34);
-            this.tlpOutput.TabIndex = 4;
+            this.tlpOutput.TabIndex = 6;
             // 
             // lblOutputText
             // 
@@ -657,7 +658,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblOutputText.Name = "lblOutputText";
             this.lblOutputText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblOutputText.Size = new System.Drawing.Size(466, 34);
-            this.lblOutputText.TabIndex = 2;
+            this.lblOutputText.TabIndex = 99;
             this.lblOutputText.Text = "Output";
             this.lblOutputText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -667,6 +668,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdSaveLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdSaveLog.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdSaveLog.FlatAppearance.BorderSize = 0;
+            this.cmdSaveLog.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdSaveLog.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdSaveLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdSaveLog.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdSaveLog.ForeColor = System.Drawing.Color.White;
@@ -770,6 +773,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdBuild.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cmdBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdBuild.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdBuild.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdBuild.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdBuild.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdBuild.ForeColor = System.Drawing.Color.White;
@@ -787,12 +792,15 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdOpenBuildsDir.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cmdOpenBuildsDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdOpenBuildsDir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdOpenBuildsDir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdOpenBuildsDir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdOpenBuildsDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOpenBuildsDir.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdOpenBuildsDir.ForeColor = System.Drawing.Color.White;
             this.cmdOpenBuildsDir.Location = new System.Drawing.Point(804, 6);
             this.cmdOpenBuildsDir.Margin = new System.Windows.Forms.Padding(0);
             this.cmdOpenBuildsDir.Name = "cmdOpenBuildsDir";
+            this.cmdOpenBuildsDir.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.cmdOpenBuildsDir.Size = new System.Drawing.Size(34, 34);
             this.cmdOpenBuildsDir.TabIndex = 0;
             this.cmdOpenBuildsDir.Text = "N";

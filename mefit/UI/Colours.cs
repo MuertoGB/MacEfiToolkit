@@ -11,17 +11,17 @@ namespace Mac_EFI_Toolkit.UI
 {
     class Colours
     {
-        internal static readonly Color clrDisabledText = Color.FromArgb(140, 140, 140);
-        internal static readonly Color clrEnabledText = Color.FromArgb(255, 255, 255);
-        internal static readonly Color clrDisabledControl = Color.FromArgb(80, 80, 80);
-        internal static readonly Color clrBorderInactive = Color.FromArgb(120, 120, 120);
-        internal static readonly Color clrBorderActive = Color.FromArgb(200, 200, 200);
-        internal static readonly Color clrClientInactive = Color.FromArgb(10, 10, 10);
-        internal static readonly Color clrClientActive = Color.FromArgb(30, 30, 30);
-        internal static readonly Color clrChecked = Color.FromArgb(120, 180, 0);
-        internal static readonly Color clrWarn = Color.Tomato;
-        internal static readonly Color clrError = Color.FromArgb(255, 50, 50);
-        internal static readonly Color clrGood = Color.FromArgb(128, 255, 128);
-        internal static readonly Color clrInfo = Color.FromArgb(0, 120, 180);
+        internal static readonly Color DISABLED_TEXT = Color.FromArgb(140, 140, 140);
+        internal static readonly Color ENABLED_TEXT = Color.FromArgb(255, 255, 255);
+        internal static readonly Color DISABLED_CONTROL = Color.FromArgb(80, 80, 80);
+        internal static readonly Color BORDER_INACTIVE = Color.FromArgb(120, 120, 120);
+        internal static readonly Color BORDER_ACTIVE = Color.FromArgb(200, 200, 200);
+        internal static readonly Color CLIENT_INACTIVE = Color.FromArgb(10, 10, 10);
+        internal static readonly Color CLIENT_ACTIVE = Color.FromArgb(30, 30, 30);
+        internal static readonly Color CHECKED = Color.FromArgb(120, 180, 0);
+        internal static readonly Color WARNING_ORANGE = Color.Tomato;
+        internal static readonly Color ERROR_RED = Color.FromArgb(255, 50, 50);
+        internal static readonly Color COMPLETE_GREEN = Color.FromArgb(128, 255, 128);
+        internal static readonly Color INFO_BLUE = Color.FromArgb(0, 120, 180);
     }
 }

@@ -16,6 +16,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
@@ -29,7 +30,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool _maskCrc = false;
         private bool _buildFailed = false;
         private string _fullBuildPath = string.Empty;
-        private readonly string _strChevronRight = "\xE76C";
         #endregion
 
         #region Overriden Properties
@@ -53,10 +53,9 @@ namespace Mac_EFI_Toolkit.WinForms
             lblTitle.MouseMove += editorWindow_MouseMove;
 
             var font = Program.FONT_MDL2_REG_9;
-            var chevronRight = _strChevronRight;
-            SetLabelProperties(lblSvsChevRight, font, chevronRight);
-            SetLabelProperties(lblVssChevRight, font, chevronRight);
-            SetLabelProperties(lblNssChevRight, font, chevronRight);
+            SetLabelProperties(lblSvsChevRight, font, Chars.CHEVRON_RIGHT);
+            SetLabelProperties(lblVssChevRight, font, Chars.CHEVRON_RIGHT);
+            SetLabelProperties(lblNssChevRight, font, Chars.CHEVRON_RIGHT);
 
             SetButtonProperties();
         }
@@ -68,7 +67,7 @@ namespace Mac_EFI_Toolkit.WinForms
             tbxSerialNumber.MaxLength = FWBase.FsysSectionData.Serial.Length;
 
             Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"The editor is unfinished, use caution!", RtbLogPrefix.Warn, rtbLog);
+            Logger.WriteLogTextToRtb($"The editor is unfinished, use caution!", RtbLogPrefix.Warning, rtbLog);
 
             LogLoadedBinarySize();
             LogFsysData();
@@ -91,7 +90,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 cbxClearNssStore.Enabled = false;
             }
 
-            Logger.WriteLogTextToRtb($"Initial checks complete", RtbLogPrefix.Good, rtbLog);
+            Logger.WriteLogTextToRtb($"Initial checks complete", RtbLogPrefix.Complete, rtbLog);
         }
         #endregion
 
@@ -145,17 +144,20 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             ToggleControlEnable(false);
 
+            // Clone the loaded binary
             _bytesNewBinary = FWBase.LoadedBinaryBytes;
 
             if (cbxReplaceFsysRgn.Checked)
             {
-                PatchFsys();
+                Logger.WriteLogTextToRtb("Replacing Fsys Store:-", RtbLogPrefix.Info, rtbLog);
+                WriteNewFsysStore();
             }
 
-            //if (cbxReplaceSerial.Checked)
-            //{
-            //    Logger.WriteLogTextToRtb($"Replacing serial number...", RtbLogPrefix.MET, rtbLog);
-            //}
+            if (cbxReplaceSerial.Checked)
+            {
+                Logger.WriteLogTextToRtb($"Replacing Serial Number:-", RtbLogPrefix.Info, rtbLog);
+                WriteNewSerialData();
+            }
 
             if (cbxClearVssStore.Checked)
             {
@@ -178,7 +180,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // If the build fails, disallow exporting.
             if (!_buildFailed)
             {
-                Logger.WriteLogTextToRtb($"BUILD SUCCEEDED.", RtbLogPrefix.Good, rtbLog);
+                Logger.WriteLogTextToRtb($"BUILD SUCCEEDED", RtbLogPrefix.Complete, rtbLog);
 
                 var filename = $"outimage_{DateTime.Now:yyMMdd_HHmmss}.bin";
 
@@ -195,7 +197,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 if (string.Equals(shaNewBinary, shaOutFile))
                 {
-                    Logger.WriteLogTextToRtb($"Written file checksum is good, export successful!", RtbLogPrefix.Good, rtbLog);
+                    Logger.WriteLogTextToRtb($"Written file checksum is good, export successful!", RtbLogPrefix.Complete, rtbLog);
                 }
                 else
                 {
@@ -254,7 +256,7 @@ namespace Mac_EFI_Toolkit.WinForms
             bool isChecked = cb.Checked;
 
             cmdFsysPath.Enabled = isChecked;
-            //tlpSerialA.Enabled = !isChecked;
+            tlpSerialA.Enabled = !isChecked;
 
             if (isChecked)
             {
@@ -308,8 +310,8 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 if (EFIUtils.GetIsValidSerialChars(tb.Text))
                 {
-                    UpdateTextBoxColor(tb, Colours.clrGood);
-                    Logger.WriteLogTextToRtb("Valid serial characters entered.", RtbLogPrefix.Info, rtbLog);
+                    UpdateTextBoxColor(tb, Colours.COMPLETE_GREEN);
+                    Logger.WriteLogTextToRtb("Valid serial characters entered", RtbLogPrefix.Info, rtbLog);
                     if (FWBase.FsysSectionData.Serial.Length == 11)
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 3));
@@ -322,9 +324,9 @@ namespace Mac_EFI_Toolkit.WinForms
                 }
                 else
                 {
-                    UpdateTextBoxColor(tb, Colours.clrError);
-                    Logger.WriteLogTextToRtb("Invalid serial characters entered.", RtbLogPrefix.Error, rtbLog);
-                    UpdateHwcTextBoxText(string.Empty);
+                    UpdateTextBoxColor(tb, Colours.ERROR_RED);
+                    Logger.WriteLogTextToRtb("Invalid serial characters entered", RtbLogPrefix.Error, rtbLog);
+                    UpdateHwcTextBoxText("???");
                     cmdBuild.Enabled = false;
                 }
             }
@@ -340,7 +342,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Validation
         private bool ValidateNewFsysRegion(byte[] sourceBytes)
         {
-            Logger.WriteLogTextToRtb("Validating donor Fsys region:", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb("Validating donor Fsys region:-", RtbLogPrefix.Info, rtbLog);
 
             if (sourceBytes.Length != FWBase.FSYS_RGN_SIZE)
             {
@@ -366,11 +368,11 @@ namespace Mac_EFI_Toolkit.WinForms
             string strCrcInSourceBytes = FWBase.GetCrcStringFromFsys(sourceBytes);
             string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");
 
-            Logger.WriteLogTextToRtb($"{strCrcInSourceBytes}h > {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"File: {strCrcInSourceBytes}h > Calc: {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
 
             if (strCrcInSourceBytes != strCrcCalculated)
             {
-                Logger.WriteLogTextToRtb("Donor Fsys CRC32 is invalid, 'Mask CRC32' flag set!", RtbLogPrefix.Warn, rtbLog);
+                Logger.WriteLogTextToRtb("Donor Fsys Store CRC32 is invalid, 'Mask CRC32' flag set!", RtbLogPrefix.Warning, rtbLog);
                 _maskCrc = true;
             }
             else
@@ -378,7 +380,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 _maskCrc = false;
             }
 
-            Logger.WriteLogTextToRtb("Validation completed", RtbLogPrefix.Good, rtbLog);
+            Logger.WriteLogTextToRtb("Validation completed", RtbLogPrefix.Complete, rtbLog);
 
             return true;
         }
@@ -405,9 +407,9 @@ namespace Mac_EFI_Toolkit.WinForms
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
+            cmdClose.Text = Chars.EXIT_CROSS;
             cmdOpenBuildsDir.Font = Program.FONT_MDL2_REG_12;
-            cmdOpenBuildsDir.Text = "\xEC50";
+            cmdOpenBuildsDir.Text = Chars.FILE_EXPLORER;
         }
 
         private void ToggleControlEnable(bool enable)
@@ -440,10 +442,8 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Editing
-        private void PatchFsys()
+        private void WriteNewFsysStore()
         {
-            Logger.WriteLogTextToRtb("Writing new Fsys Region:", RtbLogPrefix.Info, rtbLog);
-
             // Mask Fsys CRC
             if (_maskCrc)
             {
@@ -491,7 +491,88 @@ namespace Mac_EFI_Toolkit.WinForms
                 return;
             }
 
-            Logger.WriteLogTextToRtb("New Fsys region written successfully", RtbLogPrefix.Good, rtbLog);
+            Logger.WriteLogTextToRtb("New Fsys region written successfully", RtbLogPrefix.Complete, rtbLog);
+        }
+
+        private void WriteNewSerialData()
+        {
+            if (FWBase.FsysSectionData.FsysBytes != null && FWBase.FsysSectionData.SerialOffset != -1)
+            {
+                var newSerial = tbxSerialNumber.Text;
+                var newHwc = tbxHwc.Text;
+                byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
+                byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
+
+                // Write new serial number bytes
+                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.SerialOffset, newSerialBytes);
+
+                // Determine and write new HWC
+                if (FWBase.FsysSectionData.HWCOffset != -1)
+                {
+                    BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.HWCOffset, newHwcBytes);
+                }
+                else
+                {
+                    Logger.WriteLogTextToRtb("No HWC offset found, new HWC was not written!", RtbLogPrefix.Warning, rtbLog);
+                }
+
+                // Load new Fsys store
+                var newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
+
+                // Check serial matches
+                if (string.Equals(newFsys.Serial, newSerial))
+                {
+                    Logger.WriteLogTextToRtb("New serial number written successfully", RtbLogPrefix.Complete, rtbLog);
+
+                    // Load new Fsys store bytes
+                    byte[] newFsysStore = newFsys.FsysBytes;
+                    // Calculate Fsys CRC32 from given bytes
+                    uint newCrc = EFIUtils.GetUintFsysCrc32(newFsysStore);
+                    // Get bytes from new CRC uint
+                    byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
+                    // Write new CRC bytes to loaded Fsys store
+                    BinaryUtils.OverwriteBytesAtOffset(newFsysStore, 0x7FC, newCrcBytes);
+                    // Get the patched bytes from the Fsys store
+                    uint patchedCrcBytes = EFIUtils.GetUintFsysCrc32(newFsysStore);
+                    // Compare the checksums
+                    if (string.Equals(newCrc.ToString("X8"), patchedCrcBytes.ToString("X8")))
+                    {
+                        Logger.WriteLogTextToRtb("CRC32 masking successful", RtbLogPrefix.Info, rtbLog);
+                    }
+                    else
+                    {
+                        HandleBuildFailure("CRC32 masking failed.");
+                        return;
+                    }
+
+                    // Write back patched Fsys store
+                    BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, newFsysStore);
+
+                    // Load Fsys store from the new binary again
+                    newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
+
+                    // Check the Fsys store matches the patched store
+                    if (newFsys.FsysBytes.SequenceEqual(newFsysStore))
+                    {
+                        Logger.WriteLogTextToRtb("Patched Fsys store written successfully", RtbLogPrefix.Complete, rtbLog);
+                    }
+                    else
+                    {
+                        HandleBuildFailure("Patched Fsys store does not match");
+                        return;
+                    }
+                }
+                else
+                {
+                    HandleBuildFailure("New serial number could not be written");
+                    return;
+                }
+            }
+            else
+            {
+                HandleBuildFailure("Loaded binary Fsys store is invalid");
+                return;
+            }
         }
 
         private void ClearNvramStore(NvramStoreSection storeData, bool clearBackup)
@@ -535,20 +616,22 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (newStore.IsPrimaryStoreEmpty)
             {
-                Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store cleared successfully", RtbLogPrefix.Good, rtbLog);
+                Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store cleared successfully", RtbLogPrefix.Complete, rtbLog);
             }
             else
             {
                 HandleBuildFailure($"Primary {storeData.StoreType} store was not cleared successfully");
+                return;
             }
 
             if (newStore.IsBackupStoreEmpty)
             {
-                Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} store cleared successfully", RtbLogPrefix.Good, rtbLog);
+                Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} store cleared successfully", RtbLogPrefix.Complete, rtbLog);
             }
             else
             {
                 HandleBuildFailure($"Backup {storeData.StoreType} store was not cleared successfully");
+                return;
             }
 
         }
@@ -559,7 +642,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTextToRtb(errorMessage, RtbLogPrefix.Error, rtbLog);
             _buildFailed = true;
         }
-
         #endregion
 
     }

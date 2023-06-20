@@ -5,6 +5,7 @@
 // aboutWindow.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
@@ -38,14 +39,14 @@ namespace Mac_EFI_Toolkit.WinForms
             KeyDown += new KeyEventHandler(aboutWindow_KeyDown);
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
+            cmdClose.Text = Chars.EXIT_CROSS;
         }
         #endregion
 
         #region Window Events
         private void aboutWindow_Load(object sender, EventArgs e)
         {
-            lblBuild.Text = Program.appBuild;
+            lblBuild.Text = $"{Program.appBuild}, {Program.appChannel}";
             FormatLinks();
         }
         #endregion

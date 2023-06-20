@@ -105,6 +105,7 @@
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="METVersion.cs" />
+    <Compile Include="UI\Chars.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
     <Compile Include="UI\METLabel.cs">
       <SubType>Component</SubType>

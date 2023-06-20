@@ -32,12 +32,12 @@ namespace Mac_EFI_Toolkit.UI
             MouseEnter += new EventHandler(ProcessMouse);
             MouseLeave += new EventHandler(ProcessMouse);
             BackColor = Color.Transparent;
-            ForeColor = Colours.clrEnabledText;
+            ForeColor = Colours.ENABLED_TEXT;
         }
         #endregion
 
         #region Properties
-        private Color BorderInactive_ = Colours.clrBorderInactive;
+        private Color BorderInactive_ = Colours.BORDER_INACTIVE;
         [Description("Check area border color")]
         [Category("Appearance (MET)")]
         public Color BorderColor
@@ -53,7 +53,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        private Color BorderActive_ = Colours.clrBorderActive;
+        private Color BorderActive_ = Colours.BORDER_ACTIVE;
         [Description("Check area mouseover border color")]
         [Category("Appearance (MET)")]
         public Color BorderColorActive
@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        private Color ClientInactive_ = Colours.clrClientInactive;
+        private Color ClientInactive_ = Colours.CLIENT_INACTIVE;
         [Description("Check area backcolor")]
         [Category("Appearance (MET)")]
         public Color ClientColor
@@ -85,7 +85,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        private Color ClientActive_ = Colours.clrClientActive;
+        private Color ClientActive_ = Colours.CLIENT_ACTIVE;
         [Description("Check area mouseover color")]
         [Category("Appearance (MET)")]
         public Color ClientColorActive
@@ -101,7 +101,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        private Color Checked_ = Colours.clrChecked;
+        private Color Checked_ = Colours.CHECKED;
         [Description("Control checked color")]
         [Category("Appearance (MET)")]
         public Color CheckedColor
@@ -144,7 +144,7 @@ namespace Mac_EFI_Toolkit.UI
             Rectangle outerRectangle = new Rectangle(2, 2, diameter - 2, diameter - 2);
 
             Color switchBorder = Enabled ? (Focused ? BorderColor : MouseHovered && MousePressed ? CheckedColor :
-                                 MouseHovered ? BorderColorActive : BorderColor) : Colours.clrDisabledControl;
+                                 MouseHovered ? BorderColorActive : BorderColor) : Colours.DISABLED_CONTROL;
 
             if (Focused)
             {
@@ -183,7 +183,7 @@ namespace Mac_EFI_Toolkit.UI
             }
 
             var textArea = new Rectangle(outerRectangle.Width + 6, 0, Width - outerRectangle.Width - 6, Height);
-            var textColor = Enabled ? ForeColor : Colours.clrDisabledText;
+            var textColor = Enabled ? ForeColor : Colours.DISABLED_TEXT;
 
             using (var format = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
             using (var brush = new SolidBrush(textColor))

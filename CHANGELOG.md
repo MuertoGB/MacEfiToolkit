@@ -14,14 +14,20 @@
 ## Version 0.6.1
 
 #### New:
-- Enabled option to clear NVRAM stores in the editor window.
+- New editor window features:-
+> - Enabled option to clear firmware NVRAM stores.
+> - Enabled option to replace the firmware serial number.
+- Added option to navigate to the builds directory in the main window menu.
+- Added option to navigate to the fsys stores directory in the main window menu.
 
 #### Enhancements:
-- Improved main window NVRAM store information
-- Improved EFI lock status
+- UI improvements.
+- Enhanced EFI lock status
 
 #### Bugs:
 - Fixed an issue where the main window version label colour was not being set correctly upon form activation when an update is available.
+- Fixed oversight in the FWBase Fsys store parser causing incorrect offsets to be returned.
+- Added missing shortcut to open the rom information window (ALT + I)
 
 ## Version 0.6.0
 

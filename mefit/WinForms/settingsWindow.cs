@@ -5,6 +5,7 @@
 // settingsWindow.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Runtime.InteropServices;
@@ -42,7 +43,7 @@ namespace Mac_EFI_Toolkit.WinForms
             KeyDown += aboutWindow_KeyDown;
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
+            cmdClose.Text = Chars.EXIT_CROSS;
         }
         #endregion
 
