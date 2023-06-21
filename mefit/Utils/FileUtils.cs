@@ -158,24 +158,32 @@ namespace Mac_EFI_Toolkit.Utils
         /// </returns>
         internal static int WriteAllBytesEx(string path, byte[] sourceBytes)
         {
-            // Write the byte array to the file
-            File.WriteAllBytes(path, sourceBytes);
-
-            // Read the contents of the file back into a byte array
-            byte[] fileBytes = File.ReadAllBytes(path);
-
-            // Check if the file exists on disk
             if (File.Exists(path))
             {
-                // Compare the written byte array with the content on disk
-                if (!sourceBytes.SequenceEqual(fileBytes))
+                return -3;
+            }
+
+            try
+            {
+                using (var fileStream = new FileStream(path, FileMode.Create))
                 {
-                    return -1; // Integrity check failed
+                    fileStream.Write(sourceBytes, 0, sourceBytes.Length);
+                }
+
+                using (var fileStream = new FileStream(path, FileMode.Open))
+                {
+                    byte[] fileBytes = new byte[fileStream.Length];
+                    fileStream.Read(fileBytes, 0, fileBytes.Length);
+
+                    if (!sourceBytes.SequenceEqual(fileBytes))
+                    {
+                        return -1; // Integrity check failed
+                    }
                 }
             }
-            else
+            catch (IOException)
             {
-                return -2; // File does not exist on disk
+                return -2; // File access error
             }
 
             return 0; // Data was written successfully and integrity is verified

@@ -25,6 +25,7 @@
 - UI improvements.
 - Improved EFI lock status
 - Improved integrity checks when saving and editing binary files.
+- Modified default name for editor build output files.
 
 #### Bugs:
 - Corrected an issue where the color of the version label in the main window was not being set correctly when the form was activated and an update was available.

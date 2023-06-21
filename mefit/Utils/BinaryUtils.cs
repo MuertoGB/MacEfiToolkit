@@ -290,16 +290,20 @@ namespace Mac_EFI_Toolkit.Utils
             return fsysStore;
         }
 
-        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes)
+        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes, long fsysOffset, byte[] fsysStore, uint uiNewCrc)
         {
+            // Create a new byte array to hold the patched binary
+            byte[] patchedBytes = new byte[sourceBytes.Length];
+            Array.Copy(sourceBytes, patchedBytes, sourceBytes.Length);
+
             // Patch the Fsys store crc
-            byte[] patchedStore = PatchFsysCrc(FWBase.FsysSectionData.FsysBytes, FWBase.FsysSectionData.CRC32CalcInt);
+            byte[] patchedStore = PatchFsysCrc(fsysStore, uiNewCrc);
 
             // Overwrite the loaded Fsys crc32 with the newly calculated crc32
-            OverwriteBytesAtOffset(sourceBytes, FWBase.FsysSectionData.FsysOffset, patchedStore);
+            OverwriteBytesAtOffset(patchedBytes, fsysOffset, patchedStore);
 
             // Load the Fsys store from the new binary
-            var newBinaryFsys = FWBase.GetFsysStoreData(sourceBytes);
+            var newBinaryFsys = FWBase.GetFsysStoreData(patchedBytes);
 
             // Compare the new checksums
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)
@@ -307,8 +311,9 @@ namespace Mac_EFI_Toolkit.Utils
                 return null;
             }
 
-            return sourceBytes;
+            return patchedBytes;
         }
+
         #endregion
 
     }

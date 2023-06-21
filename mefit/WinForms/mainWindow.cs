@@ -344,8 +344,15 @@ namespace Mac_EFI_Toolkit
                 }
 
                 bool buildFailed = false;
+
                 // Make binary with patched Fsys crc
-                byte[] patchedBinary = BinaryUtils.MakeFsysCrcPatchedBinary(FWBase.LoadedBinaryBytes);
+                byte[] patchedBinary = BinaryUtils.MakeFsysCrcPatchedBinary
+                    (
+                    FWBase.LoadedBinaryBytes,
+                    FWBase.FsysSectionData.FsysOffset,
+                    FWBase.FsysSectionData.FsysBytes,
+                    FWBase.FsysSectionData.CRC32CalcInt
+                    );
 
                 // Check patchedBinary is not null
                 if (patchedBinary == null)

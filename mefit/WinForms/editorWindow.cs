@@ -157,6 +157,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (cbxReplaceSerial.Checked)
                 {
                     Logger.WriteLogTextToRtb($"Replacing Serial Number data:-", RtbLogPrefix.Info, rtbLog);
+
                     if (!WriteNewSerialData())
                         return;
                 }
@@ -196,19 +197,23 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private bool SaveBuild()
         {
-            var filename = $"outimage_{FWBase.FileInfoData.FileNameNoExt}.bin";
             Program.CreateCheckBuildsFolder();
+
+            var filename = $"outimage_{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin";
+
             _fullBuildPath = Path.Combine(Program.buildsDirectory, filename);
+
             int saveResult = FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary);
 
             if (saveResult != 0)
             {
-                Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned {saveResult}", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned {saveResult}, file could not be saved!", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
             Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned {saveResult}", RtbLogPrefix.Complete, rtbLog);
             Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
+
             return true;
         }
         #endregion
@@ -499,91 +504,80 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private bool WriteNewSerialData()
         {
-            if (FWBase.FsysSectionData.FsysBytes != null && FWBase.FsysSectionData.SerialOffset != -1)
+            // Given serial is too short
+            if (tbxSerialNumber.Text.Length != FWBase.FsysSectionData.Serial.Length)
             {
-                var newSerial = tbxSerialNumber.Text;
-                var newHwc = tbxHwc.Text;
-                byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
-                byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
-
-                // Write new serial number bytes
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.SerialOffset, newSerialBytes);
-
-                // Determine and write new HWC
-                if (FWBase.FsysSectionData.HWCOffset != -1)
-                {
-                    BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.HWCOffset, newHwcBytes);
-                }
-                else
-                {
-                    Logger.WriteLogTextToRtb("No HWC offset present, new data was not written!", RtbLogPrefix.Warning, rtbLog);
-                }
-
-                // Load new Fsys store
-                var newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
-
-                if (!string.Equals(newSerial, newFsys.Serial))
-                {
-                    HandleBuildFailure("Serial was not written successfully");
-                    return false;
-                }
-
-                if (FWBase.FsysSectionData.HWCOffset != -1)
-                {
-                    if (!string.Equals(newHwc, newFsys.HWC))
-                    {
-                        HandleBuildFailure("HWC was not written successfully");
-                        return false;
-                    }
-                }
-
-                Logger.WriteLogTextToRtb("Serial number written successfully", RtbLogPrefix.Complete, rtbLog);
-                Logger.WriteLogTextToRtb("HWC written successfully", RtbLogPrefix.Complete, rtbLog);
-                Logger.WriteLogTextToRtb("Masking Fsys CRC32:-", RtbLogPrefix.Info, rtbLog);
-
-                // Load new Fsys store bytes
-                byte[] newFsysStore = newFsys.FsysBytes;
-                // Calculate Fsys CRC32 from given bytes
-                uint newCrc = EFIUtils.GetUintFsysCrc32(newFsysStore);
-                // Get bytes from new CRC uint
-                byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
-                // Write new CRC bytes to loaded Fsys store
-                BinaryUtils.OverwriteBytesAtOffset(newFsysStore, FWBase.FSYS_CRC_POS, newCrcBytes);
-                // Get the patched bytes from the Fsys store
-                uint patchedCrcBytes = EFIUtils.GetUintFsysCrc32(newFsysStore);
-                // Compare the checksums
-                if (string.Equals(newCrc.ToString("X8"), patchedCrcBytes.ToString("X8")))
-                {
-                    Logger.WriteLogTextToRtb("CRC32 masking successful", RtbLogPrefix.Info, rtbLog);
-                }
-                else
-                {
-                    HandleBuildFailure("CRC32 masking failed.");
-                    return false;
-                }
-
-                // Write back patched Fsys store
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, newFsysStore);
-
-                // Load Fsys store from the new binary again
-                newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
-
-                // Check the Fsys store matches the patched store
-                if (newFsys.FsysBytes.SequenceEqual(newFsysStore))
-                {
-                    Logger.WriteLogTextToRtb("Patched Fsys store written successfully", RtbLogPrefix.Complete, rtbLog);
-                }
-                else
-                {
-                    HandleBuildFailure("Fsys comparison check failed");
-                    return false;
-                }
-            }
-            else
-            {
-                HandleBuildFailure("Loaded binary Fsys store is invalid");
+                HandleBuildFailure("The given serial number was too short");
                 return false;
             }
+
+            // Fsys postition was not found
+            if (FWBase.FsysSectionData.SerialOffset == -1)
+            {
+                HandleBuildFailure("FsysSectionData store offset is -1");
+                return false;
+            }
+
+            // Fsys store bytes are empty
+            if (FWBase.FsysSectionData.FsysBytes == null)
+            {
+                HandleBuildFailure("FsysSectionData store bytes are empty");
+                return false;
+            }
+
+            // Write new serial number bytes
+            var newSerial = tbxSerialNumber.Text;
+            byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
+            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.SerialOffset, newSerialBytes);
+
+            // Write new HWC bytes
+            var newHwc = tbxHwc.Text;
+            byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
+            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.HWCOffset, newHwcBytes);
+
+            // Load new Fsys store
+            var newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
+
+            // Check serial numbers match
+            if (!string.Equals(newSerial, newFsys.Serial))
+            {
+                HandleBuildFailure("Serial number comparison failed");
+                return false;
+            }
+
+            // Check HWC's match
+            if (FWBase.FsysSectionData.HWCOffset != -1)
+            {
+                if (!string.Equals(newHwc, newFsys.HWC))
+                {
+                    HandleBuildFailure("HWC comparison failed");
+                    return false;
+                }
+            }
+
+            Logger.WriteLogTextToRtb("Serial number comparison successful", RtbLogPrefix.Complete, rtbLog);
+            Logger.WriteLogTextToRtb("HWC comparison successful", RtbLogPrefix.Complete, rtbLog);
+            Logger.WriteLogTextToRtb("Masking Fsys CRC32:-", RtbLogPrefix.Info, rtbLog);
+
+            _bytesNewBinary = BinaryUtils.MakeFsysCrcPatchedBinary
+            (
+               _bytesNewBinary,
+               newFsys.FsysOffset,
+               newFsys.FsysBytes,
+               newFsys.CRC32CalcInt
+            );
+
+            // Load Fsys store from the new binary again
+            newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
+
+            // Check the Fsys store matches the patched store
+            if (!string.Equals(newFsys.CrcCalcString, newFsys.CrcString))
+            {
+                HandleBuildFailure("CRC comparison check failed");
+                return false;
+            }
+
+            Logger.WriteLogTextToRtb("CRC masking was successful", RtbLogPrefix.Complete, rtbLog);
 
             return true;
         }
@@ -658,6 +652,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTextToRtb("BUILD FAILED:", RtbLogPrefix.Error, rtbLog);
             Logger.WriteLogTextToRtb(errorMessage, RtbLogPrefix.Error, rtbLog);
+            // Reload _bytesNewBinary
+            _bytesNewBinary = FWBase.LoadedBinaryBytes;
         }
         #endregion
 
