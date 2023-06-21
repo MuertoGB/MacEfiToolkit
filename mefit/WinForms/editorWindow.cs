@@ -155,25 +155,25 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (cbxReplaceSerial.Checked)
             {
-                Logger.WriteLogTextToRtb($"Replacing Serial Number:-", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"Replacing Serial Number data:-", RtbLogPrefix.Info, rtbLog);
                 WriteNewSerialData();
             }
 
             if (cbxClearVssStore.Checked)
             {
-                Logger.WriteLogTextToRtb("Clearing VSS NVRAM Data:", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb("Clearing VSS NVRAM data:", RtbLogPrefix.Info, rtbLog);
                 ClearNvramStore(FWBase.VssStoreData, cbxClearVssBackup.Checked);
             }
 
             if (cbxClearSvsStore.Checked)
             {
-                Logger.WriteLogTextToRtb("Clearing SVS NVRAM Data:", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb("Clearing SVS NVRAM data:", RtbLogPrefix.Info, rtbLog);
                 ClearNvramStore(FWBase.SvsStoreData, cbxClearSvsBackup.Checked);
             }
 
             if (cbxClearNssStore.Checked)
             {
-                Logger.WriteLogTextToRtb("Clearing NSS NVRAM Data:", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb("Clearing NSS NVRAM data:", RtbLogPrefix.Info, rtbLog);
                 ClearNvramStore(FWBase.NssStoreData, cbxClearNssBackup.Checked);
             }
 
@@ -513,58 +513,66 @@ namespace Mac_EFI_Toolkit.WinForms
                 }
                 else
                 {
-                    Logger.WriteLogTextToRtb("No HWC offset found, new HWC was not written!", RtbLogPrefix.Warning, rtbLog);
+                    Logger.WriteLogTextToRtb("No HWC offset present, new data was not written!", RtbLogPrefix.Warning, rtbLog);
                 }
 
                 // Load new Fsys store
                 var newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
 
-                // Check serial matches
-                if (string.Equals(newFsys.Serial, newSerial))
+                if (!string.Equals(newSerial, newFsys.Serial))
                 {
-                    Logger.WriteLogTextToRtb("New serial number written successfully", RtbLogPrefix.Complete, rtbLog);
+                    HandleBuildFailure("Serial was not written successfully");
+                    return;
+                }
 
-                    // Load new Fsys store bytes
-                    byte[] newFsysStore = newFsys.FsysBytes;
-                    // Calculate Fsys CRC32 from given bytes
-                    uint newCrc = EFIUtils.GetUintFsysCrc32(newFsysStore);
-                    // Get bytes from new CRC uint
-                    byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
-                    // Write new CRC bytes to loaded Fsys store
-                    BinaryUtils.OverwriteBytesAtOffset(newFsysStore, 0x7FC, newCrcBytes);
-                    // Get the patched bytes from the Fsys store
-                    uint patchedCrcBytes = EFIUtils.GetUintFsysCrc32(newFsysStore);
-                    // Compare the checksums
-                    if (string.Equals(newCrc.ToString("X8"), patchedCrcBytes.ToString("X8")))
+                if (FWBase.FsysSectionData.HWCOffset != -1)
+                {
+                    if (!string.Equals(newHwc, newFsys.HWC))
                     {
-                        Logger.WriteLogTextToRtb("CRC32 masking successful", RtbLogPrefix.Info, rtbLog);
-                    }
-                    else
-                    {
-                        HandleBuildFailure("CRC32 masking failed.");
-                        return;
-                    }
-
-                    // Write back patched Fsys store
-                    BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, newFsysStore);
-
-                    // Load Fsys store from the new binary again
-                    newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
-
-                    // Check the Fsys store matches the patched store
-                    if (newFsys.FsysBytes.SequenceEqual(newFsysStore))
-                    {
-                        Logger.WriteLogTextToRtb("Patched Fsys store written successfully", RtbLogPrefix.Complete, rtbLog);
-                    }
-                    else
-                    {
-                        HandleBuildFailure("Patched Fsys store does not match");
+                        HandleBuildFailure("HWC was not written successfully");
                         return;
                     }
                 }
+
+                Logger.WriteLogTextToRtb("Serial number written successfully", RtbLogPrefix.Complete, rtbLog);
+                Logger.WriteLogTextToRtb("HWC written successfully", RtbLogPrefix.Complete, rtbLog);
+                Logger.WriteLogTextToRtb("Masking Fsys CRC32:-", RtbLogPrefix.Info, rtbLog);
+
+                // Load new Fsys store bytes
+                byte[] newFsysStore = newFsys.FsysBytes;
+                // Calculate Fsys CRC32 from given bytes
+                uint newCrc = EFIUtils.GetUintFsysCrc32(newFsysStore);
+                // Get bytes from new CRC uint
+                byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
+                // Write new CRC bytes to loaded Fsys store
+                BinaryUtils.OverwriteBytesAtOffset(newFsysStore, 0x7FC, newCrcBytes);
+                // Get the patched bytes from the Fsys store
+                uint patchedCrcBytes = EFIUtils.GetUintFsysCrc32(newFsysStore);
+                // Compare the checksums
+                if (string.Equals(newCrc.ToString("X8"), patchedCrcBytes.ToString("X8")))
+                {
+                    Logger.WriteLogTextToRtb("CRC32 masking successful", RtbLogPrefix.Info, rtbLog);
+                }
                 else
                 {
-                    HandleBuildFailure("New serial number could not be written");
+                    HandleBuildFailure("CRC32 masking failed.");
+                    return;
+                }
+
+                // Write back patched Fsys store
+                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, newFsysStore);
+
+                // Load Fsys store from the new binary again
+                newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
+
+                // Check the Fsys store matches the patched store
+                if (newFsys.FsysBytes.SequenceEqual(newFsysStore))
+                {
+                    Logger.WriteLogTextToRtb("Patched Fsys store written successfully", RtbLogPrefix.Complete, rtbLog);
+                }
+                else
+                {
+                    HandleBuildFailure("Fsys comparison check failed");
                     return;
                 }
             }
