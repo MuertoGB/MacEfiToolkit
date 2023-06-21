@@ -290,7 +290,16 @@ namespace Mac_EFI_Toolkit.Utils
             return fsysStore;
         }
 
+        /// <summary>
+        /// Patches a binaries Fsys store with the correct crc value.
+        /// </summary>
+        /// <param name="sourceBytes">The byte array representing the source binary file.</param>
+        /// <param name="fsysOffset">The offset of the Fsys store within the binary file.</param>
+        /// <param name="fsysStore">The byte array representing the Fsys store.</param>
+        /// <param name="uiNewCrc">The new CRC value to be patched in the Fsys store.</param>
+        /// <returns>The patched file byte array, or null if the new calculated crc does not match the crc in the Fsys store.</returns>
         internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes, long fsysOffset, byte[] fsysStore, uint uiNewCrc)
+
         {
             // Create a new byte array to hold the patched binary
             byte[] patchedBytes = new byte[sourceBytes.Length];
@@ -313,7 +322,6 @@ namespace Mac_EFI_Toolkit.Utils
 
             return patchedBytes;
         }
-
         #endregion
 
     }

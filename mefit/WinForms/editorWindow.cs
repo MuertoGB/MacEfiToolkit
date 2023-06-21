@@ -200,8 +200,8 @@ namespace Mac_EFI_Toolkit.WinForms
             Program.CreateCheckBuildsFolder();
 
             var filename = FWBase.FileInfoData.FileNameWithExt.StartsWith("outimage_")
-                ?  $"{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"
-                : $"outimage_{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"; ;  
+                ? $"{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"
+                : $"outimage_{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin";
 
             _fullBuildPath = Path.Combine(Program.buildsDirectory, filename);
 
