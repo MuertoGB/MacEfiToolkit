@@ -7,6 +7,8 @@
 using Mac_EFI_Toolkit.Common;
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace Mac_EFI_Toolkit.Utils
@@ -142,6 +144,41 @@ namespace Mac_EFI_Toolkit.Utils
                 // Return a string indicating an exact match
                 return "Valid";
             }
+        }
+
+        /// <summary>
+        /// Writes the specified byte array to the file at the given path and verifies the integrity of the written data.
+        /// </summary>
+        /// <param name="path">The path of the file to write.</param>
+        /// <param name="sourceBytes">The byte array containing the data to be written.</param>
+        /// <returns>
+        /// -1 if the data was not written successfully.
+        /// -2 if the file was not written to disk.
+        /// 0 if the data was written successfully and the integrity is verified.
+        /// </returns>
+        internal static int WriteAllBytesEx(string path, byte[] sourceBytes)
+        {
+            // Write the byte array to the file
+            File.WriteAllBytes(path, sourceBytes);
+
+            // Read the contents of the file back into a byte array
+            byte[] fileBytes = File.ReadAllBytes(path);
+
+            // Check if the file exists on disk
+            if (File.Exists(path))
+            {
+                // Compare the written byte array with the content on disk
+                if (!sourceBytes.SequenceEqual(fileBytes))
+                {
+                    return -1; // Integrity check failed
+                }
+            }
+            else
+            {
+                return -2; // File does not exist on disk
+            }
+
+            return 0; // Data was written successfully and integrity is verified
         }
 
     }

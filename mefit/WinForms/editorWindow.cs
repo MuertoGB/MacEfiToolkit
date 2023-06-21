@@ -28,7 +28,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private byte[] _bytesNewFsysRegion = null;
         private byte[] _bytesNewBinary = null;
         private bool _maskCrc = false;
-        private bool _buildFailed = false;
         private string _fullBuildPath = string.Empty;
         #endregion
 
@@ -129,83 +128,88 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
-                    cbxReplaceFsysRgn.Checked = false;
+                    cbxReplaceFsysStore.Checked = false;
                     return;
                 }
 
                 Logger.WriteLogTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.Info, rtbLog);
                 _bytesNewFsysRegion = File.ReadAllBytes(dialog.FileName);
                 bool isValid = ValidateNewFsysRegion(_bytesNewFsysRegion);
-                if (!isValid) cbxReplaceFsysRgn.Checked = false;
+                if (!isValid) cbxReplaceFsysStore.Checked = false;
             }
         }
 
         private void cmdBuild_Click(object sender, EventArgs e)
         {
-            ToggleControlEnable(false);
-
-            // Clone the loaded binary
-            _bytesNewBinary = FWBase.LoadedBinaryBytes;
-
-            if (cbxReplaceFsysRgn.Checked)
+            try
             {
-                Logger.WriteLogTextToRtb("Replacing Fsys Store:-", RtbLogPrefix.Info, rtbLog);
-                WriteNewFsysStore();
-            }
+                ToggleControlEnable(false);
 
-            if (cbxReplaceSerial.Checked)
-            {
-                Logger.WriteLogTextToRtb($"Replacing Serial Number data:-", RtbLogPrefix.Info, rtbLog);
-                WriteNewSerialData();
-            }
+                _bytesNewBinary = FWBase.LoadedBinaryBytes;
 
-            if (cbxClearVssStore.Checked)
-            {
-                Logger.WriteLogTextToRtb("Clearing VSS NVRAM data:", RtbLogPrefix.Info, rtbLog);
-                ClearNvramStore(FWBase.VssStoreData, cbxClearVssBackup.Checked);
-            }
-
-            if (cbxClearSvsStore.Checked)
-            {
-                Logger.WriteLogTextToRtb("Clearing SVS NVRAM data:", RtbLogPrefix.Info, rtbLog);
-                ClearNvramStore(FWBase.SvsStoreData, cbxClearSvsBackup.Checked);
-            }
-
-            if (cbxClearNssStore.Checked)
-            {
-                Logger.WriteLogTextToRtb("Clearing NSS NVRAM data:", RtbLogPrefix.Info, rtbLog);
-                ClearNvramStore(FWBase.NssStoreData, cbxClearNssBackup.Checked);
-            }
-
-            // If the build fails, disallow exporting.
-            if (!_buildFailed)
-            {
-                Logger.WriteLogTextToRtb($"BUILD SUCCEEDED", RtbLogPrefix.Complete, rtbLog);
-
-                var filename = $"outimage_{DateTime.Now:yyMMdd_HHmmss}.bin";
-
-                Program.CreateCheckBuildsFolder();
-
-                _fullBuildPath = Path.Combine(Program.buildsDirectory, filename);
-
-                File.WriteAllBytes(_fullBuildPath, _bytesNewBinary);
-                Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
-
-                var shaNewBinary = FileUtils.GetSha256Digest(_bytesNewBinary);
-                var outFileBytes = File.ReadAllBytes(_fullBuildPath);
-                var shaOutFile = FileUtils.GetSha256Digest(outFileBytes);
-
-                if (string.Equals(shaNewBinary, shaOutFile))
+                if (cbxReplaceFsysStore.Checked)
                 {
-                    Logger.WriteLogTextToRtb($"Written file checksum is good, export successful!", RtbLogPrefix.Complete, rtbLog);
+                    Logger.WriteLogTextToRtb("Replacing Fsys Store:-", RtbLogPrefix.Info, rtbLog);
+                    if (!WriteNewFsysStore())
+                        return;
                 }
-                else
+
+                if (cbxReplaceSerial.Checked)
                 {
-                    Logger.WriteLogTextToRtb($"Written file checksum is bad, export was not successful!", RtbLogPrefix.Error, rtbLog);
+                    Logger.WriteLogTextToRtb($"Replacing Serial Number data:-", RtbLogPrefix.Info, rtbLog);
+                    if (!WriteNewSerialData())
+                        return;
                 }
+
+                if (cbxClearVssStore.Checked)
+                {
+                    Logger.WriteLogTextToRtb("Clearing VSS NVRAM data:", RtbLogPrefix.Info, rtbLog);
+                    if (!ClearNvramStore(FWBase.VssStoreData, cbxClearVssBackup.Checked))
+                        return;
+                }
+
+                if (cbxClearSvsStore.Checked)
+                {
+                    Logger.WriteLogTextToRtb("Clearing SVS NVRAM data:", RtbLogPrefix.Info, rtbLog);
+                    if (!ClearNvramStore(FWBase.SvsStoreData, cbxClearSvsBackup.Checked))
+                        return;
+                }
+
+                if (cbxClearNssStore.Checked)
+                {
+                    Logger.WriteLogTextToRtb("Clearing NSS NVRAM data:", RtbLogPrefix.Info, rtbLog);
+                    if (!ClearNvramStore(FWBase.NssStoreData, cbxClearNssBackup.Checked))
+                        return;
+                }
+
+                if (!SaveBuild())
+                    return;
+
+                Logger.WriteLogTextToRtb($"Process Completed!", RtbLogPrefix.Complete, rtbLog);
+                cmdOpenLast.Enabled = true;
+            }
+            finally
+            {
+                ToggleControlEnable(true);
+            }
+        }
+
+        private bool SaveBuild()
+        {
+            var filename = $"outimage_{FWBase.FileInfoData.FileNameNoExt}.bin";
+            Program.CreateCheckBuildsFolder();
+            _fullBuildPath = Path.Combine(Program.buildsDirectory, filename);
+            int saveResult = FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary);
+
+            if (saveResult != 0)
+            {
+                Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned {saveResult}", RtbLogPrefix.Error, rtbLog);
+                return false;
             }
 
-            ToggleControlEnable(true);
+            Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned {saveResult}", RtbLogPrefix.Complete, rtbLog);
+            Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
+            return true;
         }
         #endregion
 
@@ -408,8 +412,6 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Chars.EXIT_CROSS;
-            cmdOpenBuildsDir.Font = Program.FONT_MDL2_REG_12;
-            cmdOpenBuildsDir.Text = Chars.FILE_EXPLORER;
         }
 
         private void ToggleControlEnable(bool enable)
@@ -442,7 +444,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Editing
-        private void WriteNewFsysStore()
+        private bool WriteNewFsysStore()
         {
             // Mask Fsys CRC
             if (_maskCrc)
@@ -457,7 +459,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
 
                 // Write newCrcBytes to the donor Fsys region
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewFsysRegion, 0x7FC, newCrcBytes);
+                BinaryUtils.OverwriteBytesAtOffset(_bytesNewFsysRegion, FWBase.FSYS_CRC_POS, newCrcBytes);
 
                 // Read CRC32 string from _bytesNewFsysRegion
                 uint patchedCrcBytes = EFIUtils.GetUintFsysCrc32(_bytesNewFsysRegion);
@@ -472,7 +474,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 else
                 {
                     HandleBuildFailure("CRC32 masking failed.");
-                    return;
+                    return false;
                 }
             }
 
@@ -488,13 +490,14 @@ namespace Mac_EFI_Toolkit.WinForms
             else
             {
                 HandleBuildFailure("Fsys comparison check failed");
-                return;
+                return false;
             }
 
             Logger.WriteLogTextToRtb("New Fsys region written successfully", RtbLogPrefix.Complete, rtbLog);
+            return true;
         }
 
-        private void WriteNewSerialData()
+        private bool WriteNewSerialData()
         {
             if (FWBase.FsysSectionData.FsysBytes != null && FWBase.FsysSectionData.SerialOffset != -1)
             {
@@ -522,7 +525,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (!string.Equals(newSerial, newFsys.Serial))
                 {
                     HandleBuildFailure("Serial was not written successfully");
-                    return;
+                    return false;
                 }
 
                 if (FWBase.FsysSectionData.HWCOffset != -1)
@@ -530,7 +533,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     if (!string.Equals(newHwc, newFsys.HWC))
                     {
                         HandleBuildFailure("HWC was not written successfully");
-                        return;
+                        return false;
                     }
                 }
 
@@ -545,7 +548,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 // Get bytes from new CRC uint
                 byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
                 // Write new CRC bytes to loaded Fsys store
-                BinaryUtils.OverwriteBytesAtOffset(newFsysStore, 0x7FC, newCrcBytes);
+                BinaryUtils.OverwriteBytesAtOffset(newFsysStore, FWBase.FSYS_CRC_POS, newCrcBytes);
                 // Get the patched bytes from the Fsys store
                 uint patchedCrcBytes = EFIUtils.GetUintFsysCrc32(newFsysStore);
                 // Compare the checksums
@@ -556,7 +559,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 else
                 {
                     HandleBuildFailure("CRC32 masking failed.");
-                    return;
+                    return false;
                 }
 
                 // Write back patched Fsys store
@@ -573,17 +576,19 @@ namespace Mac_EFI_Toolkit.WinForms
                 else
                 {
                     HandleBuildFailure("Fsys comparison check failed");
-                    return;
+                    return false;
                 }
             }
             else
             {
                 HandleBuildFailure("Loaded binary Fsys store is invalid");
-                return;
+                return false;
             }
+
+            return true;
         }
 
-        private void ClearNvramStore(NvramStoreSection storeData, bool clearBackup)
+        private bool ClearNvramStore(NvramStoreSection storeData, bool clearBackup)
         {
             int headerLen = 0x10;
             long primBodyStart = storeData.PrimaryStoreOffset + headerLen;
@@ -593,64 +598,81 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (!storeData.IsPrimaryStoreEmpty)
             {
+                Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store is not empty", RtbLogPrefix.Info, rtbLog);
                 byte[] primaryData = BinaryUtils.GetBytesAtOffset(storeData.PrimaryStoreBytes, headerLen, primBodyEnd);
-                Logger.WriteLogTextToRtb($"Overwriting: Primary {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"Overwriting {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
                 BinaryUtils.FillByteArrayWithFF(primaryData);
-                Logger.WriteLogTextToRtb($"Writing clean primary {storeData.StoreType} store", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
                 BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, primBodyStart, primaryData);
+
+                NvramStoreSection newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
+
+                if (newStore.IsPrimaryStoreEmpty)
+                {
+                    Logger.WriteLogTextToRtb($"Clean {storeData.StoreType} store written successfully", RtbLogPrefix.Complete, rtbLog);
+                }
+                else
+                {
+                    HandleBuildFailure($"Clean {storeData.StoreType} store was not written successfully");
+                    return false;
+                }
             }
             else
             {
                 Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store is already empty (0xFF)", RtbLogPrefix.Info, rtbLog);
             }
 
-            if (clearBackup)
+            if (clearBackup && !storeData.IsBackupStoreEmpty)
             {
-                if (!storeData.IsBackupStoreEmpty)
+                Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} is not empty", RtbLogPrefix.Info, rtbLog);
+                byte[] backupData = BinaryUtils.GetBytesAtOffset(storeData.BackupStoreBytes, headerLen, backBodyEnd);
+                Logger.WriteLogTextToRtb($"Overwriting backup {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
+                BinaryUtils.FillByteArrayWithFF(backupData);
+                Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
+                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, backBodyStart, backupData);
+
+                NvramStoreSection newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
+
+                if (newStore.IsBackupStoreEmpty)
                 {
-                    byte[] backupData = BinaryUtils.GetBytesAtOffset(storeData.BackupStoreBytes, headerLen, backBodyEnd);
-                    Logger.WriteLogTextToRtb($"Overwriting: Backup {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
-                    BinaryUtils.FillByteArrayWithFF(backupData);
-                    Logger.WriteLogTextToRtb($"Writing clean backup {storeData.StoreType} store", RtbLogPrefix.Info, rtbLog);
-                    BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, backBodyStart, backupData);
+                    Logger.WriteLogTextToRtb($"Clean {storeData.StoreType} store written successfully", RtbLogPrefix.Complete, rtbLog);
                 }
                 else
+                {
+                    HandleBuildFailure($"Clean {storeData.StoreType} store was not written successfully");
+                    return false;
+                }
+            }
+            else
+            {
+                if (clearBackup)
                 {
                     Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} store is already empty (0xFF)", RtbLogPrefix.Info, rtbLog);
                 }
             }
 
-            NvramStoreSection newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
-
-            if (newStore.IsPrimaryStoreEmpty)
-            {
-                Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store cleared successfully", RtbLogPrefix.Complete, rtbLog);
-            }
-            else
-            {
-                HandleBuildFailure($"Primary {storeData.StoreType} store was not cleared successfully");
-                return;
-            }
-
-            if (newStore.IsBackupStoreEmpty)
-            {
-                Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} store cleared successfully", RtbLogPrefix.Complete, rtbLog);
-            }
-            else
-            {
-                HandleBuildFailure($"Backup {storeData.StoreType} store was not cleared successfully");
-                return;
-            }
-
+            return true;
         }
 
         private void HandleBuildFailure(string errorMessage)
         {
             Logger.WriteLogTextToRtb("BUILD FAILED:", RtbLogPrefix.Error, rtbLog);
             Logger.WriteLogTextToRtb(errorMessage, RtbLogPrefix.Error, rtbLog);
-            _buildFailed = true;
         }
         #endregion
 
+        private void cmdOpenLast_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_fullBuildPath))
+            {
+                Program.openLastBuild = true;
+                Program.lastBuildPath = _fullBuildPath;
+                Close();
+            }
+            else
+            {
+                Logger.WriteLogTextToRtb($"The last build path is empty!", RtbLogPrefix.Warning, rtbLog);
+            }
+        }
     }
 }

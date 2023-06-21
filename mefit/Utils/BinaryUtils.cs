@@ -5,6 +5,7 @@
 // This code uses the Knuth-Morris-Pratt algorithm for pattern matching and string searching, developed by Donald Knuth, Vaughan Pratt, and James Morris.
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using System;
 using System.IO;
 using System.Linq;
@@ -251,7 +252,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// Fills a byte array with 0xFF values.
         /// </summary>
         /// <param name="byteArray">The byte array to fill with 0xFF values.</param>
-        public static void FillByteArrayWithFF(byte[] byteArray)
+        internal static void FillByteArrayWithFF(byte[] byteArray)
         {
             if (byteArray == null)
             {
@@ -262,6 +263,51 @@ namespace Mac_EFI_Toolkit.Utils
             {
                 byteArray[i] = 0xFF;
             }
+        }
+
+        /// <summary>
+        /// Patches the given Fsys store byte array with a new CRC value.
+        /// </summary>
+        /// <param name="fsysStore">The byte array representing the Fsys store.</param>
+        /// <param name="newCrc">The new CRC value to be patched.</param>
+        /// <returns>The patched Fsys store byte array.</returns>
+        internal static byte[] PatchFsysCrc(byte[] fsysStore, uint newCrc)
+        {
+            // Check if the size of the byte array is valid
+            if (fsysStore.Length < FWBase.FSYS_RGN_SIZE)
+                throw new ArgumentException(nameof(fsysStore), "Given bytes are too small.");
+
+            if (fsysStore.Length > FWBase.FSYS_RGN_SIZE)
+                throw new ArgumentException(nameof(fsysStore), "Given bytes are too large.");
+
+            // Convert the new CRC value to bytes
+            byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
+
+            // Write the new bytes back to the Fsys store at the appropriate offset
+            OverwriteBytesAtOffset(fsysStore, FWBase.FSYS_CRC_POS, newCrcBytes);
+
+            // Return the patched data
+            return fsysStore;
+        }
+
+        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes)
+        {
+            // Patch the Fsys store crc
+            byte[] patchedStore = PatchFsysCrc(FWBase.FsysSectionData.FsysBytes, FWBase.FsysSectionData.CRC32CalcInt);
+
+            // Overwrite the loaded Fsys crc32 with the newly calculated crc32
+            OverwriteBytesAtOffset(sourceBytes, FWBase.FsysSectionData.FsysOffset, patchedStore);
+
+            // Load the Fsys store from the new binary
+            var newBinaryFsys = FWBase.GetFsysStoreData(sourceBytes);
+
+            // Compare the new checksums
+            if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)
+            {
+                return null;
+            }
+
+            return sourceBytes;
         }
         #endregion
 

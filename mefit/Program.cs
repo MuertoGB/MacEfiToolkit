@@ -22,13 +22,16 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}.230621.0115";
+        internal static readonly string appBuild = $"{Application.ProductVersion}.230621.1528";
         internal static readonly string appChannel = "BETA";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
         internal static string buildsDirectory = Path.Combine(appDirectory, "builds");
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
+
+        internal static bool openLastBuild = false;
+        internal static string lastBuildPath = string.Empty;
 
         #region Private Members
         private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;

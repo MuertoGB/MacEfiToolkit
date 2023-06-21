@@ -15,6 +15,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -338,31 +339,48 @@ namespace Mac_EFI_Toolkit
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
-                    // Action was cancelled, nothing to do
+                    // Action was cancelled
                     return;
                 }
 
-                //// Calculate crc32 of the temporary Fsys bytes
-                uint newCrc = EFIUtils.GetUintFsysCrc32(FWBase.FsysSectionData.FsysBytes);
-                // Convert new crc32 uint to bytes
-                byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
-                // Overwrite the loaded Fsys crc32 with the newly calculated crc32
-                BinaryUtils.OverwriteBytesAtOffset(FWBase.LoadedBinaryBytes, FWBase.FsysSectionData.FsysOffset + 0x7FC, newCrcBytes);
+                bool buildFailed = false;
+                // Make binary with patched Fsys crc
+                byte[] patchedBinary = BinaryUtils.MakeFsysCrcPatchedBinary(FWBase.LoadedBinaryBytes);
 
-                // Write the new binary to disk
-                File.WriteAllBytes(dialog.FileName, FWBase.LoadedBinaryBytes);
-
-                // Check the new file exists
-                if (File.Exists(dialog.FileName))
+                // Check patchedBinary is not null
+                if (patchedBinary == null)
                 {
-                    // Ask if user wants to open the repaired file
-                    DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?", MsgType.Information, MsgButton.YesNoCancel);
+                    Logger.WriteToLogFile("'MakeCrcPatchedBinary' returned null data", LogType.Application);
+                    buildFailed = true;
+                }
 
-                    if (result == DialogResult.Yes)
+                // Save file
+                int saveResult = FileUtils.WriteAllBytesEx(dialog.FileName, patchedBinary);
+                // Check binary was written without error
+                if (saveResult != 0)
+                {
+                    Logger.WriteToLogFile($"'WriteAllBytesEx' returned {saveResult}", LogType.Application);
+                    buildFailed = true;
+                }
+
+                // The build failed flag was set
+                if (buildFailed)
+                {
+                    DialogResult failResult = METMessageBox.Show(this, "MET", "Fsys patching failed. Open the log?", MsgType.Critical, MsgButton.YesNoCancel);
+
+                    if (failResult == DialogResult.Yes)
                     {
-                        // Load new file data
-                        OpenBinary(dialog.FileName);
+                        Logger.ViewLogFile(LogType.Application);
                     }
+
+                    return;
+                }
+
+                // Ask if user wants to open the repaired file
+                DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?", MsgType.Information, MsgButton.YesNoCancel);
+                if (result == DialogResult.Yes)
+                {
+                    OpenBinary(dialog.FileName);
                 }
             }
         }
@@ -410,10 +428,8 @@ namespace Mac_EFI_Toolkit
             if (File.Exists(FWBase.LoadedBinaryPath))
             {
                 var fileBytes = File.ReadAllBytes(FWBase.LoadedBinaryPath);
-                var shaOnDisk = FileUtils.GetSha256Digest(fileBytes);
-                var shaInMemory = FileUtils.GetSha256Digest(FWBase.LoadedBinaryBytes);
 
-                if (!string.Equals(shaOnDisk, shaInMemory))
+                if (!fileBytes.SequenceEqual(FWBase.LoadedBinaryBytes))
                 {
                     OpenBinary(FWBase.LoadedBinaryPath);
                 }
@@ -549,10 +565,10 @@ namespace Mac_EFI_Toolkit
             // Firmware Data
             lblSerialNumber.Text = FWBase.FsysSectionData.Serial ?? "N/A";
             lblHwc.Text = FWBase.FsysSectionData.HWC ?? "N/A";
-            if (FWBase.FsysSectionData.CRC32 != null)
+            if (FWBase.FsysSectionData.CrcString != null)
             {
-                lblFsysCrc.Text = $"{FWBase.FsysSectionData.CRC32}h";
-                lblFsysCrc.ForeColor = FWBase.FsysSectionData.CRC32Calc == FWBase.FsysSectionData.CRC32 ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
+                lblFsysCrc.Text = $"{FWBase.FsysSectionData.CrcString}h";
+                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysSectionData.CrcCalcString, FWBase.FsysSectionData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
             }
             else
             {
@@ -625,6 +641,17 @@ namespace Mac_EFI_Toolkit
         private void ChildWindowClosed(object sender, EventArgs e)
         {
             Opacity = 1.0;
+
+            if (Program.openLastBuild)
+            {
+                if (File.Exists(Program.lastBuildPath))
+                {
+                    OpenBinary(Program.lastBuildPath);
+                }
+
+                Program.openLastBuild = false;
+                Program.lastBuildPath = string.Empty;
+            }
         }
 
         private void ShowContextMenu(Control control, ContextMenuStrip menu)
@@ -648,7 +675,7 @@ namespace Mac_EFI_Toolkit
 
             if (FWBase.FsysSectionData.FsysBytes != null)
             {
-                cmdFixFsysCrc.Enabled = EFIUtils.GetUintFsysCrc32(FWBase.FsysSectionData.FsysBytes).ToString("X8") == FWBase.FsysSectionData.CRC32 ? false : true;
+                cmdFixFsysCrc.Enabled = EFIUtils.GetUintFsysCrc32(FWBase.FsysSectionData.FsysBytes).ToString("X8") == FWBase.FsysSectionData.CrcString ? false : true;
             }
             else
             {

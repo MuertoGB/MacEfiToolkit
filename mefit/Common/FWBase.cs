@@ -32,9 +32,10 @@ internal struct FsysStoreSection
     internal string HWC { get; set; }
     internal long HWCOffset { get; set; }
     internal string SON { get; set; }
-    internal string CRC32 { get; set; }
-    internal long CRC32Offset { get; set; }
-    internal string CRC32Calc { get; set; }
+    internal string CrcString { get; set; }
+    internal long CrcOffset { get; set; }
+    internal string CrcCalcString { get; set; }
+    internal uint CRC32CalcInt { get; set; }
 }
 
 internal struct AppleRomInformationSection
@@ -143,6 +144,7 @@ namespace Mac_EFI_Toolkit.Common
         internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576 bytes
         internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
         internal const int FSYS_RGN_SIZE = 0x800;      // 2048 bytes
+        internal const int FSYS_CRC_POS = 0x7FC;
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
 
@@ -268,6 +270,7 @@ namespace Mac_EFI_Toolkit.Common
             string sonString = null;
             string crcString = null;
             string crcCalcString = null;
+            uint uiCrcCalc = 0xFFFFFFFF;
 
             var ssnStartPos = 0x5;
             var hwcStartPos = 0x6;
@@ -303,7 +306,8 @@ namespace Mac_EFI_Toolkit.Common
             if (fsysData != null && fsysData.Length == FSYS_RGN_SIZE)
             {
                 // Calculate Fsys CRC32 from fsysData
-                crcCalcString = EFIUtils.GetUintFsysCrc32(fsysData).ToString("X8");
+                uiCrcCalc = EFIUtils.GetUintFsysCrc32(fsysData);
+                crcCalcString = uiCrcCalc.ToString("X8");
 
                 // Fsys store CRC32
                 var crcNudgePos = FSYS_RGN_SIZE - crcLength;
@@ -324,8 +328,12 @@ namespace Mac_EFI_Toolkit.Common
                     byte[] ssnData = BinaryUtils.GetBytesAtOffset(sourceBytes, ssnPos + ssnStartPos, ssnDatLen);
                     if (ssnData != null)
                     {
-                        ssnString = _utf8.GetString(ssnData).Trim();
-                        ssnString = new string(ssnString.Where(char.IsLetterOrDigit).ToArray());
+                        ssnString = _utf8.GetString(ssnData).TrimEnd();
+                        int trimIndex = ssnString.Length - 1;
+                        if (trimIndex >= 0 && !char.IsLetterOrDigit(ssnString[trimIndex]))
+                        {
+                            ssnString = ssnString.Substring(0, trimIndex);
+                        }
                     }
                 }
 
@@ -370,9 +378,10 @@ namespace Mac_EFI_Toolkit.Common
                 HWC = hwcString,
                 HWCOffset = hwcPos != -1 ? hwcPos + hwcStartPos : -1,
                 SON = sonString,
-                CRC32 = crcString,
-                CRC32Offset = fsysPos - crcLength,
-                CRC32Calc = crcCalcString
+                CrcString = crcString,
+                CrcOffset = fsysPos - crcLength,
+                CrcCalcString = crcCalcString,
+                CRC32CalcInt = uiCrcCalc
             };
         }
 
@@ -387,9 +396,10 @@ namespace Mac_EFI_Toolkit.Common
                 HWC = null,
                 HWCOffset = -1,
                 SON = null,
-                CRC32 = null,
-                CRC32Offset = -1,
-                CRC32Calc = null
+                CrcString = null,
+                CrcOffset = -1,
+                CrcCalcString = null,
+                CRC32CalcInt = 0xFFFFFFF
             };
         }
 

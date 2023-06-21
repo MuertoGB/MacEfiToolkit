@@ -4,6 +4,7 @@
 // EfiUtils.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using System;
 using System.IO;
 using System.Linq;
@@ -82,16 +83,22 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Calculates an Fsys region CRC32 checksum.
         /// </summary>
-        /// /// <param name="fsysBytes">The Fsys region to calcuate the CRC32 for.</param>
+        /// /// <param name="fsysStore">The Fsys region to calcuate the CRC32 for.</param>
         /// <returns>The calculated Fsys CRC32 uint</returns>
-        internal static uint GetUintFsysCrc32(byte[] fsysBytes)
+        internal static uint GetUintFsysCrc32(byte[] fsysStore)
         {
-            // Data we calculate is: Sig base + 0x800h - crc len of 0x4h = 7FCh
-            byte[] bytesTempFsys = new byte[0x7FC];
+            if (fsysStore.Length < FWBase.FSYS_RGN_SIZE)
+                throw new ArgumentException(nameof(fsysStore), "Given bytes are too small.");
 
-            if (fsysBytes != null)
+            if (fsysStore.Length > FWBase.FSYS_RGN_SIZE)
+                throw new ArgumentException(nameof(fsysStore), "Given bytes are too large.");
+
+            // Data we calculate is: Sig base + 0x800h - crc len of 0x4h = 7FCh
+            byte[] bytesTempFsys = new byte[FWBase.FSYS_CRC_POS];
+
+            if (fsysStore != null)
             {
-                Array.Copy(fsysBytes, 0, bytesTempFsys, 0, bytesTempFsys.Length);
+                Array.Copy(fsysStore, 0, bytesTempFsys, 0, bytesTempFsys.Length);
                 return FileUtils.GetCrc32Digest(bytesTempFsys);
             }
 

@@ -14,20 +14,25 @@
 ## Version 0.6.1
 
 #### New:
-- New editor window features:-
-> - Enabled option to clear firmware NVRAM stores.
-> - Enabled option to replace the firmware serial number.
-- Added option to navigate to the builds directory in the main window menu.
-- Added option to navigate to the fsys stores directory in the main window menu.
+- Added new features to the editor window:
+> - Implemented the option to clear firmware NVRAM stores.
+> - Implemented the option to replace the firmware serial number.
+> - Included a button to load the last successful build.
+- Included an option in the main window menu to navigate to the builds directory.
+- Included an option in the main window menu by adding an option to navigate to the Fsys stores directory.
 
 #### Enhancements:
 - UI improvements.
-- Enhanced EFI lock status
+- Improved EFI lock status
+- Improved integrity checks when saving and editing binary files.
 
 #### Bugs:
-- Fixed an issue where the main window version label colour was not being set correctly upon form activation when an update is available.
-- Fixed oversight in the FWBase Fsys store parser causing incorrect offsets to be returned.
-- Added missing shortcut to open the rom information window (ALT + I)
+- Corrected an issue where the color of the version label in the main window was not being set correctly when the form was activated and an update was available.
+- Addressed an oversight in the FWBase Fsys store parser that resulted in incorrect offsets being returned.
+- Resolved a scenario where the FWBase Fsys store parser could fail to accurately determine the length of a serial number if the serial number had been previously edited and contained invalid characters outside the range of A-Z and 0-9.
+- Fixed a situation where the FWBase Fsys store parser could display an inaccurate serial string.
+- Fixed multiple bugs in the firmware editor.
+- Added missing keyboard shortcut to open the rom information window (ALT + I)
 
 ## Version 0.6.0
 
