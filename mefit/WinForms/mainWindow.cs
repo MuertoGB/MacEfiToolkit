@@ -82,6 +82,8 @@ namespace Mac_EFI_Toolkit
             if (!string.IsNullOrEmpty(Program.draggedFile))
             {
                 OpenBinary(Program.draggedFile);
+                // Clear the path so restarting does not cause the initially dragged file to be loaded.
+                Program.draggedFile = string.Empty;
             }
 
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck))
