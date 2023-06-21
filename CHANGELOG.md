@@ -32,7 +32,6 @@
 - Addressed an oversight in the FWBase Fsys store parser that resulted in incorrect offsets being returned.
 - Resolved a scenario where the FWBase Fsys store parser could fail to accurately determine the length of a serial number if the serial number had been previously edited and contained invalid characters outside the range of A-Z and 0-9.
 - Resolved a scenario where the FWBase Fsys store parser could return an inaccurate serial string.
-- Resolved multiple bugs in the firmware editor.
 - Resolved an issue when a file is dragged onto the executable and restarting does not clear the argument path.
 - Added missing keyboard shortcut to open the rom information window (ALT + I)
 
