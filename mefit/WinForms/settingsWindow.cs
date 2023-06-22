@@ -86,7 +86,9 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
-                fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty) ? Program.appDirectory : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+                fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty)
+                    ? Program.appDirectory
+                    : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
                 fbd.Description = "Select a folder";
                 fbd.ShowNewFolderButton = false;
 
@@ -113,11 +115,19 @@ namespace Mac_EFI_Toolkit.WinForms
             if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
+
             _showSettingsAppliedLabel();
         }
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
+            var result = METMessageBox.Show(this, "Settings", "This will revert all settings to default, are you sure you want to set default settings?", MsgType.Warning, MsgButton.YesNoCancel);
+
+            if (result != DialogResult.Yes)
+            {
+                return;
+            }
+
             Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, false);
@@ -126,8 +136,10 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetString(SettingsStringType.InitialDirectory, Program.appDirectory);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
+
             UpdateCheckBoxControls();
-            _showSettingsAppliedLabel();
+
+           _showSettingsAppliedLabel();
         }
         #endregion
 

@@ -85,7 +85,7 @@ namespace Mac_EFI_Toolkit
             this.lblSvsStore = new System.Windows.Forms.Label();
             this.lblVssStore = new System.Windows.Forms.Label();
             this.pnlSeperator = new System.Windows.Forms.Panel();
-            this.cmdEditEfirom = new System.Windows.Forms.Button();
+            this.cmdEdit = new System.Windows.Forms.Button();
             this.cmdReset = new System.Windows.Forms.Button();
             this.cmdOpenBin = new System.Windows.Forms.Button();
             this.cmsMainMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -1051,26 +1051,26 @@ namespace Mac_EFI_Toolkit
             this.pnlSeperator.Size = new System.Drawing.Size(713, 2);
             this.pnlSeperator.TabIndex = 94;
             // 
-            // cmdEditEfirom
+            // cmdEdit
             // 
-            this.cmdEditEfirom.BackColor = System.Drawing.Color.Transparent;
-            this.cmdEditEfirom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdEditEfirom.Enabled = false;
-            this.cmdEditEfirom.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.cmdEditEfirom.FlatAppearance.BorderSize = 0;
-            this.cmdEditEfirom.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
-            this.cmdEditEfirom.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cmdEditEfirom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdEditEfirom.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdEditEfirom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdEditEfirom.Location = new System.Drawing.Point(162, 0);
-            this.cmdEditEfirom.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdEditEfirom.Name = "cmdEditEfirom";
-            this.cmdEditEfirom.Size = new System.Drawing.Size(80, 38);
-            this.cmdEditEfirom.TabIndex = 2;
-            this.cmdEditEfirom.Text = "EDIT";
-            this.cmdEditEfirom.UseVisualStyleBackColor = false;
-            this.cmdEditEfirom.Click += new System.EventHandler(this.cmdEditEfirom_Click);
+            this.cmdEdit.BackColor = System.Drawing.Color.Transparent;
+            this.cmdEdit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdEdit.Enabled = false;
+            this.cmdEdit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdEdit.FlatAppearance.BorderSize = 0;
+            this.cmdEdit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cmdEdit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cmdEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdEdit.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdEdit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdEdit.Location = new System.Drawing.Point(162, 0);
+            this.cmdEdit.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdEdit.Name = "cmdEdit";
+            this.cmdEdit.Size = new System.Drawing.Size(80, 38);
+            this.cmdEdit.TabIndex = 2;
+            this.cmdEdit.Text = "EDIT";
+            this.cmdEdit.UseVisualStyleBackColor = false;
+            this.cmdEdit.Click += new System.EventHandler(this.cmdEdit_Click);
             // 
             // cmdReset
             // 
@@ -1090,7 +1090,7 @@ namespace Mac_EFI_Toolkit
             this.cmdReset.TabIndex = 1;
             this.cmdReset.Text = "RESET";
             this.cmdReset.UseVisualStyleBackColor = false;
-            this.cmdReset.Click += new System.EventHandler(this.cmdResetUnload_Click);
+            this.cmdReset.Click += new System.EventHandler(this.cmdReset_Click);
             // 
             // cmdOpenBin
             // 
@@ -1428,7 +1428,7 @@ namespace Mac_EFI_Toolkit
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 451F));
             this.tlpMenu.Controls.Add(this.cmdOpenBin, 0, 0);
             this.tlpMenu.Controls.Add(this.cmdReset, 2, 0);
-            this.tlpMenu.Controls.Add(this.cmdEditEfirom, 4, 0);
+            this.tlpMenu.Controls.Add(this.cmdEdit, 4, 0);
             this.tlpMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpMenu.Location = new System.Drawing.Point(1, 51);
             this.tlpMenu.Margin = new System.Windows.Forms.Padding(2);
@@ -1519,7 +1519,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Button cmdReset;
         private System.Windows.Forms.TableLayoutPanel tlpVersionLabel;
         private System.Windows.Forms.Label lblVersion;
-        private System.Windows.Forms.Button cmdEditEfirom;
+        private System.Windows.Forms.Button cmdEdit;
         private System.Windows.Forms.ContextMenuStrip cmsMainMenu;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;

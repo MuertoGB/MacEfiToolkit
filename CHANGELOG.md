@@ -26,6 +26,7 @@
 - Improved EFI lock status
 - Improved integrity checks when saving and editing binary files.
 - Modified default file naming for editor output files.
+- Added confirmation dialog when reverting to default settings in the settings window.
 
 #### Bugs:
 - Corrected an issue where the color of the version label in the main window was not being set correctly when the form was activated and an update was available.
