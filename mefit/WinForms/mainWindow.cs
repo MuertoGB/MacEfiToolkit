@@ -778,7 +778,7 @@ namespace Mac_EFI_Toolkit
         private string SetNvramStoreTip(NvramStoreSection storeData, string storeType)
         {
             if (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
-                return $"{storeType} data present in NVRAM";
+                return $"{storeType} data present in the NVRAM";
             else if (storeData.PrimaryStoreOffset != -1)
                 return $"{storeType} NVRAM stores are empty (0xFF)";
 

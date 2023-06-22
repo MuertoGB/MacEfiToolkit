@@ -61,6 +61,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
+            this.cmdReset = new System.Windows.Forms.Button();
             this.cmdBuild = new System.Windows.Forms.Button();
             this.cmdOpenLast = new System.Windows.Forms.Button();
             this.cmdOpenBuildsDir = new System.Windows.Forms.Button();
@@ -249,7 +250,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblFsysText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblFsysText.Size = new System.Drawing.Size(400, 34);
             this.lblFsysText.TabIndex = 99;
-            this.lblFsysText.Text = "Fsys Region";
+            this.lblFsysText.Text = "Fsys Store";
             this.lblFsysText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpSerialB
@@ -485,7 +486,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOutput.ColumnCount = 3;
             this.tlpOutput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpOutput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpOutput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpOutput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tlpOutput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpOutput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpOutput.Controls.Add(this.lblOutputText, 0, 0);
             this.tlpOutput.Controls.Add(this.cmdSaveLog, 2, 0);
             this.tlpOutput.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -507,7 +510,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblOutputText.Margin = new System.Windows.Forms.Padding(0);
             this.lblOutputText.Name = "lblOutputText";
             this.lblOutputText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblOutputText.Size = new System.Drawing.Size(466, 34);
+            this.lblOutputText.Size = new System.Drawing.Size(456, 34);
             this.lblOutputText.TabIndex = 99;
             this.lblOutputText.Text = "Output";
             this.lblOutputText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -523,10 +526,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdSaveLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdSaveLog.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdSaveLog.ForeColor = System.Drawing.Color.White;
-            this.cmdSaveLog.Location = new System.Drawing.Point(467, 0);
+            this.cmdSaveLog.Location = new System.Drawing.Point(457, 0);
             this.cmdSaveLog.Margin = new System.Windows.Forms.Padding(0);
             this.cmdSaveLog.Name = "cmdSaveLog";
-            this.cmdSaveLog.Size = new System.Drawing.Size(80, 34);
+            this.cmdSaveLog.Size = new System.Drawing.Size(90, 34);
             this.cmdSaveLog.TabIndex = 4;
             this.cmdSaveLog.Text = "Save Log";
             this.cmdSaveLog.UseVisualStyleBackColor = false;
@@ -563,7 +566,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblTitle.Size = new System.Drawing.Size(908, 40);
             this.lblTitle.TabIndex = 99;
-            this.lblTitle.Text = "Firmware Editor (Experimental)";
+            this.lblTitle.Text = "Firmware Editor";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdClose
@@ -608,6 +611,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 195F));
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155F));
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpButtons.Controls.Add(this.cmdReset, 0, 0);
             this.tlpButtons.Controls.Add(this.cmdBuild, 3, 0);
             this.tlpButtons.Controls.Add(this.cmdOpenLast, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdOpenBuildsDir, 1, 0);
@@ -619,6 +623,26 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpButtons.Size = new System.Drawing.Size(948, 46);
             this.tlpButtons.TabIndex = 1;
+            // 
+            // cmdReset
+            // 
+            this.cmdReset.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cmdReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdReset.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdReset.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdReset.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdReset.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdReset.ForeColor = System.Drawing.Color.White;
+            this.cmdReset.Location = new System.Drawing.Point(448, 6);
+            this.cmdReset.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdReset.Name = "cmdReset";
+            this.cmdReset.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdReset.Size = new System.Drawing.Size(70, 34);
+            this.cmdReset.TabIndex = 0;
+            this.cmdReset.Text = "Reset";
+            this.cmdReset.UseVisualStyleBackColor = false;
+            this.cmdReset.Click += new System.EventHandler(this.cmdReset_Click);
             // 
             // cmdBuild
             // 
@@ -634,7 +658,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdBuild.Margin = new System.Windows.Forms.Padding(0);
             this.cmdBuild.Name = "cmdBuild";
             this.cmdBuild.Size = new System.Drawing.Size(70, 34);
-            this.cmdBuild.TabIndex = 2;
+            this.cmdBuild.TabIndex = 3;
             this.cmdBuild.Text = "Build";
             this.cmdBuild.UseVisualStyleBackColor = false;
             this.cmdBuild.Click += new System.EventHandler(this.cmdBuild_Click);
@@ -655,7 +679,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdOpenLast.Name = "cmdOpenLast";
             this.cmdOpenLast.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.cmdOpenLast.Size = new System.Drawing.Size(150, 34);
-            this.cmdOpenLast.TabIndex = 1;
+            this.cmdOpenLast.TabIndex = 2;
             this.cmdOpenLast.Text = "Open Last Build";
             this.cmdOpenLast.UseVisualStyleBackColor = false;
             this.cmdOpenLast.Click += new System.EventHandler(this.cmdOpenLast_Click);
@@ -675,7 +699,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdOpenBuildsDir.Name = "cmdOpenBuildsDir";
             this.cmdOpenBuildsDir.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.cmdOpenBuildsDir.Size = new System.Drawing.Size(190, 34);
-            this.cmdOpenBuildsDir.TabIndex = 0;
+            this.cmdOpenBuildsDir.TabIndex = 1;
             this.cmdOpenBuildsDir.Text = "Open Builds Directory";
             this.cmdOpenBuildsDir.UseVisualStyleBackColor = false;
             this.cmdOpenBuildsDir.Click += new System.EventHandler(this.cmdOpenBuildsDir_Click);
@@ -716,7 +740,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxReplaceFsysStore.Size = new System.Drawing.Size(158, 21);
             this.cbxReplaceFsysStore.TabIndex = 0;
             this.cbxReplaceFsysStore.Text = "Replace Fsys Store";
-            this.cbxReplaceFsysStore.CheckedChanged += new System.EventHandler(this.cbxReplaceFsysRgn_CheckedChanged);
+            this.cbxReplaceFsysStore.CheckedChanged += new System.EventHandler(this.cbxReplaceFsysStore_CheckedChanged);
             // 
             // cbxClearNssStore
             // 
@@ -735,7 +759,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearNssStore.Size = new System.Drawing.Size(149, 21);
             this.cbxClearNssStore.TabIndex = 0;
             this.cbxClearNssStore.Text = "Clear NSS Store";
-            this.cbxClearNssStore.CheckedChanged += new System.EventHandler(this.cbxClearNssRegion_CheckedChanged);
+            this.cbxClearNssStore.CheckedChanged += new System.EventHandler(this.cbxClearNssStore_CheckedChanged);
             // 
             // cbxClearNssBackup
             // 
@@ -773,7 +797,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearSvsStore.Size = new System.Drawing.Size(149, 21);
             this.cbxClearSvsStore.TabIndex = 0;
             this.cbxClearSvsStore.Text = "Clear SVS Store";
-            this.cbxClearSvsStore.CheckedChanged += new System.EventHandler(this.cbxClearSvsRegion_CheckedChanged);
+            this.cbxClearSvsStore.CheckedChanged += new System.EventHandler(this.cbxClearSvsStore_CheckedChanged);
             // 
             // cbxClearSvsBackup
             // 
@@ -830,7 +854,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearVssStore.Size = new System.Drawing.Size(149, 21);
             this.cbxClearVssStore.TabIndex = 0;
             this.cbxClearVssStore.Text = "Clear VSS Store";
-            this.cbxClearVssStore.CheckedChanged += new System.EventHandler(this.cbxClearVssRegion_CheckedChanged);
+            this.cbxClearVssStore.CheckedChanged += new System.EventHandler(this.cbxClearVssStore_CheckedChanged);
             // 
             // editorWindow
             // 
@@ -922,5 +946,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Button cmdSaveLog;
         private System.Windows.Forms.Button cmdOpenBuildsDir;
         private System.Windows.Forms.Button cmdOpenLast;
+        private System.Windows.Forms.Button cmdReset;
     }
 }

@@ -18,6 +18,7 @@
 > - Implemented the option to clear firmware NVRAM stores.
 > - Implemented the option to replace the firmware serial number.
 > - Included a button to load the last successful build.
+> - Included a button to reset the window and all data.
 - Included an option in the main window menu to navigate to the builds directory.
 - Included an option in the main window menu to navigate to the Fsys stores directory.
 
