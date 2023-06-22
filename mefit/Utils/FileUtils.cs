@@ -160,7 +160,7 @@ namespace Mac_EFI_Toolkit.Utils
         {
             if (File.Exists(path))
             {
-                return -3;
+                return -1; // File already exists
             }
 
             try
@@ -175,15 +175,15 @@ namespace Mac_EFI_Toolkit.Utils
                     byte[] fileBytes = new byte[fileStream.Length];
                     fileStream.Read(fileBytes, 0, fileBytes.Length);
 
-                    if (!sourceBytes.SequenceEqual(fileBytes))
+                    if (!BinaryUtils.ByteArraysMatch(sourceBytes, fileBytes))
                     {
-                        return -1; // Integrity check failed
+                        return -2; // Integrity check failed
                     }
                 }
             }
             catch (IOException)
             {
-                return -2; // File access error
+                return -3; // File access error
             }
 
             return 0; // Data was written successfully and integrity is verified

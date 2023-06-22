@@ -209,6 +209,23 @@ namespace Mac_EFI_Toolkit.Utils
 
             return true;
         }
+
+        /// <summary>
+        /// Compares two byte arrays to determine if they match in size and content.
+        /// </summary>
+        /// <param name="array1">The first byte array to compare.</param>
+        /// <param name="array2">The second byte array to compare.</param>
+        /// <returns>True if the byte arrays have the same size and content, false otherwise.</returns>
+        internal static bool ByteArraysMatch(byte[] array1, byte[] array2)
+        {
+            if (array1 == null || array2 == null)
+                return false;
+
+            if (array1.Length != array2.Length)
+                return false;
+
+            return array1.SequenceEqual(array2);
+        }
         #endregion
 
         #region Binary Edit

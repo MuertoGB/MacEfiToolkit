@@ -490,16 +490,14 @@ namespace Mac_EFI_Toolkit.WinForms
 
             // Validate new Fsys was written
             FsysStoreSection fsysNew = FWBase.GetFsysStoreData(_bytesNewBinary);
-            if (fsysNew.FsysBytes.SequenceEqual(_bytesNewFsysRegion))
-            {
-                Logger.WriteLogTextToRtb("Fsys comparison check passed", RtbLogPrefix.Info, rtbLog);
-            }
-            else
+
+            if (!BinaryUtils.ByteArraysMatch(fsysNew.FsysBytes, _bytesNewFsysRegion))
             {
                 HandleBuildFailure("Fsys comparison check failed");
                 return false;
             }
 
+            Logger.WriteLogTextToRtb("Fsys comparison check passed", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb("New Fsys region written successfully", RtbLogPrefix.Complete, rtbLog);
             return true;
         }

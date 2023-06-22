@@ -15,7 +15,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -434,23 +433,21 @@ namespace Mac_EFI_Toolkit
 
         private void cmdReload_Click(object sender, EventArgs e)
         {
-            if (File.Exists(FWBase.LoadedBinaryPath))
-            {
-                var fileBytes = File.ReadAllBytes(FWBase.LoadedBinaryPath);
-
-                if (!fileBytes.SequenceEqual(FWBase.LoadedBinaryBytes))
-                {
-                    OpenBinary(FWBase.LoadedBinaryPath);
-                }
-                else
-                {
-                    METMessageBox.Show(this, "MET", "File on disk matches file in memory. Data was not refreshed.", MsgType.Information, MsgButton.Okay);
-                }
-            }
-            else
+            if (!File.Exists(FWBase.LoadedBinaryPath))
             {
                 METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.", MsgType.Critical, MsgButton.Okay);
+                return;
             }
+
+            var fileBytes = File.ReadAllBytes(FWBase.LoadedBinaryPath);
+
+            if (!BinaryUtils.ByteArraysMatch(fileBytes, FWBase.LoadedBinaryBytes))
+            {
+                OpenBinary(FWBase.LoadedBinaryPath);
+                return;
+            }
+
+            METMessageBox.Show(this, "MET", "File on disk matches file in memory. Data was not refreshed.", MsgType.Information, MsgButton.Okay);
         }
 
         private void cmdNavigate_Click(object sender, EventArgs e)
