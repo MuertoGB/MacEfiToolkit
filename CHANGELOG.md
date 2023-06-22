@@ -29,11 +29,11 @@
 - Added confirmation dialog when reverting to default settings in the settings window.
 
 #### Bugs:
-- Corrected an issue where the color of the version label in the main window was not being set correctly when the form was activated and an update was available.
-- Addressed an oversight in the FWBase Fsys store parser that resulted in incorrect offsets being returned.
-- Resolved a scenario where the FWBase Fsys store parser could fail to accurately determine the length of a serial number if the serial number had been previously edited and contained invalid characters outside the range of A-Z and 0-9.
-- Resolved a scenario where the FWBase Fsys store parser could return an inaccurate serial string.
-- Resolved an issue when a file is dragged onto the executable and restarting does not clear the argument path.
+- Fixed an issue where the colour of the version label in the main window was not being set correctly when the form was activated and an update was available.
+- Fixed an issue when a file is dragged onto the executable and restarting does not clear the argument path.
+- Resolved a scenario where the application could fail to accurately determine the length of a serial number if the serial number had been previously edited and contained invalid characters outside the range of A-Z and 0-9.
+- Resolved a scenario where the application could return an inaccurate serial string.
+- Resolved an oversight in the editor window Fsys validation causing the wrong Fsys store to be validated.
 - Added missing keyboard shortcut to open the rom information window (ALT + I)
 
 ## Version 0.6.0

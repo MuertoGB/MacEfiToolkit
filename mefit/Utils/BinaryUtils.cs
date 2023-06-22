@@ -329,7 +329,7 @@ namespace Mac_EFI_Toolkit.Utils
             OverwriteBytesAtOffset(patchedBytes, fsysOffset, patchedStore);
 
             // Load the Fsys store from the new binary
-            var newBinaryFsys = FWBase.GetFsysStoreData(patchedBytes);
+            var newBinaryFsys = FWBase.GetFsysStoreData(patchedBytes, false);
 
             // Compare the new checksums
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)

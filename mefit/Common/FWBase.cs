@@ -155,7 +155,7 @@ namespace Mac_EFI_Toolkit.Common
             VssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.VSS);
             SvsStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.SVS);
             NssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.NSS);
-            FsysSectionData = GetFsysStoreData(sourceBytes);
+            FsysSectionData = GetFsysStoreData(sourceBytes, false);
             ROMInfoData = GetRomInformationData(sourceBytes);
             EFISectionStore = GetEfiSectionData(sourceBytes);
 
@@ -263,15 +263,16 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region Fsys Store
-        internal static FsysStoreSection GetFsysStoreData(byte[] sourceBytes)
+        internal static FsysStoreSection GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly)
         {
-            string ssnString = null; long ssnPos = -1;
-            string hwcString = null; long hwcPos = -1;
+            string ssnString = null;
+            long ssnPos = -1;
+            string hwcString = null;
+            long hwcPos = -1;
             string sonString = null;
             string crcString = null;
             string crcCalcString = null;
             uint uiCrcCalc = 0xFFFFFFFF;
-
             var ssnStartPos = 0x5;
             var hwcStartPos = 0x6;
             var crcLength = 0x4;
@@ -279,25 +280,32 @@ namespace Mac_EFI_Toolkit.Common
             // First we need to locate the NVRAM section GUID.
             long nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
 
-            if (nvramPos == -1)
+            if (!isFsysStoreOnly)
             {
-                // NVRAM store was not found so return default data
-                return DefaultFsysRegionBase();
+                if (nvramPos == -1)
+                {
+                    // NVRAM store was not found so return default data
+                    return DefaultFsysRegionBase();
+                }
             }
 
-            // Zero Vector length (10h) GUID length (10h) NVRAM section size data length (4h, int32)
-            int zeroVecLen = 0x10; int guidLen = 0x10; int dataLen = 0x4;
-            // Get NVRAM section size from header
-            byte[] dataLenBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, nvramPos + guidLen, dataLen);
-            // Convert NVRAM section size to int32
-            int nvramLen = BitConverter.ToInt32(dataLenBytes, 0); // NOTE: What if this value if 0xFF??
-            // Search for the Fsys store within bounds of the NVRAM section
-            long fsysPos = BinaryUtils.GetOffset(sourceBytes, FSYS_SIG, nvramPos - zeroVecLen - guidLen, nvramLen);
+            long fsysPos = 0;
 
-            // Fsys store was not found within scope of the NVRAM section
-            if (fsysPos == -1)
+            if (!isFsysStoreOnly)
             {
-                return DefaultFsysRegionBase();
+                // Zero Vector length (10h) GUID length (10h) NVRAM section size data length (4h, int32)
+                int zeroVecLen = 0x10; int guidLen = 0x10; int dataLen = 0x4;
+                // Get NVRAM section size from header
+                byte[] dataLenBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, nvramPos + guidLen, dataLen);
+                // Convert NVRAM section size to int32
+                int nvramLen = BitConverter.ToInt32(dataLenBytes, 0); // NOTE: What if this value if 0xFF??
+                // Search for the Fsys store within bounds of the NVRAM section
+                fsysPos = BinaryUtils.GetOffset(sourceBytes, FSYS_SIG, nvramPos - zeroVecLen - guidLen, nvramLen);
+                // Fsys store was not found within scope of the NVRAM section
+                if (fsysPos == -1)
+                {
+                    return DefaultFsysRegionBase();
+                }
             }
 
             // Get Fsys store bytes

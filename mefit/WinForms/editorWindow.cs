@@ -368,46 +368,48 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTextToRtb("Validating donor Fsys region:-", RtbLogPrefix.Info, rtbLog);
 
+            long fsysSigPos = BinaryUtils.GetOffset(sourceBytes, FWBase.FSYS_SIG);
+
+            if (fsysSigPos == -1)
+            {
+                Logger.WriteLogTextToRtb("Fsys signature not found", RtbLogPrefix.Error, rtbLog);
+                return false;
+            }
+
+            if (fsysSigPos != 0)
+            {
+                Logger.WriteLogTextToRtb($"Fsys signature misaligned: {fsysSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
+                return false;
+            }
+
             if (sourceBytes.Length != FWBase.FSYS_RGN_SIZE)
             {
                 Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h, expected 800h", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            long lSigPos = BinaryUtils.GetOffset(sourceBytes, FWBase.FSYS_SIG);
-
-            if (lSigPos == -1 || lSigPos != 0)
-            {
-                Logger.WriteLogTextToRtb(lSigPos == -1 ? "Fsys signature not found." : $"Fsys signature misaligned at {lSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
-                return false;
-            }
-
-            int lenSerial = FWBase.FsysSectionData.Serial.Length;
-
-            string strHwc = lenSerial == 11 ? FWBase.FsysSectionData.Serial.Substring(FWBase.FsysSectionData.Serial.Length - 3).ToUpper() : lenSerial == 12 ? FWBase.FsysSectionData.Serial.Substring(FWBase.FsysSectionData.Serial.Length - 4).ToUpper() : string.Empty;
+            // We have validated the Fsys store, now we can load it.
+            var fsysStore = FWBase.GetFsysStoreData(sourceBytes, true);
 
             Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"Fsys signature found at {lSigPos:X2}h", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"Serial: {FWBase.FsysSectionData.Serial} ({lenSerial}char)", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"HWC: {strHwc}", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"Fsys signature found at {fsysSigPos:X2}h", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"Serial: {fsysStore.Serial} ({fsysStore.Serial.Length}char)", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb($"HWC: {fsysStore.HWC}", RtbLogPrefix.Info, rtbLog);
 
-            string strCrcInSourceBytes = FWBase.GetCrcStringFromFsys(sourceBytes);
-            string strCrcCalculated = EFIUtils.GetUintFsysCrc32(sourceBytes).ToString("X8");
-
-            Logger.WriteLogTextToRtb($"File: {strCrcInSourceBytes}h > Calc: {strCrcCalculated}h", RtbLogPrefix.Info, rtbLog);
-
-            if (strCrcInSourceBytes != strCrcCalculated)
+            if (!string.Equals(fsysStore.CrcString, fsysStore.CrcCalcString))
             {
                 Logger.WriteLogTextToRtb("Donor Fsys Store CRC32 is invalid, 'Mask CRC32' flag set!", RtbLogPrefix.Warning, rtbLog);
                 _maskCrc = true;
             }
 
+            Logger.WriteLogTextToRtb($"File: {fsysStore.CrcString}h > Calc: {fsysStore.CrcCalcString}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb("Validation completed", RtbLogPrefix.Complete, rtbLog);
 
             _maskCrc = false;
 
             return true;
         }
+
         #endregion
 
         #region UI Events
@@ -502,7 +504,7 @@ namespace Mac_EFI_Toolkit.WinForms
             BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, _bytesNewFsysRegion);
 
             // Validate new Fsys was written
-            FsysStoreSection fsysNew = FWBase.GetFsysStoreData(_bytesNewBinary);
+            FsysStoreSection fsysNew = FWBase.GetFsysStoreData(_bytesNewBinary, false);
 
             if (!BinaryUtils.ByteArraysMatch(fsysNew.FsysBytes, _bytesNewFsysRegion))
             {
@@ -558,7 +560,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Load new Fsys store
-            var newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
+            var newFsys = FWBase.GetFsysStoreData(_bytesNewBinary, false);
 
             // Check serial numbers match
             if (!string.Equals(newSerial, newFsys.Serial))
@@ -590,7 +592,7 @@ namespace Mac_EFI_Toolkit.WinForms
             );
 
             // Load Fsys store from the new binary again
-            newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
+            newFsys = FWBase.GetFsysStoreData(_bytesNewBinary, false);
 
             // Check the Fsys store matches the patched store
             if (!string.Equals(newFsys.CrcCalcString, newFsys.CrcString))
