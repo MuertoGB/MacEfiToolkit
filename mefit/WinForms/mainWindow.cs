@@ -989,7 +989,7 @@ namespace Mac_EFI_Toolkit
             SetPrimaryInitialDirectory();
 
             // Reset FWBase
-            FWBase.Reset();
+            FWBase.ResetFirmwareBaseData();
 
             // Garbage collect
             GC.Collect();

@@ -14,7 +14,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -110,6 +109,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Close();
         }
+
         private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
         {
             Program.CreateCheckBuildsFolder();
@@ -217,6 +217,19 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
 
             return true;
+        }
+
+        private void cmdOpenLast_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_fullBuildPath))
+            {
+                Program.openLastBuild = true;
+                Program.lastBuildPath = _fullBuildPath;
+                Close();
+                return;
+            }
+
+            Logger.WriteLogTextToRtb($"The last build path is empty!", RtbLogPrefix.Warning, rtbLog);
         }
         #endregion
 
@@ -362,6 +375,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             long lSigPos = BinaryUtils.GetOffset(sourceBytes, FWBase.FSYS_SIG);
+
             if (lSigPos == -1 || lSigPos != 0)
             {
                 Logger.WriteLogTextToRtb(lSigPos == -1 ? "Fsys signature not found." : $"Fsys signature misaligned at {lSigPos:X2}h", RtbLogPrefix.Error, rtbLog);
@@ -369,6 +383,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             int lenSerial = FWBase.FsysSectionData.Serial.Length;
+
             string strHwc = lenSerial == 11 ? FWBase.FsysSectionData.Serial.Substring(FWBase.FsysSectionData.Serial.Length - 3).ToUpper() : lenSerial == 12 ? FWBase.FsysSectionData.Serial.Substring(FWBase.FsysSectionData.Serial.Length - 4).ToUpper() : string.Empty;
 
             Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
@@ -386,18 +401,16 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb("Donor Fsys Store CRC32 is invalid, 'Mask CRC32' flag set!", RtbLogPrefix.Warning, rtbLog);
                 _maskCrc = true;
             }
-            else
-            {
-                _maskCrc = false;
-            }
 
             Logger.WriteLogTextToRtb("Validation completed", RtbLogPrefix.Complete, rtbLog);
+
+            _maskCrc = false;
 
             return true;
         }
         #endregion
 
-        #region Misc Events
+        #region UI Events
         private void UpdateTextBoxColor(TextBox textBox, Color color)
         {
             textBox.ForeColor = color;
@@ -442,11 +455,11 @@ namespace Mac_EFI_Toolkit.WinForms
             if (!FileUtils.GetIsValidBinSize((int)FWBase.FileInfoData.FileLength))
             {
                 Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is invalid and should not be used as a donor.", RtbLogPrefix.Error, rtbLog);
+                return;
             }
-            else
-            {
-                Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is valid", RtbLogPrefix.Info, rtbLog);
-            }
+
+            Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is valid", RtbLogPrefix.Info, rtbLog);
+
         }
         #endregion
 
@@ -499,6 +512,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             Logger.WriteLogTextToRtb("Fsys comparison check passed", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb("New Fsys region written successfully", RtbLogPrefix.Complete, rtbLog);
+
             return true;
         }
 
@@ -531,9 +545,17 @@ namespace Mac_EFI_Toolkit.WinForms
             BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.SerialOffset, newSerialBytes);
 
             // Write new HWC bytes
+
             var newHwc = tbxHwc.Text;
-            byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
-            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.HWCOffset, newHwcBytes);
+            if (FWBase.FsysSectionData.HWCOffset != -1)
+            {
+                byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
+                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.HWCOffset, newHwcBytes);
+            }
+            else
+            {
+                Logger.WriteLogTextToRtb("HWC offset is -1, new HWC will not be written!", RtbLogPrefix.Warning, rtbLog);
+            }
 
             // Load new Fsys store
             var newFsys = FWBase.GetFsysStoreData(_bytesNewBinary);
@@ -657,18 +679,5 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
-        private void cmdOpenLast_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(_fullBuildPath))
-            {
-                Program.openLastBuild = true;
-                Program.lastBuildPath = _fullBuildPath;
-                Close();
-            }
-            else
-            {
-                Logger.WriteLogTextToRtb($"The last build path is empty!", RtbLogPrefix.Warning, rtbLog);
-            }
-        }
     }
 }

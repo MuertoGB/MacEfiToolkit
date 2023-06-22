@@ -148,21 +148,6 @@ namespace Mac_EFI_Toolkit.Common
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
 
-        internal static void Reset()
-        {
-            PDRSectionData = default;
-            VssStoreData = default;
-            SvsStoreData = default;
-            NssStoreData = default;
-            FsysSectionData = default;
-            ROMInfoData = default;
-            EFISectionStore = default;
-            IsApfsCapable = null;
-            FitVersion = null;
-            MeVersion = null;
-            EfiLock = EfiLockStatus.Unknown;
-        }
-
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
             FileInfoData = GetBinaryFileInfo(fileName);
@@ -180,7 +165,22 @@ namespace Mac_EFI_Toolkit.Common
 
             EfiLock = (SvsStoreData.PrimaryStoreOffset != -1 && SvsStoreData.PrimaryStoreBytes != null)
                 ? EfiLock = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes)
-                : EfiLockStatus.Unknown;      
+                : EfiLockStatus.Unknown;
+        }
+
+        internal static void ResetFirmwareBaseData()
+        {
+            PDRSectionData = default;
+            VssStoreData = default;
+            SvsStoreData = default;
+            NssStoreData = default;
+            FsysSectionData = default;
+            ROMInfoData = default;
+            EFISectionStore = default;
+            IsApfsCapable = null;
+            FitVersion = null;
+            MeVersion = null;
+            EfiLock = EfiLockStatus.Unknown;
         }
 
         #region File Information
@@ -469,7 +469,7 @@ namespace Mac_EFI_Toolkit.Common
             {
                 NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
                 if (psHeader.SizeOfData != 0)
-                 {
+                {
                     primaryStoreLen = psHeader.SizeOfData;
                     primaryStorePos = primaryStoreHeaderPos;
                     primaryStoreData = BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStorePos, primaryStoreLen);
