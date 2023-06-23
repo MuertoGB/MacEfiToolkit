@@ -72,8 +72,6 @@ namespace Mac_EFI_Toolkit
         #region Window Events
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            ToggleControlEnable(false);
-
             lblVersion.Text = Application.ProductVersion;
 
             SetPrimaryInitialDirectory();
@@ -268,30 +266,33 @@ namespace Mac_EFI_Toolkit
         {
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
+                ToggleControlEnable(false);
                 ResetAllData();
                 return;
             }
 
             var result = METMessageBox.Show(this, "Reset", "This will clear all data, and unload the binary.\r\nAre you sure you want to reset?", MsgType.Warning, MsgButton.YesNoCancel);
 
-            switch (result)
+            if (result == DialogResult.Yes)
             {
-                case DialogResult.Yes:
-                    ResetAllData();
-                    ToggleControlEnable(false);
-                    break;
-                case DialogResult.No:
-                    break;
+                ToggleControlEnable(false);
+                ResetAllData();
             }
         }
 
         private void cmdEdit_Click(object sender, EventArgs e)
         {
+            if (FWBase.LoadedBinaryBytes == null)
+            {
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.", MsgType.Warning, MsgButton.Okay);
+                return;
+            }
+
             bool bOpenEditor = Settings.SettingsGetBool(SettingsBoolType.AcceptedEditingTerms);
 
             if (!bOpenEditor)
             {
-                Opacity = 0.5;
+                SetHalfOpacity();
                 using (Form frm = new termsWindow())
                 {
                     frm.FormClosed += ChildWindowClosed;
@@ -302,7 +303,7 @@ namespace Mac_EFI_Toolkit
 
             if (bOpenEditor)
             {
-                Opacity = 0.5;
+                SetHalfOpacity();
                 using (Form frm = new editorWindow())
                 {
                     frm.FormClosed += ChildWindowClosed;
@@ -313,6 +314,13 @@ namespace Mac_EFI_Toolkit
 
         private void cmdEveryMacSearch_Click(object sender, EventArgs e)
         {
+
+            if (FWBase.FsysSectionData.Serial == null)
+            {
+                METMessageBox.Show(this, "Error", "FsysSectionData.Serial data is null.\r\nCannot continue.", MsgType.Critical, MsgButton.Okay);
+                return;
+            }
+
             Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", FWBase.FsysSectionData.Serial));
         }
 
@@ -321,7 +329,7 @@ namespace Mac_EFI_Toolkit
             // Fsys store was not found by the firmware parser
             if (FWBase.FsysSectionData.FsysBytes == null)
             {
-                METMessageBox.Show(this, "Error", "Fsys block bytes empty.", MsgType.Critical, MsgButton.Okay);
+                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", MsgType.Critical, MsgButton.Okay);
                 return;
             }
 
@@ -371,7 +379,7 @@ namespace Mac_EFI_Toolkit
                 // The build failed flag was set
                 if (buildFailed)
                 {
-                    DialogResult failResult = METMessageBox.Show(this, "MET", "Fsys patching failed. Open the log?", MsgType.Critical, MsgButton.YesNoCancel);
+                    DialogResult failResult = METMessageBox.Show(this, "Error", "Fsys patching failed. Open the log?", MsgType.Critical, MsgButton.YesNoCancel);
 
                     if (failResult == DialogResult.Yes)
                     {
@@ -395,11 +403,19 @@ namespace Mac_EFI_Toolkit
         {
             if (FWBase.FsysSectionData.FsysBytes == null)
             {
-                METMessageBox.Show(this, "Error", "Fsys block bytes empty.", MsgType.Critical, MsgButton.Okay);
+                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", MsgType.Critical, MsgButton.Okay);
                 return;
             }
 
-            Program.CheckCreateFsysFolder();
+            if (!Directory.Exists(Program.fsysDirectory))
+            {
+                Status status = FileUtils.CreateDirectory(Program.fsysDirectory);
+
+                if (status == Status.FAILED)
+                {
+                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", MsgType.Critical, MsgButton.Okay);
+                }
+            }
 
             using (var dialog = new SaveFileDialog
             {
@@ -421,7 +437,15 @@ namespace Mac_EFI_Toolkit
 
         private void cmdAppleRomInfo_Click(object sender, EventArgs e)
         {
-            Opacity = 0.5;
+
+            if (FWBase.ROMInfoData.SectionExists == false)
+            {
+                METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.", MsgType.Critical, MsgButton.Okay);
+                return;
+            }
+
+            SetHalfOpacity();
+
             using (Form formWindow = new infoWindow())
             {
                 formWindow.FormClosed += ChildWindowClosed;
@@ -450,6 +474,12 @@ namespace Mac_EFI_Toolkit
 
         private void cmdNavigate_Click(object sender, EventArgs e)
         {
+            if (FWBase.LoadedBinaryPath == null)
+            {
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.", MsgType.Critical, MsgButton.Okay);
+                return;
+            }
+
             FileUtils.HighlightPathInExplorer(FWBase.LoadedBinaryPath);
         }
         #endregion
@@ -474,7 +504,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The Fsys Stores folder has not been created yet.", MsgType.Information, MsgButton.Okay);
+            METMessageBox.Show(this, "MET", "The Fsys directory has not been created yet.", MsgType.Information, MsgButton.Okay);
         }
 
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -485,7 +515,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "File Information", "The log file was not detected, it has not yet been created.", MsgType.Information, MsgButton.Okay);
+            METMessageBox.Show(this, "File Information", "The log file has not been created yet.", MsgType.Information, MsgButton.Okay);
         }
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -495,7 +525,7 @@ namespace Mac_EFI_Toolkit
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Opacity = 0.5;
+            SetHalfOpacity();
             using (Form formWindow = new settingsWindow())
             {
                 formWindow.FormClosed += ChildWindowClosed;
@@ -505,7 +535,7 @@ namespace Mac_EFI_Toolkit
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Opacity = 0.5;
+            SetHalfOpacity();
             using (Form formWindow = new aboutWindow())
             {
                 formWindow.FormClosed += ChildWindowClosed;
@@ -561,7 +591,7 @@ namespace Mac_EFI_Toolkit
             lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileLength)})";
             lblFileCreatedDate.Text = FWBase.FileInfoData.CreationTime;
             lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
-            lblFileCrc.Text = FWBase.FileInfoData.CRC32;
+            lblFileCrc.Text = $"{FWBase.FileInfoData.CRC32:X8}";
 
             // Firmware Data
             lblSerialNumber.Text = FWBase.FsysSectionData.Serial ?? "N/A";
@@ -639,6 +669,11 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        internal void SetHalfOpacity()
+        {
+            Opacity = 0.5;
+        }
+
         private void ChildWindowClosed(object sender, EventArgs e)
         {
             Opacity = 1.0;
@@ -666,7 +701,7 @@ namespace Mac_EFI_Toolkit
         {
             tlpMain.Enabled = enable;
 
-            Button[] buttons = { cmdReset, cmdEdit, cmdExportFsysBlock, cmdEveryMacSearch };
+            Button[] buttons = { cmdReset, cmdNavigate, cmdReload, cmdEdit, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsysBlock, cmdAppleRomInfo };
             foreach (Button button in buttons)
             {
                 button.Enabled = enable;
@@ -933,7 +968,6 @@ namespace Mac_EFI_Toolkit
             ToggleControlEnable(false);
 
             FWBase.LoadedBinaryPath = filePath;
-            FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
 
             if (IsValidMinMaxSize() && IsValidFlashHeader())
             {
@@ -943,6 +977,8 @@ namespace Mac_EFI_Toolkit
                 {
                     ResetAllData();
                 }
+
+                FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
 
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
 

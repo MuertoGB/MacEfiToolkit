@@ -189,5 +189,17 @@ namespace Mac_EFI_Toolkit.Utils
             return 0; // Data was written successfully and integrity is verified
         }
 
+        internal static Status CreateDirectory(string directory)
+        {
+            Directory.CreateDirectory(directory);
+
+            if (Directory.Exists(directory))
+            {
+                return Status.SUCCESS;
+            }
+
+            return Status.FAILED;
+        }
+
     }
 }

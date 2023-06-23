@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ToInt24.cs" />
     <Compile Include="Common\FSGuids.cs" />
     <Compile Include="Common\FWBase.cs" />
     <Compile Include="Common\Helper.cs" />

@@ -32,6 +32,7 @@
 #### Bugs:
 - Fixed an issue where the colour of the version label in the main window was not being set correctly when the form was activated and an update was available.
 - Fixed an issue when a file is dragged onto the executable and restarting does not clear the argument path.
+- Fixed an issue when the main window reset button is clicked but the UI will not reset properly if setting 'Disable Confirmation Dialogs' is enabled.
 - Resolved a scenario where the application could fail to accurately determine the length of a serial number if the serial number had been previously edited and contained invalid characters outside the range of A-Z and 0-9.
 - Resolved a scenario where the application could return an inaccurate serial string.
 - Resolved an oversight in the editor window Fsys validation causing the wrong Fsys store to be validated.

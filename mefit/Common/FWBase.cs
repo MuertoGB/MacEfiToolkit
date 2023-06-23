@@ -20,7 +20,7 @@ internal struct FileInfoData
     internal string CreationTime { get; set; }
     internal string LastWriteTime { get; set; }
     internal long FileLength { get; set; }
-    internal string CRC32 { get; set; }
+    internal uint CRC32 { get; set; }
 }
 
 internal struct FsysStoreSection
@@ -170,6 +170,9 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static void ResetFirmwareBaseData()
         {
+            LoadedBinaryPath = null;
+            LoadedBinaryBytes = null;
+
             PDRSectionData = default;
             VssStoreData = default;
             SvsStoreData = default;
@@ -195,7 +198,7 @@ namespace Mac_EFI_Toolkit.Common
                 CreationTime = fileInfo.CreationTime.ToString(),
                 LastWriteTime = fileInfo.LastWriteTime.ToString(),
                 FileLength = fileInfo.Length,
-                CRC32 = FileUtils.GetCrc32Digest(LoadedBinaryBytes).ToString("X8")
+                CRC32 = FileUtils.GetCrc32Digest(LoadedBinaryBytes)
             };
         }
         #endregion 
@@ -827,9 +830,7 @@ namespace Mac_EFI_Toolkit.Common
         #region APFSJumpStart
         internal static ApfsCompatibleFirmware GetIsApfsCapable(byte[] sourceBytes)
         {
-            long guidOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.APFS_DXE_GUID);
-
-            if (guidOffset != -1)
+            if (BinaryUtils.GetOffset(sourceBytes, FSGuids.APFS_DXE_GUID) != -1)
             {
                 return ApfsCompatibleFirmware.Yes;
             }
@@ -839,28 +840,42 @@ namespace Mac_EFI_Toolkit.Common
                 return ApfsCompatibleFirmware.Unknown;
             }
 
-            long lzmaOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.LZMA_DXE_NEW_GUID);
-            if (lzmaOffset == -1)
+            long fsOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_GUID);
+
+            if (fsOffset == -1)
             {
-                lzmaOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.LZMA_DXE_OLD_GUID);
+                fsOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID);
             }
 
-            if (lzmaOffset != -1)
+            if (fsOffset == -1)
             {
-                var lzmaNudgePos = 0x10;
-                lzmaOffset = BinaryUtils.GetOffset(sourceBytes, new byte[] { 0x5D }, lzmaOffset + lzmaNudgePos);
-                long lzmaEndOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, lzmaOffset);
-
-                if (lzmaEndOffset != -1)
-                {
-                    byte[] decompressedBytes = LzmaCoder.DecompressBytes(BinaryUtils.RemoveTrailingFFPadding(BinaryUtils.GetBytesBetweenOffsets(sourceBytes, lzmaOffset, lzmaEndOffset)));
-
-                    guidOffset = BinaryUtils.GetOffset(decompressedBytes, FSGuids.APFS_DXE_GUID);
-                    return (guidOffset != -1) ? ApfsCompatibleFirmware.Yes : ApfsCompatibleFirmware.No;
-                }
+                return ApfsCompatibleFirmware.No;
             }
 
-            return ApfsCompatibleFirmware.No;
+            // Get bytes containing section length (0x3)
+            byte[] sizeData = BinaryUtils.GetBytesAtOffset(sourceBytes, fsOffset + 0x14, 0x3);
+            // Convert section length bytes to int24
+            int sectionSize = BitConvert.ToInt24(sizeData);
+            // Determine the end of the lzma guid section
+            long endOffset = fsOffset + sectionSize;
+            // Signature length
+            var sigLength = 0x10;
+            // Search for the LZMA signature byte
+            fsOffset = BinaryUtils.GetOffset(sourceBytes, new byte[] { 0x5D }, fsOffset + sigLength);
+            // Decompress the LZMA volume
+            byte[] decompressedBytes = LzmaCoder.DecompressBytes(BinaryUtils.GetBytesBetweenOffsets(sourceBytes, fsOffset, endOffset));
+
+            if (decompressedBytes == null)
+            {
+                return ApfsCompatibleFirmware.Unknown;
+            }
+
+            if (BinaryUtils.GetOffset(decompressedBytes, FSGuids.APFS_DXE_GUID) == -1)
+            {
+                return ApfsCompatibleFirmware.No;
+            }
+
+            return ApfsCompatibleFirmware.Yes;
         }
         #endregion
 

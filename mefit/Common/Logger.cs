@@ -105,5 +105,10 @@ namespace Mac_EFI_Toolkit
             richTextBox.ScrollToCaret();
         }
 
+        internal static void WriteExceptionToAppLog(Exception e)
+        {
+            WriteToLogFile($"{e.GetType().Name}:- {e.Message}\r\n\r\n{e}\r\n\r\n -------------------", LogType.Application);
+        }
+
     }
 }

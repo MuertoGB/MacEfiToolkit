@@ -89,13 +89,26 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
         {
-            Program.CreateCheckBuildsFolder();
+            if (!Directory.Exists(Program.fsysDirectory))
+            {
+                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", MsgType.Information, MsgButton.Okay);
+                return;
+            }
+
             Process.Start("explorer.exe", Program.buildsDirectory);
         }
 
         private void cmdFsysPath_Click(object sender, EventArgs e)
         {
-            Program.CheckCreateFsysFolder();
+            if (!Directory.Exists(Program.fsysDirectory))
+            {
+                Status status = FileUtils.CreateDirectory(Program.fsysDirectory);
+
+                if (status == Status.FAILED)
+                {
+                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", MsgType.Critical, MsgButton.Okay);
+                }
+            }     
 
             using (var dialog = new OpenFileDialog
             {
@@ -174,7 +187,15 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private bool SaveBuild()
         {
-            Program.CreateCheckBuildsFolder();
+            if (!Directory.Exists(Program.buildsDirectory))
+            {
+                Status status = FileUtils.CreateDirectory(Program.buildsDirectory);
+
+                if (status == Status.FAILED)
+                {
+                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", MsgType.Critical, MsgButton.Okay);
+                }
+            }
 
             var filename = FWBase.FileInfoData.FileNameWithExt.StartsWith("outimage_")
                 ? $"{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"
@@ -207,6 +228,26 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             Logger.WriteLogTextToRtb($"The last build path is empty!", RtbLogPrefix.Warning, rtbLog);
+        }
+
+        private void cmdReset_Click(object sender, EventArgs e)
+        {
+            rtbLog.Text = string.Empty;
+
+            GetRtbInitialData();
+
+            _bytesNewFsysStore = null;
+            _bytesNewBinary = null;
+            _maskCrc = false;
+            _fullBuildPath = string.Empty;
+
+            cbxReplaceFsysStore.Checked = false;
+            cbxReplaceSerial.Checked = false;
+            cbxClearVssStore.Checked = false;
+            cbxClearSvsStore.Checked = false;
+            cbxClearNssStore.Checked = false;
+
+            cmdOpenLast.Enabled = false;
         }
         #endregion
 
@@ -679,24 +720,5 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
-        private void cmdReset_Click(object sender, EventArgs e)
-        {
-            rtbLog.Text = string.Empty;
-
-            GetRtbInitialData();
-
-            _bytesNewFsysStore = null;
-            _bytesNewBinary = null;
-            _maskCrc = false;
-            _fullBuildPath = string.Empty;
-
-            cbxReplaceFsysStore.Checked = false;
-            cbxReplaceSerial.Checked = false;
-            cbxClearVssStore.Checked = false;
-            cbxClearSvsStore.Checked = false;
-            cbxClearNssStore.Checked = false;
-
-            cmdOpenLast.Enabled = false;
-        }
     }
 }
