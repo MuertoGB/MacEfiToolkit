@@ -14,12 +14,12 @@ namespace Mac_EFI_Toolkit.UI
 {
 
     #region Enums
-    public enum MsgType
+    public enum MessageBoxType
     {
-        Critical, Warning, Information, Question
+        Error, Warning, Information, Question
     }
 
-    public enum MsgButton
+    public enum MessageBoxButtons
     {
         Okay, YesNoCancel
     }
@@ -31,8 +31,8 @@ namespace Mac_EFI_Toolkit.UI
         #region Static Members
         static string strMmbTitle;
         static string strMmbMessage;
-        static MsgType mtMmbType;
-        static MsgButton mbMmbButton;
+        static MessageBoxType mtMmbType;
+        static MessageBoxButtons mbMmbButton;
         static DialogResult drMmbResult;
         static System.Media.SystemSound ssMmbSound;
         #endregion
@@ -69,22 +69,22 @@ namespace Mac_EFI_Toolkit.UI
 
             switch (mtMmbType)
             {
-                case MsgType.Critical:
+                case MessageBoxType.Error:
                     lblMessageIcon.ForeColor = Colours.ERROR_RED;
                     lblMessageIcon.Text = Chars.STATUS_ERROR_FULL;
                     ssMmbSound = System.Media.SystemSounds.Hand;
                     break;
-                case MsgType.Warning:
+                case MessageBoxType.Warning:
                     lblMessageIcon.ForeColor = Colours.WARNING_ORANGE;
                     lblMessageIcon.Text = Chars.INCIDENT_TRIANGLE;
                     ssMmbSound = System.Media.SystemSounds.Exclamation;
                     break;
-                case MsgType.Information:
+                case MessageBoxType.Information:
                     lblMessageIcon.ForeColor = Colours.INFO_BLUE;
                     lblMessageIcon.Text = Chars.INFO_SOLID;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
-                case MsgType.Question:
+                case MessageBoxType.Question:
                     lblMessageIcon.ForeColor = Colours.INFO_BLUE;
                     lblMessageIcon.Text = Chars.UNKNOWN;
                     ssMmbSound = System.Media.SystemSounds.Beep;
@@ -94,7 +94,7 @@ namespace Mac_EFI_Toolkit.UI
             lblTitle.Text = strMmbTitle;
             lblMessage.Text = strMmbMessage;
 
-            if (mbMmbButton == MsgButton.Okay)
+            if (mbMmbButton == MessageBoxButtons.Okay)
             {
                 cmdNo.Hide();
                 cmdYes.Hide();
@@ -130,25 +130,24 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Overriden Events
-        public static DialogResult Show(Form owner, string title, string message, MsgType type, MsgButton buttons = MsgButton.Okay)
+        public static DialogResult Show(Form owner, string title, string message, MessageBoxType type, MessageBoxButtons buttons = MessageBoxButtons.Okay)
         {
-
             strMmbTitle = title;
             strMmbMessage = message;
             mtMmbType = type;
             mbMmbButton = buttons;
 
-            using (var msgForm = new METMessageBox())
+            using (METMessageBox messageBox = new METMessageBox())
             {
                 if (owner == null)
                 {
-                    msgForm.StartPosition = FormStartPosition.CenterScreen;
+                    messageBox.StartPosition = FormStartPosition.CenterScreen;
                 }
                 else
                 {
-                    msgForm.StartPosition = FormStartPosition.CenterParent;
+                    messageBox.StartPosition = FormStartPosition.CenterParent;
                 }
-                msgForm.ShowDialog(owner);
+                messageBox.ShowDialog(owner);
             }
             return drMmbResult;
         }
@@ -157,7 +156,7 @@ namespace Mac_EFI_Toolkit.UI
         #region Button Events
         private void cmdCancel_Click(object sender, EventArgs e)
         {
-            if (mbMmbButton == MsgButton.Okay)
+            if (mbMmbButton == MessageBoxButtons.Okay)
             {
                 drMmbResult = DialogResult.OK;
             }

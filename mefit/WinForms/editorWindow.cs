@@ -49,7 +49,7 @@ namespace Mac_EFI_Toolkit.WinForms
             Load += mainWindow_Load;
             lblTitle.MouseMove += editorWindow_MouseMove;
 
-            var font = Program.FONT_MDL2_REG_9;
+            Font font = Program.FONT_MDL2_REG_9;
             SetLabelProperties(lblSvsChevRight, font, Chars.CHEVRON_RIGHT);
             SetLabelProperties(lblVssChevRight, font, Chars.CHEVRON_RIGHT);
             SetLabelProperties(lblNssChevRight, font, Chars.CHEVRON_RIGHT);
@@ -64,8 +64,6 @@ namespace Mac_EFI_Toolkit.WinForms
             tbxSerialNumber.MaxLength = FWBase.FsysSectionData.Serial.Length;
 
             GetRtbInitialData();
-
-
         }
         #endregion
 
@@ -91,7 +89,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (!Directory.Exists(Program.fsysDirectory))
             {
-                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", MsgType.Information, MsgButton.Okay);
+                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", MessageBoxType.Information, UI.MessageBoxButtons.Okay);
                 return;
             }
 
@@ -106,11 +104,11 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", MsgType.Critical, MsgButton.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", MessageBoxType.Error, UI.MessageBoxButtons.Okay);
                 }
             }     
 
-            using (var dialog = new OpenFileDialog
+            using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = Program.fsysDirectory,
                 Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
@@ -193,11 +191,11 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", MsgType.Critical, MsgButton.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", MessageBoxType.Error, UI.MessageBoxButtons.Okay);
                 }
             }
 
-            var filename = FWBase.FileInfoData.FileNameWithExt.StartsWith("outimage_")
+            string filename = FWBase.FileInfoData.FileNameWithExt.StartsWith("outimage_")
                 ? $"{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"
                 : $"outimage_{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin";
 
@@ -323,7 +321,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdSaveLog_Click(object sender, EventArgs e)
         {
-            using (var dialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
                 Title = "Save Log File...",
@@ -421,7 +419,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void LogLoadedBinarySize()
         {
-            if (!FileUtils.GetIsValidBinSize((int)FWBase.FileInfoData.FileLength))
+            if (!FileUtils.GetIsValidBinSize(FWBase.FileInfoData.FileLength))
             {
                 Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is invalid and should not be used as a donor.", RtbLogPrefix.Error, rtbLog);
                 return;
@@ -467,7 +465,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTextToRtb("Validating donor Fsys store:-", RtbLogPrefix.Info, rtbLog);
 
-            long fsysSigPos = BinaryUtils.GetOffset(sourceBytes, FWBase.FSYS_SIG);
+            int fsysSigPos = BinaryUtils.GetOffset(sourceBytes, FWBase.FSYS_SIG);
 
             if (fsysSigPos == -1)
             {
@@ -488,7 +486,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // We have validated the Fsys store, now we can load it.
-            var fsysStore = FWBase.GetFsysStoreData(sourceBytes, true);
+            FsysStoreSection fsysStore = FWBase.GetFsysStoreData(sourceBytes, true);
 
             Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"Fsys signature found at {fsysSigPos:X2}h", RtbLogPrefix.Info, rtbLog);
@@ -520,7 +518,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb("Masking Fsys store CRC", RtbLogPrefix.Info, rtbLog);
 
                 // Load the new Fsys store
-                var fsysNew = FWBase.GetFsysStoreData(_bytesNewFsysStore, true);
+                FsysStoreSection fsysNew = FWBase.GetFsysStoreData(_bytesNewFsysStore, true);
 
                 // Load the new Fsys store bytes and patch the crc
                 _bytesNewFsysStore = BinaryUtils.PatchFsysCrc(fsysNew.FsysBytes, fsysNew.CRC32CalcInt);
@@ -581,13 +579,13 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Write new serial number bytes
-            var newSerial = tbxSerialNumber.Text;
+            string newSerial = tbxSerialNumber.Text;
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
             BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.SerialOffset, newSerialBytes);
 
             // Write new HWC bytes
 
-            var newHwc = tbxHwc.Text;
+            string newHwc = tbxHwc.Text;
             if (FWBase.FsysSectionData.HWCOffset != -1)
             {
                 byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
@@ -599,7 +597,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Load new Fsys store
-            var newFsys = FWBase.GetFsysStoreData(_bytesNewBinary, false);
+            FsysStoreSection newFsys = FWBase.GetFsysStoreData(_bytesNewBinary, false);
 
             // Check serial numbers match
             if (!string.Equals(newSerial, newFsys.Serial))
@@ -648,9 +646,9 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool ClearNvramStore(NvramStoreSection storeData, bool clearBackup)
         {
             int headerLen = 0x10;
-            long primBodyStart = storeData.PrimaryStoreOffset + headerLen;
+            int primBodyStart = storeData.PrimaryStoreOffset + headerLen;
             int primBodyEnd = storeData.PrimaryStoreLength - headerLen;
-            long backBodyStart = storeData.BackupStoreOffset + headerLen;
+            int backBodyStart = storeData.BackupStoreOffset + headerLen;
             int backBodyEnd = storeData.BackupStoreLength - headerLen;
 
             if (!storeData.IsPrimaryStoreEmpty)

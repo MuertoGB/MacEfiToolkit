@@ -57,7 +57,7 @@ namespace Mac_EFI_Toolkit.Common
     {
         internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
         {
-            long headerPos = -1; int readLen = 0; string result = null;
+            int headerPos = -1; int readLen = 0; string result = null;
 
             switch (headerType)
             {
@@ -74,17 +74,17 @@ namespace Mac_EFI_Toolkit.Common
 
             if (headerPos != -1)
             {
-                var headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerPos, readLen);
+                byte[] headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerPos, readLen);
                 if (headerBytes != null)
                 {
                     if (headerType == HeaderType.FlashImageTool)
                     {
-                        var fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
+                        FptHeader fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
                         result = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                     }
                     else if (headerType == HeaderType.ManagementEngine)
                     {
-                        var mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
+                        Mn2PartialHeader mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
                         result = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
                     }
                 }

@@ -14,32 +14,31 @@ namespace Mac_EFI_Toolkit
     {
         internal static byte[] DecompressBytes(byte[] sourceBytes)
         {
-            var lzmaDecoder = new LzmaDecoder();
-            var decompressedStream = new MemoryStream();
+            LzmaDecoder decoder = new LzmaDecoder();
+            MemoryStream decoderStream = new MemoryStream();
 
             try
             {
-                using (var compressedInput = new MemoryStream(sourceBytes))
+                using (MemoryStream compressedInput = new MemoryStream(sourceBytes))
                 {
-                    var propertyBytes = new byte[5];
+                    byte[] propertyBytes = new byte[5];
                     compressedInput.Read(propertyBytes, 0, 5);
 
-                    var decompressedLength = new byte[8];
+                    byte[] decompressedLength = new byte[8];
                     compressedInput.Read(decompressedLength, 0, 8);
-                    var fileLength = BitConverter.ToInt64(decompressedLength, 0);
+                    long fileLength = BitConverter.ToInt64(decompressedLength, 0);
 
-                    lzmaDecoder.SetDecoderProperties(propertyBytes);
-                    lzmaDecoder.Code(compressedInput, decompressedStream, compressedInput.Length, fileLength, null);
+                    decoder.SetDecoderProperties(propertyBytes);
+                    decoder.Code(compressedInput, decoderStream, compressedInput.Length, fileLength, null);
                 }
 
-                return decompressedStream.ToArray();
+                return decoderStream.ToArray();
             }
             catch (Exception e)
             {
                 Logger.WriteExceptionToAppLog(e);
                 return null;
             }
-
         }
     }
 }

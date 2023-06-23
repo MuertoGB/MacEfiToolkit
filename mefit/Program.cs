@@ -200,7 +200,7 @@ namespace Mac_EFI_Toolkit
         {
             Logger.WriteExceptionToAppLog(e);
 
-            DialogResult result = MessageBox.Show($"{e.Message}\r\n\r\n{e}\r\n\r\nWould you like to force quit?", $"{e.GetType()}", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+            DialogResult result = MessageBox.Show($"{e.Message}\r\n\r\n{e}\r\n\r\nWould you like to force quit?", $"{e.GetType()}", System.Windows.Forms.MessageBoxButtons.YesNo, MessageBoxIcon.Error);
 
             if (result == DialogResult.Yes)
             {
@@ -224,7 +224,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", MsgType.Question, MsgButton.YesNoCancel);
+            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", MessageBoxType.Question, UI.MessageBoxButtons.YesNoCancel);
             if (result == DialogResult.Yes)
             {
                 Application.Restart();
@@ -241,7 +241,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", MsgType.Question, MsgButton.YesNoCancel);
+            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", MessageBoxType.Question, UI.MessageBoxButtons.YesNoCancel);
             if (result == DialogResult.Yes)
             {
                 Application.Exit();

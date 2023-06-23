@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// BitConvert.cs
+// Released under the GNU GLP v3.0
+
+using System;
 
 namespace Mac_EFI_Toolkit.Common
 {

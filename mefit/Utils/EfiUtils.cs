@@ -32,11 +32,11 @@ namespace Mac_EFI_Toolkit.Utils
             try
             {
                 // Attempt to load the data from the embedded XML db
-                var xmlData = Encoding.UTF8.GetBytes(Properties.Resources.modeldb);
-                using (var stream = new MemoryStream(xmlData))
+                byte[] xmlData = Encoding.UTF8.GetBytes(Properties.Resources.modeldb);
+                using (MemoryStream stream = new MemoryStream(xmlData))
                 {
-                    var xmlDoc = XDocument.Load(stream);
-                    var name = xmlDoc.Descendants("section")
+                    XDocument xmlDoc = XDocument.Load(stream);
+                    string name = xmlDoc.Descendants("section")
                         .FirstOrDefault(e => e.Element("cfgCode")?.Value == hwcString)
                         ?.Element("model")?.Value;
 
@@ -47,15 +47,15 @@ namespace Mac_EFI_Toolkit.Utils
                 }
 
                 // Retrieve data from the Apple server
-                var url = $"http://support-sp.apple.com/sp/product?cc={hwcString}";
+                string url = $"http://support-sp.apple.com/sp/product?cc={hwcString}";
                 if (!NetUtils.GetIsWebsiteAvailable(url))
                 {
                     return null;
                 }
 
-                var xml = await new WebClient().DownloadStringTaskAsync(url);
-                var doc = XDocument.Parse(xml);
-                var data = doc.XPathSelectElement("/root/configCode")?.Value;
+                string xml = await new WebClient().DownloadStringTaskAsync(url);
+                XDocument doc = XDocument.Parse(xml);
+                string data = doc.XPathSelectElement("/root/configCode")?.Value;
 
                 if (data != null)
                 {

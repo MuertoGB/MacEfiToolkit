@@ -43,7 +43,7 @@ namespace Mac_EFI_Toolkit
         #region Create File
         internal static void SettingsCreateFile()
         {
-            var settingsIni = new IniFile(strSettingsFilePath);
+            IniFile settingsIni = new IniFile(strSettingsFilePath);
             settingsIni.Write("Startup", "DisableVersionCheck", "False");
             settingsIni.Write("Application", "DisableFlashingUI", "False");
             settingsIni.Write("Application", "DisableMessageSounds", "False");
@@ -96,7 +96,7 @@ namespace Mac_EFI_Toolkit
                     return false;
             }
 
-            var settingsIni = new IniFile(strSettingsFilePath);
+            IniFile settingsIni = new IniFile(strSettingsFilePath);
 
             if (!settingsIni.SectionExists(section))
             {
@@ -139,7 +139,7 @@ namespace Mac_EFI_Toolkit
                     return string.Empty;
             }
 
-            var settingsIni = new IniFile(strSettingsFilePath);
+            IniFile settingsIni = new IniFile(strSettingsFilePath);
 
             if (!settingsIni.SectionExists(section))
             {
@@ -205,7 +205,7 @@ namespace Mac_EFI_Toolkit
                     return;
             }
 
-            var settingsIni = new IniFile(strSettingsFilePath);
+            IniFile settingsIni = new IniFile(strSettingsFilePath);
 
             if (settingsIni.SectionExists(section))
             {
@@ -236,7 +236,7 @@ namespace Mac_EFI_Toolkit
                     return;
             }
 
-            var ini = new IniFile(strSettingsFilePath);
+            IniFile ini = new IniFile(strSettingsFilePath);
             if (!ini.SectionExists(section)) ini.Write(section, string.Empty, null);
             if (ini.KeyExists(section, key))
             {

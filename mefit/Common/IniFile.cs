@@ -28,9 +28,9 @@ namespace Mac_EFI_Toolkit.Common
 
         internal string Read(string section, string key, string defaultValue = "")
         {
-            var result = new StringBuilder(255);
-            NativeMethods.GetPrivateProfileString(section, key, defaultValue, result, 255, _strFilePath);
-            return result.ToString();
+            StringBuilder builder = new StringBuilder(255);
+            NativeMethods.GetPrivateProfileString(section, key, defaultValue, builder, 255, _strFilePath);
+            return builder.ToString();
         }
 
         internal void DeleteKey(string section, string key)
@@ -88,7 +88,7 @@ namespace Mac_EFI_Toolkit.Common
             if (bytesReturned == 0) return null;
             string local = Marshal.PtrToStringAnsi(pReturnedString, (int)bytesReturned).ToString();
             Marshal.FreeCoTaskMem(pReturnedString);
-            var keys = local.Substring(0, local.Length - 1).Split('\0');
+            string[] keys = local.Substring(0, local.Length - 1).Split('\0');
             for (int i = 0; i < keys.Length; i++)
             {
                 int separatorIndex = keys[i].IndexOf('=');

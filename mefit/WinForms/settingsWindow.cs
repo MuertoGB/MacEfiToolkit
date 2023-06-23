@@ -121,7 +121,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
-            var result = METMessageBox.Show(this, "Settings", "This will revert all settings to default, are you sure you want to set default settings?", MsgType.Warning, MsgButton.YesNoCancel);
+            DialogResult result = METMessageBox.Show(this, "Settings", "This will revert all settings to default, are you sure you want to set default settings?", MessageBoxType.Warning, UI.MessageBoxButtons.YesNoCancel);
 
             if (result != DialogResult.Yes)
             {

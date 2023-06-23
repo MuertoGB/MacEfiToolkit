@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="sourceBytes">The byte array to search in.</param>
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static long GetOffset(byte[] sourceBytes, byte[] pattern)
+        internal static int GetOffset(byte[] sourceBytes, byte[] pattern)
         {
             // Call the overload that takes a baseOffset parameter and sets it to 0.
             return GetOffset(sourceBytes, pattern, 0);
@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <param name="baseOffset">The base offset to start the search from.</param>
         /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static long GetOffset(byte[] sourceBytes, byte[] pattern, long baseOffset)
+        internal static int GetOffset(byte[] sourceBytes, byte[] pattern, int baseOffset)
         {
             // Call the overload that takes a baseOffset and maxSearchLength parameters and sets maxSearchLength to the remaining length of the sourceBytes array.
             return GetOffset(sourceBytes, pattern, baseOffset, sourceBytes.Length - baseOffset);
@@ -49,7 +49,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="baseOffset">The base offset to start the search from.</param>
         /// <param name="maxSearchLength">The maximum length of the search within the byte array.</param>
         /// <returns>The offset of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static long GetOffset(byte[] sourceBytes, byte[] patternBytes, long baseOffset, long maxSearchLength)
+        internal static int GetOffset(byte[] sourceBytes, byte[] patternBytes, int baseOffset, int maxSearchLength)
         {
             // Ensure that maxSearchLength is within the bounds of the sourceBytes array.
             maxSearchLength = Math.Min(maxSearchLength, sourceBytes.Length - baseOffset);
@@ -58,7 +58,7 @@ namespace Mac_EFI_Toolkit.Utils
             int[] partialMatchTable = BuildPartialMatchTable(patternBytes);
 
             // Initialize the source and pattern indices.
-            int sourceIndex = (int)baseOffset;
+            int sourceIndex = baseOffset;
             int patternIndex = 0;
 
             // Iterate over the source bytes until the end or until the pattern is found or the maximum search length is reached.
@@ -132,12 +132,12 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="baseOffset">The offset in the byte array to read from.</param>
         /// <param name="length">The number of bytes to read.</param>
         /// <returns>The bytes read from the byte array.</returns>
-        internal static byte[] GetBytesAtOffset(byte[] sourceBytes, long baseOffset, int length)
+        internal static byte[] GetBytesAtOffset(byte[] sourceBytes, int baseOffset, int length)
         {
             if (baseOffset < 0 || baseOffset + length > sourceBytes.Length) return null;
 
             byte[] buffer = new byte[length];
-            Buffer.BlockCopy(sourceBytes, (int)baseOffset, buffer, 0, length);
+            Buffer.BlockCopy(sourceBytes, baseOffset, buffer, 0, length);
             return buffer;
         }
 
@@ -148,12 +148,12 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="baseOffset">The starting offset in the byte array to read from.</param>
         /// <param name="endOffset">The ending offset in the byte array to read from.</param>
         /// <returns>The bytes read from the byte array.</returns>
-        internal static byte[] GetBytesBetweenOffsets(byte[] sourceBytes, long baseOffset, long endOffset)
+        internal static byte[] GetBytesBetweenOffsets(byte[] sourceBytes, int baseOffset, int endOffset)
         {
             if (endOffset <= baseOffset) return new byte[0]; // Nothing to read
 
-            long length = endOffset - baseOffset;
-            var segment = new ArraySegment<byte>(sourceBytes, (int)baseOffset, (int)length);
+            int length = endOffset - baseOffset;
+            ArraySegment<byte> segment = new ArraySegment<byte>(sourceBytes, baseOffset, length);
             return segment.ToArray();
         }
 
@@ -165,9 +165,9 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="startByte">The starting byte to read from.</param>
         /// <param name="terminationBytes">The terminating byte params to stop reading at.</param>
         /// <returns>The bytes read from the byte array up to the terminating byte.</returns>
-        internal static byte[] GetBytesAtOffsetByteDelimited(byte[] sourceBytes, long baseOffset, byte startByte, params byte[] terminationBytes)
+        internal static byte[] GetBytesAtOffsetByteDelimited(byte[] sourceBytes, int baseOffset, byte startByte, params byte[] terminationBytes)
         {
-            int startIndex = Array.IndexOf(sourceBytes, startByte, (int)baseOffset);
+            int startIndex = Array.IndexOf(sourceBytes, startByte, baseOffset);
             if (startIndex < 0 || startIndex == sourceBytes.Length - 1)
                 return null;
 
@@ -235,12 +235,12 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="sourceBytes">The byte array to overwrite.</param>
         /// <param name="baseOffset">The offset in the byte array to overwrite at.</param>
         /// <param name="newBytes">The new bytes to write.</param>
-        internal static void OverwriteBytesAtOffset(byte[] sourceBytes, long baseOffset, byte[] newBytes)
+        internal static void OverwriteBytesAtOffset(byte[] sourceBytes, int baseOffset, byte[] newBytes)
         {
             if (baseOffset < 0 || baseOffset + newBytes.Length > sourceBytes.Length)
                 throw new ArgumentOutOfRangeException(nameof(baseOffset), "Offset is out of range.");
 
-            Buffer.BlockCopy(newBytes, 0, sourceBytes, (int)baseOffset, newBytes.Length);
+            Buffer.BlockCopy(newBytes, 0, sourceBytes, baseOffset, newBytes.Length);
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="fsysStore">The byte array representing the Fsys store.</param>
         /// <param name="uiNewCrc">The new CRC value to be patched in the Fsys store.</param>
         /// <returns>The patched file byte array, or null if the new calculated crc does not match the crc in the Fsys store.</returns>
-        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes, long fsysOffset, byte[] fsysStore, uint uiNewCrc)
+        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes, int fsysOffset, byte[] fsysStore, uint uiNewCrc)
 
         {
             // Create a new byte array to hold the patched binary
@@ -329,7 +329,7 @@ namespace Mac_EFI_Toolkit.Utils
             OverwriteBytesAtOffset(patchedBytes, fsysOffset, patchedStore);
 
             // Load the Fsys store from the new binary
-            var newBinaryFsys = FWBase.GetFsysStoreData(patchedBytes, false);
+            FsysStoreSection newBinaryFsys = FWBase.GetFsysStoreData(patchedBytes, false);
 
             // Compare the new checksums
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)

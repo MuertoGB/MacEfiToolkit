@@ -36,9 +36,9 @@ namespace Mac_EFI_Toolkit
 
         internal static void WriteToLogFile(string logMessage, LogType logType)
         {
-            var pathString = GetLogFilePath(logType);
+            string pathString = GetLogFilePath(logType);
 
-            using (var writer = new StreamWriter(pathString, true))
+            using (StreamWriter writer = new StreamWriter(pathString, true))
             {
                 writer.WriteLine($"{DateTime.Now} : {logMessage}");
             }
@@ -46,7 +46,7 @@ namespace Mac_EFI_Toolkit
 
         internal static void ViewLogFile(LogType logType)
         {
-            var pathString = GetLogFilePath(logType);
+            string pathString = GetLogFilePath(logType);
 
             if (File.Exists(pathString))
             {

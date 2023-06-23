@@ -30,9 +30,9 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The SHA256 checksum of the byte array.</returns>
         internal static string GetSha256Digest(byte[] sourceBytes)
         {
-            using (var provider = SHA256.Create())
+            using (SHA256 provider = SHA256.Create())
             {
-                var digestBytes = provider.ComputeHash(sourceBytes);
+                byte[] digestBytes = provider.ComputeHash(sourceBytes);
                 return BitConverter.ToString(digestBytes).Replace("-", "");
             }
         }
@@ -172,12 +172,12 @@ namespace Mac_EFI_Toolkit.Utils
 
             try
             {
-                using (var fileStream = new FileStream(path, FileMode.Create))
+                using (FileStream fileStream = new FileStream(path, FileMode.Create))
                 {
                     fileStream.Write(sourceBytes, 0, sourceBytes.Length);
                 }
 
-                using (var fileStream = new FileStream(path, FileMode.Open))
+                using (FileStream fileStream = new FileStream(path, FileMode.Open))
                 {
                     byte[] fileBytes = new byte[fileStream.Length];
                     fileStream.Read(fileBytes, 0, fileBytes.Length);

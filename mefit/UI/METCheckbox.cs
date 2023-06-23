@@ -159,14 +159,14 @@ namespace Mac_EFI_Toolkit.UI
 
             Color switchBack = MouseHovered ? ClientColorActive : ClientColor;
 
-            using (var pen = new Pen(switchBorder, 2.0f))
+            using (Pen pen = new Pen(switchBorder, 2.0f))
             {
                 e.Graphics.DrawRectangle(pen, outerRectangle);
             }
 
             innerRectangle.Inflate(-1, -1);
 
-            using (var brush = new SolidBrush(switchBack))
+            using (SolidBrush brush = new SolidBrush(switchBack))
             {
                 e.Graphics.FillRectangle(brush, innerRectangle);
             }
@@ -176,17 +176,17 @@ namespace Mac_EFI_Toolkit.UI
                 innerRectangle = new Rectangle(1, 1, diameter, diameter);
                 innerRectangle.Inflate(-5, -5); // Control size of check
 
-                using (var brush = new SolidBrush(CheckedColor))
+                using (SolidBrush brush = new SolidBrush(CheckedColor))
                 {
                     e.Graphics.FillRectangle(brush, innerRectangle);
                 }
             }
 
-            var textArea = new Rectangle(outerRectangle.Width + 6, 0, Width - outerRectangle.Width - 6, Height);
-            var textColor = Enabled ? ForeColor : Colours.DISABLED_TEXT;
+            Rectangle textArea = new Rectangle(outerRectangle.Width + 6, 0, Width - outerRectangle.Width - 6, Height);
+            Color textColor = Enabled ? ForeColor : Colours.DISABLED_TEXT;
 
-            using (var format = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
-            using (var brush = new SolidBrush(textColor))
+            using (StringFormat format = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
+            using (SolidBrush brush = new SolidBrush(textColor))
             {
                 e.Graphics.DrawRectangle(Pens.Transparent, textArea);
                 e.Graphics.DrawString(Text, Font, brush, textArea, format);
