@@ -18,12 +18,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-enum Status
-{
-    SUCCESS,
-    FAILED
-}
-
 namespace Mac_EFI_Toolkit
 {
     static class Program

@@ -8,8 +8,15 @@ using Mac_EFI_Toolkit.Common;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
+
+#region Enum
+enum Status
+{
+    SUCCESS,
+    FAILED
+}
+#endregion
 
 namespace Mac_EFI_Toolkit.Utils
 {
@@ -189,6 +196,14 @@ namespace Mac_EFI_Toolkit.Utils
             return 0; // Data was written successfully and integrity is verified
         }
 
+        /// <summary>
+        /// Creates a directory at the specified path.
+        /// </summary>
+        /// <param name="directory">The path of the directory to create.</param>
+        /// <returns>
+        /// The status of the directory creation operation. Returns <see cref="Status.SUCCESS"/> if the directory is successfully created,
+        /// or <see cref="Status.FAILED"/> if the creation fails.
+        /// </returns>
         internal static Status CreateDirectory(string directory)
         {
             Directory.CreateDirectory(directory);
