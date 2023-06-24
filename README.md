@@ -4,7 +4,7 @@
 Mac EFI Toolkit
 </h1>
 
-<h4 align="center">A tool for viewing and repairing data in Mac EFI binaries</h4>
+<h4 align="center">A tool for analysis of Mac BIOS firmware, with limited editing capabilities.</h4>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
