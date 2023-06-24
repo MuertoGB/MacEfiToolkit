@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ToInt24.cs" />
     <Compile Include="Common\FSGuids.cs" />
     <Compile Include="Common\FWBase.cs" />
     <Compile Include="Common\Helper.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="METVersion.cs" />
+    <Compile Include="UI\Chars.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
     <Compile Include="UI\METLabel.cs">
       <SubType>Component</SubType>

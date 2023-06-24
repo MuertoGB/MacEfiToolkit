@@ -7,7 +7,16 @@
 using Mac_EFI_Toolkit.Common;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Security.Cryptography;
+
+#region Enum
+enum Status
+{
+    SUCCESS,
+    FAILED
+}
+#endregion
 
 namespace Mac_EFI_Toolkit.Utils
 {
@@ -21,9 +30,9 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The SHA256 checksum of the byte array.</returns>
         internal static string GetSha256Digest(byte[] sourceBytes)
         {
-            using (var provider = SHA256.Create())
+            using (SHA256 provider = SHA256.Create())
             {
-                var digestBytes = provider.ComputeHash(sourceBytes);
+                byte[] digestBytes = provider.ComputeHash(sourceBytes);
                 return BitConverter.ToString(digestBytes).Replace("-", "");
             }
         }
@@ -142,6 +151,59 @@ namespace Mac_EFI_Toolkit.Utils
                 // Return a string indicating an exact match
                 return "Valid";
             }
+        }
+
+        /// <summary>
+        /// Writes the specified byte array to the file at the given path and verifies the integrity of the written data.
+        /// </summary>
+        /// <param name="path">The path of the file to write.</param>
+        /// <param name="sourceBytes">The byte array containing the data to be written.</param>
+        internal static bool WriteAllBytesEx(string path, byte[] sourceBytes)
+        {
+            try
+            {
+                using (FileStream fileStream = new FileStream(path, FileMode.Create))
+                {
+                    fileStream.Write(sourceBytes, 0, sourceBytes.Length);
+                }
+
+                using (FileStream fileStream = new FileStream(path, FileMode.Open))
+                {
+                    byte[] fileBytes = new byte[fileStream.Length];
+                    fileStream.Read(fileBytes, 0, fileBytes.Length);
+
+                    if (!BinaryUtils.ByteArraysMatch(sourceBytes, fileBytes))
+                    {
+                        return false; ; // Integrity check failed
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                return false; // File access error
+            }
+
+            return true; // Data was written successfully and integrity is verified
+        }
+
+        /// <summary>
+        /// Creates a directory at the specified path.
+        /// </summary>
+        /// <param name="directory">The path of the directory to create.</param>
+        /// <returns>
+        /// The status of the directory creation operation. Returns <see cref="Status.SUCCESS"/> if the directory is successfully created,
+        /// or <see cref="Status.FAILED"/> if the creation fails.
+        /// </returns>
+        internal static Status CreateDirectory(string directory)
+        {
+            Directory.CreateDirectory(directory);
+
+            if (Directory.Exists(directory))
+            {
+                return Status.SUCCESS;
+            }
+
+            return Status.FAILED;
         }
 
     }

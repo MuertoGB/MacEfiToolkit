@@ -8,8 +8,7 @@ namespace Mac_EFI_Toolkit.Common
 {
     class FSGuids
     {
-
-        internal static readonly byte[] LZMA_DXE_OLD_GUID =
+        internal static readonly byte[] LZMA_DXE_VOLUME_IMAGE_OLD_GUID =
         {
             0xDB, 0x7F, 0xAD, 0x77,
             0x2A, 0xDF, 0x02, 0x43,
@@ -17,7 +16,7 @@ namespace Mac_EFI_Toolkit.Common
             0x4C, 0xDB, 0xD0, 0xF4
         };
 
-        internal static readonly byte[] LZMA_DXE_NEW_GUID =
+        internal static readonly byte[] LZMA_DXE_VOLUME_IMAGE_GUID =
         {
             0x79, 0xDE, 0xD3, 0x2A,
             0xE9, 0x63, 0x4F, 0x9B,
@@ -42,7 +41,7 @@ namespace Mac_EFI_Toolkit.Common
         };
 
         internal static readonly byte[] EFI_BIOS_ID_GUID =
-{
+        {
             0x09, 0x6D, 0xE3, 0xC3,
             0x94, 0x82, 0x97, 0x4B,
             0xA8, 0x57, 0xD5, 0x28,
@@ -64,6 +63,5 @@ namespace Mac_EFI_Toolkit.Common
             0x92, 0x75, 0x1B, 0xF5,
             0xD5, 0x6E, 0x07, 0x24
         };
-
     }
 }

@@ -25,7 +25,7 @@ namespace Mac_EFI_Toolkit.Utils
                 req = WebRequest.Create(urlString);
                 req.Timeout = 5000;
                 req.Method = "HEAD";
-                using (var result = req.GetResponse())
+                using (WebResponse response = req.GetResponse())
                 {
                     return true;
                 }
@@ -48,10 +48,10 @@ namespace Mac_EFI_Toolkit.Utils
             }
             try
             {
-                using (var ping = new Ping())
+                using (Ping ping = new Ping())
                 {
-                    var result = ping.Send("8.8.8.8", 1000);
-                    return (result.Status == IPStatus.Success);
+                    PingReply reply = ping.Send("8.8.8.8", 1000);
+                    return (reply.Status == IPStatus.Success);
                 }
             }
             catch

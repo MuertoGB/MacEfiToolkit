@@ -31,20 +31,25 @@ namespace Mac_EFI_Toolkit
         {
             try
             {
-                var client = new WebClient();
-                var response = await client.DownloadDataTaskAsync(versionUrl);
-                var stream = new MemoryStream(response);
-                var reader = XmlReader.Create(stream);
-                var doc = new XmlDocument();
-                doc.Load(reader);
+                using (WebClient client = new WebClient())
+                {
+                    byte[] response = await client.DownloadDataTaskAsync(versionUrl);
+                    using (MemoryStream stream = new MemoryStream(response))
+                    using (XmlReader reader = XmlReader.Create(stream))
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(reader);
 
-                var node = doc.SelectSingleNode("data/MET/VersionString");
-                if (node == null) return VersionCheckResult.Error;
+                        XmlNode node = doc.SelectSingleNode("data/MET/VersionString");
+                        if (node == null)
+                            return VersionCheckResult.Error;
 
-                var remoteVersion = new Version(node.InnerText);
-                var localVersion = new Version(Application.ProductVersion);
+                        Version remoteVersion = new Version(node.InnerText);
+                        Version localVersion = new Version(Application.ProductVersion);
 
-                return remoteVersion > localVersion ? VersionCheckResult.NewVersionAvailable : VersionCheckResult.UpToDate;
+                        return remoteVersion > localVersion ? VersionCheckResult.NewVersionAvailable : VersionCheckResult.UpToDate;
+                    }
+                }
             }
             catch
             {

@@ -22,9 +22,9 @@ namespace Mac_EFI_Toolkit
 
     public enum RtbLogPrefix
     {
-        Good,
+        Complete,
         Info,
-        Warn,
+        Warning,
         Error
     }
     #endregion
@@ -36,9 +36,9 @@ namespace Mac_EFI_Toolkit
 
         internal static void WriteToLogFile(string logMessage, LogType logType)
         {
-            var pathString = GetLogFilePath(logType);
+            string pathString = GetLogFilePath(logType);
 
-            using (var writer = new StreamWriter(pathString, true))
+            using (StreamWriter writer = new StreamWriter(pathString, true))
             {
                 writer.WriteLine($"{DateTime.Now} : {logMessage}");
             }
@@ -46,7 +46,7 @@ namespace Mac_EFI_Toolkit
 
         internal static void ViewLogFile(LogType logType)
         {
-            var pathString = GetLogFilePath(logType);
+            string pathString = GetLogFilePath(logType);
 
             if (File.Exists(pathString))
             {
@@ -81,13 +81,13 @@ namespace Mac_EFI_Toolkit
 
             switch (logPrefix)
             {
-                case RtbLogPrefix.Good:
+                case RtbLogPrefix.Complete:
                     prefixColor = Color.FromArgb(0, 200, 0);
                     break;
                 case RtbLogPrefix.Info:
                     prefixColor = Color.FromArgb(0, 122, 204);
                     break;
-                case RtbLogPrefix.Warn:
+                case RtbLogPrefix.Warning:
                     prefixColor = Color.FromArgb(255, 165, 0);
                     break;
                 case RtbLogPrefix.Error:
@@ -103,6 +103,11 @@ namespace Mac_EFI_Toolkit
             richTextBox.SelectionColor = prefixColor;
             richTextBox.AppendText(messageString + Environment.NewLine);
             richTextBox.ScrollToCaret();
+        }
+
+        internal static void WriteExceptionToAppLog(Exception e)
+        {
+            WriteToLogFile($"{e.GetType().Name}:- {e.Message}\r\n\r\n{e}\r\n\r\n -------------------", LogType.Application);
         }
 
     }

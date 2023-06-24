@@ -22,13 +22,16 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}.230618.2223";
+        internal static readonly string appBuild = $"{Application.ProductVersion}-230624.0500";
+        internal static readonly string appChannel = "BETA";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
         internal static string buildsDirectory = Path.Combine(appDirectory, "builds");
         internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
-        internal static readonly string closeChar = "\xE947";
+        internal static bool openLastBuild = false;
+        internal static string lastBuildPath = string.Empty;
+        internal static mainWindow mWindow;
 
         #region Private Members
         private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
@@ -53,6 +56,7 @@ namespace Mac_EFI_Toolkit
         internal static Font FONT_MDL2_REG_20;
         internal static Font FONT_MDL2_REG_14;
         internal static Font FONT_MDL2_REG_12;
+        internal static Font FONT_MDL2_REG_10;
         internal static Font FONT_MDL2_REG_9;
         #endregion
 
@@ -60,14 +64,14 @@ namespace Mac_EFI_Toolkit
         [STAThread]
         static void Main(string[] args)
         {
-            // Default framework stuff.
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            // Register exception handler events.
+            // Register exception handler events early
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+            // Default framework stuff.
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
             // Web Security Protocol
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
@@ -75,6 +79,7 @@ namespace Mac_EFI_Toolkit
             // Font Data
             byte[] fontData = Properties.Resources.segmdl2;
             FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
+            FONT_MDL2_REG_10 = new Font(LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
             FONT_MDL2_REG_12 = new Font(LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
             FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
             FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
@@ -91,8 +96,11 @@ namespace Mac_EFI_Toolkit
             // Get dragged filepath
             draggedFile = GetDraggedFilePath(args);
 
-            // Run mainWindow.
-            Application.Run(new mainWindow());
+            // Create main window instance
+            mWindow = new mainWindow();
+
+            // Run mWindow instance.
+            Application.Run(mWindow);
         }
 
         private static void OnExiting(object sender, EventArgs e)
@@ -110,7 +118,6 @@ namespace Mac_EFI_Toolkit
 
             return string.Empty;
         }
-
         #endregion
 
         #region Hooks
@@ -191,23 +198,19 @@ namespace Mac_EFI_Toolkit
 
         static void METCatchUnhandledException(Exception e)
         {
-            string type = e.GetType().Name;
-            string message = e.Message.ToString();
-            string exception = e.ToString();
+            Logger.WriteExceptionToAppLog(e);
 
-            Logger.WriteToLogFile($"{type}:- {message}\r\n\r\n{exception}\r\n\r\n -------------------", LogType.Application);
+            DialogResult result = MessageBox.Show($"{e.Message}\r\n\r\n{e}\r\n\r\nWould you like to force quit?", $"{e.GetType()}", System.Windows.Forms.MessageBoxButtons.YesNo, MessageBoxIcon.Error);
 
-            DialogResult result = MessageBox.Show(message + "\r\n\r\n" + exception + "\r\n\r\n" + "Quit application?",
-                type, MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-
-            switch (result)
+            if (result == DialogResult.Yes)
             {
-                case DialogResult.Yes:
-                    UnhookKeyboard(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit.
-                    Environment.Exit(-1);
-                    break;
-                case DialogResult.No:
-                    break;
+                UnhookKeyboard(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit().
+                Environment.Exit(-1);
+            }
+
+            if (mWindow.Opacity != 1.0)
+            {
+                mWindow.Opacity = 1.0;
             }
         }
         #endregion
@@ -218,14 +221,13 @@ namespace Mac_EFI_Toolkit
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
                 Application.Restart();
+                return;
             }
-            else
+
+            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", METMessageType.Question, UI.METMessageButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", MsgType.Question, MsgButton.YesNoCancel);
-                if (result == DialogResult.Yes)
-                {
-                    Application.Restart();
-                }
+                Application.Restart();
             }
         }
         #endregion
@@ -236,14 +238,13 @@ namespace Mac_EFI_Toolkit
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
                 Application.Exit();
+                return;
             }
-            else
+
+            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", METMessageType.Question, UI.METMessageButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", MsgType.Question, MsgButton.YesNoCancel);
-                if (result == DialogResult.Yes)
-                {
-                    Application.Exit();
-                }
+                Application.Exit();
             }
         }
         #endregion
@@ -254,24 +255,6 @@ namespace Mac_EFI_Toolkit
             using (Process currentProcess = Process.GetCurrentProcess())
             {
                 return currentProcess.PrivateMemorySize64;
-            }
-        }
-        #endregion
-
-        #region Paths and Directories
-        internal static void CheckCreateFsysFolder()
-        {
-            if (!Directory.Exists(fsysDirectory))
-            {
-                Directory.CreateDirectory(fsysDirectory);
-            }
-        }
-
-        internal static void CreateCheckBuildsFolder()
-        {
-            if (!Directory.Exists(buildsDirectory))
-            {
-                Directory.CreateDirectory(buildsDirectory);
             }
         }
         #endregion

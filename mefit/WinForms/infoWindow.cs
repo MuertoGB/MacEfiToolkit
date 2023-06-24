@@ -9,7 +9,6 @@ using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -39,7 +38,7 @@ namespace Mac_EFI_Toolkit.WinForms
             KeyDown += infoWindow_KeyDown;
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.closeChar;
+            cmdClose.Text = Chars.EXIT_CROSS;
 
             lblBiosId.Text = FWBase.ROMInfoData.BiosId ?? "N/A";
             lblModel.Text = FWBase.ROMInfoData.Model ?? "N/A";
@@ -58,7 +57,7 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 if (label.Text == "N/A")
                 {
-                    label.ForeColor = Colours.clrDisabledText;
+                    label.ForeColor = Colours.DISABLED_TEXT;
                 }
             }
         }

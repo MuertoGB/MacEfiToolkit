@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-070">V0.7.0</a> •
   <a href="#version-060">V0.6.0</a> •
   <a href="#version-052">V0.5.2</a> •
   <a href="#version-051">V0.5.1</a> •
@@ -9,6 +10,39 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 0.7.0
+
+#### New:
+- Added new features to the editor window:
+> - Implemented the option to clear firmware NVRAM stores.
+> - Implemented the option to replace the firmware serial number.
+> - Included a button to load the last successful build.
+> - Included a button to reset the window and all data.
+- Included an option in the main window menu to navigate to the builds directory.
+- Included an option in the main window menu to navigate to the Fsys stores directory.
+
+#### Enhancements:
+- UI improvements.
+- Improved EFI lock status
+- Improved integrity checks when saving and editing binary files.
+- Modified default file naming for editor output files.
+- Added confirmation dialog when reverting to default settings in the settings window.
+- Enabled escape key to close message dialogs.
+- Enabled escape key to close the editor window.
+- Added confirmation dialog when closing the editor window.
+- Added a new serial number signature.
+
+#### Bugs:
+- Fixed an issue where the colour of the version label in the main window was not being set correctly when the form was activated and an update was available.
+- Fixed an issue when a file is dragged onto the executable and restarting does not clear the argument path.
+- Fixed an issue when the main window reset button is clicked but the UI will not reset properly if setting 'Disable Confirmation Dialogs' is enabled.
+- Fixed an issue where a handled exception could cause the main window to become stuck at half opacity if the user chooses not to force quit.
+- Resolved a scenario where the application could fail to accurately determine the length of a serial number if the serial number had been previously edited and contained invalid characters outside the range of A-Z and 0-9.
+- Resolved a scenario where the NVRAM store parser would incorrectly determine section size when the header size data is blank (0xFFFF).
+- Resolved a scenario where the application could return an inaccurate serial string.
+- Resolved an oversight in the editor window Fsys validation causing the wrong Fsys store to be validated.
+- Added missing keyboard shortcut to open the rom information window (ALT + I)
 
 ## Version 0.6.0
 
