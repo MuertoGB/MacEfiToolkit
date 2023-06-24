@@ -14,14 +14,14 @@ namespace Mac_EFI_Toolkit.UI
 {
 
     #region Enums
-    public enum MessageBoxType
+    public enum METMessageType
     {
         Error, Warning, Information, Question
     }
 
-    public enum MessageBoxButtons
+    public enum METMessageButtons
     {
-        Okay, YesNoCancel
+        Okay, YesNo
     }
     #endregion
 
@@ -29,11 +29,11 @@ namespace Mac_EFI_Toolkit.UI
     {
 
         #region Static Members
-        static string strMmbTitle;
-        static string strMmbMessage;
-        static MessageBoxType mtMmbType;
-        static MessageBoxButtons mbMmbButton;
-        static DialogResult drMmbResult;
+        static string strTitle;
+        static string strMessage;
+        static METMessageType messageBoxType;
+        static METMessageButtons messageBoxButtons;
+        static DialogResult dialogResult;
         static System.Media.SystemSound ssMmbSound;
         #endregion
 
@@ -56,7 +56,9 @@ namespace Mac_EFI_Toolkit.UI
             lblTitle.MouseMove += metMessage_MouseMove;
             Load += new EventHandler(METMessageBox_Load);
             Shown += new EventHandler(METMessageBox_Shown);
+            KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
 
+            lblMessageIcon.Font = Program.FONT_MDL2_REG_20;
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Chars.EXIT_CROSS;
         }
@@ -65,45 +67,44 @@ namespace Mac_EFI_Toolkit.UI
         #region Window Events
         private void METMessageBox_Load(object sender, EventArgs e)
         {
-            lblMessageIcon.Font = Program.FONT_MDL2_REG_20;
-
-            switch (mtMmbType)
+            switch (messageBoxType)
             {
-                case MessageBoxType.Error:
+                case METMessageType.Error:
                     lblMessageIcon.ForeColor = Colours.ERROR_RED;
                     lblMessageIcon.Text = Chars.STATUS_ERROR_FULL;
                     ssMmbSound = System.Media.SystemSounds.Hand;
                     break;
-                case MessageBoxType.Warning:
+                case METMessageType.Warning:
                     lblMessageIcon.ForeColor = Colours.WARNING_ORANGE;
                     lblMessageIcon.Text = Chars.INCIDENT_TRIANGLE;
                     ssMmbSound = System.Media.SystemSounds.Exclamation;
                     break;
-                case MessageBoxType.Information:
+                case METMessageType.Information:
                     lblMessageIcon.ForeColor = Colours.INFO_BLUE;
                     lblMessageIcon.Text = Chars.INFO_SOLID;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
-                case MessageBoxType.Question:
+                case METMessageType.Question:
                     lblMessageIcon.ForeColor = Colours.INFO_BLUE;
                     lblMessageIcon.Text = Chars.UNKNOWN;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
             }
 
-            lblTitle.Text = strMmbTitle;
-            lblMessage.Text = strMmbMessage;
+            lblTitle.Text = strTitle;
+            lblMessage.Text = strMessage;
 
-            if (mbMmbButton == MessageBoxButtons.Okay)
+            if (messageBoxButtons == METMessageButtons.Okay)
             {
-                cmdNo.Hide();
                 cmdYes.Hide();
+                cmdNo.Text = "Okay";
             }
-            else
+            if (messageBoxButtons != METMessageButtons.Okay)
             {
-                cmdCancel.Text = "Cancel";
+                cmdYes.Show();
+                cmdNo.Show();
+                cmdNo.Text = "No";
             }
-
         }
 
         private void METMessageBox_Shown(object sender, EventArgs e)
@@ -115,6 +116,17 @@ namespace Mac_EFI_Toolkit.UI
 
             InterfaceUtils.FlashForecolor(lblTitle);
             InterfaceUtils.FlashForecolor(cmdClose);
+        }
+        #endregion
+
+        #region KeyDown Events
+        private void METMessageBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                dialogResult = DialogResult.Cancel;
+                Close();
+            }
         }
         #endregion
 
@@ -130,12 +142,12 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Overriden Events
-        public static DialogResult Show(Form owner, string title, string message, MessageBoxType type, MessageBoxButtons buttons = MessageBoxButtons.Okay)
+        public static DialogResult Show(Form owner, string title, string message, METMessageType type, METMessageButtons buttons = METMessageButtons.Okay)
         {
-            strMmbTitle = title;
-            strMmbMessage = message;
-            mtMmbType = type;
-            mbMmbButton = buttons;
+            strTitle = title;
+            strMessage = message;
+            messageBoxType = type;
+            messageBoxButtons = buttons;
 
             using (METMessageBox messageBox = new METMessageBox())
             {
@@ -149,39 +161,34 @@ namespace Mac_EFI_Toolkit.UI
                 }
                 messageBox.ShowDialog(owner);
             }
-            return drMmbResult;
+            return dialogResult;
         }
         #endregion
 
         #region Button Events
-        private void cmdCancel_Click(object sender, EventArgs e)
+        private void cmdClose_Click(object sender, EventArgs e)
         {
-            if (mbMmbButton == MessageBoxButtons.Okay)
-            {
-                drMmbResult = DialogResult.OK;
-            }
-            else
-            {
-                drMmbResult = DialogResult.Cancel;
-            }
+            dialogResult = DialogResult.Cancel;
             Close();
         }
 
         private void cmdYes_Click(object sender, EventArgs e)
         {
-            drMmbResult = DialogResult.Yes;
+            dialogResult = DialogResult.Yes;
             Close();
         }
 
         private void cmdNo_Click(object sender, EventArgs e)
         {
-            drMmbResult = DialogResult.No;
-            Close();
-        }
+            if (messageBoxButtons == METMessageButtons.Okay)
+            {
+                dialogResult = DialogResult.OK;
+            }
+            else
+            {
+                dialogResult = DialogResult.Cancel;
+            }
 
-        private void cmdClose_Click(object sender, EventArgs e)
-        {
-            drMmbResult = DialogResult.Cancel;
             Close();
         }
         #endregion

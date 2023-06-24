@@ -202,7 +202,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // cbxDisableConfDiag
             // 
             this.cbxDisableConfDiag.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableConfDiag.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableConfDiag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.cbxDisableConfDiag.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.cbxDisableConfDiag.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxDisableConfDiag.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
@@ -247,7 +247,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // cbxDisableDescriptorEnforce
             // 
             this.cbxDisableDescriptorEnforce.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableDescriptorEnforce.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableDescriptorEnforce.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.cbxDisableDescriptorEnforce.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.cbxDisableDescriptorEnforce.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxDisableDescriptorEnforce.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
@@ -355,7 +355,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // cbxDisableVersionCheck
             // 
             this.cbxDisableVersionCheck.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableVersionCheck.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableVersionCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.cbxDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.cbxDisableVersionCheck.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
@@ -430,7 +430,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // cbxDisableFlashingUI
             // 
             this.cbxDisableFlashingUI.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableFlashingUI.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableFlashingUI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.cbxDisableFlashingUI.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.cbxDisableFlashingUI.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxDisableFlashingUI.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
@@ -475,7 +475,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // cbxDisableLzmaFsSearch
             // 
             this.cbxDisableLzmaFsSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableLzmaFsSearch.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableLzmaFsSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.cbxDisableLzmaFsSearch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.cbxDisableLzmaFsSearch.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxDisableLzmaFsSearch.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
@@ -568,7 +568,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // cbxDisableTips
             // 
             this.cbxDisableTips.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableTips.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableTips.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.cbxDisableTips.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.cbxDisableTips.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxDisableTips.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
@@ -626,7 +626,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // cbxDisableMessageSounds
             // 
             this.cbxDisableMessageSounds.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableMessageSounds.BackColor = System.Drawing.Color.Transparent;
+            this.cbxDisableMessageSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.cbxDisableMessageSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.cbxDisableMessageSounds.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxDisableMessageSounds.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));

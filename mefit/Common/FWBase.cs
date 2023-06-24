@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 #region Structs
 internal struct FileInfoData
@@ -125,6 +126,9 @@ namespace Mac_EFI_Toolkit.Common
     class FWBase
     {
         internal static string LoadedBinaryPath = null;
+        internal static string IsApfsCapable = null;
+        internal static string FitVersion = null;
+        internal static string MeVersion = null;
         internal static byte[] LoadedBinaryBytes = null;
 
         internal static FileInfoData FileInfoData;
@@ -135,10 +139,6 @@ namespace Mac_EFI_Toolkit.Common
         internal static FsysStoreSection FsysSectionData;
         internal static AppleRomInformationSection ROMInfoData;
         internal static EfiSection EFISectionStore;
-
-        internal static string IsApfsCapable = null;
-        internal static string FitVersion = null;
-        internal static string MeVersion = null;
         internal static EfiLockStatus EfiLock = EfiLockStatus.Unknown;
 
         internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576 bytes
@@ -172,7 +172,7 @@ namespace Mac_EFI_Toolkit.Common
         {
             LoadedBinaryPath = null;
             LoadedBinaryBytes = null;
-
+            FileInfoData = default;
             PDRSectionData = default;
             VssStoreData = default;
             SvsStoreData = default;
@@ -331,20 +331,28 @@ namespace Mac_EFI_Toolkit.Common
                 }
 
                 // Serial + Offset
-                ssnPos = BinaryUtils.GetOffset(sourceBytes, SSN_UPPER_SIG, fsysPos, FSYS_RGN_SIZE);
+                ssnPos = BinaryUtils.GetOffset(sourceBytes, SNP_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
+
+                if (ssnPos == -1) ssnPos = BinaryUtils.GetOffset(sourceBytes, SSN_UPPER_SIG, fsysPos, FSYS_RGN_SIZE);
                 if (ssnPos == -1) ssnPos = BinaryUtils.GetOffset(sourceBytes, SSN_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
+
                 if (ssnPos != -1)
                 {
                     int ssnDatLen = 0x0C;
                     byte[] ssnData = BinaryUtils.GetBytesAtOffset(sourceBytes, ssnPos + ssnStartPos, ssnDatLen);
                     if (ssnData != null)
                     {
-                        ssnString = _utf8.GetString(ssnData).TrimEnd();
+                        ssnString = _utf8.GetString(ssnData);
                         int trimIndex = ssnString.Length - 1;
                         if (trimIndex >= 0 && !char.IsLetterOrDigit(ssnString[trimIndex]))
                         {
                             ssnString = ssnString.Substring(0, trimIndex);
                         }
+                    }
+                    if (ssnString.Length != 11 && ssnString.Length != 12)
+                    {
+                        ssnString = null;
+                        ssnPos = -1;
                     }
                 }
 
@@ -446,6 +454,11 @@ namespace Mac_EFI_Toolkit.Common
             0x53, 0x53, 0x4E
         };
 
+        internal static readonly byte[] SNP_LOWER_SIG =
+        {
+            0x73, 0x6E, 0x70
+        };
+
         internal static readonly byte[] SON_SIG =
         {
             0x03, 0x73, 0x6F, 0x6E
@@ -479,7 +492,8 @@ namespace Mac_EFI_Toolkit.Common
             if (primaryStoreHeaderPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStoreHeaderPos, 0x6) is byte[] bytesPrimaryHeader)
             {
                 NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
-                if (psHeader.SizeOfData != 0)
+
+                if (psHeader.SizeOfData != 0xFFFF && psHeader.SizeOfData != 0)
                 {
                     primaryStoreLen = psHeader.SizeOfData;
                     primaryStorePos = primaryStoreHeaderPos;
@@ -508,7 +522,8 @@ namespace Mac_EFI_Toolkit.Common
                 if (backupStoreHeaderPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupStoreHeaderPos, 0x6) is byte[] bytesBackupHeader)
                 {
                     NvramStoreHeader bsHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
-                    if (bsHeader.SizeOfData != 0)
+
+                    if (bsHeader.SizeOfData != 0xFFFF && bsHeader.SizeOfData != 0)
                     {
                         backupStoreLen = bsHeader.SizeOfData;
                         backupStorePos = backupStoreHeaderPos;
@@ -830,16 +845,19 @@ namespace Mac_EFI_Toolkit.Common
         #region APFSJumpStart
         internal static ApfsCompatibleFirmware GetIsApfsCapable(byte[] sourceBytes)
         {
+            // APFS DXE GUID found
             if (BinaryUtils.GetOffset(sourceBytes, FSGuids.APFS_DXE_GUID) != -1)
             {
                 return ApfsCompatibleFirmware.Yes;
             }
 
+            // Disable compressed DXE searching is enabled (Maybe I should get rid of this?)
             if (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch))
             {
                 return ApfsCompatibleFirmware.Unknown;
             }
 
+            // Look for a compressed volume GUID
             int fsOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_GUID);
 
             if (fsOffset == -1)
@@ -847,11 +865,13 @@ namespace Mac_EFI_Toolkit.Common
                 fsOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID);
             }
 
+            // No compressed DXE volume was found
             if (fsOffset == -1)
             {
                 return ApfsCompatibleFirmware.No;
             }
 
+            // Compressed DXE volume found
             // Get bytes containing section length (0x3)
             byte[] sizeData = BinaryUtils.GetBytesAtOffset(sourceBytes, fsOffset + 0x14, 0x3);
             // Convert section length bytes to int24
@@ -865,16 +885,20 @@ namespace Mac_EFI_Toolkit.Common
             // Decompress the LZMA volume
             byte[] decompressedBytes = LzmaCoder.DecompressBytes(BinaryUtils.GetBytesBetweenOffsets(sourceBytes, fsOffset, endOffset));
 
+            // There was an decompressing the volume (Error saved to './mefit.log')
             if (decompressedBytes == null)
             {
                 return ApfsCompatibleFirmware.Unknown;
             }
 
+            // Search the decompressed DXE volume for the APFS DXE GUID
             if (BinaryUtils.GetOffset(decompressedBytes, FSGuids.APFS_DXE_GUID) == -1)
             {
+                // The APFS DXE GUID was not found in the compressed volume
                 return ApfsCompatibleFirmware.No;
             }
 
+            // The APFS DXE GUID was present in the compressed volume
             return ApfsCompatibleFirmware.Yes;
         }
         #endregion

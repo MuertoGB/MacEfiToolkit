@@ -158,18 +158,8 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="path">The path of the file to write.</param>
         /// <param name="sourceBytes">The byte array containing the data to be written.</param>
-        /// <returns>
-        /// -1 if the data was not written successfully.
-        /// -2 if the file was not written to disk.
-        /// 0 if the data was written successfully and the integrity is verified.
-        /// </returns>
-        internal static int WriteAllBytesEx(string path, byte[] sourceBytes)
+        internal static bool WriteAllBytesEx(string path, byte[] sourceBytes)
         {
-            if (File.Exists(path))
-            {
-                return -1; // File already exists
-            }
-
             try
             {
                 using (FileStream fileStream = new FileStream(path, FileMode.Create))
@@ -184,16 +174,16 @@ namespace Mac_EFI_Toolkit.Utils
 
                     if (!BinaryUtils.ByteArraysMatch(sourceBytes, fileBytes))
                     {
-                        return -2; // Integrity check failed
+                        return false; ; // Integrity check failed
                     }
                 }
             }
             catch (IOException)
             {
-                return -3; // File access error
+                return false; // File access error
             }
 
-            return 0; // Data was written successfully and integrity is verified
+            return true; // Data was written successfully and integrity is verified
         }
 
         /// <summary>

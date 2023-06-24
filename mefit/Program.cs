@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}.230623.1850";
+        internal static readonly string appBuild = $"{Application.ProductVersion}.230624.0400";
         internal static readonly string appChannel = "BETA";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
@@ -224,7 +224,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", MessageBoxType.Question, UI.MessageBoxButtons.YesNoCancel);
+            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", METMessageType.Question, UI.METMessageButtons.YesNo);
             if (result == DialogResult.Yes)
             {
                 Application.Restart();
@@ -241,7 +241,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", MessageBoxType.Question, UI.MessageBoxButtons.YesNoCancel);
+            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", METMessageType.Question, UI.METMessageButtons.YesNo);
             if (result == DialogResult.Yes)
             {
                 Application.Exit();

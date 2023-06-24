@@ -46,7 +46,9 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
-            Load += mainWindow_Load;
+            Load += editorWindow_Load;
+            FormClosing += editorWindow_FormClosing;
+            KeyDown += editorWindow_KeyDown;
             lblTitle.MouseMove += editorWindow_MouseMove;
 
             Font font = Program.FONT_MDL2_REG_9;
@@ -59,11 +61,35 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Window Events
-        private void mainWindow_Load(object sender, EventArgs e)
+        private void editorWindow_Load(object sender, EventArgs e)
         {
-            tbxSerialNumber.MaxLength = FWBase.FsysSectionData.Serial.Length;
+            if (FWBase.FsysSectionData.Serial == null)
+            {
+                cbxReplaceSerial.Enabled = false;
+            }
+            else
+            {
+                tbxSerialNumber.MaxLength = FWBase.FsysSectionData.Serial.Length;
+            }
 
             GetRtbInitialData();
+        }
+
+        private void editorWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
+            {
+                // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
+                if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
+                {
+                    e.Cancel = false;
+                    return;
+                }
+
+                DialogResult result = METMessageBox.Show(this, "Close Editor", "Are you sure you want to close the editor?", METMessageType.Question, METMessageButtons.YesNo);
+
+                e.Cancel = result == DialogResult.Yes ? false : true;
+            }
         }
         #endregion
 
@@ -82,14 +108,30 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdClose_Click(object sender, EventArgs e)
         {
-            Close();
+            CloseWindow();
+        }
+
+        private void CloseWindow()
+        {
+            if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
+            {
+                Close();
+                return;
+            }
+
+            DialogResult result = METMessageBox.Show(this, "Close Editor", "Are you sure you want to close the editor?", METMessageType.Question, METMessageButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+            {
+                Close();
+            }
         }
 
         private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
         {
             if (!Directory.Exists(Program.fsysDirectory))
             {
-                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", MessageBoxType.Information, UI.MessageBoxButtons.Okay);
+                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", METMessageType.Information, UI.METMessageButtons.Okay);
                 return;
             }
 
@@ -104,9 +146,9 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", MessageBoxType.Error, UI.MessageBoxButtons.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", METMessageType.Error, UI.METMessageButtons.Okay);
                 }
-            }     
+            }
 
             using (OpenFileDialog dialog = new OpenFileDialog
             {
@@ -191,7 +233,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", MessageBoxType.Error, UI.MessageBoxButtons.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", METMessageType.Error, UI.METMessageButtons.Okay);
                 }
             }
 
@@ -201,15 +243,12 @@ namespace Mac_EFI_Toolkit.WinForms
 
             _fullBuildPath = Path.Combine(Program.buildsDirectory, filename);
 
-            int saveResult = FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary);
-
-            if (saveResult != 0)
+            if (!FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary))
             {
-                Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned {saveResult}, file could not be saved!", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned false, file could not be saved!", RtbLogPrefix.Error, rtbLog);
                 return false;
             }
 
-            Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned {saveResult}", RtbLogPrefix.Complete, rtbLog);
             Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
 
             return true;
@@ -246,6 +285,51 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearNssStore.Checked = false;
 
             cmdOpenLast.Enabled = false;
+        }
+
+        private void cmdReplaceSerial_CheckedChanged(object sender, EventArgs e)
+        {
+            METCheckbox cb = (METCheckbox)sender;
+            bool isChecked = cb.Checked;
+
+            tlpSerialB.Enabled = isChecked;
+            tlpFsysA.Enabled = !isChecked;
+
+            if (!isChecked)
+            {
+                tbxSerialNumber.Text = string.Empty;
+                tbxHwc.Text = string.Empty;
+            }
+        }
+
+        private void cmdSaveLog_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                Title = "Save Log File...",
+                FileName = $"metlog_{DateTime.Now:yyMMdd_HHmmss}.txt",
+                OverwritePrompt = true,
+                InitialDirectory = Program.appDirectory
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                File.WriteAllText(dialog.FileName, rtbLog.Text);
+            }
+        }
+        #endregion
+
+        #region KeyDown Events
+        private void editorWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                CloseWindow();
+            }
         }
         #endregion
 
@@ -301,41 +385,6 @@ namespace Mac_EFI_Toolkit.WinForms
             if (isChecked)
             {
                 cmdFsysPath.PerformClick();
-            }
-        }
-
-        private void cmdReplaceSerial_CheckedChanged(object sender, EventArgs e)
-        {
-            METCheckbox cb = (METCheckbox)sender;
-            bool isChecked = cb.Checked;
-
-            tlpSerialB.Enabled = isChecked;
-            tlpFsysA.Enabled = !isChecked;
-
-            if (!isChecked)
-            {
-                tbxSerialNumber.Text = string.Empty;
-                tbxHwc.Text = string.Empty;
-            }
-        }
-
-        private void cmdSaveLog_Click(object sender, EventArgs e)
-        {
-            using (SaveFileDialog dialog = new SaveFileDialog
-            {
-                Filter = "Text Files (*.txt)|*.txt",
-                Title = "Save Log File...",
-                FileName = $"metlog_{DateTime.Now:yyMMdd_HHmmss}.txt",
-                OverwritePrompt = true,
-                InitialDirectory = Program.appDirectory
-            })
-            {
-                if (dialog.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-
-                File.WriteAllText(dialog.FileName, rtbLog.Text);
             }
         }
         #endregion
