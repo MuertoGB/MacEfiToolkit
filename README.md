@@ -21,7 +21,7 @@ Mac EFI Toolkit
 
 Mac EFI Toolkit, or 'mefit' is an information gathering tool designed to aid technicians in repair of Mac BIOS/EFI files, with limited editing capability. The application can detect EFI lock in the NVRAM, detect the APFS DXE driver; even if hidden inside an LZMA compressed volume, detect if the file size is valid, with the ability to calculate any size discrepancy bytes, and more.
 
-Editing features include automated detection and masking of invalid Fsys store CRC32 checksums, with the ability to export any Fsys store (0x800h), and patch it into another donor file.
+Editing features include the ability to replace a systems serial number, with automatic crc32 making and hwc correction. The ability to transplant in any exported Fsys store, with automatic crc32 masking, and the ability to clear the NVRAM stores, which in turn clears any firmware settings and removes EFI password lock. **Access to the editing features requires agreement to the editing terms**.
 
 This application supports most Mac BIOS, with exception to the A1534 (so far), I continue to test hundreds of firmwares, and update accordingly for any edge cases.
 
