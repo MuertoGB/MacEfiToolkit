@@ -17,7 +17,7 @@ Mac EFI Toolkit
 ## About
 
 **This application is in active development:**
->🛠 Current Status: Bug tracking.
+>🛠 Current Status: Bug tracking. The next version should be a v1.0.0 release if all goes well.
 
 Mac EFI Toolkit, or 'mefit' is an information gathering tool designed to aid technicians in repair of Mac BIOS/EFI files, with limited editing capability. The application can detect EFI lock in the NVRAM, detect the APFS DXE driver; even if hidden inside an LZMA compressed volume, detect if the file size is valid, with the ability to calculate any size discrepancy bytes, and more.
 
@@ -41,7 +41,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 - Replace serial number
 - Check serial number with EveryMac.
 - View which NVRAM stores have data, are empty, or not found.
-- Clear NVRAM (SVS, VSS, NSS) with section header preservation
+- Clear NVRAM (VSS, SVS, NSS) with section header preservation
 - View ROM section information.
 - View FIT and ME versions.
 - Detect EFI password lock.
@@ -70,7 +70,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[0.7.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| NOTSET | Yes | BETA |
+|[0.7.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 24th June 2023 | Yes | BETA |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
