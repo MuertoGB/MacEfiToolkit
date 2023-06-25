@@ -646,7 +646,7 @@ namespace Mac_EFI_Toolkit
             ToggleControlEnable(true);
         }
 
-        void UpdateNvramLabel(Label label, NvramStoreSection storeData, string text)
+        void UpdateNvramLabel(Label label, NvramStore storeData, string text)
         {
             label.Text = text;
 
@@ -807,7 +807,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private string SetNvramStoreTip(NvramStoreSection storeData, string storeType)
+        private string SetNvramStoreTip(NvramStore storeData, string storeType)
         {
             if (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
                 return $"{storeType} data present in the NVRAM";
@@ -951,7 +951,7 @@ namespace Mac_EFI_Toolkit
                 return true;
             }
 
-            if (!FWBase.GetIsValidFlashHeader(FWBase.LoadedBinaryBytes))
+            if (!FWBase.GetIsValidDescriptorSignature(FWBase.LoadedBinaryBytes))
             {
                 METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.", METMessageType.Warning, UI.METMessageButtons.Okay);
                 return false;

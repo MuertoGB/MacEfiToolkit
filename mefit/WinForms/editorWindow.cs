@@ -535,7 +535,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // We have validated the Fsys store, now we can load it.
-            FsysStoreSection fsysStore = FWBase.GetFsysStoreData(sourceBytes, true);
+            FsysStore fsysStore = FWBase.GetFsysStoreData(sourceBytes, true);
 
             Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"Fsys signature found at {fsysSigPos:X2}h", RtbLogPrefix.Info, rtbLog);
@@ -567,7 +567,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb("Masking Fsys store CRC", RtbLogPrefix.Info, rtbLog);
 
                 // Load the new Fsys store
-                FsysStoreSection fsysNew = FWBase.GetFsysStoreData(_bytesNewFsysStore, true);
+                FsysStore fsysNew = FWBase.GetFsysStoreData(_bytesNewFsysStore, true);
 
                 // Load the new Fsys store bytes and patch the crc
                 _bytesNewFsysStore = BinaryUtils.PatchFsysCrc(fsysNew.FsysBytes, fsysNew.CRC32CalcInt);
@@ -589,7 +589,7 @@ namespace Mac_EFI_Toolkit.WinForms
             BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, _bytesNewFsysStore);
 
             // Load the Fsys from the new binary
-            FsysStoreSection fsysNewBinary = FWBase.GetFsysStoreData(_bytesNewBinary, false);
+            FsysStore fsysNewBinary = FWBase.GetFsysStoreData(_bytesNewBinary, false);
 
             // Validate new Fsys was written
             if (!BinaryUtils.ByteArraysMatch(fsysNewBinary.FsysBytes, _bytesNewFsysStore))
@@ -646,7 +646,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Load new Fsys store
-            FsysStoreSection newFsys = FWBase.GetFsysStoreData(_bytesNewBinary, false);
+            FsysStore newFsys = FWBase.GetFsysStoreData(_bytesNewBinary, false);
 
             // Check serial numbers match
             if (!string.Equals(newSerial, newFsys.Serial))
@@ -692,7 +692,7 @@ namespace Mac_EFI_Toolkit.WinForms
             return true;
         }
 
-        private bool ClearNvramStore(NvramStoreSection storeData, bool clearBackup)
+        private bool ClearNvramStore(NvramStore storeData, bool clearBackup)
         {
             int headerLen = 0x10;
             int primBodyStart = storeData.PrimaryStoreOffset + headerLen;
@@ -709,7 +709,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
                 BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, primBodyStart, primaryData);
 
-                NvramStoreSection newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
+                NvramStore newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
 
                 if (newStore.IsPrimaryStoreEmpty)
                 {
@@ -735,7 +735,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
                 BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, backBodyStart, backupData);
 
-                NvramStoreSection newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
+                NvramStore newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
 
                 if (newStore.IsBackupStoreEmpty)
                 {

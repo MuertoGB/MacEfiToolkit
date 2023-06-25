@@ -34,7 +34,6 @@ namespace Mac_EFI_Toolkit.Common
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal struct Mn2PartialHeader
     {
-        // Right now we only care about the ME version.
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal char[] Signature;
         internal uint NumEntries;

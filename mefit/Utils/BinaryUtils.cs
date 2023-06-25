@@ -248,22 +248,22 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="sourceBytes">The byte array to remove the trailing 0xFF bytes from.</param>
         /// <returns>The byte array with any trailing 0xFF bytes removed.</returns>
-        internal static byte[] RemoveTrailingFFPadding(byte[] sourceBytes)
-        {
-            int end = sourceBytes.Length - 1;
-            while (end >= 0 && sourceBytes[end] == 0xFF)
-            {
-                end--;
-            }
-            if (end < 0)
-            {
-                return new byte[0];
-            }
+        //internal static byte[] RemoveTrailingFFPadding(byte[] sourceBytes)
+        //{
+        //    int end = sourceBytes.Length - 1;
+        //    while (end >= 0 && sourceBytes[end] == 0xFF)
+        //    {
+        //        end--;
+        //    }
+        //    if (end < 0)
+        //    {
+        //        return new byte[0];
+        //    }
 
-            byte[] result = new byte[end + 1];
-            Array.Copy(sourceBytes, result, end + 1);
-            return result;
-        }
+        //    byte[] result = new byte[end + 1];
+        //    Array.Copy(sourceBytes, result, end + 1);
+        //    return result;
+        //}
 
         /// <summary>
         /// Fills a byte array with 0xFF values.
@@ -329,7 +329,7 @@ namespace Mac_EFI_Toolkit.Utils
             OverwriteBytesAtOffset(patchedBytes, fsysOffset, patchedStore);
 
             // Load the Fsys store from the new binary
-            FsysStoreSection newBinaryFsys = FWBase.GetFsysStoreData(patchedBytes, false);
+            FsysStore newBinaryFsys = FWBase.GetFsysStoreData(patchedBytes, false);
 
             // Compare the new checksums
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)

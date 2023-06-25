@@ -11,10 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 
 #region Structs
-internal struct FileInfoData
+internal struct FileInfoStore
 {
     internal string FileNameWithExt { get; set; }
     internal string FileNameNoExt { get; set; }
@@ -24,7 +23,7 @@ internal struct FileInfoData
     internal uint CRC32 { get; set; }
 }
 
-internal struct FsysStoreSection
+internal struct FsysStore
 {
     internal byte[] FsysBytes { get; set; }
     internal int FsysOffset { get; set; }
@@ -37,6 +36,19 @@ internal struct FsysStoreSection
     internal int CrcOffset { get; set; }
     internal string CrcCalcString { get; set; }
     internal uint CRC32CalcInt { get; set; }
+}
+
+internal struct NvramStore
+{
+    internal NvramStoreType StoreType { get; set; }
+    internal int PrimaryStoreOffset { get; set; }
+    internal int PrimaryStoreLength { get; set; }
+    internal byte[] PrimaryStoreBytes { get; set; }
+    internal bool IsPrimaryStoreEmpty { get; set; }
+    internal int BackupStoreOffset { get; set; }
+    internal int BackupStoreLength { get; set; }
+    internal byte[] BackupStoreBytes { get; set; }
+    internal bool IsBackupStoreEmpty { get; set; }
 }
 
 internal struct AppleRomInformationSection
@@ -82,24 +94,10 @@ internal struct NvramStoreHeader
     internal char[] Signature;
     internal ushort SizeOfData;
 }
-
-internal struct NvramStoreSection
-{
-    internal NvramStoreType StoreType { get; set; }
-    internal int PrimaryStoreOffset { get; set; }
-    internal int PrimaryStoreLength { get; set; }
-    internal byte[] PrimaryStoreBytes { get; set; }
-    internal bool IsPrimaryStoreEmpty { get; set; }
-    internal int BackupStoreOffset { get; set; }
-    internal int BackupStoreLength { get; set; }
-    internal byte[] BackupStoreBytes { get; set; }
-    internal bool IsBackupStoreEmpty { get; set; }
-    internal int PaddingLength { get; set; }
-}
 #endregion
 
 #region Enums
-internal enum ApfsCompatibleFirmware
+internal enum ApfsCapableFirmware
 {
     Unknown,
     Yes,
@@ -131,20 +129,32 @@ namespace Mac_EFI_Toolkit.Common
         internal static string MeVersion = null;
         internal static byte[] LoadedBinaryBytes = null;
 
-        internal static FileInfoData FileInfoData;
+        internal static FileInfoStore FileInfoData;
         internal static PdrSection PDRSectionData;
-        internal static NvramStoreSection VssStoreData;
-        internal static NvramStoreSection SvsStoreData;
-        internal static NvramStoreSection NssStoreData;
-        internal static FsysStoreSection FsysSectionData;
+        internal static NvramStore VssStoreData;
+        internal static NvramStore SvsStoreData;
+        internal static NvramStore NssStoreData;
+        internal static FsysStore FsysSectionData;
         internal static AppleRomInformationSection ROMInfoData;
         internal static EfiSection EFISectionStore;
+
         internal static EfiLockStatus EfiLock = EfiLockStatus.Unknown;
 
         internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576 bytes
         internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432 bytes
-        internal const int FSYS_RGN_SIZE = 0x800;      // 2048 bytes
+        internal const int FSYS_RGN_SIZE = 0x800;     // 2048 bytes
         internal const int FSYS_CRC_POS = 0x7FC;
+
+        private const int GUID_LENGTH = 0x10;
+        private const int ZERO_VECTOR_LENGTH = 0x10;
+
+        private const int BID_NUDGE_POS = 0x5;
+        private const int BID_LENGTH = 0x8;
+        private const int SSN_NUDGE_POS = 0x5;
+        private const int SSN_MAX_LENGTH = 0x0C;
+        private const int HWC_NUDGE_POS = 0x6;
+        private const int HWC_LENGTH = 0x4;
+        private const int CRC32_LENGTH = 0x4;
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
 
@@ -187,11 +197,11 @@ namespace Mac_EFI_Toolkit.Common
         }
 
         #region File Information
-        private static FileInfoData GetBinaryFileInfo(string fileName)
+        private static FileInfoStore GetBinaryFileInfo(string fileName)
         {
             FileInfo fileInfo = new FileInfo(fileName);
 
-            return new FileInfoData
+            return new FileInfoStore
             {
                 FileNameWithExt = fileInfo.Name,
                 FileNameNoExt = Path.GetFileNameWithoutExtension(fileName),
@@ -204,7 +214,7 @@ namespace Mac_EFI_Toolkit.Common
         #endregion 
 
         #region Flash Descriptor
-        internal static bool GetIsValidFlashHeader(byte[] sourceBytes)
+        internal static bool GetIsValidDescriptorSignature(byte[] sourceBytes)
         {
             byte[] headerData = BinaryUtils.GetBytesAtOffset(sourceBytes, 0, 0x14);
             FlashDescriptorHeader header = Helper.DeserializeHeader<FlashDescriptorHeader>(headerData);
@@ -226,28 +236,36 @@ namespace Mac_EFI_Toolkit.Common
         #region Platform Data Region
         internal static PdrSection GetPdrData(byte[] sourceBytes)
         {
+            // Get the platform data region offset
             int pdrPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.PDR_SECTION_GUID);
 
-            if (pdrPos != -1)
+            if (pdrPos == -1)
             {
-                int bidPos = BinaryUtils.GetOffset(sourceBytes, PDR_BOARD_ID_SIGNATURE, pdrPos);
-                if (bidPos != -1)
-                {
-                    int bidNudgePos = 0x5; int bidReadLength = 0x8;
-                    byte[] bidBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, bidPos + bidNudgePos, bidReadLength);
-                    string bidString = BitConverter.ToString(bidBytes).Replace("-", "");
-
-                    if (!bidString.All(c => c == '0'))
-                    {
-                        return new PdrSection
-                        {
-                            MacBoardId = $"Mac-{bidString}"
-                        };
-                    }
-                }
+                // Platform data region not found
+                return DefaultPdrSection();
             }
 
-            return DefaultPdrSection();
+            // Look for the board id signature bytes
+            int bidPos = BinaryUtils.GetOffset(sourceBytes, PDR_BOARD_ID_SIGNATURE, pdrPos);
+
+            if (bidPos == -1)
+            {
+                // Board id signature not found
+                return DefaultPdrSection();
+            }
+
+            byte[] bidBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, bidPos + BID_NUDGE_POS, BID_LENGTH);
+
+            if (bidBytes == null)
+            {
+                return DefaultPdrSection();
+            }
+
+            // Return the board id
+            return new PdrSection
+            {
+                MacBoardId = $"Mac-{BitConverter.ToString(bidBytes).Replace("-", "")}"
+            };
         }
 
         private static PdrSection DefaultPdrSection()
@@ -266,147 +284,169 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region Fsys Store
-        internal static FsysStoreSection GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly)
+        internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly)
         {
-            string ssnString = null;
-            int ssnPos = -1;
-            string hwcString = null;
-            int hwcPos = -1;
-            string sonString = null;
-            string crcString = null;
-            string crcCalcString = null;
-            uint uiCrcCalc = 0xFFFFFFFF;
-            int ssnStartPos = 0x5;
-            int hwcStartPos = 0x6;
-            int crcLength = 0x4;
+            // Will stay at zero if isFsysStoreOnly flag is set
+            int fsysPos = 0;
 
-            // First we need to locate the NVRAM section GUID.
-            int nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
-
+            // Arg to skip Fsys searching
             if (!isFsysStoreOnly)
             {
+                // First we need to locate the NVRAM section GUID
+                int nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
+
                 if (nvramPos == -1)
                 {
                     // NVRAM store was not found so return default data
-                    return DefaultFsysRegionBase();
+                    return DefaultFsysRegion();
                 }
-            }
 
-            int fsysPos = 0;
-
-            if (!isFsysStoreOnly)
-            {
-                // Zero Vector length (10h) GUID length (10h) NVRAM section size data length (4h, int32)
-                int zeroVecLen = 0x10; int guidLen = 0x10; int dataLen = 0x4;
+                int dataLen = 0x4;
                 // Get NVRAM section size from header
-                byte[] dataLenBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, nvramPos + guidLen, dataLen);
+                byte[] dataLenBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, nvramPos + GUID_LENGTH, dataLen);
                 // Convert NVRAM section size to int32
-                int nvramLen = BitConverter.ToInt32(dataLenBytes, 0); // NOTE: What if this value if 0xFF??
+                int nvramLen = BitConverter.ToInt32(dataLenBytes, 0);
                 // Search for the Fsys store within bounds of the NVRAM section
-                fsysPos = BinaryUtils.GetOffset(sourceBytes, FSYS_SIG, nvramPos - zeroVecLen - guidLen, nvramLen);
+                fsysPos = BinaryUtils.GetOffset(sourceBytes, FSYS_SIG, nvramPos - ZERO_VECTOR_LENGTH - GUID_LENGTH, nvramLen);
+
                 // Fsys store was not found within scope of the NVRAM section
                 if (fsysPos == -1)
                 {
-                    return DefaultFsysRegionBase();
+                    return DefaultFsysRegion();
                 }
             }
 
-            // Get Fsys store bytes
-            byte[] fsysData = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysPos, FSYS_RGN_SIZE);
+            byte[] fsysStoreBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysPos, FSYS_RGN_SIZE);
 
-            if (fsysData != null && fsysData.Length == FSYS_RGN_SIZE)
+            // Fsys store was not loaded
+            if (fsysStoreBytes == null)
             {
-                // Calculate Fsys CRC32 from fsysData
-                uiCrcCalc = EFIUtils.GetUintFsysCrc32(fsysData);
-                crcCalcString = uiCrcCalc.ToString("X8");
-
-                // Fsys store CRC32
-                int crcNudgePos = FSYS_RGN_SIZE - crcLength;
-                byte[] crcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysPos + crcNudgePos, crcLength);
-
-                if (crcBytes != null)
-                {
-                    byte[] crcReversedBytes = crcBytes.Reverse().ToArray();
-                    crcString = BitConverter.ToString(crcReversedBytes).Replace("-", "");
-                }
-
-                // Serial + Offset
-                ssnPos = BinaryUtils.GetOffset(sourceBytes, SNP_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
-
-                if (ssnPos == -1) ssnPos = BinaryUtils.GetOffset(sourceBytes, SSN_UPPER_SIG, fsysPos, FSYS_RGN_SIZE);
-                if (ssnPos == -1) ssnPos = BinaryUtils.GetOffset(sourceBytes, SSN_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
-
-                if (ssnPos != -1)
-                {
-                    int ssnDatLen = 0x0C;
-                    byte[] ssnData = BinaryUtils.GetBytesAtOffset(sourceBytes, ssnPos + ssnStartPos, ssnDatLen);
-                    if (ssnData != null)
-                    {
-                        ssnString = _utf8.GetString(ssnData);
-                        int trimIndex = ssnString.Length - 1;
-                        if (trimIndex >= 0 && !char.IsLetterOrDigit(ssnString[trimIndex]))
-                        {
-                            ssnString = ssnString.Substring(0, trimIndex);
-                        }
-                    }
-                    if (ssnString.Length != 11 && ssnString.Length != 12)
-                    {
-                        ssnString = null;
-                        ssnPos = -1;
-                    }
-                }
-
-                // Hardware Config + Offset
-                hwcPos = BinaryUtils.GetOffset(sourceBytes, HWC_SIG, fsysPos, FSYS_RGN_SIZE);
-
-                if (hwcPos != -1)
-                {
-                    int hwcReadLen = 0x4;
-                    byte[] hwcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, hwcPos + hwcStartPos, hwcReadLen);
-
-                    if (hwcBytes != null)
-                    {
-                        hwcString = _utf8.GetString(hwcBytes).Trim();
-                        hwcString = new string(hwcString.Where(char.IsLetterOrDigit).ToArray());
-                    }
-                }
-
-                // System order number + Offset
-                int sonPos = BinaryUtils.GetOffset(sourceBytes, SON_SIG, fsysPos, FSYS_RGN_SIZE);
-
-                if (sonPos != -1)
-                {
-                    byte indexByte = 0x00;
-                    byte[] terminationBytes = { 0x03, 0x04, 0x09 };
-                    byte[] sonBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, sonPos, indexByte, terminationBytes);
-
-                    if (sonBytes != null)
-                    {
-                        sonString = _utf8.GetString(sonBytes);
-                        if (sonString.EndsWith("/")) sonString = sonString.TrimEnd('/');
-                    }
-                }
+                return DefaultFsysRegion();
             }
 
-            return new FsysStoreSection
+            // Fsys store was not the correct size
+            if (fsysStoreBytes.Length != FSYS_RGN_SIZE)
             {
-                FsysBytes = fsysData,
+                return DefaultFsysRegion();
+            }
+
+            // Get the Fsys store crc stored at 0x7FC (FSYS_RGN_SIZE - CRC32_LENGTH)
+            byte[] crcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, fsysPos + FSYS_CRC_POS, CRC32_LENGTH);
+            byte[] crcReversedBytes = crcBytes.Reverse().ToArray();
+            string crcString = BitConverter.ToString(crcReversedBytes).Replace("-", "");
+
+            // Manually calculate the Fsys store crc
+            uint uiCrcCalc = EFIUtils.GetUintFsysCrc32(fsysStoreBytes);
+            string crcCalcString = uiCrcCalc.ToString("X8");
+
+            // Parse the serial number
+            int serialPos = BinaryUtils.GetOffset(sourceBytes, SNP_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
+            string serialString = ParseFsysSerial(sourceBytes, fsysPos, serialPos);
+            if (serialString == null) serialPos = -1;
+
+            // Parse the hardware configuration code
+            int hwcPos = BinaryUtils.GetOffset(sourceBytes, HWC_SIG, fsysPos, FSYS_RGN_SIZE);
+            string hwcString = ParseFsysHwc(sourceBytes, fsysPos, hwcPos);
+            if (hwcString == null) hwcPos = -1;
+
+            // Parse the system order number
+            int sonPos = BinaryUtils.GetOffset(sourceBytes, SON_SIG, fsysPos, FSYS_RGN_SIZE);
+            string sonString = ParseFsysSon(sourceBytes, fsysPos, sonPos);
+
+            return new FsysStore
+            {
+                FsysBytes = fsysStoreBytes,
                 FsysOffset = fsysPos,
-                Serial = ssnString,
-                SerialOffset = ssnPos != -1 ? ssnPos + ssnStartPos : -1,
+                Serial = serialString,
+                SerialOffset = serialPos != -1 ? serialPos + SSN_NUDGE_POS : -1,
                 HWC = hwcString,
-                HWCOffset = hwcPos != -1 ? hwcPos + hwcStartPos : -1,
+                HWCOffset = hwcPos != -1 ? hwcPos + HWC_NUDGE_POS : -1,
                 SON = sonString,
                 CrcString = crcString,
-                CrcOffset = fsysPos - crcLength,
+                CrcOffset = fsysPos - CRC32_LENGTH,
                 CrcCalcString = crcCalcString,
                 CRC32CalcInt = uiCrcCalc
             };
         }
 
-        private static FsysStoreSection DefaultFsysRegionBase()
+        private static string ParseFsysSerial(byte[] sourceBytes, int fsysPos, int serialPos)
         {
-            return new FsysStoreSection
+            if (serialPos == -1) serialPos = BinaryUtils.GetOffset(sourceBytes, SSN_UPPER_SIG, fsysPos, FSYS_RGN_SIZE);
+            if (serialPos == -1) serialPos = BinaryUtils.GetOffset(sourceBytes, SSN_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
+
+            if (serialPos == -1)
+            {
+                return null;
+            }
+
+            byte[] ssnData = BinaryUtils.GetBytesAtOffset(sourceBytes, serialPos + SSN_NUDGE_POS, SSN_MAX_LENGTH);
+
+            if (ssnData == null)
+            {
+                return null;
+            }
+
+            string ssn = _utf8.GetString(ssnData);
+            int trimIndex = ssn.Length - 1;
+            if (trimIndex >= 0 && !char.IsLetterOrDigit(ssn[trimIndex]))
+            {
+                ssn = ssn.Substring(0, trimIndex);
+            }
+
+            if (ssn.Length != 11 && ssn.Length != 12)
+            {
+                return null;
+            }
+
+            return ssn;
+        }
+
+        private static string ParseFsysHwc(byte[] sourceBytes, int fsysPos, int hwcPos)
+        {
+            if (hwcPos == -1)
+            {
+                return null;
+            }
+
+            byte[] hwcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, hwcPos + HWC_NUDGE_POS, HWC_LENGTH);
+
+            if (hwcBytes == null)
+            {
+                return null;
+            }
+
+            string hwc = _utf8.GetString(hwcBytes).Trim();
+            hwc = new string(hwc.Where(char.IsLetterOrDigit).ToArray());
+
+            return hwc;
+        }
+
+        private static string ParseFsysSon(byte[] sourceBytes, int fsysPos, int sonPos)
+        {
+            if (sonPos == -1)
+            {
+                return null;
+            }
+
+            byte indexByte = 0x00;
+            byte[] terminationBytes = { 0x03, 0x04, 0x09 };
+            byte[] sonBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, sonPos, indexByte, terminationBytes);
+
+            if (sonBytes == null)
+            {
+                return null;
+            }
+
+            string son = _utf8.GetString(sonBytes);
+
+            if (son.EndsWith("/")) return son.TrimEnd('/');
+
+            return son;
+        }
+
+        private static FsysStore DefaultFsysRegion()
+        {
+            return new FsysStore
             {
                 FsysBytes = null,
                 FsysOffset = -1,
@@ -420,22 +460,6 @@ namespace Mac_EFI_Toolkit.Common
                 CrcCalcString = null,
                 CRC32CalcInt = 0xFFFFFFF
             };
-        }
-
-        internal static string GetCrcStringFromFsys(byte[] sourceBytes)
-        {
-            // Fsys store CRC32
-            int crcLength = 0x4;
-            int crcNudgePos = FSYS_RGN_SIZE - crcLength;
-            byte[] crcBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, crcNudgePos, crcLength);
-
-            if (crcBytes != null)
-            {
-                byte[] crcReversedBytes = crcBytes.Reverse().ToArray();
-                return BitConverter.ToString(crcReversedBytes).Replace("-", "");
-            }
-
-            return null;
         }
 
         internal static readonly byte[] FSYS_SIG =
@@ -471,91 +495,95 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region NVRAM Section
-        internal static NvramStoreSection GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
+        internal static NvramStore GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
         {
             byte[] nvramSig = GetNvramSignature(storeType);
-            int headerLen = 0x10;
-            int paddingLen = 0;
 
             // We must find the NVRAM section GUID first.
             int nvramPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID);
 
             if (nvramPos == -1)
             {
+                // Could not find the NVRAM GUID
                 return DefaultNvramStoreData();
             }
 
-            int primaryStoreHeaderPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, nvramPos);
+            int primaryStorePos = BinaryUtils.GetOffset(sourceBytes, nvramSig, nvramPos);
 
-            int primaryStoreLen = -1; int primaryStorePos = -1; byte[] primaryStoreData = null; bool isPrimaryStoreEmpty = true;
-
-            if (primaryStoreHeaderPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStoreHeaderPos, 0x6) is byte[] bytesPrimaryHeader)
+            if (primaryStorePos == -1)
             {
-                NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
+                // Could not find the primary store signature
+                return DefaultNvramStoreData();
+            }
 
-                if (psHeader.SizeOfData != 0xFFFF && psHeader.SizeOfData != 0)
+            byte[] primaryStoreBytes = null;
+            bool primaryStoreIsEmpty = true;
+            int primaryStoreLen = -1;
+
+            if (primaryStorePos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStorePos, 0x6) is byte[] primaryHeaderBytes)
+            {
+                NvramStoreHeader primaryHeader = Helper.DeserializeHeader<NvramStoreHeader>(primaryHeaderBytes);
+
+                if (primaryHeader.SizeOfData != 0xFFFF && primaryHeader.SizeOfData != 0)
                 {
-                    primaryStoreLen = psHeader.SizeOfData;
-                    primaryStorePos = primaryStoreHeaderPos;
-                    primaryStoreData = BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStorePos, primaryStoreLen);
+                    primaryStoreLen = primaryHeader.SizeOfData;
+                    primaryStoreBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStorePos, primaryStoreLen);
 
-                    if (primaryStoreData != null)
+                    if (primaryStoreBytes != null)
                     {
-                        byte[] primaryStoreBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStorePos + headerLen, primaryStoreLen - headerLen);
-                        isPrimaryStoreEmpty = BinaryUtils.IsByteBlockEmpty(primaryStoreBodyData);
-                    }
-
-                    // Count the number of 0xFF values in the padding
-                    for (int i = (primaryStorePos + primaryStoreLen); i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
-                    {
-                        paddingLen++;
+                        byte[] primaryStoreBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, primaryStorePos + GUID_LENGTH, primaryStoreLen - GUID_LENGTH);
+                        primaryStoreIsEmpty = BinaryUtils.IsByteBlockEmpty(primaryStoreBodyData);
                     }
                 }
             }
 
-            int backupStoreLen = -1; int backupStorePos = -1; byte[] backupStoreData = null; bool isBackupStoreEmpty = true;
-
-            if (primaryStorePos != -1)
+            // Count the padding bytes after the primary store (After the last 0xFF we should have our backup store signature)
+            int paddingLen = 0;
+            for (int i = (primaryStorePos + primaryStoreLen); i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
             {
-                int backupStoreHeaderPos = BinaryUtils.GetOffset(sourceBytes, nvramSig, primaryStorePos + primaryStoreLen + paddingLen);
+                paddingLen++;
+            }
 
-                if (backupStoreHeaderPos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupStoreHeaderPos, 0x6) is byte[] bytesBackupHeader)
+            byte[] backupStoreBytes = null;
+            bool backupStoreIsEmpty = true;
+            int backupStoreLength = -1;
+
+            int backupStorePos = BinaryUtils.GetOffset(sourceBytes, nvramSig, primaryStorePos + primaryStoreLen + paddingLen);
+
+            if (backupStorePos != -1 && BinaryUtils.GetBytesAtOffset(sourceBytes, backupStorePos, 0x6) is byte[] backupHeaderBytes)
+            {
+                NvramStoreHeader backupHeader = Helper.DeserializeHeader<NvramStoreHeader>(backupHeaderBytes);
+
+                if (backupHeader.SizeOfData != 0xFFFF)
                 {
-                    NvramStoreHeader bsHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
+                    backupStoreLength = backupHeader.SizeOfData;
+                    backupStoreBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, backupStorePos, backupStoreLength);
 
-                    if (bsHeader.SizeOfData != 0xFFFF && bsHeader.SizeOfData != 0)
+                    if (backupStoreBytes != null)
                     {
-                        backupStoreLen = bsHeader.SizeOfData;
-                        backupStorePos = backupStoreHeaderPos;
-                        backupStoreData = BinaryUtils.GetBytesAtOffset(sourceBytes, backupStorePos, backupStoreLen);
-
-                        if (backupStoreData != null)
-                        {
-                            byte[] bsBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, backupStorePos + headerLen, backupStoreLen - headerLen);
-                            isBackupStoreEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
-                        }
+                        byte[] bsBodyData = BinaryUtils.GetBytesAtOffset(sourceBytes, backupStorePos + GUID_LENGTH, backupStoreLength - GUID_LENGTH);
+                        backupStoreIsEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
                     }
                 }
             }
 
-            return new NvramStoreSection
+            return new NvramStore
             {
                 StoreType = storeType,
                 PrimaryStoreLength = primaryStoreLen,
                 PrimaryStoreOffset = primaryStorePos,
-                PrimaryStoreBytes = primaryStoreData,
-                IsPrimaryStoreEmpty = isPrimaryStoreEmpty,
-                BackupStoreLength = backupStoreLen,
+                PrimaryStoreBytes = primaryStoreBytes,
+                IsPrimaryStoreEmpty = primaryStoreIsEmpty,
+                BackupStoreLength = backupStoreLength,
                 BackupStoreOffset = backupStorePos,
-                BackupStoreBytes = backupStoreData,
-                IsBackupStoreEmpty = isBackupStoreEmpty,
-                PaddingLength = paddingLen
+                BackupStoreBytes = backupStoreBytes,
+                IsBackupStoreEmpty = backupStoreIsEmpty,
             };
         }
 
-        private static NvramStoreSection DefaultNvramStoreData()
+        private static NvramStore DefaultNvramStoreData()
         {
-            return new NvramStoreSection
+            return new NvramStore
             {
                 PrimaryStoreLength = -1,
                 PrimaryStoreOffset = -1,
@@ -564,8 +592,7 @@ namespace Mac_EFI_Toolkit.Common
                 BackupStoreLength = -1,
                 BackupStoreOffset = -1,
                 BackupStoreBytes = null,
-                IsBackupStoreEmpty = true,
-                PaddingLength = 0
+                IsBackupStoreEmpty = true
             };
         }
 
@@ -660,34 +687,36 @@ namespace Mac_EFI_Toolkit.Common
             // Read the entire AppleRomInformation section using sectionLen as the max search length
             byte[] romSectionData = BinaryUtils.GetBytesAtOffset(sourceBytes, baseOffset + headerLen, sectionLen);
 
-            if (romSectionData != null)
+            if (romSectionData == null)
             {
-                // Extract data from the romSectionData based on the signature
-                foreach (KeyValuePair<byte[], string> kvPair in romInfoData)
+                return DefaultRomInformationBase();
+            }
+
+            // Extract data from the romSectionData based on the signature
+            foreach (KeyValuePair<byte[], string> kvPair in romInfoData)
+            {
+                int dataPos = BinaryUtils.GetOffset(romSectionData, kvPair.Key);
+                if (dataPos != -1)
                 {
-                    int dataPos = BinaryUtils.GetOffset(romSectionData, kvPair.Key);
-                    if (dataPos != -1)
+                    int sigLength = kvPair.Key.Length;
+                    // Extract the data using the signature position, signature length, index byte, and termination byte
+                    byte[] infoData = BinaryUtils.GetBytesAtOffsetByteDelimited(romSectionData, dataPos + sigLength, indexByte, terminationByte);
+                    if (infoData != null)
                     {
-                        int sigLength = kvPair.Key.Length;
-                        // Extract the data using the signature position, signature length, index byte, and termination byte
-                        byte[] infoData = BinaryUtils.GetBytesAtOffsetByteDelimited(romSectionData, dataPos + sigLength, indexByte, terminationByte);
-                        if (infoData != null)
-                        {
-                            // Convert the extracted byte array to string using UTF-8 encoding
-                            updatedRomInfoData[kvPair.Key] = _utf8.GetString(infoData);
-                        }
+                        // Convert the extracted byte array to string using UTF-8 encoding
+                        updatedRomInfoData[kvPair.Key] = _utf8.GetString(infoData);
                     }
                 }
-
-                // Update the original romInfoData dictionary with the extracted and updated values
-                foreach (KeyValuePair<byte[], string> kvPair in updatedRomInfoData)
-                {
-                    romInfoData[kvPair.Key] = kvPair.Value;
-                }
-
-                // Some EFI have this section GUID, however the data is empty
-                sectionHasData = romSectionData.Length <= 0x18 ? false : true;
             }
+
+            // Update the original romInfoData dictionary with the extracted and updated values
+            foreach (KeyValuePair<byte[], string> kvPair in updatedRomInfoData)
+            {
+                romInfoData[kvPair.Key] = kvPair.Value;
+            }
+
+            // Some EFI have this section GUID, however the data is empty
+            sectionHasData = romSectionData.Length <= 0x18 ? false : true;
 
             // Create and return an instance of AppleRomInformation with the extracted data
             return new AppleRomInformationSection
@@ -801,30 +830,35 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static EfiSection GetEfiSectionData(byte[] sourceBytes)
         {
-            int guidOffset = BinaryUtils.GetOffset(sourceBytes, FSGuids.EFI_BIOS_ID_GUID);
+            int guidPos = BinaryUtils.GetOffset(sourceBytes, FSGuids.EFI_BIOS_ID_GUID);
 
-            if (guidOffset != -1)
+            if (guidPos == -1)
             {
-                int modelOffset = BinaryUtils.GetOffset(sourceBytes, EFI_SECTION_SIGNATURE);
-
-                if (modelOffset != -1)
-                {
-                    byte indexByte = 0x20;
-                    byte terminationByte = 0x2E;
-                    byte[] modelBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, modelOffset, indexByte, terminationByte);
-
-                    if (modelBytes != null)
-                    {
-                        modelBytes = modelBytes.Where(b => b != 0x00 && b != 0x20).ToArray();
-                        return new EfiSection
-                        {
-                            Model = _utf8.GetString(modelBytes)
-                        };
-                    }
-                }
+                return DefaultEfiSection();
             }
 
-            return DefaultEfiSection();
+            int modelPos = BinaryUtils.GetOffset(sourceBytes, EFI_SECTION_SIGNATURE);
+
+            if (modelPos == -1)
+            {
+                return DefaultEfiSection();
+            }
+
+            byte indexByte = 0x20;
+            byte terminationByte = 0x2E;
+            byte[] modelBytes = BinaryUtils.GetBytesAtOffsetByteDelimited(sourceBytes, modelPos, indexByte, terminationByte);
+
+            if (modelBytes == null)
+            {
+                return DefaultEfiSection();
+            }
+
+            modelBytes = modelBytes.Where(b => b != 0x00 && b != 0x20).ToArray();
+
+            return new EfiSection
+            {
+                Model = _utf8.GetString(modelBytes)
+            };
         }
 
         private static EfiSection DefaultEfiSection()
@@ -843,18 +877,18 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region APFSJumpStart
-        internal static ApfsCompatibleFirmware GetIsApfsCapable(byte[] sourceBytes)
+        internal static ApfsCapableFirmware GetIsApfsCapable(byte[] sourceBytes)
         {
             // APFS DXE GUID found
             if (BinaryUtils.GetOffset(sourceBytes, FSGuids.APFS_DXE_GUID) != -1)
             {
-                return ApfsCompatibleFirmware.Yes;
+                return ApfsCapableFirmware.Yes;
             }
 
             // Disable compressed DXE searching is enabled (Maybe I should get rid of this?)
             if (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch))
             {
-                return ApfsCompatibleFirmware.Unknown;
+                return ApfsCapableFirmware.Unknown;
             }
 
             // Look for a compressed volume GUID
@@ -868,10 +902,9 @@ namespace Mac_EFI_Toolkit.Common
             // No compressed DXE volume was found
             if (fsOffset == -1)
             {
-                return ApfsCompatibleFirmware.No;
+                return ApfsCapableFirmware.No;
             }
 
-            // Compressed DXE volume found
             // Get bytes containing section length (0x3)
             byte[] sizeData = BinaryUtils.GetBytesAtOffset(sourceBytes, fsOffset + 0x14, 0x3);
             // Convert section length bytes to int24
@@ -888,18 +921,18 @@ namespace Mac_EFI_Toolkit.Common
             // There was an decompressing the volume (Error saved to './mefit.log')
             if (decompressedBytes == null)
             {
-                return ApfsCompatibleFirmware.Unknown;
+                return ApfsCapableFirmware.Unknown;
             }
 
             // Search the decompressed DXE volume for the APFS DXE GUID
             if (BinaryUtils.GetOffset(decompressedBytes, FSGuids.APFS_DXE_GUID) == -1)
             {
                 // The APFS DXE GUID was not found in the compressed volume
-                return ApfsCompatibleFirmware.No;
+                return ApfsCapableFirmware.No;
             }
 
             // The APFS DXE GUID was present in the compressed volume
-            return ApfsCompatibleFirmware.Yes;
+            return ApfsCapableFirmware.Yes;
         }
         #endregion
 
