@@ -878,7 +878,7 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdOpenBin, cmdReset, cmdEdit, cmdNavigate, cmdReload,
+                cmdOpenBin, cmdReset, cmdCopy, cmdEdit, cmdNavigate, cmdReload,
                 cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsysBlock, cmdAppleRomInfo
             };
 
@@ -908,6 +908,8 @@ namespace Mac_EFI_Toolkit
                     lblMessage.Text = "Navigate to file (ALT + N)";
                 else if (sender == cmdReload)
                     lblMessage.Text = "Reload file from disk (ALT + R)";
+                else if (sender == cmdReload)
+                    lblMessage.Text = "Reload file from disk (ALT + R)";
                 else if (sender == cmdExportFsysBlock)
                     lblMessage.Text = "Export Fsys Store (ALT + E)";
                 else if (sender == cmdFixFsysCrc)
@@ -918,6 +920,8 @@ namespace Mac_EFI_Toolkit
                     lblMessage.Text = "Open a Mac BIOS (CTRL + O)";
                 else if (sender == cmdReset)
                     lblMessage.Text = "Reset (CTRL + R)";
+                else if (sender == cmdCopy)
+                    lblMessage.Text = "Open the copy menu (CTRL + C)";
                 else if (sender == cmdEdit)
                     lblMessage.Text = "Open the editor (CTRL + E)";
                 else if (sender == cmdAppleRomInfo)
