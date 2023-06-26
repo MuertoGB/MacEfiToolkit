@@ -63,13 +63,13 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void editorWindow_Load(object sender, EventArgs e)
         {
-            if (FWBase.FsysSectionData.Serial == null)
+            if (FWBase.FsysStoreData.Serial == null)
             {
                 cbxReplaceSerial.Enabled = false;
             }
             else
             {
-                tbxSerialNumber.MaxLength = FWBase.FsysSectionData.Serial.Length;
+                tbxSerialNumber.MaxLength = FWBase.FsysStoreData.Serial.Length;
             }
 
             GetRtbInitialData();
@@ -395,17 +395,17 @@ namespace Mac_EFI_Toolkit.WinForms
             TextBox tb = (TextBox)sender;
             int textLength = tb.Text.Length;
 
-            if (textLength == FWBase.FsysSectionData.Serial.Length)
+            if (textLength == FWBase.FsysStoreData.Serial.Length)
             {
                 if (EFIUtils.GetIsValidSerialChars(tb.Text))
                 {
                     UpdateTextBoxColor(tb, Colours.COMPLETE_GREEN);
                     Logger.WriteLogTextToRtb("Valid serial characters entered", RtbLogPrefix.Info, rtbLog);
-                    if (FWBase.FsysSectionData.Serial.Length == 11)
+                    if (FWBase.FsysStoreData.Serial.Length == 11)
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 3));
                     }
-                    if (FWBase.FsysSectionData.Serial.Length == 12)
+                    if (FWBase.FsysStoreData.Serial.Length == 12)
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 4));
                     }
@@ -460,9 +460,9 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void LogFsysData()
         {
-            if (FWBase.FsysSectionData.FsysOffset != 0)
+            if (FWBase.FsysStoreData.FsysOffset != 0)
             {
-                Logger.WriteLogTextToRtb($"Fsys: Offset {FWBase.FsysSectionData.FsysOffset:X2}h, Size {FWBase.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"Fsys: Offset {FWBase.FsysStoreData.FsysOffset:X2}h, Size {FWBase.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
             }
         }
 
@@ -586,7 +586,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Write new Fsys to the output file
-            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, _bytesNewFsysStore);
+            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysStoreData.FsysOffset, _bytesNewFsysStore);
 
             // Load the Fsys from the new binary
             FsysStore fsysNewBinary = FWBase.GetFsysStoreData(_bytesNewBinary, false);
@@ -607,21 +607,21 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool WriteNewSerialData()
         {
             // Given serial is too short
-            if (tbxSerialNumber.Text.Length != FWBase.FsysSectionData.Serial.Length)
+            if (tbxSerialNumber.Text.Length != FWBase.FsysStoreData.Serial.Length)
             {
                 HandleBuildFailure("The given serial number was too short");
                 return false;
             }
 
             // Fsys postition was not found
-            if (FWBase.FsysSectionData.SerialOffset == -1)
+            if (FWBase.FsysStoreData.SerialOffset == -1)
             {
                 HandleBuildFailure("FsysSectionData store offset is -1");
                 return false;
             }
 
             // Fsys store bytes are empty
-            if (FWBase.FsysSectionData.FsysBytes == null)
+            if (FWBase.FsysStoreData.FsysBytes == null)
             {
                 HandleBuildFailure("FsysSectionData store bytes are empty");
                 return false;
@@ -630,15 +630,15 @@ namespace Mac_EFI_Toolkit.WinForms
             // Write new serial number bytes
             string newSerial = tbxSerialNumber.Text;
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
-            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.SerialOffset, newSerialBytes);
+            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysStoreData.SerialOffset, newSerialBytes);
 
             // Write new HWC bytes
 
             string newHwc = tbxHwc.Text;
-            if (FWBase.FsysSectionData.HWCOffset != -1)
+            if (FWBase.FsysStoreData.HWCOffset != -1)
             {
                 byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.HWCOffset, newHwcBytes);
+                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysStoreData.HWCOffset, newHwcBytes);
             }
             else
             {
@@ -656,7 +656,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Check HWC's match
-            if (FWBase.FsysSectionData.HWCOffset != -1)
+            if (FWBase.FsysStoreData.HWCOffset != -1)
             {
                 if (!string.Equals(newHwc, newFsys.HWC))
                 {

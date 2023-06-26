@@ -180,6 +180,10 @@ namespace Mac_EFI_Toolkit
                 {
                     cmdReset.PerformClick();
                 }
+                else if (e.KeyCode == Keys.C)
+                {
+                    cmdCopy.PerformClick();
+                }
                 else if (e.KeyCode == Keys.E)
                 {
                     cmdEdit.PerformClick();
@@ -335,22 +339,28 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void cmdCopy_Click(object sender, EventArgs e)
+        {
+            Control control = sender as Control;
+            ShowContextMenu(control, cmsCopy);
+        }
+
         private void cmdEveryMacSearch_Click(object sender, EventArgs e)
         {
 
-            if (FWBase.FsysSectionData.Serial == null)
+            if (FWBase.FsysStoreData.Serial == null)
             {
                 METMessageBox.Show(this, "Error", "FsysSectionData.Serial data is null.\r\nCannot continue.", METMessageType.Error, UI.METMessageButtons.Okay);
                 return;
             }
 
-            Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", FWBase.FsysSectionData.Serial));
+            Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", FWBase.FsysStoreData.Serial));
         }
 
         private void cmdFixFsysCrc_Click(object sender, EventArgs e)
         {
             // Fsys store was not found by the firmware parser
-            if (FWBase.FsysSectionData.FsysBytes == null)
+            if (FWBase.FsysStoreData.FsysBytes == null)
             {
                 METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", METMessageType.Error, UI.METMessageButtons.Okay);
                 return;
@@ -377,9 +387,9 @@ namespace Mac_EFI_Toolkit
                 byte[] patchedBinary = BinaryUtils.MakeFsysCrcPatchedBinary
                     (
                     FWBase.LoadedBinaryBytes,
-                    FWBase.FsysSectionData.FsysOffset,
-                    FWBase.FsysSectionData.FsysBytes,
-                    FWBase.FsysSectionData.CRC32CalcInt
+                    FWBase.FsysStoreData.FsysOffset,
+                    FWBase.FsysStoreData.FsysBytes,
+                    FWBase.FsysStoreData.CRC32CalcInt
                     );
 
                 // Check patchedBinary is not null
@@ -422,7 +432,7 @@ namespace Mac_EFI_Toolkit
         private void cmdExportFsysBlock_Click(object sender, EventArgs e)
         {
             // Fsys store bytes were null
-            if (FWBase.FsysSectionData.FsysBytes == null)
+            if (FWBase.FsysStoreData.FsysBytes == null)
             {
                 METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", METMessageType.Error, UI.METMessageButtons.Okay);
                 return;
@@ -454,7 +464,7 @@ namespace Mac_EFI_Toolkit
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     // Save the Fsys stores bytes to disk
-                    File.WriteAllBytes(dialog.FileName, FWBase.FsysSectionData.FsysBytes);
+                    File.WriteAllBytes(dialog.FileName, FWBase.FsysStoreData.FsysBytes);
                 }
             }
         }
@@ -462,7 +472,7 @@ namespace Mac_EFI_Toolkit
         private void cmdAppleRomInfo_Click(object sender, EventArgs e)
         {
             // Check the Rom Information section exists
-            if (FWBase.ROMInfoData.SectionExists == false)
+            if (FWBase.ROMInfoSectionData.SectionExists == false)
             {
                 // ROM Information section does not exist
                 METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.", METMessageType.Error, UI.METMessageButtons.Okay);
@@ -593,6 +603,67 @@ namespace Mac_EFI_Toolkit
         {
             Program.ExitMet(this);
         }
+
+        private void sizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string size = FileUtils.FormatFileSize(FWBase.FileInfoData.FileLength);
+            Clipboard.SetText($"{size} bytes");
+        }
+
+        private void crc32ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText($"{FWBase.FileInfoData.CRC32:X8}");
+        }
+
+        private void createdDateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText($"{FWBase.FileInfoData.CreationTime}");
+        }
+
+        private void modifiedDateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText($"{FWBase.FileInfoData.LastWriteTime}");
+        }
+
+        private void serialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.FsysStoreData.Serial);
+        }
+
+        private void hwcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.FsysStoreData.HWC);
+        }
+
+        private void fsysCRC32ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.FsysStoreData.CrcString);
+        }
+
+        private void efiVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.ROMInfoSectionData.EfiVersion);
+        }
+
+        private void fitVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.FitVersion);
+        }
+
+        private void meVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.MeVersion);
+        }
+
+        private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.PDRSectionData.MacBoardId);
+        }
+
+        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.FsysStoreData.SON);
+        }
         #endregion
 
         #region Label Events
@@ -625,12 +696,12 @@ namespace Mac_EFI_Toolkit
             lblFileCrc.Text = $"{FWBase.FileInfoData.CRC32:X8}";
 
             // Firmware Data
-            lblSerialNumber.Text = FWBase.FsysSectionData.Serial ?? "N/A";
-            lblHwc.Text = FWBase.FsysSectionData.HWC ?? "N/A";
-            if (FWBase.FsysSectionData.CrcString != null)
+            lblSerialNumber.Text = FWBase.FsysStoreData.Serial ?? "N/A";
+            lblHwc.Text = FWBase.FsysStoreData.HWC ?? "N/A";
+            if (FWBase.FsysStoreData.CrcString != null)
             {
-                lblFsysCrc.Text = $"{FWBase.FsysSectionData.CrcString}h";
-                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysSectionData.CrcCalcString, FWBase.FsysSectionData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
+                lblFsysCrc.Text = $"{FWBase.FsysStoreData.CrcString}h";
+                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
             }
             else
             {
@@ -639,7 +710,7 @@ namespace Mac_EFI_Toolkit
             }
             lblApfsCapable.Text = FWBase.IsApfsCapable;
             lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.COMPLETE_GREEN : Colours.WARNING_ORANGE;
-            lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
+            lblEfiVersion.Text = FWBase.ROMInfoSectionData.EfiVersion ?? "N/A";
 
             UpdateNvramLabel(lblVssStore, FWBase.VssStoreData, "VSS");
             UpdateNvramLabel(lblSvsStore, FWBase.SvsStoreData, "SVS");
@@ -663,20 +734,21 @@ namespace Mac_EFI_Toolkit
 
             lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
             lblMeVersion.Text = FWBase.MeVersion ?? "N/A";
-            lblModel.Text = $"MODEL: {EFIUtils.ConvertEfiModelCode(FWBase.EFISectionStore.Model) ?? "N/A"}";
+            lblModel.Text = $"MODEL: {EFIUtils.ConvertEfiModelCode(FWBase.EFISectionData.Model) ?? "N/A"}";
             lblBoardId.Text = FWBase.PDRSectionData.MacBoardId ?? "N/A";
-            lblOrderNo.Text = FWBase.FsysSectionData.SON ?? "N/A";
+            lblOrderNo.Text = FWBase.FsysStoreData.SON ?? "N/A";
 
             // Load the config code asynchronously
-            if (FWBase.FsysSectionData.HWC != null)
+            if (FWBase.FsysStoreData.HWC != null)
             {
-                AppendConfigCodeAsync(FWBase.FsysSectionData.HWC);
+                AppendConfigCodeAsync(FWBase.FsysStoreData.HWC);
             }
 
             ApplyNestedPanelLabelForeColor(tlpRom, Colours.DISABLED_TEXT);
 
             pbxLoad.Image = null;
 
+            ToggleCopyMenuItemEnable();
             ToggleControlEnable(true);
         }
 
@@ -693,7 +765,7 @@ namespace Mac_EFI_Toolkit
 
         private void SetContextMenuRenderers()
         {
-            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication };
+            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication, cmsCopy };
             foreach (ContextMenuStrip menu in menus)
             {
                 menu.Renderer = new METMenuRenderer();
@@ -732,17 +804,17 @@ namespace Mac_EFI_Toolkit
         {
             tlpMain.Enabled = enable;
 
-            Button[] buttons = { cmdReset, cmdNavigate, cmdReload, cmdEdit, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsysBlock, cmdAppleRomInfo };
+            Button[] buttons = { cmdReset, cmdCopy, cmdNavigate, cmdReload, cmdEdit, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsysBlock, cmdAppleRomInfo };
             foreach (Button button in buttons)
             {
                 button.Enabled = enable;
             }
 
-            cmdEveryMacSearch.Enabled = (FWBase.FsysSectionData.Serial != null);
+            cmdEveryMacSearch.Enabled = (FWBase.FsysStoreData.Serial != null);
 
-            if (FWBase.FsysSectionData.FsysBytes != null)
+            if (FWBase.FsysStoreData.FsysBytes != null)
             {
-                cmdFixFsysCrc.Enabled = EFIUtils.GetUintFsysCrc32(FWBase.FsysSectionData.FsysBytes).ToString("X8") == FWBase.FsysSectionData.CrcString ? false : true;
+                cmdFixFsysCrc.Enabled = EFIUtils.GetUintFsysCrc32(FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString ? false : true;
             }
             else
             {
@@ -751,7 +823,34 @@ namespace Mac_EFI_Toolkit
                 cmdEdit.Enabled = false;
             }
 
-            cmdAppleRomInfo.Enabled = FWBase.ROMInfoData.SectionExists;
+            cmdAppleRomInfo.Enabled = FWBase.ROMInfoSectionData.SectionExists;
+        }
+
+        private void ToggleCopyMenuItemEnable()
+        {
+            serialToolStripMenuItem.Enabled =
+                string.IsNullOrEmpty(FWBase.FsysStoreData.Serial) ? false : true;
+
+            hwcToolStripMenuItem.Enabled =
+                string.IsNullOrEmpty(FWBase.FsysStoreData.HWC) ? false : true;
+
+            fsysCRC32ToolStripMenuItem.Enabled =
+                string.IsNullOrEmpty(FWBase.FsysStoreData.CrcString) ? false : true;
+
+            efiVersionToolStripMenuItem.Enabled =
+                string.IsNullOrEmpty(FWBase.ROMInfoSectionData.EfiVersion) ? false : true;
+
+            fitVersionToolStripMenuItem.Enabled =
+                string.IsNullOrEmpty(FWBase.FitVersion) ? false : true;
+
+            meVersionToolStripMenuItem.Enabled =
+                string.IsNullOrEmpty(FWBase.MeVersion) ? false : true;
+
+            boardIDToolStripMenuItem.Enabled =
+                string.IsNullOrEmpty(FWBase.PDRSectionData.MacBoardId) ? false : true;
+
+            orderNoToolStripMenuItem.Enabled =
+                string.IsNullOrEmpty(FWBase.FsysStoreData.SON) ? false : true;
         }
 
         private void SetButtonProperties()

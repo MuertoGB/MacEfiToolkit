@@ -112,18 +112,17 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The full model identifier representation.</returns>
         internal static string ConvertEfiModelCode(string shortModel)
         {
+            if (string.IsNullOrEmpty(shortModel))
+                return null;
+
             string letters = new string(shortModel.Where(char.IsLetter).ToArray());
             string numbers = new string(shortModel.Where(char.IsDigit).ToArray());
 
             if (letters.Length > 3)
-            {
                 return shortModel;
-            }
 
             if (numbers.Length > 3)
-            {
                 return shortModel;
-            }
 
             if (shortModel.Contains("MBP"))
                 letters = "MacBookPro";
