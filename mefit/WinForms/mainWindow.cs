@@ -590,11 +590,6 @@ namespace Mac_EFI_Toolkit
             CenterToScreen();
         }
 
-        private void restartApplicationToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            Program.RestartMet(this);
-        }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Program.ExitMet(this);

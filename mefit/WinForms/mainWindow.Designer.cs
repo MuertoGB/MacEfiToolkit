@@ -41,6 +41,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
             this.cmdReload = new System.Windows.Forms.Button();
             this.cmdNavigate = new System.Windows.Forms.Button();
+            this.lblFilename = new METLabel();
             this.lblModel = new System.Windows.Forms.Label();
             this.tlpFile = new System.Windows.Forms.TableLayoutPanel();
             this.lblFileCreatedDate = new System.Windows.Forms.Label();
@@ -109,11 +110,9 @@ namespace Mac_EFI_Toolkit
             this.cmsApplication = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.minimizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.restartApplicationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
-            this.lblFilename = new METLabel();
             this.pnlMain.SuspendLayout();
             this.tlpStatusBar.SuspendLayout();
             this.tlpLoading.SuspendLayout();
@@ -312,6 +311,19 @@ namespace Mac_EFI_Toolkit
             this.cmdNavigate.Text = "N";
             this.cmdNavigate.UseVisualStyleBackColor = false;
             this.cmdNavigate.Click += new System.EventHandler(this.cmdNavigate_Click);
+            // 
+            // lblFilename
+            // 
+            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblFilename.ForeColor = System.Drawing.Color.White;
+            this.lblFilename.Location = new System.Drawing.Point(0, 0);
+            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFilename.Name = "lblFilename";
+            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblFilename.Size = new System.Drawing.Size(639, 36);
+            this.lblFilename.TabIndex = 6;
             // 
             // lblModel
             // 
@@ -1357,19 +1369,18 @@ namespace Mac_EFI_Toolkit
             this.cmsApplication.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.minimizeToolStripMenuItem,
             this.resetPositionToolStripMenuItem,
-            this.restartApplicationToolStripMenuItem1,
             this.toolStripSeparator3,
             this.exitToolStripMenuItem});
             this.cmsApplication.Name = "cmsApplication";
             this.cmsApplication.ShowImageMargin = false;
-            this.cmsApplication.Size = new System.Drawing.Size(199, 122);
+            this.cmsApplication.Size = new System.Drawing.Size(186, 122);
             // 
             // minimizeToolStripMenuItem
             // 
             this.minimizeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.minimizeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.minimizeToolStripMenuItem.Name = "minimizeToolStripMenuItem";
-            this.minimizeToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.minimizeToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.minimizeToolStripMenuItem.Text = "Minimize";
             this.minimizeToolStripMenuItem.Click += new System.EventHandler(this.minimizeToolStripMenuItem_Click);
             // 
@@ -1378,23 +1389,14 @@ namespace Mac_EFI_Toolkit
             this.resetPositionToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resetPositionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.resetPositionToolStripMenuItem.Name = "resetPositionToolStripMenuItem";
-            this.resetPositionToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.resetPositionToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.resetPositionToolStripMenuItem.Text = "Reset Position";
             this.resetPositionToolStripMenuItem.Click += new System.EventHandler(this.resetPositionToolStripMenuItem_Click);
-            // 
-            // restartApplicationToolStripMenuItem1
-            // 
-            this.restartApplicationToolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.restartApplicationToolStripMenuItem1.ForeColor = System.Drawing.Color.White;
-            this.restartApplicationToolStripMenuItem1.Name = "restartApplicationToolStripMenuItem1";
-            this.restartApplicationToolStripMenuItem1.Size = new System.Drawing.Size(198, 28);
-            this.restartApplicationToolStripMenuItem1.Text = "Restart Application";
-            this.restartApplicationToolStripMenuItem1.Click += new System.EventHandler(this.restartApplicationToolStripMenuItem1_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(195, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(182, 6);
             // 
             // exitToolStripMenuItem
             // 
@@ -1403,7 +1405,7 @@ namespace Mac_EFI_Toolkit
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1429,19 +1431,6 @@ namespace Mac_EFI_Toolkit
             this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMenu.Size = new System.Drawing.Size(713, 38);
             this.tlpMenu.TabIndex = 1;
-            // 
-            // lblFilename
-            // 
-            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
-            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblFilename.ForeColor = System.Drawing.Color.White;
-            this.lblFilename.Location = new System.Drawing.Point(0, 0);
-            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblFilename.Size = new System.Drawing.Size(639, 36);
-            this.lblFilename.TabIndex = 6;
             // 
             // mainWindow
             // 
@@ -1535,7 +1524,6 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.ContextMenuStrip cmsApplication;
         private System.Windows.Forms.ToolStripMenuItem minimizeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetPositionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem restartApplicationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewLogToolStripMenuItem;
