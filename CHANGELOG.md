@@ -16,6 +16,7 @@
 
 #### Bugs:
 - Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.
+- Fixed an issue that caused a handled exception to appear when refreshing a control before its handles were fully initialized.
 
 ## Version 0.7.0
 
