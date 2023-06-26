@@ -761,34 +761,28 @@ namespace Mac_EFI_Toolkit
 
         private void SetTipHandlers()
         {
-            cmdOpenBin.MouseEnter += HandleMouseEnterTip;
-            cmdOpenBin.MouseLeave += HandleMouseLeaveTip;
-            cmdReset.MouseEnter += HandleMouseEnterTip;
-            cmdReset.MouseLeave += HandleMouseLeaveTip;
-            cmdEdit.MouseEnter += HandleMouseEnterTip;
-            cmdEdit.MouseLeave += HandleMouseLeaveTip;
-            cmdNavigate.MouseEnter += HandleMouseEnterTip;
-            cmdNavigate.MouseLeave += HandleMouseLeaveTip;
-            cmdReload.MouseEnter += HandleMouseEnterTip;
-            cmdReload.MouseLeave += HandleMouseLeaveTip;
-            cmdEveryMacSearch.MouseEnter += HandleMouseEnterTip;
-            cmdEveryMacSearch.MouseLeave += HandleMouseLeaveTip;
-            cmdFixFsysCrc.MouseEnter += HandleMouseEnterTip;
-            cmdFixFsysCrc.MouseLeave += HandleMouseLeaveTip;
-            cmdExportFsysBlock.MouseEnter += HandleMouseEnterTip;
-            cmdExportFsysBlock.MouseLeave += HandleMouseLeaveTip;
-            cmdAppleRomInfo.MouseEnter += HandleMouseEnterTip;
-            cmdAppleRomInfo.MouseLeave += HandleMouseLeaveTip;
-            lblEfiLock.MouseEnter += HandleMouseEnterTip;
-            lblEfiLock.MouseLeave += HandleMouseLeaveTip;
-            lblPrivateMemory.MouseEnter += HandleMouseEnterTip;
-            lblPrivateMemory.MouseLeave += HandleMouseLeaveTip;
-            lblVssStore.MouseEnter += HandleMouseEnterTip;
-            lblVssStore.MouseLeave += HandleMouseLeaveTip;
-            lblSvsStore.MouseEnter += HandleMouseEnterTip;
-            lblSvsStore.MouseLeave += HandleMouseLeaveTip;
-            lblNssStore.MouseEnter += HandleMouseEnterTip;
-            lblNssStore.MouseLeave += HandleMouseLeaveTip;
+            Button[] buttons =
+            {
+                cmdOpenBin, cmdReset, cmdEdit, cmdNavigate, cmdReload,
+                cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsysBlock, cmdAppleRomInfo
+            };
+
+            Label[] labels =
+            {
+                lblEfiLock, lblPrivateMemory, lblVssStore, lblSvsStore, lblNssStore
+            };
+
+            foreach (Button button in buttons)
+            {
+                button.MouseEnter += HandleMouseEnterTip;
+                button.MouseLeave += HandleMouseLeaveTip;
+            }
+
+            foreach (Label label in labels)
+            {
+                label.MouseEnter += HandleMouseEnterTip;
+                label.MouseLeave += HandleMouseLeaveTip;
+            }
         }
 
         private void HandleMouseEnterTip(object sender, EventArgs e)
