@@ -14,6 +14,9 @@
 
 ## Version 1.0.0
 
+#### Enhancements:
+- The EFI model code is now automatically converted and displayed as a model identifier in the main window and rom information window.
+
 #### Bugs:
 - Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.
 - Fixed an issue that caused a handled exception to appear when refreshing a control before its handles were fully initialized.

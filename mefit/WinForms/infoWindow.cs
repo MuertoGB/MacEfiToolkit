@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Runtime.InteropServices;
@@ -41,7 +42,7 @@ namespace Mac_EFI_Toolkit.WinForms
             cmdClose.Text = Chars.EXIT_CROSS;
 
             lblBiosId.Text = FWBase.ROMInfoData.BiosId ?? "N/A";
-            lblModel.Text = FWBase.ROMInfoData.Model ?? "N/A";
+            lblModel.Text = $"{FWBase.ROMInfoData.Model} ({EFIUtils.ConvertEfiModelCode(FWBase.ROMInfoData.Model)})" ?? "N/A";
             lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
             lblBuiltBy.Text = FWBase.ROMInfoData.BuiltBy ?? "N/A";
             lblDateStamp.Text = FWBase.ROMInfoData.DateStamp ?? "N/A";

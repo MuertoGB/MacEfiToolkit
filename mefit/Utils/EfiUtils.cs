@@ -105,5 +105,49 @@ namespace Mac_EFI_Toolkit.Utils
             return 0xFFFFFFFF;
         }
 
+        /// <summary>
+        /// Converts the EFI model code to a full model identifier.
+        /// </summary>
+        /// <param name="shortModel">The EFI model code.</param>
+        /// <returns>The full model identifier representation.</returns>
+        internal static string ConvertEfiModelCode(string shortModel)
+        {
+            string letters = new string(shortModel.Where(char.IsLetter).ToArray());
+            string numbers = new string(shortModel.Where(char.IsDigit).ToArray());
+
+            if (letters.Length > 3)
+            {
+                return shortModel;
+            }
+
+            if (numbers.Length > 3)
+            {
+                return shortModel;
+            }
+
+            if (shortModel.Contains("MBP"))
+                letters = "MacBookPro";
+            else if (shortModel.Contains("MBA"))
+                letters = "MacBookAir";
+            else if (shortModel.Contains("MB"))
+                letters = "MacBook";
+            else if (shortModel.Contains("IM"))
+                letters = "iMac";
+            else if (shortModel.Contains("IMP"))
+                letters = "iMacPro";
+            else if (shortModel.Contains("MM"))
+                letters = "MacMini";
+            else if (shortModel.Contains("MP"))
+                letters = "MacPro";
+
+            if (numbers.Length == 2)
+                numbers = $"{numbers[0]},{numbers[1]}";
+            else if (numbers.Length == 3)
+                numbers = $"{numbers.Substring(0, 2)},{numbers.Substring(2)}";
+
+            // Return the generated full model, otherwise what was passed in will be returned.
+            return $"{letters}{numbers}";
+        }
+
     }
 }

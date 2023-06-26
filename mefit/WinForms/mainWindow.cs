@@ -663,7 +663,7 @@ namespace Mac_EFI_Toolkit
 
             lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
             lblMeVersion.Text = FWBase.MeVersion ?? "N/A";
-            lblModel.Text = $"MODEL: {FWBase.EFISectionStore.Model ?? "N/A"}";
+            lblModel.Text = $"MODEL: {EFIUtils.ConvertEfiModelCode(FWBase.EFISectionStore.Model) ?? "N/A"}";
             lblBoardId.Text = FWBase.PDRSectionData.MacBoardId ?? "N/A";
             lblOrderNo.Text = FWBase.FsysSectionData.SON ?? "N/A";
 
