@@ -48,6 +48,7 @@ namespace Mac_EFI_Toolkit
         {
             InitializeComponent();
 
+            // Attach event handlers
             Load += mainWindow_Load;
             FormClosing += mainWindow_FormClosing;
             KeyDown += mainWindow_KeyDown;
@@ -56,16 +57,26 @@ namespace Mac_EFI_Toolkit
             Activated += mainWindow_Activated;
             Deactivate += mainWindow_Deactivate;
 
+            // Set font for lblEfiLock
             lblEfiLock.Font = Program.FONT_MDL2_REG_9;
 
+            // Set tip handlers for controls
             SetTipHandlers();
+
+            // Set mouse move event handlers
             SetMouseMoveEventHandlers();
+
+            // Set context menu renderers
             SetContextMenuRenderers();
+
+            // Set button properties (font and text)
             SetButtonProperties();
 
+            // Set up memory timer to retrieve private memory usage
             TimerCallback callback = new TimerCallback(GetPrivateMemoryUsage);
             Program.memoryTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
+
         #endregion
 
         #region Window Events
@@ -94,29 +105,35 @@ namespace Mac_EFI_Toolkit
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Check if ALT+F4 was passed
+            // Check if ALT+F4 was pressed to close the form
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
-                // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
+                // We need to cancel the original request to close first if confirmation dialogs are not disabled
                 if (!Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
                 {
                     e.Cancel = true;
                 }
 
+                // Show confirmation dialog
                 Program.ExitMet(this);
             }
         }
 
         private void mainWindow_DragEnter(object sender, DragEventArgs e)
         {
+            // Check if the dragged data is a file
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                // Check if only one file is being dragged
                 if (draggedFiles.Length == 1)
                 {
                     // Check if the dragged item is a file and not a folder
                     string draggedFile = draggedFiles[0];
                     FileAttributes attributes = File.GetAttributes(draggedFile);
+
+                    // If it's a file (not a folder) then allow the copy operation
                     if ((attributes & FileAttributes.Directory) == 0)
                     {
                         e.Effect = DragDropEffects.Copy;
@@ -125,13 +142,17 @@ namespace Mac_EFI_Toolkit
                 }
             }
 
+            // Disable the drop operation
             e.Effect = DragDropEffects.None;
         }
 
         private void mainWindow_DragDrop(object sender, DragEventArgs e)
         {
+            // Get the path of the dragged file
             string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             string draggedFilename = draggedFiles[0];
+
+            // Open the binary file
             OpenBinary(draggedFilename);
         }
 
@@ -821,6 +842,11 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void HandleMouseLeaveTip(object sender, EventArgs e)
+        {
+            lblMessage.Text = string.Empty;
+        }
+
         private string SetNvramStoreTip(NvramStore storeData, string storeType)
         {
             if (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
@@ -850,11 +876,6 @@ namespace Mac_EFI_Toolkit
             }
 
             lblMessage.Text = statusText;
-        }
-
-        private void HandleMouseLeaveTip(object sender, EventArgs e)
-        {
-            lblMessage.Text = string.Empty;
         }
 
         private void GetPrivateMemoryUsage(object state)
@@ -909,8 +930,10 @@ namespace Mac_EFI_Toolkit
 
         internal async void CheckForNewVersion()
         {
+            // Check for a new version using the specified URL
             VersionCheckResult result = await METVersion.CheckForNewVersion("https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml");
 
+            // If a new version is available and update the UI
             if (result == VersionCheckResult.NewVersionAvailable)
             {
                 lblVersion.ForeColor = Color.Tomato;
@@ -921,8 +944,10 @@ namespace Mac_EFI_Toolkit
 
         private void SetPrimaryInitialDirectory()
         {
+            // Get the initial directory from settings
             string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);
 
+            // If the path is not empty check if it exists and set it as the initial directory
             if (!string.IsNullOrEmpty(path))
             {
                 _strInitialDirectory = Directory.Exists(path) ? path : Program.appDirectory;
@@ -942,77 +967,97 @@ namespace Mac_EFI_Toolkit
         {
             FileInfo fileInfo = new FileInfo(FWBase.LoadedBinaryPath);
 
-            // The file is too small, ignore it.
+            // Check if the file size is smaller than the minimum allowed size
             if (fileInfo.Length < FWBase.MIN_IMAGE_SIZE) // 1048576 bytes
             {
+                // Show a warning message if the file is too small
                 METMessageBox.Show(this, "Warning", "The selected file is too small and will not be loaded.", METMessageType.Warning, UI.METMessageButtons.Okay);
                 return false;
             }
 
-            // The file is too large, ignore it.
+            // Check if the file size is larger than the maximum allowed size
             if (fileInfo.Length > FWBase.MAX_IMAGE_SIZE) // 33554432 bytes
             {
+                // Show a warning message if the file is too large
                 METMessageBox.Show(this, "Warning", "The selected file is too large and will not be loaded.", METMessageType.Warning, UI.METMessageButtons.Okay);
                 return false;
             }
 
+            // The file size is within the valid range
             return true;
         }
 
         private bool IsValidFlashHeader()
         {
+            // Check if descriptor enforcement is disabled in settings
             if (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce))
             {
                 return true;
             }
 
+            // Check if the loaded binary has a valid flash descriptor signature
             if (!FWBase.GetIsValidDescriptorSignature(FWBase.LoadedBinaryBytes))
             {
+                // Show a warning message if the binary does not have a valid flash descriptor
                 METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.", METMessageType.Warning, UI.METMessageButtons.Okay);
                 return false;
             }
 
+            // The flash header is valid
             return true;
         }
 
         private void OpenBinary(string filePath)
         {
+            // Disable window controls
             ToggleControlEnable(false);
 
+            // If a firmware is loaded, reset all data
             if (_firmwareLoaded)
             {
                 ResetAllData();
             }
 
+            // Set the binary path and load the bytes
             FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
             FWBase.LoadedBinaryPath = filePath;
 
+            // Check parameters
             if (IsValidMinMaxSize() && IsValidFlashHeader())
             {
+                // Show loading resource
                 pbxLoad.Image = Properties.Resources.loading;
 
+                // Set the current initial directory
                 _strInitialDirectory = Path.GetDirectoryName(filePath);
 
+                // Load the firmware base in a separate thread
                 Thread thr = new Thread(() => LoadFirmwareBase(filePath))
                 {
                     IsBackground = true
                 };
-
                 thr.Start();
 
                 return;
             }
 
+            // Reset all data and set firmware loaded to false
             ResetAllData();
             _firmwareLoaded = false;
         }
 
         private void LoadFirmwareBase(string filePath)
         {
+            // Load firmware base data from loaded binary bytes
             FWBase.LoadFirmwareBaseData(FWBase.LoadedBinaryBytes, filePath);
+
+            // Update controls on the main UI thread using Invoke
             Invoke((MethodInvoker)UpdateControls);
+
+            // Set firmware loaded flag to true
             _firmwareLoaded = true;
         }
+
 
         private void ResetAllData()
         {
