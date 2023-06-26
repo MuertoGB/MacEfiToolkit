@@ -87,7 +87,7 @@ namespace Mac_EFI_Toolkit.WinForms
             using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
                 fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty)
-                    ? Program.appDirectory
+                    ? METPath.CurrentDirectory
                     : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
                 fbd.Description = "Select a folder";
                 fbd.ShowNewFolderButton = false;
@@ -121,7 +121,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
-            DialogResult result = METMessageBox.Show(this, "Settings", "This will revert all settings to default, are you sure you want to set default settings?", METMessageType.Warning, UI.METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(this, "Settings", "This will revert all settings to default, are you sure you want to set default settings?", METMessageType.Warning, METMessageButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
@@ -133,7 +133,7 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableTips, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, false);
-            Settings.SettingsSetString(SettingsStringType.InitialDirectory, Program.appDirectory);
+            Settings.SettingsSetString(SettingsStringType.InitialDirectory, METPath.CurrentDirectory);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
             Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
 

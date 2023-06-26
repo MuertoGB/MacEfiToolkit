@@ -5,53 +5,9 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Utils;
-using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Common
 {
-
-    #region Struct
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct FptHeader
-    {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal char[] Signature;
-        internal uint NumEntries;
-        internal byte HeaderVersion;
-        internal byte EntryVersion;
-        internal byte HeaderLength;
-        internal byte Checksum;
-        internal ushort FlashCycleLife;
-        internal ushort FlashCycleLimit;
-        internal uint UmaSize;
-        internal uint Flags;
-        internal ushort FitMajor;
-        internal ushort FitMinor;
-        internal ushort FitHotfix;
-        internal ushort FitBuild;
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct Mn2PartialHeader
-    {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal char[] Signature;
-        internal uint NumEntries;
-        internal ushort EngineMajor;
-        internal ushort EngineMinor;
-        internal ushort EngineHotfix;
-        internal ushort EngineBuild;
-    }
-    #endregion
-
-    #region Enum
-    internal enum HeaderType
-    {
-        FlashImageTool,
-        ManagementEngine
-    }
-    #endregion
-
     class MEParser
     {
         internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)

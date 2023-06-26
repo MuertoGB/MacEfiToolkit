@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// METVersion.cs - Provides a simple version check
+// AppVersion.cs - Provides a simple version check
 // Released under the GNU GLP v3.0
 
 using System;
@@ -14,19 +14,8 @@ using System.Xml;
 namespace Mac_EFI_Toolkit
 {
 
-    #region Enum
-    public enum VersionCheckResult
+    class AppVersion
     {
-        UpToDate,
-        NewVersionAvailable,
-        Error
-    }
-    #endregion
-
-    class METVersion
-    {
-        internal static string strLatestUrl = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
-
         internal static async Task<VersionCheckResult> CheckForNewVersion(string versionUrl)
         {
             try

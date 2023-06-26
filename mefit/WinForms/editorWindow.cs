@@ -129,30 +129,30 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(Program.fsysDirectory))
+            if (!Directory.Exists(METPath.FsysDirectory))
             {
-                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", METMessageType.Information, UI.METMessageButtons.Okay);
+                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
                 return;
             }
 
-            Process.Start("explorer.exe", Program.buildsDirectory);
+            Process.Start("explorer.exe", METPath.BuildsDirectory);
         }
 
         private void cmdFsysPath_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(Program.fsysDirectory))
+            if (!Directory.Exists(METPath.FsysDirectory))
             {
-                Status status = FileUtils.CreateDirectory(Program.fsysDirectory);
+                Status status = FileUtils.CreateDirectory(METPath.FsysDirectory);
 
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", METMessageType.Error, UI.METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", METMessageType.Error, METMessageButtons.Okay);
                 }
             }
 
             using (OpenFileDialog dialog = new OpenFileDialog
             {
-                InitialDirectory = Program.fsysDirectory,
+                InitialDirectory = METPath.FsysDirectory,
                 Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
             })
             {
@@ -227,13 +227,13 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private bool SaveBuild()
         {
-            if (!Directory.Exists(Program.buildsDirectory))
+            if (!Directory.Exists(METPath.BuildsDirectory))
             {
-                Status status = FileUtils.CreateDirectory(Program.buildsDirectory);
+                Status status = FileUtils.CreateDirectory(METPath.BuildsDirectory);
 
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", METMessageType.Error, UI.METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", METMessageType.Error, METMessageButtons.Okay);
                 }
             }
 
@@ -241,7 +241,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 ? $"{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"
                 : $"outimage_{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin";
 
-            _fullBuildPath = Path.Combine(Program.buildsDirectory, filename);
+            _fullBuildPath = Path.Combine(METPath.BuildsDirectory, filename);
 
             if (!FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary))
             {
@@ -310,7 +310,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Title = "Save Log File...",
                 FileName = $"metlog_{DateTime.Now:yyMMdd_HHmmss}.txt",
                 OverwritePrompt = true,
-                InitialDirectory = Program.appDirectory
+                InitialDirectory = METPath.CurrentDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)

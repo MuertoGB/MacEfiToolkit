@@ -12,19 +12,6 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
 {
-
-    #region Enums
-    public enum METMessageType
-    {
-        Error, Warning, Information, Question
-    }
-
-    public enum METMessageButtons
-    {
-        Okay, YesNo
-    }
-    #endregion
-
     public partial class METMessageBox : Form
     {
 

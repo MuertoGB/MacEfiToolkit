@@ -8,7 +8,6 @@ using Mac_EFI_Toolkit.Common;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
 
 #region Enum
 enum Status

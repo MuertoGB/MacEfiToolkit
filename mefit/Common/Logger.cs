@@ -12,27 +12,10 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-
-    #region Enum
-    internal enum LogType
-    {
-        Application,
-        Database
-    }
-
-    public enum RtbLogPrefix
-    {
-        Complete,
-        Info,
-        Warning,
-        Error
-    }
-    #endregion
-
     class Logger
     {
-        internal static string strLogFilePath = Path.Combine(Program.appDirectory, "mefit.log");
-        internal static string strDbReportPath = Path.Combine(Program.appDirectory, "dbreport.log");
+        internal static string strLogFilePath = Path.Combine(METPath.CurrentDirectory, "mefit.log");
+        internal static string strDbReportPath = Path.Combine(METPath.CurrentDirectory, "dbreport.log");
 
         internal static void WriteToLogFile(string logMessage, LogType logType)
         {

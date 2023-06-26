@@ -22,12 +22,6 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}-230626.0415";
-        internal static readonly string appChannel = "Release";
-        internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
-        internal static string buildsDirectory = Path.Combine(appDirectory, "builds");
-        internal static string appName = Assembly.GetExecutingAssembly().Location;
         internal static string draggedFile = string.Empty;
         internal static bool openLastBuild = false;
         internal static string lastBuildPath = string.Empty;
@@ -86,7 +80,7 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
 
             // Settings
-            if (!File.Exists(Settings.strSettingsFilePath)) Settings.SettingsCreateFile();
+            if (!File.Exists(METPath.SettingsFile)) Settings.SettingsCreateFile();
 
             // Register application exit event.
             Application.ApplicationExit += OnExiting;
@@ -243,7 +237,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", METMessageType.Question, UI.METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", METMessageType.Question, METMessageButtons.YesNo);
             if (result == DialogResult.Yes)
             {
                 Application.Restart();
@@ -260,7 +254,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", METMessageType.Question, UI.METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", METMessageType.Question, METMessageButtons.YesNo);
             if (result == DialogResult.Yes)
             {
                 Application.Exit();
