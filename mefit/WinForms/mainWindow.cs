@@ -27,7 +27,6 @@ namespace Mac_EFI_Toolkit
         #region Private Members
         private string _strInitialDirectory = Program.appDirectory;
         private static readonly object _lockObject = new object();
-        private static System.Threading.Timer _statsTimer;
         private static bool _firmwareLoaded = false;
         #endregion
 
@@ -64,18 +63,21 @@ namespace Mac_EFI_Toolkit
             SetContextMenuRenderers();
             SetButtonProperties();
 
-            TimerCallback callback = new TimerCallback(UpdateMemoryStats);
-            _statsTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+            TimerCallback callback = new TimerCallback(GetPrivateMemoryUsage);
+            Program.memoryTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
         #endregion
 
         #region Window Events
         private void mainWindow_Load(object sender, EventArgs e)
         {
+            // Set version text
             lblVersion.Text = Application.ProductVersion;
 
+            // Get and set the primary file dialog initial directory
             SetPrimaryInitialDirectory();
 
+            // Open dragged file is the arg path is ! null or ! empty
             if (!string.IsNullOrEmpty(Program.draggedFile))
             {
                 OpenBinary(Program.draggedFile);
@@ -83,6 +85,7 @@ namespace Mac_EFI_Toolkit
                 Program.draggedFile = string.Empty;
             }
 
+            // Check for a new application version
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck))
             {
                 CheckForNewVersion();
@@ -91,6 +94,7 @@ namespace Mac_EFI_Toolkit
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Check if ALT+F4 was passed
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
                 // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
@@ -100,7 +104,6 @@ namespace Mac_EFI_Toolkit
                 }
 
                 Program.ExitMet(this);
-                _statsTimer.Dispose();
             }
         }
 
@@ -398,22 +401,27 @@ namespace Mac_EFI_Toolkit
 
         private void cmdExportFsysBlock_Click(object sender, EventArgs e)
         {
+            // Fsys store bytes were null
             if (FWBase.FsysSectionData.FsysBytes == null)
             {
                 METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", METMessageType.Error, UI.METMessageButtons.Okay);
                 return;
             }
 
+            // Check the Fsys stores directory exists
             if (!Directory.Exists(Program.fsysDirectory))
             {
+                // Create the Fsys stores directory
                 Status status = FileUtils.CreateDirectory(Program.fsysDirectory);
 
+                // Directory creation failed
                 if (status == Status.FAILED)
                 {
                     METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", METMessageType.Error, UI.METMessageButtons.Okay);
                 }
             }
 
+            // Set SaveFileDialog params
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
@@ -423,26 +431,28 @@ namespace Mac_EFI_Toolkit
                 InitialDirectory = Program.fsysDirectory
             })
             {
-                if (dialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    return;
+                    // Save the Fsys stores bytes to disk
+                    File.WriteAllBytes(dialog.FileName, FWBase.FsysSectionData.FsysBytes);
                 }
-
-                File.WriteAllBytes(dialog.FileName, FWBase.FsysSectionData.FsysBytes);
             }
         }
 
         private void cmdAppleRomInfo_Click(object sender, EventArgs e)
         {
-
+            // Check the Rom Information section exists
             if (FWBase.ROMInfoData.SectionExists == false)
             {
+                // ROM Information section does not exist
                 METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.", METMessageType.Error, UI.METMessageButtons.Okay);
                 return;
             }
 
+            // Set window half opacity
             SetHalfOpacity();
 
+            // Open the Rom Information Window
             using (Form formWindow = new infoWindow())
             {
                 formWindow.FormClosed += ChildWindowClosed;
@@ -452,31 +462,40 @@ namespace Mac_EFI_Toolkit
 
         private void cmdReload_Click(object sender, EventArgs e)
         {
+            // Check the loaded binary exists
             if (!File.Exists(FWBase.LoadedBinaryPath))
             {
+                // Loaded binary not exist
                 METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.", METMessageType.Error, UI.METMessageButtons.Okay);
                 return;
             }
 
+            // Load bytes from loaded binary file
             byte[] fileBytes = File.ReadAllBytes(FWBase.LoadedBinaryPath);
 
-            if (!BinaryUtils.ByteArraysMatch(fileBytes, FWBase.LoadedBinaryBytes))
+            // Check if the binaries match in size and data
+            if (BinaryUtils.ByteArraysMatch(fileBytes, FWBase.LoadedBinaryBytes))
             {
-                OpenBinary(FWBase.LoadedBinaryPath);
+                // Loaded binaries match
+                METMessageBox.Show(this, "MET", "File on disk matches file in memory, data was not refreshed.", METMessageType.Information, UI.METMessageButtons.Okay);
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "File on disk matches file in memory. Data was not refreshed.", METMessageType.Information, UI.METMessageButtons.Okay);
+            // File data has changed
+            OpenBinary(FWBase.LoadedBinaryPath);
         }
 
         private void cmdNavigate_Click(object sender, EventArgs e)
         {
-            if (FWBase.LoadedBinaryPath == null)
+            // Check the loaded binary path is not null or empty
+            if (string.IsNullOrEmpty(FWBase.LoadedBinaryPath))
             {
+                // Binary path is null or empty
                 METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.", METMessageType.Error, UI.METMessageButtons.Okay);
                 return;
             }
 
+            // Navigate and highlight the file in explorer
             FileUtils.HighlightPathInExplorer(FWBase.LoadedBinaryPath);
         }
         #endregion
@@ -843,16 +862,17 @@ namespace Mac_EFI_Toolkit
             lblMessage.Text = string.Empty;
         }
 
-        private void UpdateMemoryStats(object state)
+        private void GetPrivateMemoryUsage(object state)
         {
             lock (_lockObject)
             {
-                string privateMemoryString = Helper.GetBytesReadableSize(Program.GetPrivateMemorySize());
-
-                lblPrivateMemory.Invoke((Action)(() =>
+                using (Process currentProcess = Process.GetCurrentProcess())
                 {
-                    lblPrivateMemory.Text = $"{privateMemoryString}";
-                }));
+                    lblPrivateMemory.Invoke((Action)(() =>
+                    {
+                        lblPrivateMemory.Text = $"{Helper.GetBytesReadableSize(currentProcess.PrivateMemorySize64)}";
+                    }));
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-100">V1.0.0</a> •
   <a href="#version-070">V0.7.0</a> •
   <a href="#version-060">V0.6.0</a> •
   <a href="#version-052">V0.5.2</a> •
@@ -10,6 +11,11 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.0.0
+
+#### Bugs:
+- Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.
 
 ## Version 0.7.0
 

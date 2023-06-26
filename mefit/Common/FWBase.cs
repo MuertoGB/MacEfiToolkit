@@ -33,7 +33,6 @@ internal struct FsysStore
     internal int HWCOffset { get; set; }
     internal string SON { get; set; }
     internal string CrcString { get; set; }
-    internal int CrcOffset { get; set; }
     internal string CrcCalcString { get; set; }
     internal uint CRC32CalcInt { get; set; }
 }
@@ -341,6 +340,8 @@ namespace Mac_EFI_Toolkit.Common
 
             // Parse the serial number
             int serialPos = BinaryUtils.GetOffset(sourceBytes, SNP_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
+            if (serialPos == -1) serialPos = BinaryUtils.GetOffset(sourceBytes, SSN_UPPER_SIG, fsysPos, FSYS_RGN_SIZE);
+            if (serialPos == -1) serialPos = BinaryUtils.GetOffset(sourceBytes, SSN_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
             string serialString = ParseFsysSerial(sourceBytes, fsysPos, serialPos);
             if (serialString == null) serialPos = -1;
 
@@ -363,7 +364,6 @@ namespace Mac_EFI_Toolkit.Common
                 HWCOffset = hwcPos != -1 ? hwcPos + HWC_NUDGE_POS : -1,
                 SON = sonString,
                 CrcString = crcString,
-                CrcOffset = fsysPos - CRC32_LENGTH,
                 CrcCalcString = crcCalcString,
                 CRC32CalcInt = uiCrcCalc
             };
@@ -371,9 +371,6 @@ namespace Mac_EFI_Toolkit.Common
 
         private static string ParseFsysSerial(byte[] sourceBytes, int fsysPos, int serialPos)
         {
-            if (serialPos == -1) serialPos = BinaryUtils.GetOffset(sourceBytes, SSN_UPPER_SIG, fsysPos, FSYS_RGN_SIZE);
-            if (serialPos == -1) serialPos = BinaryUtils.GetOffset(sourceBytes, SSN_LOWER_SIG, fsysPos, FSYS_RGN_SIZE);
-
             if (serialPos == -1)
             {
                 return null;
@@ -456,7 +453,6 @@ namespace Mac_EFI_Toolkit.Common
                 HWCOffset = -1,
                 SON = null,
                 CrcString = null,
-                CrcOffset = -1,
                 CrcCalcString = null,
                 CRC32CalcInt = 0xFFFFFFF
             };

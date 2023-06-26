@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit
 {
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}-230625.2000";
+        internal static readonly string appBuild = $"{Application.ProductVersion}-230626.0200";
         internal static readonly string appChannel = "Release";
         internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
@@ -32,6 +32,7 @@ namespace Mac_EFI_Toolkit
         internal static bool openLastBuild = false;
         internal static string lastBuildPath = string.Empty;
         internal static mainWindow mWindow;
+        internal static System.Threading.Timer memoryTimer;
 
         #region Private Members
         private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
@@ -103,12 +104,6 @@ namespace Mac_EFI_Toolkit
             Application.Run(mWindow);
         }
 
-        private static void OnExiting(object sender, EventArgs e)
-        {
-            // Unhook the keyboard hook before exiting the application.
-            UnhookKeyboard();
-        }
-
         private static string GetDraggedFilePath(string[] args)
         {
             if (args.Length > 0 && File.Exists(args[0]))
@@ -118,9 +113,33 @@ namespace Mac_EFI_Toolkit
 
             return string.Empty;
         }
+
         #endregion
 
-        #region Hooks
+        #region OnExit
+        private static void OnExiting(object sender, EventArgs e)
+        {
+            HandleExitCleanup();
+        }
+
+        private static void HandleExitCleanup()
+        {
+            // Dispose fonts
+            FONT_MDL2_REG_9.Dispose();
+            FONT_MDL2_REG_10.Dispose();
+            FONT_MDL2_REG_12.Dispose();
+            FONT_MDL2_REG_14.Dispose();
+            FONT_MDL2_REG_20.Dispose();
+
+            // Dispose memory stats timer
+            memoryTimer.Dispose();
+
+            // Unhook the low level keyboard hook
+            UnhookKeyboard();
+        }
+        #endregion
+
+        #region Keyboard Hook
         // Register the keyboard hook.
         internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc kbProc)
         {
@@ -166,7 +185,6 @@ namespace Mac_EFI_Toolkit
         {
             IntPtr pFileView = Marshal.AllocCoTaskMem(fontData.Length);
             Marshal.Copy(fontData, 0, pFileView, fontData.Length);
-
             try
             {
                 uint pNumFonts = 0;
@@ -204,10 +222,11 @@ namespace Mac_EFI_Toolkit
 
             if (result == DialogResult.Yes)
             {
-                UnhookKeyboard(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit().
+                HandleExitCleanup(); // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
                 Environment.Exit(-1);
             }
 
+            // Fix for mainWindow opacity getting stuck at 0.5
             if (mWindow.Opacity != 1.0)
             {
                 mWindow.Opacity = 1.0;
@@ -215,7 +234,7 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Restart
+        #region Restart MET
         internal static void RestartMet(Form owner)
         {
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
@@ -232,7 +251,7 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Exit
+        #region Exit MET
         internal static void ExitMet(Form owner)
         {
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
@@ -245,16 +264,6 @@ namespace Mac_EFI_Toolkit
             if (result == DialogResult.Yes)
             {
                 Application.Exit();
-            }
-        }
-        #endregion
-
-        #region Process
-        internal static long GetPrivateMemorySize()
-        {
-            using (Process currentProcess = Process.GetCurrentProcess())
-            {
-                return currentProcess.PrivateMemorySize64;
             }
         }
         #endregion
