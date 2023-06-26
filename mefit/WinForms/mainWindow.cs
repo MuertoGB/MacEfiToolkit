@@ -741,22 +741,23 @@ namespace Mac_EFI_Toolkit
 
         private void SetButtonProperties()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Chars.EXIT_CROSS;
-            cmdMenu.Font = Program.FONT_MDL2_REG_14;
-            cmdMenu.Text = Chars.SHOW;
-            cmdNavigate.Font = Program.FONT_MDL2_REG_10;
-            cmdNavigate.Text = Chars.FILE_EXPLORER;
-            cmdReload.Font = Program.FONT_MDL2_REG_10;
-            cmdReload.Text = Chars.REFRESH;
-            cmdEveryMacSearch.Font = Program.FONT_MDL2_REG_9;
-            cmdEveryMacSearch.Text = Chars.WEB_SEARCH;
-            cmdExportFsysBlock.Font = Program.FONT_MDL2_REG_9;
-            cmdExportFsysBlock.Text = Chars.SAVE;
-            cmdFixFsysCrc.Font = Program.FONT_MDL2_REG_9;
-            cmdFixFsysCrc.Text = Chars.REPAIR;
-            cmdAppleRomInfo.Font = Program.FONT_MDL2_REG_9;
-            cmdAppleRomInfo.Text = Chars.FORWARD;
+            var buttons = new[]
+            {
+                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS },
+                new { Button = cmdMenu, Font = Program.FONT_MDL2_REG_14, Text = Chars.SHOW },
+                new { Button = cmdNavigate, Font = Program.FONT_MDL2_REG_10, Text = Chars.FILE_EXPLORER },
+                new { Button = cmdReload, Font = Program.FONT_MDL2_REG_10, Text = Chars.REFRESH },
+                new { Button = cmdEveryMacSearch, Font = Program.FONT_MDL2_REG_9, Text = Chars.WEB_SEARCH },
+                new { Button = cmdExportFsysBlock, Font = Program.FONT_MDL2_REG_9, Text = Chars.SAVE },
+                new { Button = cmdFixFsysCrc, Font = Program.FONT_MDL2_REG_9, Text = Chars.REPAIR },
+                new { Button = cmdAppleRomInfo, Font = Program.FONT_MDL2_REG_9, Text = Chars.FORWARD }
+            };
+
+            foreach (var buttonData in buttons)
+            {
+                buttonData.Button.Font = buttonData.Font;
+                buttonData.Button.Text = buttonData.Text;
+            }
         }
 
         private void SetTipHandlers()
