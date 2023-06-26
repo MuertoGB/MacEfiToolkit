@@ -71,12 +71,7 @@ namespace Mac_EFI_Toolkit
 
             // Set button properties (font and text)
             SetButtonProperties();
-
-            // Set up memory timer to retrieve private memory usage
-            TimerCallback callback = new TimerCallback(GetPrivateMemoryUsage);
-            Program.memoryTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
-
         #endregion
 
         #region Window Events
@@ -101,6 +96,10 @@ namespace Mac_EFI_Toolkit
             {
                 CheckForNewVersion();
             }
+
+            // Set up memory timer to retrieve private memory usage
+            TimerCallback callback = new TimerCallback(GetPrivateMemoryUsage);
+            Program.memoryTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
