@@ -908,8 +908,6 @@ namespace Mac_EFI_Toolkit
                     lblMessage.Text = "Navigate to file (ALT + N)";
                 else if (sender == cmdReload)
                     lblMessage.Text = "Reload file from disk (ALT + R)";
-                else if (sender == cmdReload)
-                    lblMessage.Text = "Reload file from disk (ALT + R)";
                 else if (sender == cmdExportFsysBlock)
                     lblMessage.Text = "Export Fsys Store (ALT + E)";
                 else if (sender == cmdFixFsysCrc)
