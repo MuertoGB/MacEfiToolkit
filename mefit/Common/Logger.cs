@@ -12,6 +12,23 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
+
+    #region Enums
+    internal enum LogType
+    {
+        Application,
+        Database
+    }
+
+    public enum RtbLogPrefix
+    {
+        Complete,
+        Info,
+        Warning,
+        Error
+    }
+    #endregion
+
     class Logger
     {
         internal static string strLogFilePath = Path.Combine(METPath.CurrentDirectory, "mefit.log");

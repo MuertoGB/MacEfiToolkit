@@ -24,5 +24,8 @@ namespace Mac_EFI_Toolkit.UI
         internal static readonly string REPAIR = "\xE90F";
         internal static readonly string SAVE = "\xE74E";
         internal static readonly string FORWARD = "\xE72A";
+
+        // Non line-breaking space
+        internal static readonly string NBSPACE = "\u00A0";
     }
 }

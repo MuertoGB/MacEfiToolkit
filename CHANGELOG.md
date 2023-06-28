@@ -15,9 +15,11 @@
 ## Version 1.0.0
 
 #### New:
+- Added option to export the Intel ME Region to the main window (ALT + M).
 - Added copy menu to the main window which enables quick copying of text fields.
 
 #### Enhancements:
+- UI improvements
 - The EFI model code is now automatically converted and displayed as a model identifier in the main window and rom information window.
 
 #### Bugs:

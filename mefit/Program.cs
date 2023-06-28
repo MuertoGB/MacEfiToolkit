@@ -20,6 +20,30 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
+
+    #region Struct
+    internal struct METPath
+    {
+        internal static string CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        internal static string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
+        internal static string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
+        internal static string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
+        internal static string SettingsFile = Path.Combine(METPath.CurrentDirectory, "Settings.ini");
+    }
+
+    internal struct METVersion
+    {
+        internal static readonly string Build = "230628.2100";
+        internal static readonly string Channel = "Release";
+    }
+
+    internal struct METUrl
+    {
+        internal static string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal static string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+    }
+    #endregion
+
     static class Program
     {
         internal static string draggedFile = string.Empty;

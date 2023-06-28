@@ -14,9 +14,18 @@ using System.Xml;
 namespace Mac_EFI_Toolkit
 {
 
+    #region Enums
+    public enum VersionResult
+    {
+        UpToDate,
+        NewVersionAvailable,
+        Error
+    }
+    #endregion
+
     class AppVersion
     {
-        internal static async Task<VersionCheckResult> CheckForNewVersion(string versionUrl)
+        internal static async Task<VersionResult> CheckForNewVersion(string versionUrl)
         {
             try
             {
@@ -31,18 +40,18 @@ namespace Mac_EFI_Toolkit
 
                         XmlNode node = doc.SelectSingleNode("data/MET/VersionString");
                         if (node == null)
-                            return VersionCheckResult.Error;
+                            return VersionResult.Error;
 
                         Version remoteVersion = new Version(node.InnerText);
                         Version localVersion = new Version(Application.ProductVersion);
 
-                        return remoteVersion > localVersion ? VersionCheckResult.NewVersionAvailable : VersionCheckResult.UpToDate;
+                        return remoteVersion > localVersion ? VersionResult.NewVersionAvailable : VersionResult.UpToDate;
                     }
                 }
             }
             catch
             {
-                return VersionCheckResult.Error;
+                return VersionResult.Error;
             }
         }
     }

@@ -9,10 +9,109 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Mac_EFI_Toolkit.Common
 {
+
+    #region Structs
+    internal struct FileInfoStore
+    {
+        internal string FileNameWithExt { get; set; }
+        internal string FileNameNoExt { get; set; }
+        internal string CreationTime { get; set; }
+        internal string LastWriteTime { get; set; }
+        internal int FileLength { get; set; }
+        internal uint CRC32 { get; set; }
+    }
+
+    internal struct FsysStore
+    {
+        internal byte[] FsysBytes { get; set; }
+        internal int FsysOffset { get; set; }
+        internal string Serial { get; set; }
+        internal int SerialOffset { get; set; }
+        internal string HWC { get; set; }
+        internal int HWCOffset { get; set; }
+        internal string SON { get; set; }
+        internal string CrcString { get; set; }
+        internal string CrcCalcString { get; set; }
+        internal uint CRC32CalcInt { get; set; }
+    }
+
+    internal struct NvramStore
+    {
+        internal NvramStoreType StoreType { get; set; }
+        internal int PrimaryStoreOffset { get; set; }
+        internal int PrimaryStoreLength { get; set; }
+        internal byte[] PrimaryStoreBytes { get; set; }
+        internal bool IsPrimaryStoreEmpty { get; set; }
+        internal int BackupStoreOffset { get; set; }
+        internal int BackupStoreLength { get; set; }
+        internal byte[] BackupStoreBytes { get; set; }
+        internal bool IsBackupStoreEmpty { get; set; }
+    }
+
+    internal struct AppleRomInformationSection
+    {
+        internal bool SectionExists { get; set; }
+        internal byte[] SectionBytes { get; set; }
+        internal int SectionOffset { get; set; }
+        internal string BiosId { get; set; }
+        internal string Model { get; set; }
+        internal string EfiVersion { get; set; }
+        internal string BuiltBy { get; set; }
+        internal string DateStamp { get; set; }
+        internal string Revision { get; set; }
+        internal string RomVersion { get; set; }
+        internal string BuildcaveId { get; set; }
+        internal string BuildType { get; set; }
+        internal string Compiler { get; set; }
+    }
+
+    internal struct PdrSection
+    {
+        internal string MacBoardId { get; set; }
+    }
+
+    internal struct EfiSection
+    {
+        internal string Model { get; set; }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct NvramStoreHeader
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        internal char[] Signature;
+        internal ushort SizeOfData;
+    }
+    #endregion
+
+    #region FWBase
+    internal enum ApfsCapableFirmware
+    {
+        Unknown,
+        Yes,
+        No
+    }
+
+    internal enum EfiLockStatus
+    {
+        Locked,
+        Unlocked,
+        Unknown
+    }
+
+    internal enum NvramStoreType
+    {
+        VSS,
+        SVS,
+        NSS
+    }
+    #endregion
+
     class FWBase
     {
         internal static string LoadedBinaryPath = null;
@@ -104,26 +203,6 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
         #endregion 
-
-        #region Flash Descriptor
-        internal static bool GetIsValidDescriptorSignature(byte[] sourceBytes)
-        {
-            byte[] headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, 0, 0x14);
-            FlashDescriptorHeader header = Helper.DeserializeHeader<FlashDescriptorHeader>(headerBytes);
-
-            if (header.Signature.SequenceEqual(FLASH_DESC_SIGNATURE))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        internal static readonly byte[] FLASH_DESC_SIGNATURE =
-        {
-            0x5A, 0xA5, 0xF0, 0x0F
-        };
-        #endregion
 
         #region Platform Data Region
         internal static PdrSection GetPdrData(byte[] sourceBytes)

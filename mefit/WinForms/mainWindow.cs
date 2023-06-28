@@ -223,7 +223,7 @@ namespace Mac_EFI_Toolkit
                 }
                 else if (e.KeyCode == Keys.E)
                 {
-                    cmdExportFsysBlock.PerformClick();
+                    cmdExportFsys.PerformClick();
                 }
                 else if (e.KeyCode == Keys.F)
                 {
@@ -232,6 +232,10 @@ namespace Mac_EFI_Toolkit
                 else if (e.KeyCode == Keys.I)
                 {
                     cmdAppleRomInfo.PerformClick();
+                }
+                else if (e.KeyCode == Keys.M)
+                {
+                    cmdExportMe.PerformClick();
                 }
             }
         }
@@ -357,6 +361,45 @@ namespace Mac_EFI_Toolkit
             Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", FWBase.FsysStoreData.Serial));
         }
 
+        private void cmdReload_Click(object sender, EventArgs e)
+        {
+            // Check the loaded binary exists
+            if (!File.Exists(FWBase.LoadedBinaryPath))
+            {
+                // Loaded binary not exist
+                METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.", METMessageType.Error, METMessageButtons.Okay);
+                return;
+            }
+
+            // Load bytes from loaded binary file
+            byte[] fileBytes = File.ReadAllBytes(FWBase.LoadedBinaryPath);
+
+            // Check if the binaries match in size and data
+            if (BinaryUtils.ByteArraysMatch(fileBytes, FWBase.LoadedBinaryBytes))
+            {
+                // Loaded binaries match
+                METMessageBox.Show(this, "MET", "File on disk matches file in memory, data was not refreshed.", METMessageType.Information, METMessageButtons.Okay);
+                return;
+            }
+
+            // File data has changed
+            OpenBinary(FWBase.LoadedBinaryPath);
+        }
+
+        private void cmdNavigate_Click(object sender, EventArgs e)
+        {
+            // Check the loaded binary path is not null or empty
+            if (string.IsNullOrEmpty(FWBase.LoadedBinaryPath))
+            {
+                // Binary path is null or empty
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                return;
+            }
+
+            // Navigate and highlight the file in explorer
+            FileUtils.HighlightPathInExplorer(FWBase.LoadedBinaryPath);
+        }
+
         private void cmdFixFsysCrc_Click(object sender, EventArgs e)
         {
             // Fsys store was not found by the firmware parser
@@ -429,7 +472,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void cmdExportFsysBlock_Click(object sender, EventArgs e)
+        private void cmdExportFsys_Click(object sender, EventArgs e)
         {
             // Fsys store bytes were null
             if (FWBase.FsysStoreData.FsysBytes == null)
@@ -461,11 +504,21 @@ namespace Mac_EFI_Toolkit
                 InitialDirectory = METPath.FsysDirectory
             })
             {
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
-                    // Save the Fsys stores bytes to disk
-                    File.WriteAllBytes(dialog.FileName, FWBase.FsysStoreData.FsysBytes);
+                    return;
                 }
+
+                string fsysPath = dialog.FileName;
+
+                // Save the Fsys stores bytes to disk
+                if (FileUtils.WriteAllBytesEx(fsysPath, FWBase.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
+                {
+                    METMessageBox.Show(this, "MET", $"Fsys export successful:\r\n'{fsysPath.Replace(" ", Chars.NBSPACE)}'", METMessageType.Information, METMessageButtons.Okay);
+                    return;
+                }
+
+                METMessageBox.Show(this, "Error", "Fsys export failed.", METMessageType.Error, METMessageButtons.Okay);
             }
         }
 
@@ -490,43 +543,54 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void cmdReload_Click(object sender, EventArgs e)
+        private void cmdExportMe_Click(object sender, EventArgs e)
         {
-            // Check the loaded binary exists
-            if (!File.Exists(FWBase.LoadedBinaryPath))
+            if (Descriptor.MeBase == 0 || Descriptor.MeLimit == 0)
             {
-                // Loaded binary not exist
-                METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "Management Engine base or limit not found.", METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
-            // Load bytes from loaded binary file
-            byte[] fileBytes = File.ReadAllBytes(FWBase.LoadedBinaryPath);
-
-            // Check if the binaries match in size and data
-            if (BinaryUtils.ByteArraysMatch(fileBytes, FWBase.LoadedBinaryBytes))
+            // Check the Fsys stores directory exists
+            if (!Directory.Exists(METPath.MeDirectory))
             {
-                // Loaded binaries match
-                METMessageBox.Show(this, "MET", "File on disk matches file in memory, data was not refreshed.", METMessageType.Information, METMessageButtons.Okay);
-                return;
+                // Create the Fsys stores directory
+                Status status = FileUtils.CreateDirectory(METPath.MeDirectory);
+
+                // Directory creation failed
+                if (status == Status.FAILED)
+                {
+                    METMessageBox.Show(this, "Error", "Failed to create the ME region directory.", METMessageType.Error, METMessageButtons.Okay);
+                }
             }
 
-            // File data has changed
-            OpenBinary(FWBase.LoadedBinaryPath);
-        }
-
-        private void cmdNavigate_Click(object sender, EventArgs e)
-        {
-            // Check the loaded binary path is not null or empty
-            if (string.IsNullOrEmpty(FWBase.LoadedBinaryPath))
+            // Set SaveFileDialog params
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
-                // Binary path is null or empty
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
-                return;
-            }
+                Filter = "Binary Files (*.bin)|*.bin",
+                Title = "Export ME Region",
+                FileName = string.Concat("ME_RGN_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                OverwritePrompt = true,
+                InitialDirectory = METPath.MeDirectory
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
 
-            // Navigate and highlight the file in explorer
-            FileUtils.HighlightPathInExplorer(FWBase.LoadedBinaryPath);
+                string mePath = dialog.FileName;
+
+                byte[] meBytes = BinaryUtils.GetBytesAtOffset(FWBase.LoadedBinaryBytes, (int)Descriptor.MeBase, (int)Descriptor.MeSize);
+
+                if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
+                {
+                    METMessageBox.Show(this, "MET", $"ME export successful:\r\n'{mePath.Replace(" ", Chars.NBSPACE)}'", METMessageType.Information, METMessageButtons.Okay);
+                    return;
+                }
+
+                METMessageBox.Show(this, "Error", $"ME export failed.", METMessageType.Error, METMessageButtons.Okay);
+            }
         }
         #endregion
 
@@ -550,7 +614,18 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The Fsys directory has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "MET", "The Fsys folder has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+        }
+
+        private void openMeRegionDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.MeDirectory))
+            {
+                Process.Start("explorer.exe", METPath.MeDirectory);
+                return;
+            }
+
+            METMessageBox.Show(this, "MET", "The ME folder has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -802,9 +877,8 @@ namespace Mac_EFI_Toolkit
 
         private void ToggleControlEnable(bool enable)
         {
-            tlpMain.Enabled = enable;
-
-            Button[] buttons = { cmdReset, cmdCopy, cmdNavigate, cmdReload, cmdEdit, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsysBlock, cmdAppleRomInfo };
+            Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdNavigate, cmdReload,
+                cmdFixFsysCrc, cmdExportFsys , cmdAppleRomInfo, cmdExportMe};
             foreach (Button button in buttons)
             {
                 button.Enabled = enable;
@@ -819,11 +893,18 @@ namespace Mac_EFI_Toolkit
             else
             {
                 cmdFixFsysCrc.Enabled = false;
-                cmdExportFsysBlock.Enabled = false;
+                cmdExportFsys.Enabled = false;
                 cmdEdit.Enabled = false;
             }
 
             cmdAppleRomInfo.Enabled = FWBase.ROMInfoSectionData.SectionExists;
+
+            cmdExportMe.Enabled =
+                Descriptor.IsValid &&
+                Descriptor.MeBase != 0 &&
+                Descriptor.MeLimit != 0;
+
+            tlpMain.Enabled = enable;
         }
 
         private void ToggleCopyMenuItemEnable()
@@ -862,9 +943,10 @@ namespace Mac_EFI_Toolkit
                 new { Button = cmdNavigate, Font = Program.FONT_MDL2_REG_10, Text = Chars.FILE_EXPLORER },
                 new { Button = cmdReload, Font = Program.FONT_MDL2_REG_10, Text = Chars.REFRESH },
                 new { Button = cmdEveryMacSearch, Font = Program.FONT_MDL2_REG_9, Text = Chars.WEB_SEARCH },
-                new { Button = cmdExportFsysBlock, Font = Program.FONT_MDL2_REG_9, Text = Chars.SAVE },
+                new { Button = cmdExportFsys, Font = Program.FONT_MDL2_REG_9, Text = Chars.SAVE },
                 new { Button = cmdFixFsysCrc, Font = Program.FONT_MDL2_REG_9, Text = Chars.REPAIR },
-                new { Button = cmdAppleRomInfo, Font = Program.FONT_MDL2_REG_9, Text = Chars.FORWARD }
+                new { Button = cmdAppleRomInfo, Font = Program.FONT_MDL2_REG_9, Text = Chars.FORWARD },
+                new { Button = cmdExportMe, Font = Program.FONT_MDL2_REG_9, Text = Chars.SAVE }
             };
 
             foreach (var buttonData in buttons)
@@ -879,7 +961,8 @@ namespace Mac_EFI_Toolkit
             Button[] buttons =
             {
                 cmdOpenBin, cmdReset, cmdCopy, cmdEdit, cmdNavigate, cmdReload,
-                cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsysBlock, cmdAppleRomInfo
+                cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys, cmdAppleRomInfo,
+                cmdExportMe
             };
 
             Label[] labels =
@@ -904,26 +987,28 @@ namespace Mac_EFI_Toolkit
         {
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableTips))
             {
+                if (sender == cmdOpenBin)
+                    lblMessage.Text = "Open a Mac UEFI/BIOS (CTRL + O)";
+                else if (sender == cmdReset)
+                    lblMessage.Text = "Reset (CTRL + R)";
+                else if (sender == cmdEdit)
+                    lblMessage.Text = "Open the firmware editor (CTRL + E)";
+                else if (sender == cmdCopy)
+                    lblMessage.Text = "Open the copy menu (CTRL + C)";
                 if (sender == cmdNavigate)
                     lblMessage.Text = "Navigate to file (ALT + N)";
                 else if (sender == cmdReload)
                     lblMessage.Text = "Reload file from disk (ALT + R)";
-                else if (sender == cmdExportFsysBlock)
-                    lblMessage.Text = "Export Fsys Store (ALT + E)";
-                else if (sender == cmdFixFsysCrc)
-                    lblMessage.Text = "Repair Fsys CRC32 (ALT + F)";
                 else if (sender == cmdEveryMacSearch)
                     lblMessage.Text = "Search serial with EveryMac (ALT + S)";
-                else if (sender == cmdOpenBin)
-                    lblMessage.Text = "Open a Mac BIOS (CTRL + O)";
-                else if (sender == cmdReset)
-                    lblMessage.Text = "Reset (CTRL + R)";
-                else if (sender == cmdCopy)
-                    lblMessage.Text = "Open the copy menu (CTRL + C)";
-                else if (sender == cmdEdit)
-                    lblMessage.Text = "Open the editor (CTRL + E)";
+                else if (sender == cmdFixFsysCrc)
+                    lblMessage.Text = "Repair Fsys CRC32 (ALT + F)";
+                else if (sender == cmdExportFsys)
+                    lblMessage.Text = "Export Fsys Store (ALT + E)";
                 else if (sender == cmdAppleRomInfo)
-                    lblMessage.Text = "Open ROM information window (ALT + I)";
+                    lblMessage.Text = "Open ROM Information Window (ALT + I)";
+                else if (sender == cmdExportMe)
+                    lblMessage.Text = "Export ME Region (ALT + M)";
                 else if (sender == lblPrivateMemory)
                     lblMessage.Text = "Private memory consumption";
                 else if (sender == lblVssStore)
@@ -1026,10 +1111,10 @@ namespace Mac_EFI_Toolkit
         internal async void CheckForNewVersion()
         {
             // Check for a new version using the specified URL
-            VersionCheckResult result = await AppVersion.CheckForNewVersion(METUrl.VersionXml);
+            VersionResult result = await AppVersion.CheckForNewVersion(METUrl.VersionXml);
 
             // If a new version is available and update the UI
-            if (result == VersionCheckResult.NewVersionAvailable)
+            if (result == VersionResult.NewVersionAvailable)
             {
                 lblVersion.ForeColor = Color.Tomato;
                 lblVersion.Cursor = Cursors.Hand;
@@ -1091,7 +1176,7 @@ namespace Mac_EFI_Toolkit
             }
 
             // Check if the loaded binary has a valid flash descriptor signature
-            if (!FWBase.GetIsValidDescriptorSignature(FWBase.LoadedBinaryBytes))
+            if (!Descriptor.IsValid)
             {
                 // Show a warning message if the binary does not have a valid flash descriptor
                 METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.", METMessageType.Warning, METMessageButtons.Okay);
@@ -1114,8 +1199,10 @@ namespace Mac_EFI_Toolkit
             }
 
             // Set the binary path and load the bytes
-            FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
+
             FWBase.LoadedBinaryPath = filePath;
+            FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
+            Descriptor.Parse(FWBase.LoadedBinaryBytes);
 
             // Check parameters
             if (IsValidMinMaxSize() && IsValidFlashHeader())

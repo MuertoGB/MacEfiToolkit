@@ -432,7 +432,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private void GetRtbInitialData()
         {
             Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"The editor is unfinished, use caution!", RtbLogPrefix.Warning, rtbLog);
 
             LogLoadedBinarySize();
             LogFsysData();

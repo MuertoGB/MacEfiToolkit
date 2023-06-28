@@ -31,20 +31,20 @@ namespace Mac_EFI_Toolkit.UI
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(METMessageBox));
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMessage = new System.Windows.Forms.TableLayoutPanel();
+            this.lblMessageIcon = new System.Windows.Forms.Label();
+            this.lblMessage = new System.Windows.Forms.Label();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.cmdNo = new System.Windows.Forms.Button();
             this.cmdYes = new System.Windows.Forms.Button();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.tlpMessage = new System.Windows.Forms.TableLayoutPanel();
-            this.lblMessageIcon = new System.Windows.Forms.Label();
-            this.lblMessage = new System.Windows.Forms.Label();
             this.pnlSplit = new System.Windows.Forms.Panel();
             this.tlpMain.SuspendLayout();
+            this.tlpMessage.SuspendLayout();
             this.tlpButtons.SuspendLayout();
             this.tlpTitle.SuspendLayout();
-            this.tlpMessage.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpMain
@@ -62,6 +62,49 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMain.Size = new System.Drawing.Size(490, 208);
             this.tlpMain.TabIndex = 0;
+            // 
+            // tlpMessage
+            // 
+            this.tlpMessage.ColumnCount = 2;
+            this.tlpMessage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61F));
+            this.tlpMessage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMessage.Controls.Add(this.lblMessageIcon, 0, 0);
+            this.tlpMessage.Controls.Add(this.lblMessage, 1, 0);
+            this.tlpMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpMessage.Location = new System.Drawing.Point(0, 0);
+            this.tlpMessage.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpMessage.Name = "tlpMessage";
+            this.tlpMessage.RowCount = 1;
+            this.tlpMessage.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMessage.Size = new System.Drawing.Size(490, 162);
+            this.tlpMessage.TabIndex = 99;
+            // 
+            // lblMessageIcon
+            // 
+            this.lblMessageIcon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMessageIcon.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessageIcon.ForeColor = System.Drawing.Color.White;
+            this.lblMessageIcon.Location = new System.Drawing.Point(3, 0);
+            this.lblMessageIcon.Name = "lblMessageIcon";
+            this.lblMessageIcon.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.lblMessageIcon.Size = new System.Drawing.Size(55, 162);
+            this.lblMessageIcon.TabIndex = 99;
+            this.lblMessageIcon.Text = "...";
+            this.lblMessageIcon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblMessage
+            // 
+            this.lblMessage.AutoEllipsis = true;
+            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.ForeColor = System.Drawing.Color.White;
+            this.lblMessage.Location = new System.Drawing.Point(64, 0);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Padding = new System.Windows.Forms.Padding(3, 3, 6, 3);
+            this.lblMessage.Size = new System.Drawing.Size(423, 162);
+            this.lblMessage.TabIndex = 99;
+            this.lblMessage.Text = "...";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpButtons
             // 
@@ -173,48 +216,6 @@ namespace Mac_EFI_Toolkit.UI
             this.lblTitle.Text = "...";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tlpMessage
-            // 
-            this.tlpMessage.ColumnCount = 2;
-            this.tlpMessage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61F));
-            this.tlpMessage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMessage.Controls.Add(this.lblMessageIcon, 0, 0);
-            this.tlpMessage.Controls.Add(this.lblMessage, 1, 0);
-            this.tlpMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpMessage.Location = new System.Drawing.Point(0, 0);
-            this.tlpMessage.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpMessage.Name = "tlpMessage";
-            this.tlpMessage.RowCount = 1;
-            this.tlpMessage.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMessage.Size = new System.Drawing.Size(490, 162);
-            this.tlpMessage.TabIndex = 99;
-            // 
-            // lblMessageIcon
-            // 
-            this.lblMessageIcon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMessageIcon.Font = new System.Drawing.Font("Segoe UI", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMessageIcon.ForeColor = System.Drawing.Color.White;
-            this.lblMessageIcon.Location = new System.Drawing.Point(3, 0);
-            this.lblMessageIcon.Name = "lblMessageIcon";
-            this.lblMessageIcon.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lblMessageIcon.Size = new System.Drawing.Size(55, 162);
-            this.lblMessageIcon.TabIndex = 99;
-            this.lblMessageIcon.Text = "...";
-            this.lblMessageIcon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblMessage
-            // 
-            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMessage.ForeColor = System.Drawing.Color.White;
-            this.lblMessage.Location = new System.Drawing.Point(64, 0);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Padding = new System.Windows.Forms.Padding(3);
-            this.lblMessage.Size = new System.Drawing.Size(423, 162);
-            this.lblMessage.TabIndex = 99;
-            this.lblMessage.Text = "...";
-            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // pnlSplit
             // 
             this.pnlSplit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
@@ -248,9 +249,9 @@ namespace Mac_EFI_Toolkit.UI
             this.ShowInTaskbar = false;
             this.Text = "Message";
             this.tlpMain.ResumeLayout(false);
+            this.tlpMessage.ResumeLayout(false);
             this.tlpButtons.ResumeLayout(false);
             this.tlpTitle.ResumeLayout(false);
-            this.tlpMessage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
