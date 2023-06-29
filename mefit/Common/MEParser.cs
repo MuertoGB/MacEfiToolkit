@@ -54,8 +54,8 @@ namespace Mac_EFI_Toolkit.Common
     {
         internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
         {
-            int meBase = (int)(Descriptor.MeBase != 0 ? Descriptor.MeBase : 0);
-            int meLimit = (int)(Descriptor.MeLimit != 0 ? Descriptor.MeLimit : 0);
+            int meBase = (Descriptor.MeBase != 0 ? (int)Descriptor.MeBase : 0);
+            int meLimit = (Descriptor.MeLimit != 0 ? (int)Descriptor.MeLimit : FWBase.FileInfoData.FileLength);
 
             int headerPos = -1; int readLen = 0; string result = null;
 

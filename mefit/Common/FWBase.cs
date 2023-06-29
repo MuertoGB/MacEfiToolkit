@@ -207,10 +207,10 @@ namespace Mac_EFI_Toolkit.Common
         #region Platform Data Region
         internal static PdrSection GetPdrData(byte[] sourceBytes)
         {
-            int basePos = (int)(Descriptor.PdrBase != 0 ? Descriptor.PdrBase : 0);
-            int limitPos = (int)(Descriptor.PdrLimit != 0 ? Descriptor.PdrLimit : 0);
+            int pdrBase = (Descriptor.PdrBase != 0 ? (int)Descriptor.PdrBase : 0);
+            int pdrLimit = (Descriptor.PdrLimit != 0 ? (int)Descriptor.PdrLimit : FileInfoData.FileLength);
 
-            int guidBase = BinaryUtils.GetOffset(sourceBytes, FSGuids.PDR_SECTION_GUID, basePos, limitPos);
+            int guidBase = BinaryUtils.GetOffset(sourceBytes, FSGuids.PDR_SECTION_GUID, pdrBase, pdrLimit);
 
             if (guidBase == -1)
             {
@@ -266,8 +266,8 @@ namespace Mac_EFI_Toolkit.Common
             if (!isFsysStoreOnly)
             {
                 // Check the descriptor for bios base + limit
-                int biosBase = (int)(Descriptor.BiosBase != 0 ? Descriptor.BiosBase : 0);
-                int biosLimit = (int)(Descriptor.BiosLimit != 0 ? Descriptor.BiosLimit : 0);
+                int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
+                int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
 
                 // First we need to locate the NVRAM section GUID
                 int guidBase = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID, biosBase, biosLimit);
@@ -473,8 +473,8 @@ namespace Mac_EFI_Toolkit.Common
             byte[] nvramSignature = GetNvramSignature(storeType);
 
             // Check the descriptor for bios base + limit
-            int biosBase = (int)(Descriptor.BiosBase != 0 ? Descriptor.BiosBase : 0);
-            int biosLimit = (int)(Descriptor.BiosLimit != 0 ? Descriptor.BiosLimit : 0);
+            int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
+            int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
 
             // Look for the NVRAM GUID
             int nvramBase = BinaryUtils.GetOffset(sourceBytes, FSGuids.NVRAM_SECTION_GUID, biosBase, biosLimit);
@@ -648,8 +648,8 @@ namespace Mac_EFI_Toolkit.Common
             Dictionary<byte[], string> updatedRomInfoData = new Dictionary<byte[], string>(romInfoData);
 
             // Check the descriptor for bios base + limit
-            int biosBase = (int)(Descriptor.BiosBase != 0 ? Descriptor.BiosBase : 0);
-            int biosLimit = (int)(Descriptor.BiosLimit != 0 ? Descriptor.BiosLimit : 0);
+            int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
+            int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
 
             // First we need to locate the AppleRomInformation section GUID
             int romSectionBase = BinaryUtils.GetOffset(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, biosBase, biosLimit);
@@ -813,8 +813,8 @@ namespace Mac_EFI_Toolkit.Common
         internal static EfiSection GetEfiSectionData(byte[] sourceBytes)
         {
             // Check the descriptor for bios base + limit
-            int biosBase = (int)(Descriptor.BiosBase != 0 ? Descriptor.BiosBase : 0);
-            int biosLimit = (int)(Descriptor.BiosLimit != 0 ? Descriptor.BiosLimit : 0);
+            int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
+            int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
 
             int guidBase = BinaryUtils.GetOffset(sourceBytes, FSGuids.EFI_BIOS_ID_GUID, biosBase, biosLimit);
 
@@ -866,8 +866,8 @@ namespace Mac_EFI_Toolkit.Common
         internal static ApfsCapableFirmware GetIsApfsCapable(byte[] sourceBytes)
         {
             // Check the descriptor for bios base + limit
-            int biosBase = (int)(Descriptor.BiosBase != 0 ? Descriptor.BiosBase : 0);
-            int biosLimit = (int)(Descriptor.BiosLimit != 0 ? Descriptor.BiosLimit : 0);
+            int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
+            int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
 
             // APFS DXE GUID found
             if (BinaryUtils.GetOffset(sourceBytes, FSGuids.APFS_DXE_GUID, biosBase, biosLimit) != -1)
