@@ -43,20 +43,20 @@ namespace Mac_EFI_Toolkit.Common
         internal const uint DESCRIPTOR_BASE = 0x0;
         internal const uint DESCRIPTOR_LENGTH = 0x1000;
 
-        internal static uint DescriptorBase;
-        internal static uint DescriptorLimit;
-        internal static uint DescriptorSize;
-        internal static uint BiosBase;
-        internal static uint BiosLimit;
-        internal static uint BiosSize;
-        internal static uint MeBase;
-        internal static uint MeLimit;
-        internal static uint MeSize;
-        internal static uint PdrBase;
-        internal static uint PdrLimit;
-        internal static uint PdrSize;
+        internal static uint DescriptorBase = 0;
+        internal static uint DescriptorLimit = 0;
+        internal static uint DescriptorSize = 0;
+        internal static uint BiosBase = 0;
+        internal static uint BiosLimit = 0;
+        internal static uint BiosSize = 0;
+        internal static uint MeBase = 0;
+        internal static uint MeLimit = 0;
+        internal static uint MeSize = 0;
+        internal static uint PdrBase = 0;
+        internal static uint PdrLimit = 0;
+        internal static uint PdrSize = 0;
 
-        internal static bool IsValid;
+        internal static bool IsValid = false;
         #endregion
 
         internal static uint CalculateRegionBase(ushort basePos)

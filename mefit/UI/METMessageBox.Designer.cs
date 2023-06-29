@@ -96,7 +96,7 @@ namespace Mac_EFI_Toolkit.UI
             // 
             this.lblMessage.AutoEllipsis = true;
             this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMessage.ForeColor = System.Drawing.Color.White;
             this.lblMessage.Location = new System.Drawing.Point(64, 0);
             this.lblMessage.Name = "lblMessage";

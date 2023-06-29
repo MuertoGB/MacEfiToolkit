@@ -93,6 +93,7 @@ namespace Mac_EFI_Toolkit
             this.cmsMainMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openBuildsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFsysStoresDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openMeRegionDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.viewLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -130,7 +131,6 @@ namespace Mac_EFI_Toolkit
             this.meVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orderNoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openMeRegionDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlMain.SuspendLayout();
             this.tlpStatusBar.SuspendLayout();
             this.tlpLoading.SuspendLayout();
@@ -1193,7 +1193,7 @@ namespace Mac_EFI_Toolkit
             this.aboutToolStripMenuItem});
             this.cmsMainMenu.Name = "cmsMainMenu";
             this.cmsMainMenu.ShowImageMargin = false;
-            this.cmsMainMenu.Size = new System.Drawing.Size(276, 246);
+            this.cmsMainMenu.Size = new System.Drawing.Size(276, 218);
             // 
             // openBuildsDirectoryToolStripMenuItem
             // 
@@ -1210,6 +1210,14 @@ namespace Mac_EFI_Toolkit
             this.openFsysStoresDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.openFsysStoresDirectoryToolStripMenuItem.Text = "Open Fsys Stores Folder";
             this.openFsysStoresDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openFsysDirectoryToolStripMenuItem_Click);
+            // 
+            // openMeRegionDirectoryToolStripMenuItem
+            // 
+            this.openMeRegionDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openMeRegionDirectoryToolStripMenuItem.Name = "openMeRegionDirectoryToolStripMenuItem";
+            this.openMeRegionDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
+            this.openMeRegionDirectoryToolStripMenuItem.Text = "Open ME Region Folder";
+            this.openMeRegionDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openMeRegionDirectoryToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -1640,14 +1648,6 @@ namespace Mac_EFI_Toolkit
             this.orderNoToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
             this.orderNoToolStripMenuItem.Text = "Order No";
             this.orderNoToolStripMenuItem.Click += new System.EventHandler(this.orderNoToolStripMenuItem_Click);
-            // 
-            // openMeRegionDirectoryToolStripMenuItem
-            // 
-            this.openMeRegionDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.openMeRegionDirectoryToolStripMenuItem.Name = "openMeRegionDirectoryToolStripMenuItem";
-            this.openMeRegionDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
-            this.openMeRegionDirectoryToolStripMenuItem.Text = "Open ME Region Folder";
-            this.openMeRegionDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openMeRegionDirectoryToolStripMenuItem_Click);
             // 
             // mainWindow
             // 

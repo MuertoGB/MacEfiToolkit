@@ -15,12 +15,13 @@
 ## Version 1.0.0
 
 #### New:
-- Added option to export the Intel ME Region to the main window (ALT + M).
-- Added copy menu to the main window which enables quick copying of text fields.
+- Added option in the main window to export the Intel ME Region (ALT + M).
+- Added menu in the main window which enables quick copying of text fields (CTRL + C).
 
 #### Enhancements:
 - UI improvements
 - The EFI model code is now automatically converted and displayed as a model identifier in the main window and rom information window.
+- The application will now parse the flash descriptor (when available) for base + limit offsets of UEFI regions.
 
 #### Bugs:
 - Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.
