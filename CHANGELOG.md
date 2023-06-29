@@ -26,6 +26,7 @@
 #### Bugs:
 - Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.
 - Fixed an issue that caused a handled exception to appear when a thread attempted to refresh a control before its handles were fully initialized.
+- Fixed the editor window 'Open Builds Directory' button opening the wrong path.
 
 ## Version 0.7.0
 

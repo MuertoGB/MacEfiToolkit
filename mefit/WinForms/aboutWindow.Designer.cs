@@ -52,7 +52,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // pnlMain
             // 
-            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.pnlMain.Controls.Add(this.lnkUrls);
             this.pnlMain.Controls.Add(this.lblInfo);
             this.pnlMain.Controls.Add(this.pnlSplit);
@@ -66,7 +66,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // lnkUrls
             // 
             this.lnkUrls.ActiveLinkColor = System.Drawing.Color.White;
-            this.lnkUrls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lnkUrls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.lnkUrls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lnkUrls.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lnkUrls.ForeColor = System.Drawing.Color.White;

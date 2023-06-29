@@ -967,7 +967,7 @@ namespace Mac_EFI_Toolkit
 
             Label[] labels =
             {
-                lblEfiLock, lblPrivateMemory, lblVssStore, lblSvsStore, lblNssStore
+                lblVssStore, lblSvsStore, lblNssStore, lblEfiLock
             };
 
             foreach (Button button in buttons)
@@ -1009,8 +1009,6 @@ namespace Mac_EFI_Toolkit
                     lblMessage.Text = "Open ROM Information Window (ALT + I)";
                 else if (sender == cmdExportMe)
                     lblMessage.Text = "Export ME Region (ALT + M)";
-                else if (sender == lblPrivateMemory)
-                    lblMessage.Text = "Private memory consumption";
                 else if (sender == lblVssStore)
                     lblMessage.Text = SetNvramStoreTip(FWBase.VssStoreData, "VSS");
                 else if (sender == lblSvsStore)
@@ -1199,7 +1197,6 @@ namespace Mac_EFI_Toolkit
             }
 
             // Set the binary path and load the bytes
-
             FWBase.LoadedBinaryPath = filePath;
             FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
             Descriptor.Parse(FWBase.LoadedBinaryBytes);
@@ -1263,16 +1260,6 @@ namespace Mac_EFI_Toolkit
 
             // Reset FWBase
             FWBase.ResetFirmwareBaseData();
-
-            // Garbage collect
-            GC.Collect();
-            if (GC.WaitForFullGCApproach() == GCNotificationStatus.Succeeded)
-            {
-                if (GC.WaitForFullGCComplete() == GCNotificationStatus.Succeeded)
-                {
-                    GC.WaitForPendingFinalizers();
-                }
-            }
 
             _firmwareLoaded = false;
         }

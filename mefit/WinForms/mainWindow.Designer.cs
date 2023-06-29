@@ -33,10 +33,9 @@ namespace Mac_EFI_Toolkit
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainWindow));
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
-            this.lblMessage = new System.Windows.Forms.Label();
             this.lblPrivateMemory = new System.Windows.Forms.Label();
-            this.tlpLoading = new System.Windows.Forms.TableLayoutPanel();
-            this.pbxLoad = new System.Windows.Forms.PictureBox();
+            this.lblMessage = new System.Windows.Forms.Label();
+            this.lblVersion = new System.Windows.Forms.Label();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
             this.cmdReload = new System.Windows.Forms.Button();
@@ -87,6 +86,7 @@ namespace Mac_EFI_Toolkit
             this.lblMeVersion = new System.Windows.Forms.Label();
             this.cmdExportMe = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
+            this.pbxLoad = new System.Windows.Forms.PictureBox();
             this.cmdEdit = new System.Windows.Forms.Button();
             this.cmdReset = new System.Windows.Forms.Button();
             this.cmdOpenBin = new System.Windows.Forms.Button();
@@ -103,8 +103,7 @@ namespace Mac_EFI_Toolkit
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlTitle = new System.Windows.Forms.Panel();
             this.lblWindowTitle = new System.Windows.Forms.Label();
-            this.tlpVersionLabel = new System.Windows.Forms.TableLayoutPanel();
-            this.lblVersion = new System.Windows.Forms.Label();
+            this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
             this.cmdMenu = new System.Windows.Forms.Button();
             this.tlpMainIcon = new System.Windows.Forms.TableLayoutPanel();
             this.pbxTitleLogo = new System.Windows.Forms.PictureBox();
@@ -133,8 +132,6 @@ namespace Mac_EFI_Toolkit
             this.orderNoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlMain.SuspendLayout();
             this.tlpStatusBar.SuspendLayout();
-            this.tlpLoading.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLoad)).BeginInit();
             this.tlpMain.SuspendLayout();
             this.tlpFilename.SuspendLayout();
             this.tlpFile.SuspendLayout();
@@ -144,9 +141,10 @@ namespace Mac_EFI_Toolkit
             this.tlpEfiVer.SuspendLayout();
             this.tlpNvram.SuspendLayout();
             this.tlpIntelMe.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLoad)).BeginInit();
             this.cmsMainMenu.SuspendLayout();
             this.pnlTitle.SuspendLayout();
-            this.tlpVersionLabel.SuspendLayout();
+            this.tlpStatusBarImage.SuspendLayout();
             this.tlpMainIcon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxTitleLogo)).BeginInit();
             this.cmsApplication.SuspendLayout();
@@ -170,15 +168,17 @@ namespace Mac_EFI_Toolkit
             // tlpStatusBar
             // 
             this.tlpStatusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.tlpStatusBar.ColumnCount = 4;
+            this.tlpStatusBar.ColumnCount = 6;
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStatusBar.Controls.Add(this.lblMessage, 0, 0);
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 56F));
             this.tlpStatusBar.Controls.Add(this.lblPrivateMemory, 3, 0);
-            this.tlpStatusBar.Controls.Add(this.tlpLoading, 1, 0);
+            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 1, 0);
+            this.tlpStatusBar.Controls.Add(this.lblMessage, 0, 0);
+            this.tlpStatusBar.Controls.Add(this.lblVersion, 5, 0);
             this.tlpStatusBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatusBar.Location = new System.Drawing.Point(0, 294);
             this.tlpStatusBar.Margin = new System.Windows.Forms.Padding(0);
@@ -187,6 +187,20 @@ namespace Mac_EFI_Toolkit
             this.tlpStatusBar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.Size = new System.Drawing.Size(713, 36);
             this.tlpStatusBar.TabIndex = 99;
+            // 
+            // lblPrivateMemory
+            // 
+            this.lblPrivateMemory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.lblPrivateMemory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPrivateMemory.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPrivateMemory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.lblPrivateMemory.Location = new System.Drawing.Point(570, 0);
+            this.lblPrivateMemory.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPrivateMemory.Name = "lblPrivateMemory";
+            this.lblPrivateMemory.Size = new System.Drawing.Size(86, 36);
+            this.lblPrivateMemory.TabIndex = 99;
+            this.lblPrivateMemory.Text = "...";
+            this.lblPrivateMemory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblMessage
             // 
@@ -199,49 +213,23 @@ namespace Mac_EFI_Toolkit
             this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblMessage.Size = new System.Drawing.Size(591, 36);
+            this.lblMessage.Size = new System.Drawing.Size(533, 36);
             this.lblMessage.TabIndex = 99;
             this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblPrivateMemory
+            // lblVersion
             // 
-            this.lblPrivateMemory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.lblPrivateMemory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPrivateMemory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPrivateMemory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.lblPrivateMemory.Location = new System.Drawing.Point(628, 0);
-            this.lblPrivateMemory.Margin = new System.Windows.Forms.Padding(0);
-            this.lblPrivateMemory.Name = "lblPrivateMemory";
-            this.lblPrivateMemory.Size = new System.Drawing.Size(85, 36);
-            this.lblPrivateMemory.TabIndex = 99;
-            this.lblPrivateMemory.Text = "...";
-            this.lblPrivateMemory.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tlpLoading
-            // 
-            this.tlpLoading.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.tlpLoading.ColumnCount = 1;
-            this.tlpLoading.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpLoading.Controls.Add(this.pbxLoad, 0, 0);
-            this.tlpLoading.Location = new System.Drawing.Point(591, 0);
-            this.tlpLoading.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpLoading.Name = "tlpLoading";
-            this.tlpLoading.RowCount = 1;
-            this.tlpLoading.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpLoading.Size = new System.Drawing.Size(36, 36);
-            this.tlpLoading.TabIndex = 100;
-            // 
-            // pbxLoad
-            // 
-            this.pbxLoad.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbxLoad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.pbxLoad.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pbxLoad.Location = new System.Drawing.Point(6, 6);
-            this.pbxLoad.Margin = new System.Windows.Forms.Padding(0);
-            this.pbxLoad.Name = "pbxLoad";
-            this.pbxLoad.Size = new System.Drawing.Size(24, 24);
-            this.pbxLoad.TabIndex = 100;
-            this.pbxLoad.TabStop = false;
+            this.lblVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.lblVersion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblVersion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.lblVersion.Location = new System.Drawing.Point(657, 0);
+            this.lblVersion.Margin = new System.Windows.Forms.Padding(0);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(56, 36);
+            this.lblVersion.TabIndex = 99;
+            this.lblVersion.Text = "...";
+            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tlpMain
             // 
@@ -1113,6 +1101,18 @@ namespace Mac_EFI_Toolkit
             this.pnlSeperator.Size = new System.Drawing.Size(713, 2);
             this.pnlSeperator.TabIndex = 94;
             // 
+            // pbxLoad
+            // 
+            this.pbxLoad.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbxLoad.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLoad.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pbxLoad.Location = new System.Drawing.Point(6, 6);
+            this.pbxLoad.Margin = new System.Windows.Forms.Padding(0);
+            this.pbxLoad.Name = "pbxLoad";
+            this.pbxLoad.Size = new System.Drawing.Size(24, 24);
+            this.pbxLoad.TabIndex = 100;
+            this.pbxLoad.TabStop = false;
+            // 
             // cmdEdit
             // 
             this.cmdEdit.BackColor = System.Drawing.Color.Transparent;
@@ -1277,7 +1277,6 @@ namespace Mac_EFI_Toolkit
             this.pnlTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.pnlTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
             this.pnlTitle.Controls.Add(this.lblWindowTitle);
-            this.pnlTitle.Controls.Add(this.tlpVersionLabel);
             this.pnlTitle.Controls.Add(this.cmdMenu);
             this.pnlTitle.Controls.Add(this.tlpMainIcon);
             this.pnlTitle.Controls.Add(this.cmdMin);
@@ -1298,42 +1297,26 @@ namespace Mac_EFI_Toolkit
             this.lblWindowTitle.Location = new System.Drawing.Point(45, 0);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(453, 50);
+            this.lblWindowTitle.Size = new System.Drawing.Size(518, 50);
             this.lblWindowTitle.TabIndex = 99;
             this.lblWindowTitle.Text = " Mac EFI Toolkit";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tlpVersionLabel
+            // tlpStatusBarImage
             // 
-            this.tlpVersionLabel.BackColor = System.Drawing.Color.Transparent;
-            this.tlpVersionLabel.ColumnCount = 1;
-            this.tlpVersionLabel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpVersionLabel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpVersionLabel.Controls.Add(this.lblVersion, 0, 0);
-            this.tlpVersionLabel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tlpVersionLabel.Location = new System.Drawing.Point(498, 0);
-            this.tlpVersionLabel.Margin = new System.Windows.Forms.Padding(2);
-            this.tlpVersionLabel.Name = "tlpVersionLabel";
-            this.tlpVersionLabel.RowCount = 1;
-            this.tlpVersionLabel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpVersionLabel.Size = new System.Drawing.Size(65, 50);
-            this.tlpVersionLabel.TabIndex = 99;
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(110)))), ((int)(((byte)(120)))), ((int)(((byte)(130)))));
-            this.lblVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblVersion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.ForeColor = System.Drawing.Color.White;
-            this.lblVersion.Location = new System.Drawing.Point(14, 14);
-            this.lblVersion.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(43, 22);
-            this.lblVersion.TabIndex = 99;
-            this.lblVersion.Text = "0.0.0";
-            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.tlpStatusBarImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.tlpStatusBarImage.ColumnCount = 1;
+            this.tlpStatusBarImage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatusBarImage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatusBarImage.Controls.Add(this.pbxLoad, 0, 0);
+            this.tlpStatusBarImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStatusBarImage.Location = new System.Drawing.Point(533, 0);
+            this.tlpStatusBarImage.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStatusBarImage.Name = "tlpStatusBarImage";
+            this.tlpStatusBarImage.RowCount = 1;
+            this.tlpStatusBarImage.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatusBarImage.Size = new System.Drawing.Size(36, 36);
+            this.tlpStatusBarImage.TabIndex = 99;
             // 
             // cmdMenu
             // 
@@ -1676,8 +1659,6 @@ namespace Mac_EFI_Toolkit
             this.pnlMain.ResumeLayout(false);
             this.tlpStatusBar.ResumeLayout(false);
             this.tlpStatusBar.PerformLayout();
-            this.tlpLoading.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLoad)).EndInit();
             this.tlpMain.ResumeLayout(false);
             this.tlpFilename.ResumeLayout(false);
             this.tlpFile.ResumeLayout(false);
@@ -1687,10 +1668,10 @@ namespace Mac_EFI_Toolkit
             this.tlpEfiVer.ResumeLayout(false);
             this.tlpNvram.ResumeLayout(false);
             this.tlpIntelMe.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLoad)).EndInit();
             this.cmsMainMenu.ResumeLayout(false);
             this.pnlTitle.ResumeLayout(false);
-            this.tlpVersionLabel.ResumeLayout(false);
-            this.tlpVersionLabel.PerformLayout();
+            this.tlpStatusBarImage.ResumeLayout(false);
             this.tlpMainIcon.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxTitleLogo)).EndInit();
             this.cmsApplication.ResumeLayout(false);
@@ -1730,7 +1711,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblNvramText;
         private System.Windows.Forms.Label lblEfiVersionText;
         private System.Windows.Forms.Button cmdReset;
-        private System.Windows.Forms.TableLayoutPanel tlpVersionLabel;
+        private System.Windows.Forms.TableLayoutPanel tlpStatusBarImage;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Button cmdEdit;
         private System.Windows.Forms.ContextMenuStrip cmsMainMenu;
@@ -1773,7 +1754,6 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblEfiVersion;
         private System.Windows.Forms.Button cmdAppleRomInfo;
         private System.Windows.Forms.PictureBox pbxLoad;
-        private System.Windows.Forms.TableLayoutPanel tlpLoading;
         private METLabel lblFilename;
         private System.Windows.Forms.Label lblMeVersion;
         private System.Windows.Forms.TableLayoutPanel tlpNvram;

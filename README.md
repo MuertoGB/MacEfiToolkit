@@ -32,6 +32,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 
 **EFIROM:**
 - Original binaries are left untouched, new files built from memory.
+- Read the flash descriptor for base and limit positions of UEFI sections.
 - Knuth–Morris–Pratt algorithm for searching binary data.
 - View configuration code derived from the hardware config (HWC).
 - Detect and repair invalid Fsys store checksums.
@@ -44,6 +45,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 - Clear NVRAM (VSS, SVS, NSS) with section header preservation
 - View ROM section information.
 - View FIT and ME versions.
+- Export the Intel ME Region.
 - Detect EFI password lock.
 - Detect APFS capability.
 - Validate binary size.

@@ -129,7 +129,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(METPath.FsysDirectory))
+            if (!Directory.Exists(METPath.BuildsDirectory))
             {
                 METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
                 return;
