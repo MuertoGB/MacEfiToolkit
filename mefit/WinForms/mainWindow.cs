@@ -283,7 +283,7 @@ namespace Mac_EFI_Toolkit
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
-                Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
+                Filter = "UEFI/BIOS Files (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*"
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -412,7 +412,6 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                Title = "Export new binary",
                 FileName = $"CRC_FIXED_{FWBase.FileInfoData.FileNameNoExt}.bin",
                 OverwritePrompt = true,
                 InitialDirectory = _strInitialDirectory
@@ -498,7 +497,6 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                Title = "Export Fsys store",
                 FileName = string.Concat("FSYS_STORE_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
                 OverwritePrompt = true,
                 InitialDirectory = METPath.FsysDirectory
@@ -568,7 +566,6 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                Title = "Export ME Region",
                 FileName = string.Concat("ME_RGN_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
                 OverwritePrompt = true,
                 InitialDirectory = METPath.MeDirectory

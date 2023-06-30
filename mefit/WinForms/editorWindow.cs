@@ -153,7 +153,7 @@ namespace Mac_EFI_Toolkit.WinForms
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = METPath.FsysDirectory,
-                Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
+                Filter = "Binary Files (*.bin, *.rom)|*.bin;*.rom|All Files (*.*)|*.*"
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -307,7 +307,6 @@ namespace Mac_EFI_Toolkit.WinForms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
-                Title = "Save Log File...",
                 FileName = $"metlog_{DateTime.Now:yyMMdd_HHmmss}.txt",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.CurrentDirectory
