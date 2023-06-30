@@ -15,14 +15,14 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Checks if a website is available by making a HEAD request to its URL.
         /// </summary>
-        /// <param name="urlString">The URL of the website to check.</param>
+        /// <param name="url">The URL of the website to check.</param>
         /// <returns>True if the website is available, false otherwise.</returns>
-        internal static bool GetIsWebsiteAvailable(string urlString)
+        internal static bool GetIsWebsiteAvailable(string url)
         {
             try
             {
                 WebRequest req;
-                req = WebRequest.Create(urlString);
+                req = WebRequest.Create(url);
                 req.Timeout = 5000;
                 req.Method = "HEAD";
                 using (WebResponse response = req.GetResponse())

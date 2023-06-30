@@ -433,49 +433,69 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.Info, rtbLog);
 
             LogLoadedBinarySize();
+            LogDescriptorData();
             LogFsysData();
 
-            if (FWBase.VssStoreData.PrimaryStoreOffset == -1)
+            if (FWBase.VssStoreData.PrimaryStoreBase == -1)
             {
                 cbxClearVssStore.Enabled = false;
                 Logger.WriteLogTextToRtb($"No VSS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
             }
 
-            if (FWBase.SvsStoreData.PrimaryStoreOffset == -1)
+            if (FWBase.SvsStoreData.PrimaryStoreBase == -1)
             {
                 cbxClearSvsStore.Enabled = false;
                 Logger.WriteLogTextToRtb($"No SVS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
             }
 
-            if (FWBase.NssStoreData.PrimaryStoreOffset == -1)
+            if (FWBase.NssStoreData.PrimaryStoreBase == -1)
             {
-                Logger.WriteLogTextToRtb($"No NSS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
                 cbxClearNssStore.Enabled = false;
+                Logger.WriteLogTextToRtb($"No NSS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
             }
 
             Logger.WriteLogTextToRtb($"Initial checks complete", RtbLogPrefix.Complete, rtbLog);
-        }
-
-        private void LogFsysData()
-        {
-            if (FWBase.FsysStoreData.FsysOffset != 0)
-            {
-                Logger.WriteLogTextToRtb($"Fsys: Offset {FWBase.FsysStoreData.FsysOffset:X2}h, Size {FWBase.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
-            }
         }
 
         private void LogLoadedBinarySize()
         {
             if (!FileUtils.GetIsValidBinSize(FWBase.FileInfoData.FileLength))
             {
-                Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is invalid and should not be used as a donor.", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is invalid.", RtbLogPrefix.Error, rtbLog);
                 return;
             }
 
             Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is valid", RtbLogPrefix.Info, rtbLog);
-
         }
 
+        private void LogDescriptorData()
+        {
+            if (Descriptor.IsValid)
+            {
+                if (Descriptor.PdrBase != 0)
+                    Logger.WriteLogTextToRtb($"PDR Region: Base {Descriptor.PdrBase:X2}h, Limit: {Descriptor.PdrLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (Descriptor.MeBase != 0)
+                    Logger.WriteLogTextToRtb($"ME Region: Base {Descriptor.MeBase:X2}h, Limit: {Descriptor.MeLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (Descriptor.BiosBase != 0)
+                    Logger.WriteLogTextToRtb($"BIOS Region: Base {Descriptor.BiosBase:X2}h, Limit: {Descriptor.BiosLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
+        }
+
+        private void LogFsysData()
+        {
+            if (FWBase.FsysStoreData.FsysBase != 0)
+            {
+                Logger.WriteLogTextToRtb($"Fsys: Base {FWBase.FsysStoreData.FsysBase:X2}h, Size {FWBase.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (FWBase.FsysStoreData.SerialBase != -1)
+                    Logger.WriteLogTextToRtb($"Serial: Base {FWBase.FsysStoreData.SerialBase:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (FWBase.FsysStoreData.HWCBase != -1)
+                    Logger.WriteLogTextToRtb($"HWC: Base {FWBase.FsysStoreData.HWCBase:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
+        }
 
         private void UpdateTextBoxColor(TextBox textBox, Color color)
         {
@@ -512,7 +532,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTextToRtb("Validating donor Fsys store:-", RtbLogPrefix.Info, rtbLog);
 
-            int fsysSigPos = BinaryUtils.GetOffset(sourceBytes, FWBase.FSYS_SIG);
+            int fsysSigPos = BinaryUtils.GetBasePosition(sourceBytes, FWBase.FSYS_SIG);
 
             if (fsysSigPos == -1)
             {
@@ -584,7 +604,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Write new Fsys to the output file
-            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysStoreData.FsysOffset, _bytesNewFsysStore);
+            BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, FWBase.FsysStoreData.FsysBase, _bytesNewFsysStore);
 
             // Load the Fsys from the new binary
             FsysStore fsysNewBinary = FWBase.GetFsysStoreData(_bytesNewBinary, false);
@@ -612,9 +632,9 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Fsys postition was not found
-            if (FWBase.FsysStoreData.SerialOffset == -1)
+            if (FWBase.FsysStoreData.SerialBase == -1)
             {
-                HandleBuildFailure("FsysSectionData store offset is -1");
+                HandleBuildFailure("FsysSectionData store base is -1");
                 return false;
             }
 
@@ -628,19 +648,19 @@ namespace Mac_EFI_Toolkit.WinForms
             // Write new serial number bytes
             string newSerial = tbxSerialNumber.Text;
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
-            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysStoreData.SerialOffset, newSerialBytes);
+            BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, FWBase.FsysStoreData.SerialBase, newSerialBytes);
 
             // Write new HWC bytes
 
             string newHwc = tbxHwc.Text;
-            if (FWBase.FsysStoreData.HWCOffset != -1)
+            if (FWBase.FsysStoreData.HWCBase != -1)
             {
                 byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysStoreData.HWCOffset, newHwcBytes);
+                BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, FWBase.FsysStoreData.HWCBase, newHwcBytes);
             }
             else
             {
-                Logger.WriteLogTextToRtb("HWC offset is -1, new HWC will not be written!", RtbLogPrefix.Warning, rtbLog);
+                Logger.WriteLogTextToRtb("HWC base is -1, new HWC will not be written!", RtbLogPrefix.Warning, rtbLog);
             }
 
             // Load new Fsys store
@@ -654,7 +674,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Check HWC's match
-            if (FWBase.FsysStoreData.HWCOffset != -1)
+            if (FWBase.FsysStoreData.HWCBase != -1)
             {
                 if (!string.Equals(newHwc, newFsys.HWC))
                 {
@@ -670,7 +690,7 @@ namespace Mac_EFI_Toolkit.WinForms
             _bytesNewBinary = BinaryUtils.MakeFsysCrcPatchedBinary
             (
                _bytesNewBinary,
-               newFsys.FsysOffset,
+               newFsys.FsysBase,
                newFsys.FsysBytes,
                newFsys.CRC32CalcInt
             );
@@ -693,19 +713,19 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool ClearNvramStore(NvramStore storeData, bool clearBackup)
         {
             int headerLen = 0x10;
-            int primBodyStart = storeData.PrimaryStoreOffset + headerLen;
+            int primBodyStart = storeData.PrimaryStoreBase + headerLen;
             int primBodyEnd = storeData.PrimaryStoreLength - headerLen;
-            int backBodyStart = storeData.BackupStoreOffset + headerLen;
+            int backBodyStart = storeData.BackupStoreBase + headerLen;
             int backBodyEnd = storeData.BackupStoreLength - headerLen;
 
             if (!storeData.IsPrimaryStoreEmpty)
             {
                 Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store is not empty", RtbLogPrefix.Info, rtbLog);
-                byte[] primaryData = BinaryUtils.GetBytesAtOffset(storeData.PrimaryStoreBytes, headerLen, primBodyEnd);
+                byte[] primaryData = BinaryUtils.GetBytesBaseLength(storeData.PrimaryStoreBytes, headerLen, primBodyEnd);
                 Logger.WriteLogTextToRtb($"Overwriting {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
                 BinaryUtils.FillByteArrayWithFF(primaryData);
                 Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, primBodyStart, primaryData);
+                BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, primBodyStart, primaryData);
 
                 NvramStore newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
 
@@ -727,11 +747,11 @@ namespace Mac_EFI_Toolkit.WinForms
             if (clearBackup && !storeData.IsBackupStoreEmpty)
             {
                 Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} is not empty", RtbLogPrefix.Info, rtbLog);
-                byte[] backupData = BinaryUtils.GetBytesAtOffset(storeData.BackupStoreBytes, headerLen, backBodyEnd);
+                byte[] backupData = BinaryUtils.GetBytesBaseLength(storeData.BackupStoreBytes, headerLen, backBodyEnd);
                 Logger.WriteLogTextToRtb($"Overwriting backup {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
                 BinaryUtils.FillByteArrayWithFF(backupData);
                 Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, backBodyStart, backupData);
+                BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, backBodyStart, backupData);
 
                 NvramStore newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
 

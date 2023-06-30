@@ -25,9 +25,9 @@ namespace Mac_EFI_Toolkit.Utils
         /// Prioritizes retrieving data from the embedded XML db. 
         /// Falls back to retrieving data from the Apple server if not found in the XML resource.
         /// </summary>
-        /// <param name="hwcString">The HWC identifier to retrieve a model string for.</param>
+        /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static async Task<string> GetDeviceConfigCodeAsync(string hwcString)
+        internal static async Task<string> GetDeviceConfigCodeAsync(string hwc)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Mac_EFI_Toolkit.Utils
                 {
                     XDocument xmlDoc = XDocument.Load(stream);
                     string name = xmlDoc.Descendants("section")
-                        .FirstOrDefault(e => e.Element("cfgCode")?.Value == hwcString)
+                        .FirstOrDefault(e => e.Element("cfgCode")?.Value == hwc)
                         ?.Element("model")?.Value;
 
                     if (!string.IsNullOrEmpty(name))
@@ -47,7 +47,7 @@ namespace Mac_EFI_Toolkit.Utils
                 }
 
                 // Retrieve data from the Apple server
-                string url = $"http://support-sp.apple.com/sp/product?cc={hwcString}";
+                string url = $"http://support-sp.apple.com/sp/product?cc={hwc}";
                 if (!NetUtils.GetIsWebsiteAvailable(url))
                 {
                     return null;
@@ -59,7 +59,7 @@ namespace Mac_EFI_Toolkit.Utils
 
                 if (data != null)
                 {
-                    Logger.WriteToLogFile($"'{hwcString}' not present in local db > Server returned: '{data}'", LogType.Database);
+                    Logger.WriteToLogFile($"'{hwc}' not present in local db > Server returned: '{data}'", LogType.Database);
                 }
 
                 return data ?? null;
@@ -73,11 +73,11 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Checks if a given input string contains only valid characters for a serial number.
         /// </summary>
-        /// <param name="charString">The serial number string to check.</param>
+        /// <param name="serial">The serial number string to check.</param>
         /// <returns>True if the input string contains only valid characters, otherwise false.</returns>
-        internal static bool GetIsValidSerialChars(string charString)
+        internal static bool GetIsValidSerialChars(string serial)
         {
-            return Regex.IsMatch(charString, "^[0-9A-Z]+$");
+            return Regex.IsMatch(serial, "^[0-9A-Z]+$");
         }
 
         /// <summary>
@@ -108,35 +108,36 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Converts the EFI model code to a full model identifier.
         /// </summary>
-        /// <param name="shortModel">The EFI model code.</param>
+        /// <param name="model">The EFI model code.</param>
         /// <returns>The full model identifier representation.</returns>
-        internal static string ConvertEfiModelCode(string shortModel)
+        internal static string ConvertEfiModelCode(string model)
         {
-            if (string.IsNullOrEmpty(shortModel))
+            // Example MPB121 becomes MacBookPro12,1
+            if (string.IsNullOrEmpty(model))
                 return null;
 
-            string letters = new string(shortModel.Where(char.IsLetter).ToArray());
-            string numbers = new string(shortModel.Where(char.IsDigit).ToArray());
+            string letters = new string(model.Where(char.IsLetter).ToArray());
+            string numbers = new string(model.Where(char.IsDigit).ToArray());
 
             if (letters.Length > 3)
-                return shortModel;
+                return model;
 
             if (numbers.Length > 3)
-                return shortModel;
+                return model;
 
-            if (shortModel.Contains("MBP"))
+            if (model.Contains("MBP"))
                 letters = "MacBookPro";
-            else if (shortModel.Contains("MBA"))
+            else if (model.Contains("MBA"))
                 letters = "MacBookAir";
-            else if (shortModel.Contains("MB"))
+            else if (model.Contains("MB"))
                 letters = "MacBook";
-            else if (shortModel.Contains("IM"))
+            else if (model.Contains("IM"))
                 letters = "iMac";
-            else if (shortModel.Contains("IMP"))
+            else if (model.Contains("IMP"))
                 letters = "iMacPro";
-            else if (shortModel.Contains("MM"))
+            else if (model.Contains("MM"))
                 letters = "MacMini";
-            else if (shortModel.Contains("MP"))
+            else if (model.Contains("MP"))
                 letters = "MacPro";
 
             if (numbers.Length == 2)

@@ -59,25 +59,24 @@ namespace Mac_EFI_Toolkit.Common
         internal static bool IsValid = false;
         #endregion
 
-        internal static uint CalculateRegionBase(ushort basePos)
+        internal static uint CalculateRegionBase(ushort basePosition)
         {
-            if (basePos == 0x7FFF)
+            if (basePosition == 0x7FFF)
                 return 0;
-            if (basePos == 0x0FFF)
+            if (basePosition == 0x0FFF)
                 return 0;
-            if (basePos == 0xFFFF)
+            if (basePosition == 0xFFFF)
                 return 0;
             // For example:
             // BIOS Base:  LE: 3701h > 137h * 1000h = A bios base of 137000h
-            return (basePos * DESCRIPTOR_LENGTH);
+            return (basePosition * DESCRIPTOR_LENGTH);
         }
 
-        internal static uint CalculateRegionSize(ushort basePos, ushort limitPos)
+        internal static uint CalculateRegionSize(ushort basePosition, ushort limitPosition)
         {
-            if (limitPos != 0)
-            {
-                return (uint)((limitPos + 0x1 - basePos) * DESCRIPTOR_LENGTH);
-            }
+            if (limitPosition != 0)
+                return (uint)((limitPosition + 0x1 - basePosition) * DESCRIPTOR_LENGTH);
+
             // For example:
             // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h
             return 0;
@@ -86,7 +85,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static void Parse(byte[] sourceBytes)
         {
             // Read in the flash descriptor
-            byte[] fdRegionBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
+            byte[] fdRegionBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
             // Deserialize the descriptor
             FlashDescriptor descriptor = Helper.DeserializeHeader<FlashDescriptor>(fdRegionBytes);
 

@@ -45,11 +45,11 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Formats a number of bytes as a string with commas.
         /// </summary>
-        /// <param name="lSize">The number of bytes to format.</param>
+        /// <param name="size">The number of bytes to format.</param>
         /// <returns>A string representation of the number of bytes with commas.</returns>
-        internal static string FormatFileSize(long lSize)
+        internal static string FormatFileSize(long size)
         {
-            return string.Format("{0:#,##0}", lSize);
+            return string.Format("{0:#,##0}", size);
         }
 
         /// <summary>

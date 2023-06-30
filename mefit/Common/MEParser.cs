@@ -57,24 +57,26 @@ namespace Mac_EFI_Toolkit.Common
             int meBase = (Descriptor.MeBase != 0 ? (int)Descriptor.MeBase : 0);
             int meLimit = (Descriptor.MeLimit != 0 ? (int)Descriptor.MeLimit : FWBase.FileInfoData.FileLength);
 
-            int headerPos = -1; int readLen = 0; string result = null;
+            int headerPos = -1;
+            int readLen = 0;
+            string result = null;
 
             switch (headerType)
             {
                 case HeaderType.FlashImageTool:
-                    headerPos = BinaryUtils.GetOffset(sourceBytes, FPT_SIGNATURE, meBase, meLimit);
+                    headerPos = BinaryUtils.GetBasePosition(sourceBytes, FPT_SIGNATURE, meBase, meLimit);
                     readLen = 0x20;
                     break;
 
                 case HeaderType.ManagementEngine:
-                    headerPos = BinaryUtils.GetOffset(sourceBytes, MN2_SIGNATURE, meBase, meLimit);
+                    headerPos = BinaryUtils.GetBasePosition(sourceBytes, MN2_SIGNATURE, meBase, meLimit);
                     readLen = 0x10;
                     break;
             }
 
             if (headerPos != -1)
             {
-                byte[] headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerPos, readLen);
+                byte[] headerBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, headerPos, readLen);
                 if (headerBytes != null)
                 {
                     if (headerType == HeaderType.FlashImageTool)

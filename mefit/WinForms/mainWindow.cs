@@ -84,11 +84,11 @@ namespace Mac_EFI_Toolkit
             SetPrimaryInitialDirectory();
 
             // Open dragged file is the arg path is ! null or ! empty
-            if (!string.IsNullOrEmpty(Program.draggedFile))
+            if (!string.IsNullOrEmpty(Program.draggedFilePath))
             {
-                OpenBinary(Program.draggedFile);
+                OpenBinary(Program.draggedFilePath);
                 // Clear the path so restarting does not cause the initially dragged file to be loaded.
-                Program.draggedFile = string.Empty;
+                Program.draggedFilePath = string.Empty;
             }
 
             // Check for a new application version
@@ -429,7 +429,7 @@ namespace Mac_EFI_Toolkit
                 byte[] patchedBinary = BinaryUtils.MakeFsysCrcPatchedBinary
                     (
                     FWBase.LoadedBinaryBytes,
-                    FWBase.FsysStoreData.FsysOffset,
+                    FWBase.FsysStoreData.FsysBase,
                     FWBase.FsysStoreData.FsysBytes,
                     FWBase.FsysStoreData.CRC32CalcInt
                     );
@@ -578,7 +578,7 @@ namespace Mac_EFI_Toolkit
 
                 string mePath = dialog.FileName;
 
-                byte[] meBytes = BinaryUtils.GetBytesAtOffset(FWBase.LoadedBinaryBytes, (int)Descriptor.MeBase, (int)Descriptor.MeSize);
+                byte[] meBytes = BinaryUtils.GetBytesBaseLength(FWBase.LoadedBinaryBytes, (int)Descriptor.MeBase, (int)Descriptor.MeSize);
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
@@ -830,7 +830,7 @@ namespace Mac_EFI_Toolkit
 
             Color foreColor = (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
                 ? Colours.WARNING_ORANGE
-                : (storeData.PrimaryStoreOffset != -1 ? Colours.COMPLETE_GREEN : Colours.DISABLED_TEXT);
+                : (storeData.PrimaryStoreBase != -1 ? Colours.COMPLETE_GREEN : Colours.DISABLED_TEXT);
 
             label.ForeColor = foreColor;
         }
@@ -1026,7 +1026,7 @@ namespace Mac_EFI_Toolkit
         {
             if (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
                 return $"{storeType} data present in the NVRAM";
-            else if (storeData.PrimaryStoreOffset != -1)
+            else if (storeData.PrimaryStoreBase != -1)
                 return $"{storeType} NVRAM stores are empty (0xFF)";
 
             return string.Empty;

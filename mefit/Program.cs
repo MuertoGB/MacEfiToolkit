@@ -14,7 +14,6 @@ using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -28,12 +27,12 @@ namespace Mac_EFI_Toolkit
         internal static string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
         internal static string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
         internal static string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
-        internal static string SettingsFile = Path.Combine(METPath.CurrentDirectory, "Settings.ini");
+        internal static string SettingsFile = Path.Combine(CurrentDirectory, "Settings.ini");
     }
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230630.0030";
+        internal static readonly string Build = "230630.0500";
         internal static readonly string Channel = "Release";
     }
 
@@ -46,11 +45,11 @@ namespace Mac_EFI_Toolkit
 
     static class Program
     {
-        internal static string draggedFile = string.Empty;
-        internal static bool openLastBuild = false;
+        internal static string draggedFilePath = string.Empty;
         internal static string lastBuildPath = string.Empty;
-        internal static mainWindow mWindow;
+        internal static bool openLastBuild = false;
         internal static System.Threading.Timer memoryTimer;
+        internal static mainWindow mWindow;
 
         #region Private Members
         private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
@@ -104,7 +103,8 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
 
             // Settings
-            if (!File.Exists(METPath.SettingsFile)) Settings.SettingsCreateFile();
+            if (!File.Exists(METPath.SettingsFile))
+                Settings.SettingsCreateFile();
 
             // Register application exit event.
             Application.ApplicationExit += OnExiting;
@@ -113,7 +113,7 @@ namespace Mac_EFI_Toolkit
             HookKeyboard();
 
             // Get dragged filepath
-            draggedFile = GetDraggedFilePath(args);
+            draggedFilePath = GetDraggedFilePath(args);
 
             // Create main window instance
             mWindow = new mainWindow();
@@ -223,13 +223,15 @@ namespace Mac_EFI_Toolkit
         #region Exception Handler
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            if (e != null) METCatchUnhandledException(e.Exception);
+            if (e != null)
+                METCatchUnhandledException(e.Exception);
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
-            if (ex != null) METCatchUnhandledException(ex);
+            if (ex != null)
+                METCatchUnhandledException(ex);
         }
 
         static void METCatchUnhandledException(Exception e)
@@ -246,9 +248,7 @@ namespace Mac_EFI_Toolkit
 
             // Fix for mainWindow opacity getting stuck at 0.5
             if (mWindow.Opacity != 1.0)
-            {
                 mWindow.Opacity = 1.0;
-            }
         }
         #endregion
 
