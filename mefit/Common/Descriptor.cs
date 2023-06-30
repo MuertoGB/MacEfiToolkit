@@ -6,7 +6,6 @@
 // This code is a work in progress.
 
 using Mac_EFI_Toolkit.Utils;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -90,15 +89,7 @@ namespace Mac_EFI_Toolkit.Common
             FlashDescriptor descriptor = Helper.DeserializeHeader<FlashDescriptor>(fdRegionBytes);
 
             // Match flash descriptor tag (5AA5F00F)
-            if (!descriptor.Signature.SequenceEqual(FLASH_DESC_SIGNATURE))
-            {
-                // Signature mismatch
-                IsValid = false;
-                return;
-            }
-
-            // Signature match
-            IsValid = true;
+            IsValid = (descriptor.Signature.SequenceEqual(FLASH_DESC_SIGNATURE)) ? true : false;
 
             // Descriptor base, size, limit
             DescriptorBase = CalculateRegionBase(descriptor.DescriptorBase);
@@ -119,6 +110,21 @@ namespace Mac_EFI_Toolkit.Common
             PdrBase = CalculateRegionBase(descriptor.PdrBase);
             PdrSize = CalculateRegionSize(descriptor.PdrBase, descriptor.PdrLimit);
             PdrLimit = PdrBase + PdrSize;
+        }
+
+        internal static void ResetValues()
+        {
+            uint[] values =
+            {
+                DescriptorBase, DescriptorLimit, DescriptorSize, BiosBase, BiosLimit,
+                BiosSize, MeBase, MeLimit, MeSize, PdrBase, PdrLimit, PdrSize
+            };
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = 0;
+            }
+
+            IsValid = false;
         }
 
         internal static readonly byte[] FLASH_DESC_SIGNATURE =

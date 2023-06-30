@@ -1255,6 +1255,9 @@ namespace Mac_EFI_Toolkit
             // Reset initial directory
             SetPrimaryInitialDirectory();
 
+            // Reset descriptor values
+            Descriptor.ResetValues();
+
             // Reset FWBase
             FWBase.ResetFirmwareBaseData();
 

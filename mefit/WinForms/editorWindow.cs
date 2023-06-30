@@ -714,9 +714,9 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             int headerLen = 0x10;
             int primBodyStart = storeData.PrimaryStoreBase + headerLen;
-            int primBodyEnd = storeData.PrimaryStoreLength - headerLen;
+            int primBodyEnd = storeData.PrimaryStoreSize - headerLen;
             int backBodyStart = storeData.BackupStoreBase + headerLen;
-            int backBodyEnd = storeData.BackupStoreLength - headerLen;
+            int backBodyEnd = storeData.BackupStoreSize - headerLen;
 
             if (!storeData.IsPrimaryStoreEmpty)
             {

@@ -44,11 +44,11 @@ namespace Mac_EFI_Toolkit.Common
     {
         internal NvramStoreType StoreType { get; set; }
         internal int PrimaryStoreBase { get; set; }
-        internal int PrimaryStoreLength { get; set; }
+        internal int PrimaryStoreSize { get; set; }
         internal byte[] PrimaryStoreBytes { get; set; }
         internal bool IsPrimaryStoreEmpty { get; set; }
         internal int BackupStoreBase { get; set; }
-        internal int BackupStoreLength { get; set; }
+        internal int BackupStoreSize { get; set; }
         internal byte[] BackupStoreBytes { get; set; }
         internal bool IsBackupStoreEmpty { get; set; }
     }
@@ -140,11 +140,8 @@ namespace Mac_EFI_Toolkit.Common
         private const int ZERO_VECTOR_LENGTH = 0x10; // 16
 
         private const int BID_NUDGE_POS = 0x5;   // 5
+        private const int LITERAL_POS = 0x2;     // 2
         private const int BID_LENGTH = 0x8;      // 8
-        private const int SSN_NUDGE_POS = 0x6;   // 6
-        private const int SSN_MAX_LENGTH = 0x0C; // 12
-        private const int HWC_NUDGE_POS = 0x6;   // 6
-        private const int HWC_LENGTH = 0x4;      // 4
         private const int CRC32_LENGTH = 0x4;    // 4
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
@@ -316,29 +313,74 @@ namespace Mac_EFI_Toolkit.Common
             string crcCalcString = uiCrcCalc.ToString("X8");
 
             // Parse the serial number
-            int snBase = BinaryUtils.GetBasePosition(sourceBytes, SNP_LOWER_SIG, fsysBase, FSYS_RGN_SIZE);
-            if (snBase == -1) snBase = BinaryUtils.GetBasePosition(sourceBytes, SSN_UPPER_SIG, fsysBase, FSYS_RGN_SIZE);
-            if (snBase == -1) snBase = BinaryUtils.GetBasePosition(sourceBytes, SSN_LOWER_SIG, fsysBase, FSYS_RGN_SIZE);
-            string serialString = ParseFsysSerial(sourceBytes, snBase);
-            if (serialString == null) snBase = -1;
+            int snDataStart = -1;
+
+            // Look for the lower case system serial number signature
+            if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSN_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
+                snDataStart += 0x1 + 0x3; // Skip over the size data and signature
+
+            // Look for the upper case system serial number signature
+            if (snDataStart == -1)
+            {
+                if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSN_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
+                    snDataStart += 0x1 + 0x3;
+            }
+
+            // Look for other ssn signatures
+            if (snDataStart == -1)
+            {
+                if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSNP_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
+                    snDataStart += 0x1 + 0x4;
+            }
+
+            string serialString = ParseFsysString(sourceBytes, snDataStart);
+            if (serialString == null) snDataStart = -1;
 
             // Parse the hardware configuration code
-            int hwcBase = BinaryUtils.GetBasePosition(sourceBytes, HWC_SIG, fsysBase, FSYS_RGN_SIZE);
-            string hwcString = ParseFsysHwc(sourceBytes, hwcBase);
-            if (hwcString == null) hwcBase = -1;
+            int hwcDataStart = -1;
+
+            // Look for the hardware configuration lower case signature
+            if ((hwcDataStart = BinaryUtils.GetBasePosition(sourceBytes, HWC_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
+                hwcDataStart += 0x1 + 0x3;
+
+            // Look for the hardware configuration upper case signature
+            if (hwcDataStart == -1)
+            {
+                if ((hwcDataStart = BinaryUtils.GetBasePosition(sourceBytes, HWC_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
+                    hwcDataStart += 0x1 + 0x3;
+            }
+
+            string hwcString = ParseFsysString(sourceBytes, hwcDataStart);
+            if (hwcString == null) hwcDataStart = -1;
 
             // Parse the system order number
-            int sonBase = BinaryUtils.GetBasePosition(sourceBytes, SON_SIG, fsysBase, FSYS_RGN_SIZE);
-            string sonString = ParseFsysSon(sourceBytes, sonBase);
+            int sonDataStart = -1;
+
+            // Look for the system order number lower case signature
+            if ((sonDataStart = BinaryUtils.GetBasePosition(sourceBytes, SON_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
+            {
+                sonDataStart += 0x1 + 0x3;
+            }
+
+            // Look for the system order number uppser case signature
+            if (sonDataStart == -1)
+            {
+                if ((sonDataStart = BinaryUtils.GetBasePosition(sourceBytes, SON_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
+                {
+                    sonDataStart += 0x1 + 0x3;
+                }
+            }
+
+            string sonString = ParseFsysString(sourceBytes, sonDataStart);
 
             return new FsysStore
             {
                 FsysBytes = fsysStoreBytes,
                 FsysBase = fsysBase,
                 Serial = serialString,
-                SerialBase = snBase != -1 ? snBase + SSN_NUDGE_POS : -1,
+                SerialBase = snDataStart != -1 ? snDataStart + LITERAL_POS : -1,
                 HWC = hwcString,
-                HWCBase = hwcBase != -1 ? hwcBase + HWC_NUDGE_POS : -1,
+                HWCBase = hwcDataStart != -1 ? hwcDataStart + LITERAL_POS : -1,
                 SON = sonString,
                 CrcString = crcString,
                 CrcCalcString = crcCalcString,
@@ -346,76 +388,34 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
-        private static string ParseFsysSerial(byte[] sourceBytes, int serialBase)
+        private static string ParseFsysString(byte[] sourceBytes, int basePos)
         {
-            if (serialBase == -1)
+            // If the base is -1 return null
+            if (basePos == -1)
             {
                 return null;
             }
 
-            byte[] ssnBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, serialBase + SSN_NUDGE_POS, SSN_MAX_LENGTH);
+            // Read size of the indicated variable
+            int dataSize = sourceBytes[basePos];
 
-            if (ssnBytes == null)
+            // Invalid data size
+            if (dataSize == 0)
             {
                 return null;
             }
 
-            string ssnString = _utf8.GetString(ssnBytes);
-            int trimIndex = ssnString.Length - 1;
-            if (trimIndex >= 0 && !char.IsLetterOrDigit(ssnString[trimIndex]))
-            {
-                ssnString = ssnString.Substring(0, trimIndex);
-            }
+            // Read the variable bytes
+            byte[] dataBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, basePos + LITERAL_POS, dataSize);
 
-            if (ssnString.Length != 11 && ssnString.Length != 12)
+            // Invalid bytes
+            if (dataBytes == null || dataBytes.Length > dataSize)
             {
                 return null;
             }
 
-            return ssnString;
-        }
-
-        private static string ParseFsysHwc(byte[] sourceBytes, int hwcBase)
-        {
-            if (hwcBase == -1)
-            {
-                return null;
-            }
-
-            byte[] hwcBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, hwcBase + HWC_NUDGE_POS, HWC_LENGTH);
-
-            if (hwcBytes == null)
-            {
-                return null;
-            }
-
-            string hwcString = _utf8.GetString(hwcBytes).Trim();
-            hwcString = new string(hwcString.Where(char.IsLetterOrDigit).ToArray());
-
-            return hwcString;
-        }
-
-        private static string ParseFsysSon(byte[] sourceBytes, int sonBase)
-        {
-            if (sonBase == -1)
-            {
-                return null;
-            }
-
-            byte indexByte = 0x00;
-            byte[] terminationBytes = { 0x03, 0x04, 0x09 };
-            byte[] sonBytes = BinaryUtils.GetBytesDelimited(sourceBytes, sonBase, indexByte, terminationBytes);
-
-            if (sonBytes == null)
-            {
-                return null;
-            }
-
-            string sonString = _utf8.GetString(sonBytes);
-
-            if (sonString.EndsWith("/")) return sonString.TrimEnd('/');
-
-            return sonString;
+            // Return string data
+            return _utf8.GetString(dataBytes);
         }
 
         private static FsysStore DefaultFsysRegion()
@@ -435,6 +435,7 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
+        // Fsys resides in the NVRAM at either base: 20000h, or 22000h.
         internal static readonly byte[] FSYS_SIG =
         {
             0x46, 0x73, 0x79, 0x73,
@@ -451,95 +452,100 @@ namespace Mac_EFI_Toolkit.Common
             0x03, 0x53, 0x53, 0x4E
         };
 
-        internal static readonly byte[] SNP_LOWER_SIG =
+        internal static readonly byte[] SSNP_LOWER_SIG =
         {
-             0x73, 0x73, 0x6E, 0x70
+             0x04, 0x73, 0x73, 0x6E, 0x70
         };
 
-        internal static readonly byte[] SON_SIG =
+        internal static readonly byte[] HWC_LOWER_SIG =
+        {
+            0x03, 0x68, 0x77, 0x63
+        };
+
+        internal static readonly byte[] HWC_UPPER_SIG =
+        {
+            0x03, 0x53, 0x53, 0x4E
+        };
+
+        internal static readonly byte[] SON_LOWER_SIG =
         {
             0x03, 0x73, 0x6F, 0x6E
         };
 
-        internal static readonly byte[] HWC_SIG =
+        internal static readonly byte[] SON_UPPER_SIG =
         {
-            0x03, 0x68, 0x77,  0x63
+            0x03, 0x53, 0x4F, 0x4E
         };
         #endregion
 
         #region NVRAM Section
         internal static NvramStore GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
         {
-            byte[] nvramSignature = GetNvramSignature(storeType);
-
-            // Check the descriptor for bios base + limit
+            byte[] nvramSig = GetNvramSignature(storeType);
             int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
             int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
+            int nvramPos = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, biosBase, biosLimit);
+            int paddingLen = 0;
 
-            // Look for the NVRAM GUID
-            int nvramBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, biosBase, biosLimit);
-
-            if (nvramBase == -1)
+            if (nvramPos == -1)
             {
-                // Could not find the NVRAM GUID
                 return DefaultNvramStoreData();
             }
 
-            int primaryBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSignature, nvramBase);
-
-            if (primaryBase == -1)
-            {
-                // Could not find the primary store signature
-                return DefaultNvramStoreData();
-            }
-
-            byte[] primaryStoreBytes = null;
+            int primaryStoreSize = -1;
+            int primaryStoreBase = -1;
+            byte[] primaryStoreData = null;
             bool isPrimaryStoreEmpty = true;
-            int primaryStoreLength = -1;
 
-            if (primaryBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, primaryBase, 0x6) is byte[] primaryHeaderBytes)
+            int psHeaderBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSig, nvramPos);
+
+            if (psHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, psHeaderBase, 0x6) is byte[] bytesPrimaryHeader)
             {
-                NvramStoreHeader primaryStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(primaryHeaderBytes);
+                NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
 
-                if (primaryStoreHeader.SizeOfData != 0xFFFF && primaryStoreHeader.SizeOfData != 0)
+                if (psHeader.SizeOfData != 0xFFFF && psHeader.SizeOfData != 0)
                 {
-                    primaryStoreLength = primaryStoreHeader.SizeOfData;
-                    primaryStoreBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, primaryBase, primaryStoreLength);
+                    primaryStoreSize = psHeader.SizeOfData;
+                    primaryStoreBase = psHeaderBase;
+                    primaryStoreData = BinaryUtils.GetBytesBaseLength(sourceBytes, primaryStoreBase, primaryStoreSize);
 
-                    if (primaryStoreBytes != null)
+                    if (primaryStoreData != null)
                     {
-                        byte[] primaryStoreBodyData = BinaryUtils.GetBytesBaseLength(sourceBytes, primaryBase + GUID_LENGTH, primaryStoreLength - GUID_LENGTH);
+                        byte[] primaryStoreBodyData = BinaryUtils.GetBytesBaseLength(sourceBytes, primaryStoreBase + GUID_LENGTH, primaryStoreSize - GUID_LENGTH);
                         isPrimaryStoreEmpty = BinaryUtils.IsByteBlockEmpty(primaryStoreBodyData);
+                    }
+
+                    for (int i = primaryStoreBase + primaryStoreSize; i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
+                    {
+                        paddingLen++;
                     }
                 }
             }
 
-            // Count the padding bytes after the primary store (After the last 0xFF we should have our backup store signature)
-            int paddingLength = 0;
-            for (int i = (primaryBase + primaryStoreLength); i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
-            {
-                paddingLength++;
-            }
-
-            byte[] backupStoreBytes = null;
+            int backupStoreSize = -1;
+            int backupStoreBase = -1;
+            byte[] backupStoreData = null;
             bool isBackupStoreEmpty = true;
-            int backupStoreLength = -1;
 
-            int backupBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSignature, primaryBase + primaryStoreLength + paddingLength);
-
-            if (backupBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, backupBase, 0x6) is byte[] backupHeaderBytes)
+            if (primaryStoreBase != -1)
             {
-                NvramStoreHeader backupStoreHeader = Helper.DeserializeHeader<NvramStoreHeader>(backupHeaderBytes);
+                int bsHeaderBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSig, primaryStoreBase + primaryStoreSize + paddingLen);
 
-                if (backupStoreHeader.SizeOfData != 0xFFFF)
+                if (bsHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, bsHeaderBase, 0x6) is byte[] bytesBackupHeader)
                 {
-                    backupStoreLength = backupStoreHeader.SizeOfData;
-                    backupStoreBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, backupBase, backupStoreLength);
+                    NvramStoreHeader bsHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
 
-                    if (backupStoreBytes != null)
+                    if (bsHeader.SizeOfData != 0xFFFF && bsHeader.SizeOfData != 0)
                     {
-                        byte[] backupStoreBodyData = BinaryUtils.GetBytesBaseLength(sourceBytes, backupBase + GUID_LENGTH, backupStoreLength - GUID_LENGTH);
-                        isBackupStoreEmpty = BinaryUtils.IsByteBlockEmpty(backupStoreBodyData);
+                        backupStoreSize = bsHeader.SizeOfData;
+                        backupStoreBase = bsHeaderBase;
+                        backupStoreData = BinaryUtils.GetBytesBaseLength(sourceBytes, backupStoreBase, backupStoreSize);
+
+                        if (backupStoreData != null)
+                        {
+                            byte[] bsBodyData = BinaryUtils.GetBytesBaseLength(sourceBytes, backupStoreBase + GUID_LENGTH, backupStoreSize - GUID_LENGTH);
+                            isBackupStoreEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
+                        }
                     }
                 }
             }
@@ -547,13 +553,13 @@ namespace Mac_EFI_Toolkit.Common
             return new NvramStore
             {
                 StoreType = storeType,
-                PrimaryStoreLength = primaryStoreLength,
-                PrimaryStoreBase = primaryBase,
-                PrimaryStoreBytes = primaryStoreBytes,
+                PrimaryStoreSize = primaryStoreSize,
+                PrimaryStoreBase = primaryStoreBase,
+                PrimaryStoreBytes = primaryStoreData,
                 IsPrimaryStoreEmpty = isPrimaryStoreEmpty,
-                BackupStoreLength = backupStoreLength,
-                BackupStoreBase = backupBase,
-                BackupStoreBytes = backupStoreBytes,
+                BackupStoreSize = backupStoreSize,
+                BackupStoreBase = backupStoreBase,
+                BackupStoreBytes = backupStoreData,
                 IsBackupStoreEmpty = isBackupStoreEmpty,
             };
         }
@@ -562,11 +568,11 @@ namespace Mac_EFI_Toolkit.Common
         {
             return new NvramStore
             {
-                PrimaryStoreLength = -1,
+                PrimaryStoreSize = -1,
                 PrimaryStoreBase = -1,
                 PrimaryStoreBytes = null,
                 IsPrimaryStoreEmpty = true,
-                BackupStoreLength = -1,
+                BackupStoreSize = -1,
                 BackupStoreBase = -1,
                 BackupStoreBytes = null,
                 IsBackupStoreEmpty = true
