@@ -432,7 +432,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.Info, rtbLog);
 
-            LogLoadedBinarySize();
+            LogBinarySize();
             LogDescriptorData();
             LogFsysData();
 
@@ -457,7 +457,7 @@ namespace Mac_EFI_Toolkit.WinForms
             Logger.WriteLogTextToRtb($"Initial checks complete", RtbLogPrefix.Complete, rtbLog);
         }
 
-        private void LogLoadedBinarySize()
+        private void LogBinarySize()
         {
             if (!FileUtils.GetIsValidBinSize(FWBase.FileInfoData.FileLength))
             {
@@ -473,13 +473,13 @@ namespace Mac_EFI_Toolkit.WinForms
             if (Descriptor.IsValid)
             {
                 if (Descriptor.PdrBase != 0)
-                    Logger.WriteLogTextToRtb($"PDR Region: Base {Descriptor.PdrBase:X2}h, Limit: {Descriptor.PdrLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+                    Logger.WriteLogTextToRtb($"PDR Region: Base {Descriptor.PdrBase:X2}h, Limit {Descriptor.PdrLimit:X2}h", RtbLogPrefix.Info, rtbLog);
 
                 if (Descriptor.MeBase != 0)
-                    Logger.WriteLogTextToRtb($"ME Region: Base {Descriptor.MeBase:X2}h, Limit: {Descriptor.MeLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+                    Logger.WriteLogTextToRtb($"ME Region: Base {Descriptor.MeBase:X2}h, Limit {Descriptor.MeLimit:X2}h", RtbLogPrefix.Info, rtbLog);
 
                 if (Descriptor.BiosBase != 0)
-                    Logger.WriteLogTextToRtb($"BIOS Region: Base {Descriptor.BiosBase:X2}h, Limit: {Descriptor.BiosLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+                    Logger.WriteLogTextToRtb($"BIOS Region: Base {Descriptor.BiosBase:X2}h, Limit {Descriptor.BiosLimit:X2}h", RtbLogPrefix.Info, rtbLog);
             }
         }
 

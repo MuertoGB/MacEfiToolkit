@@ -989,21 +989,21 @@ namespace Mac_EFI_Toolkit
                 else if (sender == cmdReset)
                     lblMessage.Text = "Reset (CTRL + R)";
                 else if (sender == cmdEdit)
-                    lblMessage.Text = "Open the firmware editor (CTRL + E)";
+                    lblMessage.Text = "Open the Firmware Editor (CTRL + E)";
                 else if (sender == cmdCopy)
-                    lblMessage.Text = "Open the copy menu (CTRL + C)";
+                    lblMessage.Text = "Open the Copy Menu (CTRL + C)";
                 if (sender == cmdNavigate)
-                    lblMessage.Text = "Navigate to file (ALT + N)";
+                    lblMessage.Text = "Navigate to File (ALT + N)";
                 else if (sender == cmdReload)
-                    lblMessage.Text = "Reload file from disk (ALT + R)";
+                    lblMessage.Text = "Reload File from Disk (ALT + R)";
                 else if (sender == cmdEveryMacSearch)
-                    lblMessage.Text = "Search serial with EveryMac (ALT + S)";
+                    lblMessage.Text = "Search Serial with EveryMac (ALT + S)";
                 else if (sender == cmdFixFsysCrc)
                     lblMessage.Text = "Repair Fsys CRC32 (ALT + F)";
                 else if (sender == cmdExportFsys)
                     lblMessage.Text = "Export Fsys Store (ALT + E)";
                 else if (sender == cmdAppleRomInfo)
-                    lblMessage.Text = "Open ROM Information Window (ALT + I)";
+                    lblMessage.Text = "Open the ROM Information Window (ALT + I)";
                 else if (sender == cmdExportMe)
                     lblMessage.Text = "Export ME Region (ALT + M)";
                 else if (sender == lblVssStore)

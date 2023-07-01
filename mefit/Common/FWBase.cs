@@ -372,6 +372,10 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             string sonString = ParseFsysString(sourceBytes, sonDataStart);
+            if (sonString != null && sonString.EndsWith("/"))
+            {
+                sonString = sonString.TrimEnd('/');
+            }
 
             return new FsysStore
             {
