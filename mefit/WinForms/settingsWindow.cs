@@ -139,7 +139,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             UpdateCheckBoxControls();
 
-           _showSettingsAppliedLabel();
+            _showSettingsAppliedLabel();
         }
         #endregion
 

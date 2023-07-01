@@ -17,7 +17,7 @@ Mac EFI Toolkit
 ## About
 
 **This application is in active development:**
->🛠 Current Status: Bug tracking. The next version should be a v1.0.0 release if all goes well.
+>🛠 Current Status: Bug tracking. Final updates.
 
 Mac EFI Toolkit, or 'mefit' is an information gathering tool designed to aid technicians in repair of Mac BIOS/EFI files, with limited editing capability. The application can detect EFI lock in the NVRAM, detect the APFS DXE driver; even if hidden inside an LZMA compressed volume, detect if the file size is valid, with the ability to calculate any size discrepancy bytes, and more.
 
@@ -30,24 +30,33 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 
 ## Features
 
-**EFIROM:**
-- Original binaries are left untouched, new files built from memory.
-- Read the flash descriptor for base and limit positions of UEFI sections.
-- Knuth–Morris–Pratt algorithm for searching binary data.
-- View configuration code derived from the hardware config (HWC).
-- Detect and repair invalid Fsys store checksums.
-- View information in the Fsys store.
+**Fsys Store:**
 - Export Fsys store from the NVRAM.
-- Replace Fsys store
-- Replace serial number
+- Replace the Fsys store (0x800) at offset 0x20000h or 0x22000h.
+- View the serial number, hwc, and son.
+- Edit the serial number, and hwc.
+- Detect and repair invalid Fsys store checksums.
 - Check serial number with EveryMac.
+
+**NVRAM**:
+- Clear NVRAM (VSS, SVS, NSS) with section header preservation.
 - View which NVRAM stores have data, are empty, or not found.
-- Clear NVRAM (VSS, SVS, NSS) with section header preservation
-- View ROM section information.
-- View FIT and ME versions.
-- Export the Intel ME Region.
+
+**Platform Data Region:**
+- Read the Mac Board-ID (> 2013 UEFI)
+
+**Mac Specific:**
 - Detect EFI password lock.
 - Detect APFS capability.
+- View Apple ROM section information.
+- View configuration code derived from the hardware configuration code (hwc).
+
+**General:**
+- Original files are always safe, edits are made to a copy in memory.
+- Read the flash descriptor for base and limit positions of UEFI sections.
+- Knuth–Morris–Pratt algorithm for searching binary data.
+- View FIT and ME versions.
+- Export the Intel ME Region.
 - Validate binary size.
 
 **Application:**
@@ -55,18 +64,17 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 - No installation necessary.
 - DPI scaling support.
 - Drag & drop support.
-- Memory Management.
 - Version checking.
 
 **TODO**
 - [ ] Complete the logging systems
 - [ ] Refactor and optimize source code
+- [ ] Patch exported ME Region into binary
 
-| SUGGESTED FEATURES                   | Status      |
-|--------------------------------------|-------------|
-| Detect MDM status                    |🔴 Undecided |
-| Detect email address in the NVRAM    |🔴 Undecided |
-| Configure ME region	               |🔴 Undecided |
+| SUGGESTED FEATURES                   | Status         |
+|--------------------------------------|----------------|
+| Detect email address in the NVRAM    |🟠 Researching |
+| Detect MDM status                    |🔴 Undecided   |
 
 ## Download
 
