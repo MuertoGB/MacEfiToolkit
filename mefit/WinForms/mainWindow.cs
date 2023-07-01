@@ -1196,6 +1196,8 @@ namespace Mac_EFI_Toolkit
             // Set the binary path and load the bytes
             FWBase.LoadedBinaryPath = filePath;
             FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
+
+            // Process the descriptor
             Descriptor.Parse(FWBase.LoadedBinaryBytes);
 
             // Check parameters

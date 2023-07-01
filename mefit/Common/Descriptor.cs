@@ -116,8 +116,8 @@ namespace Mac_EFI_Toolkit.Common
         {
             uint[] values =
             {
-                DescriptorBase, DescriptorLimit, DescriptorSize, BiosBase, BiosLimit,
-                BiosSize, MeBase, MeLimit, MeSize, PdrBase, PdrLimit, PdrSize
+                DescriptorBase, DescriptorLimit, DescriptorSize, BiosBase, BiosLimit, BiosSize,
+                MeBase, MeLimit, MeSize, PdrBase, PdrLimit, PdrSize
             };
             for (int i = 0; i < values.Length; i++)
             {

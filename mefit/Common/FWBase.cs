@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Common
 {
@@ -136,13 +137,10 @@ namespace Mac_EFI_Toolkit.Common
         internal const int FSYS_RGN_SIZE = 0x800;      // 2048
         internal const int FSYS_CRC_POS = 0x7FC;       // 2044
 
-        private const int GUID_LENGTH = 0x10;        // 16
-        private const int ZERO_VECTOR_LENGTH = 0x10; // 16
-
-        private const int BID_NUDGE_POS = 0x5;   // 5
-        private const int LITERAL_POS = 0x2;     // 2
-        private const int BID_LENGTH = 0x8;      // 8
-        private const int CRC32_LENGTH = 0x4;    // 4
+        private const int GUID_LENGTH = 0x10;          // 16
+        private const int ZERO_VECTOR_LENGTH = 0x10;   // 16
+        private const int LITERAL_POS = 0x2;           // 2
+        private const int CRC32_LENGTH = 0x4;          // 4
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
 
@@ -224,7 +222,9 @@ namespace Mac_EFI_Toolkit.Common
                 return DefaultPdrSection();
             }
 
-            byte[] bidBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, bidBase + BID_NUDGE_POS, BID_LENGTH);
+            int boardIdLength = 0x8;
+            int dataStartPosition = 0x5;
+            byte[] bidBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, bidBase + dataStartPosition, boardIdLength);
 
             if (bidBytes == null)
             {
@@ -362,7 +362,7 @@ namespace Mac_EFI_Toolkit.Common
                 sonDataStart += 0x1 + 0x3;
             }
 
-            // Look for the system order number uppser case signature
+            // Look for the system order number upper case signature
             if (sonDataStart == -1)
             {
                 if ((sonDataStart = BinaryUtils.GetBasePosition(sourceBytes, SON_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
@@ -633,7 +633,6 @@ namespace Mac_EFI_Toolkit.Common
             // Define index and termination bytes for data extraction
             byte indexByte = 0x20;
             byte terminationByte = 0x0A;
-            bool sectionHasData = false;
 
             // Create a dictionary to hold signature-data pairs
             Dictionary<byte[], string> romInfoData = new Dictionary<byte[], string>
@@ -650,79 +649,109 @@ namespace Mac_EFI_Toolkit.Common
                 { COMPILER_SIGNATURE, null }
             };
 
-            // Create a separate dictionary to store updated data
-            Dictionary<byte[], string> updatedRomInfoData = new Dictionary<byte[], string>(romInfoData);
-
             // Check the descriptor for bios base + limit
             int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
             int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
 
             // First we need to locate the AppleRomInformation section GUID
-            int romSectionBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, biosBase, biosLimit);
+            List<int> romSectionBases = new List<int>();
 
-            if (romSectionBase == -1)
+            int guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, biosBase, biosLimit);
+
+            // Seach all GUIDs
+            while (guidPosition != -1)
+            {
+                // Store the base position of the AppleRomInformation section
+                romSectionBases.Add(guidPosition);
+
+                // Move the search position to the next occurrence of the GUID
+                guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, guidPosition + 1, biosLimit);
+            }
+
+            if (romSectionBases.Count == 0)
             {
                 // AppleRomInformation GUID was not found, so return default data
                 return DefaultRomInformationBase();
             }
 
-            // GUID Length (10h) AppleRomInformation section size data length (2h, int16)
-            int headerLength = 0x18; int dataLength = 0x2;
-            // Read first two bytes after the header
-            byte[] dataLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, romSectionBase + headerLength, dataLength);
-            // Convert first two bytes to an int16 value and get the AppleRomInformation section size
-            int sectionLength = BitConverter.ToInt16(dataLengthBytes, 0);
-            // Read the entire AppleRomInformation section using sectionLen as the max search length
-            byte[] romSectionBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, romSectionBase + headerLength, sectionLength);
+            // Declare the variables outside the loop to ensure accessibility
+            byte[] romSectionBytes = null;
 
-            if (romSectionBytes == null)
+            // Process each AppleRomInformation section
+            foreach (int sectionBase in romSectionBases)
             {
-                return DefaultRomInformationBase();
-            }
+                // GUID Length (10h) AppleRomInformation section size data length (2h, int16)
+                int headerLength = 0x18;
+                int dataLength = 0x2;
 
-            // Extract data from the romSectionData based on the signature
-            foreach (KeyValuePair<byte[], string> kvPair in romInfoData)
-            {
-                int dataBase = BinaryUtils.GetBasePosition(romSectionBytes, kvPair.Key);
-                if (dataBase != -1)
+                // Read first two bytes after the header
+                byte[] dataLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, sectionBase + headerLength, dataLength);
+
+                // Convert first two bytes to an int16 value and get the AppleRomInformation section size
+                int sectionLength = BitConverter.ToInt16(dataLengthBytes, 0);
+
+                if (sectionLength <= 6)
+                {      
+                    // Skip reading the section if the length is under 6
+                    continue;
+                }
+
+                // Read the entire AppleRomInformation section using sectionLength as the max search length
+                romSectionBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, sectionBase + headerLength, sectionLength);
+
+                if (romSectionBytes == null)
                 {
-                    int signatureLength = kvPair.Key.Length;
-                    // Extract the data using the signature position, signature length, index byte, and termination byte
-                    byte[] infoBytes = BinaryUtils.GetBytesDelimited(romSectionBytes, dataBase + signatureLength, indexByte, terminationByte);
-                    if (infoBytes != null)
+                    return DefaultRomInformationBase();
+                }
+
+                // Extract data from the romSectionBytes based on the signature
+                Dictionary<byte[], string> updatedRomInfoData = new Dictionary<byte[], string>(romInfoData);
+
+                foreach (KeyValuePair<byte[], string> kvPair in romInfoData)
+                {
+                    int dataBase = BinaryUtils.GetBasePosition(romSectionBytes, kvPair.Key);
+
+                    if (dataBase != -1)
                     {
-                        // Convert the extracted byte array to string using UTF-8 encoding
-                        updatedRomInfoData[kvPair.Key] = _utf8.GetString(infoBytes);
+                        int keyLength = kvPair.Key.Length;
+                        // Extract the data using the signature position, signature length, index byte, and termination byte
+                        byte[] infoBytes = BinaryUtils.GetBytesDelimited(romSectionBytes, dataBase + keyLength, indexByte, terminationByte);
+
+                        if (infoBytes != null)
+                        {
+                            // Convert the extracted byte array to string using UTF-8 encoding
+                            updatedRomInfoData[kvPair.Key] = _utf8.GetString(infoBytes);
+                        }
                     }
                 }
+
+                // Update the original romInfoData dictionary with the extracted and updated values
+                foreach (KeyValuePair<byte[], string> kvPair in updatedRomInfoData)
+                {
+                    romInfoData[kvPair.Key] = kvPair.Value;
+                }
+
+                // Create and return an instance of AppleRomInformation with the extracted data
+                return new AppleRomInformationSection
+                {
+                    SectionExists = sectionLength > 6,
+                    SectionBytes = romSectionBytes,
+                    SectionBase = sectionBase,
+                    BiosId = romInfoData[BIOS_ID_SIGNATURE],
+                    Model = romInfoData[MODEL_SIGNATURE],
+                    EfiVersion = romInfoData[EFI_VERSION_SIGNATURE],
+                    BuiltBy = romInfoData[BUILT_BY_SIGNATURE],
+                    DateStamp = romInfoData[DATE_SIGNATURE],
+                    Revision = romInfoData[REVISION_SIGNATURE],
+                    RomVersion = romInfoData[ROM_VERSION_SIGNATURE],
+                    BuildcaveId = romInfoData[BUILDCAVE_ID_SIGNATURE],
+                    BuildType = romInfoData[BUILD_TYPE_SIGNATURE],
+                    Compiler = romInfoData[COMPILER_SIGNATURE]
+                };
             }
 
-            // Update the original romInfoData dictionary with the extracted and updated values
-            foreach (KeyValuePair<byte[], string> kvPair in updatedRomInfoData)
-            {
-                romInfoData[kvPair.Key] = kvPair.Value;
-            }
-
-            // Some EFI have this section GUID, however the data is empty
-            sectionHasData = romSectionBytes.Length <= 0x18 ? false : true;
-
-            // Create and return an instance of AppleRomInformation with the extracted data
-            return new AppleRomInformationSection
-            {
-                SectionExists = sectionHasData,
-                SectionBytes = romSectionBytes,
-                SectionBase = romSectionBase,
-                BiosId = romInfoData[BIOS_ID_SIGNATURE],
-                Model = romInfoData[MODEL_SIGNATURE],
-                EfiVersion = romInfoData[EFI_VERSION_SIGNATURE],
-                BuiltBy = romInfoData[BUILT_BY_SIGNATURE],
-                DateStamp = romInfoData[DATE_SIGNATURE],
-                Revision = romInfoData[REVISION_SIGNATURE],
-                RomVersion = romInfoData[ROM_VERSION_SIGNATURE],
-                BuildcaveId = romInfoData[BUILDCAVE_ID_SIGNATURE],
-                BuildType = romInfoData[BUILD_TYPE_SIGNATURE],
-                Compiler = romInfoData[COMPILER_SIGNATURE]
-            };
+            // If no valid AppleRomInformation section is found, return default data
+            return DefaultRomInformationBase();
         }
 
         internal static AppleRomInformationSection DefaultRomInformationBase()
@@ -744,6 +773,7 @@ namespace Mac_EFI_Toolkit.Common
                 Compiler = null
             };
         }
+
 
         internal static readonly byte[] BIOS_ID_SIGNATURE =
         {
@@ -907,10 +937,8 @@ namespace Mac_EFI_Toolkit.Common
             int sectionLength = BitConvert.ToInt24(dataLengthBytes);
             // Determine the end of the lzma guid section
             int lzmaDxeLimit = lzmaDxeBase + sectionLength;
-            // Signature length
-            int signatureLength = 0x10;
             // Search for the LZMA signature byte
-            lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, new byte[] { 0x5D }, lzmaDxeBase + signatureLength);
+            lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, new byte[] { 0x5D }, lzmaDxeBase + GUID_LENGTH);
             // Decompress the LZMA volume
             byte[] decompressedBytes = LzmaCoder.DecompressBytes(BinaryUtils.GetBytesBaseLimit(sourceBytes, lzmaDxeBase, lzmaDxeLimit));
 

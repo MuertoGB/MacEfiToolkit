@@ -23,12 +23,14 @@
 - The EFI model code is now automatically converted and displayed as a model identifier in the main window and rom information window.
 - The application will now parse the flash descriptor (when available) for base + limit offsets of UEFI regions.
 - Added more files types when opening a firmware image (*.fd, *.bio).
+- The Fsys parser will now dynamically read variable size.
 
 #### Bugs:
 - Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.
 - Fixed an issue that caused a handled exception to appear when a thread attempted to refresh a control before its handles were fully initialized.
 - Fixed the editor window 'Open Builds Directory' button opening the wrong path.
 - Fixed invalidated (0x83) serial numbers being read.
+- Fixed ROM information not being found if the GUID exists, but the section is empty.
 
 ## Version 0.7.0
 
