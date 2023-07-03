@@ -42,9 +42,6 @@ namespace Mac_EFI_Toolkit.Common
         internal const uint DESCRIPTOR_BASE = 0x0;
         internal const uint DESCRIPTOR_LENGTH = 0x1000;
 
-        internal static uint DescriptorBase = 0;
-        internal static uint DescriptorLimit = 0;
-        internal static uint DescriptorSize = 0;
         internal static uint BiosBase = 0;
         internal static uint BiosLimit = 0;
         internal static uint BiosSize = 0;
@@ -60,21 +57,15 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static uint CalculateRegionBase(ushort basePosition)
         {
-            if (basePosition == 0x7FFF)
-                return 0;
-            if (basePosition == 0x0FFF)
-                return 0;
-            if (basePosition == 0xFFFF)
-                return 0;
             // For example:
             // BIOS Base:  LE: 3701h > 137h * 1000h = A bios base of 137000h
-            return (basePosition * DESCRIPTOR_LENGTH);
+            return basePosition * DESCRIPTOR_LENGTH;
         }
 
         internal static uint CalculateRegionSize(ushort basePosition, ushort limitPosition)
         {
             if (limitPosition != 0)
-                return (uint)((limitPosition + 0x1 - basePosition) * DESCRIPTOR_LENGTH);
+                return (uint)(limitPosition + 0x1 - basePosition) * DESCRIPTOR_LENGTH;
 
             // For example:
             // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h
@@ -91,38 +82,39 @@ namespace Mac_EFI_Toolkit.Common
             // Match flash descriptor tag (5AA5F00F)
             IsValid = (descriptor.Signature.SequenceEqual(FLASH_DESC_SIGNATURE)) ? true : false;
 
-            // Descriptor base, size, limit
-            DescriptorBase = CalculateRegionBase(descriptor.DescriptorBase);
-            DescriptorSize = CalculateRegionSize(descriptor.DescriptorBase, descriptor.DescriptorLimit);
-            DescriptorLimit = DescriptorBase + DescriptorSize;
+            if (IsValid)
+            {
+                // BIOS base, size, limit
+                BiosBase = CalculateRegionBase(descriptor.BiosBase);
+                if (BiosBase > sourceBytes.Length) BiosBase = 0;
+                BiosSize = CalculateRegionSize(descriptor.BiosBase, descriptor.BiosLimit);
+                BiosLimit = BiosBase + BiosSize;
 
-            // BIOS base, size, limit
-            BiosBase = CalculateRegionBase(descriptor.BiosBase);
-            BiosSize = CalculateRegionSize(descriptor.BiosBase, descriptor.BiosLimit);
-            BiosLimit = BiosBase + BiosSize;
+                // Management Engine base, size, limit
+                MeBase = CalculateRegionBase(descriptor.MeBase);
+                if (MeBase > sourceBytes.Length) MeBase = 0;
+                MeSize = CalculateRegionSize(descriptor.MeBase, descriptor.MeLimit);
+                MeLimit = MeBase + MeSize;
 
-            // Management Engine base, size, limit
-            MeBase = CalculateRegionBase(descriptor.MeBase);
-            MeSize = CalculateRegionSize(descriptor.MeBase, descriptor.MeLimit);
-            MeLimit = MeBase + MeSize;
-
-            // Platform Data Region base, size, limit
-            PdrBase = CalculateRegionBase(descriptor.PdrBase);
-            PdrSize = CalculateRegionSize(descriptor.PdrBase, descriptor.PdrLimit);
-            PdrLimit = PdrBase + PdrSize;
+                // Platform Data Region base, size, limit
+                PdrBase = CalculateRegionBase(descriptor.PdrBase);
+                if (PdrBase > sourceBytes.Length) PdrBase = 0;
+                PdrSize = CalculateRegionSize(descriptor.PdrBase, descriptor.PdrLimit);
+                PdrLimit = PdrBase + PdrSize;
+            }
         }
 
         internal static void ResetValues()
         {
-            uint[] values =
-            {
-                DescriptorBase, DescriptorLimit, DescriptorSize, BiosBase, BiosLimit, BiosSize,
-                MeBase, MeLimit, MeSize, PdrBase, PdrLimit, PdrSize
-            };
-            for (int i = 0; i < values.Length; i++)
-            {
-                values[i] = 0;
-            }
+            BiosBase = 0;
+            BiosLimit = 0;
+            BiosSize = 0;
+            MeBase = 0;
+            MeLimit = 0;
+            MeSize = 0;
+            PdrBase = 0;
+            PdrLimit = 0;
+            PdrSize = 0;
 
             IsValid = false;
         }

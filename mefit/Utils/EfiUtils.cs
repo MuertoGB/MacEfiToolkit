@@ -57,12 +57,12 @@ namespace Mac_EFI_Toolkit.Utils
                 XDocument doc = XDocument.Parse(xml);
                 string data = doc.XPathSelectElement("/root/configCode")?.Value;
 
-                if (data != null)
+                if (!string.IsNullOrEmpty(data))
                 {
                     Logger.WriteToLogFile($"'{hwc}' not present in local db > Server returned: '{data}'", LogType.Database);
                 }
 
-                return data ?? null;
+                return string.IsNullOrEmpty(data) ? null : data;
             }
             catch
             {

@@ -157,6 +157,17 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
+        #region Debug
+        internal static bool IsDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
+        }
+        #endregion
+
         #region Keyboard Hook
         // Register the keyboard hook.
         internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc kbProc)

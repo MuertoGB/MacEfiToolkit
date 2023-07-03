@@ -71,6 +71,10 @@ namespace Mac_EFI_Toolkit
 
             // Set button properties (font and text)
             SetButtonProperties();
+
+            // hide debug button
+            if (!Program.IsDebugMode())
+                cmdDebug.Dispose();
         }
         #endregion
 
@@ -327,8 +331,8 @@ namespace Mac_EFI_Toolkit
                 using (Form frm = new termsWindow())
                 {
                     frm.FormClosed += ChildWindowClosed;
-                    DialogResult dr = frm.ShowDialog();
-                    bOpenEditor = (dr != DialogResult.No);
+                    DialogResult result = frm.ShowDialog();
+                    bOpenEditor = (result != DialogResult.No);
                 }
             }
 
@@ -347,6 +351,12 @@ namespace Mac_EFI_Toolkit
         {
             Control control = sender as Control;
             ShowContextMenu(control, cmsCopy);
+        }
+
+        private void cmdDebug_Click(object sender, EventArgs e)
+        {
+            Control control = sender as Control;
+            ShowContextMenu(control, cmsDebug);
         }
 
         private void cmdEveryMacSearch_Click(object sender, EventArgs e)
@@ -837,7 +847,7 @@ namespace Mac_EFI_Toolkit
 
         private void SetContextMenuRenderers()
         {
-            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication, cmsCopy };
+            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication, cmsCopy, cmsDebug };
             foreach (ContextMenuStrip menu in menus)
             {
                 menu.Renderer = new METMenuRenderer();
@@ -1102,7 +1112,6 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Misc Events
-
         internal async void CheckForNewVersion()
         {
             // Check for a new version using the specified URL
@@ -1129,14 +1138,64 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        //        private bool IsDebugMode()
-        //        {
-        //#if DEBUG
-        //            return true;
-        //#else
-        //    return false;
-        //#endif
-        //        }
+        private void OpenBinary(string filePath)
+        {
+            // Disable window controls
+            ToggleControlEnable(false);
+
+            // If a firmware is loaded, reset all data
+            if (_firmwareLoaded)
+            {
+                ResetAllData();
+            }
+
+            // Set the binary path and load the bytes
+            FWBase.LoadedBinaryPath = filePath;
+            FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
+
+            // Check the filesize
+            if (!IsValidMinMaxSize())
+            {
+                ResetAllData();
+                return;
+            }
+
+            // Process the descriptor
+            Descriptor.Parse(FWBase.LoadedBinaryBytes);
+
+            // Check parameters
+            if (IsValidFlashHeader())
+            {
+                // Show loading resource
+                pbxLoad.Image = Properties.Resources.loading;
+
+                // Set the current initial directory
+                _strInitialDirectory = Path.GetDirectoryName(filePath);
+
+                // Load the firmware base in a separate thread
+                Thread thr = new Thread(() => LoadFirmwareBase(filePath))
+                {
+                    IsBackground = true
+                };
+                thr.Start();
+
+                return;
+            }
+
+            ResetAllData();
+        }
+
+        private void LoadFirmwareBase(string filePath)
+        {
+            // Load firmware base data from loaded binary bytes
+            FWBase.LoadFirmwareBaseData(FWBase.LoadedBinaryBytes, filePath);
+
+            // Update controls on the main UI thread using Invoke
+            Invoke((MethodInvoker)UpdateControls);
+
+            // Set firmware loaded flag to true
+            _firmwareLoaded = true;
+        }
 
         private bool IsValidMinMaxSize()
         {
@@ -1182,60 +1241,6 @@ namespace Mac_EFI_Toolkit
             return true;
         }
 
-        private void OpenBinary(string filePath)
-        {
-            // Disable window controls
-            ToggleControlEnable(false);
-
-            // If a firmware is loaded, reset all data
-            if (_firmwareLoaded)
-            {
-                ResetAllData();
-            }
-
-            // Set the binary path and load the bytes
-            FWBase.LoadedBinaryPath = filePath;
-            FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
-
-            // Process the descriptor
-            Descriptor.Parse(FWBase.LoadedBinaryBytes);
-
-            // Check parameters
-            if (IsValidMinMaxSize() && IsValidFlashHeader())
-            {
-                // Show loading resource
-                pbxLoad.Image = Properties.Resources.loading;
-
-                // Set the current initial directory
-                _strInitialDirectory = Path.GetDirectoryName(filePath);
-
-                // Load the firmware base in a separate thread
-                Thread thr = new Thread(() => LoadFirmwareBase(filePath))
-                {
-                    IsBackground = true
-                };
-                thr.Start();
-
-                return;
-            }
-
-            // Reset all data and set firmware loaded to false
-            ResetAllData();
-            _firmwareLoaded = false;
-        }
-
-        private void LoadFirmwareBase(string filePath)
-        {
-            // Load firmware base data from loaded binary bytes
-            FWBase.LoadFirmwareBaseData(FWBase.LoadedBinaryBytes, filePath);
-
-            // Update controls on the main UI thread using Invoke
-            Invoke((MethodInvoker)UpdateControls);
-
-            // Set firmware loaded flag to true
-            _firmwareLoaded = true;
-        }
-
         private void ResetAllData()
         {
             // Clear labels
@@ -1264,6 +1269,28 @@ namespace Mac_EFI_Toolkit
             FWBase.ResetFirmwareBaseData();
 
             _firmwareLoaded = false;
+        }
+        #endregion
+
+        #region Debug Menu
+        private void viewDescriptorDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            METMessageBox.Show(this, "MET",
+                $"Valid Descriptor: {Descriptor.IsValid}\r\n" +
+                $"PdrBase: {Descriptor.PdrBase:X2}h, PdrLimit: {Descriptor.PdrLimit:X2}h\r\n" +
+                $"MeBase: {Descriptor.MeBase:X2}h, MeLimit: {Descriptor.MeLimit:X2}h\r\n" +
+                $"BiosBase: {Descriptor.BiosBase:X2}h, BiosLimit: {Descriptor.BiosLimit:X2}h",
+                METMessageType.Information, METMessageButtons.Okay);
+        }
+
+        private void openTermsWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetHalfOpacity();
+            using (Form frm = new termsWindow())
+            {
+                frm.FormClosed += ChildWindowClosed;
+                frm.ShowDialog();
+            }
         }
         #endregion
 

@@ -778,7 +778,6 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
-
         internal static readonly byte[] BIOS_ID_SIGNATURE =
         {
             0x42, 0x49, 0x4F, 0x53,
@@ -946,7 +945,7 @@ namespace Mac_EFI_Toolkit.Common
             // Decompress the LZMA volume
             byte[] decompressedBytes = LzmaCoder.DecompressBytes(BinaryUtils.GetBytesBaseLimit(sourceBytes, lzmaDxeBase, lzmaDxeLimit));
 
-            // There was an decompressing the volume (Error saved to './mefit.log')
+            // There was an issue decompressing the volume (Error saved to './mefit.log')
             if (decompressedBytes == null)
             {
                 return ApfsCapableFirmware.Unknown;

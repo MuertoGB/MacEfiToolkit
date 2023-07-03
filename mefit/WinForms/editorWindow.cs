@@ -293,7 +293,7 @@ namespace Mac_EFI_Toolkit.WinForms
             bool isChecked = cb.Checked;
 
             tlpSerialB.Enabled = isChecked;
-            tlpFsysA.Enabled = !isChecked;
+            tlpFsys.Enabled = !isChecked;
 
             if (!isChecked)
             {
@@ -470,16 +470,24 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void LogDescriptorData()
         {
-            if (Descriptor.IsValid)
+            if (Descriptor.PdrBase != 0 && Descriptor.PdrLimit != 0)
             {
-                if (Descriptor.PdrBase != 0)
-                    Logger.WriteLogTextToRtb($"PDR Region: Base {Descriptor.PdrBase:X2}h, Limit {Descriptor.PdrLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"PDR Region: Base {Descriptor.PdrBase:X2}h, Limit {Descriptor.PdrLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
 
-                if (Descriptor.MeBase != 0)
-                    Logger.WriteLogTextToRtb($"ME Region: Base {Descriptor.MeBase:X2}h, Limit {Descriptor.MeLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+            if (Descriptor.MeBase != 0 && Descriptor.MeLimit != 0)
+            {
+                Logger.WriteLogTextToRtb($"ME Region: Base {Descriptor.MeBase:X2}h, Limit {Descriptor.MeLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
+            else
+            {
+                cbxMeRegion.Enabled = false;
+                Logger.WriteLogTextToRtb($"ME Region not found: Option disabled", RtbLogPrefix.Warning, rtbLog);
+            }
 
-                if (Descriptor.BiosBase != 0)
-                    Logger.WriteLogTextToRtb($"BIOS Region: Base {Descriptor.BiosBase:X2}h, Limit {Descriptor.BiosLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+            if (Descriptor.BiosBase != 0 && Descriptor.BiosLimit != 0)
+            {
+                Logger.WriteLogTextToRtb($"BIOS Region: Base {Descriptor.BiosBase:X2}h, Limit {Descriptor.BiosLimit:X2}h", RtbLogPrefix.Info, rtbLog);
             }
         }
 

@@ -116,6 +116,7 @@ namespace Mac_EFI_Toolkit
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
             this.cmdCopy = new System.Windows.Forms.Button();
+            this.cmdDebug = new System.Windows.Forms.Button();
             this.cmsCopy = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.crc32ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,6 +131,10 @@ namespace Mac_EFI_Toolkit
             this.meVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orderNoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsDebug = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.viewDescriptorDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.openTermsWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlMain.SuspendLayout();
             this.tlpStatusBar.SuspendLayout();
             this.tlpStatusBarImage.SuspendLayout();
@@ -150,6 +155,7 @@ namespace Mac_EFI_Toolkit
             this.cmsApplication.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.cmsCopy.SuspendLayout();
+            this.cmsDebug.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -1317,7 +1323,7 @@ namespace Mac_EFI_Toolkit
             this.lblWindowTitle.Name = "lblWindowTitle";
             this.lblWindowTitle.Size = new System.Drawing.Size(518, 50);
             this.lblWindowTitle.TabIndex = 99;
-            this.lblWindowTitle.Text = " Mac EFI Toolkit";
+            this.lblWindowTitle.Text = "Mac EFI Toolkit";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdMenu
@@ -1466,7 +1472,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.tlpMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpMenu.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpMenu.ColumnCount = 9;
+            this.tlpMenu.ColumnCount = 10;
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
@@ -1475,11 +1481,13 @@ namespace Mac_EFI_Toolkit
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpMenu.Controls.Add(this.cmdOpenBin, 0, 0);
             this.tlpMenu.Controls.Add(this.cmdReset, 2, 0);
             this.tlpMenu.Controls.Add(this.cmdEdit, 4, 0);
             this.tlpMenu.Controls.Add(this.cmdCopy, 6, 0);
+            this.tlpMenu.Controls.Add(this.cmdDebug, 8, 0);
             this.tlpMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpMenu.Location = new System.Drawing.Point(1, 51);
             this.tlpMenu.Margin = new System.Windows.Forms.Padding(2);
@@ -1509,6 +1517,26 @@ namespace Mac_EFI_Toolkit
             this.cmdCopy.Text = "COPY";
             this.cmdCopy.UseVisualStyleBackColor = false;
             this.cmdCopy.Click += new System.EventHandler(this.cmdCopy_Click);
+            // 
+            // cmdDebug
+            // 
+            this.cmdDebug.BackColor = System.Drawing.Color.Transparent;
+            this.cmdDebug.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdDebug.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdDebug.FlatAppearance.BorderSize = 0;
+            this.cmdDebug.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.cmdDebug.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cmdDebug.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdDebug.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdDebug.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdDebug.Location = new System.Drawing.Point(324, 0);
+            this.cmdDebug.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdDebug.Name = "cmdDebug";
+            this.cmdDebug.Size = new System.Drawing.Size(80, 38);
+            this.cmdDebug.TabIndex = 4;
+            this.cmdDebug.Text = "DEBUG";
+            this.cmdDebug.UseVisualStyleBackColor = false;
+            this.cmdDebug.Click += new System.EventHandler(this.cmdDebug_Click);
             // 
             // cmsCopy
             // 
@@ -1634,6 +1662,40 @@ namespace Mac_EFI_Toolkit
             this.orderNoToolStripMenuItem.Text = "Order No";
             this.orderNoToolStripMenuItem.Click += new System.EventHandler(this.orderNoToolStripMenuItem_Click);
             // 
+            // cmsDebug
+            // 
+            this.cmsDebug.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsDebug.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmsDebug.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsDebug.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewDescriptorDataToolStripMenuItem,
+            this.toolStripSeparator6,
+            this.openTermsWindowToolStripMenuItem});
+            this.cmsDebug.Name = "cmsDebug";
+            this.cmsDebug.ShowImageMargin = false;
+            this.cmsDebug.Size = new System.Drawing.Size(216, 94);
+            // 
+            // viewDescriptorDataToolStripMenuItem
+            // 
+            this.viewDescriptorDataToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.viewDescriptorDataToolStripMenuItem.Name = "viewDescriptorDataToolStripMenuItem";
+            this.viewDescriptorDataToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.viewDescriptorDataToolStripMenuItem.Text = "View Descriptor Data";
+            this.viewDescriptorDataToolStripMenuItem.Click += new System.EventHandler(this.viewDescriptorDataToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(212, 6);
+            // 
+            // openTermsWindowToolStripMenuItem
+            // 
+            this.openTermsWindowToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openTermsWindowToolStripMenuItem.Name = "openTermsWindowToolStripMenuItem";
+            this.openTermsWindowToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.openTermsWindowToolStripMenuItem.Text = "Open Terms Window";
+            this.openTermsWindowToolStripMenuItem.Click += new System.EventHandler(this.openTermsWindowToolStripMenuItem_Click);
+            // 
             // mainWindow
             // 
             this.AllowDrop = true;
@@ -1679,6 +1741,7 @@ namespace Mac_EFI_Toolkit
             this.cmsApplication.ResumeLayout(false);
             this.tlpMenu.ResumeLayout(false);
             this.cmsCopy.ResumeLayout(false);
+            this.cmsDebug.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1783,6 +1846,11 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.TableLayoutPanel tlpIntelMe;
         private System.Windows.Forms.Button cmdExportMe;
         private System.Windows.Forms.ToolStripMenuItem openMeRegionDirectoryToolStripMenuItem;
+        private System.Windows.Forms.Button cmdDebug;
+        private System.Windows.Forms.ContextMenuStrip cmsDebug;
+        private System.Windows.Forms.ToolStripMenuItem viewDescriptorDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem openTermsWindowToolStripMenuItem;
     }
 }
 
