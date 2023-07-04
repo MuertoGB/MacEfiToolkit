@@ -6,6 +6,7 @@
 // This code is a work in progress.
 
 using Mac_EFI_Toolkit.Utils;
+using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -14,14 +15,33 @@ namespace Mac_EFI_Toolkit.Common
 
     #region Structs
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct FlashDescriptor
+    internal struct DescriptorHeader
     {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // 10h
         internal byte[] ReservedVector;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x4)]
-        internal byte[] Signature;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x2C)]
-        internal byte[] Unknown;  // We do not need this chunk of data
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] // 4h
+        internal byte[] Tag;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct DescriptorMap
+    {
+        internal byte ComponentBase;
+        internal byte NumOfFlashChips;
+        internal byte RegionBase;
+        internal byte NumOfRegions;
+        internal byte MasterBase;
+        internal byte NumOfMasters;
+        internal byte PchStrapsBase;
+        internal byte NumOfPchStraps;
+        internal byte ProcStrapsBase;
+        internal byte NumOfProcStraps;
+        internal ushort DescriptorVersion;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct DescriptorRegions
+    {
         internal ushort DescriptorBase;
         internal ushort DescriptorLimit;
         internal ushort BiosBase;
@@ -32,6 +52,28 @@ namespace Mac_EFI_Toolkit.Common
         internal ushort GbeLimit;
         internal ushort PdrBase;
         internal ushort PdrLimit;
+        internal ushort DevExp1Base;
+        internal ushort DevExp1Limit;
+        internal ushort Bios2Base;
+        internal ushort Bios2Limit;
+        internal ushort MicrocodeBase;
+        internal ushort MicrocodeLimit;
+        internal ushort EcBase;
+        internal ushort EcLimit;
+        internal ushort DevExp2Base;
+        internal ushort DevExp2Limit;
+        internal ushort IeBase;
+        internal ushort IeLimit;
+        internal ushort Tgbe1Base;
+        internal ushort Tgbe1Limit;
+        internal ushort Tgbe2Base;
+        internal ushort Tgbe2Limit;
+        internal ushort Reserved1Base;
+        internal ushort Reserved1Limit;
+        internal ushort Reserved2Base;
+        internal ushort Reserved2Limit;
+        internal ushort PttBase;
+        internal ushort PttLimit;
     }
     #endregion
 
@@ -39,8 +81,12 @@ namespace Mac_EFI_Toolkit.Common
     {
 
         #region Internal Members
-        internal const uint DESCRIPTOR_BASE = 0x0;
-        internal const uint DESCRIPTOR_LENGTH = 0x1000;
+        internal const uint DESCRIPTOR_BASE = 0; // 0h
+        internal const uint DESCRIPTOR_LENGTH = 4096; // 1000h
+
+        internal static DescriptorHeader Header;
+        internal static DescriptorMap Map;
+        internal static DescriptorRegions Regions;
 
         internal static uint BiosBase = 0;
         internal static uint BiosLimit = 0;
@@ -52,7 +98,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static uint PdrLimit = 0;
         internal static uint PdrSize = 0;
 
-        internal static bool IsValid = false;
+        internal static bool DescriptorMode = false;
         #endregion
 
         internal static uint CalculateRegionBase(ushort basePosition)
@@ -65,7 +111,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static uint CalculateRegionSize(ushort basePosition, ushort limitPosition)
         {
             if (limitPosition != 0)
-                return (uint)(limitPosition + 0x1 - basePosition) * DESCRIPTOR_LENGTH;
+                return (uint)(limitPosition + 1 - basePosition) * DESCRIPTOR_LENGTH;
 
             // For example:
             // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h
@@ -75,37 +121,56 @@ namespace Mac_EFI_Toolkit.Common
         internal static void Parse(byte[] sourceBytes)
         {
             // Read in the flash descriptor
-            byte[] fdRegionBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
-            // Deserialize the descriptor
-            FlashDescriptor descriptor = Helper.DeserializeHeader<FlashDescriptor>(fdRegionBytes);
+            byte[] DescriptorBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
+
+            // Deserialize the header
+            byte[] HeaderBytes = new byte[Marshal.SizeOf(typeof(DescriptorHeader))];
+            Array.Copy(DescriptorBytes, 0, HeaderBytes, 0, Marshal.SizeOf(typeof(DescriptorHeader)));
+            Header = Helper.DeserializeHeader<DescriptorHeader>(HeaderBytes);
+
+            // Deserialize the flash map
+            byte[] MapBytes = new byte[Marshal.SizeOf(typeof(DescriptorMap))];
+            Array.Copy(DescriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)), MapBytes, 0, Marshal.SizeOf(typeof(DescriptorMap)));
+            Map = Helper.DeserializeHeader<DescriptorMap>(MapBytes);
+
+            // Deserialize the regions data
+            byte[] RegionBytes = new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
+            int RegionBase = Map.RegionBase << 4;
+            Array.Copy(DescriptorBytes, RegionBase, RegionBytes, 0, Marshal.SizeOf(typeof(DescriptorRegions)));
+            Regions = Helper.DeserializeHeader<DescriptorRegions>(RegionBytes);
 
             // Match flash descriptor tag (5AA5F00F)
-            IsValid = (descriptor.Signature.SequenceEqual(FLASH_DESC_SIGNATURE)) ? true : false;
+            DescriptorMode = Header.Tag.SequenceEqual(FLASH_DESC_SIGNATURE);
 
-            if (IsValid)
+            // Descriptor mode
+            if (DescriptorMode)
             {
                 // BIOS base, size, limit
-                BiosBase = CalculateRegionBase(descriptor.BiosBase);
+                BiosBase = CalculateRegionBase(Regions.BiosBase);
                 if (BiosBase > sourceBytes.Length) BiosBase = 0;
-                BiosSize = CalculateRegionSize(descriptor.BiosBase, descriptor.BiosLimit);
+                BiosSize = CalculateRegionSize(Regions.BiosBase, Regions.BiosLimit);
                 BiosLimit = BiosBase + BiosSize;
 
                 // Management Engine base, size, limit
-                MeBase = CalculateRegionBase(descriptor.MeBase);
+                MeBase = CalculateRegionBase(Regions.MeBase);
                 if (MeBase > sourceBytes.Length) MeBase = 0;
-                MeSize = CalculateRegionSize(descriptor.MeBase, descriptor.MeLimit);
+                MeSize = CalculateRegionSize(Regions.MeBase, Regions.MeLimit);
                 MeLimit = MeBase + MeSize;
 
                 // Platform Data Region base, size, limit
-                PdrBase = CalculateRegionBase(descriptor.PdrBase);
+                PdrBase = CalculateRegionBase(Regions.PdrBase);
                 if (PdrBase > sourceBytes.Length) PdrBase = 0;
-                PdrSize = CalculateRegionSize(descriptor.PdrBase, descriptor.PdrLimit);
+                PdrSize = CalculateRegionSize(Regions.PdrBase, Regions.PdrLimit);
                 PdrLimit = PdrBase + PdrSize;
             }
         }
 
         internal static void ResetValues()
         {
+            Header = default;
+            Map = default;
+            Regions = default;
+
             BiosBase = 0;
             BiosLimit = 0;
             BiosSize = 0;
@@ -116,7 +181,7 @@ namespace Mac_EFI_Toolkit.Common
             PdrLimit = 0;
             PdrSize = 0;
 
-            IsValid = false;
+            DescriptorMode = false;
         }
 
         internal static readonly byte[] FLASH_DESC_SIGNATURE =

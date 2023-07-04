@@ -907,7 +907,7 @@ namespace Mac_EFI_Toolkit
             cmdAppleRomInfo.Enabled = FWBase.ROMInfoSectionData.SectionExists;
 
             cmdExportMe.Enabled =
-                Descriptor.IsValid &&
+                Descriptor.DescriptorMode &&
                 Descriptor.MeBase != 0 &&
                 Descriptor.MeLimit != 0;
 
@@ -1230,7 +1230,7 @@ namespace Mac_EFI_Toolkit
             }
 
             // Check if the loaded binary has a valid flash descriptor signature
-            if (!Descriptor.IsValid)
+            if (!Descriptor.DescriptorMode)
             {
                 // Show a warning message if the binary does not have a valid flash descriptor
                 METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.", METMessageType.Warning, METMessageButtons.Okay);
@@ -1276,7 +1276,7 @@ namespace Mac_EFI_Toolkit
         private void viewDescriptorDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
             METMessageBox.Show(this, "MET",
-                $"Valid Descriptor: {Descriptor.IsValid}\r\n" +
+                $"Descriptor Mode: {Descriptor.DescriptorMode}\r\n" +
                 $"PdrBase: {Descriptor.PdrBase:X2}h, PdrLimit: {Descriptor.PdrLimit:X2}h\r\n" +
                 $"MeBase: {Descriptor.MeBase:X2}h, MeLimit: {Descriptor.MeLimit:X2}h\r\n" +
                 $"BiosBase: {Descriptor.BiosBase:X2}h, BiosLimit: {Descriptor.BiosLimit:X2}h",

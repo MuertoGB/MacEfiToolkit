@@ -23,8 +23,9 @@ namespace Mac_EFI_Toolkit.WinForms
     {
 
         #region Private Members
-        private byte[] _bytesNewFsysStore = null;
         private byte[] _bytesNewBinary = null;
+        private byte[] _bytesNewFsysStore = null;
+        private byte[] _bytesNewMeRegion = null;
         private bool _maskCrc = false;
         private string _fullBuildPath = string.Empty;
         #endregion
@@ -283,6 +284,7 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearVssStore.Checked = false;
             cbxClearSvsStore.Checked = false;
             cbxClearNssStore.Checked = false;
+            cbxMeRegion.Checked = false;
 
             cmdOpenLast.Enabled = false;
         }
