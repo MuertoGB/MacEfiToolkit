@@ -132,15 +132,15 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static EfiLockStatus EfiLock = EfiLockStatus.Unknown;
 
-        internal const int MIN_IMAGE_SIZE = 0x100000;  // 1048576
-        internal const int MAX_IMAGE_SIZE = 0x2000000; // 33554432
-        internal const int FSYS_RGN_SIZE = 0x800;      // 2048
-        internal const int FSYS_CRC_POS = 0x7FC;       // 2044
+        internal const int MIN_IMAGE_SIZE = 1048576;  // 100000h
+        internal const int MAX_IMAGE_SIZE = 33554432; // 2000000h
+        internal const int FSYS_RGN_SIZE = 2048;      // 800h
+        internal const int FSYS_CRC_POS = 2044;       // 7FCh
 
-        private const int GUID_LENGTH = 0x10;          // 16
-        private const int ZERO_VECTOR_LENGTH = 0x10;   // 16
-        private const int LITERAL_POS = 0x2;           // 2
-        private const int CRC32_LENGTH = 0x4;          // 4
+        private const int GUID_LENGTH = 16;          // 10h
+        private const int ZERO_VECTOR_LENGTH = 16;   // 10h
+        private const int LITERAL_POS = 2;           // 2h
+        private const int CRC32_LENGTH = 4;          // 4h
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
 
@@ -222,8 +222,8 @@ namespace Mac_EFI_Toolkit.Common
                 return DefaultPdrSection();
             }
 
-            int boardIdLength = 0x8;
-            int dataStartPosition = 0x5;
+            int boardIdLength = 8;
+            int dataStartPosition = 5;
             byte[] bidBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, bidBase + dataStartPosition, boardIdLength);
 
             if (bidBytes == null)
@@ -276,7 +276,7 @@ namespace Mac_EFI_Toolkit.Common
                 }
 
                 // Get NVRAM section size from header
-                byte[] sectionLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, guidBase + GUID_LENGTH, 0x4);
+                byte[] sectionLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, guidBase + GUID_LENGTH, 4);
                 // Convert NVRAM section size to int32
                 int nvramLength = BitConverter.ToInt32(sectionLengthBytes, 0);
                 // Search for the Fsys store within bounds of the NVRAM section
@@ -317,20 +317,20 @@ namespace Mac_EFI_Toolkit.Common
 
             // Look for the lower case system serial number signature
             if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSN_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                snDataStart += 0x1 + 0x3; // Skip over the size data and signature
+                snDataStart += SSN_LOWER_SIG.Length;
 
             // Look for the upper case system serial number signature
             if (snDataStart == -1)
             {
                 if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSN_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                    snDataStart += 0x1 + 0x3;
+                    snDataStart += SSN_UPPER_SIG.Length;
             }
 
             // Look for other ssn signatures
             if (snDataStart == -1)
             {
                 if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSNP_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                    snDataStart += 0x1 + 0x4;
+                    snDataStart += SSNP_LOWER_SIG.Length;
             }
 
             string serialString = ParseFsysString(sourceBytes, snDataStart);
@@ -341,13 +341,13 @@ namespace Mac_EFI_Toolkit.Common
 
             // Look for the hardware configuration lower case signature
             if ((hwcDataStart = BinaryUtils.GetBasePosition(sourceBytes, HWC_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                hwcDataStart += 0x1 + 0x3;
+                hwcDataStart += HWC_LOWER_SIG.Length;
 
             // Look for the hardware configuration upper case signature
             if (hwcDataStart == -1)
             {
                 if ((hwcDataStart = BinaryUtils.GetBasePosition(sourceBytes, HWC_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                    hwcDataStart += 0x1 + 0x3;
+                    hwcDataStart += HWC_UPPER_SIG.Length;
             }
 
             string hwcString = ParseFsysString(sourceBytes, hwcDataStart);
@@ -359,7 +359,7 @@ namespace Mac_EFI_Toolkit.Common
             // Look for the system order number lower case signature
             if ((sonDataStart = BinaryUtils.GetBasePosition(sourceBytes, SON_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
             {
-                sonDataStart += 0x1 + 0x3;
+                sonDataStart += SON_LOWER_SIG.Length;
             }
 
             // Look for the system order number upper case signature
@@ -367,7 +367,7 @@ namespace Mac_EFI_Toolkit.Common
             {
                 if ((sonDataStart = BinaryUtils.GetBasePosition(sourceBytes, SON_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
                 {
-                    sonDataStart += 0x1 + 0x3;
+                    sonDataStart += SON_UPPER_SIG.Length;
                 }
             }
 
@@ -503,7 +503,7 @@ namespace Mac_EFI_Toolkit.Common
 
             int psHeaderBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSig, nvramPos);
 
-            if (psHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, psHeaderBase, 0x6) is byte[] bytesPrimaryHeader)
+            if (psHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, psHeaderBase, 6) is byte[] bytesPrimaryHeader)
             {
                 NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
 
@@ -535,7 +535,7 @@ namespace Mac_EFI_Toolkit.Common
             {
                 int bsHeaderBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSig, primaryStoreBase + primaryStoreSize + paddingLen);
 
-                if (bsHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, bsHeaderBase, 0x6) is byte[] bytesBackupHeader)
+                if (bsHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, bsHeaderBase, 6) is byte[] bytesBackupHeader)
                 {
                     NvramStoreHeader bsHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
 
@@ -684,9 +684,9 @@ namespace Mac_EFI_Toolkit.Common
             // Process each AppleRomInformation section
             foreach (int sectionBase in romSectionBases)
             {
-                // GUID Length (10h) AppleRomInformation section size data length (2h, int16)
-                int headerLength = 0x18;
-                int dataLength = 0x2;
+                // Header Length (18h) AppleRomInformation section size (2h, int16)
+                int headerLength = 24; // 18h
+                int dataLength = 2; // 2h
 
                 // Read first two bytes after the header
                 byte[] dataLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, sectionBase + headerLength, dataLength);
@@ -935,7 +935,7 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             // Get bytes containing section length (0x3)
-            byte[] dataLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, lzmaDxeBase + 0x14, 0x3);
+            byte[] dataLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, lzmaDxeBase + 20, 3);
             // Convert section length bytes to int24
             int sectionLength = BitConvert.ToInt24(dataLengthBytes);
             // Determine the end of the lzma guid section

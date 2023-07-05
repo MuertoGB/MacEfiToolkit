@@ -54,7 +54,8 @@ namespace Mac_EFI_Toolkit.WinForms
             lblBuildType.Text = FWBase.ROMInfoSectionData.BuildType ?? "N/A";
             lblCompiler.Text = FWBase.ROMInfoSectionData.Compiler ?? "N/A";
 
-            lblSectionData.Text = $"Base: 0x{FWBase.ROMInfoSectionData.SectionBase:X2}h, Size: 0x{FWBase.ROMInfoSectionData.SectionBytes.Length:X2}h" ?? string.Empty;
+            lblSectionData.Text = $"Base: {FWBase.ROMInfoSectionData.SectionBase:X2}h, " +
+                $"Size: {FWBase.ROMInfoSectionData.SectionBytes.Length:X2}h" ?? string.Empty;
 
             foreach (Label label in tlpMain.Controls)
             {

@@ -25,7 +25,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Private Members
         private byte[] _bytesNewBinary = null;
         private byte[] _bytesNewFsysStore = null;
-        private byte[] _bytesNewMeRegion = null;
+        //private byte[] _bytesNewMeRegion = null;
         private bool _maskCrc = false;
         private string _fullBuildPath = string.Empty;
         #endregion

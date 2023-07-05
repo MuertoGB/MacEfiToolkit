@@ -87,18 +87,18 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 ## Requirements
 
 **Application:**
-- MS [.NET Framework 4.5](https://www.microsoft.com/en-GB/download/details.aspx?id=30653)
+- Microsoft [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 - Windows 7, 8, 8.1, 10. 32, or 64-bit
 - Internet connectivity required for:-
 > - Version Checking (Can be disabled in settings).
-> - Fetching model data from the server when not present in the database.
+> - Fetching config code from the server when not present in the database.
 
 **Build requirements:**
-- Visual Studio 2019 or higher
+- [Visual Studio 2022](https:/visualstudio.microsoft.com/vs/), targeting .NET Framework 4.8.
 
 ## Acknowledgements
 
-#### This software uses the following third party libraries, or resources:-
+**This software uses the following third party libraries, or resources:-**
 
 LZMA [v22.01 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.\
 The [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and  Vaughan Pratt.\

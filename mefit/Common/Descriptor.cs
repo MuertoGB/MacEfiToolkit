@@ -135,7 +135,7 @@ namespace Mac_EFI_Toolkit.Common
 
             // Deserialize the regions data
             byte[] RegionBytes = new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
-            int RegionBase = Map.RegionBase << 4;
+            int RegionBase = Map.RegionBase << 4; // Left shift right four bits: Example: 04h: 0000 0100 << 40h: 0100 0000
             Array.Copy(DescriptorBytes, RegionBase, RegionBytes, 0, Marshal.SizeOf(typeof(DescriptorRegions)));
             Regions = Helper.DeserializeHeader<DescriptorRegions>(RegionBytes);
 

@@ -124,7 +124,7 @@
   <data name="pbxTitleLogo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAA
-        7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAASjSURBVFhH1Zd7
+        4wAAAOMBD+bfpwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAASjSURBVFhH1Zd7
         bFNlGMZPQBOJCVFjMhhOmENFEwgywnAmCsuiKErCpLotMCEOSEwMRgQXwqVzGyhT2zHYhXbdpdss3X0F
         EU1km+M2bgLbjKO7gbvQ29rTc9rqtjx+p/vGbqfd2ikJz1/NOen3/M57nvf9vsM8lJJoMfOVHGPg4gxj
         6KKM7tAX042BDLlGb/8/WqU2LAzPN30ZpjKcX640Di49bsDirHt4OaMXLxztQciR7sEF8q5zz8i6dgcd
@@ -152,9 +152,6 @@
   </metadata>
   <metadata name="cmsCopy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>335, 17</value>
-  </metadata>
-  <metadata name="cmsDebug.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>454, 17</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>81</value>

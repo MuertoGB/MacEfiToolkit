@@ -13,7 +13,7 @@ namespace Mac_EFI_Toolkit.UI.Renderers
     class METMenuRenderer : ToolStripRenderer
     {
         private Color BorderColor = Color.FromArgb(120, 120, 120);
-        private Color ItemHoveredColor = Color.FromArgb(80, 60, 160, 235);
+        private Color ItemHoveredColor = Color.FromArgb(75, 85, 170, 255);
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {

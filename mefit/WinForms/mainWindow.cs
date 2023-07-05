@@ -71,10 +71,6 @@ namespace Mac_EFI_Toolkit
 
             // Set button properties (font and text)
             SetButtonProperties();
-
-            // hide debug button
-            if (!Program.IsDebugMode())
-                cmdDebug.Dispose();
         }
         #endregion
 
@@ -351,12 +347,6 @@ namespace Mac_EFI_Toolkit
         {
             Control control = sender as Control;
             ShowContextMenu(control, cmsCopy);
-        }
-
-        private void cmdDebug_Click(object sender, EventArgs e)
-        {
-            Control control = sender as Control;
-            ShowContextMenu(control, cmsDebug);
         }
 
         private void cmdEveryMacSearch_Click(object sender, EventArgs e)
@@ -847,7 +837,7 @@ namespace Mac_EFI_Toolkit
 
         private void SetContextMenuRenderers()
         {
-            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication, cmsCopy, cmsDebug };
+            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication, cmsCopy };
             foreach (ContextMenuStrip menu in menus)
             {
                 menu.Renderer = new METMenuRenderer();
@@ -1269,28 +1259,6 @@ namespace Mac_EFI_Toolkit
             FWBase.ResetFirmwareBaseData();
 
             _firmwareLoaded = false;
-        }
-        #endregion
-
-        #region Debug Menu
-        private void viewDescriptorDataToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            METMessageBox.Show(this, "MET",
-                $"Descriptor Mode: {Descriptor.DescriptorMode}\r\n" +
-                $"PdrBase: {Descriptor.PdrBase:X2}h, PdrLimit: {Descriptor.PdrLimit:X2}h\r\n" +
-                $"MeBase: {Descriptor.MeBase:X2}h, MeLimit: {Descriptor.MeLimit:X2}h\r\n" +
-                $"BiosBase: {Descriptor.BiosBase:X2}h, BiosLimit: {Descriptor.BiosLimit:X2}h",
-                METMessageType.Information, METMessageButtons.Okay);
-        }
-
-        private void openTermsWindowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetHalfOpacity();
-            using (Form frm = new termsWindow())
-            {
-                frm.FormClosed += ChildWindowClosed;
-                frm.ShowDialog();
-            }
         }
         #endregion
 
