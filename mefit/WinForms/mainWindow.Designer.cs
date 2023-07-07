@@ -42,6 +42,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
             this.cmdReload = new System.Windows.Forms.Button();
             this.cmdNavigate = new System.Windows.Forms.Button();
+            this.lblFilename = new METLabel();
             this.lblModel = new System.Windows.Forms.Label();
             this.tlpFile = new System.Windows.Forms.TableLayoutPanel();
             this.lblFileCreatedDate = new System.Windows.Forms.Label();
@@ -91,6 +92,7 @@ namespace Mac_EFI_Toolkit
             this.cmdReset = new System.Windows.Forms.Button();
             this.cmdOpenBin = new System.Windows.Forms.Button();
             this.cmsMainMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openLocalFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBuildsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFsysStoresDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openMeRegionDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -129,7 +131,6 @@ namespace Mac_EFI_Toolkit
             this.meVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardIDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orderNoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblFilename = new METLabel();
             this.pnlMain.SuspendLayout();
             this.tlpStatusBar.SuspendLayout();
             this.tlpStatusBarImage.SuspendLayout();
@@ -347,6 +348,19 @@ namespace Mac_EFI_Toolkit
             this.cmdNavigate.Text = "N";
             this.cmdNavigate.UseVisualStyleBackColor = false;
             this.cmdNavigate.Click += new System.EventHandler(this.cmdNavigate_Click);
+            // 
+            // lblFilename
+            // 
+            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblFilename.ForeColor = System.Drawing.Color.White;
+            this.lblFilename.Location = new System.Drawing.Point(0, 0);
+            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFilename.Name = "lblFilename";
+            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblFilename.Size = new System.Drawing.Size(639, 36);
+            this.lblFilename.TabIndex = 6;
             // 
             // lblModel
             // 
@@ -1180,6 +1194,7 @@ namespace Mac_EFI_Toolkit
             this.cmsMainMenu.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmsMainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openLocalFolderToolStripMenuItem,
             this.openBuildsDirectoryToolStripMenuItem,
             this.openFsysStoresDirectoryToolStripMenuItem,
             this.openMeRegionDirectoryToolStripMenuItem,
@@ -1192,13 +1207,21 @@ namespace Mac_EFI_Toolkit
             this.aboutToolStripMenuItem});
             this.cmsMainMenu.Name = "cmsMainMenu";
             this.cmsMainMenu.ShowImageMargin = false;
-            this.cmsMainMenu.Size = new System.Drawing.Size(276, 218);
+            this.cmsMainMenu.Size = new System.Drawing.Size(293, 274);
+            // 
+            // openLocalFolderToolStripMenuItem
+            // 
+            this.openLocalFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openLocalFolderToolStripMenuItem.Name = "openLocalFolderToolStripMenuItem";
+            this.openLocalFolderToolStripMenuItem.Size = new System.Drawing.Size(292, 28);
+            this.openLocalFolderToolStripMenuItem.Text = "Open Local Folder";
+            this.openLocalFolderToolStripMenuItem.Click += new System.EventHandler(this.openLocalFolderToolStripMenuItem_Click);
             // 
             // openBuildsDirectoryToolStripMenuItem
             // 
             this.openBuildsDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.openBuildsDirectoryToolStripMenuItem.Name = "openBuildsDirectoryToolStripMenuItem";
-            this.openBuildsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
+            this.openBuildsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(292, 28);
             this.openBuildsDirectoryToolStripMenuItem.Text = "Open Builds Folder";
             this.openBuildsDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openBuildsDirectoryToolStripMenuItem_Click);
             // 
@@ -1206,7 +1229,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.openFsysStoresDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.openFsysStoresDirectoryToolStripMenuItem.Name = "openFsysStoresDirectoryToolStripMenuItem";
-            this.openFsysStoresDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
+            this.openFsysStoresDirectoryToolStripMenuItem.Size = new System.Drawing.Size(292, 28);
             this.openFsysStoresDirectoryToolStripMenuItem.Text = "Open Fsys Stores Folder";
             this.openFsysStoresDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openFsysDirectoryToolStripMenuItem_Click);
             // 
@@ -1214,35 +1237,35 @@ namespace Mac_EFI_Toolkit
             // 
             this.openMeRegionDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.openMeRegionDirectoryToolStripMenuItem.Name = "openMeRegionDirectoryToolStripMenuItem";
-            this.openMeRegionDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
+            this.openMeRegionDirectoryToolStripMenuItem.Size = new System.Drawing.Size(292, 28);
             this.openMeRegionDirectoryToolStripMenuItem.Text = "Open ME Region Folder";
             this.openMeRegionDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openMeRegionDirectoryToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(272, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(289, 6);
             // 
             // viewLogToolStripMenuItem
             // 
             this.viewLogToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.viewLogToolStripMenuItem.Name = "viewLogToolStripMenuItem";
             this.viewLogToolStripMenuItem.ShortcutKeyDisplayString = "Shift + V";
-            this.viewLogToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
-            this.viewLogToolStripMenuItem.Text = "View Log";
+            this.viewLogToolStripMenuItem.Size = new System.Drawing.Size(292, 28);
+            this.viewLogToolStripMenuItem.Text = "View Application Log";
             this.viewLogToolStripMenuItem.Click += new System.EventHandler(this.viewLogToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(272, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(289, 6);
             // 
             // restartApplicationToolStripMenuItem
             // 
             this.restartApplicationToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.restartApplicationToolStripMenuItem.Name = "restartApplicationToolStripMenuItem";
             this.restartApplicationToolStripMenuItem.ShortcutKeyDisplayString = "Shift + R";
-            this.restartApplicationToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
+            this.restartApplicationToolStripMenuItem.Size = new System.Drawing.Size(292, 28);
             this.restartApplicationToolStripMenuItem.Text = "Restart Application";
             this.restartApplicationToolStripMenuItem.Click += new System.EventHandler(this.restartApplicationToolStripMenuItem_Click);
             // 
@@ -1251,14 +1274,14 @@ namespace Mac_EFI_Toolkit
             this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.ShortcutKeyDisplayString = "Shift + S";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(292, 28);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(272, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(289, 6);
             // 
             // aboutToolStripMenuItem
             // 
@@ -1267,7 +1290,7 @@ namespace Mac_EFI_Toolkit
             this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeyDisplayString = "Shift + A";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(292, 28);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -1616,19 +1639,6 @@ namespace Mac_EFI_Toolkit
             this.orderNoToolStripMenuItem.Text = "Order No";
             this.orderNoToolStripMenuItem.Click += new System.EventHandler(this.orderNoToolStripMenuItem_Click);
             // 
-            // lblFilename
-            // 
-            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
-            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblFilename.ForeColor = System.Drawing.Color.White;
-            this.lblFilename.Location = new System.Drawing.Point(0, 0);
-            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblFilename.Size = new System.Drawing.Size(639, 36);
-            this.lblFilename.TabIndex = 6;
-            // 
             // mainWindow
             // 
             this.AllowDrop = true;
@@ -1778,6 +1788,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.TableLayoutPanel tlpIntelMe;
         private System.Windows.Forms.Button cmdExportMe;
         private System.Windows.Forms.ToolStripMenuItem openMeRegionDirectoryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openLocalFolderToolStripMenuItem;
     }
 }
 

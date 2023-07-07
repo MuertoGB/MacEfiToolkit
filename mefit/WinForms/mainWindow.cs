@@ -27,7 +27,6 @@ namespace Mac_EFI_Toolkit
         #region Private Members
         private string _strInitialDirectory = METPath.CurrentDirectory;
         private static readonly object _lockObject = new object();
-        private static bool _firmwareLoaded = false;
         #endregion
 
         #region Overriden Properties
@@ -592,6 +591,11 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Toolstrip Events
+        private void openLocalFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", METPath.CurrentDirectory);
+        }
+
         private void openBuildsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(METPath.BuildsDirectory))
@@ -757,6 +761,29 @@ namespace Mac_EFI_Toolkit
         internal void UpdateControls()
         {
             // File information
+            UpdateFileInfoLabels();
+
+            // Firmware Data
+            UpdateFirmwareDataLabels();
+
+            // EFI Lock
+            UpdateEfiLockStatus();
+
+            // Apply DISABLED_TEXT color to N/A text labels
+            ApplyNestedPanelLabelForeColor(tlpRom, Colours.DISABLED_TEXT);
+
+            // Hide loading image
+            pbxLoad.Image = null;
+
+            // Check which copy menu items should be enabled
+            ToggleCopyMenuItemEnable();
+
+            // Check and set control enable
+            ToggleControlEnable(true);
+        }
+
+        private void UpdateFileInfoLabels()
+        {
             lblFilename.Text = $"FILE: '{FWBase.FileInfoData.FileNameWithExt}'";
             int fileLength = (int)FWBase.FileInfoData.FileLength;
             bool isValidSize = FileUtils.GetIsValidBinSize(fileLength);
@@ -766,10 +793,13 @@ namespace Mac_EFI_Toolkit
             lblFileCreatedDate.Text = FWBase.FileInfoData.CreationTime;
             lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
             lblFileCrc.Text = $"{FWBase.FileInfoData.CRC32:X8}";
+        }
 
-            // Firmware Data
+        private void UpdateFirmwareDataLabels()
+        {
             lblSerialNumber.Text = FWBase.FsysStoreData.Serial ?? "N/A";
             lblHwc.Text = FWBase.FsysStoreData.HWC ?? "N/A";
+
             if (FWBase.FsysStoreData.CrcString != null)
             {
                 lblFsysCrc.Text = $"{FWBase.FsysStoreData.CrcString}h";
@@ -780,6 +810,7 @@ namespace Mac_EFI_Toolkit
                 lblFsysCrc.Text = "N/A";
                 lblFsysCrc.ForeColor = Color.White;
             }
+
             lblApfsCapable.Text = FWBase.IsApfsCapable;
             lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.COMPLETE_GREEN : Colours.WARNING_ORANGE;
             lblEfiVersion.Text = FWBase.ROMInfoSectionData.EfiVersion ?? "N/A";
@@ -787,22 +818,6 @@ namespace Mac_EFI_Toolkit
             UpdateNvramLabel(lblVssStore, FWBase.VssStoreData, "VSS");
             UpdateNvramLabel(lblSvsStore, FWBase.SvsStoreData, "SVS");
             UpdateNvramLabel(lblNssStore, FWBase.NssStoreData, "NSS");
-
-            switch (FWBase.EfiLock)
-            {
-                case EfiLockStatus.Locked:
-                    lblEfiLock.Text = Chars.LOCKED;
-                    lblEfiLock.ForeColor = Colours.ERROR_RED;
-                    break;
-                case EfiLockStatus.Unlocked:
-                    lblEfiLock.Text = Chars.UNLOCKED;
-                    lblEfiLock.ForeColor = Colours.COMPLETE_GREEN;
-                    break;
-                case EfiLockStatus.Unknown:
-                    lblEfiLock.Text = Chars.UNLOCKED;
-                    lblEfiLock.ForeColor = Colours.DISABLED_TEXT;
-                    break;
-            }
 
             lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
             lblMeVersion.Text = FWBase.MeVersion ?? "N/A";
@@ -815,16 +830,9 @@ namespace Mac_EFI_Toolkit
             {
                 AppendConfigCodeAsync(FWBase.FsysStoreData.HWC);
             }
-
-            ApplyNestedPanelLabelForeColor(tlpRom, Colours.DISABLED_TEXT);
-
-            pbxLoad.Image = null;
-
-            ToggleCopyMenuItemEnable();
-            ToggleControlEnable(true);
         }
 
-        void UpdateNvramLabel(Label label, NvramStore storeData, string text)
+        private void UpdateNvramLabel(Label label, NvramStore storeData, string text)
         {
             label.Text = text;
 
@@ -833,6 +841,40 @@ namespace Mac_EFI_Toolkit
                 : (storeData.PrimaryStoreBase != -1 ? Colours.COMPLETE_GREEN : Colours.DISABLED_TEXT);
 
             label.ForeColor = foreColor;
+        }
+
+        private void UpdateEfiLockStatus()
+        {
+            lblEfiLock.Text = GetEfiLockStatusText(FWBase.EfiLock);
+            lblEfiLock.ForeColor = GetEfiLockStatusColor(FWBase.EfiLock);
+        }
+
+        private string GetEfiLockStatusText(EfiLockStatus lockStatus)
+        {
+            switch (lockStatus)
+            {
+                case EfiLockStatus.Locked:
+                    return Chars.LOCKED;
+                case EfiLockStatus.Unlocked:
+                    return Chars.UNLOCKED;
+                case EfiLockStatus.Unknown:
+                default:
+                    return Chars.UNLOCKED;
+            }
+        }
+
+        private Color GetEfiLockStatusColor(EfiLockStatus lockStatus)
+        {
+            switch (lockStatus)
+            {
+                case EfiLockStatus.Locked:
+                    return Colours.ERROR_RED;
+                case EfiLockStatus.Unlocked:
+                    return Colours.COMPLETE_GREEN;
+                case EfiLockStatus.Unknown:
+                default:
+                    return Colours.DISABLED_TEXT;
+            }
         }
 
         private void SetContextMenuRenderers()
@@ -1134,7 +1176,7 @@ namespace Mac_EFI_Toolkit
             ToggleControlEnable(false);
 
             // If a firmware is loaded, reset all data
-            if (_firmwareLoaded)
+            if (FWBase.FirmwareLoaded)
             {
                 ResetAllData();
             }
@@ -1184,7 +1226,7 @@ namespace Mac_EFI_Toolkit
             Invoke((MethodInvoker)UpdateControls);
 
             // Set firmware loaded flag to true
-            _firmwareLoaded = true;
+            FWBase.FirmwareLoaded = true;
         }
 
         private bool IsValidMinMaxSize()
@@ -1258,7 +1300,7 @@ namespace Mac_EFI_Toolkit
             // Reset FWBase
             FWBase.ResetFirmwareBaseData();
 
-            _firmwareLoaded = false;
+            FWBase.FirmwareLoaded = false;
         }
         #endregion
 

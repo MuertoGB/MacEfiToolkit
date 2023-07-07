@@ -3,7 +3,6 @@
 
 // Descriptor.cs
 // Released under the GNU GLP v3.0
-// This code is a work in progress.
 
 using Mac_EFI_Toolkit.Utils;
 using System;
@@ -110,11 +109,11 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static uint CalculateRegionSize(ushort basePosition, ushort limitPosition)
         {
+            // For example:
+            // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h
             if (limitPosition != 0)
                 return (uint)(limitPosition + 1 - basePosition) * DESCRIPTOR_LENGTH;
 
-            // For example:
-            // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h
             return 0;
         }
 

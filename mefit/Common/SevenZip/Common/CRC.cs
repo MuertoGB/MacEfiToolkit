@@ -39,17 +39,17 @@ namespace SevenZip
 
 		public uint GetDigest() { return _value ^ 0xFFFFFFFF; }
 
-		static uint CalculateDigest(byte[] data, uint offset, uint size)
-		{
-			CRC crc = new CRC();
-			// crc.Init();
-			crc.Update(data, offset, size);
-			return crc.GetDigest();
-		}
+		//static uint CalculateDigest(byte[] data, uint offset, uint size)
+		//{
+		//	CRC crc = new CRC();
+		//	// crc.Init();
+		//	crc.Update(data, offset, size);
+		//	return crc.GetDigest();
+		//}
 
-		static bool VerifyDigest(uint digest, byte[] data, uint offset, uint size)
-		{
-			return (CalculateDigest(data, offset, size) == digest);
-		}
+		//static bool VerifyDigest(uint digest, byte[] data, uint offset, uint size)
+		//{
+		//	return (CalculateDigest(data, offset, size) == digest);
+		//}
 	}
 }

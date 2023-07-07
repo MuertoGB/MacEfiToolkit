@@ -17,6 +17,7 @@
 #### New:
 - Added option in the main window to export the Intel ME Region (ALT + M).
 - Added menu in the main window which enables quick copying of text fields (CTRL + C).
+- Unhandled exceptions will now output a debug log to './unhandled.log'.
 
 #### Enhancements:
 - UI improvements.

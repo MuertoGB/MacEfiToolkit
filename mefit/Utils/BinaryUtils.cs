@@ -244,41 +244,48 @@ namespace Mac_EFI_Toolkit.Utils
         }
 
         /// <summary>
-        /// Removes any trailing 0xFF bytes from a byte array.
+        /// Removes any trailing padding bytes from a byte array.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to remove the trailing 0xFF bytes from.</param>
-        /// <returns>The byte array with any trailing 0xFF bytes removed.</returns>
-        //internal static byte[] RemoveTrailingFFPadding(byte[] sourceBytes)
-        //{
-        //    int end = sourceBytes.Length - 1;
-        //    while (end >= 0 && sourceBytes[end] == 0xFF)
-        //    {
-        //        end--;
-        //    }
-        //    if (end < 0)
-        //    {
-        //        return new byte[0];
-        //    }
+        /// <param name="sourceBytes">The byte array to remove the trailing padding bytes from.</param>
+        /// <param name="paddingByte">The padding byte to remove.</param>
+        /// <returns>The byte array with any trailing padding bytes removed.</returns>
+        internal static byte[] RemovePadding(byte[] sourceBytes, byte paddingByte)
+        {
+            if (sourceBytes == null)
+                throw new ArgumentNullException(nameof(sourceBytes));
 
-        //    byte[] result = new byte[end + 1];
-        //    Array.Copy(sourceBytes, result, end + 1);
-        //    return result;
-        //}
+            int end = sourceBytes.Length - 1;
+
+            // Find the index of the last non-padding byte
+            while (end >= 0 && sourceBytes[end] == paddingByte)
+            {
+                end--;
+            }
+
+            // If all bytes are padding, return an empty byte array
+            if (end < 0)
+            {
+                return new byte[0];
+            }
+
+            // Create a new byte array without the trailing padding bytes
+            byte[] result = new byte[end + 1];
+            Array.Copy(sourceBytes, result, end + 1);
+            return result;
+        }
 
         /// <summary>
         /// Fills a byte array with 0xFF values.
         /// </summary>
-        /// <param name="byteArray">The byte array to fill with 0xFF values.</param>
-        internal static void FillByteArrayWithFF(byte[] byteArray)
+        /// <param name="sourceBytes">The byte array to fill with 0xFF values.</param>
+        internal static void EraseByteArray(byte[] sourceBytes, byte eraseByte)
         {
-            if (byteArray == null)
-            {
-                throw new ArgumentNullException(nameof(byteArray));
-            }
+            if (sourceBytes == null)
+                throw new ArgumentNullException(nameof(sourceBytes));
 
-            for (int i = 0; i < byteArray.Length; i++)
+            for (int i = 0; i < sourceBytes.Length; i++)
             {
-                byteArray[i] = 0xFF;
+                sourceBytes[i] = eraseByte;
             }
         }
 

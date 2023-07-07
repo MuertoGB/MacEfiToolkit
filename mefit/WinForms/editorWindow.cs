@@ -733,7 +733,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store is not empty", RtbLogPrefix.Info, rtbLog);
                 byte[] primaryData = BinaryUtils.GetBytesBaseLength(storeData.PrimaryStoreBytes, headerLen, primBodyEnd);
                 Logger.WriteLogTextToRtb($"Overwriting {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
-                BinaryUtils.FillByteArrayWithFF(primaryData);
+                BinaryUtils.EraseByteArray(primaryData, 0xFF);
                 Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
                 BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, primBodyStart, primaryData);
 
@@ -759,7 +759,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} is not empty", RtbLogPrefix.Info, rtbLog);
                 byte[] backupData = BinaryUtils.GetBytesBaseLength(storeData.BackupStoreBytes, headerLen, backBodyEnd);
                 Logger.WriteLogTextToRtb($"Overwriting backup {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
-                BinaryUtils.FillByteArrayWithFF(backupData);
+                BinaryUtils.EraseByteArray(backupData, 0xFF);
                 Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
                 BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, backBodyStart, backupData);
 

@@ -120,6 +120,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static string FitVersion = null;
         internal static string MeVersion = null;
         internal static byte[] LoadedBinaryBytes = null;
+        internal static bool FirmwareLoaded = false;
 
         internal static FileInfoStore FileInfoData;
         internal static PdrSection PDRSectionData;

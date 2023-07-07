@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
@@ -24,6 +25,7 @@ namespace Mac_EFI_Toolkit
     internal struct METPath
     {
         internal static string CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        internal static string FriendlyName = AppDomain.CurrentDomain.FriendlyName;
         internal static string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
         internal static string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
         internal static string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
@@ -32,7 +34,7 @@ namespace Mac_EFI_Toolkit
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230705.1700";
+        internal static readonly string Build = "230707.2300";
         internal static readonly string Channel = "Release";
     }
 
@@ -166,6 +168,16 @@ namespace Mac_EFI_Toolkit
             return false;
 #endif
         }
+
+        internal static bool IsRunAsAdmin()
+        {
+            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        internal static string BitnessMode()
+        {
+            return IntPtr.Size == 8 ? "x64" : "x86";
+        }
         #endregion
 
         #region Keyboard Hook
@@ -247,9 +259,12 @@ namespace Mac_EFI_Toolkit
 
         static void METCatchUnhandledException(Exception e)
         {
-            Logger.WriteExceptionToAppLog(e);
+            string name = Path.Combine(METPath.CurrentDirectory, "unhandled.log");
+            File.WriteAllText(name, Debug.GenerateDebugReport(e));
 
-            DialogResult result = MessageBox.Show($"{e.Message}\r\n\r\n{e}\r\n\r\nWould you like to force quit?", $"{e.GetType()}", System.Windows.Forms.MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+            DialogResult result = MessageBox.Show($"{e.Message}\r\n\r\nDetails were saved to {name.Replace(" ", Chars.NBSPACE)}'\r\n\r\nForce quit application?",
+                $"MET Exception Handler",
+                System.Windows.Forms.MessageBoxButtons.YesNo, MessageBoxIcon.Error);
 
             if (result == DialogResult.Yes)
             {
