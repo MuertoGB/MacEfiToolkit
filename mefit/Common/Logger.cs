@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Logger.cs - Handles logging of data to .txt file
+// Logger.cs - Handles logging of data and text
 // Released under the GNU GLP v3.0
 
 using System;

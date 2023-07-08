@@ -30,11 +30,13 @@ namespace Mac_EFI_Toolkit
         internal static string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
         internal static string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
         internal static string SettingsFile = Path.Combine(CurrentDirectory, "Settings.ini");
+        internal static string DebugLog = Path.Combine(CurrentDirectory, "debug.log");
+        internal static string UnhandledLog = Path.Combine(CurrentDirectory, "unhandled.log");
     }
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230707.2300";
+        internal static readonly string Build = "230708.0500";
         internal static readonly string Channel = "Release";
     }
 
@@ -244,27 +246,44 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Exception Handler
-        static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        internal static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
             if (e != null)
-                METCatchUnhandledException(e.Exception);
+                ExceptionHandler(e.Exception);
         }
 
-        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
             if (ex != null)
-                METCatchUnhandledException(ex);
+                ExceptionHandler(ex);
         }
 
-        static void METCatchUnhandledException(Exception e)
+        internal static void ExceptionHandler(Exception e)
         {
-            string name = Path.Combine(METPath.CurrentDirectory, "unhandled.log");
-            File.WriteAllText(name, Debug.GenerateDebugReport(e));
+            DialogResult result;
 
-            DialogResult result = MessageBox.Show($"{e.Message}\r\n\r\nDetails were saved to {name.Replace(" ", Chars.NBSPACE)}'\r\n\r\nForce quit application?",
-                $"MET Exception Handler",
-                System.Windows.Forms.MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+            File.WriteAllText(METPath.UnhandledLog, Debug.GenerateDebugReport(e));
+
+            if (File.Exists(METPath.UnhandledLog))
+            {
+                result = MessageBox.Show
+                   (
+                   $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NBSPACE)}'\r\n\r\nForce quit application?",
+                   $"MET Exception Handler",
+                   MessageBoxButtons.YesNo,
+                   MessageBoxIcon.Error
+                   );
+            }
+            else
+            {
+                result = MessageBox.Show
+                    (
+                    $"{e.Message}\r\n\r\n{e}\r\n\r\nForce quit application?",
+                    $"{e.GetType()}",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Error);
+            }
 
             if (result == DialogResult.Yes)
             {

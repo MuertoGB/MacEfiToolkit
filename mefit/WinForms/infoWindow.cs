@@ -43,7 +43,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             lblBiosId.Text = FWBase.ROMInfoSectionData.BiosId ?? "N/A";
             lblModel.Text = FWBase.ROMInfoSectionData.Model != null
-                ? $"{FWBase.ROMInfoSectionData.Model} ({EFIUtils.ConvertEfiModelCode(FWBase.ROMInfoSectionData.Model)})"
+                ? $"{FWBase.ROMInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(FWBase.ROMInfoSectionData.Model)})"
                 : "N/A";
             lblEfiVersion.Text = FWBase.ROMInfoSectionData.EfiVersion ?? "N/A";
             lblBuiltBy.Text = FWBase.ROMInfoSectionData.BuiltBy ?? "N/A";

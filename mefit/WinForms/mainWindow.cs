@@ -640,6 +640,14 @@ namespace Mac_EFI_Toolkit
             METMessageBox.Show(this, "File Information", "The log file has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
         }
 
+        private void createADebugLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            File.WriteAllText(METPath.DebugLog, Debug.GenerateDebugReport(null));
+
+            if (File.Exists(METPath.DebugLog))
+                FileUtils.HighlightPathInExplorer(METPath.DebugLog);
+        }
+
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Program.RestartMet(this);
@@ -821,7 +829,7 @@ namespace Mac_EFI_Toolkit
 
             lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
             lblMeVersion.Text = FWBase.MeVersion ?? "N/A";
-            lblModel.Text = $"MODEL: {EFIUtils.ConvertEfiModelCode(FWBase.EFISectionData.Model) ?? "N/A"}";
+            lblModel.Text = $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.Model) ?? "N/A"}";
             lblBoardId.Text = FWBase.PDRSectionData.MacBoardId ?? "N/A";
             lblOrderNo.Text = FWBase.FsysStoreData.SON ?? "N/A";
 
@@ -927,7 +935,7 @@ namespace Mac_EFI_Toolkit
 
             if (FWBase.FsysStoreData.FsysBytes != null)
             {
-                cmdFixFsysCrc.Enabled = EFIUtils.GetUintFsysCrc32(FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString ? false : true;
+                cmdFixFsysCrc.Enabled = MacUtils.GetUintFsysCrc32(FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString ? false : true;
             }
             else
             {
@@ -1111,7 +1119,7 @@ namespace Mac_EFI_Toolkit
 
         internal async void AppendConfigCodeAsync(string strHwc)
         {
-            string configCode = await EFIUtils.GetDeviceConfigCodeAsync(strHwc);
+            string configCode = await MacUtils.GetDeviceConfigCodeAsync(strHwc);
 
             if (configCode != null)
             {

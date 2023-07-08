@@ -75,18 +75,34 @@ namespace Mac_EFI_Toolkit
         private static string GetFirmwareData()
         {
             if (!FWBase.FirmwareLoaded)
-                return "There is no UEFI/BIOS loaded..\r\n";
+                return "There is no UEFI/BIOS loaded.\r\n";
 
             StringBuilder builder = new StringBuilder();
 
-            builder.AppendLine($"Des_Mode: {Descriptor.DescriptorMode}");
-
             if (Descriptor.DescriptorMode)
             {
+                builder.AppendLine($"  Descriptor ->\r\n");
+                builder.AppendLine($"Des_Mode: {Descriptor.DescriptorMode}");
                 builder.AppendLine($"PDR:      {Descriptor.PdrBase:X2}h, {Descriptor.PdrLimit:X2}h");
                 builder.AppendLine($"ME:       {Descriptor.MeBase:X2}h, {Descriptor.MeLimit:X2}h");
-                builder.AppendLine($"BIOS:     {Descriptor.BiosBase:X2}h, {Descriptor.BiosLimit:X2}h");
+                builder.AppendLine($"BIOS:     {Descriptor.BiosBase:X2}h, {Descriptor.BiosLimit:X2}h\r\n");
             }
+
+            builder.AppendLine($"  File ->\r\n");
+            builder.AppendLine($"File Size: {FWBase.FileInfoData.FileLength:X2}h\r\n");
+
+            builder.AppendLine($"  Fsys Store  ->\r\n");
+            builder.AppendLine($"Fsys Base:   {FWBase.FsysStoreData.FsysBase:X2}h");
+            builder.AppendLine($"Serial Base: {FWBase.FsysStoreData.SerialBase:X2}h");
+            builder.AppendLine($"HWC Base:    {FWBase.FsysStoreData.HWCBase:X2}h\r\n");
+
+            builder.AppendLine($"  NVRAM  ->\r\n");
+            builder.AppendLine($"VSS Primary: Base {FWBase.VssStoreData.PrimaryStoreBase:X2}h, Size {FWBase.VssStoreData.PrimaryStoreSize:X2}h");
+            builder.AppendLine($"VSS Backup:  Base {FWBase.VssStoreData.BackupStoreBase:X2}h, Size {FWBase.VssStoreData.BackupStoreSize:X2}h");
+            builder.AppendLine($"SVS Primary: Base {FWBase.SvsStoreData.PrimaryStoreBase:X2}h, Size {FWBase.SvsStoreData.PrimaryStoreSize:X2}h");
+            builder.AppendLine($"SVS Backup:  Base {FWBase.SvsStoreData.BackupStoreBase:X2}h, Size {FWBase.SvsStoreData.BackupStoreSize:X2}h");
+            builder.AppendLine($"NSS Primary: Base {FWBase.NssStoreData.PrimaryStoreBase:X2}h, Size {FWBase.NssStoreData.PrimaryStoreSize:X2}h");
+            builder.AppendLine($"NSS Backup:  Base {FWBase.NssStoreData.BackupStoreBase:X2}h, Size {FWBase.NssStoreData.BackupStoreSize:X2}h");
 
             return builder.ToString();
         }

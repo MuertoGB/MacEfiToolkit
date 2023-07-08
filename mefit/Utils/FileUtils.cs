@@ -173,7 +173,7 @@ namespace Mac_EFI_Toolkit.Utils
 
                     if (!BinaryUtils.ByteArraysMatch(sourceBytes, fileBytes))
                     {
-                        return false; ; // Integrity check failed
+                        return false; // Integrity check failed
                     }
                 }
             }

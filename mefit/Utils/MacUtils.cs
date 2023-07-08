@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// EfiUtils.cs
+// MacUtils.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
@@ -17,7 +17,7 @@ using System.Xml.XPath;
 
 namespace Mac_EFI_Toolkit.Utils
 {
-    class EFIUtils
+    class MacUtils
     {
 
         /// <summary>

@@ -11,7 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Common
 {
@@ -310,7 +309,7 @@ namespace Mac_EFI_Toolkit.Common
             string crcString = BitConverter.ToString(crcEndianBytes).Replace("-", "");
 
             // Manually calculate the Fsys store crc
-            uint uiCrcCalc = EFIUtils.GetUintFsysCrc32(fsysStoreBytes);
+            uint uiCrcCalc = MacUtils.GetUintFsysCrc32(fsysStoreBytes);
             string crcCalcString = uiCrcCalc.ToString("X8");
 
             // Parse the serial number
@@ -696,7 +695,7 @@ namespace Mac_EFI_Toolkit.Common
                 int sectionLength = BitConverter.ToInt16(dataLengthBytes, 0);
 
                 if (sectionLength <= 6)
-                {      
+                {
                     // Skip reading the section if the length is under 6
                     continue;
                 }

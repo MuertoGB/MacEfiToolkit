@@ -398,7 +398,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (textLength == FWBase.FsysStoreData.Serial.Length)
             {
-                if (EFIUtils.GetIsValidSerialChars(tb.Text))
+                if (MacUtils.GetIsValidSerialChars(tb.Text))
                 {
                     UpdateTextBoxColor(tb, Colours.COMPLETE_GREEN);
                     Logger.WriteLogTextToRtb("Valid serial characters entered", RtbLogPrefix.Info, rtbLog);

@@ -152,7 +152,7 @@
     </Compile>
     <Compile Include="UI\Renderers\METMenuRenderer.cs" />
     <Compile Include="Utils\BinaryUtils.cs" />
-    <Compile Include="Utils\EfiUtils.cs" />
+    <Compile Include="Utils\MacUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\NetUtils.cs" />
     <Compile Include="WinForms\settingsWindow.cs">
