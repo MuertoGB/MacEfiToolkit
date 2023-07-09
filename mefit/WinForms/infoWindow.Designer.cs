@@ -171,7 +171,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblSectionData.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblSectionData.Size = new System.Drawing.Size(438, 35);
             this.lblSectionData.TabIndex = 101;
-            this.lblSectionData.Text = "`";
+            this.lblSectionData.Text = "...";
             this.lblSectionData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpMain

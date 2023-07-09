@@ -156,12 +156,12 @@ namespace Mac_EFI_Toolkit
 
         private void mainWindow_Activated(object sender, EventArgs e)
         {
-            SetControlForeColor(pnlTitle, Color.White);
+            SetControlForeColor(tlpTitle, Color.White);
         }
 
         private void mainWindow_Deactivate(object sender, EventArgs e)
         {
-            SetControlForeColor(pnlTitle, Color.FromArgb(100, 100, 100));
+            SetControlForeColor(tlpTitle, Color.FromArgb(100, 100, 100));
         }
         #endregion
 
@@ -252,7 +252,7 @@ namespace Mac_EFI_Toolkit
 
         private void SetMouseMoveEventHandlers()
         {
-            Control[] controls = { tlpMain, tlpMainIcon, lblWindowTitle, tlpMenu };
+            Control[] controls = { tlpMain, tlpTitle, lblWindowTitle, tlpMenu };
             foreach (Control control in controls)
             {
                 control.MouseMove += mainWindow_MouseMove;

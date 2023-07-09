@@ -32,7 +32,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 
 **Fsys Store:**
 - Export Fsys store from the NVRAM.
-- Replace the Fsys store (0x800) at offset 0x20000h or 0x22000h.
+- Replace the Fsys store.
 - View the serial number, hwc, and son.
 - Edit the serial number, and hwc.
 - Detect and repair invalid Fsys store checksums.

@@ -119,11 +119,14 @@ namespace Mac_EFI_Toolkit.Utils
             string letters = new string(model.Where(char.IsLetter).ToArray());
             string numbers = new string(model.Where(char.IsDigit).ToArray());
 
-            if (letters.Length > 3)
-                return model;
+            int minLength = 2;
+            int maxLength = 3;
 
-            if (numbers.Length > 3)
+            if (letters.Length < minLength || letters.Length > maxLength ||
+                numbers.Length < minLength || numbers.Length > maxLength)
+            {
                 return model;
+            }
 
             if (model.Contains("MBP"))
                 letters = "MacBookPro";
