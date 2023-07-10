@@ -31,7 +31,11 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(aboutWindow));
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.lnkUrls = new System.Windows.Forms.LinkLabel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cmdDonate = new System.Windows.Forms.Button();
+            this.cmdIssues = new System.Windows.Forms.Button();
+            this.cmdEmail = new System.Windows.Forms.Button();
+            this.cmdSource = new System.Windows.Forms.Button();
             this.lblInfo = new System.Windows.Forms.Label();
             this.pnlSplit = new System.Windows.Forms.Panel();
             this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
@@ -44,6 +48,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.pnlMain.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tlpTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpTopLabels.SuspendLayout();
@@ -53,7 +58,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // pnlMain
             // 
             this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.pnlMain.Controls.Add(this.lnkUrls);
+            this.pnlMain.Controls.Add(this.tableLayoutPanel1);
             this.pnlMain.Controls.Add(this.lblInfo);
             this.pnlMain.Controls.Add(this.pnlSplit);
             this.pnlMain.Controls.Add(this.tlpTop);
@@ -63,25 +68,111 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Size = new System.Drawing.Size(438, 238);
             this.pnlMain.TabIndex = 71;
             // 
-            // lnkUrls
+            // tableLayoutPanel1
             // 
-            this.lnkUrls.ActiveLinkColor = System.Drawing.Color.White;
-            this.lnkUrls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.lnkUrls.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lnkUrls.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lnkUrls.ForeColor = System.Drawing.Color.White;
-            this.lnkUrls.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
-            this.lnkUrls.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkUrls.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.lnkUrls.Location = new System.Drawing.Point(0, 190);
-            this.lnkUrls.Margin = new System.Windows.Forms.Padding(0);
-            this.lnkUrls.Name = "lnkUrls";
-            this.lnkUrls.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lnkUrls.Size = new System.Drawing.Size(438, 48);
-            this.lnkUrls.TabIndex = 10;
-            this.lnkUrls.Text = "Contact Me · Source Code · Donate";
-            this.lnkUrls.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lnkUrls.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkUrls_LinkClicked);
+            this.tableLayoutPanel1.ColumnCount = 7;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.cmdDonate, 6, 0);
+            this.tableLayoutPanel1.Controls.Add(this.cmdIssues, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.cmdEmail, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.cmdSource, 2, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 202);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(438, 36);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // cmdDonate
+            // 
+            this.cmdDonate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdDonate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdDonate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdDonate.FlatAppearance.BorderSize = 0;
+            this.cmdDonate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdDonate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdDonate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdDonate.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdDonate.ForeColor = System.Drawing.Color.White;
+            this.cmdDonate.Location = new System.Drawing.Point(327, 0);
+            this.cmdDonate.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdDonate.Name = "cmdDonate";
+            this.cmdDonate.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdDonate.Size = new System.Drawing.Size(111, 36);
+            this.cmdDonate.TabIndex = 3;
+            this.cmdDonate.Text = "DONATE";
+            this.cmdDonate.UseVisualStyleBackColor = false;
+            this.cmdDonate.Click += new System.EventHandler(this.cmdDonate_Click);
+            // 
+            // cmdIssues
+            // 
+            this.cmdIssues.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdIssues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdIssues.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdIssues.FlatAppearance.BorderSize = 0;
+            this.cmdIssues.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdIssues.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdIssues.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdIssues.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdIssues.ForeColor = System.Drawing.Color.White;
+            this.cmdIssues.Location = new System.Drawing.Point(218, 0);
+            this.cmdIssues.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdIssues.Name = "cmdIssues";
+            this.cmdIssues.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdIssues.Size = new System.Drawing.Size(108, 36);
+            this.cmdIssues.TabIndex = 2;
+            this.cmdIssues.Text = "ISSUES";
+            this.cmdIssues.UseVisualStyleBackColor = false;
+            this.cmdIssues.Click += new System.EventHandler(this.cmdIssues_Click);
+            // 
+            // cmdEmail
+            // 
+            this.cmdEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdEmail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdEmail.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdEmail.FlatAppearance.BorderSize = 0;
+            this.cmdEmail.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdEmail.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdEmail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdEmail.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdEmail.ForeColor = System.Drawing.Color.White;
+            this.cmdEmail.Location = new System.Drawing.Point(0, 0);
+            this.cmdEmail.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdEmail.Name = "cmdEmail";
+            this.cmdEmail.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdEmail.Size = new System.Drawing.Size(108, 36);
+            this.cmdEmail.TabIndex = 0;
+            this.cmdEmail.Text = "EMAIL ME";
+            this.cmdEmail.UseVisualStyleBackColor = false;
+            this.cmdEmail.Click += new System.EventHandler(this.cmdEmail_Click);
+            // 
+            // cmdSource
+            // 
+            this.cmdSource.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdSource.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdSource.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdSource.FlatAppearance.BorderSize = 0;
+            this.cmdSource.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdSource.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdSource.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdSource.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdSource.ForeColor = System.Drawing.Color.White;
+            this.cmdSource.Location = new System.Drawing.Point(109, 0);
+            this.cmdSource.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdSource.Name = "cmdSource";
+            this.cmdSource.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdSource.Size = new System.Drawing.Size(108, 36);
+            this.cmdSource.TabIndex = 1;
+            this.cmdSource.Text = "SOURCE";
+            this.cmdSource.UseVisualStyleBackColor = false;
+            this.cmdSource.Click += new System.EventHandler(this.cmdSource_Click);
             // 
             // lblInfo
             // 
@@ -91,7 +182,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblInfo.Location = new System.Drawing.Point(0, 94);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lblInfo.Size = new System.Drawing.Size(438, 96);
+            this.lblInfo.Size = new System.Drawing.Size(438, 90);
             this.lblInfo.TabIndex = 0;
             this.lblInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
     "erto, so don\'t eat it.\r\nThe \'Muerto\' avatar was hand crafted by Hammi.";
@@ -277,6 +368,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.pnlMain.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.tlpTop.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpTopLabels.ResumeLayout(false);
@@ -288,7 +380,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
         #endregion
         internal System.Windows.Forms.Panel pnlMain;
-        internal System.Windows.Forms.LinkLabel lnkUrls;
         internal System.Windows.Forms.TableLayoutPanel tlpTitle;
         internal System.Windows.Forms.Button cmdClose;
         internal System.Windows.Forms.TableLayoutPanel tlpTopLabels;
@@ -300,5 +391,10 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.TableLayoutPanel tlpTop;
         internal System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Panel pnlSplit;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button cmdDonate;
+        private System.Windows.Forms.Button cmdIssues;
+        private System.Windows.Forms.Button cmdEmail;
+        private System.Windows.Forms.Button cmdSource;
     }
 }

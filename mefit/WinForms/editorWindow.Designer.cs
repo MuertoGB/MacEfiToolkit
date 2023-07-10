@@ -61,7 +61,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblMeText = new System.Windows.Forms.Label();
             this.tlpMeRegion = new System.Windows.Forms.TableLayoutPanel();
             this.cmdMePath = new System.Windows.Forms.Button();
-            this.cbxWriteMeRegion = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.cbxPatchMeRegion = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.tlpLog = new System.Windows.Forms.TableLayoutPanel();
             this.pnlLog = new System.Windows.Forms.Panel();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
@@ -620,7 +620,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMeRegion.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMeRegion.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpMeRegion.Controls.Add(this.cmdMePath, 1, 0);
-            this.tlpMeRegion.Controls.Add(this.cbxWriteMeRegion, 0, 0);
+            this.tlpMeRegion.Controls.Add(this.cbxPatchMeRegion, 0, 0);
             this.tlpMeRegion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMeRegion.Location = new System.Drawing.Point(0, 325);
             this.tlpMeRegion.Margin = new System.Windows.Forms.Padding(0);
@@ -649,24 +649,24 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdMePath.Text = "Change File";
             this.cmdMePath.UseVisualStyleBackColor = false;
             // 
-            // cbxWriteMeRegion
+            // cbxPatchMeRegion
             // 
-            this.cbxWriteMeRegion.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxWriteMeRegion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxWriteMeRegion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxWriteMeRegion.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxWriteMeRegion.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxWriteMeRegion.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxWriteMeRegion.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxWriteMeRegion.Enabled = false;
-            this.cbxWriteMeRegion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxWriteMeRegion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxWriteMeRegion.Location = new System.Drawing.Point(11, 4);
-            this.cbxWriteMeRegion.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.cbxWriteMeRegion.Name = "cbxWriteMeRegion";
-            this.cbxWriteMeRegion.Size = new System.Drawing.Size(219, 21);
-            this.cbxWriteMeRegion.TabIndex = 0;
-            this.cbxWriteMeRegion.Text = "Write Exported ME Region";
+            this.cbxPatchMeRegion.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.cbxPatchMeRegion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cbxPatchMeRegion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxPatchMeRegion.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxPatchMeRegion.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxPatchMeRegion.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxPatchMeRegion.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxPatchMeRegion.Enabled = false;
+            this.cbxPatchMeRegion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxPatchMeRegion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxPatchMeRegion.Location = new System.Drawing.Point(11, 4);
+            this.cbxPatchMeRegion.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
+            this.cbxPatchMeRegion.Name = "cbxPatchMeRegion";
+            this.cbxPatchMeRegion.Size = new System.Drawing.Size(149, 21);
+            this.cbxPatchMeRegion.TabIndex = 0;
+            this.cbxPatchMeRegion.Text = "Patch ME Region";
             // 
             // tlpLog
             // 
@@ -1034,6 +1034,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Label lblMeText;
         private System.Windows.Forms.TableLayoutPanel tlpMeRegion;
         private System.Windows.Forms.Button cmdMePath;
-        private UI.METCheckbox cbxWriteMeRegion;
+        private UI.METCheckbox cbxPatchMeRegion;
     }
 }

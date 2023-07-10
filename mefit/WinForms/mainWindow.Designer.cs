@@ -1103,6 +1103,7 @@ namespace Mac_EFI_Toolkit
             this.lblVersion.AutoSize = true;
             this.lblVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblVersion.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblVersion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
             this.lblVersion.Location = new System.Drawing.Point(32, 14);
@@ -1195,7 +1196,7 @@ namespace Mac_EFI_Toolkit
             this.aboutToolStripMenuItem});
             this.cmsMainMenu.Name = "cmsMainMenu";
             this.cmsMainMenu.ShowImageMargin = false;
-            this.cmsMainMenu.Size = new System.Drawing.Size(247, 302);
+            this.cmsMainMenu.Size = new System.Drawing.Size(247, 274);
             // 
             // openLocalFolderToolStripMenuItem
             // 

@@ -284,7 +284,7 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearVssStore.Checked = false;
             cbxClearSvsStore.Checked = false;
             cbxClearNssStore.Checked = false;
-            cbxWriteMeRegion.Checked = false;
+            cbxPatchMeRegion.Checked = false;
 
             cmdOpenLast.Enabled = false;
         }
@@ -483,7 +483,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
             else
             {
-                cbxWriteMeRegion.Enabled = false;
+                cbxPatchMeRegion.Enabled = false;
                 Logger.WriteLogTextToRtb($"ME Region not found: Option disabled", RtbLogPrefix.Warning, rtbLog);
             }
 
