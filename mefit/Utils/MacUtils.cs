@@ -64,8 +64,9 @@ namespace Mac_EFI_Toolkit.Utils
 
                 return string.IsNullOrEmpty(data) ? null : data;
             }
-            catch
+            catch (Exception e)
             {
+                Logger.WriteExceptionToAppLog(e);
                 return null;
             }
         }

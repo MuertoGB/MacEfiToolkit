@@ -49,8 +49,9 @@ namespace Mac_EFI_Toolkit
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Logger.WriteExceptionToAppLog(e);
                 return VersionResult.Error;
             }
         }

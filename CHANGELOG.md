@@ -18,13 +18,15 @@
 - Added option in the main window to export the Intel ME Region (ALT + M).
 - Added menu in the main window which enables quick copying of text fields (CTRL + C).
 - Unhandled exceptions will now output a debug log to './unhandled.log'.
+- Added option to create a debug log 'Main Window > Menu > Create a Debug Log'.
+- The application will now parse the flash descriptor (where available) for base and limit offsets of UEFI regions.
 
 #### Enhancements:
 - UI improvements.
 - The EFI model code is now automatically converted and displayed as a model identifier in the main window and rom information window.
-- The application will now parse the flash descriptor (when available) for base + limit offsets of UEFI regions.
 - Added more files types when opening a firmware image (*.fd, *.bio).
 - The Fsys parser will now dynamically read variable size.
+- Modified context menu shortcut keys.
 
 #### Bugs:
 - Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.

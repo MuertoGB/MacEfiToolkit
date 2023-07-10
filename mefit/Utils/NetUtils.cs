@@ -4,6 +4,7 @@
 // NetUtils.cs
 // Released under the GNU GLP v3.0
 
+using System;
 using System.Net;
 using System.Net.NetworkInformation;
 
@@ -30,8 +31,9 @@ namespace Mac_EFI_Toolkit.Utils
                     return true;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Logger.WriteExceptionToAppLog(e);
                 return false;
             }
         }
@@ -54,8 +56,9 @@ namespace Mac_EFI_Toolkit.Utils
                     return (reply.Status == IPStatus.Success);
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Logger.WriteExceptionToAppLog(e);
                 return false;
             }
         }

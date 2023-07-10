@@ -36,8 +36,8 @@ namespace Mac_EFI_Toolkit
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230708.0500";
-        internal static readonly string Channel = "Release";
+        internal static readonly string Build = "230710.1540";
+        internal static readonly string Channel = "Stable";
     }
 
     internal struct METUrl
@@ -56,6 +56,7 @@ namespace Mac_EFI_Toolkit
         internal static mainWindow mWindow;
 
         #region Private Members
+        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
         private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
         private static IntPtr _hookId = IntPtr.Zero;
         private static GCHandle _hookHandle;
@@ -100,11 +101,19 @@ namespace Mac_EFI_Toolkit
 
             // Font Data
             byte[] fontData = Properties.Resources.segmdl2;
-            FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
-            FONT_MDL2_REG_10 = new Font(LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
-            FONT_MDL2_REG_12 = new Font(LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
-            FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
-            FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
+
+            if (fontData != null)
+            {
+                FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
+                FONT_MDL2_REG_10 = new Font(LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
+                FONT_MDL2_REG_12 = new Font(LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
+                FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
+                FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
+            }
+            else
+            {
+                MessageBox.Show("Segoe MDL2 Assets font failed to load, see ./mefit.log for more details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             // Settings
             if (!File.Exists(METPath.SettingsFile))
@@ -205,6 +214,7 @@ namespace Mac_EFI_Toolkit
                     return (IntPtr)1;
                 }
             }
+
             return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
         }
 
@@ -223,7 +233,6 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Font Resolver
-        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
         internal static FontFamily LoadFontFromResource(byte[] fontData)
         {
             IntPtr pFileView = Marshal.AllocCoTaskMem(fontData.Length);
@@ -234,6 +243,11 @@ namespace Mac_EFI_Toolkit
                 NativeMethods.AddFontMemResourceEx(pFileView, (uint)fontData.Length, IntPtr.Zero, ref pNumFonts);
                 _privateFontCollection.AddMemoryFont(pFileView, fontData.Length);
                 return _privateFontCollection.Families.Last();
+            }
+            catch (Exception e)
+            {
+                Logger.WriteExceptionToAppLog(e);
+                return null;
             }
             finally
             {

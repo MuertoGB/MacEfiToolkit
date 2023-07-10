@@ -238,7 +238,7 @@ namespace Mac_EFI_Toolkit.Utils
         internal static void OverwriteBytesAtBase(byte[] sourceBytes, int basePosition, byte[] newBytes)
         {
             if (basePosition < 0 || basePosition + newBytes.Length > sourceBytes.Length)
-                throw new ArgumentOutOfRangeException(nameof(basePosition), "Bae position is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(basePosition), "Base position is out of range.");
 
             Buffer.BlockCopy(newBytes, 0, sourceBytes, basePosition, newBytes.Length);
         }

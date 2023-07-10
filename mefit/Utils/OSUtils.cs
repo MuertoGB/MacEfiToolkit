@@ -43,8 +43,9 @@ namespace Mac_EFI_Toolkit.Utils
                         return FontStatus.Available;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Logger.WriteExceptionToAppLog(e);
                 return FontStatus.Unknown;
             }
 

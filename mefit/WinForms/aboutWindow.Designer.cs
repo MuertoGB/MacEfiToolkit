@@ -145,8 +145,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTopLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTopLabels.Controls.Add(this.lblBuild, 0, 1);
             this.tlpTopLabels.Controls.Add(this.lblName, 0, 0);
-            this.tlpTopLabels.Location = new System.Drawing.Point(106, 20);
-            this.tlpTopLabels.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.tlpTopLabels.Location = new System.Drawing.Point(100, 20);
+            this.tlpTopLabels.Margin = new System.Windows.Forms.Padding(0);
             this.tlpTopLabels.Name = "tlpTopLabels";
             this.tlpTopLabels.RowCount = 3;
             this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));

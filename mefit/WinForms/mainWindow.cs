@@ -301,7 +301,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(this, "Reset", "This will clear all data, and unload the binary.\r\nAre you sure you want to reset?", METMessageType.Warning, METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(this, "Reset", "This will unload the firmware and data.\r\nAre you sure you want to reset?", METMessageType.Warning, METMessageButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {

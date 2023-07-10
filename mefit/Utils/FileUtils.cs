@@ -177,9 +177,10 @@ namespace Mac_EFI_Toolkit.Utils
                     }
                 }
             }
-            catch (IOException)
+            catch (Exception e)
             {
-                return false; // File access error
+                Logger.WriteExceptionToAppLog(e);
+                return false; // An error occured
             }
 
             return true; // Data was written successfully and integrity is verified

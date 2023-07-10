@@ -67,8 +67,6 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 - Version checking.
 
 **TODO**
-- [ ] Complete the logging systems
-- [ ] Refactor and optimize source code
 - [ ] Patch exported ME Region into binary
 
 | SUGGESTED FEATURES                   | Status         |
@@ -80,7 +78,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[0.7.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 24th June 2023 | Yes | BETA |
+|[1.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Yes | BETA |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
