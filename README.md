@@ -78,7 +78,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Yes | BETA |
+|[1.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Yes | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
