@@ -14,7 +14,7 @@ namespace Mac_EFI_Toolkit
     {
         internal static byte[] DecompressBytes(byte[] sourceBytes)
         {
-            LzmaDecoder decoder = new LzmaDecoder();
+            Decoder decoder = new Decoder();
             MemoryStream decoderStream = new MemoryStream();
 
             try

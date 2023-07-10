@@ -6,7 +6,7 @@ namespace SevenZip.Compression.LZMA
 {
     using RangeCoder;
 
-    public class LzmaDecoder : ICoder, ISetDecoderProperties // System.IO.Stream
+    public class Decoder : ICoder, ISetDecoderProperties // ,System.IO.Stream
     {
         class LenDecoder
         {
@@ -154,9 +154,10 @@ namespace SevenZip.Compression.LZMA
 
         uint m_DictionarySize;
         uint m_DictionarySizeCheck;
+
         uint m_PosStateMask;
 
-        public LzmaDecoder()
+        public Decoder()
         {
             m_DictionarySize = 0xFFFFFFFF;
             for (int i = 0; i < Base.kNumLenToPosStates; i++)
@@ -340,7 +341,6 @@ namespace SevenZip.Compression.LZMA
                     }
                 }
             }
-
             m_OutWindow.Flush();
             m_OutWindow.ReleaseStream();
             m_RangeDecoder.ReleaseStream();
@@ -369,5 +369,30 @@ namespace SevenZip.Compression.LZMA
             _solid = true;
             return m_OutWindow.Train(stream);
         }
+
+        /*
+		public override bool CanRead { get { return true; }}
+		public override bool CanWrite { get { return true; }}
+		public override bool CanSeek { get { return true; }}
+		public override long Length { get { return 0; }}
+		public override long Position
+		{
+			get { return 0;	}
+			set { }
+		}
+		public override void Flush() { }
+		public override int Read(byte[] buffer, int offset, int count) 
+		{
+			return 0;
+		}
+		public override void Write(byte[] buffer, int offset, int count)
+		{
+		}
+		public override long Seek(long offset, System.IO.SeekOrigin origin)
+		{
+			return 0;
+		}
+		public override void SetLength(long value) {}
+		*/
     }
 }

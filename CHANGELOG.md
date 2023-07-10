@@ -20,6 +20,7 @@
 - Unhandled exceptions will now output a debug log to './unhandled.log'.
 - Added option to create a debug log 'Main Window > Menu > Create a Debug Log'.
 - The application will now parse the flash descriptor (where available) for base and limit offsets of UEFI regions.
+- Updated LZMA SDK to version 23.01.
 
 #### Enhancements:
 - UI improvements.
