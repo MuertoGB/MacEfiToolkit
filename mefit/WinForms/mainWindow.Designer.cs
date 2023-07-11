@@ -56,7 +56,7 @@ namespace Mac_EFI_Toolkit
             this.lblSonText = new System.Windows.Forms.Label();
             this.lblApfsCapable = new System.Windows.Forms.Label();
             this.lblNvramText = new System.Windows.Forms.Label();
-            this.lblFsysCrcText = new System.Windows.Forms.Label();
+            this.lblFsysStoreText = new System.Windows.Forms.Label();
             this.lblApfsCapableText = new System.Windows.Forms.Label();
             this.lblEfiVersionText = new System.Windows.Forms.Label();
             this.lblBoardId = new System.Windows.Forms.Label();
@@ -375,7 +375,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFile.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpFile.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpFile.Size = new System.Drawing.Size(713, 61);
-            this.tlpFile.TabIndex = 1;
+            this.tlpFile.TabIndex = 99;
             // 
             // lblFileCreatedDate
             // 
@@ -511,7 +511,7 @@ namespace Mac_EFI_Toolkit
             this.tlpRom.Controls.Add(this.lblSonText, 4, 8);
             this.tlpRom.Controls.Add(this.lblApfsCapable, 6, 2);
             this.tlpRom.Controls.Add(this.lblNvramText, 4, 4);
-            this.tlpRom.Controls.Add(this.lblFsysCrcText, 0, 2);
+            this.tlpRom.Controls.Add(this.lblFsysStoreText, 0, 2);
             this.tlpRom.Controls.Add(this.lblApfsCapableText, 4, 2);
             this.tlpRom.Controls.Add(this.lblEfiVersionText, 0, 4);
             this.tlpRom.Controls.Add(this.lblBoardId, 2, 8);
@@ -604,20 +604,20 @@ namespace Mac_EFI_Toolkit
             this.lblNvramText.Text = "NVRAM:";
             this.lblNvramText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblFsysCrcText
+            // lblFsysStoreText
             // 
-            this.lblFsysCrcText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
-            this.lblFsysCrcText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFsysCrcText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFsysCrcText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblFsysCrcText.Location = new System.Drawing.Point(0, 31);
-            this.lblFsysCrcText.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFsysCrcText.Name = "lblFsysCrcText";
-            this.lblFsysCrcText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblFsysCrcText.Size = new System.Drawing.Size(130, 30);
-            this.lblFsysCrcText.TabIndex = 99;
-            this.lblFsysCrcText.Text = "Fsys CRC32:";
-            this.lblFsysCrcText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFsysStoreText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
+            this.lblFsysStoreText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFsysStoreText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFsysStoreText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblFsysStoreText.Location = new System.Drawing.Point(0, 31);
+            this.lblFsysStoreText.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFsysStoreText.Name = "lblFsysStoreText";
+            this.lblFsysStoreText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblFsysStoreText.Size = new System.Drawing.Size(130, 30);
+            this.lblFsysStoreText.TabIndex = 99;
+            this.lblFsysStoreText.Text = "Fsys Store:";
+            this.lblFsysStoreText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblApfsCapableText
             // 
@@ -1571,7 +1571,7 @@ namespace Mac_EFI_Toolkit
             this.tlpTitle.RowCount = 1;
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.Size = new System.Drawing.Size(713, 50);
-            this.tlpTitle.TabIndex = 100;
+            this.tlpTitle.TabIndex = 1;
             // 
             // cmdClose
             // 
@@ -1612,7 +1612,7 @@ namespace Mac_EFI_Toolkit
             this.cmdMenu.Padding = new System.Windows.Forms.Padding(2, 0, 0, 1);
             this.cmdMenu.Size = new System.Drawing.Size(50, 50);
             this.cmdMenu.TabIndex = 0;
-            this.cmdMenu.Text = "S";
+            this.cmdMenu.Text = "M";
             this.cmdMenu.UseVisualStyleBackColor = false;
             this.cmdMenu.Click += new System.EventHandler(this.cmdMenu_Click);
             // 
@@ -1729,7 +1729,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Button cmdOpenBin;
         internal System.Windows.Forms.PictureBox pbxTitleLogo;
         internal System.Windows.Forms.Label lblWindowTitle;
-        private System.Windows.Forms.Label lblFsysCrcText;
+        private System.Windows.Forms.Label lblFsysStoreText;
         private System.Windows.Forms.Label lblSonText;
         private System.Windows.Forms.Label lblFsysCrc;
         private System.Windows.Forms.Label lblApfsCapable;

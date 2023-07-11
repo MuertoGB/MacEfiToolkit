@@ -29,6 +29,7 @@
 - Added more files types when opening a firmware image (*.fd, *.bio).
 - The Fsys parser will now dynamically read variable size.
 - Modified context menu shortcut keys.
+- Adjusted tab index ordering.
 
 #### Bugs:
 - Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.

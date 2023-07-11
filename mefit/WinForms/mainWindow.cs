@@ -1057,7 +1057,7 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdOpenBin, cmdReset, cmdCopy, cmdEdit, cmdNavigate, cmdReload,
+                cmdOpenBin, cmdReset, cmdCopy, cmdEdit, cmdMenu, cmdNavigate, cmdReload,
                 cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys, cmdAppleRomInfo,
                 cmdExportMe
             };
@@ -1089,6 +1089,7 @@ namespace Mac_EFI_Toolkit
                     { cmdOpenBin, "Open a Mac UEFI/BIOS (CTRL + O)" },
                     { cmdReset, "Reset (CTRL + R)" },
                     { cmdEdit, "Open the Firmware Editor (CTRL + E)" },
+                    { cmdMenu, "Open the Application Menu (CTRL + M)"},
                     { cmdCopy, "Open the Copy Menu (CTRL + C)" },
                     { cmdNavigate, "Navigate to File (ALT + N)" },
                     { cmdReload, "Reload File from Disk (ALT + R)" },

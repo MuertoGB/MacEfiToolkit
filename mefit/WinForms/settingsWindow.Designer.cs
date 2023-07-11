@@ -534,7 +534,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMain.Size = new System.Drawing.Size(408, 396);
-            this.tlpMain.TabIndex = 99;
+            this.tlpMain.TabIndex = 0;
             // 
             // lblSettingsApplied
             // 
