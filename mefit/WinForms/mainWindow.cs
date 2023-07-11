@@ -926,7 +926,7 @@ namespace Mac_EFI_Toolkit
 
             if (Descriptor.MeBase != 0)
             {
-                if (!string.Equals(FWBase.MeVersion, "N/A") || FWBase.MeVersion == null)
+                if (!string.IsNullOrEmpty(FWBase.MeVersion))
                 {
                     lblMeVersion.Text += $" ({Descriptor.MeBase:X2}h)";
                 }

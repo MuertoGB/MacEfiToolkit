@@ -59,6 +59,7 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 - Knuth–Morris–Pratt algorithm for searching binary data.
 - View FIT and ME versions.
 - Export the Intel ME Region.
+- Transplant the Intel ME Region.
 - Validate binary size.
 
 **Application:**
@@ -68,13 +69,10 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 - Drag & drop support.
 - Version checking.
 
-**TODO**
-- [ ] Patch exported ME Region into binary
-
 | SUGGESTED FEATURES                   | Status         |
 |--------------------------------------|----------------|
-| Detect email address in the NVRAM    |🟠 Researching |
-| Detect MDM status                    |🔴 Undecided   |
+| Detect email address in the NVRAM    |🟠 Researching  |
+| Detect MDM status                    |🔴 Undecided    |
 
 ## Download
 
