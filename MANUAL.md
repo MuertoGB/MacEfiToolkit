@@ -154,6 +154,9 @@ This section provides information about the EFI version, if available, and inclu
 <kbd>
   <img src="files/manual/nvram.png">
 </kbd>
+<kbd>
+  <img src="files/manual/nvramlocked.png">
+</kbd>
 
 This section is divided into four sections. The first three labels represent different NVRAM store types. Each store type will appear green when empty, orange when data is present, and grey when the store is not found. The last item indicates the EFI Lock status. If the lock is green, the EFI does not have a Message Authentication Code (MAC) and is likely not locked. If the lock is red, a Message Authentication Code (MAC) was found, indicating that the EFI is likely password locked.
 
