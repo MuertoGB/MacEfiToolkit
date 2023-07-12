@@ -1,5 +1,35 @@
 ## Main Window
 
+#### Title Area:
+
+<kbd>
+  <img src="files/manual/title.png">
+</kbd>
+
+The current version of the application is displayed in this section. If a new version is available, the label will appear in orange. Clicking on the version number will navigate to the latest release. The menu button opens the main menu. The minimize and close buttons function as expected, allowing you to minimize or quit the application.
+
+---
+
+#### Main Buttons:
+
+<kbd>
+  <img src="files/manual/mainbuttons.png">
+</kbd>
+
+'Open':\
+By clicking the 'Open' button, you can choose and load a UEFI/BIOS file into the application.
+
+'Reset':\
+The 'Reset' button unloads the currently loaded file and clears any buffers and data associated with it.
+
+'Edit':\
+Clicking 'Edit' will open the editor window. Alternatively, it can open the terms window, which must be accepted before access to the editor is granted.
+
+'Copy':\
+Clicking 'Copy' opens the copy menu, which enables quick copying of text fields to the clipboard.
+
+---
+
 #### File:
 
 <kbd>
