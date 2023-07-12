@@ -8,7 +8,7 @@ Mac EFI Toolkit
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
-  <a href="#MANUAL.md">Manual</a> •
+  <a href="MANUAL.md">Manual</a> •
   <a href="#download">Download</a> •
   <a href="#requirements">Requirements</a> •
   <a href="#acknowledgements">Acknowledgements</a> •
