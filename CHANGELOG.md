@@ -26,6 +26,7 @@
 #### Enhancements:
 - UI improvements.
 - The EFI model code is now automatically converted and displayed as a model identifier in the main window and rom information window.
+- The main window APFS capability status will now display DXE type.
 - Added more files types when opening a firmware image (*.fd, *.bio).
 - The Fsys parser will now dynamically read variable size.
 - Modified context menu shortcut keys.

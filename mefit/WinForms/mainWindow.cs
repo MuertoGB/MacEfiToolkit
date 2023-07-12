@@ -61,6 +61,17 @@ namespace Mac_EFI_Toolkit
             // Set font for lblEfiLock
             lblEfiLock.Font = Program.FONT_MDL2_REG_9;
 
+            // Recalculate tlpMain's height based on each row height - the last row
+            int totalHeight = 0;
+
+            for (int i = 0; i < tlpMain.RowStyles.Count - 1; i++)
+            {
+                RowStyle rowStyle = tlpMain.RowStyles[i];
+                totalHeight += (int)rowStyle.Height;
+            }
+
+            tlpMain.Height = totalHeight;
+
             // Set tip handlers for controls
             SetTipHandlers();
 
@@ -861,8 +872,26 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateApfsCapableLabel()
         {
-            lblApfsCapable.Text = FWBase.IsApfsCapable;
-            lblApfsCapable.ForeColor = FWBase.IsApfsCapable == "Yes" ? Colours.COMPLETE_GREEN : Colours.WARNING_ORANGE;
+
+            switch(FWBase.IsApfsCapable)
+            {
+                case ApfsCapable.Unknown:
+                    lblApfsCapable.Text = "Unknown";
+                    lblApfsCapable.ForeColor = Colours.ERROR_RED;
+                    break;
+                case ApfsCapable.YesGuid:
+                    lblApfsCapable.Text = "Yes · DXE";
+                    lblApfsCapable.ForeColor = Colours.COMPLETE_GREEN;
+                    break;
+                case ApfsCapable.YesLzma:
+                    lblApfsCapable.Text = "Yes · LZMA DXE";
+                    lblApfsCapable.ForeColor = Colours.COMPLETE_GREEN;
+                    break;
+                case ApfsCapable.No:
+                    lblApfsCapable.Text = "No";
+                    lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
+                    break;
+            }
         }
 
         private void UpdateEfiVersionLabel()

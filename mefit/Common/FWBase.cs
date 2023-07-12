@@ -89,11 +89,12 @@ namespace Mac_EFI_Toolkit.Common
     }
     #endregion
 
-    #region FWBase
-    internal enum ApfsCapableFirmware
+    #region Enums
+    internal enum ApfsCapable
     {
         Unknown,
-        Yes,
+        YesGuid,
+        YesLzma,
         No
     }
 
@@ -115,7 +116,6 @@ namespace Mac_EFI_Toolkit.Common
     class FWBase
     {
         internal static string LoadedBinaryPath = null;
-        internal static string IsApfsCapable = null;
         internal static string FitVersion = null;
         internal static string MeVersion = null;
         internal static byte[] LoadedBinaryBytes = null;
@@ -131,6 +131,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static EfiSection EFISectionData;
 
         internal static EfiLockStatus EfiLock = EfiLockStatus.Unknown;
+        internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
 
         internal const int MIN_IMAGE_SIZE = 1048576;  // 100000h
         internal const int MAX_IMAGE_SIZE = 33554432; // 2000000h
@@ -155,7 +156,7 @@ namespace Mac_EFI_Toolkit.Common
             ROMInfoSectionData = GetRomInformationData(sourceBytes);
             EFISectionData = GetEfiSectionData(sourceBytes);
 
-            IsApfsCapable = GetIsApfsCapable(LoadedBinaryBytes).ToString();
+            IsApfsCapable = GetIsApfsCapable(LoadedBinaryBytes);
             FitVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.FlashImageTool);
             MeVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.ManagementEngine);
 
@@ -176,7 +177,7 @@ namespace Mac_EFI_Toolkit.Common
             FsysStoreData = default;
             ROMInfoSectionData = default;
             EFISectionData = default;
-            IsApfsCapable = null;
+            IsApfsCapable = ApfsCapable.Unknown;
             FitVersion = null;
             MeVersion = null;
             EfiLock = EfiLockStatus.Unknown;
@@ -902,7 +903,7 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region APFSJumpStart
-        internal static ApfsCapableFirmware GetIsApfsCapable(byte[] sourceBytes)
+        internal static ApfsCapable GetIsApfsCapable(byte[] sourceBytes)
         {
             // Check the descriptor for bios base + limit
             int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
@@ -911,13 +912,13 @@ namespace Mac_EFI_Toolkit.Common
             // APFS DXE GUID found
             if (BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APFS_DXE_GUID, biosBase, biosLimit) != -1)
             {
-                return ApfsCapableFirmware.Yes;
+                return ApfsCapable.YesGuid;
             }
 
             // Disable compressed DXE searching is enabled (Maybe I should get rid of this?)
             if (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch))
             {
-                return ApfsCapableFirmware.Unknown;
+                return ApfsCapable.Unknown;
             }
 
             // Look for a compressed volume GUID
@@ -931,7 +932,7 @@ namespace Mac_EFI_Toolkit.Common
             // No compressed DXE volume was found
             if (lzmaDxeBase == -1)
             {
-                return ApfsCapableFirmware.No;
+                return ApfsCapable.No;
             }
 
             // Get bytes containing section length (0x3)
@@ -948,18 +949,18 @@ namespace Mac_EFI_Toolkit.Common
             // There was an issue decompressing the volume (Error saved to './mefit.log')
             if (decompressedBytes == null)
             {
-                return ApfsCapableFirmware.Unknown;
+                return ApfsCapable.Unknown;
             }
 
             // Search the decompressed DXE volume for the APFS DXE GUID
             if (BinaryUtils.GetBasePosition(decompressedBytes, FSGuids.APFS_DXE_GUID) == -1)
             {
                 // The APFS DXE GUID was not found in the compressed volume
-                return ApfsCapableFirmware.No;
+                return ApfsCapable.No;
             }
 
             // The APFS DXE GUID was present in the compressed volume
-            return ApfsCapableFirmware.Yes;
+            return ApfsCapable.YesLzma;
         }
         #endregion
 
