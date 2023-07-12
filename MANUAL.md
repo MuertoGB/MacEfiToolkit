@@ -1,5 +1,11 @@
 ## Main Window
 
+This section explains the main window and its functionality.
+
+<kbd>
+  <img src="files/images/met.png">
+</kbd>
+
 #### Title Area:
 
 <kbd>
@@ -10,22 +16,57 @@ The current version of the application is displayed in this section. If a new ve
 
 ---
 
+#### Main Menu:
+
+<kbd>
+  <img src="files/manual/mainmenu.png">
+</kbd>
+
+**'Local Directory':**\
+Navigates to the working directory where the executable is located.
+
+**'Builds Directory':**\
+Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved to.
+
+**'Fsys Store Directory':**\
+Navigates to the Fsys Store directory within the working directory. This is the default path where Fsys Stores are exported to.
+
+**'ME Region Directory':**\
+Navigates to the ME Region directory within the working directory. This is the default path where ME Regions are exported to.
+
+**'View Application Log':**\
+Opens the application log (if present), which contains details of any handled errors, or other relevant issues captured during runtime.
+
+**'Create a Debug Log':**\
+Writes a debug text log (debug.log) to the working directory, which contains information which can be used during troubleshooting.
+
+**'Restart Application':**\
+Shuts down the application and starts a new instance.
+
+**'Settings':**\
+Opens the settings window.
+
+**'About':**\
+Opens the about window.
+
+----
+
 #### Main Buttons:
 
 <kbd>
   <img src="files/manual/mainbuttons.png">
 </kbd>
 
-'Open':\
+**'Open':**\
 By clicking the 'Open' button, you can choose and load a UEFI/BIOS file into the application.
 
-'Reset':\
+**'Reset':**\
 The 'Reset' button unloads the currently loaded file and clears any buffers and data associated with it.
 
-'Edit':\
+**'Edit':**\
 Clicking 'Edit' will open the editor window. Alternatively, it can open the terms window, which must be accepted before access to the editor is granted.
 
-'Copy':\
+**'Copy':**\
 Clicking 'Copy' opens the copy menu, which enables quick copying of text fields to the clipboard.
 
 ---
