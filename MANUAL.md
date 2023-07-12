@@ -2,6 +2,11 @@
 This section displays the name of the loaded file and includes two buttons. Clicking the 'Folder' icon will open the file explorer and highlight the location of the loaded file. The 'Reload' button can be used to refresh the loaded file from disk in case any external changes have been made.
 
 #### Size (Bytes):
+
+<div style="border: 1px solid rgb(85, 170, 255); display: inline-block;">
+    ![](files/manual/filesize.png)
+</div>
+
 The file size of the loaded file is measured in bytes. If the file size is valid, the label will appear green. However, if the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and appended.
 
 #### CRC32:
