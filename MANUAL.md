@@ -11,7 +11,7 @@ This section explains the main window and its functionality.
 <kbd>
   <img src="files/manual/title.png">
 </kbd>
-<br>
+&nbsp;
 
 The current version of the application is displayed in this section. If a new version is available, the label will appear in orange. Clicking on the version number will navigate to the latest release. The menu button opens the main menu. The minimize and close buttons function as expected, allowing you to minimize or quit the application.
 
