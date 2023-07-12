@@ -1,4 +1,9 @@
 #### File:
+
+<kbd>
+  <img src="files/manual/file.png">
+</kbd>
+
 This section displays the name of the loaded file and includes two buttons. Clicking the 'Folder' icon will open the file explorer and highlight the location of the loaded file. The 'Reload' button can be used to refresh the loaded file from disk in case any external changes have been made.
 
 #### Size (Bytes):
