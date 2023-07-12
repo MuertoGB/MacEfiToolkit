@@ -1,3 +1,5 @@
+## Main Window
+
 #### File:
 
 <kbd>
@@ -6,22 +8,47 @@
 
 This section displays the name of the loaded file and includes two buttons. Clicking the 'Folder' icon will open the file explorer and highlight the location of the loaded file. The 'Reload' button can be used to refresh the loaded file from disk in case any external changes have been made.
 
+---
+
 #### Size (Bytes):
 
 <kbd>
   <img src="files/manual/filesize.png">
 </kbd>
 
-The file size of the loaded file is measured in bytes. If the file size is valid, the label will appear green. However, if the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and appended.
+The file size of the loaded file is measured in bytes. If the file size is valid, the label will appear green. However, if the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
+
+---
 
 #### CRC32:
+
+<kbd>
+  <img src="files/manual/crc.png">
+</kbd>
+
 The CRC32 value calculated for the loaded file.
 
+---
+
 #### Created:
+
+<kbd>
+  <img src="files/manual/created.png">
+</kbd>
+
 The creation date of the loaded file.
 
+---
+
 #### Modified:
+
+<kbd>
+  <img src="files/manual/modified.png">
+</kbd>
+
 The last write time of the loaded file.
+
+---
 
 #### Model:
 First, the application retrieves the model identifier (e.g., IM161) from the UEFI/BIOS and then converts it into a readable format (e.g., iMac16,1). If the hardware configuration (HWC) is available in the Fsys store, the application appends the corresponding configuration code obtained  from the internal database or Apple's server, resulting in a complete model name (e.g., "iMac (21.5-inch, Late 2015)").
