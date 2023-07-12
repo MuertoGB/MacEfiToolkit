@@ -816,7 +816,7 @@ namespace Mac_EFI_Toolkit
             int fileSize = (int)FWBase.FileInfoData.FileLength;
             bool isValidSize = FileUtils.GetIsValidBinSize(fileSize);
             lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileSize);
-            lblFileSizeBytes.ForeColor = isValidSize ? Colours.COMPLETE_GREEN : Colours.WARNING_ORANGE;
+            lblFileSizeBytes.ForeColor = isValidSize ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
             lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileSize)})";
         }
 
