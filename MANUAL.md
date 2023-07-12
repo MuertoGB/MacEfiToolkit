@@ -36,7 +36,7 @@ Clicking 'Copy' opens the copy menu, which enables quick copying of text fields 
   <img src="files/manual/file.png">
 </kbd>
 
-This section displays the name of the loaded file and includes two buttons. Clicking the 'Folder' icon will open the file explorer and highlight the location of the loaded file. The 'Reload' button can be used to refresh the loaded file from disk in case any external changes have been made.
+This section displays the name of the loaded file and includes two buttons. Clicking the 'Folder' button will open the file explorer and highlight the location of the loaded file. The 'Reload' button can be used to refresh the loaded file from disk in case any external changes have been made.
 
 ---
 
@@ -99,7 +99,7 @@ First, the application retrieves the model identifier (e.g., IM161) from the UEF
   <img src="files/manual/serial.png">
 </kbd>
 
-The system's serial number is stored in the Fsys store within the NVRAM. A valid serial number will consist of either 11 or 12 characters.
+This section consists of the system's serial number stored in the Fsys store within the NVRAM, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
 
 ---
 
