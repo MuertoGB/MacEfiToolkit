@@ -45,6 +45,9 @@ This section displays the name of the loaded file and includes two buttons. Clic
 <kbd>
   <img src="files/manual/filesize.png">
 </kbd>
+<kbd>
+  <img src="files/manual/filesizeinvalid.png">
+</kbd>
 
 The file size of the loaded file is measured in bytes. If the file size is valid, the label will appear green. However, if the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
 
@@ -115,6 +118,9 @@ The hardware configuration code is stored in the Fsys store within the NVRAM. Th
 <kbd>
   <img src="files/manual/fsys.png">
 </kbd>
+<kbd>
+  <img src="files/manual/fsysinvalid.png">
+</kbd>
 
 This section includes the checksum of the Fsys Store and two buttons. If the CRC32 checksum of the Fsys store is valid, the label will appear green and display the valid checksum. If the CRC32 is invalid, the label will appear red and display the invalid checksum. Clicking the "Wrench" button, which is enabled when the Fsys Store checksum is invalid, will prompt a "Save As" dialog to export the binary file with a repaired Fsys CRC32 checksum. The "Save" button allows exporting of the 2048-byte (0x800h) Fsys Store.
 
@@ -124,6 +130,9 @@ This section includes the checksum of the Fsys Store and two buttons. If the CRC
 
 <kbd>
   <img src="files/manual/apfs.png">
+</kbd>
+<kbd>
+  <img src="files/manual/apfsno.png">
 </kbd>
 
 Indicates whether the UEFI is capable of supporting APFS and provides information about the detected DXE type, such as LZMA DXE. The presence of LZMA DXE suggests the presence of a compressed DXE file system containing the APFSJumpStart boot time driver.
@@ -189,3 +198,11 @@ This section displays the 8-byte hexadecimal board-id obtained from the UEFI Pla
 The system order number (SON) is displayed in this section, retrieved from the Fsys Store within the NVRAM. The order number can be a standard order number such as MNE92LL/A or a custom Built to Order (BTO) / Configure to Order (CTO) number.
 
 ---
+
+#### Status Bar:
+
+<kbd>
+  <img src="files/manual/statusbar.png">
+</kbd>
+
+Located at the bottom of the main window, the status bar serves multiple purposes. It displays helpful tips when hovering over specific items (this feature can be disabled in the settings). It also shows a loading animation to indicate ongoing processes or operations. Additionally, the status bar provides information about the private memory usage for the application.
