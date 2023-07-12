@@ -3,10 +3,9 @@ This section displays the name of the loaded file and includes two buttons. Clic
 
 #### Size (Bytes):
 
-<span style="display: inline-block; border: 1px solid rgb(85, 170, 255);">
-    <img src="files/manual/filesize.png" alt="Image">
-</span>
-
+<kbd>
+  <img src="files/manual/filesize.png">
+</kbd>
 
 The file size of the loaded file is measured in bytes. If the file size is valid, the label will appear green. However, if the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and appended.
 
