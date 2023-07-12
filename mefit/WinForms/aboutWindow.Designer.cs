@@ -92,11 +92,11 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // cmdDonate
             // 
-            this.cmdDonate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdDonate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdDonate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdDonate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdDonate.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdDonate.FlatAppearance.BorderSize = 0;
-            this.cmdDonate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdDonate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdDonate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdDonate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDonate.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -113,11 +113,11 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // cmdIssues
             // 
-            this.cmdIssues.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdIssues.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdIssues.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdIssues.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdIssues.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdIssues.FlatAppearance.BorderSize = 0;
-            this.cmdIssues.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdIssues.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdIssues.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdIssues.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdIssues.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -134,11 +134,11 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // cmdEmail
             // 
-            this.cmdEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdEmail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdEmail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdEmail.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdEmail.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdEmail.FlatAppearance.BorderSize = 0;
-            this.cmdEmail.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdEmail.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdEmail.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdEmail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdEmail.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -155,11 +155,11 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // cmdSource
             // 
-            this.cmdSource.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdSource.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdSource.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdSource.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdSource.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdSource.FlatAppearance.BorderSize = 0;
-            this.cmdSource.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdSource.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdSource.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdSource.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdSource.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -182,7 +182,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblInfo.Location = new System.Drawing.Point(0, 94);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lblInfo.Size = new System.Drawing.Size(438, 90);
+            this.lblInfo.Size = new System.Drawing.Size(438, 93);
             this.lblInfo.TabIndex = 0;
             this.lblInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
     "erto, so don\'t eat it.\r\nThe \'Muerto\' avatar was hand crafted by Hammi.";

@@ -36,7 +36,7 @@ namespace Mac_EFI_Toolkit
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230711.1900";
+        internal static readonly string Build = "230712.0700";
         internal static readonly string Channel = "Stable";
     }
 

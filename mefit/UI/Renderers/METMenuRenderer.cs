@@ -19,11 +19,11 @@ namespace Mac_EFI_Toolkit.UI.Renderers
         {
             base.OnRenderToolStripBorder(e);
 
-            Rectangle bounds = e.AffectedBounds;
+            Rectangle rect = e.AffectedBounds;
 
             using (Pen pen = new Pen(BorderColor))
             {
-                e.Graphics.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                e.Graphics.DrawRectangle(pen, rect.X, rect.Y, rect.Width - 1, rect.Height - 1);
             }
         }
 
