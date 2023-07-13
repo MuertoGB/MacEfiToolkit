@@ -24,7 +24,7 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool designed to aid technicians in r
 
 In terms of editing, mefit allows users to replace a system's Serial Number with automatic Hardware Configuration (hwc) calculation and CRC32 masking. It also supports transplanting of exported Fsys stores with automatic CRC32 masking, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password.
 
->🛈 **Access to some features requires agreement to the editing terms.**
+>🛈 **Access to some features requires accepting the editing terms.**
 
 This application provides support for most Mac BIOS, with the exception of the A1534 model (as of now). I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac BIOS configurations.
 
