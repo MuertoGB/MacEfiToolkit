@@ -6,6 +6,8 @@ This section explains the main window and its functionality.
   <img src="files/images/met.png">
 </kbd>
 
+---
+
 #### Title Area:
 
 <kbd>
@@ -250,3 +252,43 @@ The system order number (SON) is displayed in this section, retrieved from the F
 </kbd>
 
 Located at the bottom of the main window, the status bar serves multiple purposes. It displays helpful tips when hovering over specific items (this feature can be disabled in the settings). It also shows a loading animation to indicate ongoing processes or operations. Additionally, the status bar provides information about the private memory usage for the application.
+
+---
+
+## Firmware Editor Window
+
+This section explains the firmware editor window and its functionality.
+
+<kbd>
+  <img src="files/images/met_editor.png">
+</kbd>
+
+---
+
+#### Fsys Store:
+
+<kbd>
+  <img src="files/manual/fsys_replace.png">
+</kbd>
+
+When the checkbox is activated, it will prompt an open file dialog, allowing you to select and open the new Fsys region file. If you wish to choose a different file, you can click the 'Change File' button to open the file dialog again.
+
+The application will verify the new Fsys Store, if CRC masking is require this will be done automatically at build time.
+
+> 🛈 The `Replace Serial Number` option is not available when `Replace Fsys Store` is selected.
+
+---
+
+#### Serial Number:
+
+<kbd>
+  <img src="files/manual/serial_replace.png">
+</kbd>
+
+When the checkbox is activated, it will enable the 'SSN' textbox, allowing input of a new serial number. Once a valid serial number is entered, the Hardware Configuration code (HWC) will be automatically determined based on the provided serial number. It is important to note that you cannot change the HWC separately from the serial number. The HWC must match the serial number and cannot be modified independently.
+
+The application will automatically enforce the required length of the serial number, allowing for either 11 or 12 characters. It will also provide validation to ensure that only valid characters are entered. This helps to ensure that the serial number input meets the necessary criteria and maintains the expected format.
+
+The editor will automatically verify and mask the Fsys Store CRC32 after the serial number patching is complete.
+
+> 🛈 The `Replace Fsys Store` option is not available when `Replace Serial Number` is selected.
