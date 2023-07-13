@@ -8,32 +8,56 @@
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
+
+    #region Struct
+    internal struct METPath
+    {
+        internal static string CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        internal static string FriendlyName = AppDomain.CurrentDomain.FriendlyName;
+        internal static string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
+        internal static string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
+        internal static string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
+        internal static string SettingsFile = Path.Combine(CurrentDirectory, "Settings.ini");
+        internal static string DebugLog = Path.Combine(CurrentDirectory, "debug.log");
+        internal static string UnhandledLog = Path.Combine(CurrentDirectory, "unhandled.log");
+    }
+
+    internal struct METVersion
+    {
+        internal static readonly string Build = "230713.1620";
+        internal static readonly string Channel = "Stable";
+    }
+
+    internal struct METUrl
+    {
+        internal static string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal static string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+    }
+    #endregion
+
     static class Program
     {
-        internal static readonly string appBuild = $"{Application.ProductVersion}-230624.0500";
-        internal static readonly string appChannel = "BETA";
-        internal static string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        internal static string fsysDirectory = Path.Combine(appDirectory, "fsys_stores");
-        internal static string buildsDirectory = Path.Combine(appDirectory, "builds");
-        internal static string appName = Assembly.GetExecutingAssembly().Location;
-        internal static string draggedFile = string.Empty;
-        internal static bool openLastBuild = false;
+        internal static string draggedFilePath = string.Empty;
         internal static string lastBuildPath = string.Empty;
+        internal static bool openLastBuild = false;
+        internal static System.Threading.Timer memoryTimer;
         internal static mainWindow mWindow;
 
         #region Private Members
+        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
         private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
         private static IntPtr _hookId = IntPtr.Zero;
         private static GCHandle _hookHandle;
@@ -78,14 +102,23 @@ namespace Mac_EFI_Toolkit
 
             // Font Data
             byte[] fontData = Properties.Resources.segmdl2;
-            FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
-            FONT_MDL2_REG_10 = new Font(LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
-            FONT_MDL2_REG_12 = new Font(LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
-            FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
-            FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
+
+            if (fontData != null)
+            {
+                FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
+                FONT_MDL2_REG_10 = new Font(LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
+                FONT_MDL2_REG_12 = new Font(LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
+                FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
+                FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
+            }
+            else
+            {
+                MessageBox.Show("Segoe MDL2 Assets font failed to load, see ./mefit.log for more details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             // Settings
-            if (!File.Exists(Settings.strSettingsFilePath)) Settings.SettingsCreateFile();
+            if (!File.Exists(METPath.SettingsFile))
+                Settings.SettingsCreateFile();
 
             // Register application exit event.
             Application.ApplicationExit += OnExiting;
@@ -94,19 +127,13 @@ namespace Mac_EFI_Toolkit
             HookKeyboard();
 
             // Get dragged filepath
-            draggedFile = GetDraggedFilePath(args);
+            draggedFilePath = GetDraggedFilePath(args);
 
             // Create main window instance
             mWindow = new mainWindow();
 
             // Run mWindow instance.
             Application.Run(mWindow);
-        }
-
-        private static void OnExiting(object sender, EventArgs e)
-        {
-            // Unhook the keyboard hook before exiting the application.
-            UnhookKeyboard();
         }
 
         private static string GetDraggedFilePath(string[] args)
@@ -118,9 +145,54 @@ namespace Mac_EFI_Toolkit
 
             return string.Empty;
         }
+
         #endregion
 
-        #region Hooks
+        #region OnExit
+        private static void OnExiting(object sender, EventArgs e)
+        {
+            HandleExitCleanup();
+        }
+
+        private static void HandleExitCleanup()
+        {
+            // Dispose fonts
+            FONT_MDL2_REG_9.Dispose();
+            FONT_MDL2_REG_10.Dispose();
+            FONT_MDL2_REG_12.Dispose();
+            FONT_MDL2_REG_14.Dispose();
+            FONT_MDL2_REG_20.Dispose();
+
+            // Dispose memory stats timer
+            memoryTimer.Dispose();
+
+            // Unhook the low level keyboard hook
+            UnhookKeyboard();
+        }
+        #endregion
+
+        #region Debug
+        internal static bool IsDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
+        }
+
+        internal static bool IsRunAsAdmin()
+        {
+            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        internal static string BitnessMode()
+        {
+            return IntPtr.Size == 8 ? "x64" : "x86";
+        }
+        #endregion
+
+        #region Keyboard Hook
         // Register the keyboard hook.
         internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc kbProc)
         {
@@ -143,6 +215,7 @@ namespace Mac_EFI_Toolkit
                     return (IntPtr)1;
                 }
             }
+
             return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
         }
 
@@ -161,18 +234,21 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Font Resolver
-        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
         internal static FontFamily LoadFontFromResource(byte[] fontData)
         {
             IntPtr pFileView = Marshal.AllocCoTaskMem(fontData.Length);
             Marshal.Copy(fontData, 0, pFileView, fontData.Length);
-
             try
             {
                 uint pNumFonts = 0;
                 NativeMethods.AddFontMemResourceEx(pFileView, (uint)fontData.Length, IntPtr.Zero, ref pNumFonts);
                 _privateFontCollection.AddMemoryFont(pFileView, fontData.Length);
                 return _privateFontCollection.Families.Last();
+            }
+            catch (Exception e)
+            {
+                Logger.WriteExceptionToAppLog(e);
+                return null;
             }
             finally
             {
@@ -185,54 +261,90 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Exception Handler
-        static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        internal static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            if (e != null) METCatchUnhandledException(e.Exception);
+            if (e != null)
+                ExceptionHandler(e.Exception);
         }
 
-        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
-            if (ex != null) METCatchUnhandledException(ex);
+            if (ex != null)
+                ExceptionHandler(ex);
         }
 
-        static void METCatchUnhandledException(Exception e)
+        internal static void ExceptionHandler(Exception e)
         {
-            Logger.WriteExceptionToAppLog(e);
+            DialogResult result;
 
-            DialogResult result = MessageBox.Show($"{e.Message}\r\n\r\n{e}\r\n\r\nWould you like to force quit?", $"{e.GetType()}", System.Windows.Forms.MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+            File.WriteAllText(METPath.UnhandledLog, Debug.GenerateDebugReport(e));
+
+            if (File.Exists(METPath.UnhandledLog))
+            {
+                result = MessageBox.Show
+                   (
+                   $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NBSPACE)}'\r\n\r\nForce quit application?",
+                   $"MET Exception Handler",
+                   MessageBoxButtons.YesNo,
+                   MessageBoxIcon.Error
+                   );
+            }
+            else
+            {
+                result = MessageBox.Show
+                    (
+                    $"{e.Message}\r\n\r\n{e}\r\n\r\nForce quit application?",
+                    $"{e.GetType()}",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Error);
+            }
 
             if (result == DialogResult.Yes)
             {
-                UnhookKeyboard(); // Unhook keyboard as the OnExit event will not fire when using Environment.Exit().
+                HandleExitCleanup(); // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
                 Environment.Exit(-1);
             }
 
+            // Fix for mainWindow opacity getting stuck at 0.5
             if (mWindow.Opacity != 1.0)
-            {
                 mWindow.Opacity = 1.0;
-            }
         }
         #endregion
 
-        #region Restart
+        #region Restart MET 
         internal static void RestartMet(Form owner)
         {
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
-                Application.Restart();
+                Restart();
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", METMessageType.Question, UI.METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", METMessageType.Question, METMessageButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                Application.Restart();
+                Restart();
+            }
+        }
+
+        private static void Restart()
+        {
+            try
+            {
+                Process.Start(Application.ExecutablePath);
+                Application.Exit();
+            }
+            catch (Win32Exception)
+            {
+                // Do nothing.
+                // The application throws and unhandled exception when a user cancels the UAC prompt.
+                return;
             }
         }
         #endregion
 
-        #region Exit
+        #region Exit MET
         internal static void ExitMet(Form owner)
         {
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
@@ -241,20 +353,10 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", METMessageType.Question, UI.METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", METMessageType.Question, METMessageButtons.YesNo);
             if (result == DialogResult.Yes)
             {
                 Application.Exit();
-            }
-        }
-        #endregion
-
-        #region Process
-        internal static long GetPrivateMemorySize()
-        {
-            using (Process currentProcess = Process.GetCurrentProcess())
-            {
-                return currentProcess.PrivateMemorySize64;
             }
         }
         #endregion

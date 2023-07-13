@@ -15,6 +15,7 @@ namespace Mac_EFI_Toolkit.Common
     class IniFile
     {
         private readonly string _strFilePath;
+        private const int MAX_BUFFER = 32767;
 
         internal IniFile(string filePath)
         {
@@ -46,6 +47,7 @@ namespace Mac_EFI_Toolkit.Common
         internal bool SectionExists(string section)
         {
             string[] sectionNames = GetSectionNames(_strFilePath);
+
             if (sectionNames != null)
             {
                 foreach (string s in sectionNames)
@@ -56,46 +58,86 @@ namespace Mac_EFI_Toolkit.Common
                     }
                 }
             }
+
             return false;
         }
 
         internal bool KeyExists(string section, string key)
         {
             string[] keyNames = GetSectionKeys(section, _strFilePath);
-            foreach (string s in keyNames) if (s == key) return true;
+
+            foreach (string s in keyNames)
+            {
+                if (s == key)
+                    return true;
+            }
+
             return false;
         }
 
         // GetSectionNames code found on pinvoke.
         // GetSectionKeys I adapted from GetSectionNames using GetPrivateProfileSection.
         // https://www.pinvoke.net/default.aspx/kernel32/GetPrivateProfileSectionNames.html
-        internal static string[] GetSectionNames(string path)
+        internal static string[] GetSectionNames(string lpFileName)
         {
-            uint MAX_BUFFER = 32767;
-            IntPtr pReturnedString = Marshal.AllocCoTaskMem((int)MAX_BUFFER);
-            uint bytesReturned = NativeMethods.GetPrivateProfileSectionNames(pReturnedString, MAX_BUFFER, path);
-            if (bytesReturned == 0) return null;
-            string local = Marshal.PtrToStringAnsi(pReturnedString, (int)bytesReturned).ToString();
-            Marshal.FreeCoTaskMem(pReturnedString);
-            return local.Substring(0, local.Length - 1).Split('\0');
+            IntPtr lpszReturnBuffer = IntPtr.Zero;
+            try
+            {
+                lpszReturnBuffer = Marshal.AllocCoTaskMem(MAX_BUFFER);
+                uint data = NativeMethods.GetPrivateProfileSectionNames(lpszReturnBuffer, MAX_BUFFER, lpFileName);
+
+                if (data == 0)
+                    return null;
+
+                string ansiString = Marshal.PtrToStringAnsi(lpszReturnBuffer, (int)data).ToString();
+                return ansiString.Substring(0, ansiString.Length - 1).Split('\0');
+            }
+            catch (Exception e)
+            {
+                Logger.WriteExceptionToAppLog(e);
+                return null;
+            }
+            finally
+            {
+                if (lpszReturnBuffer != IntPtr.Zero)
+                    Marshal.FreeCoTaskMem(lpszReturnBuffer);
+            }
         }
 
-        internal static string[] GetSectionKeys(string sectionName, string path)
+        internal static string[] GetSectionKeys(string lpAppName, string lpFileName)
         {
-            uint MAX_BUFFER = 32767;
-            IntPtr pReturnedString = Marshal.AllocCoTaskMem((int)MAX_BUFFER);
-            uint bytesReturned = NativeMethods.GetPrivateProfileSection(sectionName, pReturnedString, MAX_BUFFER, path);
-            if (bytesReturned == 0) return null;
-            string local = Marshal.PtrToStringAnsi(pReturnedString, (int)bytesReturned).ToString();
-            Marshal.FreeCoTaskMem(pReturnedString);
-            string[] keys = local.Substring(0, local.Length - 1).Split('\0');
-            for (int i = 0; i < keys.Length; i++)
+            IntPtr lpReturnedString = IntPtr.Zero;
+            try
             {
-                int separatorIndex = keys[i].IndexOf('=');
-                if (separatorIndex != -1)
-                    keys[i] = keys[i].Substring(0, separatorIndex);
+                lpReturnedString = Marshal.AllocCoTaskMem(MAX_BUFFER);
+                uint data = NativeMethods.GetPrivateProfileSection(lpAppName, lpReturnedString, MAX_BUFFER, lpFileName);
+
+                if (data == 0)
+                    return null;
+
+                string ansiString = Marshal.PtrToStringAnsi(lpReturnedString, (int)data).ToString();
+                string[] keys = ansiString.Substring(0, ansiString.Length - 1).Split('\0');
+
+                for (int i = 0; i < keys.Length; i++)
+                {
+                    int separatorIndex = keys[i].IndexOf('=');
+                    if (separatorIndex != -1)
+                        keys[i] = keys[i].Substring(0, separatorIndex);
+                }
+
+                return keys;
             }
-            return keys;
+            catch (Exception e)
+            {
+                Logger.WriteExceptionToAppLog(e);
+                return null;
+            }
+            finally
+            {
+                if (lpReturnedString != IntPtr.Zero)
+                    Marshal.FreeCoTaskMem(lpReturnedString);
+            }
         }
+
     }
 }

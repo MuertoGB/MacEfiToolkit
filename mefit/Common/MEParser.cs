@@ -10,17 +10,16 @@ using System.Runtime.InteropServices;
 namespace Mac_EFI_Toolkit.Common
 {
 
-    #region Struct
+    #region Structs
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct FptHeader
+    internal struct FPTHeader
     {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal char[] Signature;
+        internal uint Tag;
         internal uint NumEntries;
         internal byte HeaderVersion;
         internal byte EntryVersion;
         internal byte HeaderLength;
-        internal byte Checksum;
+        internal byte HeaderChecksum;
         internal ushort FlashCycleLife;
         internal ushort FlashCycleLimit;
         internal uint UmaSize;
@@ -32,11 +31,9 @@ namespace Mac_EFI_Toolkit.Common
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct Mn2PartialHeader
+    internal struct MN2Manifest
     {
-        // Right now we only care about the ME version.
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal char[] Signature;
+        internal uint Tag;
         internal uint NumEntries;
         internal ushort EngineMajor;
         internal ushort EngineMinor;
@@ -45,7 +42,7 @@ namespace Mac_EFI_Toolkit.Common
     }
     #endregion
 
-    #region Enum
+    #region MEParser
     internal enum HeaderType
     {
         FlashImageTool,
@@ -57,34 +54,39 @@ namespace Mac_EFI_Toolkit.Common
     {
         internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
         {
-            int headerPos = -1; int readLen = 0; string result = null;
+            int meBase = (Descriptor.MeBase != 0 ? (int)Descriptor.MeBase : 0);
+            int meLimit = (Descriptor.MeLimit != 0 ? (int)Descriptor.MeLimit : FWBase.FileInfoData.FileLength);
+
+            int headerPos = -1;
+            int readLen = 0;
+            string result = null;
 
             switch (headerType)
             {
                 case HeaderType.FlashImageTool:
-                    headerPos = BinaryUtils.GetOffset(sourceBytes, FPT_SIGNATURE);
+                    headerPos = BinaryUtils.GetBasePosition(sourceBytes, FPT_SIGNATURE, meBase, meLimit);
                     readLen = 0x20;
                     break;
 
                 case HeaderType.ManagementEngine:
-                    headerPos = BinaryUtils.GetOffset(sourceBytes, MN2_SIGNATURE);
+                    headerPos = BinaryUtils.GetBasePosition(sourceBytes, MN2_SIGNATURE, meBase, meLimit);
                     readLen = 0x10;
                     break;
             }
 
             if (headerPos != -1)
             {
-                byte[] headerBytes = BinaryUtils.GetBytesAtOffset(sourceBytes, headerPos, readLen);
+                byte[] headerBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, headerPos, readLen);
                 if (headerBytes != null)
                 {
                     if (headerType == HeaderType.FlashImageTool)
                     {
-                        FptHeader fptHeader = Helper.DeserializeHeader<FptHeader>(headerBytes);
+                        FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(headerBytes);
                         result = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                     }
                     else if (headerType == HeaderType.ManagementEngine)
                     {
-                        Mn2PartialHeader mn2Header = Helper.DeserializeHeader<Mn2PartialHeader>(headerBytes);
+                        MN2Manifest mn2Header = Helper.DeserializeHeader<MN2Manifest>(headerBytes);
                         result = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
                     }
                 }

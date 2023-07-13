@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Mac_EFI_Toolkit</RootNamespace>
     <AssemblyName>mefit</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -73,21 +73,20 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Descriptor.cs" />
     <Compile Include="Common\ToInt24.cs" />
     <Compile Include="Common\FSGuids.cs" />
     <Compile Include="Common\FWBase.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Common\MEParser.cs" />
+    <Compile Include="Debug.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />
     <Compile Include="Common\SevenZip\Common\CRC.cs" />
@@ -105,8 +104,9 @@
     <Compile Include="Common\SevenZip\ICoder.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
-    <Compile Include="METVersion.cs" />
+    <Compile Include="AppVersion.cs" />
     <Compile Include="UI\Chars.cs" />
+    <Compile Include="UI\Enums.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
     <Compile Include="UI\METLabel.cs">
       <SubType>Component</SubType>
@@ -117,6 +117,7 @@
     <Compile Include="UI\METMessageBox.Designer.cs">
       <DependentUpon>METMessageBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\OSUtils.cs" />
     <Compile Include="WinForms\aboutWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -151,7 +152,7 @@
     </Compile>
     <Compile Include="UI\Renderers\METMenuRenderer.cs" />
     <Compile Include="Utils\BinaryUtils.cs" />
-    <Compile Include="Utils\EfiUtils.cs" />
+    <Compile Include="Utils\MacUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\NetUtils.cs" />
     <Compile Include="WinForms\settingsWindow.cs">

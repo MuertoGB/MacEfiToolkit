@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Logger.cs - Handles logging of data to .txt file
+// Logger.cs - Handles logging of data and text
 // Released under the GNU GLP v3.0
 
 using System;
@@ -13,7 +13,7 @@ using System.Windows.Forms;
 namespace Mac_EFI_Toolkit
 {
 
-    #region Enum
+    #region Enums
     internal enum LogType
     {
         Application,
@@ -31,8 +31,8 @@ namespace Mac_EFI_Toolkit
 
     class Logger
     {
-        internal static string strLogFilePath = Path.Combine(Program.appDirectory, "mefit.log");
-        internal static string strDbReportPath = Path.Combine(Program.appDirectory, "dbreport.log");
+        internal static string strLogFilePath = Path.Combine(METPath.CurrentDirectory, "mefit.log");
+        internal static string strDbReportPath = Path.Combine(METPath.CurrentDirectory, "dbreport.log");
 
         internal static void WriteToLogFile(string logMessage, LogType logType)
         {

@@ -23,8 +23,9 @@ namespace Mac_EFI_Toolkit.WinForms
     {
 
         #region Private Members
-        private byte[] _bytesNewFsysStore = null;
         private byte[] _bytesNewBinary = null;
+        private byte[] _bytesNewFsysStore = null;
+        private byte[] _bytesNewMeRegion = null;
         private bool _maskCrc = false;
         private string _fullBuildPath = string.Empty;
         #endregion
@@ -63,13 +64,13 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void editorWindow_Load(object sender, EventArgs e)
         {
-            if (FWBase.FsysSectionData.Serial == null)
+            if (FWBase.FsysStoreData.Serial == null)
             {
                 cbxReplaceSerial.Enabled = false;
             }
             else
             {
-                tbxSerialNumber.MaxLength = FWBase.FsysSectionData.Serial.Length;
+                tbxSerialNumber.MaxLength = FWBase.FsysStoreData.Serial.Length;
             }
 
             GetRtbInitialData();
@@ -129,31 +130,31 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(Program.fsysDirectory))
+            if (!Directory.Exists(METPath.BuildsDirectory))
             {
-                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", METMessageType.Information, UI.METMessageButtons.Okay);
+                METMessageBox.Show(this, "MET", "The builds directory has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
                 return;
             }
 
-            Process.Start("explorer.exe", Program.buildsDirectory);
+            Process.Start("explorer.exe", METPath.BuildsDirectory);
         }
 
         private void cmdFsysPath_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(Program.fsysDirectory))
+            if (!Directory.Exists(METPath.FsysDirectory))
             {
-                Status status = FileUtils.CreateDirectory(Program.fsysDirectory);
+                Status status = FileUtils.CreateDirectory(METPath.FsysDirectory);
 
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", METMessageType.Error, UI.METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", METMessageType.Error, METMessageButtons.Okay);
                 }
             }
 
             using (OpenFileDialog dialog = new OpenFileDialog
             {
-                InitialDirectory = Program.fsysDirectory,
-                Filter = "Binary Files (*.rom, *.bin)|*.rom;*.bin|All Files (*.*)|*.*"
+                InitialDirectory = METPath.FsysDirectory,
+                Filter = "Binary Files (*.bin, *.rom, *.rgn)|*.bin;*.rom;*.rgn|All Files (*.*)|*.*"
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -164,8 +165,32 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 Logger.WriteLogTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.Info, rtbLog);
                 _bytesNewFsysStore = File.ReadAllBytes(dialog.FileName);
-                bool isValid = ValidateNewFsysStore(_bytesNewFsysStore);
-                if (!isValid) cbxReplaceFsysStore.Checked = false;
+
+                if (!ValidateNewFsysStore(_bytesNewFsysStore))
+                    cbxReplaceFsysStore.Checked = false;
+            }
+        }
+
+        private void cmdMePath_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog
+            {
+                InitialDirectory = METPath.MeDirectory,
+                Filter = "Binary Files (*.bin, *.rom, *.rgn)|*.bin;*.rom;*.rgn|All Files (*.*)|*.*"
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    cbxReplaceMeRegion.Checked = false;
+                    return;
+                }
+
+                Logger.WriteLogTextToRtb($"Opening '{dialog.FileName}'", RtbLogPrefix.Info, rtbLog);
+
+                _bytesNewMeRegion = File.ReadAllBytes(dialog.FileName);
+
+                if (!ValidateNewMeRegion(_bytesNewMeRegion))
+                    cbxReplaceMeRegion.Checked = false;
             }
         }
 
@@ -213,6 +238,13 @@ namespace Mac_EFI_Toolkit.WinForms
                         return;
                 }
 
+                if (cbxReplaceMeRegion.Checked)
+                {
+                    Logger.WriteLogTextToRtb("Writing new ME Region:", RtbLogPrefix.Info, rtbLog);
+                    if (!WriteNewMeRegion())
+                        return;
+                }
+
                 if (!SaveBuild())
                     return;
 
@@ -227,13 +259,13 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private bool SaveBuild()
         {
-            if (!Directory.Exists(Program.buildsDirectory))
+            if (!Directory.Exists(METPath.BuildsDirectory))
             {
-                Status status = FileUtils.CreateDirectory(Program.buildsDirectory);
+                Status status = FileUtils.CreateDirectory(METPath.BuildsDirectory);
 
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", METMessageType.Error, UI.METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the builds directory.", METMessageType.Error, METMessageButtons.Okay);
                 }
             }
 
@@ -241,7 +273,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 ? $"{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"
                 : $"outimage_{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin";
 
-            _fullBuildPath = Path.Combine(Program.buildsDirectory, filename);
+            _fullBuildPath = Path.Combine(METPath.BuildsDirectory, filename);
 
             if (!FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary))
             {
@@ -275,6 +307,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             _bytesNewFsysStore = null;
             _bytesNewBinary = null;
+            _bytesNewMeRegion = null;
             _maskCrc = false;
             _fullBuildPath = string.Empty;
 
@@ -283,6 +316,7 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearVssStore.Checked = false;
             cbxClearSvsStore.Checked = false;
             cbxClearNssStore.Checked = false;
+            cbxReplaceMeRegion.Checked = false;
 
             cmdOpenLast.Enabled = false;
         }
@@ -293,7 +327,7 @@ namespace Mac_EFI_Toolkit.WinForms
             bool isChecked = cb.Checked;
 
             tlpSerialB.Enabled = isChecked;
-            tlpFsysA.Enabled = !isChecked;
+            tlpFsys.Enabled = !isChecked;
 
             if (!isChecked)
             {
@@ -307,10 +341,9 @@ namespace Mac_EFI_Toolkit.WinForms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
-                Title = "Save Log File...",
                 FileName = $"metlog_{DateTime.Now:yyMMdd_HHmmss}.txt",
                 OverwritePrompt = true,
-                InitialDirectory = Program.appDirectory
+                InitialDirectory = METPath.CurrentDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -337,12 +370,12 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cbxClearVssStore_CheckedChanged(object sender, EventArgs e)
         {
-            METCheckbox cb = (METCheckbox)sender;
+            METCheckbox control = (METCheckbox)sender;
 
-            lblVssChevRight.Visible = cb.Checked;
-            cbxClearVssBackup.Enabled = cb.Checked;
+            lblVssChevRight.Visible = control.Checked;
+            cbxClearVssBackup.Enabled = control.Checked;
 
-            if (!cb.Checked)
+            if (!control.Checked)
             {
                 cbxClearVssBackup.Checked = false;
             }
@@ -350,12 +383,12 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cbxClearSvsStore_CheckedChanged(object sender, EventArgs e)
         {
-            METCheckbox cb = (METCheckbox)sender;
+            METCheckbox control = (METCheckbox)sender;
 
-            lblSvsChevRight.Visible = cb.Checked;
-            cbxClearSvsBackup.Enabled = cb.Checked;
+            lblSvsChevRight.Visible = control.Checked;
+            cbxClearSvsBackup.Enabled = control.Checked;
 
-            if (!cb.Checked)
+            if (!control.Checked)
             {
                 cbxClearSvsBackup.Checked = false;
             }
@@ -363,12 +396,12 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cbxClearNssStore_CheckedChanged(object sender, EventArgs e)
         {
-            METCheckbox cb = (METCheckbox)sender;
+            METCheckbox control = (METCheckbox)sender;
 
-            lblNssChevRight.Visible = cb.Checked;
-            cbxClearNssBackup.Enabled = cb.Checked;
+            lblNssChevRight.Visible = control.Checked;
+            cbxClearNssBackup.Enabled = control.Checked;
 
-            if (!cb.Checked)
+            if (!control.Checked)
             {
                 cbxClearNssBackup.Checked = false;
             }
@@ -376,8 +409,8 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cbxReplaceFsysStore_CheckedChanged(object sender, EventArgs e)
         {
-            METCheckbox cb = (METCheckbox)sender;
-            bool isChecked = cb.Checked;
+            METCheckbox control = (METCheckbox)sender;
+            bool isChecked = control.Checked;
 
             cmdFsysPath.Enabled = isChecked;
             tlpSerialA.Enabled = !isChecked;
@@ -387,6 +420,14 @@ namespace Mac_EFI_Toolkit.WinForms
                 cmdFsysPath.PerformClick();
             }
         }
+
+        private void cbxReplaceMeRegion_CheckedChanged(object sender, EventArgs e)
+        {
+            METCheckbox control = (METCheckbox)sender;
+
+            cmdMePath.Enabled = control.Checked;
+            cmdMePath.PerformClick();
+        }
         #endregion
 
         #region TextBox Events
@@ -395,17 +436,17 @@ namespace Mac_EFI_Toolkit.WinForms
             TextBox tb = (TextBox)sender;
             int textLength = tb.Text.Length;
 
-            if (textLength == FWBase.FsysSectionData.Serial.Length)
+            if (textLength == FWBase.FsysStoreData.Serial.Length)
             {
-                if (EFIUtils.GetIsValidSerialChars(tb.Text))
+                if (MacUtils.GetIsValidSerialChars(tb.Text))
                 {
                     UpdateTextBoxColor(tb, Colours.COMPLETE_GREEN);
                     Logger.WriteLogTextToRtb("Valid serial characters entered", RtbLogPrefix.Info, rtbLog);
-                    if (FWBase.FsysSectionData.Serial.Length == 11)
+                    if (FWBase.FsysStoreData.Serial.Length == 11)
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 3));
                     }
-                    if (FWBase.FsysSectionData.Serial.Length == 12)
+                    if (FWBase.FsysStoreData.Serial.Length == 12)
                     {
                         UpdateHwcTextBoxText(tb.Text.Substring(textLength - 4));
                     }
@@ -432,52 +473,79 @@ namespace Mac_EFI_Toolkit.WinForms
         private void GetRtbInitialData()
         {
             Logger.WriteLogTextToRtb($"{DateTime.Now}", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb($"The editor is unfinished, use caution!", RtbLogPrefix.Warning, rtbLog);
 
-            LogLoadedBinarySize();
+            LogBinarySize();
+            LogDescriptorData();
             LogFsysData();
 
-            if (FWBase.VssStoreData.PrimaryStoreOffset == -1)
+            if (FWBase.VssStoreData.PrimaryStoreBase == -1)
             {
                 cbxClearVssStore.Enabled = false;
-                Logger.WriteLogTextToRtb($"No VSS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"VSS store not found: Option disabled", RtbLogPrefix.Warning, rtbLog);
             }
 
-            if (FWBase.SvsStoreData.PrimaryStoreOffset == -1)
+            if (FWBase.SvsStoreData.PrimaryStoreBase == -1)
             {
                 cbxClearSvsStore.Enabled = false;
-                Logger.WriteLogTextToRtb($"No SVS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
+                Logger.WriteLogTextToRtb($"SVS store not found: Option disabled", RtbLogPrefix.Warning, rtbLog);
             }
 
-            if (FWBase.NssStoreData.PrimaryStoreOffset == -1)
+            if (FWBase.NssStoreData.PrimaryStoreBase == -1)
             {
-                Logger.WriteLogTextToRtb($"No NSS store present: Option disabled", RtbLogPrefix.Info, rtbLog);
                 cbxClearNssStore.Enabled = false;
+                Logger.WriteLogTextToRtb($"NSS store not found: Option disabled", RtbLogPrefix.Warning, rtbLog);
             }
 
             Logger.WriteLogTextToRtb($"Initial checks complete", RtbLogPrefix.Complete, rtbLog);
         }
 
-        private void LogFsysData()
-        {
-            if (FWBase.FsysSectionData.FsysOffset != 0)
-            {
-                Logger.WriteLogTextToRtb($"Fsys: Offset {FWBase.FsysSectionData.FsysOffset:X2}h, Size {FWBase.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
-            }
-        }
-
-        private void LogLoadedBinarySize()
+        private void LogBinarySize()
         {
             if (!FileUtils.GetIsValidBinSize(FWBase.FileInfoData.FileLength))
             {
-                Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is invalid and should not be used as a donor.", RtbLogPrefix.Error, rtbLog);
+                Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is invalid.", RtbLogPrefix.Error, rtbLog);
                 return;
             }
 
             Logger.WriteLogTextToRtb($"Loaded binary size {FWBase.FileInfoData.FileLength:X2}h is valid", RtbLogPrefix.Info, rtbLog);
-
         }
 
+        private void LogDescriptorData()
+        {
+            if (Descriptor.PdrBase != 0 && Descriptor.PdrLimit != 0)
+            {
+                Logger.WriteLogTextToRtb($"PDR Region: Base {Descriptor.PdrBase:X2}h, Limit {Descriptor.PdrLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
+
+            if (Descriptor.MeBase != 0 && Descriptor.MeLimit != 0)
+            {
+                Logger.WriteLogTextToRtb($"ME Region: Base {Descriptor.MeBase:X2}h, Limit {Descriptor.MeLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
+            else
+            {
+                cbxReplaceMeRegion.Enabled = false;
+                Logger.WriteLogTextToRtb($"ME Region not found: Option disabled", RtbLogPrefix.Warning, rtbLog);
+            }
+
+            if (Descriptor.BiosBase != 0 && Descriptor.BiosLimit != 0)
+            {
+                Logger.WriteLogTextToRtb($"BIOS Region: Base {Descriptor.BiosBase:X2}h, Limit {Descriptor.BiosLimit:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
+        }
+
+        private void LogFsysData()
+        {
+            if (FWBase.FsysStoreData.FsysBase != 0)
+            {
+                Logger.WriteLogTextToRtb($"Fsys: Base {FWBase.FsysStoreData.FsysBase:X2}h, Size {FWBase.FSYS_RGN_SIZE:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (FWBase.FsysStoreData.SerialBase != -1)
+                    Logger.WriteLogTextToRtb($"Serial: Base {FWBase.FsysStoreData.SerialBase:X2}h", RtbLogPrefix.Info, rtbLog);
+
+                if (FWBase.FsysStoreData.HWCBase != -1)
+                    Logger.WriteLogTextToRtb($"HWC: Base {FWBase.FsysStoreData.HWCBase:X2}h", RtbLogPrefix.Info, rtbLog);
+            }
+        }
 
         private void UpdateTextBoxColor(TextBox textBox, Color color)
         {
@@ -514,7 +582,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             Logger.WriteLogTextToRtb("Validating donor Fsys store:-", RtbLogPrefix.Info, rtbLog);
 
-            int fsysSigPos = BinaryUtils.GetOffset(sourceBytes, FWBase.FSYS_SIG);
+            int fsysSigPos = BinaryUtils.GetBasePosition(sourceBytes, FWBase.FSYS_SIG);
 
             if (fsysSigPos == -1)
             {
@@ -535,7 +603,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // We have validated the Fsys store, now we can load it.
-            FsysStoreSection fsysStore = FWBase.GetFsysStoreData(sourceBytes, true);
+            FsysStore fsysStore = FWBase.GetFsysStoreData(sourceBytes, true);
 
             Logger.WriteLogTextToRtb($"Filesize: {sourceBytes.Length:X2}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb($"Fsys signature found at {fsysSigPos:X2}h", RtbLogPrefix.Info, rtbLog);
@@ -547,15 +615,47 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb("Donor Fsys Store CRC32 is invalid, 'Mask CRC32' flag set!", RtbLogPrefix.Warning, rtbLog);
                 _maskCrc = true;
             }
+            else
+            {
+                _maskCrc = false;
+            }
 
             Logger.WriteLogTextToRtb($"File: {fsysStore.CrcString}h > Calc: {fsysStore.CrcCalcString}h", RtbLogPrefix.Info, rtbLog);
             Logger.WriteLogTextToRtb("Validation completed", RtbLogPrefix.Complete, rtbLog);
 
-            _maskCrc = false;
-
             return true;
         }
 
+        private bool ValidateNewMeRegion(byte[] sourceBytes)
+        {
+            Logger.WriteLogTextToRtb("Validating ME Region:-", RtbLogPrefix.Info, rtbLog);
+
+            int fptSignature = BinaryUtils.GetBasePosition(sourceBytes, MEParser.FPT_SIGNATURE);
+
+            if (fptSignature == -1)
+            {
+                Logger.WriteLogTextToRtb($"FPT signature not found", RtbLogPrefix.Error, rtbLog);
+                return false;
+            }
+
+            if (sourceBytes.Length > Descriptor.MeSize)
+            {
+                Logger.WriteLogTextToRtb($"ME will not fit: {sourceBytes.Length:X2}h > {Descriptor.MeSize:X2}h", RtbLogPrefix.Error, rtbLog);
+                return false;
+            }
+
+            if (sourceBytes.Length < Descriptor.MeSize)
+            {
+                Logger.WriteLogTextToRtb($"ME is smaller ({sourceBytes.Length:X2}h) and will be adjusted at build time", RtbLogPrefix.Warning, rtbLog);
+            }
+
+            string meVersion = MEParser.GetVersionData(_bytesNewMeRegion, HeaderType.ManagementEngine);
+
+            Logger.WriteLogTextToRtb($"ME Version: {meVersion}", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb("Validation completed", RtbLogPrefix.Complete, rtbLog);
+
+            return true;
+        }
         #endregion
 
         #region Editing
@@ -567,7 +667,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Logger.WriteLogTextToRtb("Masking Fsys store CRC", RtbLogPrefix.Info, rtbLog);
 
                 // Load the new Fsys store
-                FsysStoreSection fsysNew = FWBase.GetFsysStoreData(_bytesNewFsysStore, true);
+                FsysStore fsysNew = FWBase.GetFsysStoreData(_bytesNewFsysStore, true);
 
                 // Load the new Fsys store bytes and patch the crc
                 _bytesNewFsysStore = BinaryUtils.PatchFsysCrc(fsysNew.FsysBytes, fsysNew.CRC32CalcInt);
@@ -586,10 +686,10 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Write new Fsys to the output file
-            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.FsysOffset, _bytesNewFsysStore);
+            BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, FWBase.FsysStoreData.FsysBase, _bytesNewFsysStore);
 
             // Load the Fsys from the new binary
-            FsysStoreSection fsysNewBinary = FWBase.GetFsysStoreData(_bytesNewBinary, false);
+            FsysStore fsysNewBinary = FWBase.GetFsysStoreData(_bytesNewBinary, false);
 
             // Validate new Fsys was written
             if (!BinaryUtils.ByteArraysMatch(fsysNewBinary.FsysBytes, _bytesNewFsysStore))
@@ -599,7 +699,36 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             Logger.WriteLogTextToRtb("Fsys comparison check passed", RtbLogPrefix.Info, rtbLog);
-            Logger.WriteLogTextToRtb("Fsys store written successfully", RtbLogPrefix.Complete, rtbLog);
+            Logger.WriteLogTextToRtb("Data written successfully", RtbLogPrefix.Complete, rtbLog);
+
+            return true;
+        }
+
+        private bool WriteNewMeRegion()
+        {
+            // Create a blank array
+            byte[] meData = new byte[Descriptor.MeSize];
+
+            // 0xFF the blank array
+            BinaryUtils.EraseByteArray(meData, 0xFF);
+
+            // Copy in the ME Region
+            Array.Copy(_bytesNewMeRegion, 0, meData, 0, _bytesNewMeRegion.Length);
+
+            // Write the new array to the new binary
+            Array.Copy(meData, 0, _bytesNewBinary, Descriptor.MeBase, meData.Length);
+
+            // Validate write
+            byte[] meNewBinary = BinaryUtils.GetBytesBaseLimit(_bytesNewBinary, (int)Descriptor.MeBase, (int)Descriptor.MeLimit);
+
+            if (!BinaryUtils.ByteArraysMatch(meNewBinary, meData))
+            {
+                HandleBuildFailure("ME Region write failed");
+                return false;
+            }
+
+            Logger.WriteLogTextToRtb("ME Region comparison check passed", RtbLogPrefix.Info, rtbLog);
+            Logger.WriteLogTextToRtb("Data written successfully", RtbLogPrefix.Complete, rtbLog);
 
             return true;
         }
@@ -607,21 +736,21 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool WriteNewSerialData()
         {
             // Given serial is too short
-            if (tbxSerialNumber.Text.Length != FWBase.FsysSectionData.Serial.Length)
+            if (tbxSerialNumber.Text.Length != FWBase.FsysStoreData.Serial.Length)
             {
                 HandleBuildFailure("The given serial number was too short");
                 return false;
             }
 
             // Fsys postition was not found
-            if (FWBase.FsysSectionData.SerialOffset == -1)
+            if (FWBase.FsysStoreData.SerialBase == -1)
             {
-                HandleBuildFailure("FsysSectionData store offset is -1");
+                HandleBuildFailure("FsysSectionData store base is -1");
                 return false;
             }
 
             // Fsys store bytes are empty
-            if (FWBase.FsysSectionData.FsysBytes == null)
+            if (FWBase.FsysStoreData.FsysBytes == null)
             {
                 HandleBuildFailure("FsysSectionData store bytes are empty");
                 return false;
@@ -630,23 +759,23 @@ namespace Mac_EFI_Toolkit.WinForms
             // Write new serial number bytes
             string newSerial = tbxSerialNumber.Text;
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
-            BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.SerialOffset, newSerialBytes);
+            BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, FWBase.FsysStoreData.SerialBase, newSerialBytes);
 
             // Write new HWC bytes
 
             string newHwc = tbxHwc.Text;
-            if (FWBase.FsysSectionData.HWCOffset != -1)
+            if (FWBase.FsysStoreData.HWCBase != -1)
             {
                 byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, FWBase.FsysSectionData.HWCOffset, newHwcBytes);
+                BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, FWBase.FsysStoreData.HWCBase, newHwcBytes);
             }
             else
             {
-                Logger.WriteLogTextToRtb("HWC offset is -1, new HWC will not be written!", RtbLogPrefix.Warning, rtbLog);
+                Logger.WriteLogTextToRtb("HWC base is -1, new HWC will not be written!", RtbLogPrefix.Warning, rtbLog);
             }
 
             // Load new Fsys store
-            FsysStoreSection newFsys = FWBase.GetFsysStoreData(_bytesNewBinary, false);
+            FsysStore newFsys = FWBase.GetFsysStoreData(_bytesNewBinary, false);
 
             // Check serial numbers match
             if (!string.Equals(newSerial, newFsys.Serial))
@@ -656,7 +785,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Check HWC's match
-            if (FWBase.FsysSectionData.HWCOffset != -1)
+            if (FWBase.FsysStoreData.HWCBase != -1)
             {
                 if (!string.Equals(newHwc, newFsys.HWC))
                 {
@@ -672,7 +801,7 @@ namespace Mac_EFI_Toolkit.WinForms
             _bytesNewBinary = BinaryUtils.MakeFsysCrcPatchedBinary
             (
                _bytesNewBinary,
-               newFsys.FsysOffset,
+               newFsys.FsysBase,
                newFsys.FsysBytes,
                newFsys.CRC32CalcInt
             );
@@ -692,24 +821,24 @@ namespace Mac_EFI_Toolkit.WinForms
             return true;
         }
 
-        private bool ClearNvramStore(NvramStoreSection storeData, bool clearBackup)
+        private bool ClearNvramStore(NvramStore storeData, bool clearBackup)
         {
             int headerLen = 0x10;
-            int primBodyStart = storeData.PrimaryStoreOffset + headerLen;
-            int primBodyEnd = storeData.PrimaryStoreLength - headerLen;
-            int backBodyStart = storeData.BackupStoreOffset + headerLen;
-            int backBodyEnd = storeData.BackupStoreLength - headerLen;
+            int primBodyStart = storeData.PrimaryStoreBase + headerLen;
+            int primBodyEnd = storeData.PrimaryStoreSize - headerLen;
+            int backBodyStart = storeData.BackupStoreBase + headerLen;
+            int backBodyEnd = storeData.BackupStoreSize - headerLen;
 
             if (!storeData.IsPrimaryStoreEmpty)
             {
                 Logger.WriteLogTextToRtb($"Primary {storeData.StoreType} store is not empty", RtbLogPrefix.Info, rtbLog);
-                byte[] primaryData = BinaryUtils.GetBytesAtOffset(storeData.PrimaryStoreBytes, headerLen, primBodyEnd);
+                byte[] primaryData = BinaryUtils.GetBytesBaseLength(storeData.PrimaryStoreBytes, headerLen, primBodyEnd);
                 Logger.WriteLogTextToRtb($"Overwriting {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
-                BinaryUtils.FillByteArrayWithFF(primaryData);
+                BinaryUtils.EraseByteArray(primaryData, 0xFF);
                 Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, primBodyStart, primaryData);
+                BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, primBodyStart, primaryData);
 
-                NvramStoreSection newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
+                NvramStore newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
 
                 if (newStore.IsPrimaryStoreEmpty)
                 {
@@ -729,13 +858,13 @@ namespace Mac_EFI_Toolkit.WinForms
             if (clearBackup && !storeData.IsBackupStoreEmpty)
             {
                 Logger.WriteLogTextToRtb($"Backup {storeData.StoreType} is not empty", RtbLogPrefix.Info, rtbLog);
-                byte[] backupData = BinaryUtils.GetBytesAtOffset(storeData.BackupStoreBytes, headerLen, backBodyEnd);
+                byte[] backupData = BinaryUtils.GetBytesBaseLength(storeData.BackupStoreBytes, headerLen, backBodyEnd);
                 Logger.WriteLogTextToRtb($"Overwriting backup {storeData.StoreType} buffer (0xFF)", RtbLogPrefix.Info, rtbLog);
-                BinaryUtils.FillByteArrayWithFF(backupData);
+                BinaryUtils.EraseByteArray(backupData, 0xFF);
                 Logger.WriteLogTextToRtb($"Writing clean {storeData.StoreType} store to file buffer", RtbLogPrefix.Info, rtbLog);
-                BinaryUtils.OverwriteBytesAtOffset(_bytesNewBinary, backBodyStart, backupData);
+                BinaryUtils.OverwriteBytesAtBase(_bytesNewBinary, backBodyStart, backupData);
 
-                NvramStoreSection newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
+                NvramStore newStore = FWBase.GetNvramStoreData(_bytesNewBinary, storeData.StoreType);
 
                 if (newStore.IsBackupStoreEmpty)
                 {

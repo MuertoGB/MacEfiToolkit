@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-100">V1.0.0</a> •
   <a href="#version-070">V0.7.0</a> •
   <a href="#version-060">V0.6.0</a> •
   <a href="#version-052">V0.5.2</a> •
@@ -10,6 +11,34 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.0.0
+
+#### New:
+- Added option in the main window to export the Intel ME Region (ALT + M).
+- Added option in the editor window to replace the ME Region.
+- Added menu in the main window which enables quick copying of text fields (CTRL + C).
+- Unhandled exceptions will now output a debug log to './unhandled.log'.
+- Added option to create a debug log 'Main Window > Menu > Create a Debug Log'.
+- The application will now parse the flash descriptor (where available) for base and limit offsets of UEFI regions.
+- Updated LZMA SDK to version 23.01.
+
+#### Enhancements:
+- UI improvements.
+- The EFI model code is now automatically converted and displayed as a model identifier in the main window and rom information window.
+- The main window APFS capability status will now display DXE type.
+- Added more files types when opening a firmware image (*.fd, *.bio).
+- The Fsys parser will now dynamically read variable size.
+- Modified context menu shortcut keys.
+- Adjusted tab index ordering.
+
+#### Bugs:
+- Fixed an issue where the main window private memory usage label would stop updating if the user closes the window with ALT + F4 then cancels the action.
+- Fixed an issue that caused a handled exception to appear when a thread attempted to refresh a control before its handles were fully initialized.
+- Fixed the editor window 'Open Builds Directory' button opening the wrong path.
+- Fixed invalidated (0x83) serial numbers being read.
+- Fixed ROM information not being found if the GUID exists, but the section is empty.
+- Fixed application restart option being unreliable on Windows 7.
 
 ## Version 0.7.0
 

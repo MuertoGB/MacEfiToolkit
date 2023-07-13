@@ -22,7 +22,6 @@ namespace Mac_EFI_Toolkit.Utils
 {
     class FileUtils
     {
-
         /// <summary>
         /// Calculates the SHA256 hash of a byte array.
         /// </summary>
@@ -33,7 +32,7 @@ namespace Mac_EFI_Toolkit.Utils
             using (SHA256 provider = SHA256.Create())
             {
                 byte[] digestBytes = provider.ComputeHash(sourceBytes);
-                return BitConverter.ToString(digestBytes).Replace("-", "");
+                return BitConverter.ToString(digestBytes).Replace("-", "").ToLower();
             }
         }
 
@@ -61,11 +60,11 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Formats a number of bytes as a string with commas.
         /// </summary>
-        /// <param name="lSize">The number of bytes to format.</param>
+        /// <param name="size">The number of bytes to format.</param>
         /// <returns>A string representation of the number of bytes with commas.</returns>
-        internal static string FormatFileSize(long lSize)
+        internal static string FormatFileSize(long size)
         {
-            return string.Format("{0:#,##0}", lSize);
+            return string.Format("{0:#,##0}", size);
         }
 
         /// <summary>
@@ -174,13 +173,14 @@ namespace Mac_EFI_Toolkit.Utils
 
                     if (!BinaryUtils.ByteArraysMatch(sourceBytes, fileBytes))
                     {
-                        return false; ; // Integrity check failed
+                        return false; // Integrity check failed
                     }
                 }
             }
-            catch (IOException)
+            catch (Exception e)
             {
-                return false; // File access error
+                Logger.WriteExceptionToAppLog(e);
+                return false; // An error occured
             }
 
             return true; // Data was written successfully and integrity is verified

@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Runtime.InteropServices;
@@ -40,18 +41,21 @@ namespace Mac_EFI_Toolkit.WinForms
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Chars.EXIT_CROSS;
 
-            lblBiosId.Text = FWBase.ROMInfoData.BiosId ?? "N/A";
-            lblModel.Text = FWBase.ROMInfoData.Model ?? "N/A";
-            lblEfiVersion.Text = FWBase.ROMInfoData.EfiVersion ?? "N/A";
-            lblBuiltBy.Text = FWBase.ROMInfoData.BuiltBy ?? "N/A";
-            lblDateStamp.Text = FWBase.ROMInfoData.DateStamp ?? "N/A";
-            lblRevision.Text = FWBase.ROMInfoData.Revision ?? "N/A";
-            lblBootRom.Text = FWBase.ROMInfoData.RomVersion ?? "N/A";
-            lblBuildcaveId.Text = FWBase.ROMInfoData.BuildcaveId ?? "N/A";
-            lblBuildType.Text = FWBase.ROMInfoData.BuildType ?? "N/A";
-            lblCompiler.Text = FWBase.ROMInfoData.Compiler ?? "N/A";
+            lblBiosId.Text = FWBase.ROMInfoSectionData.BiosId ?? "N/A";
+            lblModel.Text = FWBase.ROMInfoSectionData.Model != null
+                ? $"{FWBase.ROMInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(FWBase.ROMInfoSectionData.Model)})"
+                : "N/A";
+            lblEfiVersion.Text = FWBase.ROMInfoSectionData.EfiVersion ?? "N/A";
+            lblBuiltBy.Text = FWBase.ROMInfoSectionData.BuiltBy ?? "N/A";
+            lblDateStamp.Text = FWBase.ROMInfoSectionData.DateStamp ?? "N/A";
+            lblRevision.Text = FWBase.ROMInfoSectionData.Revision ?? "N/A";
+            lblBootRom.Text = FWBase.ROMInfoSectionData.RomVersion ?? "N/A";
+            lblBuildcaveId.Text = FWBase.ROMInfoSectionData.BuildcaveId ?? "N/A";
+            lblBuildType.Text = FWBase.ROMInfoSectionData.BuildType ?? "N/A";
+            lblCompiler.Text = FWBase.ROMInfoSectionData.Compiler ?? "N/A";
 
-            lblSectionData.Text = $"Offset: 0x{FWBase.ROMInfoData.SectionOffset:X2}h | Size 0x{FWBase.ROMInfoData.SectionBytes.Length:X2}h" ?? string.Empty;
+            lblSectionData.Text = $"Base: {FWBase.ROMInfoSectionData.SectionBase:X2}h, " +
+                $"Size: {FWBase.ROMInfoSectionData.SectionBytes.Length:X2}h" ?? string.Empty;
 
             foreach (Label label in tlpMain.Controls)
             {

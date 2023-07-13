@@ -103,8 +103,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.cmdClose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdClose.FlatAppearance.BorderSize = 0;
-            this.cmdClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cmdClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.cmdClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(192)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.cmdClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdClose.ForeColor = System.Drawing.Color.White;
@@ -124,7 +124,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // pnlSeperator
             // 
-            this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
+            this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.pnlSeperator.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlSeperator.Location = new System.Drawing.Point(1, 41);
             this.pnlSeperator.Name = "pnlSeperator";
@@ -171,7 +171,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblSectionData.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblSectionData.Size = new System.Drawing.Size(438, 35);
             this.lblSectionData.TabIndex = 101;
-            this.lblSectionData.Text = "`";
+            this.lblSectionData.Text = "...";
             this.lblSectionData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpMain

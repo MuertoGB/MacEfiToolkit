@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// EfiUtils.cs
+// MacUtils.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
@@ -17,7 +17,7 @@ using System.Xml.XPath;
 
 namespace Mac_EFI_Toolkit.Utils
 {
-    class EFIUtils
+    class MacUtils
     {
 
         /// <summary>
@@ -25,9 +25,9 @@ namespace Mac_EFI_Toolkit.Utils
         /// Prioritizes retrieving data from the embedded XML db. 
         /// Falls back to retrieving data from the Apple server if not found in the XML resource.
         /// </summary>
-        /// <param name="hwcString">The HWC identifier to retrieve a model string for.</param>
+        /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static async Task<string> GetDeviceConfigCodeAsync(string hwcString)
+        internal static async Task<string> GetDeviceConfigCodeAsync(string hwc)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Mac_EFI_Toolkit.Utils
                 {
                     XDocument xmlDoc = XDocument.Load(stream);
                     string name = xmlDoc.Descendants("section")
-                        .FirstOrDefault(e => e.Element("cfgCode")?.Value == hwcString)
+                        .FirstOrDefault(e => e.Element("cfgCode")?.Value == hwc)
                         ?.Element("model")?.Value;
 
                     if (!string.IsNullOrEmpty(name))
@@ -47,7 +47,7 @@ namespace Mac_EFI_Toolkit.Utils
                 }
 
                 // Retrieve data from the Apple server
-                string url = $"http://support-sp.apple.com/sp/product?cc={hwcString}";
+                string url = $"http://support-sp.apple.com/sp/product?cc={hwc}";
                 if (!NetUtils.GetIsWebsiteAvailable(url))
                 {
                     return null;
@@ -57,15 +57,16 @@ namespace Mac_EFI_Toolkit.Utils
                 XDocument doc = XDocument.Parse(xml);
                 string data = doc.XPathSelectElement("/root/configCode")?.Value;
 
-                if (data != null)
+                if (!string.IsNullOrEmpty(data))
                 {
-                    Logger.WriteToLogFile($"'{hwcString}' not present in local db > Server returned: '{data}'", LogType.Database);
+                    Logger.WriteToLogFile($"'{hwc}' not present in local db > Server returned: '{data}'", LogType.Database);
                 }
 
-                return data ?? null;
+                return string.IsNullOrEmpty(data) ? null : data;
             }
-            catch
+            catch (Exception e)
             {
+                Logger.WriteExceptionToAppLog(e);
                 return null;
             }
         }
@@ -73,11 +74,11 @@ namespace Mac_EFI_Toolkit.Utils
         /// <summary>
         /// Checks if a given input string contains only valid characters for a serial number.
         /// </summary>
-        /// <param name="charString">The serial number string to check.</param>
+        /// <param name="serial">The serial number string to check.</param>
         /// <returns>True if the input string contains only valid characters, otherwise false.</returns>
-        internal static bool GetIsValidSerialChars(string charString)
+        internal static bool GetIsValidSerialChars(string serial)
         {
-            return Regex.IsMatch(charString, "^[0-9A-Z]+$");
+            return Regex.IsMatch(serial, "^[0-9A-Z]+$");
         }
 
         /// <summary>
@@ -103,6 +104,53 @@ namespace Mac_EFI_Toolkit.Utils
             }
 
             return 0xFFFFFFFF;
+        }
+
+        /// <summary>
+        /// Converts the EFI model code to a full model identifier.
+        /// </summary>
+        /// <param name="model">The EFI model code.</param>
+        /// <returns>The full model identifier representation.</returns>
+        internal static string ConvertEfiModelCode(string model)
+        {
+            // Example MPB121 becomes MacBookPro12,1
+            if (string.IsNullOrEmpty(model))
+                return null;
+
+            string letters = new string(model.Where(char.IsLetter).ToArray());
+            string numbers = new string(model.Where(char.IsDigit).ToArray());
+
+            int minLength = 2;
+            int maxLength = 3;
+
+            if (letters.Length < minLength || letters.Length > maxLength ||
+                numbers.Length < minLength || numbers.Length > maxLength)
+            {
+                return model;
+            }
+
+            if (model.Contains("MBP"))
+                letters = "MacBookPro";
+            else if (model.Contains("MBA"))
+                letters = "MacBookAir";
+            else if (model.Contains("MB"))
+                letters = "MacBook";
+            else if (model.Contains("IM"))
+                letters = "iMac";
+            else if (model.Contains("IMP"))
+                letters = "iMacPro";
+            else if (model.Contains("MM"))
+                letters = "MacMini";
+            else if (model.Contains("MP"))
+                letters = "MacPro";
+
+            if (numbers.Length == 2)
+                numbers = $"{numbers[0]},{numbers[1]}";
+            else if (numbers.Length == 3)
+                numbers = $"{numbers.Substring(0, 2)},{numbers.Substring(2)}";
+
+            // Return the generated full model, otherwise what was passed in will be returned.
+            return $"{letters}{numbers}";
         }
 
     }
