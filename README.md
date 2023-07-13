@@ -60,6 +60,8 @@ This application provides support for most Mac BIOS, with the exception of the A
 - Validate binary size.
 
 **Application:**
+
+- Works with Wine (Better support coming in an update)
 - Automatic handling of uncaught errors.
 - No installation required.
 - Support for DPI scaling.
@@ -69,7 +71,7 @@ This application provides support for most Mac BIOS, with the exception of the A
 | SUGGESTED FEATURES                         | Status                |
 |--------------------------------------------|-----------------------|
 | Batch process files for information        |🟢 Coming in an update |
-| Invalidate EFI lock without cleanring SVS  |🟢 Coming in an update |
+| Invalidate EFI lock without clearing SVS   |🟢 Coming in an update |
 | Detect email address in the NVRAM          |🟠 Researching         |
 | Build clean firmware from FD               |🟠 Researching         |
 | Detect MDM status                          |🔴 Undecided           |
