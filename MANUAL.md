@@ -1,3 +1,9 @@
+<h4 align="center">Mac EFI Toolkit Manual</h4>
+<p align="center">
+  <a href="#main-window">Main Window</a> •
+  <a href="#firmware-editor-window">Firmware Editor Window</a>
+</p>
+
 ## Main Window
 
 This section explains the main window and its functionality.
