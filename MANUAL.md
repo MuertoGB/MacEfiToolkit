@@ -12,7 +12,7 @@ This section explains the main window and its functionality.
   <img src="files/manual/title.png">
 </kbd>
 
-The current version of the application is displayed in this section. If a new version is available, the label will appear in orange. Clicking on the version number will navigate to the latest release. The menu button opens the main menu. The minimize and close buttons function as expected, allowing you to minimize or quit the application.
+The current version of the application is displayed in this section. If there is a newer version available, the label will appear in orange. By clicking on the version number, you will be directed to the latest release in Github. The menu button opens the main menu, providing access to various options.
 
 ---
 
@@ -23,31 +23,31 @@ The current version of the application is displayed in this section. If a new ve
 </kbd>
 
 **'Local Directory':**\
-Navigates to the working directory where the executable is located.
+Opens the working directory where the executable is located.
 
 **'Builds Directory':**\
-Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved to.
+Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved.
 
 **'Fsys Store Directory':**\
-Navigates to the Fsys Store directory within the working directory. This is the default path where Fsys Stores are exported to.
+Navigates to the Fsys Store directory within the working directory. This is the default location where Fsys Stores are exported.
 
 **'ME Region Directory':**\
-Navigates to the ME Region directory within the working directory. This is the default path where ME Regions are exported to.
+Navigates to the ME Region directory within the working directory. This is the default path where ME Regions are exported.
 
 **'View Application Log':**\
-Opens the application log (if present), which contains details of any handled errors, or other relevant issues captured during runtime.
+Opens the application log, if available, which contains details of any handled errors or relevant issues encountered during runtime.
 
 **'Create a Debug Log':**\
-Writes a debug text log (debug.log) to the working directory, which contains information which can be used during troubleshooting.
+Generates a debug text log (debug.log) in the working directory, which contains information useful for troubleshooting purposes.
 
 **'Restart Application':**\
-Shuts down the application and starts a new instance.
+Closes the current instance of the application and launches a new one.
 
 **'Settings':**\
-Opens the settings window.
+Opens the settings window where you can modify various application settings.
 
 **'About':**\
-Opens the about window.
+Opens the about window, providing information about the application and its version.
 
 ----
 
