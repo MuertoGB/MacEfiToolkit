@@ -1228,7 +1228,6 @@ namespace Mac_EFI_Toolkit
             if (result == VersionResult.NewVersionAvailable)
             {
                 lblVersion.ForeColor = Color.Tomato;
-                lblVersion.Cursor = Cursors.Hand;
             }
         }
 
