@@ -80,7 +80,7 @@ This application provides support for most Mac BIOS, with the exception of the A
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Yes | Stable |
+|[1.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 13th July, 2023 | Yes | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
