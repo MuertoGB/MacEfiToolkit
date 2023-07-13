@@ -35,31 +35,31 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 
 **Fsys Store:**
 - Export and replace the Fsys store.
-- View and edit serial number, and Hardware Configuration (hwc).
+- View and edit the Serial Number, and Hardware Configuration (hwc).
 - View the System Order Number (son).
-- Detect and repair invalid Fsys store checksums.
-- Check serial number with EveryMac.
+- Detect and repair invalid Fsys Store CRC32.
+- Check Serial Number with EveryMac.
 
 **NVRAM:**
-- Clear NVRAM (VSS, SVS, NSS) with section header preservation.
+- Clear NVRAM stores (VSS, SVS, NSS) with section header preservation.
 - Identify NVRAM stores with data, empty stores, and missing stores.
 
 **Platform Data Region:**
-- Read Mac Board-ID (UEFI version from 2013 onwards).
+- Read the Board-ID (UEFI version from 2013 onwards).
 
 **Mac Specific:**
 - Detect EFI password lock.
 - Check APFS capability.
 - View Apple ROM section information.
-- Derive configuration code from the hardware configuration Code (hwc).
+- Derive Configuration Code from the Hardware Configuration (hwc).
 
 **General:**
 - Edit copies of files in memory, preserving original files.
-- Read flash descriptor for UEFI section base and limit positions.
+- Read Intel Descriptor for UEFI section base and limit positions.
 - Utilize Knuth–Morris–Pratt algorithm for binary data search.
-- View FIT and ME versions.
-- Export Intel ME Region.
-- Transplant Intel ME Region.
+- View Flash Image Tool and Management Engine versions.
+- Export the Intel Management Engine region.
+- Transplant the Intel Management Engine region.
 - Validate binary size.
 
 **Application:**
