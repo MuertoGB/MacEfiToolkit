@@ -138,7 +138,7 @@ The last write time of the loaded file.
   <img src="files/manual/model.png">
 </kbd>
 
-First, the application retrieves the model identifier (e.g., IM161) from the UEFI/BIOS and then converts it into a readable format (e.g., iMac16,1). If the hardware configuration (HWC) is available in the Fsys store, the application appends the corresponding configuration code obtained  from the internal database or Apple's server, resulting in a complete model name (e.g., "iMac (21.5-inch, Late 2015)").
+First, the application retrieves the model identifier (e.g., IM161) from the UEFI/BIOS and then converts it into a readable format (e.g., iMac16,1). If the Hardware Configuration (HWC) is available in the Fsys store, the application appends the corresponding Configuration Code obtained from the internal database or Apple's server, resulting in a complete model name (e.g., "iMac (21.5-inch, Late 2015)").
 
 ---
 
@@ -148,7 +148,7 @@ First, the application retrieves the model identifier (e.g., IM161) from the UEF
   <img src="files/manual/serial.png">
 </kbd>
 
-This section consists of the system's serial number stored in the Fsys store within the NVRAM, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
+This section consists of the system's Serial Number stored in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
 
 ---
 
@@ -158,7 +158,7 @@ This section consists of the system's serial number stored in the Fsys store wit
   <img src="files/manual/hwc.png">
 </kbd>
 
-The hardware configuration code is stored in the Fsys store within the NVRAM. The HWC is derived from the system serial number. If the serial number is 11 characters long, the HWC will be 3 characters. If the serial number is 12 characters long, the HWC will be 4 characters.
+The Hardware Configuration Code is stored in the Fsys store and is derived from the System Serial Number (SSN). If the Serial Number is 11 characters long, the HWC will be 3 characters. If the Serial Number is 12 characters long, the HWC will be 4 characters.
 
 ---
 
@@ -171,7 +171,7 @@ The hardware configuration code is stored in the Fsys store within the NVRAM. Th
   <img src="files/manual/fsysinvalid.png">
 </kbd>
 
-This section includes the checksum of the Fsys Store and two buttons. If the CRC32 checksum of the Fsys store is valid, the label will appear green and display the valid checksum. If the CRC32 is invalid, the label will appear red and display the invalid checksum. Clicking the "Wrench" button, which is enabled when the Fsys Store checksum is invalid, will prompt a "Save As" dialog to export the binary file with a repaired Fsys CRC32 checksum. The "Save" button allows exporting of the 2048-byte (0x800h) Fsys Store.
+This section includes the checksum of the Fsys store and two buttons. If the CRC32 of the Fsys store is valid, the label will appear green and display the valid checksum. If the CRC32 is invalid, the label will appear red and display the invalid checksum. Clicking the "Wrench" button, which is enabled when the Fsys store checksum is invalid, will prompt a "Save As" dialog to export the binary file with a repaired Fsys CRC32 checksum. The "Save" button allows exporting of the 2048-byte (0x800h) Fsys store.
 
 ---
 
@@ -247,7 +247,7 @@ This section displays the 8-byte hexadecimal board-id obtained from the UEFI Pla
   <img src="files/manual/son.png">
 </kbd>
 
-The system order number (SON) is displayed in this section, retrieved from the Fsys Store within the NVRAM. The order number can be a standard order number such as MNE92LL/A or a custom Built to Order (BTO) / Configure to Order (CTO) number.
+The System Order Number (SON) is displayed in this section, retrieved from the Fsys store. The order number can be a standard order number such as `MNE92LL/A` or a custom Built to Order (BTO) / Configure to Order (CTO) number.
 
 ---
 
@@ -277,7 +277,7 @@ This section explains the firmware editor window and its functionality.
   <img src="files/manual/fsys_replace.png">
 </kbd>
 
-When the checkbox is activated, it will prompt an open file dialog, allowing you to select and open the new Fsys region file. If you wish to choose a different file, you can click the 'Change File' button to open the file dialog again.
+When the checkbox is activated, an open file dialog will be prompted, enabling the selection and opening of the new Fsys Store. If you want to choose a different file, simply click the 'Change File' button to reopen the file dialog.
 
 The application will verify the new Fsys Store, if CRC masking is require this will be done automatically at build time.
 
