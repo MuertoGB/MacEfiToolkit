@@ -356,7 +356,7 @@ When you click the 'Reset' button, it initiates a process that resets the editor
 Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved when the 'Build' button is used.
 
 **Open Last Build:**\
-Clicking 'Open Last Build' option will close the firmware editor window and load in the last successfully built binary into the main window.
+Clicking 'Open Last Build' will close the firmware editor window and load in the last successfully built binary into the main window.
 
 **Build**\
 The 'Build' button generates a new binary file based on the user specified preferences.
