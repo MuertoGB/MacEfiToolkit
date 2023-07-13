@@ -40,7 +40,7 @@ Navigates to the Builds directory within the working directory, this is where ed
 Navigates to the Fsys Store directory within the working directory. This is the default location where Fsys Stores are exported.
 
 **'ME Region Directory':**\
-Navigates to the ME Region directory within the working directory. This is the default path where ME Regions are exported.
+Navigates to the ME Region directory within the working directory. This is the default path where ME regions are exported.
 
 **'View Application Log':**\
 Opens the application log, if available, which contains details of any handled errors or relevant issues encountered during runtime.
@@ -148,7 +148,7 @@ First, the application retrieves the model identifier (e.g., IM161) from the UEF
   <img src="files/manual/serial.png">
 </kbd>
 
-This section consists of the system's Serial Number stored in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
+This section consists of the System Serial Number (SSN) stored in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
 
 ---
 
@@ -298,3 +298,36 @@ The application will automatically enforce the required length of the serial num
 The editor will automatically verify and mask the Fsys Store CRC32 after the serial number patching is complete.
 
 > 🛈 The `Replace Fsys Store` option is not available when `Replace Serial Number` is selected.
+
+---
+
+#### NVRAM:
+
+<kbd>
+  <img src="files/manual/nvram_clear.png">
+</kbd>
+
+In this section, you have the option to clear specific NVRAM stores. By selecting 'Clear VSS Store', a general PRAM reset will be performed, similar to using CMD + SHIFT + P + R on the Mac keyboard. This action helps in resetting parameters stored in the VSS Store.
+
+Alternatively, selecting 'Clear SVS Store' will remove the EFI lock in the event that a customer has forgotten their EFI password. This action effectively clears the SVS Store, which contains the Message Authentication Code (MAC) responsible for storing the EFI password.
+
+The NSS store's specific purpose is currently unknown to me. It is included as an option for users who are knowledgeable about its functionality and potential use cases.
+
+---
+
+#### ME Region:
+
+<kbd>
+  <img src="files/manual/me_replace.png">
+</kbd>
+
+When the checkbox is activated, an open file dialog will be prompted, allowing selection of a donor or clean Management Engine (ME) firmware. This feature proves useful for scenarios such as migrating a ME Region from a faulty UEFI to a donor UEFI. Additionally, it can be utilized to write a configured ME Region from a matching clean Apple firmware.
+
+A repository of clean Apple firmware can be found here on [Github](https://github.com/gdbinit/firmware_vault). This repository provides a collection of clean Apple firmware files containing clean and configured ME regions.
+
+It is important for the user to ensure the accurate replacement of the ME Region when utilizing the application. The application allows for the transfer of a dumped or configured region but does not provide a guarantee of accuracy.
+
+For users who require a higher level of certainty and guidance in replacing the ME region, I recommend referring to resources such as the guide available on [Win-Raid](https://winraid.level1techs.com/t/guide-clean-dumped-intel-engine-cs-me-cs-txe-regions-with-data-initialization/31277) written by platomav, or the post on [Logi.wiki](https://www.logi.wiki/index.php/Clean_EFI_ME_Region). These resources provide comprehensive instructions and information on performing a clean replacement of the ME Region while ensuring data integrity and accuracy.
+
+---
+
