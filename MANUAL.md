@@ -331,3 +331,34 @@ For users who require a higher level of certainty and guidance in replacing the 
 
 ---
 
+#### Output:
+
+<kbd>
+  <img src="files/manual/output.png">
+</kbd>
+
+This section includes a single button and the output log. By clicking the 'Save Log' button, a save file dialog will be prompted, allowing you to export the log text to a file of your choice.
+
+The output log serves as a valuable source of information during the validation and build process. It provides necessary details and updates to keep the user informed about the progress and status of these processes.
+
+---
+
+#### Editor Buttons:
+
+<kbd>
+  <img src="files/manual/editorbuttons.png">
+</kbd>
+
+**Reset:**\
+When you click the 'Reset' button, it initiates a process that resets the editor and unloads any loaded files, such as the Fsys store and ME region.
+
+**Open Build Directory:**\
+Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved when the 'Build' button is used.
+
+**Open Last Build:**\
+Clicking 'Open Last Build' option will close the firmware editor window and load in the last successfully built binary into the main window.
+
+**Build**\
+The 'Build' button generates a new binary file based on the user specified preferences.
+
+---
