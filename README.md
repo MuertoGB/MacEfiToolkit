@@ -20,13 +20,13 @@ Mac EFI Toolkit
 **This application is in active development:**
 > 🛠 Current Status: Bug tracking 1.0.0 RC1.
 
-Mac EFI Toolkit, or 'mefit' is an information gathering tool designed to aid technicians in repair of Mac BIOS/EFI files, with limited editing capability. The application can detect EFI lock in the NVRAM, detect the APFS DXE driver; even if hidden inside an LZMA compressed volume, detect if the file size is valid, with the ability to calculate any size discrepancy bytes, and more.
+Mac EFI Toolkit, or 'mefit', is a valuable tool designed to aid technicians in repairing Mac BIOS/EFI files. It provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if hidden in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes.
 
-Editing features include the ability to replace a systems serial number, with automatic crc32 masking and hwc correction. The ability to transplant in any exported Fsys store, with automatic crc32 masking, and the ability to clear the NVRAM stores, which in turn clears any firmware settings and removes EFI password lock.
+In terms of editing, mefit allows users to replace a system's Serial Number with automatic Hardware Configuration (hwc) calculation and CRC32 masking. It also supports transplanting of exported Fsys stores with automatic CRC32 masking, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password.
 
 >🛈 **Access to some features requires agreement to the editing terms.**
 
-This application supports most Mac BIOS, with exception to the A1534 (so far), I continue to test hundreds of firmwares, and update accordingly for any edge cases.
+This application provides support for most Mac BIOS, with the exception of the A1534 model (as of now). I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac BIOS configurations.
 
 <img width="550" src="files/images/met.png" alt="MET">
 <img width="550" src="files/images/met_alt.png" alt="MET_ALT">
