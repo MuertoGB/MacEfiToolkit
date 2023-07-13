@@ -34,41 +34,40 @@ This application supports most Mac BIOS, with exception to the A1534 (so far), I
 ## Features
 
 **Fsys Store:**
-- Export Fsys store from the NVRAM.
-- Replace the Fsys store.
-- View the serial number, hwc, and son.
-- Edit the serial number, and hwc.
+- Export and replace the Fsys store.
+- View and edit serial number, and Hardware Configuration (hwc).
+- View the System Order Number (son).
 - Detect and repair invalid Fsys store checksums.
 - Check serial number with EveryMac.
 
-**NVRAM**:
+**NVRAM:**
 - Clear NVRAM (VSS, SVS, NSS) with section header preservation.
-- View which NVRAM stores have data, are empty, or not found.
+- Identify NVRAM stores with data, empty stores, and missing stores.
 
 **Platform Data Region:**
-- Read the Mac Board-ID (> 2013 UEFI).
+- Read Mac Board-ID (UEFI version from 2013 onwards).
 
 **Mac Specific:**
 - Detect EFI password lock.
-- Detect APFS capability.
+- Check APFS capability.
 - View Apple ROM section information.
-- View configuration code derived from the hardware configuration code (hwc).
+- Derive configuration code from the hardware configuration Code (hwc).
 
 **General:**
-- Original files are always safe, edits are made to a copy in memory.
-- Read the flash descriptor for base and limit positions of UEFI sections.
-- Knuth–Morris–Pratt algorithm for searching binary data.
+- Edit copies of files in memory, preserving original files.
+- Read flash descriptor for UEFI section base and limit positions.
+- Utilize Knuth–Morris–Pratt algorithm for binary data search.
 - View FIT and ME versions.
-- Export the Intel ME Region.
-- Transplant the Intel ME Region.
+- Export Intel ME Region.
+- Transplant Intel ME Region.
 - Validate binary size.
 
 **Application:**
 - Automatic handling of uncaught errors.
-- No installation necessary.
-- DPI scaling support.
-- Drag & drop support.
-- Version checking.
+- No installation required.
+- Support for DPI scaling.
+- Drag and drop functionality.
+- Version checking mechanism.
 
 | SUGGESTED FEATURES                   | Status         |
 |--------------------------------------|----------------|
