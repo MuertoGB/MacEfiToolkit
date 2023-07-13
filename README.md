@@ -32,7 +32,7 @@ This application provides support for most Mac BIOS, with the exception of the A
 
 **Fsys Store:**
 - Export and replace the Fsys store.
-- View and edit the Serial Number, and Hardware Configuration (hwc).
+- View and edit the System Serial Number (ssn), and Hardware Configuration (hwc).
 - View the System Order Number (son).
 - Detect and repair invalid Fsys Store CRC32.
 - Check Serial Number with EveryMac.

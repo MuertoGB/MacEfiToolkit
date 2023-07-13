@@ -38,6 +38,7 @@
 - Fixed the editor window 'Open Builds Directory' button opening the wrong path.
 - Fixed invalidated (0x83) serial numbers being read.
 - Fixed ROM information not being found if the GUID exists, but the section is empty.
+- Fixed application restart option being unreliable on Windows 7.
 
 ## Version 0.7.0
 

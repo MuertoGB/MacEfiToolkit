@@ -8,6 +8,7 @@
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
@@ -36,7 +37,7 @@ namespace Mac_EFI_Toolkit
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230713.1400";
+        internal static readonly string Build = "230713.1620";
         internal static readonly string Channel = "Stable";
     }
 
@@ -311,19 +312,34 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Restart MET
+        #region Restart MET 
         internal static void RestartMet(Form owner)
         {
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
-                Application.Restart();
+                Restart();
                 return;
             }
 
             DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", METMessageType.Question, METMessageButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                Application.Restart();
+                Restart();
+            }
+        }
+
+        private static void Restart()
+        {
+            try
+            {
+                Process.Start(Application.ExecutablePath);
+                Application.Exit();
+            }
+            catch (Win32Exception)
+            {
+                // Do nothing.
+                // The application throws and unhandled exception when a user cancels the UAC prompt.
+                return;
             }
         }
         #endregion
