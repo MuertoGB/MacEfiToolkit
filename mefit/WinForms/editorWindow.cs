@@ -307,6 +307,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             _bytesNewFsysStore = null;
             _bytesNewBinary = null;
+            _bytesNewMeRegion = null;
             _maskCrc = false;
             _fullBuildPath = string.Empty;
 
