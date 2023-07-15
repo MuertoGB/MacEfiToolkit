@@ -32,13 +32,12 @@ namespace Mac_EFI_Toolkit.UI.Renderers
             Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
             Rectangle rectItemBorder = new Rectangle(rect.X + 3, rect.Y + 2, rect.Width - 6, rect.Height - 4);
 
-            Color clr = e.Item.Selected ? ItemHoverColor : Color.Transparent;
-            using (SolidBrush br = new SolidBrush(clr))
+            using (SolidBrush brush = new SolidBrush(e.Item.Selected ? ItemHoverColor : Color.Transparent))
             using (Pen pen = new Pen(BorderColor))
             {
                 if (e.Item.Selected)
                 {
-                    e.Graphics.FillRectangle(br, rectItemBorder);
+                    e.Graphics.FillRectangle(brush, rectItemBorder);
                     e.Graphics.DrawRectangle(pen, rectItemBorder);
                 }
             }

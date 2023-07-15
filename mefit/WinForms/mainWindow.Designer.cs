@@ -1398,70 +1398,73 @@ namespace Mac_EFI_Toolkit
             this.toolStripSeparator1,
             this.aboutToolStripMenuItem});
             this.cmsMainMenu.Name = "cmsMainMenu";
-            this.cmsMainMenu.ShowImageMargin = false;
-            this.cmsMainMenu.Size = new System.Drawing.Size(247, 274);
+            this.cmsMainMenu.Size = new System.Drawing.Size(276, 274);
             // 
             // openLocalFolderToolStripMenuItem
             // 
             this.openLocalFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openLocalFolderToolStripMenuItem.Image = global::Mac_EFI_Toolkit.Properties.Resources.folder;
             this.openLocalFolderToolStripMenuItem.Name = "openLocalFolderToolStripMenuItem";
             this.openLocalFolderToolStripMenuItem.ShortcutKeyDisplayString = "(L)";
-            this.openLocalFolderToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.openLocalFolderToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.openLocalFolderToolStripMenuItem.Text = "Local Directory";
             this.openLocalFolderToolStripMenuItem.Click += new System.EventHandler(this.openLocalFolderToolStripMenuItem_Click);
             // 
             // openBuildsDirectoryToolStripMenuItem
             // 
             this.openBuildsDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openBuildsDirectoryToolStripMenuItem.Image = global::Mac_EFI_Toolkit.Properties.Resources.folder;
             this.openBuildsDirectoryToolStripMenuItem.Name = "openBuildsDirectoryToolStripMenuItem";
             this.openBuildsDirectoryToolStripMenuItem.ShortcutKeyDisplayString = "(B)";
-            this.openBuildsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.openBuildsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.openBuildsDirectoryToolStripMenuItem.Text = "Builds Directory";
             this.openBuildsDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openBuildsDirectoryToolStripMenuItem_Click);
             // 
             // openFsysStoresDirectoryToolStripMenuItem
             // 
             this.openFsysStoresDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openFsysStoresDirectoryToolStripMenuItem.Image = global::Mac_EFI_Toolkit.Properties.Resources.folder;
             this.openFsysStoresDirectoryToolStripMenuItem.Name = "openFsysStoresDirectoryToolStripMenuItem";
             this.openFsysStoresDirectoryToolStripMenuItem.ShortcutKeyDisplayString = "(F)";
-            this.openFsysStoresDirectoryToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.openFsysStoresDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.openFsysStoresDirectoryToolStripMenuItem.Text = "Fsys Store Directory";
             this.openFsysStoresDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openFsysDirectoryToolStripMenuItem_Click);
             // 
             // openMeRegionDirectoryToolStripMenuItem
             // 
             this.openMeRegionDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openMeRegionDirectoryToolStripMenuItem.Image = global::Mac_EFI_Toolkit.Properties.Resources.folder;
             this.openMeRegionDirectoryToolStripMenuItem.Name = "openMeRegionDirectoryToolStripMenuItem";
             this.openMeRegionDirectoryToolStripMenuItem.ShortcutKeyDisplayString = "(M)";
-            this.openMeRegionDirectoryToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.openMeRegionDirectoryToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.openMeRegionDirectoryToolStripMenuItem.Text = "ME Region Directory";
             this.openMeRegionDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openMeRegionDirectoryToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(243, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(272, 6);
             // 
             // viewLogToolStripMenuItem
             // 
             this.viewLogToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.viewLogToolStripMenuItem.Name = "viewLogToolStripMenuItem";
             this.viewLogToolStripMenuItem.ShortcutKeyDisplayString = "(V)";
-            this.viewLogToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.viewLogToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.viewLogToolStripMenuItem.Text = "View Application Log";
             this.viewLogToolStripMenuItem.Click += new System.EventHandler(this.viewLogToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(243, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(272, 6);
             // 
             // createADebugLogToolStripMenuItem
             // 
             this.createADebugLogToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.createADebugLogToolStripMenuItem.Name = "createADebugLogToolStripMenuItem";
             this.createADebugLogToolStripMenuItem.ShortcutKeyDisplayString = "(C)";
-            this.createADebugLogToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.createADebugLogToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.createADebugLogToolStripMenuItem.Text = "Create a Debug Log";
             this.createADebugLogToolStripMenuItem.Click += new System.EventHandler(this.createADebugLogToolStripMenuItem_Click);
             // 
@@ -1470,7 +1473,7 @@ namespace Mac_EFI_Toolkit
             this.restartApplicationToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.restartApplicationToolStripMenuItem.Name = "restartApplicationToolStripMenuItem";
             this.restartApplicationToolStripMenuItem.ShortcutKeyDisplayString = "(R)";
-            this.restartApplicationToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.restartApplicationToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.restartApplicationToolStripMenuItem.Text = "Restart Application";
             this.restartApplicationToolStripMenuItem.Click += new System.EventHandler(this.restartApplicationToolStripMenuItem_Click);
             // 
@@ -1479,14 +1482,14 @@ namespace Mac_EFI_Toolkit
             this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.ShortcutKeyDisplayString = "(S)";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(243, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(272, 6);
             // 
             // aboutToolStripMenuItem
             // 
@@ -1495,7 +1498,7 @@ namespace Mac_EFI_Toolkit
             this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.ShortcutKeyDisplayString = "(A)";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(246, 28);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(275, 28);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -1575,7 +1578,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.sizeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.sizeToolStripMenuItem.Name = "sizeToolStripMenuItem";
-            this.sizeToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.sizeToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.sizeToolStripMenuItem.Text = "Size";
             this.sizeToolStripMenuItem.Click += new System.EventHandler(this.sizeToolStripMenuItem_Click);
             // 
@@ -1583,7 +1586,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.crc32ToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.crc32ToolStripMenuItem.Name = "crc32ToolStripMenuItem";
-            this.crc32ToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.crc32ToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.crc32ToolStripMenuItem.Text = "CRC32";
             this.crc32ToolStripMenuItem.Click += new System.EventHandler(this.crc32ToolStripMenuItem_Click);
             // 
@@ -1591,7 +1594,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.createdDateToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.createdDateToolStripMenuItem.Name = "createdDateToolStripMenuItem";
-            this.createdDateToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.createdDateToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.createdDateToolStripMenuItem.Text = "Created Date";
             this.createdDateToolStripMenuItem.Click += new System.EventHandler(this.createdDateToolStripMenuItem_Click);
             // 
@@ -1599,20 +1602,20 @@ namespace Mac_EFI_Toolkit
             // 
             this.modifiedDateToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.modifiedDateToolStripMenuItem.Name = "modifiedDateToolStripMenuItem";
-            this.modifiedDateToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.modifiedDateToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.modifiedDateToolStripMenuItem.Text = "Modified Date";
             this.modifiedDateToolStripMenuItem.Click += new System.EventHandler(this.modifiedDateToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(160, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(182, 6);
             // 
             // serialToolStripMenuItem
             // 
             this.serialToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.serialToolStripMenuItem.Name = "serialToolStripMenuItem";
-            this.serialToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.serialToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.serialToolStripMenuItem.Text = "Serial";
             this.serialToolStripMenuItem.Click += new System.EventHandler(this.serialToolStripMenuItem_Click);
             // 
@@ -1620,7 +1623,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.hwcToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.hwcToolStripMenuItem.Name = "hwcToolStripMenuItem";
-            this.hwcToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.hwcToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.hwcToolStripMenuItem.Text = "HWC";
             this.hwcToolStripMenuItem.Click += new System.EventHandler(this.hwcToolStripMenuItem_Click);
             // 
@@ -1628,7 +1631,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.fsysCRC32ToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.fsysCRC32ToolStripMenuItem.Name = "fsysCRC32ToolStripMenuItem";
-            this.fsysCRC32ToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.fsysCRC32ToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.fsysCRC32ToolStripMenuItem.Text = "Fsys CRC32";
             this.fsysCRC32ToolStripMenuItem.Click += new System.EventHandler(this.fsysCRC32ToolStripMenuItem_Click);
             // 
@@ -1636,7 +1639,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.efiVersionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.efiVersionToolStripMenuItem.Name = "efiVersionToolStripMenuItem";
-            this.efiVersionToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.efiVersionToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.efiVersionToolStripMenuItem.Text = "EFI Version";
             this.efiVersionToolStripMenuItem.Click += new System.EventHandler(this.efiVersionToolStripMenuItem_Click);
             // 
@@ -1644,7 +1647,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.fitVersionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.fitVersionToolStripMenuItem.Name = "fitVersionToolStripMenuItem";
-            this.fitVersionToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.fitVersionToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.fitVersionToolStripMenuItem.Text = "FIT Version";
             this.fitVersionToolStripMenuItem.Click += new System.EventHandler(this.fitVersionToolStripMenuItem_Click);
             // 
@@ -1652,7 +1655,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.meVersionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.meVersionToolStripMenuItem.Name = "meVersionToolStripMenuItem";
-            this.meVersionToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.meVersionToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.meVersionToolStripMenuItem.Text = "ME Version";
             this.meVersionToolStripMenuItem.Click += new System.EventHandler(this.meVersionToolStripMenuItem_Click);
             // 
@@ -1660,7 +1663,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.boardIDToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.boardIDToolStripMenuItem.Name = "boardIDToolStripMenuItem";
-            this.boardIDToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.boardIDToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.boardIDToolStripMenuItem.Text = "Board-ID";
             this.boardIDToolStripMenuItem.Click += new System.EventHandler(this.boardIDToolStripMenuItem_Click);
             // 
@@ -1668,7 +1671,7 @@ namespace Mac_EFI_Toolkit
             // 
             this.orderNoToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.orderNoToolStripMenuItem.Name = "orderNoToolStripMenuItem";
-            this.orderNoToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
+            this.orderNoToolStripMenuItem.Size = new System.Drawing.Size(185, 28);
             this.orderNoToolStripMenuItem.Text = "Order No";
             this.orderNoToolStripMenuItem.Click += new System.EventHandler(this.orderNoToolStripMenuItem_Click);
             // 

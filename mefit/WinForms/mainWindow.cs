@@ -811,9 +811,14 @@ namespace Mac_EFI_Toolkit
         {
             int fileSize = (int)FWBase.FileInfoData.FileLength;
             bool isValidSize = FileUtils.GetIsValidBinSize(fileSize);
+
             lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileSize);
-            lblFileSizeBytes.ForeColor = isValidSize ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
-            lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileSize)})";
+
+            if (!isValidSize)
+            {
+                lblFileSizeBytes.ForeColor = Colours.ERROR_RED;
+                lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileSize)})";
+            }
         }
 
         private void UpdateFileCrc32Label()
@@ -876,15 +881,13 @@ namespace Mac_EFI_Toolkit
                     lblApfsCapable.ForeColor = Colours.ERROR_RED;
                     break;
                 case ApfsCapable.YesGuid:
-                    lblApfsCapable.Text = "Yes · DXE";
-                    lblApfsCapable.ForeColor = Colours.COMPLETE_GREEN;
+                    lblApfsCapable.Text = "Yes (DXE)";
                     break;
                 case ApfsCapable.YesLzma:
-                    lblApfsCapable.Text = "Yes · LZMA DXE";
-                    lblApfsCapable.ForeColor = Colours.COMPLETE_GREEN;
+                    lblApfsCapable.Text = "Yes (LZMA DXE)";
                     break;
                 case ApfsCapable.No:
-                    lblApfsCapable.Text = "No";
+                    lblApfsCapable.Text = "Driver not Found";
                     lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
                     break;
             }

@@ -100,7 +100,9 @@ This section displays the name of the loaded file and includes two buttons. Clic
   <img src="files/manual/filesizeinvalid.png">
 </kbd>
 
-The file size of the loaded file is measured in bytes. If the file size is valid, the label will appear green. However, if the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
+The file size of the loaded file is measured in bytes. If the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
+
+> 🛈 8,388,615 (>7) would indicate the given file is 7 bytes too large.
 
 ---
 
@@ -180,13 +182,16 @@ This section includes the checksum of the Fsys store and two buttons. If the CRC
 #### APFS Capable:
 
 <kbd>
-  <img src="files/manual/apfs.png">
+  <img src="files/manual/apfsdxe.png">
+</kbd>
+<kbd>
+  <img src="files/manual/apfslzma.png">
 </kbd>
 <kbd>
   <img src="files/manual/apfsno.png">
 </kbd>
 
-Indicates whether the UEFI is capable of supporting APFS and provides information about the detected DXE type, such as LZMA DXE. The presence of LZMA DXE suggests the presence of a compressed DXE file system containing the APFSJumpStart boot time driver.
+The application provides information regarding the presence of the UEFI APFS DXE driver and the firmware's capability to support APFS boot. If the driver is detected, it will display `Yes (DXE)` to indicate that an uncompressed driver was found. If the driver is found within an LZMA compressed volume, it will display `Yes (LZMA DXE)` to indicate that the driver was located in an LZMA compressed volume.
 
 ---
 
