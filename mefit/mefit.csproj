@@ -80,6 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Descriptor.cs" />
+    <Compile Include="Common\FontResolver.cs" />
+    <Compile Include="Common\KeyboardHookManager.cs" />
     <Compile Include="Common\ToInt24.cs" />
     <Compile Include="Common\FSGuids.cs" />
     <Compile Include="Common\FWBase.cs" />

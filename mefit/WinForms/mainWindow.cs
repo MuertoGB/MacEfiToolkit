@@ -122,7 +122,7 @@ namespace Mac_EFI_Toolkit
                 }
 
                 // Show confirmation dialog
-                Program.ExitMet(this);
+                Program.PerformMetAction(this, MetAction.Exit);
             }
         }
 
@@ -260,7 +260,7 @@ namespace Mac_EFI_Toolkit
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e)
         {
-            Program.ExitMet(this);
+            Program.PerformMetAction(this, MetAction.Exit);
         }
 
         private void cmdMin_Click(object sender, EventArgs e)
@@ -669,7 +669,7 @@ namespace Mac_EFI_Toolkit
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.RestartMet(this);
+            Program.PerformMetAction(this, MetAction.Restart);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -704,7 +704,7 @@ namespace Mac_EFI_Toolkit
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.ExitMet(this);
+            Program.PerformMetAction(this, MetAction.Exit);
         }
 
         private void sizeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -901,10 +901,10 @@ namespace Mac_EFI_Toolkit
                     lblApfsCapable.Text = "Unknown";
                     lblApfsCapable.ForeColor = Colours.ERROR_RED;
                     break;
-                case ApfsCapable.YesGuid:
+                case ApfsCapable.Guid:
                     lblApfsCapable.Text = "Yes (DXE)";
                     break;
-                case ApfsCapable.YesLzma:
+                case ApfsCapable.Lzma:
                     lblApfsCapable.Text = "Yes (LZMA DXE)";
                     break;
                 case ApfsCapable.No:

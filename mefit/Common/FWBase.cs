@@ -92,10 +92,10 @@ namespace Mac_EFI_Toolkit.Common
     #region Enums
     internal enum ApfsCapable
     {
-        Unknown,
-        YesGuid,
-        YesLzma,
-        No
+        Guid,
+        Lzma,
+        No,
+        Unknown
     }
 
     internal enum EfiLockStatus
@@ -145,8 +145,18 @@ namespace Mac_EFI_Toolkit.Common
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
 
+        private static int _pdrBase = 0;
+        private static int _pdrLimit = 0;
+        private static int _biosBase = 0;
+        private static int _biosLimit = 0;
+
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
+            _pdrBase = Descriptor.PdrBase != 0 ? (int)Descriptor.PdrBase : 0;
+            _pdrLimit = Descriptor.PdrLimit != 0 ? (int)Descriptor.PdrLimit : sourceBytes.Length;
+            _biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
+            _biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : sourceBytes.Length;
+
             FileInfoData = GetBinaryFileInfo(fileName);
             PDRSectionData = GetPdrData(sourceBytes);
             VssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.VSS);
@@ -203,10 +213,7 @@ namespace Mac_EFI_Toolkit.Common
         #region Platform Data Region
         internal static PdrSection GetPdrData(byte[] sourceBytes)
         {
-            int pdrBase = (Descriptor.PdrBase != 0 ? (int)Descriptor.PdrBase : 0);
-            int pdrLimit = (Descriptor.PdrLimit != 0 ? (int)Descriptor.PdrLimit : FileInfoData.FileLength);
-
-            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.PDR_SECTION_GUID, pdrBase, pdrLimit);
+            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.PDR_SECTION_GUID, _pdrBase, _pdrLimit);
 
             if (guidBase == -1)
             {
@@ -263,12 +270,8 @@ namespace Mac_EFI_Toolkit.Common
             // Arg to skip Fsys searching
             if (!isFsysStoreOnly)
             {
-                // Check the descriptor for bios base + limit
-                int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
-                int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
-
                 // First we need to locate the NVRAM section GUID
-                int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, biosBase, biosLimit);
+                int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, _biosBase, _biosLimit);
 
                 if (guidBase == -1)
                 {
@@ -487,9 +490,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static NvramStore GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
         {
             byte[] nvramSig = GetNvramSignature(storeType);
-            int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
-            int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
-            int nvramPos = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, biosBase, biosLimit);
+            int nvramPos = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, _biosBase, _biosLimit);
             int paddingLen = 0;
 
             if (nvramPos == -1)
@@ -654,14 +655,10 @@ namespace Mac_EFI_Toolkit.Common
                 { COMPILER_SIGNATURE, null }
             };
 
-            // Check the descriptor for bios base + limit
-            int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
-            int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
-
             // First we need to locate the AppleRomInformation section GUID
             List<int> romSectionBases = new List<int>();
 
-            int guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, biosBase, biosLimit);
+            int guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, _biosBase, _biosLimit);
 
             // Seach all GUIDs
             while (guidPosition != -1)
@@ -670,7 +667,7 @@ namespace Mac_EFI_Toolkit.Common
                 romSectionBases.Add(guidPosition);
 
                 // Move the search position to the next occurrence of the GUID
-                guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, guidPosition + 1, biosLimit);
+                guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, guidPosition + 1, _biosLimit);
             }
 
             if (romSectionBases.Count == 0)
@@ -852,11 +849,7 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static EfiSection GetEfiSectionData(byte[] sourceBytes)
         {
-            // Check the descriptor for bios base + limit
-            int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
-            int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
-
-            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.EFI_BIOS_ID_GUID, biosBase, biosLimit);
+            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.EFI_BIOS_ID_GUID, _biosBase, _biosLimit);
 
             if (guidBase == -1)
             {
@@ -905,14 +898,10 @@ namespace Mac_EFI_Toolkit.Common
         #region APFSJumpStart
         internal static ApfsCapable GetIsApfsCapable(byte[] sourceBytes)
         {
-            // Check the descriptor for bios base + limit
-            int biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
-            int biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : FileInfoData.FileLength;
-
             // APFS DXE GUID found
-            if (BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APFS_DXE_GUID, biosBase, biosLimit) != -1)
+            if (BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APFS_DXE_GUID, _biosBase, _biosLimit) != -1)
             {
-                return ApfsCapable.YesGuid;
+                return ApfsCapable.Guid;
             }
 
             // Disable compressed DXE searching is enabled (Maybe I should get rid of this?)
@@ -922,11 +911,11 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             // Look for a compressed volume GUID
-            int lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_GUID, biosBase, biosLimit);
+            int lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_GUID, _biosBase, _biosLimit);
 
             if (lzmaDxeBase == -1)
             {
-                lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID, biosBase, biosLimit);
+                lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID, _biosBase, _biosLimit);
             }
 
             // No compressed DXE volume was found
@@ -960,7 +949,7 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             // The APFS DXE GUID was present in the compressed volume
-            return ApfsCapable.YesLzma;
+            return ApfsCapable.Lzma;
         }
         #endregion
 

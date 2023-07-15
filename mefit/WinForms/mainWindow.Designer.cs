@@ -96,7 +96,6 @@ namespace Mac_EFI_Toolkit
             this.pbxTitleLogo = new System.Windows.Forms.PictureBox();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
             this.cmdCopy = new System.Windows.Forms.Button();
-            this.threeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
             this.cmdMenu = new System.Windows.Forms.Button();
@@ -1269,11 +1268,6 @@ namespace Mac_EFI_Toolkit
             this.cmdCopy.UseVisualStyleBackColor = false;
             this.cmdCopy.Click += new System.EventHandler(this.cmdCopy_Click);
             // 
-            // threeToolStripMenuItem
-            // 
-            this.threeToolStripMenuItem.Name = "threeToolStripMenuItem";
-            this.threeToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
-            // 
             // tlpTitle
             // 
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
@@ -1827,8 +1821,5 @@ namespace Mac_EFI_Toolkit
         private METContextMenuStrip cmsMainMenu;
         private METContextMenuStrip cmsApplication;
         private METContextMenuStrip cmsCopy;
-        private System.Windows.Forms.ToolStripMenuItem oneToolStripMenuItem;
-        private METContextMenuStrip twoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem threeToolStripMenuItem;
     }
 }
