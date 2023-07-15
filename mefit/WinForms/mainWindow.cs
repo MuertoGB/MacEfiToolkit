@@ -298,7 +298,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(this, "Reset", "This will unload the firmware and data.\r\nAre you sure you want to reset?", METMessageType.Warning, METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(this, "Reset", "This will unload the firmware and all associated data, are you sure you want to reset?",
+                METMessageType.Warning, METMessageButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {
@@ -311,7 +312,8 @@ namespace Mac_EFI_Toolkit
         {
             if (FWBase.LoadedBinaryBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.", METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.",
+                    METMessageType.Warning, METMessageButtons.Okay);
                 return;
             }
 
@@ -350,7 +352,8 @@ namespace Mac_EFI_Toolkit
 
             if (FWBase.FsysStoreData.Serial == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.Serial data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FsysSectionData.Serial data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -363,7 +366,8 @@ namespace Mac_EFI_Toolkit
             if (!File.Exists(FWBase.LoadedBinaryPath))
             {
                 // Loaded binary not exist
-                METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -374,7 +378,8 @@ namespace Mac_EFI_Toolkit
             if (BinaryUtils.ByteArraysMatch(fileBytes, FWBase.LoadedBinaryBytes))
             {
                 // Loaded binaries match
-                METMessageBox.Show(this, "MET", "File on disk matches file in memory, data was not refreshed.", METMessageType.Information, METMessageButtons.Okay);
+                METMessageBox.Show(this, "MET", "File on disk matches file in memory, data was not refreshed.",
+                    METMessageType.Information, METMessageButtons.Okay);
                 return;
             }
 
@@ -388,7 +393,8 @@ namespace Mac_EFI_Toolkit
             if (string.IsNullOrEmpty(FWBase.LoadedBinaryPath))
             {
                 // Binary path is null or empty
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -401,7 +407,8 @@ namespace Mac_EFI_Toolkit
             // Fsys store was not found by the firmware parser
             if (FWBase.FsysStoreData.FsysBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -447,7 +454,8 @@ namespace Mac_EFI_Toolkit
                 // The build failed flag was set
                 if (buildFailed)
                 {
-                    DialogResult failResult = METMessageBox.Show(this, "Error", "Fsys patching failed. Open the log?", METMessageType.Error, METMessageButtons.YesNo);
+                    DialogResult failResult = METMessageBox.Show(this, "Error", "Fsys patching failed. Open the log?",
+                        METMessageType.Error, METMessageButtons.YesNo);
 
                     if (failResult == DialogResult.Yes)
                     {
@@ -458,7 +466,8 @@ namespace Mac_EFI_Toolkit
                 }
 
                 // Ask if user wants to open the repaired file
-                DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?", METMessageType.Information, METMessageButtons.YesNo);
+                DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?",
+                    METMessageType.Information, METMessageButtons.YesNo);
 
                 if (result == DialogResult.Yes)
                 {
@@ -472,7 +481,8 @@ namespace Mac_EFI_Toolkit
             // Fsys store bytes were null
             if (FWBase.FsysStoreData.FsysBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -485,7 +495,8 @@ namespace Mac_EFI_Toolkit
                 // Directory creation failed
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", METMessageType.Error, METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.",
+                        METMessageType.Error, METMessageButtons.Okay);
                 }
             }
 
@@ -508,11 +519,13 @@ namespace Mac_EFI_Toolkit
                 // Save the Fsys stores bytes to disk
                 if (FileUtils.WriteAllBytesEx(fsysPath, FWBase.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
                 {
-                    METMessageBox.Show(this, "MET", $"Fsys export successful:\r\n'{fsysPath.Replace(" ", Chars.NBSPACE)}'", METMessageType.Information, METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", $"Fsys export successful:\r\n'{fsysPath.Replace(" ", Chars.NBSPACE)}'",
+                        METMessageType.Information, METMessageButtons.Okay);
                     return;
                 }
 
-                METMessageBox.Show(this, "Error", "Fsys export failed.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "Fsys export failed.",
+                    METMessageType.Error, METMessageButtons.Okay);
             }
         }
 
@@ -522,7 +535,8 @@ namespace Mac_EFI_Toolkit
             if (FWBase.ROMInfoSectionData.SectionExists == false)
             {
                 // ROM Information section does not exist
-                METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -541,7 +555,8 @@ namespace Mac_EFI_Toolkit
         {
             if (Descriptor.MeBase == 0 || Descriptor.MeLimit == 0)
             {
-                METMessageBox.Show(this, "Error", "Management Engine base or limit not found.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "Management Engine base or limit not found.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -554,7 +569,8 @@ namespace Mac_EFI_Toolkit
                 // Directory creation failed
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "Error", "Failed to create the ME region directory.", METMessageType.Error, METMessageButtons.Okay);
+                    METMessageBox.Show(this, "Error", "Failed to create the ME region directory.",
+                        METMessageType.Error, METMessageButtons.Okay);
                 }
             }
 
@@ -578,11 +594,13 @@ namespace Mac_EFI_Toolkit
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
-                    METMessageBox.Show(this, "MET", $"ME export successful:\r\n'{mePath.Replace(" ", Chars.NBSPACE)}'", METMessageType.Information, METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", $"ME export successful:\r\n'{mePath.Replace(" ", Chars.NBSPACE)}'",
+                        METMessageType.Information, METMessageButtons.Okay);
                     return;
                 }
 
-                METMessageBox.Show(this, "Error", $"ME export failed.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", $"ME export failed.",
+                    METMessageType.Error, METMessageButtons.Okay);
             }
         }
         #endregion
@@ -601,7 +619,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The builds folder has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "MET", "The builds folder has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void openFsysDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -612,7 +631,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The Fsys folder has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "MET", "The Fsys folder has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void openMeRegionDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -623,7 +643,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The ME folder has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "MET", "The ME folder has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -634,7 +655,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "File Information", "The log file has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "File Information", "The log file has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void createADebugLogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -861,13 +883,12 @@ namespace Mac_EFI_Toolkit
         {
             if (FWBase.FsysStoreData.CrcString != null)
             {
-                lblFsysCrc.Text = $"{FWBase.FsysStoreData.CrcString}h";
+                lblFsysCrc.Text = $"CRC32: {FWBase.FsysStoreData.CrcString}h";
                 lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
             }
             else
             {
                 lblFsysCrc.Text = "N/A";
-                lblFsysCrc.ForeColor = Color.White;
             }
         }
 
@@ -903,8 +924,8 @@ namespace Mac_EFI_Toolkit
             label.Text = text;
 
             Color foreColor = (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
-                ? Colours.WARNING_ORANGE
-                : (storeData.PrimaryStoreBase != -1 ? Colours.COMPLETE_GREEN : Colours.DISABLED_TEXT);
+                ? Colours.COMPLETE_GREEN
+                : (storeData.PrimaryStoreBase != -1 ? Color.White : Colours.DISABLED_TEXT);
 
             label.ForeColor = foreColor;
         }
@@ -1300,7 +1321,8 @@ namespace Mac_EFI_Toolkit
             if (fileInfo.Length < FWBase.MIN_IMAGE_SIZE) // 1048576 bytes
             {
                 // Show a warning message if the file is too small
-                METMessageBox.Show(this, "Warning", "The selected file is too small and will not be loaded.", METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Warning", "The selected file is too small and will not be loaded.",
+                    METMessageType.Warning, METMessageButtons.Okay);
                 return false;
             }
 
@@ -1308,7 +1330,8 @@ namespace Mac_EFI_Toolkit
             if (fileInfo.Length > FWBase.MAX_IMAGE_SIZE) // 33554432 bytes
             {
                 // Show a warning message if the file is too large
-                METMessageBox.Show(this, "Warning", "The selected file is too large and will not be loaded.", METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Warning", "The selected file is too large and will not be loaded.",
+                    METMessageType.Warning, METMessageButtons.Okay);
                 return false;
             }
 
@@ -1328,7 +1351,8 @@ namespace Mac_EFI_Toolkit
             if (!Descriptor.DescriptorMode)
             {
                 // Show a warning message if the binary does not have a valid flash descriptor
-                METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.", METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.",
+                    METMessageType.Warning, METMessageButtons.Okay);
                 return false;
             }
 
