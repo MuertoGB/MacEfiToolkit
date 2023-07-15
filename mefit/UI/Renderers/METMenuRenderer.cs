@@ -12,8 +12,8 @@ namespace Mac_EFI_Toolkit.UI.Renderers
 {
     class METMenuRenderer : ToolStripRenderer
     {
-        private Color BorderColor = Color.FromArgb(80, 80, 80);
-        private Color ItemHoveredColor = Color.FromArgb(120, 100, 100, 100);
+        private readonly Color BorderColor = Color.FromArgb(80, 80, 80);
+        private readonly Color ItemHoverColor = Color.FromArgb(60,60,60);
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
@@ -30,16 +30,16 @@ namespace Mac_EFI_Toolkit.UI.Renderers
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
             Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
-            Rectangle highlightRect = new Rectangle(rect.X + 3, rect.Y + 2, rect.Width - 6, rect.Height - 4);
+            Rectangle rectItemBorder = new Rectangle(rect.X + 3, rect.Y + 2, rect.Width - 6, rect.Height - 4);
 
-            Color clr = e.Item.Selected ? ItemHoveredColor : Color.Transparent;
+            Color clr = e.Item.Selected ? ItemHoverColor : Color.Transparent;
             using (SolidBrush br = new SolidBrush(clr))
-            using (Pen pen = new Pen(Color.FromArgb(ItemHoveredColor.R, ItemHoveredColor.G, ItemHoveredColor.B)))
+            using (Pen pen = new Pen(BorderColor))
             {
                 if (e.Item.Selected)
                 {
-                    e.Graphics.FillRectangle(br, highlightRect);
-                    e.Graphics.DrawRectangle(pen, highlightRect);
+                    e.Graphics.FillRectangle(br, rectItemBorder);
+                    e.Graphics.DrawRectangle(pen, rectItemBorder);
                 }
             }
         }
@@ -53,18 +53,19 @@ namespace Mac_EFI_Toolkit.UI.Renderers
             else
             {
                 Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
+
                 int y = rect.Bottom - (rect.Height / 2) - 1;
                 int left = rect.Left + 5;
                 int right = rect.Right - 5;
 
-                using (SolidBrush br = new SolidBrush(Color.Transparent))
+                using (SolidBrush brush = new SolidBrush(Color.Transparent))
                 {
-                    e.Graphics.FillRectangle(br, rect);
+                    e.Graphics.FillRectangle(brush, rect);
                 }
 
-                using (SolidBrush sb = new SolidBrush(BorderColor))
+                using (SolidBrush brush = new SolidBrush(BorderColor))
                 {
-                    e.Graphics.DrawLine(new Pen(sb), left, y, right, y);
+                    e.Graphics.DrawLine(new Pen(brush), left, y, right, y);
                 }
             }
         }

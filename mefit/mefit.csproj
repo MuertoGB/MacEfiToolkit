@@ -108,6 +108,9 @@
     <Compile Include="UI\Chars.cs" />
     <Compile Include="UI\Enums.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
+    <Compile Include="UI\METContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\METLabel.cs">
       <SubType>Component</SubType>
     </Compile>

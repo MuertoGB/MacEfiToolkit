@@ -7,7 +7,6 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.UI.Renderers;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using Mac_EFI_Toolkit.WinForms;
@@ -77,9 +76,6 @@ namespace Mac_EFI_Toolkit
 
             // Set mouse move event handlers
             SetMouseMoveEventHandlers();
-
-            // Set context menu renderers
-            SetContextMenuRenderers();
 
             // Set button properties (font and text)
             SetButtonProperties();
@@ -873,7 +869,7 @@ namespace Mac_EFI_Toolkit
         private void UpdateApfsCapableLabel()
         {
 
-            switch(FWBase.IsApfsCapable)
+            switch (FWBase.IsApfsCapable)
             {
                 case ApfsCapable.Unknown:
                     lblApfsCapable.Text = "Unknown";
@@ -974,15 +970,6 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region UI Events
-        private void SetContextMenuRenderers()
-        {
-            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication, cmsCopy };
-            foreach (ContextMenuStrip menu in menus)
-            {
-                menu.Renderer = new METMenuRenderer();
-            }
-        }
-
         internal void SetHalfOpacity()
         {
             Opacity = 0.5;
