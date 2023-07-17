@@ -47,6 +47,7 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 **Mac Specific:**
 - Detect EFI password lock.
 - Check APFS capability.
+- View the firmware version.
 - View Apple ROM section information.
 - Derive Configuration Code from the Hardware Configuration (hwc).
 
