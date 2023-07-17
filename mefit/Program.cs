@@ -33,13 +33,16 @@ namespace Mac_EFI_Toolkit
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230717.1517";
+        internal static readonly string Build = "230717.1725";
         internal static readonly string Channel = "Dev";
     }
 
     internal struct METUrl
     {
+        internal static string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
+        internal static string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
         internal static string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal static string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
         internal static string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
     }
     #endregion

@@ -686,6 +686,21 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void changelogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(METUrl.Changelog);
+        }
+
+        private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(METUrl.Homepage);
+        }
+
+        private void usageManualToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(METUrl.Manual);
+        }
+
         private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
@@ -737,9 +752,19 @@ namespace Mac_EFI_Toolkit
             Clipboard.SetText(FWBase.FsysStoreData.CrcString);
         }
 
+        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.FsysStoreData.SON);
+        }
+
         private void efiVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(FWBase.FirmwareVersion);
+        }
+
+        private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.PDRSectionData.BoardId);
         }
 
         private void fitVersionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -750,16 +775,6 @@ namespace Mac_EFI_Toolkit
         private void meVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(FWBase.MeVersion);
-        }
-
-        private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(FWBase.PDRSectionData.BoardId);
-        }
-
-        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(FWBase.FsysStoreData.SON);
         }
         #endregion
 
@@ -1056,11 +1071,11 @@ namespace Mac_EFI_Toolkit
             serialToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.Serial);
             hwcToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.HWC);
             fsysCRC32ToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.CrcString);
+            orderNoToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.SON);
             efiVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FirmwareVersion);
+            boardIDToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.PDRSectionData.BoardId);
             fitVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FitVersion);
             meVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.MeVersion);
-            boardIDToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.PDRSectionData.BoardId);
-            orderNoToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.SON);
         }
 
         private bool IsStringNotEmpty(string value)
@@ -1075,7 +1090,7 @@ namespace Mac_EFI_Toolkit
                 new { Button = cmdMenu, Font = Program.FONT_MDL2_REG_14, Text = Chars.SHOW },
                 new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS },
                 new { Button = cmdCopy, Font =  Program.FONT_MDL2_REG_12, Text = Chars.COPY },
-                new { Button = cmdEdit, Font =  Program.FONT_MDL2_REG_12, Text = Chars.TOOLS },
+                new { Button = cmdEdit, Font =  Program.FONT_MDL2_REG_12, Text = Chars.COMPONENT },
                 new { Button = cmdBuildClean, Font =  Program.FONT_MDL2_REG_12, Text = Chars.USB },
                 new { Button = cmdNavigate, Font = Program.FONT_MDL2_REG_10, Text = Chars.FILE_EXPLORER },
                 new { Button = cmdReload, Font = Program.FONT_MDL2_REG_10, Text = Chars.REFRESH },

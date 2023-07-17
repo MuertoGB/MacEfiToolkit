@@ -17,6 +17,7 @@
 
 #### New:
 - Revised the method for determining the 'EFI Version' data in the main window. If the `AppleRomInformationSection` does not provide an EFI Version, the application will now generate a version number that closely resembles the one displayed in the MacOS 'Hardware Overview' System Firmware Version.
+- Implemented the addition of links to the Github changelog, homepage, and manual within the main menu of the application's main window. 
 
 #### Enhancements:
 - User Interface and text improvements. Some elements in the main window have been reorganized.
