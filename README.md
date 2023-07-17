@@ -17,9 +17,9 @@ Mac EFI Toolkit
 
 ## About
 
-Mac EFI Toolkit, or 'mefit', is a valuable tool designed to aid technicians in repairing Mac BIOS/EFI files. It provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if hidden in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes.
+Mac EFI Toolkit, or 'mefit', is a valuable tool designed to aid technicians in repairing Mac BIOS/EFI files. It provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if hidden in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
 
-In terms of editing, mefit allows users to replace the System Serial Number (SSN) with automatic Hardware Configuration (HWC) calculation and CRC32 masking. It also supports transplanting of exported Fsys stores with automatic CRC32 masking, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password.
+In terms of editing, mefit allows users to replace the System Serial Number (SSN) with automatic Hardware Configuration (HWC) matching and CRC32 masking. It also supports transplanting of exported Fsys stores with automatic CRC32 masking, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password.
 
 >🛈 **Access to some features requires accepting the editing terms.**
 
@@ -80,7 +80,7 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 13th July, 2023 | Yes | Stable |
+|[1.0.1](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Yes | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
