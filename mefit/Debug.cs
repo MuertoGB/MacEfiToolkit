@@ -10,6 +10,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
 
@@ -17,6 +18,28 @@ namespace Mac_EFI_Toolkit
 {
     internal class Debug
     {
+
+        #region Functions
+        internal static bool IsDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
+        }
+
+        internal static bool IsRunAsAdmin()
+        {
+            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        internal static string BitnessMode()
+        {
+            return IntPtr.Size == 8 ? "x64" : "x86";
+        }
+        #endregion
+
         internal static string GenerateDebugReport(Exception e)
         {
             StringBuilder builder = new StringBuilder();
@@ -28,9 +51,9 @@ namespace Mac_EFI_Toolkit
             builder.AppendLine($"Name:     {Application.ProductName}");
             builder.AppendLine($"Version:  {Application.ProductVersion}.{METVersion.Build}");
             builder.AppendLine($"Channel:  {METVersion.Channel}");
-            builder.AppendLine($"Mode:     {Program.BitnessMode()}");
-            builder.AppendLine($"Debug:    {Program.IsDebugMode()}");
-            builder.AppendLine($"Elevated: {Program.IsRunAsAdmin()}");
+            builder.AppendLine($"Mode:     {BitnessMode()}");
+            builder.AppendLine($"Debug:    {IsDebugMode()}");
+            builder.AppendLine($"Elevated: {IsRunAsAdmin()}");
             builder.AppendLine($"SHA256:   {FileUtils.GetSha256Digest(appBytes)}\r\n");
 
             builder.AppendLine("<-- Operating System -->\r\n");

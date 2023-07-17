@@ -5,18 +5,14 @@
 // Released under the GNU GLP v3.0
 // MET uses embedded font resource "Segoe MDL2 Assets" which is copyright Microsoft Corp.
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Text;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
@@ -37,30 +33,43 @@ namespace Mac_EFI_Toolkit
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230713.1620";
+        internal static readonly string Build = "230717.2105";
         internal static readonly string Channel = "Stable";
     }
 
     internal struct METUrl
     {
+        internal static string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
+        internal static string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
         internal static string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal static string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
         internal static string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+    }
+    #endregion
+
+    #region Enum
+    internal enum MetAction
+    {
+        Restart,
+        Exit
     }
     #endregion
 
     static class Program
     {
+
+        #region Internal Members
         internal static string draggedFilePath = string.Empty;
         internal static string lastBuildPath = string.Empty;
         internal static bool openLastBuild = false;
         internal static System.Threading.Timer memoryTimer;
         internal static mainWindow mWindow;
 
-        #region Private Members
-        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
-        private static NativeMethods.LowLevelKeyboardProc _kbProc = HookCallback;
-        private static IntPtr _hookId = IntPtr.Zero;
-        private static GCHandle _hookHandle;
+        internal static Font FONT_MDL2_REG_20;
+        internal static Font FONT_MDL2_REG_14;
+        internal static Font FONT_MDL2_REG_12;
+        internal static Font FONT_MDL2_REG_10;
+        internal static Font FONT_MDL2_REG_9;
         #endregion
 
         #region Const Members
@@ -69,19 +78,6 @@ namespace Mac_EFI_Toolkit
         internal const int WS_MINIMIZEBOX = 0x20000;
         internal const int CS_DBLCLKS = 0x8;
         internal const int CS_DROP = 0x20000;
-        private const int WH_KEYBOARD_LL = 13;
-        private const int WM_KEYDOWN = 0x0100;
-        private const int VK_UP = 0x26;
-        private const int VK_LWIN = 0x5B;
-        private const int KEY_PRESSED = 0x8000;
-        #endregion
-
-        #region Internal Fonts
-        internal static Font FONT_MDL2_REG_20;
-        internal static Font FONT_MDL2_REG_14;
-        internal static Font FONT_MDL2_REG_12;
-        internal static Font FONT_MDL2_REG_10;
-        internal static Font FONT_MDL2_REG_9;
         #endregion
 
         #region Main Entry Point
@@ -105,11 +101,11 @@ namespace Mac_EFI_Toolkit
 
             if (fontData != null)
             {
-                FONT_MDL2_REG_9 = new Font(LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
-                FONT_MDL2_REG_10 = new Font(LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
-                FONT_MDL2_REG_12 = new Font(LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
-                FONT_MDL2_REG_14 = new Font(LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
-                FONT_MDL2_REG_20 = new Font(LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
+                FONT_MDL2_REG_9 = new Font(FontResolver.LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
+                FONT_MDL2_REG_10 = new Font(FontResolver.LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
+                FONT_MDL2_REG_12 = new Font(FontResolver.LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
+                FONT_MDL2_REG_14 = new Font(FontResolver.LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
+                FONT_MDL2_REG_20 = new Font(FontResolver.LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
             }
             else
             {
@@ -124,7 +120,7 @@ namespace Mac_EFI_Toolkit
             Application.ApplicationExit += OnExiting;
 
             // Register low level keyboard hook for preventing WinKey+Up.
-            HookKeyboard();
+            KeyboardHookManager.Hook();
 
             // Get dragged filepath
             draggedFilePath = GetDraggedFilePath(args);
@@ -167,96 +163,7 @@ namespace Mac_EFI_Toolkit
             memoryTimer.Dispose();
 
             // Unhook the low level keyboard hook
-            UnhookKeyboard();
-        }
-        #endregion
-
-        #region Debug
-        internal static bool IsDebugMode()
-        {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
-        }
-
-        internal static bool IsRunAsAdmin()
-        {
-            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
-        }
-
-        internal static string BitnessMode()
-        {
-            return IntPtr.Size == 8 ? "x64" : "x86";
-        }
-        #endregion
-
-        #region Keyboard Hook
-        // Register the keyboard hook.
-        internal static IntPtr SetHook(NativeMethods.LowLevelKeyboardProc kbProc)
-        {
-            using (Process process = Process.GetCurrentProcess())
-            using (ProcessModule module = process.MainModule)
-            {
-                return NativeMethods.SetWindowsHookExA(WH_KEYBOARD_LL, kbProc, NativeMethods.GetModuleHandleA(module.ModuleName), 0);
-            }
-        }
-
-        // Define the keyboard hook callback function
-        private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
-        {
-            if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
-            {
-                int vkCode = Marshal.ReadInt32(lParam);
-                if (vkCode == VK_UP && (NativeMethods.GetKeyState(VK_LWIN) & KEY_PRESSED) != 0)
-                {
-                    // Disable the Windows+Up shortcut by not passing it to the operating system
-                    return (IntPtr)1;
-                }
-            }
-
-            return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
-        }
-
-        private static void HookKeyboard()
-        {
-            _kbProc = HookCallback;
-            _hookHandle = GCHandle.Alloc(_kbProc);
-            _hookId = SetHook(_kbProc);
-        }
-
-        private static void UnhookKeyboard()
-        {
-            NativeMethods.UnhookWindowsHookEx(_hookId);
-            _hookHandle.Free();
-        }
-        #endregion
-
-        #region Font Resolver
-        internal static FontFamily LoadFontFromResource(byte[] fontData)
-        {
-            IntPtr pFileView = Marshal.AllocCoTaskMem(fontData.Length);
-            Marshal.Copy(fontData, 0, pFileView, fontData.Length);
-            try
-            {
-                uint pNumFonts = 0;
-                NativeMethods.AddFontMemResourceEx(pFileView, (uint)fontData.Length, IntPtr.Zero, ref pNumFonts);
-                _privateFontCollection.AddMemoryFont(pFileView, fontData.Length);
-                return _privateFontCollection.Families.Last();
-            }
-            catch (Exception e)
-            {
-                Logger.WriteExceptionToAppLog(e);
-                return null;
-            }
-            finally
-            {
-                if (pFileView != IntPtr.Zero)
-                {
-                    Marshal.FreeCoTaskMem(pFileView);
-                }
-            }
+            KeyboardHookManager.Unhook();
         }
         #endregion
 
@@ -312,20 +219,56 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Restart MET 
-        internal static void RestartMet(Form owner)
+        #region MET Action
+        internal static void PerformMetAction(Form owner, MetAction action)
         {
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
-                Restart();
+                if (action == MetAction.Restart)
+                {
+                    Restart();
+                }
+                else if (action == MetAction.Exit)
+                {
+                    Application.Exit();
+                }
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(owner, "Restart application", "Are you sure you want to restart the application?", METMessageType.Question, METMessageButtons.YesNo);
-            if (result == DialogResult.Yes)
+            string title, message;
+
+            if (action == MetAction.Restart)
             {
-                Restart();
+                title = "Restart application";
+                message = "Are you sure you want to restart the application?";
             }
+            else if (action == MetAction.Exit)
+            {
+                title = "Exit application";
+                message = "Are you sure you want to quit the application?";
+            }
+            else
+            {
+                return;
+            }
+
+            if (ShowConfirmationDialog(owner, title, message))
+            {
+                if (action == MetAction.Restart)
+                {
+                    Restart();
+                }
+                else if (action == MetAction.Exit)
+                {
+                    Application.Exit();
+                }
+            }
+        }
+
+        private static bool ShowConfirmationDialog(Form owner, string title, string message)
+        {
+            DialogResult result = METMessageBox.Show(owner, title, message, METMessageType.Question, METMessageButtons.YesNo);
+            return result == DialogResult.Yes;
         }
 
         private static void Restart()
@@ -338,25 +281,8 @@ namespace Mac_EFI_Toolkit
             catch (Win32Exception)
             {
                 // Do nothing.
-                // The application throws and unhandled exception when a user cancels the UAC prompt.
+                // The application throws an unhandled exception when a user cancels the UAC prompt.
                 return;
-            }
-        }
-        #endregion
-
-        #region Exit MET
-        internal static void ExitMet(Form owner)
-        {
-            if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
-            {
-                Application.Exit();
-                return;
-            }
-
-            DialogResult result = METMessageBox.Show(owner, "Exit application", "Are you sure you want to quit the application?", METMessageType.Question, METMessageButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {
-                Application.Exit();
             }
         }
         #endregion

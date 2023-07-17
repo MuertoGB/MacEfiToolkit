@@ -127,23 +127,23 @@ namespace Mac_EFI_Toolkit.Common
             Array.Copy(DescriptorBytes, 0, HeaderBytes, 0, Marshal.SizeOf(typeof(DescriptorHeader)));
             Header = Helper.DeserializeHeader<DescriptorHeader>(HeaderBytes);
 
-            // Deserialize the flash map
-            byte[] MapBytes = new byte[Marshal.SizeOf(typeof(DescriptorMap))];
-            Array.Copy(DescriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)), MapBytes, 0, Marshal.SizeOf(typeof(DescriptorMap)));
-            Map = Helper.DeserializeHeader<DescriptorMap>(MapBytes);
-
-            // Deserialize the regions data
-            byte[] RegionBytes = new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
-            int RegionBase = Map.RegionBase << 4; // Left shift right four bits: Example: 04h: 0000 0100 << 40h: 0100 0000
-            Array.Copy(DescriptorBytes, RegionBase, RegionBytes, 0, Marshal.SizeOf(typeof(DescriptorRegions)));
-            Regions = Helper.DeserializeHeader<DescriptorRegions>(RegionBytes);
-
             // Match flash descriptor tag (5AA5F00F)
             DescriptorMode = Header.Tag.SequenceEqual(FLASH_DESC_SIGNATURE);
 
             // Descriptor mode
             if (DescriptorMode)
             {
+                // Deserialize the flash map
+                byte[] MapBytes = new byte[Marshal.SizeOf(typeof(DescriptorMap))];
+                Array.Copy(DescriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)), MapBytes, 0, Marshal.SizeOf(typeof(DescriptorMap)));
+                Map = Helper.DeserializeHeader<DescriptorMap>(MapBytes);
+
+                // Deserialize the regions data
+                byte[] RegionBytes = new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
+                int RegionBase = Map.RegionBase << 4; // Left shift right four bits: Example: 04h: 0000 0100 << 40h: 0100 0000
+                Array.Copy(DescriptorBytes, RegionBase, RegionBytes, 0, Marshal.SizeOf(typeof(DescriptorRegions)));
+                Regions = Helper.DeserializeHeader<DescriptorRegions>(RegionBytes);
+
                 // BIOS base, size, limit
                 BiosBase = CalculateRegionBase(Regions.BiosBase);
                 if (BiosBase > sourceBytes.Length) BiosBase = 0;

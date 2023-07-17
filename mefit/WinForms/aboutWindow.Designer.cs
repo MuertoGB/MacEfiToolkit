@@ -387,7 +387,6 @@ namespace Mac_EFI_Toolkit.WinForms
         internal System.Windows.Forms.Label lblName;
         internal System.Windows.Forms.PictureBox pbxLogo;
         private System.Windows.Forms.Label lblInfo;
-        private System.Windows.Forms.Panel pnlSeperator;
         private System.Windows.Forms.TableLayoutPanel tlpTop;
         internal System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Panel pnlSplit;
@@ -396,5 +395,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Button cmdIssues;
         private System.Windows.Forms.Button cmdEmail;
         private System.Windows.Forms.Button cmdSource;
+        private System.Windows.Forms.Panel pnlSeperator;
     }
 }

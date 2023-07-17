@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <data>
  <MET>
-    <VersionString>1.0.0</VersionString>
-    <Build>1.0.0.230713.1620</Build>
-    <ReleaseDate>13.07.2023</ReleaseDate>
-    <Channel>stable</Channel>
-    <SHA256>6d765022a195d763c9a25b7ed119ca3b9c4afa3883426f38d6e00349a3503911</SHA256>
+    <VersionString>1.0.1</VersionString>
+    <Build>1.0.1.230717.2105</Build>
+    <ReleaseDate>17.07.2023</ReleaseDate>
+    <Channel>Stable</Channel>
+    <SHA256>de82e52b5518c05701a73be96cb7476ff0b30154c563111c29ab489dc154533e</SHA256>
  </MET>
 </data>

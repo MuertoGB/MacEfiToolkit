@@ -143,6 +143,8 @@ namespace Mac_EFI_Toolkit.Utils
                 letters = "MacMini";
             else if (model.Contains("MP"))
                 letters = "MacPro";
+            else if (model.Contains("XS"))
+                letters = "Xserve";
 
             if (numbers.Length == 2)
                 numbers = $"{numbers[0]},{numbers[1]}";
@@ -151,6 +153,50 @@ namespace Mac_EFI_Toolkit.Utils
 
             // Return the generated full model, otherwise what was passed in will be returned.
             return $"{letters}{numbers}";
+        }
+
+        internal static string GetFirmwareVersion()
+        {
+            if (FWBase.ROMInfoSectionData.EfiVersion != null)
+            {
+                return FWBase.ROMInfoSectionData.EfiVersion;
+            }
+
+            string modelPart = FWBase.EFISectionData.ModelPart;
+            string majorPart = FWBase.EFISectionData.MajorPart;
+            string minorPart = FWBase.EFISectionData.MinorPart;
+
+            string romVersion = FWBase.ROMInfoSectionData.RomVersion;
+            string[] ignoredVersions = { "F000_B00", "Official Build" };
+
+            if (!string.IsNullOrWhiteSpace(romVersion) && !ignoredVersions.Contains(romVersion, StringComparer.OrdinalIgnoreCase))
+            {
+                return $"{modelPart}.{romVersion.Replace("_", ".")}";
+            }
+
+            string biosId = FWBase.ROMInfoSectionData.BiosId;
+            string notSet = "F000.B00";
+
+            if (!string.IsNullOrWhiteSpace(biosId) && biosId.IndexOf(notSet, StringComparison.OrdinalIgnoreCase) == -1)
+            {
+                string[] parts = biosId.Split('.');
+                if (parts.Length != 5)
+                {
+                    return GetFormattedEfiVersion(parts[0], parts[2], parts[3]);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(modelPart) && !string.IsNullOrWhiteSpace(majorPart) && !string.IsNullOrWhiteSpace(minorPart))
+            {
+                return GetFormattedEfiVersion(modelPart, majorPart, minorPart);
+            }
+
+            return "N/A";
+        }
+
+        private static string GetFormattedEfiVersion(string modelPart, string majorPart, string minorPart)
+        {
+            return $"{modelPart}.{majorPart}.{minorPart}";
         }
 
     }

@@ -80,6 +80,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Descriptor.cs" />
+    <Compile Include="Common\FontResolver.cs" />
+    <Compile Include="Common\KeyboardHookManager.cs" />
     <Compile Include="Common\ToInt24.cs" />
     <Compile Include="Common\FSGuids.cs" />
     <Compile Include="Common\FWBase.cs" />
@@ -108,6 +110,9 @@
     <Compile Include="UI\Chars.cs" />
     <Compile Include="UI\Enums.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
+    <Compile Include="UI\METContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\METLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -220,6 +225,7 @@
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\folder.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Assets\editorterms.txt" />
     <Content Include="Assets\met.ico" />

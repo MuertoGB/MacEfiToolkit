@@ -7,7 +7,6 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.UI.Renderers;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using Mac_EFI_Toolkit.WinForms;
@@ -61,16 +60,7 @@ namespace Mac_EFI_Toolkit
             // Set font for lblEfiLock
             lblEfiLock.Font = Program.FONT_MDL2_REG_9;
 
-            // Recalculate tlpMain's height based on each row height - the last row
-            int totalHeight = 0;
-
-            for (int i = 0; i < tlpMain.RowStyles.Count - 1; i++)
-            {
-                RowStyle rowStyle = tlpMain.RowStyles[i];
-                totalHeight += (int)rowStyle.Height;
-            }
-
-            tlpMain.Height = totalHeight;
+            InterfaceUtils.SetTableLayoutPanelHeight(tlpMain);
 
             // Set tip handlers for controls
             SetTipHandlers();
@@ -78,11 +68,11 @@ namespace Mac_EFI_Toolkit
             // Set mouse move event handlers
             SetMouseMoveEventHandlers();
 
-            // Set context menu renderers
-            SetContextMenuRenderers();
-
             // Set button properties (font and text)
             SetButtonProperties();
+
+            // Not ready yet
+            cmdBuildClean.Hide();
         }
         #endregion
 
@@ -126,7 +116,7 @@ namespace Mac_EFI_Toolkit
                 }
 
                 // Show confirmation dialog
-                Program.ExitMet(this);
+                Program.PerformMetAction(this, MetAction.Exit);
             }
         }
 
@@ -186,7 +176,7 @@ namespace Mac_EFI_Toolkit
                 switch (e.KeyCode)
                 {
                     case Keys.O:
-                        cmdOpenBin.PerformClick();
+                        cmdOpen.PerformClick();
                         break;
                     case Keys.R:
                         cmdReset.PerformClick();
@@ -264,7 +254,7 @@ namespace Mac_EFI_Toolkit
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e)
         {
-            Program.ExitMet(this);
+            Program.PerformMetAction(this, MetAction.Exit);
         }
 
         private void cmdMin_Click(object sender, EventArgs e)
@@ -278,7 +268,7 @@ namespace Mac_EFI_Toolkit
             ShowContextMenu(control, cmsMainMenu);
         }
 
-        private void cmdOpenBin_Click(object sender, EventArgs e)
+        private void cmdOpen_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog
             {
@@ -302,7 +292,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(this, "Reset", "This will unload the firmware and data.\r\nAre you sure you want to reset?", METMessageType.Warning, METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(this, "Reset", "This will unload the firmware and all associated data, are you sure you want to reset?",
+                METMessageType.Warning, METMessageButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {
@@ -315,7 +306,8 @@ namespace Mac_EFI_Toolkit
         {
             if (FWBase.LoadedBinaryBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.", METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.",
+                    METMessageType.Warning, METMessageButtons.Okay);
                 return;
             }
 
@@ -354,7 +346,8 @@ namespace Mac_EFI_Toolkit
 
             if (FWBase.FsysStoreData.Serial == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.Serial data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FsysSectionData.Serial data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -367,7 +360,8 @@ namespace Mac_EFI_Toolkit
             if (!File.Exists(FWBase.LoadedBinaryPath))
             {
                 // Loaded binary not exist
-                METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -378,7 +372,8 @@ namespace Mac_EFI_Toolkit
             if (BinaryUtils.ByteArraysMatch(fileBytes, FWBase.LoadedBinaryBytes))
             {
                 // Loaded binaries match
-                METMessageBox.Show(this, "MET", "File on disk matches file in memory, data was not refreshed.", METMessageType.Information, METMessageButtons.Okay);
+                METMessageBox.Show(this, "MET", "File on disk matches file in memory, data was not refreshed.",
+                    METMessageType.Information, METMessageButtons.Okay);
                 return;
             }
 
@@ -392,7 +387,8 @@ namespace Mac_EFI_Toolkit
             if (string.IsNullOrEmpty(FWBase.LoadedBinaryPath))
             {
                 // Binary path is null or empty
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -405,7 +401,8 @@ namespace Mac_EFI_Toolkit
             // Fsys store was not found by the firmware parser
             if (FWBase.FsysStoreData.FsysBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -451,7 +448,8 @@ namespace Mac_EFI_Toolkit
                 // The build failed flag was set
                 if (buildFailed)
                 {
-                    DialogResult failResult = METMessageBox.Show(this, "Error", "Fsys patching failed. Open the log?", METMessageType.Error, METMessageButtons.YesNo);
+                    DialogResult failResult = METMessageBox.Show(this, "Error", "Fsys patching failed. Open the log?",
+                        METMessageType.Error, METMessageButtons.YesNo);
 
                     if (failResult == DialogResult.Yes)
                     {
@@ -462,7 +460,8 @@ namespace Mac_EFI_Toolkit
                 }
 
                 // Ask if user wants to open the repaired file
-                DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?", METMessageType.Information, METMessageButtons.YesNo);
+                DialogResult result = METMessageBox.Show(this, "File Saved", "New file saved. Would you like to load the new file?",
+                    METMessageType.Information, METMessageButtons.YesNo);
 
                 if (result == DialogResult.Yes)
                 {
@@ -476,7 +475,8 @@ namespace Mac_EFI_Toolkit
             // Fsys store bytes were null
             if (FWBase.FsysStoreData.FsysBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -489,7 +489,8 @@ namespace Mac_EFI_Toolkit
                 // Directory creation failed
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.", METMessageType.Error, METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.",
+                        METMessageType.Error, METMessageButtons.Okay);
                 }
             }
 
@@ -512,11 +513,13 @@ namespace Mac_EFI_Toolkit
                 // Save the Fsys stores bytes to disk
                 if (FileUtils.WriteAllBytesEx(fsysPath, FWBase.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
                 {
-                    METMessageBox.Show(this, "MET", $"Fsys export successful:\r\n'{fsysPath.Replace(" ", Chars.NBSPACE)}'", METMessageType.Information, METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", $"Fsys export successful:\r\n'{fsysPath.Replace(" ", Chars.NBSPACE)}'",
+                        METMessageType.Information, METMessageButtons.Okay);
                     return;
                 }
 
-                METMessageBox.Show(this, "Error", "Fsys export failed.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "Fsys export failed.",
+                    METMessageType.Error, METMessageButtons.Okay);
             }
         }
 
@@ -526,7 +529,8 @@ namespace Mac_EFI_Toolkit
             if (FWBase.ROMInfoSectionData.SectionExists == false)
             {
                 // ROM Information section does not exist
-                METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -545,7 +549,8 @@ namespace Mac_EFI_Toolkit
         {
             if (Descriptor.MeBase == 0 || Descriptor.MeLimit == 0)
             {
-                METMessageBox.Show(this, "Error", "Management Engine base or limit not found.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "Management Engine base or limit not found.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
@@ -558,7 +563,8 @@ namespace Mac_EFI_Toolkit
                 // Directory creation failed
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "Error", "Failed to create the ME region directory.", METMessageType.Error, METMessageButtons.Okay);
+                    METMessageBox.Show(this, "Error", "Failed to create the ME region directory.",
+                        METMessageType.Error, METMessageButtons.Okay);
                 }
             }
 
@@ -582,11 +588,13 @@ namespace Mac_EFI_Toolkit
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
-                    METMessageBox.Show(this, "MET", $"ME export successful:\r\n'{mePath.Replace(" ", Chars.NBSPACE)}'", METMessageType.Information, METMessageButtons.Okay);
+                    METMessageBox.Show(this, "MET", $"ME export successful:\r\n'{mePath.Replace(" ", Chars.NBSPACE)}'",
+                        METMessageType.Information, METMessageButtons.Okay);
                     return;
                 }
 
-                METMessageBox.Show(this, "Error", $"ME export failed.", METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", $"ME export failed.",
+                    METMessageType.Error, METMessageButtons.Okay);
             }
         }
         #endregion
@@ -605,7 +613,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The builds folder has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "MET", "The builds folder has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void openFsysDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -616,7 +625,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The Fsys folder has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "MET", "The Fsys folder has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void openMeRegionDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -627,7 +637,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The ME folder has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "MET", "The ME folder has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -638,7 +649,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            METMessageBox.Show(this, "File Information", "The log file has not been created yet.", METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(this, "File Information", "The log file has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
         }
 
         private void createADebugLogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -651,7 +663,7 @@ namespace Mac_EFI_Toolkit
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.RestartMet(this);
+            Program.PerformMetAction(this, MetAction.Restart);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -674,6 +686,21 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void changelogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(METUrl.Changelog);
+        }
+
+        private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(METUrl.Homepage);
+        }
+
+        private void usageManualToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(METUrl.Manual);
+        }
+
         private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             WindowState = FormWindowState.Minimized;
@@ -686,7 +713,7 @@ namespace Mac_EFI_Toolkit
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.ExitMet(this);
+            Program.PerformMetAction(this, MetAction.Exit);
         }
 
         private void sizeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -725,9 +752,19 @@ namespace Mac_EFI_Toolkit
             Clipboard.SetText(FWBase.FsysStoreData.CrcString);
         }
 
+        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.FsysStoreData.SON);
+        }
+
         private void efiVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(FWBase.ROMInfoSectionData.EfiVersion);
+            Clipboard.SetText(FWBase.FirmwareVersion);
+        }
+
+        private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(FWBase.PDRSectionData.BoardId);
         }
 
         private void fitVersionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -738,16 +775,6 @@ namespace Mac_EFI_Toolkit
         private void meVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(FWBase.MeVersion);
-        }
-
-        private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(FWBase.PDRSectionData.MacBoardId);
-        }
-
-        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Clipboard.SetText(FWBase.FsysStoreData.SON);
         }
         #endregion
 
@@ -782,16 +809,16 @@ namespace Mac_EFI_Toolkit
             UpdateFirmwareSerialNumber();
             UpdateHardwareConfigLabel();
             UpdateFsysLabel();
-            UpdateApfsCapableLabel();
+            UpdateOrderNumberLabel();
             UpdateEfiVersionLabel();
             UpdateNvramLabel(lblVssStore, FWBase.VssStoreData, "VSS");
             UpdateNvramLabel(lblSvsStore, FWBase.SvsStoreData, "SVS");
             UpdateNvramLabel(lblNssStore, FWBase.NssStoreData, "NSS");
             UpdateEfiLockLabel();
+            UpdateBoardIdLabel();
+            UpdateApfsCapableLabel();
             UpdateFitVersionLabel();
             UpdateIntelMeLabel();
-            UpdateBoardIdLabel();
-            UpdateOrderNumberLabel();
 
             // Apply DISABLED_TEXT color to N/A text labels
             ApplyNestedPanelLabelForeColor(tlpRom, Colours.DISABLED_TEXT);
@@ -815,9 +842,14 @@ namespace Mac_EFI_Toolkit
         {
             int fileSize = (int)FWBase.FileInfoData.FileLength;
             bool isValidSize = FileUtils.GetIsValidBinSize(fileSize);
+
             lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileSize);
-            lblFileSizeBytes.ForeColor = isValidSize ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
-            lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileSize)})";
+
+            if (!isValidSize)
+            {
+                lblFileSizeBytes.ForeColor = Colours.ERROR_RED;
+                lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileSize)})";
+            }
         }
 
         private void UpdateFileCrc32Label()
@@ -835,20 +867,20 @@ namespace Mac_EFI_Toolkit
             lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
         }
 
-        private void UpdateFirmwareSerialNumber()
-        {
-            lblSerialNumber.Text = FWBase.FsysStoreData.Serial ?? "N/A";
-        }
-
         private void UpdateModelLabel()
         {
-            lblModel.Text = $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.Model) ?? "N/A"}";
+            lblModel.Text = $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.ModelPart) ?? "N/A"}";
 
             // Load and append the config code asynchronously
             if (FWBase.FsysStoreData.HWC != null)
             {
                 AppendConfigCodeTextAsync(FWBase.FsysStoreData.HWC);
             }
+        }
+
+        private void UpdateFirmwareSerialNumber()
+        {
+            lblSerialNumber.Text = FWBase.FsysStoreData.Serial ?? "N/A";
         }
 
         private void UpdateHardwareConfigLabel()
@@ -860,43 +892,24 @@ namespace Mac_EFI_Toolkit
         {
             if (FWBase.FsysStoreData.CrcString != null)
             {
-                lblFsysCrc.Text = $"{FWBase.FsysStoreData.CrcString}h";
-                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
+                lblFsysCrc.Text = $"CRC32: {FWBase.FsysStoreData.CrcString}h";
+                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString,
+                    FWBase.FsysStoreData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
             }
             else
             {
                 lblFsysCrc.Text = "N/A";
-                lblFsysCrc.ForeColor = Color.White;
             }
         }
 
-        private void UpdateApfsCapableLabel()
+        private void UpdateOrderNumberLabel()
         {
-
-            switch(FWBase.IsApfsCapable)
-            {
-                case ApfsCapable.Unknown:
-                    lblApfsCapable.Text = "Unknown";
-                    lblApfsCapable.ForeColor = Colours.ERROR_RED;
-                    break;
-                case ApfsCapable.YesGuid:
-                    lblApfsCapable.Text = "Yes · DXE";
-                    lblApfsCapable.ForeColor = Colours.COMPLETE_GREEN;
-                    break;
-                case ApfsCapable.YesLzma:
-                    lblApfsCapable.Text = "Yes · LZMA DXE";
-                    lblApfsCapable.ForeColor = Colours.COMPLETE_GREEN;
-                    break;
-                case ApfsCapable.No:
-                    lblApfsCapable.Text = "No";
-                    lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
-                    break;
-            }
+            lblOrderNo.Text = FWBase.FsysStoreData.SON ?? "N/A";
         }
 
         private void UpdateEfiVersionLabel()
         {
-            lblEfiVersion.Text = FWBase.ROMInfoSectionData.EfiVersion ?? "N/A";
+            lblEfiVersion.Text = FWBase.FirmwareVersion;
         }
 
         private void UpdateNvramLabel(Label label, NvramStore storeData, string text)
@@ -904,8 +917,8 @@ namespace Mac_EFI_Toolkit
             label.Text = text;
 
             Color foreColor = (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
-                ? Colours.WARNING_ORANGE
-                : (storeData.PrimaryStoreBase != -1 ? Colours.COMPLETE_GREEN : Colours.DISABLED_TEXT);
+                ? Colours.COMPLETE_GREEN
+                : (storeData.PrimaryStoreBase != -1 ? Color.White : Colours.DISABLED_TEXT);
 
             label.ForeColor = foreColor;
         }
@@ -944,6 +957,33 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void UpdateBoardIdLabel()
+        {
+            lblBoardId.Text = FWBase.PDRSectionData.BoardId ?? "N/A";
+        }
+
+        private void UpdateApfsCapableLabel()
+        {
+
+            switch (FWBase.IsApfsCapable)
+            {
+                case ApfsCapable.Unknown:
+                    lblApfsCapable.Text = "UNKOWN";
+                    lblApfsCapable.ForeColor = Colours.ERROR_RED;
+                    break;
+                case ApfsCapable.Guid:
+                    lblApfsCapable.Text = "YES (DXE)";
+                    break;
+                case ApfsCapable.Lzma:
+                    lblApfsCapable.Text = "YES (LZMA DXE)";
+                    break;
+                case ApfsCapable.No:
+                    lblApfsCapable.Text = "DRIVER NOT FOUND";
+                    lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
+                    break;
+            }
+        }
+
         private void UpdateFitVersionLabel()
         {
             lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
@@ -961,28 +1001,9 @@ namespace Mac_EFI_Toolkit
                 }
             }
         }
-
-        private void UpdateBoardIdLabel()
-        {
-            lblBoardId.Text = FWBase.PDRSectionData.MacBoardId ?? "N/A";
-        }
-
-        private void UpdateOrderNumberLabel()
-        {
-            lblOrderNo.Text = FWBase.FsysStoreData.SON ?? "N/A";
-        }
         #endregion
 
         #region UI Events
-        private void SetContextMenuRenderers()
-        {
-            ContextMenuStrip[] menus = { cmsMainMenu, cmsApplication, cmsCopy };
-            foreach (ContextMenuStrip menu in menus)
-            {
-                menu.Renderer = new METMenuRenderer();
-            }
-        }
-
         internal void SetHalfOpacity()
         {
             Opacity = 0.5;
@@ -1013,7 +1034,7 @@ namespace Mac_EFI_Toolkit
 
         private void ToggleControlEnable(bool enable)
         {
-            Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdNavigate, cmdReload,
+            Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdBuildClean, cmdNavigate, cmdReload,
                 cmdFixFsysCrc, cmdExportFsys , cmdAppleRomInfo, cmdExportMe};
             foreach (Button button in buttons)
             {
@@ -1024,7 +1045,9 @@ namespace Mac_EFI_Toolkit
 
             if (FWBase.FsysStoreData.FsysBytes != null)
             {
-                cmdFixFsysCrc.Enabled = MacUtils.GetUintFsysCrc32(FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString ? false : true;
+                cmdFixFsysCrc.Enabled = MacUtils.GetUintFsysCrc32
+                    (FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString
+                    ? false : true;
             }
             else
             {
@@ -1048,11 +1071,11 @@ namespace Mac_EFI_Toolkit
             serialToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.Serial);
             hwcToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.HWC);
             fsysCRC32ToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.CrcString);
-            efiVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.ROMInfoSectionData.EfiVersion);
+            orderNoToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.SON);
+            efiVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FirmwareVersion);
+            boardIDToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.PDRSectionData.BoardId);
             fitVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FitVersion);
             meVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.MeVersion);
-            boardIDToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.PDRSectionData.MacBoardId);
-            orderNoToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.SON);
         }
 
         private bool IsStringNotEmpty(string value)
@@ -1064,8 +1087,11 @@ namespace Mac_EFI_Toolkit
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS },
                 new { Button = cmdMenu, Font = Program.FONT_MDL2_REG_14, Text = Chars.SHOW },
+                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS },
+                new { Button = cmdCopy, Font =  Program.FONT_MDL2_REG_12, Text = Chars.COPY },
+                new { Button = cmdEdit, Font =  Program.FONT_MDL2_REG_12, Text = Chars.COMPONENT },
+                new { Button = cmdBuildClean, Font =  Program.FONT_MDL2_REG_12, Text = Chars.USB },
                 new { Button = cmdNavigate, Font = Program.FONT_MDL2_REG_10, Text = Chars.FILE_EXPLORER },
                 new { Button = cmdReload, Font = Program.FONT_MDL2_REG_10, Text = Chars.REFRESH },
                 new { Button = cmdEveryMacSearch, Font = Program.FONT_MDL2_REG_9, Text = Chars.WEB_SEARCH },
@@ -1086,9 +1112,9 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdOpenBin, cmdReset, cmdCopy, cmdEdit, cmdMenu, cmdNavigate, cmdReload,
-                cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys, cmdAppleRomInfo,
-                cmdExportMe
+                cmdMenu, cmdOpen, cmdReset, cmdCopy, cmdEdit, cmdBuildClean,
+                cmdNavigate, cmdReload, cmdEveryMacSearch, cmdFixFsysCrc,
+                cmdExportFsys, cmdAppleRomInfo, cmdExportMe
             };
 
             Label[] labels =
@@ -1115,17 +1141,18 @@ namespace Mac_EFI_Toolkit
             {
                 Dictionary<object, string> tooltips = new Dictionary<object, string>
                 {
-                    { cmdOpenBin, "Open a Mac UEFI/BIOS (CTRL + O)" },
+                    { cmdOpen, "Open a Mac UEFI/BIOS (CTRL + O)" },
                     { cmdReset, "Reset (CTRL + R)" },
-                    { cmdEdit, "Open the Firmware Editor (CTRL + E)" },
-                    { cmdMenu, "Open the Application Menu (CTRL + M)"},
-                    { cmdCopy, "Open the Copy Menu (CTRL + C)" },
+                    { cmdEdit, "Firmware Editor (CTRL + E)" },
+                    { cmdMenu, "Application Menu (CTRL + M)"},
+                    { cmdCopy, "Copy (CTRL + C)" },
+                    { cmdBuildClean, "Build Factory Image (CTRL + B)"},
                     { cmdNavigate, "Navigate to File (ALT + N)" },
                     { cmdReload, "Reload File from Disk (ALT + R)" },
                     { cmdEveryMacSearch, "Search Serial with EveryMac (ALT + S)" },
                     { cmdFixFsysCrc, "Repair Fsys CRC32 (ALT + F)" },
                     { cmdExportFsys, "Export Fsys Store (ALT + E)" },
-                    { cmdAppleRomInfo, "Open the ROM Information Window (ALT + I)" },
+                    { cmdAppleRomInfo, "ROM Information (ALT + I)" },
                     { cmdExportMe, "Export ME Region (ALT + M)" },
                     { lblVssStore, SetNvramStoreTip(FWBase.VssStoreData, "VSS") },
                     { lblSvsStore, SetNvramStoreTip(FWBase.SvsStoreData, "SVS") },
@@ -1268,6 +1295,15 @@ namespace Mac_EFI_Toolkit
             // Process the descriptor
             Descriptor.Parse(FWBase.LoadedBinaryBytes);
 
+            // Check if the image is what we're looking for
+            if (!FWBase.IsValidImage(FWBase.LoadedBinaryBytes))
+            {
+                METMessageBox.Show(this, "Error", "The selected file is not a valid firmware image.",
+                    METMessageType.Error, METMessageButtons.Okay);
+                ResetAllData();
+                return;
+            }
+
             // Check parameters
             if (IsValidFlashHeader())
             {
@@ -1310,7 +1346,8 @@ namespace Mac_EFI_Toolkit
             if (fileInfo.Length < FWBase.MIN_IMAGE_SIZE) // 1048576 bytes
             {
                 // Show a warning message if the file is too small
-                METMessageBox.Show(this, "Warning", "The selected file is too small and will not be loaded.", METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Warning", "The selected file is too small and will not be loaded.",
+                    METMessageType.Warning, METMessageButtons.Okay);
                 return false;
             }
 
@@ -1318,7 +1355,8 @@ namespace Mac_EFI_Toolkit
             if (fileInfo.Length > FWBase.MAX_IMAGE_SIZE) // 33554432 bytes
             {
                 // Show a warning message if the file is too large
-                METMessageBox.Show(this, "Warning", "The selected file is too large and will not be loaded.", METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Warning", "The selected file is too large and will not be loaded.",
+                    METMessageType.Warning, METMessageButtons.Okay);
                 return false;
             }
 
@@ -1338,7 +1376,8 @@ namespace Mac_EFI_Toolkit
             if (!Descriptor.DescriptorMode)
             {
                 // Show a warning message if the binary does not have a valid flash descriptor
-                METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.", METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.",
+                    METMessageType.Warning, METMessageButtons.Okay);
                 return false;
             }
 

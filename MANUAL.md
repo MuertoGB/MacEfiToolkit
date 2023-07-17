@@ -59,6 +59,15 @@ Opens the settings window where you can modify various application settings.
 **'About':**\
 Opens the about window, providing information about the application and its version.
 
+**'Changelog':**\
+Opens a browser window directly to the application's changelog.
+
+**'Homepage':**\
+Opens a browser window to the application landing page.
+
+**'Usage Manual':**\
+Opens a browser window here, to the application manual.
+
 ----
 
 #### Main Buttons:
@@ -67,17 +76,23 @@ Opens the about window, providing information about the application and its vers
   <img src="files/manual/mainbuttons.png">
 </kbd>
 
-**'Open':**\
+**'Open Button':**\
 By clicking the 'Open' button, you can choose and load a UEFI/BIOS file into the application.
 
-**'Reset':**\
+**'Reset Button':**\
 The 'Reset' button unloads the currently loaded file and clears any buffers and data associated with it.
 
-**'Edit':**\
-Clicking 'Edit' will open the editor window. Alternatively, it can open the terms window, which must be accepted before access to the editor is granted.
+**'Copy Button':**\
+<kbd>
+  <img src="files/manual/opencopymenu.png">
+</kbd>\
+Clicking the 'Copy' button opens the copy menu, which enables quick copying of text fields to the clipboard.
 
-**'Copy':**\
-Clicking 'Copy' opens the copy menu, which enables quick copying of text fields to the clipboard.
+**'Edit Button':**\
+<kbd>
+  <img src="files/manual/openeditor.png">
+</kbd>\
+Clicking the 'Edit' button will open the editor window. Alternatively, it can open the terms window, which must be accepted before access to the editor is granted.
 
 ---
 
@@ -100,7 +115,9 @@ This section displays the name of the loaded file and includes two buttons. Clic
   <img src="files/manual/filesizeinvalid.png">
 </kbd>
 
-The file size of the loaded file is measured in bytes. If the file size is valid, the label will appear green. However, if the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
+The file size of the loaded file is measured in bytes. If the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
+
+> 🛈 8,388,615 (>7) would indicate the given file is 7 bytes too large.
 
 ---
 
@@ -150,7 +167,7 @@ First, the application retrieves the model identifier (e.g., IM161) from the UEF
   <img src="files/manual/serial.png">
 </kbd>
 
-This section consists of the System Serial Number (SSN) stored in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
+This section consists of the System Serial Number (SSN) located in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
 
 ---
 
@@ -160,7 +177,7 @@ This section consists of the System Serial Number (SSN) stored in the Fsys store
   <img src="files/manual/hwc.png">
 </kbd>
 
-The Hardware Configuration Code is stored in the Fsys store and is derived from the System Serial Number (SSN). If the Serial Number is 11 characters long, the HWC will be 3 characters. If the Serial Number is 12 characters long, the HWC will be 4 characters.
+The Hardware Configuration Code (HWC) is located in the Fsys store and is derived from the System Serial Number (SSN). If the Serial Number is 11 characters long, the HWC will be 3 characters. If the Serial Number is 12 characters long, the HWC will be 4 characters.
 
 ---
 
@@ -177,16 +194,13 @@ This section includes the checksum of the Fsys store and two buttons. If the CRC
 
 ---
 
-#### APFS Capable:
+#### Order No:
 
 <kbd>
-  <img src="files/manual/apfs.png">
-</kbd>
-<kbd>
-  <img src="files/manual/apfsno.png">
+  <img src="files/manual/son.png">
 </kbd>
 
-Indicates whether the UEFI is capable of supporting APFS and provides information about the detected DXE type, such as LZMA DXE. The presence of LZMA DXE suggests the presence of a compressed DXE file system containing the APFSJumpStart boot time driver.
+The System Order Number (SON) is displayed in this section, retrieved from the Fsys store. The order number can be a standard order number such as `MNE92LL/A` or a custom Built to Order (BTO) / Configure to Order (CTO) number.
 
 ---
 
@@ -196,7 +210,11 @@ Indicates whether the UEFI is capable of supporting APFS and provides informatio
   <img src="files/manual/efiversion.png">
 </kbd>
 
-This section provides information about the EFI version, if available, and includes one button. Clicking the 'Arrow' button will open the ROM Information window, which displays ROM information retrieved from the `AppleRomInformationSection` GUID found in Apple UEFI only, it was not available in Apple BIOS without a flash descriptor.
+<kbd>
+  <img src="files/manual/efiversionalt.png">
+</kbd>
+
+This section provides information about the firmware version, and includes one button. Clicking the 'Arrow' button will open the ROM Information window, which displays ROM information retrieved from the `AppleRomInformationSection` GUID found in Apple UEFI only, it was not available in Apple BIOS without a flash descriptor.
 
 ---
 
@@ -209,7 +227,35 @@ This section provides information about the EFI version, if available, and inclu
   <img src="files/manual/nvramlocked.png">
 </kbd>
 
-This section is divided into four sections. The first three labels represent different NVRAM store types. Each store type will appear green when empty, orange when data is present, and grey when the store is not found. The last item indicates the EFI Lock status. If the lock is green, the EFI does not have a Message Authentication Code (MAC) and is likely not locked. If the lock is red, a Message Authentication Code (MAC) was found, indicating that the EFI is likely password locked.
+This section is divided into four items. The first three items represent different NVRAM store types, indicating their status. Each store type will appear white when empty, green when data is present, and grey when the store is not found.
+
+The padlock item represents EFI Lock status. If the padlock icon is green and unlocked, it signifies that a Message Authentication Code (MAC) was not found, indicating that the EFI is likely not locked. Conversely, if the padlock icon is red and locked, it suggests that a Message Authentication Code (MAC) was found, indicating that the EFI is likely password locked.
+
+---
+
+#### Mac Board ID:
+
+<kbd>
+  <img src="files/manual/boardid.png">
+</kbd>
+
+This section displays the 8-byte hexadecimal board-id obtained from the UEFI Platform Data Region. The Mac board-id is valuable for matching an SMC firmware or identifying a platform's logic board.
+
+---
+
+#### APFS Capable:
+
+<kbd>
+  <img src="files/manual/apfsdxe.png">
+</kbd>
+<kbd>
+  <img src="files/manual/apfslzma.png">
+</kbd>
+<kbd>
+  <img src="files/manual/apfsno.png">
+</kbd>
+
+The application provides information regarding the presence of the UEFI APFS DXE driver and the firmware's capability to support APFS boot. If the driver is detected, it will display `YES (DXE)` to indicate that an uncompressed driver was found. If the driver is found within an LZMA compressed volume, it will display `YES (LZMA DXE)` to indicate that the driver was located in an LZMA compressed volume.
 
 ---
 
@@ -230,26 +276,6 @@ Displays the Flash Image Tool version found in the Intel Management Engine firmw
 </kbd>
 
 This section provides information about the Intel Management Engine (ME). It displays the ME version obtained from the MN2 manifest and indicates the base position of the ME in the UEFI. Additionally, it includes one button. Clicking the 'Save' button allows exporting the entire Management Engine firmware by extracting the portion between the 'MEBase' and 'MELimit' values defined in the Intel Flash Descriptor.
-
----
-
-#### Mac Board ID:
-
-<kbd>
-  <img src="files/manual/boardid.png">
-</kbd>
-
-This section displays the 8-byte hexadecimal board-id obtained from the UEFI Platform Data Region. The Mac board-id is valuable for matching an SMC firmware or identifying a platform's logic board.
-
----
-
-#### Order No:
-
-<kbd>
-  <img src="files/manual/son.png">
-</kbd>
-
-The System Order Number (SON) is displayed in this section, retrieved from the Fsys store. The order number can be a standard order number such as `MNE92LL/A` or a custom Built to Order (BTO) / Configure to Order (CTO) number.
 
 ---
 

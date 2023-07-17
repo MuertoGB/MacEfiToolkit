@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-101">V1.0.1</a> •
   <a href="#version-100">V1.0.0</a> •
   <a href="#version-070">V0.7.0</a> •
   <a href="#version-060">V0.6.0</a> •
@@ -11,6 +12,22 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.0.1
+
+#### New:
+- Implemented a new functionality where the application verifies if a valid firmware image is being loaded. If the loaded file is not recognized as a valid firmware image, the application will reject the file. 
+- Implemented the addition of links to the Github changelog, homepage, and manual within the main menu of the application's main window.
+
+#### Enhancements:
+- Revised the method for determining the 'EFI Version' data in the main window. If the `AppleRomInformationSection` does not provide an EFI Version, the application will now generate a version number that closely resembles the one displayed in the MacOS 'Hardware Overview' System Firmware Version.
+- User Interface and text improvements. Some elements in the main window have been reorganized.
+- Improved Xserve support.
+
+#### Bugs:
+
+- Resolved an oversight where the application attempted to read the flash descriptor even when no descriptor signature was found. This issue led to specific files triggering an unhandled exception.
+- Addressed an extremely rare issue where the EfiBiosId was not being read correctly.
 
 ## Version 1.0.0
 
