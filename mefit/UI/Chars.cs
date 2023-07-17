@@ -9,21 +9,24 @@ namespace Mac_EFI_Toolkit.UI
 {
     class Chars
     {
-        internal const string EXIT_CROSS = "\xE947";
-        internal const string UNLOCKED = "\xE785";
-        internal const string LOCKED = "\xE72E";
-        internal const string STATUS_ERROR_FULL = "\xEB90";
-        internal const string INCIDENT_TRIANGLE = "\xE814";
-        internal const string INFO_SOLID = "\xF167";
-        internal const string UNKNOWN = "\xE9CE";
-        internal const string CHEVRON_RIGHT = "\xE76C";
-        internal const string FILE_EXPLORER = "\xEC50";
-        internal const string SHOW = "\xE169";
-        internal const string REFRESH = "\xE72C";
-        internal const string WEB_SEARCH = "\xF6FA";
-        internal const string REPAIR = "\xE90F";
-        internal const string SAVE = "\xE74E";
-        internal const string FORWARD = "\xE72A";
+        internal const string EXIT_CROSS = "\uE947";
+        internal const string UNLOCKED = "\uE785";
+        internal const string LOCKED = "\uE72E";
+        internal const string STATUS_ERROR_FULL = "\uEB90";
+        internal const string INCIDENT_TRIANGLE = "\uE814";
+        internal const string INFO_SOLID = "\uF167";
+        internal const string UNKNOWN = "\uE9CE";
+        internal const string CHEVRON_RIGHT = "\uE76C";
+        internal const string FILE_EXPLORER = "\uEC50";
+        internal const string SHOW = "\uE169";
+        internal const string REFRESH = "\uE72C";
+        internal const string WEB_SEARCH = "\uF6FA";
+        internal const string REPAIR = "\uE90F";
+        internal const string SAVE = "\uE74E";
+        internal const string FORWARD = "\uE72A";
+        internal const string TOOLS = "\uEC7A";
+        internal const string COPY = "\uE8C8";
+        internal const string USB = "\uE88E";
 
         // Non line-breaking space
         internal const string NBSPACE = "\u00A0";

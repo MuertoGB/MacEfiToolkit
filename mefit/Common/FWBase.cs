@@ -72,12 +72,16 @@ namespace Mac_EFI_Toolkit.Common
 
     internal struct PdrSection
     {
-        internal string MacBoardId { get; set; }
+        internal string BoardId { get; set; }
     }
 
-    internal struct EfiSection
+    internal struct EfiBiosIdSection
     {
-        internal string Model { get; set; }
+        internal string ModelPart { get; set; }
+        internal string zzPart { get; set; }
+        internal string MajorPart { get; set; }
+        internal string MinorPart { get; set; }
+        internal string DatePart { get; set; }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -116,6 +120,7 @@ namespace Mac_EFI_Toolkit.Common
     class FWBase
     {
         internal static string LoadedBinaryPath = null;
+        internal static string FirmwareVersion = null;
         internal static string FitVersion = null;
         internal static string MeVersion = null;
         internal static byte[] LoadedBinaryBytes = null;
@@ -128,7 +133,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static NvramStore NssStoreData;
         internal static FsysStore FsysStoreData;
         internal static AppleRomInformationSection ROMInfoSectionData;
-        internal static EfiSection EFISectionData;
+        internal static EfiBiosIdSection EFISectionData;
 
         internal static EfiLockStatus EfiLock = EfiLockStatus.Unknown;
         internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
@@ -164,9 +169,10 @@ namespace Mac_EFI_Toolkit.Common
             NssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.NSS);
             FsysStoreData = GetFsysStoreData(sourceBytes, false);
             ROMInfoSectionData = GetRomInformationData(sourceBytes);
-            EFISectionData = GetEfiSectionData(sourceBytes);
+            EFISectionData = GetEfiBiosIdSectionData(sourceBytes);
 
             IsApfsCapable = GetIsApfsCapable(LoadedBinaryBytes);
+            FirmwareVersion = MacUtils.GetFirmwareVersion();
             FitVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.FlashImageTool);
             MeVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.ManagementEngine);
 
@@ -242,7 +248,7 @@ namespace Mac_EFI_Toolkit.Common
             // Return the board id
             return new PdrSection
             {
-                MacBoardId = $"Mac-{BitConverter.ToString(bidBytes).Replace("-", "")}"
+                BoardId = $"Mac-{BitConverter.ToString(bidBytes).Replace("-", "")}"
             };
         }
 
@@ -250,7 +256,7 @@ namespace Mac_EFI_Toolkit.Common
         {
             return new PdrSection
             {
-                MacBoardId = null
+                BoardId = null
             };
         }
 
@@ -845,50 +851,65 @@ namespace Mac_EFI_Toolkit.Common
         };
         #endregion
 
-        #region EFI Section
+        #region EFI BIOS ID Section
 
-        internal static EfiSection GetEfiSectionData(byte[] sourceBytes)
+        internal static EfiBiosIdSection GetEfiBiosIdSectionData(byte[] sourceBytes)
         {
             int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.EFI_BIOS_ID_GUID, _biosBase, _biosLimit);
 
             if (guidBase == -1)
             {
-                return DefaultEfiSection();
+                return DefaultEfiBiosIdSection();
             }
 
-            int modelBase = BinaryUtils.GetBasePosition(sourceBytes, EFI_SECTION_SIGNATURE, guidBase);
+            int efiBiosIdBase = BinaryUtils.GetBasePosition(sourceBytes, EFI_BIOS_ID_SIGNATURE, guidBase);
 
-            if (modelBase == -1)
+            if (efiBiosIdBase == -1)
             {
-                return DefaultEfiSection();
+                return DefaultEfiBiosIdSection();
             }
 
-            byte indexByte = 0x20;
-            byte terminationByte = 0x2E;
-            byte[] modelBytes = BinaryUtils.GetBytesDelimited(sourceBytes, modelBase, indexByte, terminationByte);
+            int efiBiosIdLimit = BinaryUtils.GetBasePosition(sourceBytes, new byte[] { 0x00, 0x00, 0x00 }, efiBiosIdBase);
 
-            if (modelBytes == null)
+            byte[] efiBiosIdBytes = BinaryUtils.GetBytesBaseLimit(sourceBytes, efiBiosIdBase + EFI_BIOS_ID_SIGNATURE.Length, efiBiosIdLimit);
+
+            if (efiBiosIdBytes == null)
             {
-                return DefaultEfiSection();
+                return DefaultEfiBiosIdSection();
             }
 
-            modelBytes = modelBytes.Where(b => b != 0x00 && b != 0x20).ToArray();
+            efiBiosIdBytes = efiBiosIdBytes.Where(b => b != 0x00 && b != 0x20).ToArray();
+            string efiBiosId = _utf8.GetString(efiBiosIdBytes);
+            string[] parts = efiBiosId.Split('.');
 
-            return new EfiSection
+            if (parts.Length != 5)
             {
-                Model = _utf8.GetString(modelBytes)
+                return DefaultEfiBiosIdSection();
+            }
+
+            return new EfiBiosIdSection
+            {
+                ModelPart = parts[0],
+                zzPart = parts[1],
+                MajorPart = parts[2],
+                MinorPart = parts[3],
+                DatePart = parts[4],
             };
         }
 
-        private static EfiSection DefaultEfiSection()
+        private static EfiBiosIdSection DefaultEfiBiosIdSection()
         {
-            return new EfiSection
+            return new EfiBiosIdSection
             {
-                Model = null
+                ModelPart = null,
+                zzPart = null,
+                MajorPart = null,
+                MinorPart = null,
+                DatePart = null,
             };
         }
 
-        internal static readonly byte[] EFI_SECTION_SIGNATURE =
+        internal static readonly byte[] EFI_BIOS_ID_SIGNATURE =
         {
             0x24, 0x49, 0x42, 0x49,
             0x4F, 0x53, 0x49, 0x24

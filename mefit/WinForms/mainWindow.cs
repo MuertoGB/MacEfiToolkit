@@ -60,16 +60,7 @@ namespace Mac_EFI_Toolkit
             // Set font for lblEfiLock
             lblEfiLock.Font = Program.FONT_MDL2_REG_9;
 
-            // Recalculate tlpMain's height based on each row height - the last row
-            int totalHeight = 0;
-
-            for (int i = 0; i < tlpMain.RowStyles.Count - 1; i++)
-            {
-                RowStyle rowStyle = tlpMain.RowStyles[i];
-                totalHeight += (int)rowStyle.Height;
-            }
-
-            tlpMain.Height = totalHeight;
+            InterfaceUtils.SetTableLayoutPanelHeight(tlpMain);
 
             // Set tip handlers for controls
             SetTipHandlers();
@@ -79,6 +70,9 @@ namespace Mac_EFI_Toolkit
 
             // Set button properties (font and text)
             SetButtonProperties();
+
+            // Not ready yet
+            cmdBuildClean.Hide();
         }
         #endregion
 
@@ -182,7 +176,7 @@ namespace Mac_EFI_Toolkit
                 switch (e.KeyCode)
                 {
                     case Keys.O:
-                        cmdOpenBin.PerformClick();
+                        cmdOpen.PerformClick();
                         break;
                     case Keys.R:
                         cmdReset.PerformClick();
@@ -274,7 +268,7 @@ namespace Mac_EFI_Toolkit
             ShowContextMenu(control, cmsMainMenu);
         }
 
-        private void cmdOpenBin_Click(object sender, EventArgs e)
+        private void cmdOpen_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog
             {
@@ -745,7 +739,7 @@ namespace Mac_EFI_Toolkit
 
         private void efiVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(FWBase.ROMInfoSectionData.EfiVersion);
+            Clipboard.SetText(FWBase.FirmwareVersion);
         }
 
         private void fitVersionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -760,7 +754,7 @@ namespace Mac_EFI_Toolkit
 
         private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(FWBase.PDRSectionData.MacBoardId);
+            Clipboard.SetText(FWBase.PDRSectionData.BoardId);
         }
 
         private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -800,16 +794,16 @@ namespace Mac_EFI_Toolkit
             UpdateFirmwareSerialNumber();
             UpdateHardwareConfigLabel();
             UpdateFsysLabel();
-            UpdateApfsCapableLabel();
+            UpdateOrderNumberLabel();
             UpdateEfiVersionLabel();
             UpdateNvramLabel(lblVssStore, FWBase.VssStoreData, "VSS");
             UpdateNvramLabel(lblSvsStore, FWBase.SvsStoreData, "SVS");
             UpdateNvramLabel(lblNssStore, FWBase.NssStoreData, "NSS");
             UpdateEfiLockLabel();
+            UpdateBoardIdLabel();
+            UpdateApfsCapableLabel();
             UpdateFitVersionLabel();
             UpdateIntelMeLabel();
-            UpdateBoardIdLabel();
-            UpdateOrderNumberLabel();
 
             // Apply DISABLED_TEXT color to N/A text labels
             ApplyNestedPanelLabelForeColor(tlpRom, Colours.DISABLED_TEXT);
@@ -858,20 +852,20 @@ namespace Mac_EFI_Toolkit
             lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
         }
 
-        private void UpdateFirmwareSerialNumber()
-        {
-            lblSerialNumber.Text = FWBase.FsysStoreData.Serial ?? "N/A";
-        }
-
         private void UpdateModelLabel()
         {
-            lblModel.Text = $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.Model) ?? "N/A"}";
+            lblModel.Text = $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.ModelPart) ?? "N/A"}";
 
             // Load and append the config code asynchronously
             if (FWBase.FsysStoreData.HWC != null)
             {
                 AppendConfigCodeTextAsync(FWBase.FsysStoreData.HWC);
             }
+        }
+
+        private void UpdateFirmwareSerialNumber()
+        {
+            lblSerialNumber.Text = FWBase.FsysStoreData.Serial ?? "N/A";
         }
 
         private void UpdateHardwareConfigLabel()
@@ -884,7 +878,8 @@ namespace Mac_EFI_Toolkit
             if (FWBase.FsysStoreData.CrcString != null)
             {
                 lblFsysCrc.Text = $"CRC32: {FWBase.FsysStoreData.CrcString}h";
-                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
+                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString,
+                    FWBase.FsysStoreData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
             }
             else
             {
@@ -892,31 +887,14 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void UpdateApfsCapableLabel()
+        private void UpdateOrderNumberLabel()
         {
-
-            switch (FWBase.IsApfsCapable)
-            {
-                case ApfsCapable.Unknown:
-                    lblApfsCapable.Text = "Unknown";
-                    lblApfsCapable.ForeColor = Colours.ERROR_RED;
-                    break;
-                case ApfsCapable.Guid:
-                    lblApfsCapable.Text = "Yes (DXE)";
-                    break;
-                case ApfsCapable.Lzma:
-                    lblApfsCapable.Text = "Yes (LZMA DXE)";
-                    break;
-                case ApfsCapable.No:
-                    lblApfsCapable.Text = "Driver not Found";
-                    lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
-                    break;
-            }
+            lblOrderNo.Text = FWBase.FsysStoreData.SON ?? "N/A";
         }
 
         private void UpdateEfiVersionLabel()
         {
-            lblEfiVersion.Text = FWBase.ROMInfoSectionData.EfiVersion ?? "N/A";
+            lblEfiVersion.Text = FWBase.FirmwareVersion;
         }
 
         private void UpdateNvramLabel(Label label, NvramStore storeData, string text)
@@ -964,6 +942,33 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void UpdateBoardIdLabel()
+        {
+            lblBoardId.Text = FWBase.PDRSectionData.BoardId ?? "N/A";
+        }
+
+        private void UpdateApfsCapableLabel()
+        {
+
+            switch (FWBase.IsApfsCapable)
+            {
+                case ApfsCapable.Unknown:
+                    lblApfsCapable.Text = "UNKOWN";
+                    lblApfsCapable.ForeColor = Colours.ERROR_RED;
+                    break;
+                case ApfsCapable.Guid:
+                    lblApfsCapable.Text = "YES (DXE)";
+                    break;
+                case ApfsCapable.Lzma:
+                    lblApfsCapable.Text = "YES (LZMA DXE)";
+                    break;
+                case ApfsCapable.No:
+                    lblApfsCapable.Text = "DRIVER NOT FOUND";
+                    lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
+                    break;
+            }
+        }
+
         private void UpdateFitVersionLabel()
         {
             lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
@@ -980,16 +985,6 @@ namespace Mac_EFI_Toolkit
                     lblMeVersion.Text += $" ({Descriptor.MeBase:X2}h)";
                 }
             }
-        }
-
-        private void UpdateBoardIdLabel()
-        {
-            lblBoardId.Text = FWBase.PDRSectionData.MacBoardId ?? "N/A";
-        }
-
-        private void UpdateOrderNumberLabel()
-        {
-            lblOrderNo.Text = FWBase.FsysStoreData.SON ?? "N/A";
         }
         #endregion
 
@@ -1024,7 +1019,7 @@ namespace Mac_EFI_Toolkit
 
         private void ToggleControlEnable(bool enable)
         {
-            Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdNavigate, cmdReload,
+            Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdBuildClean, cmdNavigate, cmdReload,
                 cmdFixFsysCrc, cmdExportFsys , cmdAppleRomInfo, cmdExportMe};
             foreach (Button button in buttons)
             {
@@ -1035,7 +1030,9 @@ namespace Mac_EFI_Toolkit
 
             if (FWBase.FsysStoreData.FsysBytes != null)
             {
-                cmdFixFsysCrc.Enabled = MacUtils.GetUintFsysCrc32(FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString ? false : true;
+                cmdFixFsysCrc.Enabled = MacUtils.GetUintFsysCrc32
+                    (FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString
+                    ? false : true;
             }
             else
             {
@@ -1059,10 +1056,10 @@ namespace Mac_EFI_Toolkit
             serialToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.Serial);
             hwcToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.HWC);
             fsysCRC32ToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.CrcString);
-            efiVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.ROMInfoSectionData.EfiVersion);
+            efiVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FirmwareVersion);
             fitVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FitVersion);
             meVersionToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.MeVersion);
-            boardIDToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.PDRSectionData.MacBoardId);
+            boardIDToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.PDRSectionData.BoardId);
             orderNoToolStripMenuItem.Enabled = IsStringNotEmpty(FWBase.FsysStoreData.SON);
         }
 
@@ -1075,8 +1072,11 @@ namespace Mac_EFI_Toolkit
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS },
                 new { Button = cmdMenu, Font = Program.FONT_MDL2_REG_14, Text = Chars.SHOW },
+                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS },
+                new { Button = cmdCopy, Font =  Program.FONT_MDL2_REG_12, Text = Chars.COPY },
+                new { Button = cmdEdit, Font =  Program.FONT_MDL2_REG_12, Text = Chars.TOOLS },
+                new { Button = cmdBuildClean, Font =  Program.FONT_MDL2_REG_12, Text = Chars.USB },
                 new { Button = cmdNavigate, Font = Program.FONT_MDL2_REG_10, Text = Chars.FILE_EXPLORER },
                 new { Button = cmdReload, Font = Program.FONT_MDL2_REG_10, Text = Chars.REFRESH },
                 new { Button = cmdEveryMacSearch, Font = Program.FONT_MDL2_REG_9, Text = Chars.WEB_SEARCH },
@@ -1097,9 +1097,9 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdOpenBin, cmdReset, cmdCopy, cmdEdit, cmdMenu, cmdNavigate, cmdReload,
-                cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys, cmdAppleRomInfo,
-                cmdExportMe
+                cmdMenu, cmdOpen, cmdReset, cmdCopy, cmdEdit, cmdBuildClean,
+                cmdNavigate, cmdReload, cmdEveryMacSearch, cmdFixFsysCrc,
+                cmdExportFsys, cmdAppleRomInfo, cmdExportMe
             };
 
             Label[] labels =
@@ -1126,17 +1126,18 @@ namespace Mac_EFI_Toolkit
             {
                 Dictionary<object, string> tooltips = new Dictionary<object, string>
                 {
-                    { cmdOpenBin, "Open a Mac UEFI/BIOS (CTRL + O)" },
+                    { cmdOpen, "Open a Mac UEFI/BIOS (CTRL + O)" },
                     { cmdReset, "Reset (CTRL + R)" },
-                    { cmdEdit, "Open the Firmware Editor (CTRL + E)" },
-                    { cmdMenu, "Open the Application Menu (CTRL + M)"},
-                    { cmdCopy, "Open the Copy Menu (CTRL + C)" },
+                    { cmdEdit, "Firmware Editor (CTRL + E)" },
+                    { cmdMenu, "Application Menu (CTRL + M)"},
+                    { cmdCopy, "Copy (CTRL + C)" },
+                    { cmdBuildClean, "Build Factory Image (CTRL + B)"},
                     { cmdNavigate, "Navigate to File (ALT + N)" },
                     { cmdReload, "Reload File from Disk (ALT + R)" },
                     { cmdEveryMacSearch, "Search Serial with EveryMac (ALT + S)" },
                     { cmdFixFsysCrc, "Repair Fsys CRC32 (ALT + F)" },
                     { cmdExportFsys, "Export Fsys Store (ALT + E)" },
-                    { cmdAppleRomInfo, "Open the ROM Information Window (ALT + I)" },
+                    { cmdAppleRomInfo, "ROM Information (ALT + I)" },
                     { cmdExportMe, "Export ME Region (ALT + M)" },
                     { lblVssStore, SetNvramStoreTip(FWBase.VssStoreData, "VSS") },
                     { lblSvsStore, SetNvramStoreTip(FWBase.SvsStoreData, "SVS") },
