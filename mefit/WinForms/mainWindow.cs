@@ -1295,6 +1295,15 @@ namespace Mac_EFI_Toolkit
             // Process the descriptor
             Descriptor.Parse(FWBase.LoadedBinaryBytes);
 
+            // Check if the image is what we're looking for
+            if (!FWBase.IsValidImage(FWBase.LoadedBinaryBytes))
+            {
+                METMessageBox.Show(this, "Error", "The selected file is not a valid firmware image.",
+                    METMessageType.Error, METMessageButtons.Okay);
+                ResetAllData();
+                return;
+            }
+
             // Check parameters
             if (IsValidFlashHeader())
             {

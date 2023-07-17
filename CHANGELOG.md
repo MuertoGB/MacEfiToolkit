@@ -16,7 +16,8 @@
 ## Version 1.0.1
 
 #### New:
-- Implemented the addition of links to the Github changelog, homepage, and manual within the main menu of the application's main window. 
+- Implemented a new functionality where the application verifies if a valid firmware image is being loaded. If the loaded file is not recognized as a valid firmware image, the application will reject the file. 
+- Implemented the addition of links to the Github changelog, homepage, and manual within the main menu of the application's main window.
 
 #### Enhancements:
 - Revised the method for determining the 'EFI Version' data in the main window. If the `AppleRomInformationSection` does not provide an EFI Version, the application will now generate a version number that closely resembles the one displayed in the MacOS 'Hardware Overview' System Firmware Version.

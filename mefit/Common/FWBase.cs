@@ -199,6 +199,18 @@ namespace Mac_EFI_Toolkit.Common
             EfiLock = EfiLockStatus.Unknown;
         }
 
+        internal static bool IsValidImage(byte[] sourceBytes)
+        {
+            int dxeCore = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.DXE_CORE);
+
+            if (!Descriptor.DescriptorMode && dxeCore == -1)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #region File Information
         private static FileInfoStore GetBinaryFileInfo(string fileName)
         {
