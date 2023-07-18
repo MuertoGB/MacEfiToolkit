@@ -76,23 +76,17 @@ Opens a browser window here, to the application manual.
   <img src="files/manual/mainbuttons.png">
 </kbd>
 
-**'Open Button':**\
-By clicking the 'Open' button, you can choose and load a UEFI/BIOS file into the application.
+**'OPEN':**\
+By clicking the 'OPEN' button, you can choose and load a UEFI/BIOS file into the application.
 
-**'Reset Button':**\
-The 'Reset' button unloads the currently loaded file and clears any buffers and data associated with it.
+**'RESET':**\
+Clicking the 'RESET' button unloads the currently loaded file and clears any buffers and data associated with it.
 
-**'Copy Button':**\
-<kbd>
-  <img src="files/manual/opencopymenu.png">
-</kbd>\
-Clicking the 'Copy' button opens the copy menu, which enables quick copying of text fields to the clipboard.
+**'COPY':**\
+Clicking the 'COPY' button opens the copy menu, which enables quick copying of text fields to the clipboard.
 
-**'Edit Button':**\
-<kbd>
-  <img src="files/manual/openeditor.png">
-</kbd>\
-Clicking the 'Edit' button will open the editor window. Alternatively, it can open the terms window, which must be accepted before access to the editor is granted.
+**'EDITOR':**\
+Clicking the 'EDITOR' button will open the firmware editor window. Alternatively, it can open the terms window, which must be accepted before access to the editor is granted.
 
 ---
 

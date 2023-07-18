@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-101">V1.0.2</a> •
   <a href="#version-101">V1.0.1</a> •
   <a href="#version-100">V1.0.0</a> •
   <a href="#version-070">V0.7.0</a> •
@@ -13,6 +14,15 @@
   <a href="#version-034">V0.3.4</a>
 </p>
 
+## Version 1.0.2
+
+#### Enhancements:
+- Reverted the main buttons back to text-based buttons, restoring their original form without the use of icons.
+- Other User Interface improvements.
+
+#### Bugs:
+- Resolved an issue that caused the application to become unresponsive when attempting to open large files.
+
 ## Version 1.0.1
 
 #### New:
@@ -25,7 +35,6 @@
 - Improved Xserve support.
 
 #### Bugs:
-
 - Resolved an oversight where the application attempted to read the flash descriptor even when no descriptor signature was found. This issue led to specific files triggering an unhandled exception.
 - Addressed an extremely rare issue where the EfiBiosId was not being read correctly.
 
