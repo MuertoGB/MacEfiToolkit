@@ -42,7 +42,6 @@ namespace Mac_EFI_Toolkit
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
             this.cmdReload = new System.Windows.Forms.Button();
             this.cmdNavigate = new System.Windows.Forms.Button();
-            this.lblFilename = new METLabel();
             this.lblModel = new System.Windows.Forms.Label();
             this.tlpFile = new System.Windows.Forms.TableLayoutPanel();
             this.lblFileCreatedDate = new System.Windows.Forms.Label();
@@ -103,6 +102,7 @@ namespace Mac_EFI_Toolkit
             this.cmdMenu = new System.Windows.Forms.Button();
             this.cmdMin = new System.Windows.Forms.Button();
             this.tlpVersionLabel = new System.Windows.Forms.TableLayoutPanel();
+            this.lblFilename = new METLabel();
             this.cmsMainMenu = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.openLocalFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBuildsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -338,19 +338,6 @@ namespace Mac_EFI_Toolkit
             this.cmdNavigate.Text = "N";
             this.cmdNavigate.UseVisualStyleBackColor = false;
             this.cmdNavigate.Click += new System.EventHandler(this.cmdNavigate_Click);
-            // 
-            // lblFilename
-            // 
-            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
-            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblFilename.ForeColor = System.Drawing.Color.White;
-            this.lblFilename.Location = new System.Drawing.Point(0, 0);
-            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblFilename.Size = new System.Drawing.Size(639, 36);
-            this.lblFilename.TabIndex = 6;
             // 
             // lblModel
             // 
@@ -1145,10 +1132,10 @@ namespace Mac_EFI_Toolkit
             this.cmdEdit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdEdit.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdEdit.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdEdit.Location = new System.Drawing.Point(221, 0);
-            this.cmdEdit.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdEdit.Location = new System.Drawing.Point(222, 1);
+            this.cmdEdit.Margin = new System.Windows.Forms.Padding(1);
             this.cmdEdit.Name = "cmdEdit";
-            this.cmdEdit.Size = new System.Drawing.Size(80, 38);
+            this.cmdEdit.Size = new System.Drawing.Size(78, 36);
             this.cmdEdit.TabIndex = 3;
             this.cmdEdit.Text = "EDITOR";
             this.cmdEdit.UseVisualStyleBackColor = false;
@@ -1166,10 +1153,10 @@ namespace Mac_EFI_Toolkit
             this.cmdReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdReset.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdReset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdReset.Location = new System.Drawing.Point(71, 0);
-            this.cmdReset.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdReset.Location = new System.Drawing.Point(72, 1);
+            this.cmdReset.Margin = new System.Windows.Forms.Padding(1);
             this.cmdReset.Name = "cmdReset";
-            this.cmdReset.Size = new System.Drawing.Size(70, 38);
+            this.cmdReset.Size = new System.Drawing.Size(68, 36);
             this.cmdReset.TabIndex = 1;
             this.cmdReset.Text = "RESET";
             this.cmdReset.UseVisualStyleBackColor = false;
@@ -1186,10 +1173,10 @@ namespace Mac_EFI_Toolkit
             this.cmdOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOpen.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdOpen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdOpen.Location = new System.Drawing.Point(0, 0);
-            this.cmdOpen.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdOpen.Location = new System.Drawing.Point(1, 1);
+            this.cmdOpen.Margin = new System.Windows.Forms.Padding(1);
             this.cmdOpen.Name = "cmdOpen";
-            this.cmdOpen.Size = new System.Drawing.Size(70, 38);
+            this.cmdOpen.Size = new System.Drawing.Size(68, 36);
             this.cmdOpen.TabIndex = 0;
             this.cmdOpen.Text = "OPEN";
             this.cmdOpen.UseVisualStyleBackColor = false;
@@ -1287,10 +1274,10 @@ namespace Mac_EFI_Toolkit
             this.cmdCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCopy.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdCopy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdCopy.Location = new System.Drawing.Point(146, 0);
-            this.cmdCopy.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdCopy.Location = new System.Drawing.Point(147, 1);
+            this.cmdCopy.Margin = new System.Windows.Forms.Padding(1);
             this.cmdCopy.Name = "cmdCopy";
-            this.cmdCopy.Size = new System.Drawing.Size(70, 38);
+            this.cmdCopy.Size = new System.Drawing.Size(68, 36);
             this.cmdCopy.TabIndex = 2;
             this.cmdCopy.Text = "COPY";
             this.cmdCopy.UseVisualStyleBackColor = false;
@@ -1400,6 +1387,19 @@ namespace Mac_EFI_Toolkit
             this.tlpVersionLabel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpVersionLabel.Size = new System.Drawing.Size(60, 50);
             this.tlpVersionLabel.TabIndex = 100;
+            // 
+            // lblFilename
+            // 
+            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblFilename.ForeColor = System.Drawing.Color.White;
+            this.lblFilename.Location = new System.Drawing.Point(0, 0);
+            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFilename.Name = "lblFilename";
+            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblFilename.Size = new System.Drawing.Size(639, 36);
+            this.lblFilename.TabIndex = 6;
             // 
             // cmsMainMenu
             // 
