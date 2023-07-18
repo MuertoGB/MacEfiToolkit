@@ -22,6 +22,7 @@
 
 #### Bugs:
 - Resolved an issue that caused the application to become unresponsive when attempting to open large files.
+- Resolved an issue that allowed copying the EFI version when the string value was null.
 
 ## Version 1.0.1
 

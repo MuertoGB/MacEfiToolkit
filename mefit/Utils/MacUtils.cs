@@ -191,7 +191,7 @@ namespace Mac_EFI_Toolkit.Utils
                 return GetFormattedEfiVersion(modelPart, majorPart, minorPart);
             }
 
-            return "N/A";
+            return null;
         }
 
         private static string GetFormattedEfiVersion(string modelPart, string majorPart, string minorPart)

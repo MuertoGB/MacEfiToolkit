@@ -908,7 +908,7 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateEfiVersionLabel()
         {
-            lblEfiVersion.Text = FWBase.FirmwareVersion;
+            lblEfiVersion.Text = FWBase.FirmwareVersion ?? "N/A";
         }
 
         private void UpdateNvramLabel(Label label, NvramStore storeData, string text)
@@ -1033,14 +1033,14 @@ namespace Mac_EFI_Toolkit
 
         private void ToggleControlEnable(bool enable)
         {
+            ArrowDrawer.Update(cmdCopy, enable ? Colours.DROP_ARROW_ENABLED : Colours.DROP_ARROW_DISABLED);
+
             Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdNavigate, cmdReload,
                 cmdFixFsysCrc, cmdExportFsys , cmdAppleRomInfo, cmdExportMe};
             foreach (Button button in buttons)
             {
                 button.Enabled = enable;
             }
-
-            ArrowDrawer.Update(cmdCopy, enable ? Colours.DROP_ARROW_ENABLED : Colours.DROP_ARROW_DISABLED);
 
             cmdEveryMacSearch.Enabled = (FWBase.FsysStoreData.Serial != null);
 

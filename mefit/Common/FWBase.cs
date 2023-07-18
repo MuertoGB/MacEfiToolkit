@@ -892,7 +892,7 @@ namespace Mac_EFI_Toolkit.Common
 
             efiBiosIdBytes = efiBiosIdBytes.Where(b => b != 0x00 && b != 0x20).ToArray();
             string efiBiosId = _utf8.GetString(efiBiosIdBytes);
-            string[] parts = efiBiosId.Split('.');
+            string[] parts = efiBiosId.Split((char)0x2E);
 
             if (parts.Length != 5)
             {

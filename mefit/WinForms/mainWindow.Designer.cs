@@ -1705,7 +1705,7 @@ namespace Mac_EFI_Toolkit
             this.boardIDToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.boardIDToolStripMenuItem.Name = "boardIDToolStripMenuItem";
             this.boardIDToolStripMenuItem.Size = new System.Drawing.Size(163, 28);
-            this.boardIDToolStripMenuItem.Text = "Board-ID";
+            this.boardIDToolStripMenuItem.Text = "Board ID";
             this.boardIDToolStripMenuItem.Click += new System.EventHandler(this.boardIDToolStripMenuItem_Click);
             // 
             // fitVersionToolStripMenuItem
