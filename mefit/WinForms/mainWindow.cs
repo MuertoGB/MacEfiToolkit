@@ -71,8 +71,7 @@ namespace Mac_EFI_Toolkit
             // Set button properties (font and text)
             SetButtonProperties();
 
-            // Not ready yet
-            cmdBuildClean.Hide();
+            ArrowDrawer.Draw(cmdCopy, Colours.DROP_ARROW_DISABLED);
         }
         #endregion
 
@@ -909,7 +908,7 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateEfiVersionLabel()
         {
-            lblEfiVersion.Text = FWBase.FirmwareVersion;
+            lblEfiVersion.Text = FWBase.FirmwareVersion ?? "N/A";
         }
 
         private void UpdateNvramLabel(Label label, NvramStore storeData, string text)
@@ -1034,7 +1033,9 @@ namespace Mac_EFI_Toolkit
 
         private void ToggleControlEnable(bool enable)
         {
-            Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdBuildClean, cmdNavigate, cmdReload,
+            ArrowDrawer.Update(cmdCopy, enable ? Colours.DROP_ARROW_ENABLED : Colours.DROP_ARROW_DISABLED);
+
+            Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdNavigate, cmdReload,
                 cmdFixFsysCrc, cmdExportFsys , cmdAppleRomInfo, cmdExportMe};
             foreach (Button button in buttons)
             {
@@ -1089,9 +1090,6 @@ namespace Mac_EFI_Toolkit
             {
                 new { Button = cmdMenu, Font = Program.FONT_MDL2_REG_14, Text = Chars.SHOW },
                 new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS },
-                new { Button = cmdCopy, Font =  Program.FONT_MDL2_REG_12, Text = Chars.COPY },
-                new { Button = cmdEdit, Font =  Program.FONT_MDL2_REG_12, Text = Chars.COMPONENT },
-                new { Button = cmdBuildClean, Font =  Program.FONT_MDL2_REG_12, Text = Chars.USB },
                 new { Button = cmdNavigate, Font = Program.FONT_MDL2_REG_10, Text = Chars.FILE_EXPLORER },
                 new { Button = cmdReload, Font = Program.FONT_MDL2_REG_10, Text = Chars.REFRESH },
                 new { Button = cmdEveryMacSearch, Font = Program.FONT_MDL2_REG_9, Text = Chars.WEB_SEARCH },
@@ -1112,9 +1110,9 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdMenu, cmdOpen, cmdReset, cmdCopy, cmdEdit, cmdBuildClean,
-                cmdNavigate, cmdReload, cmdEveryMacSearch, cmdFixFsysCrc,
-                cmdExportFsys, cmdAppleRomInfo, cmdExportMe
+                cmdMenu, cmdOpen, cmdReset, cmdCopy, cmdEdit, cmdNavigate,
+                cmdReload, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys,
+                cmdAppleRomInfo, cmdExportMe
             };
 
             Label[] labels =
@@ -1146,7 +1144,6 @@ namespace Mac_EFI_Toolkit
                     { cmdEdit, "Firmware Editor (CTRL + E)" },
                     { cmdMenu, "Application Menu (CTRL + M)"},
                     { cmdCopy, "Copy (CTRL + C)" },
-                    { cmdBuildClean, "Build Factory Image (CTRL + B)"},
                     { cmdNavigate, "Navigate to File (ALT + N)" },
                     { cmdReload, "Reload File from Disk (ALT + R)" },
                     { cmdEveryMacSearch, "Search Serial with EveryMac (ALT + S)" },
@@ -1281,16 +1278,16 @@ namespace Mac_EFI_Toolkit
                 ResetAllData();
             }
 
-            // Set the binary path and load the bytes
-            FWBase.LoadedBinaryPath = filePath;
-            FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
-
             // Check the filesize
-            if (!IsValidMinMaxSize())
+            if (!IsValidMinMaxSize(filePath))
             {
                 ResetAllData();
                 return;
             }
+
+            // Set the binary path and load the bytes
+            FWBase.LoadedBinaryPath = filePath;
+            FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
 
             // Process the descriptor
             Descriptor.Parse(FWBase.LoadedBinaryBytes);
@@ -1338,25 +1335,25 @@ namespace Mac_EFI_Toolkit
             FWBase.FirmwareLoaded = true;
         }
 
-        private bool IsValidMinMaxSize()
+        private bool IsValidMinMaxSize(string filePath)
         {
-            FileInfo fileInfo = new FileInfo(FWBase.LoadedBinaryPath);
+            FileInfo fileInfo = new FileInfo(filePath);
 
             // Check if the file size is smaller than the minimum allowed size
             if (fileInfo.Length < FWBase.MIN_IMAGE_SIZE) // 1048576 bytes
             {
-                // Show a warning message if the file is too small
-                METMessageBox.Show(this, "Warning", "The selected file is too small and will not be loaded.",
-                    METMessageType.Warning, METMessageButtons.Okay);
+                // Show an error message if the file is too small
+                METMessageBox.Show(this, "Error", $"The selected file does not meet the minimum size requirement of {FWBase.MIN_IMAGE_SIZE:X}h.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return false;
             }
 
             // Check if the file size is larger than the maximum allowed size
             if (fileInfo.Length > FWBase.MAX_IMAGE_SIZE) // 33554432 bytes
             {
-                // Show a warning message if the file is too large
-                METMessageBox.Show(this, "Warning", "The selected file is too large and will not be loaded.",
-                    METMessageType.Warning, METMessageButtons.Okay);
+                // Show an error message if the file is too large
+                METMessageBox.Show(this, "Error", $"The selected file exceeds the maximum size limit of {FWBase.MAX_IMAGE_SIZE:X}h.",
+                    METMessageType.Error, METMessageButtons.Okay);
                 return false;
             }
 

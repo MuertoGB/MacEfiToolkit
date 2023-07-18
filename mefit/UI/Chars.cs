@@ -24,9 +24,6 @@ namespace Mac_EFI_Toolkit.UI
         internal const string REPAIR = "\uE90F";
         internal const string SAVE = "\uE74E";
         internal const string FORWARD = "\uE72A";
-        internal const string COPY = "\uE8C8";
-        internal const string COMPONENT = "\uE950";
-        internal const string USB = "\uE88E";
 
         // Non line-breaking space
         internal const string NBSPACE = "\u00A0";
