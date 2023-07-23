@@ -71,7 +71,7 @@ namespace Mac_EFI_Toolkit
             // Set button properties (font and text)
             SetButtonProperties();
 
-            ArrowDrawer.Draw(cmdCopy, Colours.DROP_ARROW_DISABLED);
+            ArrowDrawer.Draw(cmdCopyMenu, Colours.DROP_ARROW_DISABLED);
         }
         #endregion
 
@@ -181,7 +181,7 @@ namespace Mac_EFI_Toolkit
                         cmdReset.PerformClick();
                         break;
                     case Keys.C:
-                        cmdCopy.PerformClick();
+                        cmdCopyMenu.PerformClick();
                         break;
                     case Keys.E:
                         cmdEdit.PerformClick();
@@ -291,7 +291,8 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            DialogResult result = METMessageBox.Show(this, "Reset", "This will unload the firmware and all associated data, are you sure you want to reset?",
+            DialogResult result =
+                METMessageBox.Show(this, "Reset", "This will unload the firmware and all associated data, are you sure you want to reset?",
                 METMessageType.Warning, METMessageButtons.YesNo);
 
             if (result == DialogResult.Yes)
@@ -668,6 +669,7 @@ namespace Mac_EFI_Toolkit
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetHalfOpacity();
+
             using (Form formWindow = new settingsWindow())
             {
                 formWindow.FormClosed += ChildWindowClosed;
@@ -678,6 +680,7 @@ namespace Mac_EFI_Toolkit
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetHalfOpacity();
+
             using (Form formWindow = new aboutWindow())
             {
                 formWindow.FormClosed += ChildWindowClosed;
@@ -847,7 +850,11 @@ namespace Mac_EFI_Toolkit
             if (!isValidSize)
             {
                 lblFileSizeBytes.ForeColor = Colours.ERROR_RED;
-                lblFileSizeBytes.Text += isValidSize ? string.Empty : $" ({FileUtils.GetSizeDifference(fileSize)})";
+
+                lblFileSizeBytes.Text +=
+                    isValidSize
+                    ? string.Empty
+                    : $" ({FileUtils.GetSizeDifference(fileSize)})";
             }
         }
 
@@ -868,7 +875,8 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateModelLabel()
         {
-            lblModel.Text = $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.ModelPart) ?? "N/A"}";
+            lblModel.Text =
+                $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.ModelPart) ?? "N/A"}";
 
             // Load and append the config code asynchronously
             if (FWBase.FsysStoreData.HWC != null)
@@ -879,12 +887,16 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateFirmwareSerialNumber()
         {
-            lblSerialNumber.Text = FWBase.FsysStoreData.Serial ?? "N/A";
+            lblSerialNumber.Text =
+                FWBase.FsysStoreData.Serial ??
+                "N/A";
         }
 
         private void UpdateHardwareConfigLabel()
         {
-            lblHwc.Text = FWBase.FsysStoreData.HWC ?? "N/A";
+            lblHwc.Text =
+                FWBase.FsysStoreData.HWC
+                ?? "N/A";
         }
 
         private void UpdateFsysLabel()
@@ -892,8 +904,10 @@ namespace Mac_EFI_Toolkit
             if (FWBase.FsysStoreData.CrcString != null)
             {
                 lblFsysCrc.Text = $"CRC32: {FWBase.FsysStoreData.CrcString}h";
-                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString,
-                    FWBase.FsysStoreData.CrcString) ? Colours.COMPLETE_GREEN : Colours.ERROR_RED;
+                lblFsysCrc.ForeColor =
+                    string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString)
+                    ? Colours.COMPLETE_GREEN
+                    : Colours.ERROR_RED;
             }
             else
             {
@@ -903,21 +917,28 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateOrderNumberLabel()
         {
-            lblOrderNo.Text = FWBase.FsysStoreData.SON ?? "N/A";
+            lblOrderNo.Text =
+                FWBase.FsysStoreData.SON
+                ?? "N/A";
         }
 
         private void UpdateEfiVersionLabel()
         {
-            lblEfiVersion.Text = FWBase.FirmwareVersion ?? "N/A";
+            lblEfiVersion.Text =
+                FWBase.FirmwareVersion
+                ?? "N/A";
         }
 
         private void UpdateNvramLabel(Label label, NvramStore storeData, string text)
         {
             label.Text = text;
 
-            Color foreColor = (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
+            Color foreColor =
+                !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
+                ? Color.White
+                : storeData.PrimaryStoreBase != -1
                 ? Colours.COMPLETE_GREEN
-                : (storeData.PrimaryStoreBase != -1 ? Color.White : Colours.DISABLED_TEXT);
+                : Colours.DISABLED_TEXT;
 
             label.ForeColor = foreColor;
         }
@@ -958,7 +979,9 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateBoardIdLabel()
         {
-            lblBoardId.Text = FWBase.PDRSectionData.BoardId ?? "N/A";
+            lblBoardId.Text =
+                FWBase.PDRSectionData.BoardId
+                ?? "N/A";
         }
 
         private void UpdateApfsCapableLabel()
@@ -966,10 +989,6 @@ namespace Mac_EFI_Toolkit
 
             switch (FWBase.IsApfsCapable)
             {
-                case ApfsCapable.Unknown:
-                    lblApfsCapable.Text = "UNKOWN";
-                    lblApfsCapable.ForeColor = Colours.ERROR_RED;
-                    break;
                 case ApfsCapable.Guid:
                     lblApfsCapable.Text = "YES (DXE)";
                     break;
@@ -980,23 +999,32 @@ namespace Mac_EFI_Toolkit
                     lblApfsCapable.Text = "DRIVER NOT FOUND";
                     lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
                     break;
+                case ApfsCapable.Unknown:
+                    lblApfsCapable.Text = "UNKOWN";
+                    lblApfsCapable.ForeColor = Colours.ERROR_RED;
+                    break;
             }
         }
 
         private void UpdateFitVersionLabel()
         {
-            lblFitVersion.Text = FWBase.FitVersion ?? "N/A";
+            lblFitVersion.Text =
+                FWBase.FitVersion
+                ?? "N/A";
         }
 
         private void UpdateIntelMeLabel()
         {
-            lblMeVersion.Text = FWBase.MeVersion ?? "N/A";
+            lblMeVersion.Text =
+                FWBase.MeVersion
+                ?? "N/A";
 
             if (Descriptor.MeBase != 0)
             {
                 if (!string.IsNullOrEmpty(FWBase.MeVersion))
                 {
-                    lblMeVersion.Text += $" ({Descriptor.MeBase:X2}h)";
+                    lblMeVersion.Text +=
+                        $" ({Descriptor.MeBase:X2}h)";
                 }
             }
         }
@@ -1033,22 +1061,34 @@ namespace Mac_EFI_Toolkit
 
         private void ToggleControlEnable(bool enable)
         {
-            ArrowDrawer.Update(cmdCopy, enable ? Colours.DROP_ARROW_ENABLED : Colours.DROP_ARROW_DISABLED);
+            ArrowDrawer.Draw
+            (
+                cmdCopyMenu,
+                enable
+                ? Colours.DROP_ARROW_ENABLED
+                : Colours.DROP_ARROW_DISABLED
+            );
 
-            Button[] buttons = { cmdReset, cmdEdit, cmdCopy, cmdNavigate, cmdReload,
-                cmdFixFsysCrc, cmdExportFsys , cmdAppleRomInfo, cmdExportMe};
+            Button[] buttons =
+            {
+                cmdReset, cmdEdit, cmdCopyMenu, cmdNavigate, cmdReload,
+                cmdFixFsysCrc, cmdExportFsys , cmdAppleRomInfo, cmdExportMe
+            };
+
             foreach (Button button in buttons)
             {
                 button.Enabled = enable;
             }
 
-            cmdEveryMacSearch.Enabled = (FWBase.FsysStoreData.Serial != null);
+            cmdEveryMacSearch.Enabled =
+                FWBase.FsysStoreData.Serial != null;
 
             if (FWBase.FsysStoreData.FsysBytes != null)
             {
-                cmdFixFsysCrc.Enabled = MacUtils.GetUintFsysCrc32
-                    (FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString
-                    ? false : true;
+                cmdFixFsysCrc.Enabled =
+                    MacUtils.GetUintFsysCrc32(FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString
+                    ? false
+                    : true;
             }
             else
             {
@@ -1110,7 +1150,7 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdMenu, cmdOpen, cmdReset, cmdCopy, cmdEdit, cmdNavigate,
+                cmdMenu, cmdOpen, cmdReset, cmdCopyMenu, cmdEdit, cmdNavigate,
                 cmdReload, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys,
                 cmdAppleRomInfo, cmdExportMe
             };
@@ -1143,7 +1183,7 @@ namespace Mac_EFI_Toolkit
                     { cmdReset, "Reset (CTRL + R)" },
                     { cmdEdit, "Firmware Editor (CTRL + E)" },
                     { cmdMenu, "Application Menu (CTRL + M)"},
-                    { cmdCopy, "Copy (CTRL + C)" },
+                    { cmdCopyMenu, "Copy (CTRL + C)" },
                     { cmdNavigate, "Navigate to File (ALT + N)" },
                     { cmdReload, "Reload File from Disk (ALT + R)" },
                     { cmdEveryMacSearch, "Search Serial with EveryMac (ALT + S)" },
@@ -1171,8 +1211,10 @@ namespace Mac_EFI_Toolkit
 
         private string SetNvramStoreTip(NvramStore storeData, string storeType)
         {
-            if (!storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty)
-                return $"{storeType} data present in the NVRAM";
+            if (!storeData.IsPrimaryStoreEmpty && !storeData.IsBackupStoreEmpty)
+                return $"Data present in both {storeType} stores";
+            else if (!storeData.IsPrimaryStoreEmpty && storeData.IsBackupStoreEmpty)
+                return $"Data present in the primary {storeType} store";
             else if (storeData.PrimaryStoreBase != -1)
                 return $"{storeType} NVRAM stores are empty (0xFF)";
 
@@ -1202,7 +1244,8 @@ namespace Mac_EFI_Toolkit
                 {
                     lblPrivateMemory.Invoke((Action)(() =>
                     {
-                        lblPrivateMemory.Text = $"{Helper.GetBytesReadableSize(currentProcess.PrivateMemorySize64)}";
+                        lblPrivateMemory.Text =
+                        $"{Helper.GetBytesReadableSize(currentProcess.PrivateMemorySize64)}";
                     }));
                 }
             }

@@ -179,6 +179,17 @@ namespace Mac_EFI_Toolkit.Common
             EfiLock = (SvsStoreData.PrimaryStoreBase != -1 && SvsStoreData.PrimaryStoreBytes != null)
                 ? EfiLock = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes)
                 : EfiLockStatus.Unknown;
+
+            if (FsysStoreData.FsysBytes == null)
+            {
+                FsysStoreData = GetFsysStoreData(sourceBytes, false, true);
+
+                if (FsysStoreData.FsysBytes != null)
+                {
+                    Logger.WriteToLogFile($"Force found Fsys Store at {FsysStoreData.FsysBase:X}h." +
+                        $" The image may be misaligned or corrupt ({FileInfoData.FileNameWithExt}).", LogType.Application);
+                }
+            }
         }
 
         internal static void ResetFirmwareBaseData()
@@ -201,11 +212,14 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
-            int dxeCore = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.DXE_CORE);
+            int dxeCore = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.DXE_CORE, 16, 16);
 
-            if (!Descriptor.DescriptorMode && dxeCore == -1)
+            if (!Descriptor.DescriptorMode)
             {
-                return false;
+                if (dxeCore == -1)
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -280,7 +294,7 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region Fsys Store
-        internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly)
+        internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFind = false)
         {
             // Base should be zero if the isFsysStoreOnly flag is set
             int fsysBase = 0;
@@ -288,23 +302,30 @@ namespace Mac_EFI_Toolkit.Common
             // Arg to skip Fsys searching
             if (!isFsysStoreOnly)
             {
-                // First we need to locate the NVRAM section GUID
-                int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, _biosBase, _biosLimit);
-
-                if (guidBase == -1)
+                if (!forceFind)
                 {
-                    // NVRAM store was not found so return default data
-                    return DefaultFsysRegion();
+                    // First we need to locate the NVRAM section GUID
+                    int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, _biosBase, _biosLimit);
+
+                    if (guidBase == -1)
+                    {
+                        // NVRAM store was not found so return default data
+                        return DefaultFsysRegion();
+                    }
+
+                    // Get NVRAM section size from header
+                    byte[] sectionLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, guidBase + GUID_LENGTH, 4);
+                    // Convert NVRAM section size to int32
+                    int nvramLength = BitConverter.ToInt32(sectionLengthBytes, 0);
+                    // Search for the Fsys store within bounds of the NVRAM section
+                    fsysBase = BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, guidBase - ZERO_VECTOR_LENGTH - GUID_LENGTH, nvramLength);
+                }
+                else
+                {
+                    fsysBase = BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, _biosBase, _biosLimit);
                 }
 
-                // Get NVRAM section size from header
-                byte[] sectionLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, guidBase + GUID_LENGTH, 4);
-                // Convert NVRAM section size to int32
-                int nvramLength = BitConverter.ToInt32(sectionLengthBytes, 0);
-                // Search for the Fsys store within bounds of the NVRAM section
-                fsysBase = BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, guidBase - ZERO_VECTOR_LENGTH - GUID_LENGTH, nvramLength);
-
-                // Fsys store was not found within scope of the NVRAM section
+                // Fsys store was not found within scope of the binary.
                 if (fsysBase == -1)
                 {
                     return DefaultFsysRegion();
