@@ -221,7 +221,7 @@ This section provides information about the firmware version, and includes one b
   <img src="files/manual/nvramlocked.png">
 </kbd>
 
-This section is divided into four items. The first three items represent different NVRAM store types, indicating their status. Each store type will appear white when empty, green when data is present, and grey when the store is not found.
+This section is divided into four items. The first three items represent different NVRAM store types, indicating their status. Each store type will appear green when empty, white when data is present, and grey when the store is not found.
 
 The padlock item represents EFI Lock status. If the padlock icon is green and unlocked, it signifies that a Message Authentication Code (MAC) was not found, indicating that the EFI is likely not locked. Conversely, if the padlock icon is red and locked, it suggests that a Message Authentication Code (MAC) was found, indicating that the EFI is likely password locked.
 
