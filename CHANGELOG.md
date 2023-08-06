@@ -25,6 +25,9 @@
 - Improved the image validation logic.
 - User interface improvements.
 
+#### Bugs:
+- Fixed an scenario where dragging and dropping a file onto the application executable would result in a crash when "Create a Debug Log" was clicked. This issue was resolved by dynamically constructing the file path when necessary.
+
 ## Version 1.0.2
 
 #### Enhancements:

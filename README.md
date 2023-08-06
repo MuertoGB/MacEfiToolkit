@@ -1,7 +1,7 @@
 <h1 align="center">
 <img width="200" src="files/images/img128px.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit V1.0.2
+Mac EFI Toolkit V1.0.3
 </h1>
 
 <h4 align="center">A tool for analysis of Mac BIOS firmware, with limited editing capabilities.</h4>

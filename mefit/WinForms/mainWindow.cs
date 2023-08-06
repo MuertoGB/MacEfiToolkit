@@ -302,6 +302,12 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void cmdCopy_Click(object sender, EventArgs e)
+        {
+            Control control = sender as Control;
+            ShowContextMenu(control, cmsCopy);
+        }
+
         private void cmdEdit_Click(object sender, EventArgs e)
         {
             if (FWBase.LoadedBinaryBytes == null)
@@ -333,12 +339,6 @@ namespace Mac_EFI_Toolkit
                     frm.ShowDialog();
                 }
             }
-        }
-
-        private void cmdCopy_Click(object sender, EventArgs e)
-        {
-            Control control = sender as Control;
-            ShowContextMenu(control, cmsCopy);
         }
 
         private void cmdEveryMacSearch_Click(object sender, EventArgs e)
