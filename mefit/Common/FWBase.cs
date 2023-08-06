@@ -125,6 +125,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static string MeVersion = null;
         internal static byte[] LoadedBinaryBytes = null;
         internal static bool FirmwareLoaded = false;
+        internal static bool ForceFoundFsys = false;
 
         internal static FileInfoStore FileInfoData;
         internal static PdrSection PDRSectionData;
@@ -186,6 +187,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 if (FsysStoreData.FsysBytes != null)
                 {
+                    ForceFoundFsys = true;
                     Logger.WriteToLogFile($"Force found Fsys Store at {FsysStoreData.FsysBase:X}h." +
                         $" The image may be misaligned or corrupt ({FileInfoData.FileNameWithExt}).", LogType.Application);
                 }
@@ -196,6 +198,7 @@ namespace Mac_EFI_Toolkit.Common
         {
             LoadedBinaryPath = null;
             LoadedBinaryBytes = null;
+            ForceFoundFsys = false;
             FileInfoData = default;
             PDRSectionData = default;
             VssStoreData = default;

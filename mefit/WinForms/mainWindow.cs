@@ -903,9 +903,9 @@ namespace Mac_EFI_Toolkit
         {
             if (FWBase.FsysStoreData.CrcString != null)
             {
-                lblFsysCrc.Text = $"CRC32: {FWBase.FsysStoreData.CrcString}h";
-                lblFsysCrc.ForeColor =
-                    string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString)
+                lblFsysCrc.Text =
+                    $"CRC: {FWBase.FsysStoreData.CrcString}h{(FWBase.ForceFoundFsys ? " [F]" : string.Empty)}";
+                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString)
                     ? Colours.COMPLETE_GREEN
                     : Colours.ERROR_RED;
             }
