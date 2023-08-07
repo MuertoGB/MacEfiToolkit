@@ -35,27 +35,53 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
-            lblTitle.MouseMove += infoWindow_MouseMove;
+            Load += infoWindow_Load;
             KeyDown += infoWindow_KeyDown;
+            lblTitle.MouseMove += infoWindow_MouseMove;
+
+            InterfaceUtils.SetTableLayoutPanelHeight(tlpMain);
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Chars.EXIT_CROSS;
+        }
+        #endregion
 
-            lblBiosId.Text = FWBase.ROMInfoSectionData.BiosId ?? "N/A";
+        #region Window Events
+        private void infoWindow_Load(object sender, EventArgs e)
+        {
+            lblBiosId.Text = FWBase.ROMInfoSectionData.BiosId
+                ?? "N/A";
             lblModel.Text = FWBase.ROMInfoSectionData.Model != null
                 ? $"{FWBase.ROMInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(FWBase.ROMInfoSectionData.Model)})"
                 : "N/A";
-            lblEfiVersion.Text = FWBase.ROMInfoSectionData.EfiVersion ?? "N/A";
-            lblBuiltBy.Text = FWBase.ROMInfoSectionData.BuiltBy ?? "N/A";
-            lblDateStamp.Text = FWBase.ROMInfoSectionData.DateStamp ?? "N/A";
-            lblRevision.Text = FWBase.ROMInfoSectionData.Revision ?? "N/A";
-            lblBootRom.Text = FWBase.ROMInfoSectionData.RomVersion ?? "N/A";
-            lblBuildcaveId.Text = FWBase.ROMInfoSectionData.BuildcaveId ?? "N/A";
-            lblBuildType.Text = FWBase.ROMInfoSectionData.BuildType ?? "N/A";
-            lblCompiler.Text = FWBase.ROMInfoSectionData.Compiler ?? "N/A";
-
-            lblSectionData.Text = $"Base: {FWBase.ROMInfoSectionData.SectionBase:X2}h, " +
-                $"Size: {FWBase.ROMInfoSectionData.SectionBytes.Length:X2}h" ?? string.Empty;
+            lblEfiVersion.Text =
+                FWBase.ROMInfoSectionData.EfiVersion
+                ?? "N/A";
+            lblBuiltBy.Text =
+                FWBase.ROMInfoSectionData.BuiltBy
+                ?? "N/A";
+            lblDateStamp.Text =
+                FWBase.ROMInfoSectionData.DateStamp
+                ?? "N/A";
+            lblRevision.Text =
+                FWBase.ROMInfoSectionData.Revision
+                ?? "N/A";
+            lblBootRom.Text =
+                FWBase.ROMInfoSectionData.RomVersion
+                ?? "N/A";
+            lblBuildcaveId.Text =
+                FWBase.ROMInfoSectionData.BuildcaveId
+                ?? "N/A";
+            lblBuildType.Text =
+                FWBase.ROMInfoSectionData.BuildType
+                ?? "N/A";
+            lblCompiler.Text =
+                FWBase.ROMInfoSectionData.Compiler
+                ?? "N/A";
+            lblSectionData.Text =
+                $"Base: {FWBase.ROMInfoSectionData.SectionBase:X2}h, " +
+                $"Size: {FWBase.ROMInfoSectionData.SectionBytes.Length:X2}h"
+                ?? string.Empty;
 
             foreach (Label label in tlpMain.Controls)
             {

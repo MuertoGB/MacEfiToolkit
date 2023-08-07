@@ -1,6 +1,7 @@
 <h4 align="center">Version History</h4>
 <p align="center">
-  <a href="#version-101">V1.0.2</a> •
+  <a href="#version-103">V1.0.3</a> •
+  <a href="#version-102">V1.0.2</a> •
   <a href="#version-101">V1.0.1</a> •
   <a href="#version-100">V1.0.0</a> •
   <a href="#version-070">V0.7.0</a> •
@@ -13,6 +14,19 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.0.3
+
+#### New:
+- Updated the firmware parser with a new feature that attempts to force find the Fsys Store if it was not initially located within the NVRAM on the first pass. This change makes the application more reliable at extracting Fsys data from corrupt firmware.
+
+#### Enhancements:
+- Implemented a visual colour change in the presentation of NVRAM store labels in the main window. The manual has been updated to reflect this change.
+- Improved the image validation logic.
+- User interface improvements.
+
+#### Bugs:
+- Fixed a scenario that caused a crash when dragging and dropping a file onto the application executable and subsequently clicking "Create a Debug Log." This issue was caused by a malformed file path in specific scenarios, and was resolved by dynamically constructing the executable file path when necessary.
 
 ## Version 1.0.2
 

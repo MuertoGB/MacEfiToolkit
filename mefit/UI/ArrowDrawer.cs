@@ -14,18 +14,15 @@ using System.Windows.Forms;
 
 public class ArrowDrawer
 {
-    private static Color arrowColor;
 
     public static void Draw(Control control, Color color)
     {
-        arrowColor = color;
-
         control.Paint += (sender, e) =>
         {
             int arrowX = control.Width / 2;
             int arrowY = control.Height - 6;
 
-            using (SolidBrush brush = new SolidBrush(arrowColor))
+            using (SolidBrush brush = new SolidBrush(color))
             {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 e.Graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
@@ -41,11 +38,5 @@ public class ArrowDrawer
                 e.Graphics.FillPolygon(brush, arrowPoints);
             }
         };
-    }
-
-    public static void Update(Control control, Color color)
-    {
-        arrowColor = color;
-        control.Invalidate();
     }
 }
