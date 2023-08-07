@@ -18,7 +18,7 @@
 ## Version 1.0.3
 
 #### New:
-- Updated the firmware parser with a new feature that attempts to force find the Fsys Store if it was not initially located within the NVRAM on the first pass.
+- Updated the firmware parser with a new feature that attempts to force find the Fsys Store if it was not initially located within the NVRAM on the first pass. This change makes the application more reliable at extracting Fsys data from corrupt firmware.
 
 #### Enhancements:
 - Implemented a visual colour change in the presentation of NVRAM store labels in the main window. The manual has been updated to reflect this change.
@@ -26,7 +26,7 @@
 - User interface improvements.
 
 #### Bugs:
-- Fixed an scenario where dragging and dropping a file onto the application executable would result in a crash when "Create a Debug Log" was clicked. This issue was resolved by dynamically constructing the file path when necessary.
+- Fixed a scenario that caused a crash when dragging and dropping a file onto the application executable and subsequently clicking "Create a Debug Log." This issue was caused by a malformed file path in specific scenarios, and was resolved by dynamically constructing the executable file path when necessary.
 
 ## Version 1.0.2
 
