@@ -1000,7 +1000,7 @@ namespace Mac_EFI_Toolkit
                     lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
                     break;
                 case ApfsCapable.Unknown:
-                    lblApfsCapable.Text = "UNKOWN";
+                    lblApfsCapable.Text = "UNKNOWN";
                     lblApfsCapable.ForeColor = Colours.ERROR_RED;
                     break;
             }
