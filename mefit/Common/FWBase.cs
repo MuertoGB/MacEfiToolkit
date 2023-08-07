@@ -297,132 +297,46 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region Fsys Store
+        // Fsys resides in the NVRAM at either base: 20000h, or 22000h.
+        // Fsys size resides in the store at 0x09 and is 2 bytes in length,
+        // we should dynamically read it, not hardcode.
         internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFind = false)
         {
-            // Base should be zero if the isFsysStoreOnly flag is set
-            int fsysBase = 0;
+            // Find the base position of Fsys Store
+            int fsysBase = FindFsysBase(sourceBytes, isFsysStoreOnly, forceFind);
 
-            // Arg to skip Fsys searching
-            if (!isFsysStoreOnly)
-            {
-                if (!forceFind)
-                {
-                    // First we need to locate the NVRAM section GUID
-                    int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, _biosBase, _biosLimit);
-
-                    if (guidBase == -1)
-                    {
-                        // NVRAM store was not found so return default data
-                        return DefaultFsysRegion();
-                    }
-
-                    // Get NVRAM section size from header
-                    byte[] sectionLengthBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, guidBase + GUID_LENGTH, 4);
-                    // Convert NVRAM section size to int32
-                    int nvramLength = BitConverter.ToInt32(sectionLengthBytes, 0);
-                    // Search for the Fsys store within bounds of the NVRAM section
-                    fsysBase = BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, guidBase - ZERO_VECTOR_LENGTH - GUID_LENGTH, nvramLength);
-                }
-                else
-                {
-                    fsysBase = BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, _biosBase, _biosLimit);
-                }
-
-                // Fsys store was not found within scope of the binary.
-                if (fsysBase == -1)
-                {
-                    return DefaultFsysRegion();
-                }
-            }
-
-            byte[] fsysStoreBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, fsysBase, FSYS_RGN_SIZE);
-
-            // Fsys store was not loaded
-            if (fsysStoreBytes == null)
-            {
+            // If Fsys Store base is not found, return default data
+            if (fsysBase == -1)
                 return DefaultFsysRegion();
-            }
 
-            // Fsys store was not the correct size
-            if (fsysStoreBytes.Length != FSYS_RGN_SIZE)
-            {
+            // Retrieve FsysStore bytes
+            byte[] fsysStoreBytes = GetFsysStoreBytes(sourceBytes, fsysBase);
+
+            // If FsysStore is invalid, return default data
+            if (!IsValidFsysStore(fsysStoreBytes))
                 return DefaultFsysRegion();
-            }
 
-            // Get the Fsys store crc stored at 0x7FC (FSYS_RGN_SIZE - CRC32_LENGTH)
-            byte[] crcBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, fsysBase + FSYS_CRC_POS, CRC32_LENGTH);
-            byte[] crcEndianBytes = crcBytes.Reverse().ToArray(); // We need to flip the bytes from little endian
-            string crcString = BitConverter.ToString(crcEndianBytes).Replace("-", "");
-
-            // Manually calculate the Fsys store crc
-            uint uiCrcCalc = MacUtils.GetUintFsysCrc32(fsysStoreBytes);
+            // Retrieve CRC bytes and calculate CRC values
+            byte[] crcBytes = GetCrcBytes(sourceBytes, fsysBase);
+            string crcString = GetFlippedCrcString(crcBytes);
+            uint uiCrcCalc = CalculateFsysCrc(fsysStoreBytes);
             string crcCalcString = uiCrcCalc.ToString("X8");
 
-            // Parse the serial number
-            int snDataStart = -1;
-
-            // Look for the lower case system serial number signature
-            if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSN_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                snDataStart += SSN_LOWER_SIG.Length;
-
-            // Look for the upper case system serial number signature
-            if (snDataStart == -1)
-            {
-                if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSN_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                    snDataStart += SSN_UPPER_SIG.Length;
-            }
-
-            // Look for other ssn signatures
-            if (snDataStart == -1)
-            {
-                if ((snDataStart = BinaryUtils.GetBasePosition(sourceBytes, SSNP_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                    snDataStart += SSNP_LOWER_SIG.Length;
-            }
-
+            // Find and parse various signatures within FsysStore
+            int snDataStart = FindSignaturePosition(sourceBytes, fsysBase, FSYS_RGN_SIZE, SSN_LOWER_SIG, SSN_UPPER_SIG, SSNP_LOWER_SIG);
             string serialString = ParseFsysString(sourceBytes, snDataStart);
-            if (serialString == null) snDataStart = -1;
 
-            // Parse the hardware configuration code
-            int hwcDataStart = -1;
-
-            // Look for the hardware configuration lower case signature
-            if ((hwcDataStart = BinaryUtils.GetBasePosition(sourceBytes, HWC_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                hwcDataStart += HWC_LOWER_SIG.Length;
-
-            // Look for the hardware configuration upper case signature
-            if (hwcDataStart == -1)
-            {
-                if ((hwcDataStart = BinaryUtils.GetBasePosition(sourceBytes, HWC_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                    hwcDataStart += HWC_UPPER_SIG.Length;
-            }
-
+            int hwcDataStart = FindSignaturePosition(sourceBytes, fsysBase, FSYS_RGN_SIZE, HWC_LOWER_SIG, HWC_UPPER_SIG);
             string hwcString = ParseFsysString(sourceBytes, hwcDataStart);
-            if (hwcString == null) hwcDataStart = -1;
 
-            // Parse the system order number
-            int sonDataStart = -1;
-
-            // Look for the system order number lower case signature
-            if ((sonDataStart = BinaryUtils.GetBasePosition(sourceBytes, SON_LOWER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-            {
-                sonDataStart += SON_LOWER_SIG.Length;
-            }
-
-            // Look for the system order number upper case signature
-            if (sonDataStart == -1)
-            {
-                if ((sonDataStart = BinaryUtils.GetBasePosition(sourceBytes, SON_UPPER_SIG, fsysBase, FSYS_RGN_SIZE)) != -1)
-                {
-                    sonDataStart += SON_UPPER_SIG.Length;
-                }
-            }
-
+            int sonDataStart = FindSignaturePosition(sourceBytes, fsysBase, FSYS_RGN_SIZE, SON_LOWER_SIG, SON_UPPER_SIG);
             string sonString = ParseFsysString(sourceBytes, sonDataStart);
-            if (sonString != null && sonString.EndsWith("/"))
-            {
-                sonString = sonString.TrimEnd('/');
-            }
 
+            // Trim trailing '/' from SON string if present
+            if (sonString != null && sonString.EndsWith("/"))
+                sonString = sonString.TrimEnd('/');
+
+            // Create and return FsysStore object
             return new FsysStore
             {
                 FsysBytes = fsysStoreBytes,
@@ -440,32 +354,80 @@ namespace Mac_EFI_Toolkit.Common
 
         private static string ParseFsysString(byte[] sourceBytes, int basePos)
         {
-            // If the base is -1 return null
-            if (basePos == -1)
-            {
+            // Return null if base position is invalid or data size is zero
+            if (basePos == -1 || sourceBytes[basePos] == 0)
                 return null;
-            }
 
             // Read size of the indicated variable
             int dataSize = sourceBytes[basePos];
 
-            // Invalid data size
+            // Return null if data size is invalid
             if (dataSize == 0)
-            {
                 return null;
-            }
 
             // Read the variable bytes
             byte[] dataBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, basePos + LITERAL_POS, dataSize);
 
-            // Invalid bytes
-            if (dataBytes == null || dataBytes.Length > dataSize)
-            {
+            // Return null if bytes are invalid or exceed the data size
+            if (dataBytes == null || dataBytes.Length != dataSize)
                 return null;
-            }
 
             // Return string data
             return _utf8.GetString(dataBytes);
+        }
+
+        private static int FindFsysBase(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFind)
+        {
+            if (isFsysStoreOnly)
+                return 0;
+
+            if (forceFind)
+                return BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, _biosBase, _biosLimit);
+
+            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, _biosBase, _biosLimit);
+
+            if (guidBase == -1)
+                return -1;
+
+            int nvramLength = BitConverter.ToInt32(BinaryUtils.GetBytesBaseLength(sourceBytes, guidBase + GUID_LENGTH, 4), 0);
+            return BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, guidBase - ZERO_VECTOR_LENGTH - GUID_LENGTH, nvramLength);
+        }
+
+        private static bool IsValidFsysStore(byte[] fsysStoreBytes)
+        {
+            return fsysStoreBytes != null && fsysStoreBytes.Length == FSYS_RGN_SIZE;
+        }
+
+        private static string GetFlippedCrcString(byte[] crcBytes)
+        {
+            byte[] crcEndianBytes = crcBytes.Reverse().ToArray();
+            return BitConverter.ToString(crcEndianBytes).Replace("-", "");
+        }
+
+        private static uint CalculateFsysCrc(byte[] fsysStoreBytes)
+        {
+            return MacUtils.GetUintFsysCrc32(fsysStoreBytes);
+        }
+
+        private static int FindSignaturePosition(byte[] sourceBytes, int start, int limit, params byte[][] signatures)
+        {
+            foreach (byte[] sig in signatures)
+            {
+                int dataStart = BinaryUtils.GetBasePosition(sourceBytes, sig, start, limit);
+                if (dataStart != -1)
+                    return dataStart + sig.Length;
+            }
+            return -1;
+        }
+
+        private static byte[] GetFsysStoreBytes(byte[] sourceBytes, int fsysBase)
+        {
+            return BinaryUtils.GetBytesBaseLength(sourceBytes, fsysBase, FSYS_RGN_SIZE);
+        }
+
+        private static byte[] GetCrcBytes(byte[] sourceBytes, int fsysBase)
+        {
+            return BinaryUtils.GetBytesBaseLength(sourceBytes, fsysBase + FSYS_CRC_POS, CRC32_LENGTH);
         }
 
         private static FsysStore DefaultFsysRegion()
@@ -485,7 +447,6 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
-        // Fsys resides in the NVRAM at either base: 20000h, or 22000h.
         internal static readonly byte[] FSYS_SIG =
         {
             0x46, 0x73, 0x79, 0x73,
