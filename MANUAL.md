@@ -111,7 +111,7 @@ This section displays the name of the loaded file and includes two buttons. Clic
 
 The file size of the loaded file is measured in bytes. If the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
 
-> 🛈 8,388,615 (>7) would indicate the given file is 7 bytes too large.
+> 🛈 8,388,615 (>7) would indicate the given firmware is 7 bytes too large.
 
 ---
 
@@ -183,8 +183,13 @@ The Hardware Configuration Code (HWC) is located in the Fsys store and is derive
 <kbd>
   <img src="files/manual/fsysinvalid.png">
 </kbd>
+<kbd>
+  <img src="files/manual/fsys_forced.png">
+</kbd>
 
-This section includes the checksum of the Fsys store and two buttons. If the CRC32 of the Fsys store is valid, the label will appear green and display the valid checksum. If the CRC32 is invalid, the label will appear red and display the invalid checksum. Clicking the "Wrench" button, which is enabled when the Fsys store checksum is invalid, will prompt a "Save As" dialog to export the binary file with a repaired Fsys CRC32 checksum. The "Save" button allows exporting of the 2048-byte (0x800h) Fsys store.
+This section includes the checksum of the Fsys store and two buttons. If the CRC32 of the Fsys store is valid, the label will appear green and display the valid checksum. If the CRC32 is invalid, the label will appear red and display the invalid checksum. The presence of `[F]` appended to the checksum indicates the Fsys Store was force found by the application, and the firmware may be corrupt.
+
+Clicking the "Wrench" button, which is enabled when the Fsys store checksum is invalid, will prompt a "Save As" dialog to export the binary file with a repaired Fsys CRC32 checksum. The "Save" button allows exporting of the 2048-byte (0x800h) Fsys store.
 
 ---
 
