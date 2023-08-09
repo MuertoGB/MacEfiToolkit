@@ -127,6 +127,8 @@ namespace Mac_EFI_Toolkit.Common
         internal static bool FirmwareLoaded = false;
         internal static bool ForceFoundFsys = false;
 
+        internal static int FSYS_RGN_SIZE = 0;
+
         internal static FileInfoStore FileInfoData;
         internal static PdrSection PDRSectionData;
         internal static NvramStore VssStoreData;
@@ -141,13 +143,11 @@ namespace Mac_EFI_Toolkit.Common
 
         internal const int MIN_IMAGE_SIZE = 1048576;  // 100000h
         internal const int MAX_IMAGE_SIZE = 33554432; // 2000000h
-        internal const int FSYS_RGN_SIZE = 2048;      // 800h
-        internal const int FSYS_CRC_POS = 2044;       // 7FCh
+        internal const int CRC32_SIZE = 4;             // 4h
 
         private const int GUID_LENGTH = 16;          // 10h
         private const int ZERO_VECTOR_LENGTH = 16;   // 10h
         private const int LITERAL_POS = 2;           // 2h
-        private const int CRC32_LENGTH = 4;          // 4h
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
 
@@ -298,8 +298,6 @@ namespace Mac_EFI_Toolkit.Common
 
         #region Fsys Store
         // Fsys resides in the NVRAM at either base: 20000h, or 22000h.
-        // Fsys size resides in the store at 0x09 and is 2 bytes in length,
-        // we should dynamically read it, not hardcode.
         internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFind = false)
         {
             // Find the base position of Fsys Store
@@ -422,12 +420,26 @@ namespace Mac_EFI_Toolkit.Common
 
         private static byte[] GetFsysStoreBytes(byte[] sourceBytes, int fsysBase)
         {
+
+            // Get Fsys Store size bytes - fsys base + 0x09, length 2 bytes (int16)
+            byte[] sizeData = BinaryUtils.GetBytesBaseLength(sourceBytes, fsysBase + 9, 2);
+
+            // Convert size to int16 value
+            FSYS_RGN_SIZE = BitConverter.ToInt16(sizeData, 0);
+
+            // Min Fsys rgn size
+            if (FSYS_RGN_SIZE < 2048)
+            {
+                Logger.WriteToLogFile($"Fsys Store size was less than the min expected size: {FSYS_RGN_SIZE}", LogType.Application);
+                return null;
+            }
+
             return BinaryUtils.GetBytesBaseLength(sourceBytes, fsysBase, FSYS_RGN_SIZE);
         }
 
         private static byte[] GetCrcBytes(byte[] sourceBytes, int fsysBase)
         {
-            return BinaryUtils.GetBytesBaseLength(sourceBytes, fsysBase + FSYS_CRC_POS, CRC32_LENGTH);
+            return BinaryUtils.GetBytesBaseLength(sourceBytes, fsysBase + FSYS_RGN_SIZE - CRC32_SIZE, CRC32_SIZE);
         }
 
         private static FsysStore DefaultFsysRegion()

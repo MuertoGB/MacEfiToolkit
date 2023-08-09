@@ -94,8 +94,8 @@ namespace Mac_EFI_Toolkit.Utils
             if (fsysStore.Length > FWBase.FSYS_RGN_SIZE)
                 throw new ArgumentException(nameof(fsysStore), "Given bytes are too large.");
 
-            // Data we calculate is: Sig base + 0x800h - crc len of 0x4h = 7FCh
-            byte[] bytesTempFsys = new byte[FWBase.FSYS_CRC_POS];
+            // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes
+            byte[] bytesTempFsys = new byte[FWBase.FSYS_RGN_SIZE - FWBase.CRC32_SIZE];
 
             if (fsysStore != null)
             {

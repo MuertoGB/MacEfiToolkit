@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-104">V1.0.4</a> •
   <a href="#version-103">V1.0.3</a> •
   <a href="#version-102">V1.0.2</a> •
   <a href="#version-101">V1.0.1</a> •
@@ -14,6 +15,11 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.0.4
+
+#### Enhancements:
+- Enhanced the firmware parser by implementing dynamic reading of the Fsys store size. This improvement replaces the previous static approach of reading a hardcoded size of 0x800h (2048 bytes).
 
 ## Version 1.0.3
 

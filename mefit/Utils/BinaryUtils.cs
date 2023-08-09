@@ -308,7 +308,7 @@ namespace Mac_EFI_Toolkit.Utils
             byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
 
             // Write the new bytes back to the Fsys store at the appropriate base
-            OverwriteBytesAtBase(fsysStore, FWBase.FSYS_CRC_POS, newCrcBytes);
+            OverwriteBytesAtBase(fsysStore, FWBase.FSYS_RGN_SIZE - FWBase.CRC32_SIZE, newCrcBytes);
 
             // Return the patched data
             return fsysStore;
