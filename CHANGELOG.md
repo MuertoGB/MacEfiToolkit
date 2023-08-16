@@ -25,7 +25,7 @@
 #### Enhancements:
 - Improved the Fsys parser by implementing dynamic reading of the Fsys store size. This improvement replaces the previous static approach of reading a hardcoded size of 0x800h (2048 bytes).
 - Expanded functionality of the main window copy menu by introducing new options to copy the following data: File Size (Hex), Config Code, PDR base, ME base, and BIOS base.
-- Reorganized the main window user interface by relocating the EFI Lock icon in the NVRAM section to its own dedicated section.
+- Reorganized some data in the main window user interface by relocating EFI Lock information to its own dedicated section.
 - The main window will now display the length of a system serial number.
 - Improved user interaction by enabling access to the main window application menu through a right-click action on the title area.
 - Debug logs will now show the detected Fsys store size if a firmware is loaded and the Fsys store is present.
