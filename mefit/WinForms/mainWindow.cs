@@ -1431,7 +1431,7 @@ namespace Mac_EFI_Toolkit
                     { cmdFixFsysCrc, "Repair Fsys CRC32 (ALT + F)" },
                     { cmdExportFsys, "Export Fsys Store (ALT + E)" },
                     { cmdAppleRomInfo, "ROM Information (ALT + I)" },
-                    { cmdInvalidateEfiLock, "Invalidate EFI Lock (ALT + K)" },
+                    { cmdInvalidateEfiLock, "Remove EFI Lock (ALT + L)" },
                     { cmdExportMe, "Export ME Region (ALT + M)" },
                     { lblVssStore, SetNvramStoreTip(FWBase.VssStoreData, "VSS") },
                     { lblSvsStore, SetNvramStoreTip(FWBase.SvsStoreData, "SVS") },
