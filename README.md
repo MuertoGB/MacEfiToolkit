@@ -1,7 +1,7 @@
 <h1 align="center">
 <img width="200" src="files/images/img128px.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit V1.0.3
+Mac EFI Toolkit V1.1.0
 </h1>
 
 <h4 align="center">A tool for analysis of Mac BIOS firmware, with limited editing capabilities.</h4>
@@ -17,16 +17,15 @@ Mac EFI Toolkit V1.0.3
 
 ## About
 
-Mac EFI Toolkit, or 'mefit', is a valuable tool designed to aid technicians in repairing Mac BIOS/EFI files. It provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if hidden in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
+Mac EFI Toolkit, or 'mefit', is a valuable tool designed to aid technicians in repairing Mac BIOS/EFI files. Designed to be compact, mefit provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if hidden in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
 
 In terms of editing, mefit allows users to replace the System Serial Number (SSN) with automatic Hardware Configuration (HWC) matching and CRC32 masking. It also supports transplanting of exported Fsys stores with automatic CRC32 masking, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password.
 
 >🛈 **Access to some features requires accepting the editing terms.**
 
-This application provides support for most Mac BIOS/UEFI, with the exception of the A1534 model (as of now). I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
-
 <img width="550" src="files/images/met.png" alt="MET">
-<img width="550" src="files/images/met_alt.png" alt="MET_ALT">
+
+This application provides support for most Mac BIOS/UEFI, with the exception of editing A1534 firmware (as of now). I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
 
 ## Features
 
@@ -45,7 +44,7 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 - Read the Board-ID (UEFI version from 2013 onwards).
 
 **Mac Specific:**
-- Detect EFI password lock.
+- Detect and remove EFI password lock.
 - Check APFS capability.
 - View the firmware version.
 - View Apple ROM section information.
@@ -71,17 +70,16 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 
 | SUGGESTED FEATURES                         | Status                |
 |--------------------------------------------|-----------------------|
-| Batch process files for information        |🟢 Coming in an update |
-| Invalidate EFI lock without clearing SVS   |🟢 Coming in an update |
+| Batch process files for information        |🟢 Addition planned    |
+| Build clean firmware from FD               |🟢 Addition planned    |
 | Detect email address in the NVRAM          |🟠 Researching         |
-| Build clean firmware from FD               |🟠 Researching         |
 | Detect MDM status                          |🔴 Undecided           |
 
 ## Download
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.0.3](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 7th August, 2023 | Yes | Stable |
+|[1.1.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| TBD | Yes | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 

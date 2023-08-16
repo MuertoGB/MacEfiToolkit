@@ -26,6 +26,24 @@ namespace Mac_EFI_Toolkit.Common
         internal uint CRC32 { get; set; }
     }
 
+    internal struct PdrSection
+    {
+        internal string BoardId { get; set; }
+    }
+
+    internal struct NvramStore
+    {
+        internal NvramStoreType StoreType { get; set; }
+        internal int PrimaryStoreBase { get; set; }
+        internal int PrimaryStoreSize { get; set; }
+        internal byte[] PrimaryStoreBytes { get; set; }
+        internal bool IsPrimaryStoreEmpty { get; set; }
+        internal int BackupStoreBase { get; set; }
+        internal int BackupStoreSize { get; set; }
+        internal byte[] BackupStoreBytes { get; set; }
+        internal bool IsBackupStoreEmpty { get; set; }
+    }
+
     internal struct FsysStore
     {
         internal byte[] FsysBytes { get; set; }
@@ -40,17 +58,10 @@ namespace Mac_EFI_Toolkit.Common
         internal uint CRC32CalcInt { get; set; }
     }
 
-    internal struct NvramStore
+    internal struct EfiLock
     {
-        internal NvramStoreType StoreType { get; set; }
-        internal int PrimaryStoreBase { get; set; }
-        internal int PrimaryStoreSize { get; set; }
-        internal byte[] PrimaryStoreBytes { get; set; }
-        internal bool IsPrimaryStoreEmpty { get; set; }
-        internal int BackupStoreBase { get; set; }
-        internal int BackupStoreSize { get; set; }
-        internal byte[] BackupStoreBytes { get; set; }
-        internal bool IsBackupStoreEmpty { get; set; }
+        internal EfiLockStatus LockStatus { get; set; }
+        internal int LockCrcBase { get; set; }
     }
 
     internal struct AppleRomInformationSection
@@ -68,11 +79,6 @@ namespace Mac_EFI_Toolkit.Common
         internal string BuildcaveId { get; set; }
         internal string BuildType { get; set; }
         internal string Compiler { get; set; }
-    }
-
-    internal struct PdrSection
-    {
-        internal string BoardId { get; set; }
     }
 
     internal struct EfiBiosIdSection
@@ -119,6 +125,8 @@ namespace Mac_EFI_Toolkit.Common
 
     class FWBase
     {
+
+        #region Internal Members
         internal static string LoadedBinaryPath = null;
         internal static string FirmwareVersion = null;
         internal static string FitVersion = null;
@@ -126,48 +134,58 @@ namespace Mac_EFI_Toolkit.Common
         internal static byte[] LoadedBinaryBytes = null;
         internal static bool FirmwareLoaded = false;
         internal static bool ForceFoundFsys = false;
-
         internal static int FSYS_RGN_SIZE = 0;
-
         internal static FileInfoStore FileInfoData;
         internal static PdrSection PDRSectionData;
         internal static NvramStore VssStoreData;
         internal static NvramStore SvsStoreData;
         internal static NvramStore NssStoreData;
+        internal static EfiLock SvsPrimaryLockData = DefaultEfiLockStatus();
+        internal static EfiLock SvsBackupLockData = DefaultEfiLockStatus();
         internal static FsysStore FsysStoreData;
         internal static AppleRomInformationSection ROMInfoSectionData;
         internal static EfiBiosIdSection EFISectionData;
-
-        internal static EfiLockStatus EfiLock = EfiLockStatus.Unknown;
         internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
 
         internal const int MIN_IMAGE_SIZE = 1048576;  // 100000h
         internal const int MAX_IMAGE_SIZE = 33554432; // 2000000h
         internal const int CRC32_SIZE = 4;             // 4h
 
+        internal static int PDR_BASE = 0;
+        internal static int PDR_LIMIT = 0;
+        internal static int ME_BASE = 0;
+        internal static int ME_LIMIT = 0;
+        internal static int BIOS_BASE = 0;
+        internal static int BIOS_LIMIT = 0;
+        #endregion
+
+        #region Private Members
         private const int GUID_LENGTH = 16;          // 10h
         private const int ZERO_VECTOR_LENGTH = 16;   // 10h
         private const int LITERAL_POS = 2;           // 2h
 
         private static readonly Encoding _utf8 = Encoding.UTF8;
+        #endregion
 
-        private static int _pdrBase = 0;
-        private static int _pdrLimit = 0;
-        private static int _biosBase = 0;
-        private static int _biosLimit = 0;
-
+        #region Process Firmware
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
-            _pdrBase = Descriptor.PdrBase != 0 ? (int)Descriptor.PdrBase : 0;
-            _pdrLimit = Descriptor.PdrLimit != 0 ? (int)Descriptor.PdrLimit : sourceBytes.Length;
-            _biosBase = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
-            _biosLimit = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : sourceBytes.Length;
+            PDR_BASE = Descriptor.PdrBase != 0 ? (int)Descriptor.PdrBase : 0;
+            PDR_LIMIT = Descriptor.PdrLimit != 0 ? (int)Descriptor.PdrLimit : sourceBytes.Length;
+            ME_BASE = Descriptor.MeBase != 0 ? (int)Descriptor.MeBase : 0;
+            ME_LIMIT = Descriptor.MeLimit != 0 ? (int)Descriptor.MeLimit : sourceBytes.Length;
+            BIOS_BASE = Descriptor.BiosBase != 0 ? (int)Descriptor.BiosBase : 0;
+            BIOS_LIMIT = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : sourceBytes.Length;
 
             FileInfoData = GetBinaryFileInfo(fileName);
             PDRSectionData = GetPdrData(sourceBytes);
             VssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.VSS);
             SvsStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.SVS);
             NssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.NSS);
+
+            SvsPrimaryLockData = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes);
+            SvsBackupLockData = GetIsEfiLocked(SvsStoreData.BackupStoreBytes);
+
             FsysStoreData = GetFsysStoreData(sourceBytes, false);
             ROMInfoSectionData = GetRomInformationData(sourceBytes);
             EFISectionData = GetEfiBiosIdSectionData(sourceBytes);
@@ -176,10 +194,6 @@ namespace Mac_EFI_Toolkit.Common
             FirmwareVersion = MacUtils.GetFirmwareVersion();
             FitVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.FlashImageTool);
             MeVersion = MEParser.GetVersionData(LoadedBinaryBytes, HeaderType.ManagementEngine);
-
-            EfiLock = (SvsStoreData.PrimaryStoreBase != -1 && SvsStoreData.PrimaryStoreBytes != null)
-                ? EfiLock = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes)
-                : EfiLockStatus.Unknown;
 
             if (FsysStoreData.FsysBytes == null)
             {
@@ -204,13 +218,14 @@ namespace Mac_EFI_Toolkit.Common
             VssStoreData = default;
             SvsStoreData = default;
             NssStoreData = default;
+            SvsPrimaryLockData = default;
+            SvsBackupLockData = default;
             FsysStoreData = default;
             ROMInfoSectionData = default;
             EFISectionData = default;
             IsApfsCapable = ApfsCapable.Unknown;
             FitVersion = null;
             MeVersion = null;
-            EfiLock = EfiLockStatus.Unknown;
         }
 
         internal static bool IsValidImage(byte[] sourceBytes)
@@ -227,6 +242,7 @@ namespace Mac_EFI_Toolkit.Common
 
             return true;
         }
+        #endregion
 
         #region File Information
         private static FileInfoStore GetBinaryFileInfo(string fileName)
@@ -248,7 +264,7 @@ namespace Mac_EFI_Toolkit.Common
         #region Platform Data Region
         internal static PdrSection GetPdrData(byte[] sourceBytes)
         {
-            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.PDR_SECTION_GUID, _pdrBase, _pdrLimit);
+            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.PDR_SECTION_GUID, PDR_BASE, PDR_LIMIT);
 
             if (guidBase == -1)
             {
@@ -293,6 +309,175 @@ namespace Mac_EFI_Toolkit.Common
         {
             0xF8, 0x7C, 0x00, 0x00,
             0x19
+        };
+        #endregion
+
+        #region NVRAM Section
+        internal static NvramStore GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
+        {
+            byte[] nvramSig = GetNvramSignature(storeType);
+            int nvramPos = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, BIOS_BASE, BIOS_LIMIT);
+            int paddingLen = 0;
+
+            if (nvramPos == -1)
+            {
+                return DefaultNvramStoreData();
+            }
+
+            int primaryStoreSize = -1;
+            int primaryStoreBase = -1;
+            byte[] primaryStoreData = null;
+            bool isPrimaryStoreEmpty = true;
+
+            int psHeaderBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSig, nvramPos);
+
+            if (psHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, psHeaderBase, 6) is byte[] bytesPrimaryHeader)
+            {
+                NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
+
+                if (psHeader.SizeOfData != 0xFFFF && psHeader.SizeOfData != 0)
+                {
+                    primaryStoreSize = psHeader.SizeOfData;
+                    primaryStoreBase = psHeaderBase;
+                    primaryStoreData = BinaryUtils.GetBytesBaseLength(sourceBytes, primaryStoreBase, primaryStoreSize);
+
+                    if (primaryStoreData != null)
+                    {
+                        byte[] primaryStoreBodyData = BinaryUtils.GetBytesBaseLength(sourceBytes, primaryStoreBase + GUID_LENGTH, primaryStoreSize - GUID_LENGTH);
+                        isPrimaryStoreEmpty = BinaryUtils.IsByteBlockEmpty(primaryStoreBodyData);
+                    }
+
+                    for (int i = primaryStoreBase + primaryStoreSize; i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
+                    {
+                        paddingLen++;
+                    }
+                }
+            }
+
+            int backupStoreSize = -1;
+            int backupStoreBase = -1;
+            byte[] backupStoreData = null;
+            bool isBackupStoreEmpty = true;
+
+            if (primaryStoreBase != -1)
+            {
+                int bsHeaderBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSig, primaryStoreBase + primaryStoreSize + paddingLen);
+
+                if (bsHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, bsHeaderBase, 6) is byte[] bytesBackupHeader)
+                {
+                    NvramStoreHeader bsHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
+
+                    if (bsHeader.SizeOfData != 0xFFFF && bsHeader.SizeOfData != 0)
+                    {
+                        backupStoreSize = bsHeader.SizeOfData;
+                        backupStoreBase = bsHeaderBase;
+                        backupStoreData = BinaryUtils.GetBytesBaseLength(sourceBytes, backupStoreBase, backupStoreSize);
+
+                        if (backupStoreData != null)
+                        {
+                            byte[] bsBodyData = BinaryUtils.GetBytesBaseLength(sourceBytes, backupStoreBase + GUID_LENGTH, backupStoreSize - GUID_LENGTH);
+                            isBackupStoreEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
+                        }
+                    }
+                }
+            }
+
+            return new NvramStore
+            {
+                StoreType = storeType,
+                PrimaryStoreSize = primaryStoreSize,
+                PrimaryStoreBase = primaryStoreBase,
+                PrimaryStoreBytes = primaryStoreData,
+                IsPrimaryStoreEmpty = isPrimaryStoreEmpty,
+                BackupStoreSize = backupStoreSize,
+                BackupStoreBase = backupStoreBase,
+                BackupStoreBytes = backupStoreData,
+                IsBackupStoreEmpty = isBackupStoreEmpty,
+            };
+        }
+
+        private static NvramStore DefaultNvramStoreData()
+        {
+            return new NvramStore
+            {
+                PrimaryStoreSize = -1,
+                PrimaryStoreBase = -1,
+                PrimaryStoreBytes = null,
+                IsPrimaryStoreEmpty = true,
+                BackupStoreSize = -1,
+                BackupStoreBase = -1,
+                BackupStoreBytes = null,
+                IsBackupStoreEmpty = true
+            };
+        }
+
+        private static byte[] GetNvramSignature(NvramStoreType storeType)
+        {
+            switch (storeType)
+            {
+                case NvramStoreType.SVS:
+                    return SVS_STORE_SIG;
+                case NvramStoreType.VSS:
+                    return VSS_STORE_SIG;
+                case NvramStoreType.NSS:
+                    return NSS_STORE_SIGNATURE;
+                default:
+                    throw new ArgumentException("Invalid NVRAM header type.");
+            }
+        }
+
+        internal static EfiLock GetIsEfiLocked(byte[] nvramStoreBytes)
+        {
+            // NVRAM store is empty
+            if (nvramStoreBytes == null)
+                return DefaultEfiLockStatus();
+
+            // Search store for Message Authentication Code
+            int lockCrcBase =
+                BinaryUtils.GetBasePosition(nvramStoreBytes, EFI_LOCK_MAC_SIG);
+
+            // No Message Authentication Code was found
+            if (lockCrcBase == -1)
+                return DefaultEfiLockStatus();
+
+            // lockBase was set
+            return new EfiLock
+            {
+                LockStatus = EfiLockStatus.Locked,
+                LockCrcBase = lockCrcBase
+            };
+        }
+
+        private static EfiLock DefaultEfiLockStatus()
+        {
+            return new EfiLock
+            {
+                LockStatus = EfiLockStatus.Unlocked,
+                LockCrcBase = -1,
+            };
+        }
+
+        internal static readonly byte[] EFI_LOCK_MAC_SIG =
+        {
+            0x43, 0x00, 0x42, 0x00,
+            0x46, 0x00, 0x32, 0x00,
+            0x43, 0x00, 0x43, 0x00,
+            0x33, 0x00, 0x32
+        };
+
+        internal static readonly byte[] VSS_STORE_SIG =
+        {
+            0x24, 0x56, 0x53, 0x53
+        };
+
+        internal static readonly byte[] SVS_STORE_SIG =
+        {
+            0x24, 0x53, 0x56, 0x53
+        };
+
+        internal static readonly byte[] NSS_STORE_SIGNATURE =
+        {
+            0x24, 0x4E, 0x53, 0x53
         };
         #endregion
 
@@ -380,9 +565,9 @@ namespace Mac_EFI_Toolkit.Common
                 return 0;
 
             if (forceFind)
-                return BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, _biosBase, _biosLimit);
+                return BinaryUtils.GetBasePosition(sourceBytes, FSYS_SIG, BIOS_BASE, BIOS_LIMIT);
 
-            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, _biosBase, _biosLimit);
+            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, BIOS_BASE, BIOS_LIMIT);
 
             if (guidBase == -1)
                 return -1;
@@ -501,153 +686,6 @@ namespace Mac_EFI_Toolkit.Common
         };
         #endregion
 
-        #region NVRAM Section
-        internal static NvramStore GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
-        {
-            byte[] nvramSig = GetNvramSignature(storeType);
-            int nvramPos = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.NVRAM_SECTION_GUID, _biosBase, _biosLimit);
-            int paddingLen = 0;
-
-            if (nvramPos == -1)
-            {
-                return DefaultNvramStoreData();
-            }
-
-            int primaryStoreSize = -1;
-            int primaryStoreBase = -1;
-            byte[] primaryStoreData = null;
-            bool isPrimaryStoreEmpty = true;
-
-            int psHeaderBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSig, nvramPos);
-
-            if (psHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, psHeaderBase, 6) is byte[] bytesPrimaryHeader)
-            {
-                NvramStoreHeader psHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesPrimaryHeader);
-
-                if (psHeader.SizeOfData != 0xFFFF && psHeader.SizeOfData != 0)
-                {
-                    primaryStoreSize = psHeader.SizeOfData;
-                    primaryStoreBase = psHeaderBase;
-                    primaryStoreData = BinaryUtils.GetBytesBaseLength(sourceBytes, primaryStoreBase, primaryStoreSize);
-
-                    if (primaryStoreData != null)
-                    {
-                        byte[] primaryStoreBodyData = BinaryUtils.GetBytesBaseLength(sourceBytes, primaryStoreBase + GUID_LENGTH, primaryStoreSize - GUID_LENGTH);
-                        isPrimaryStoreEmpty = BinaryUtils.IsByteBlockEmpty(primaryStoreBodyData);
-                    }
-
-                    for (int i = primaryStoreBase + primaryStoreSize; i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
-                    {
-                        paddingLen++;
-                    }
-                }
-            }
-
-            int backupStoreSize = -1;
-            int backupStoreBase = -1;
-            byte[] backupStoreData = null;
-            bool isBackupStoreEmpty = true;
-
-            if (primaryStoreBase != -1)
-            {
-                int bsHeaderBase = BinaryUtils.GetBasePosition(sourceBytes, nvramSig, primaryStoreBase + primaryStoreSize + paddingLen);
-
-                if (bsHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(sourceBytes, bsHeaderBase, 6) is byte[] bytesBackupHeader)
-                {
-                    NvramStoreHeader bsHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesBackupHeader);
-
-                    if (bsHeader.SizeOfData != 0xFFFF && bsHeader.SizeOfData != 0)
-                    {
-                        backupStoreSize = bsHeader.SizeOfData;
-                        backupStoreBase = bsHeaderBase;
-                        backupStoreData = BinaryUtils.GetBytesBaseLength(sourceBytes, backupStoreBase, backupStoreSize);
-
-                        if (backupStoreData != null)
-                        {
-                            byte[] bsBodyData = BinaryUtils.GetBytesBaseLength(sourceBytes, backupStoreBase + GUID_LENGTH, backupStoreSize - GUID_LENGTH);
-                            isBackupStoreEmpty = BinaryUtils.IsByteBlockEmpty(bsBodyData);
-                        }
-                    }
-                }
-            }
-
-            return new NvramStore
-            {
-                StoreType = storeType,
-                PrimaryStoreSize = primaryStoreSize,
-                PrimaryStoreBase = primaryStoreBase,
-                PrimaryStoreBytes = primaryStoreData,
-                IsPrimaryStoreEmpty = isPrimaryStoreEmpty,
-                BackupStoreSize = backupStoreSize,
-                BackupStoreBase = backupStoreBase,
-                BackupStoreBytes = backupStoreData,
-                IsBackupStoreEmpty = isBackupStoreEmpty,
-            };
-        }
-
-        private static NvramStore DefaultNvramStoreData()
-        {
-            return new NvramStore
-            {
-                PrimaryStoreSize = -1,
-                PrimaryStoreBase = -1,
-                PrimaryStoreBytes = null,
-                IsPrimaryStoreEmpty = true,
-                BackupStoreSize = -1,
-                BackupStoreBase = -1,
-                BackupStoreBytes = null,
-                IsBackupStoreEmpty = true
-            };
-        }
-
-        private static byte[] GetNvramSignature(NvramStoreType storeType)
-        {
-            switch (storeType)
-            {
-                case NvramStoreType.SVS:
-                    return SVS_STORE_SIG;
-                case NvramStoreType.VSS:
-                    return VSS_STORE_SIG;
-                case NvramStoreType.NSS:
-                    return NSS_STORE_SIGNATURE;
-                default:
-                    throw new ArgumentException("Invalid NVRAM header type.");
-            }
-        }
-
-        internal static EfiLockStatus GetIsEfiLocked(byte[] nvramStoreBytes)
-        {
-            int lockMarker = BinaryUtils.GetBasePosition(nvramStoreBytes, EFI_LOCK_MAC_SIG);
-            // Message Authentication Code was found
-            if (lockMarker != -1) return EfiLockStatus.Locked;
-
-            return EfiLockStatus.Unlocked;
-        }
-
-        internal static readonly byte[] EFI_LOCK_MAC_SIG =
-        {
-            0x43, 0x00, 0x42, 0x00,
-            0x46, 0x00, 0x32, 0x00,
-            0x43, 0x00, 0x43, 0x00,
-            0x33, 0x00, 0x32
-        };
-
-        internal static readonly byte[] VSS_STORE_SIG =
-        {
-            0x24, 0x56, 0x53, 0x53
-        };
-
-        internal static readonly byte[] SVS_STORE_SIG =
-        {
-            0x24, 0x53, 0x56, 0x53
-        };
-
-        internal static readonly byte[] NSS_STORE_SIGNATURE =
-        {
-            0x24, 0x4E, 0x53, 0x53
-        };
-        #endregion
-
         #region ROM Section
         internal static AppleRomInformationSection GetRomInformationData(byte[] sourceBytes)
         {
@@ -673,7 +711,7 @@ namespace Mac_EFI_Toolkit.Common
             // First we need to locate the AppleRomInformation section GUID
             List<int> romSectionBases = new List<int>();
 
-            int guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, _biosBase, _biosLimit);
+            int guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, BIOS_BASE, BIOS_LIMIT);
 
             // Seach all GUIDs
             while (guidPosition != -1)
@@ -682,7 +720,7 @@ namespace Mac_EFI_Toolkit.Common
                 romSectionBases.Add(guidPosition);
 
                 // Move the search position to the next occurrence of the GUID
-                guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, guidPosition + 1, _biosLimit);
+                guidPosition = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APPLE_ROM_INFO_GUID, guidPosition + 1, BIOS_LIMIT);
             }
 
             if (romSectionBases.Count == 0)
@@ -864,7 +902,7 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static EfiBiosIdSection GetEfiBiosIdSectionData(byte[] sourceBytes)
         {
-            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.EFI_BIOS_ID_GUID, _biosBase, _biosLimit);
+            int guidBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.EFI_BIOS_ID_GUID, BIOS_BASE, BIOS_LIMIT);
 
             if (guidBase == -1)
             {
@@ -929,7 +967,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static ApfsCapable GetIsApfsCapable(byte[] sourceBytes)
         {
             // APFS DXE GUID found
-            if (BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APFS_DXE_GUID, _biosBase, _biosLimit) != -1)
+            if (BinaryUtils.GetBasePosition(sourceBytes, FSGuids.APFS_DXE_GUID, BIOS_BASE, BIOS_LIMIT) != -1)
             {
                 return ApfsCapable.Guid;
             }
@@ -941,11 +979,11 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             // Look for a compressed volume GUID
-            int lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_GUID, _biosBase, _biosLimit);
+            int lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_GUID, BIOS_BASE, BIOS_LIMIT);
 
             if (lzmaDxeBase == -1)
             {
-                lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID, _biosBase, _biosLimit);
+                lzmaDxeBase = BinaryUtils.GetBasePosition(sourceBytes, FSGuids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID, BIOS_BASE, BIOS_LIMIT);
             }
 
             // No compressed DXE volume was found

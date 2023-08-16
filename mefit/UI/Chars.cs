@@ -11,7 +11,6 @@ namespace Mac_EFI_Toolkit.UI
     {
         internal const string EXIT_CROSS = "\uE947";
         internal const string UNLOCKED = "\uE785";
-        internal const string LOCKED = "\uE72E";
         internal const string STATUS_ERROR_FULL = "\uEB90";
         internal const string INCIDENT_TRIANGLE = "\uE814";
         internal const string INFO_SOLID = "\uF167";
