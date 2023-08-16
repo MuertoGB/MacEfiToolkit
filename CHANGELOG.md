@@ -19,7 +19,7 @@
 ## Version 1.1.0
 
 #### New:
-- Introduced a new option in the main window that allows users to remove EFI Lock without clearing the SVS NVRAM store (ALT + L). This method offers a safer approach as it retains the SVS NVRAM data whilst only invalidating the Message Authentication Code.
+- Introduced a new option in the main window that allows users to remove EFI Lock without clearing the SVS NVRAM store (ALT + L). This method offers a safer approach as it retains the SVS NVRAM data whilst only invalidating the Message Authentication Code (Use of this feature will require acceptance of the editing terms).
 - Added dialog when text is copied via the main window copy menu.
 
 #### Enhancements:
@@ -31,7 +31,7 @@
 - Debug logs will now show the detected Fsys store size if a firmware is loaded and the Fsys store is present.
 - Minor UI improvements.
 
-#### Misc
+#### Misc:
 - Omitted the display of the Intel Flash Image Tool version from the main window, while retaining its presence within the clipboard copy menu.
 
 ## Version 1.0.3
