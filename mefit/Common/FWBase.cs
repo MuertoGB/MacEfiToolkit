@@ -128,42 +128,43 @@ namespace Mac_EFI_Toolkit.Common
 
         #region Internal Members
         internal static string LoadedBinaryPath = null;
-        internal static string FirmwareVersion = null;
-        internal static string FitVersion = null;
-        internal static string MeVersion = null;
         internal static byte[] LoadedBinaryBytes = null;
         internal static bool FirmwareLoaded = false;
+        internal static string FirmwareVersion = null;
         internal static bool ForceFoundFsys = false;
-        internal static int FSYS_RGN_SIZE = 0;
+        internal static string FitVersion = null;
+        internal static string MeVersion = null;
+
         internal static FileInfoStore FileInfoData;
-        internal static PdrSection PDRSectionData;
+        internal static PdrSection PdrSectionData;
         internal static NvramStore VssStoreData;
         internal static NvramStore SvsStoreData;
         internal static NvramStore NssStoreData;
-        internal static EfiLock SvsPrimaryLockData = DefaultEfiLockStatus();
-        internal static EfiLock SvsBackupLockData = DefaultEfiLockStatus();
+        internal static EfiLock EfiPrimaryLockData = DefaultEfiLockStatus();
+        internal static EfiLock EfiBackupLockData = DefaultEfiLockStatus();
         internal static FsysStore FsysStoreData;
-        internal static AppleRomInformationSection ROMInfoSectionData;
-        internal static EfiBiosIdSection EFISectionData;
+        internal static AppleRomInformationSection AppleRomInfoSectionData;
+        internal static EfiBiosIdSection EfiBiosIdSectionData;
+
         internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
 
-        internal const int MIN_IMAGE_SIZE = 1048576;  // 100000h
-        internal const int MAX_IMAGE_SIZE = 33554432; // 2000000h
-        internal const int CRC32_SIZE = 4;             // 4h
-
+        internal static int FSYS_RGN_SIZE = 0;
         internal static int PDR_BASE = 0;
         internal static int PDR_LIMIT = 0;
         internal static int ME_BASE = 0;
         internal static int ME_LIMIT = 0;
         internal static int BIOS_BASE = 0;
         internal static int BIOS_LIMIT = 0;
+
+        internal const int MIN_IMAGE_SIZE = 1048576;  // 100000h
+        internal const int MAX_IMAGE_SIZE = 33554432; // 2000000h
+        internal const int CRC32_SIZE = 4;            // 4h
         #endregion
 
         #region Private Members
         private const int GUID_LENGTH = 16;          // 10h
         private const int ZERO_VECTOR_LENGTH = 16;   // 10h
         private const int LITERAL_POS = 2;           // 2h
-
         private static readonly Encoding _utf8 = Encoding.UTF8;
         #endregion
 
@@ -178,17 +179,17 @@ namespace Mac_EFI_Toolkit.Common
             BIOS_LIMIT = Descriptor.BiosLimit != 0 ? (int)Descriptor.BiosLimit : sourceBytes.Length;
 
             FileInfoData = GetBinaryFileInfo(fileName);
-            PDRSectionData = GetPdrData(sourceBytes);
+            PdrSectionData = GetPdrData(sourceBytes);
             VssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.VSS);
             SvsStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.SVS);
             NssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.NSS);
 
-            SvsPrimaryLockData = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes);
-            SvsBackupLockData = GetIsEfiLocked(SvsStoreData.BackupStoreBytes);
+            EfiPrimaryLockData = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes);
+            EfiBackupLockData = GetIsEfiLocked(SvsStoreData.BackupStoreBytes);
 
             FsysStoreData = GetFsysStoreData(sourceBytes, false);
-            ROMInfoSectionData = GetRomInformationData(sourceBytes);
-            EFISectionData = GetEfiBiosIdSectionData(sourceBytes);
+            AppleRomInfoSectionData = GetRomInformationData(sourceBytes);
+            EfiBiosIdSectionData = GetEfiBiosIdSectionData(sourceBytes);
 
             IsApfsCapable = GetIsApfsCapable(LoadedBinaryBytes);
             FirmwareVersion = MacUtils.GetFirmwareVersion();
@@ -212,20 +213,31 @@ namespace Mac_EFI_Toolkit.Common
         {
             LoadedBinaryPath = null;
             LoadedBinaryBytes = null;
+            FirmwareLoaded = false;
+            FirmwareVersion = null;
             ForceFoundFsys = false;
+            FitVersion = null;
+            MeVersion = null;
+
             FileInfoData = default;
-            PDRSectionData = default;
+            PdrSectionData = default;
             VssStoreData = default;
             SvsStoreData = default;
             NssStoreData = default;
-            SvsPrimaryLockData = default;
-            SvsBackupLockData = default;
+            EfiPrimaryLockData = default;
+            EfiBackupLockData = default;
             FsysStoreData = default;
-            ROMInfoSectionData = default;
-            EFISectionData = default;
+            AppleRomInfoSectionData = default;
+            EfiBiosIdSectionData = default;
             IsApfsCapable = ApfsCapable.Unknown;
-            FitVersion = null;
-            MeVersion = null;
+
+            FSYS_RGN_SIZE = 0;
+            PDR_BASE = 0;
+            PDR_LIMIT = 0;
+            ME_BASE = 0;
+            ME_LIMIT = 0;
+            BIOS_BASE = 0;
+            BIOS_LIMIT = 0;
         }
 
         internal static bool IsValidImage(byte[] sourceBytes)

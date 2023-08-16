@@ -157,16 +157,16 @@ namespace Mac_EFI_Toolkit.Utils
 
         internal static string GetFirmwareVersion()
         {
-            if (FWBase.ROMInfoSectionData.EfiVersion != null)
+            if (FWBase.AppleRomInfoSectionData.EfiVersion != null)
             {
-                return FWBase.ROMInfoSectionData.EfiVersion;
+                return FWBase.AppleRomInfoSectionData.EfiVersion;
             }
 
-            string modelPart = FWBase.EFISectionData.ModelPart;
-            string majorPart = FWBase.EFISectionData.MajorPart;
-            string minorPart = FWBase.EFISectionData.MinorPart;
+            string modelPart = FWBase.EfiBiosIdSectionData.ModelPart;
+            string majorPart = FWBase.EfiBiosIdSectionData.MajorPart;
+            string minorPart = FWBase.EfiBiosIdSectionData.MinorPart;
 
-            string romVersion = FWBase.ROMInfoSectionData.RomVersion;
+            string romVersion = FWBase.AppleRomInfoSectionData.RomVersion;
             string[] ignoredVersions = { "F000_B00", "Official Build" };
 
             if (!string.IsNullOrWhiteSpace(romVersion) && !ignoredVersions.Contains(romVersion, StringComparer.OrdinalIgnoreCase))
@@ -174,7 +174,7 @@ namespace Mac_EFI_Toolkit.Utils
                 return $"{modelPart}.{romVersion.Replace("_", ".")}";
             }
 
-            string biosId = FWBase.ROMInfoSectionData.BiosId;
+            string biosId = FWBase.AppleRomInfoSectionData.BiosId;
             string notSet = "F000.B00";
 
             if (!string.IsNullOrWhiteSpace(biosId) && biosId.IndexOf(notSet, StringComparison.OrdinalIgnoreCase) == -1)

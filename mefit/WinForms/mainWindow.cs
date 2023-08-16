@@ -533,7 +533,7 @@ namespace Mac_EFI_Toolkit
         private void cmdAppleRomInfo_Click(object sender, EventArgs e)
         {
             // Check the Rom Information section exists
-            if (FWBase.ROMInfoSectionData.SectionExists == false)
+            if (FWBase.AppleRomInfoSectionData.SectionExists == false)
             {
                 // ROM Information section does not exist
                 METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.",
@@ -620,20 +620,20 @@ namespace Mac_EFI_Toolkit
                 unlockedPrimaryStore = BinaryUtils.PatchSvsStoreMac
                 (
                     FWBase.SvsStoreData.PrimaryStoreBytes,
-                    FWBase.SvsPrimaryLockData.LockCrcBase
+                    FWBase.EfiPrimaryLockData.LockCrcBase
                 );
 
                 // Write patched primary store to the cloned binary
                 BinaryUtils.OverwriteBytesAtBase(patchedBinary, FWBase.SvsStoreData.PrimaryStoreBase, unlockedPrimaryStore);
 
                 // We should probably patch any Message Authentication Code in the backup SVS store as well
-                if (FWBase.SvsBackupLockData.LockCrcBase != -1)
+                if (FWBase.EfiBackupLockData.LockCrcBase != -1)
                 {
                     // A MAC CRC base was found in the backup store so we need to patch it
                     unlockedBackupStore = BinaryUtils.PatchSvsStoreMac
                         (
                         FWBase.SvsStoreData.BackupStoreBytes,
-                        FWBase.SvsBackupLockData.LockCrcBase
+                        FWBase.EfiBackupLockData.LockCrcBase
                         );
 
                     // Write patched backup store to the cloned binary
@@ -901,7 +901,7 @@ namespace Mac_EFI_Toolkit
         // Firmware Clipboard Menu
         private void modelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.ModelPart));
+            SetClipboardText(MacUtils.ConvertEfiModelCode(FWBase.EfiBiosIdSectionData.ModelPart));
         }
 
         private void configCodeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -936,7 +936,7 @@ namespace Mac_EFI_Toolkit
 
         private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.PDRSectionData.BoardId);
+            SetClipboardText(FWBase.PdrSectionData.BoardId);
         }
 
         private void fitVersionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1064,7 +1064,7 @@ namespace Mac_EFI_Toolkit
         private void UpdateModelLabel()
         {
             lblModel.Text =
-                $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EFISectionData.ModelPart) ?? "N/A"}";
+                $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EfiBiosIdSectionData.ModelPart) ?? "N/A"}";
 
             // Load and append the config code asynchronously
             if (FWBase.FsysStoreData.HWC != null)
@@ -1138,7 +1138,7 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateEfiLockLabel()
         {
-            switch (FWBase.SvsPrimaryLockData.LockStatus)
+            switch (FWBase.EfiPrimaryLockData.LockStatus)
             {
                 case EfiLockStatus.Locked:
                     lblEfiLockStatus.Text = "LOCKED";
@@ -1158,7 +1158,7 @@ namespace Mac_EFI_Toolkit
         private void UpdateBoardIdLabel()
         {
             lblBoardId.Text =
-                FWBase.PDRSectionData.BoardId
+                FWBase.PdrSectionData.BoardId
                 ?? "N/A";
         }
 
@@ -1294,10 +1294,10 @@ namespace Mac_EFI_Toolkit
             }
 
             cmdAppleRomInfo.Enabled =
-                FWBase.ROMInfoSectionData.SectionExists;
+                FWBase.AppleRomInfoSectionData.SectionExists;
 
             cmdInvalidateEfiLock.Enabled =
-                FWBase.SvsPrimaryLockData.LockStatus == EfiLockStatus.Locked;
+                FWBase.EfiPrimaryLockData.LockStatus == EfiLockStatus.Locked;
 
             cmdExportMe.Enabled =
                 Descriptor.DescriptorMode &&
@@ -1310,7 +1310,7 @@ namespace Mac_EFI_Toolkit
         private void ToggleCopyMenuItemEnable()
         {
             modelToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.EFISectionData.ModelPart);
+                IsStringNotEmpty(FWBase.EfiBiosIdSectionData.ModelPart);
             configCodeToolStripMenuItem.Enabled =
                 IsStringNotEmpty(_configCode);
             serialToolStripMenuItem.Enabled =
@@ -1324,7 +1324,7 @@ namespace Mac_EFI_Toolkit
             efiVersionToolStripMenuItem.Enabled =
                 IsStringNotEmpty(FWBase.FirmwareVersion);
             boardIDToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.PDRSectionData.BoardId);
+                IsStringNotEmpty(FWBase.PdrSectionData.BoardId);
             fitVersionToolStripMenuItem.Enabled =
                 IsStringNotEmpty(FWBase.FitVersion);
             meVersionToolStripMenuItem.Enabled =
@@ -1681,9 +1681,6 @@ namespace Mac_EFI_Toolkit
 
             // Reset FWBase
             FWBase.ResetFirmwareBaseData();
-
-            // Set firmware loaded bool
-            FWBase.FirmwareLoaded = false;
         }
 
         internal void SetClipboardText(string text)

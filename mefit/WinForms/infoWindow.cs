@@ -49,38 +49,38 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void infoWindow_Load(object sender, EventArgs e)
         {
-            lblBiosId.Text = FWBase.ROMInfoSectionData.BiosId
+            lblBiosId.Text = FWBase.AppleRomInfoSectionData.BiosId
                 ?? "N/A";
-            lblModel.Text = FWBase.ROMInfoSectionData.Model != null
-                ? $"{FWBase.ROMInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(FWBase.ROMInfoSectionData.Model)})"
+            lblModel.Text = FWBase.AppleRomInfoSectionData.Model != null
+                ? $"{FWBase.AppleRomInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(FWBase.AppleRomInfoSectionData.Model)})"
                 : "N/A";
             lblEfiVersion.Text =
-                FWBase.ROMInfoSectionData.EfiVersion
+                FWBase.AppleRomInfoSectionData.EfiVersion
                 ?? "N/A";
             lblBuiltBy.Text =
-                FWBase.ROMInfoSectionData.BuiltBy
+                FWBase.AppleRomInfoSectionData.BuiltBy
                 ?? "N/A";
             lblDateStamp.Text =
-                FWBase.ROMInfoSectionData.DateStamp
+                FWBase.AppleRomInfoSectionData.DateStamp
                 ?? "N/A";
             lblRevision.Text =
-                FWBase.ROMInfoSectionData.Revision
+                FWBase.AppleRomInfoSectionData.Revision
                 ?? "N/A";
             lblBootRom.Text =
-                FWBase.ROMInfoSectionData.RomVersion
+                FWBase.AppleRomInfoSectionData.RomVersion
                 ?? "N/A";
             lblBuildcaveId.Text =
-                FWBase.ROMInfoSectionData.BuildcaveId
+                FWBase.AppleRomInfoSectionData.BuildcaveId
                 ?? "N/A";
             lblBuildType.Text =
-                FWBase.ROMInfoSectionData.BuildType
+                FWBase.AppleRomInfoSectionData.BuildType
                 ?? "N/A";
             lblCompiler.Text =
-                FWBase.ROMInfoSectionData.Compiler
+                FWBase.AppleRomInfoSectionData.Compiler
                 ?? "N/A";
             lblSectionData.Text =
-                $"Base: {FWBase.ROMInfoSectionData.SectionBase:X2}h, " +
-                $"Size: {FWBase.ROMInfoSectionData.SectionBytes.Length:X2}h"
+                $"Base: {FWBase.AppleRomInfoSectionData.SectionBase:X2}h, " +
+                $"Size: {FWBase.AppleRomInfoSectionData.SectionBytes.Length:X2}h"
                 ?? string.Empty;
 
             foreach (Label label in tlpMain.Controls)
