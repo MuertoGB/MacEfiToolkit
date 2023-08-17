@@ -188,10 +188,10 @@ namespace Mac_EFI_Toolkit
                         cmdEdit.PerformClick();
                         break;
                     case Keys.C:
-                        cmdCopy.PerformClick();
+                        cmdCopyMenu.PerformClick();
                         break;
                     case Keys.M:
-                        ShowContextMenuAtControlPoint(cmdMenu, cmsMainMenu, MenuPosition.BottomLeft);
+                        ShowContextMenuAtControlPoint(cmdMainMenu, cmsMainMenu, MenuPosition.BottomLeft);
                         break;
                     case Keys.S:
                         settingsToolStripMenuItem.PerformClick();
@@ -268,7 +268,7 @@ namespace Mac_EFI_Toolkit
             WindowState = FormWindowState.Minimized;
         }
 
-        private void cmdMenu_Click(object sender, EventArgs e)
+        private void cmdMainMenu_Click(object sender, EventArgs e)
         {
             ShowContextMenuAtControlPoint(sender, cmsMainMenu, MenuPosition.BottomLeft);
         }
@@ -341,7 +341,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void cmdCopy_Click(object sender, EventArgs e)
+        private void cmdCopyMenu_Click(object sender, EventArgs e)
         {
             ShowContextMenuAtControlPoint(sender, cmsClipboard, MenuPosition.BottomLeft);
         }
@@ -1266,7 +1266,7 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdReset, cmdEdit, cmdCopy, cmdNavigate, cmdReload,
+                cmdReset, cmdCopyMenu, cmdEdit, cmdNavigate, cmdReload,
                 cmdFixFsysCrc, cmdExportFsys, cmdAppleRomInfo,
                 cmdInvalidateEfiLock, cmdExportMe
             };
@@ -1348,7 +1348,7 @@ namespace Mac_EFI_Toolkit
         {
             var buttons = new[]
             {
-                new { Button = cmdMenu,
+                new { Button = cmdMainMenu,
                     Font = Program.FONT_MDL2_REG_14,
                     Text = Chars.SHOW },
                 new { Button = cmdClose,
@@ -1391,8 +1391,8 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdMenu, cmdOpen, cmdReset, cmdEdit, cmdNavigate, cmdReload,
-                cmdCopy, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys,
+                cmdMainMenu, cmdOpen, cmdReset, cmdEdit, cmdNavigate, cmdReload,
+                cmdCopyMenu, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys,
                 cmdAppleRomInfo, cmdInvalidateEfiLock, cmdExportMe
             };
 
@@ -1421,16 +1421,16 @@ namespace Mac_EFI_Toolkit
                 Dictionary<object, string> tooltips = new Dictionary<object, string>
                 {
                     { cmdOpen, "Open a Mac UEFI/BIOS (CTRL + O)" },
-                    { cmdReset, "Reset (CTRL + R)" },
+                    { cmdReset, "Reset Window Data (CTRL + R)" },
                     { cmdEdit, "Open the Firmware Editor (CTRL + E)" },
-                    { cmdCopy, "Open Clipboard Copy Menu (CTRL + C)" },
-                    { cmdMenu, "Application Menu (CTRL + M)"},
+                    { cmdCopyMenu, "Open the Clipboard Copy Menu (CTRL + C)" },
+                    { cmdMainMenu, "Open the Main Menu (CTRL + M)"},
                     { cmdNavigate, "Open Explorer at File (ALT + N)" },
                     { cmdReload, "Reload File from Disk (ALT + R)" },
-                    { cmdEveryMacSearch, "Search Serial with EveryMac (ALT + S)" },
+                    { cmdEveryMacSearch, "Search Serial Number on EveryMac (ALT + S)" },
                     { cmdFixFsysCrc, "Repair Fsys CRC32 (ALT + F)" },
                     { cmdExportFsys, "Export Fsys Store (ALT + E)" },
-                    { cmdAppleRomInfo, "ROM Information (ALT + I)" },
+                    { cmdAppleRomInfo, "Open the ROM Information Window (ALT + I)" },
                     { cmdInvalidateEfiLock, "Remove EFI Lock (ALT + L)" },
                     { cmdExportMe, "Export ME Region (ALT + M)" },
                     { lblVssStore, SetNvramStoreTip(FWBase.VssStoreData, "VSS") },
@@ -1657,9 +1657,10 @@ namespace Mac_EFI_Toolkit
             // Clear labels
             Label[] labels =
             {
-                lblFilename, lblFileSizeBytes, lblFileCrc, lblFileCreatedDate, lblFileModifiedDate,
-                lblModel, lblSerialNumber, lblHwc, lblFsysCrc, lblApfsCapable, lblEfiVersion, lblVssStore,
-                lblSvsStore, lblNssStore, lblEfiLockStatus, lblMeVersion, lblBoardId, lblOrderNo
+                lblFilename, lblFileSizeBytes, lblFileCrc, lblFileCreatedDate,
+                lblFileModifiedDate, lblModel, lblSerialNumber, lblHwc, lblFsysCrc,
+                lblOrderNo, lblEfiVersion, lblVssStore, lblSvsStore, lblNssStore,
+                lblEfiLockStatus, lblBoardId, lblApfsCapable, lblMeVersion
             };
             foreach (Label label in labels)
             {
