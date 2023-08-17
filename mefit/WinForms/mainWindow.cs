@@ -1571,26 +1571,18 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            // Check parameters
-            if (IsValidFlashHeader())
+            // Show loading resource
+            pbxLoad.Image = Properties.Resources.loading;
+
+            // Set the current initial directory
+            _strInitialDirectory = Path.GetDirectoryName(filePath);
+
+            // Load the firmware base in a separate thread
+            Thread thr = new Thread(() => LoadFirmwareBase(filePath))
             {
-                // Show loading resource
-                pbxLoad.Image = Properties.Resources.loading;
-
-                // Set the current initial directory
-                _strInitialDirectory = Path.GetDirectoryName(filePath);
-
-                // Load the firmware base in a separate thread
-                Thread thr = new Thread(() => LoadFirmwareBase(filePath))
-                {
-                    IsBackground = true
-                };
-                thr.Start();
-
-                return;
-            }
-
-            ResetAllData();
+                IsBackground = true
+            };
+            thr.Start();
         }
 
         private void LoadFirmwareBase(string filePath)
@@ -1628,27 +1620,6 @@ namespace Mac_EFI_Toolkit
             }
 
             // The file size is within the valid range
-            return true;
-        }
-
-        private bool IsValidFlashHeader()
-        {
-            // Check if descriptor enforcement is disabled in settings
-            if (Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce))
-            {
-                return true;
-            }
-
-            // Check if the loaded binary has a valid flash descriptor signature
-            if (!Descriptor.DescriptorMode)
-            {
-                // Show a warning message if the binary does not have a valid flash descriptor
-                METMessageBox.Show(this, "Warning", "The binary does not contain a valid flash descriptor.\r\nThis check can be disabled in settings.",
-                    METMessageType.Warning, METMessageButtons.Okay);
-                return false;
-            }
-
-            // The flash header is valid
             return true;
         }
 

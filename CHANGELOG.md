@@ -32,7 +32,8 @@
 - Minor UI improvements.
 
 #### Misc:
-- Omitted the display of the Intel Flash Image Tool version from the main window, while retaining its presence within the clipboard copy menu.
+- Omitted display of the Intel Flash Image Tool version from the main window, while retaining its presence within the clipboard copy menu.
+- Removed setting "Enable valid flash descriptor enforcement" from the application, as it is no longer required or relevant.
 
 ## Version 1.0.3
 
