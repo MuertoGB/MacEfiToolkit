@@ -29,44 +29,44 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 
 ## Features
 
-**Fsys Store:**
-- Export and replace the Fsys store.
-- View and edit the System Serial Number (ssn), and Hardware Configuration (hwc).
-- View the System Order Number (son).
-- Detect and repair invalid Fsys Store CRC32.
-- Check Serial Number with EveryMac.
-
-**NVRAM:**
-- Clear NVRAM stores (VSS, SVS, NSS) with section header preservation.
-- Identify NVRAM stores with data, empty stores, and missing stores.
-
-**Platform Data Region:**
-- Read the Board-ID (UEFI version from 2013 onwards).
-
-**Mac Specific:**
-- Detect and remove EFI password lock.
-- Check APFS capability.
-- View the firmware version.
-- View Apple ROM section information.
-- Derive Configuration Code from the Hardware Configuration (hwc).
-
 **General:**
 - Edit copies of files in memory, preserving original files.
 - Read Intel Descriptor for UEFI section base and limit positions.
 - Utilize Knuth–Morris–Pratt algorithm for binary data search.
-- View Flash Image Tool and Management Engine versions.
-- Export the Intel Management Engine region.
-- Transplant the Intel Management Engine region.
-- Validate binary size.
+- View the Intel Management Engine version.
+- Export and transplant the Intel Management Engine region.
+- View and validate the binary size.
+- View the firmware CRC32, created and modified date.
+
+**Mac Specific:**
+- View if the firmware is APFS DXE driver is present.
+- View the firmware version.
+- View Apple ROM section information.
+- View the configuration code, derived from the system serial number.
+
+**Fsys Store:**
+- View and edit the System Serial Number (ssn), and Hardware Configuration (hwc).
+- View the System Order Number (son).
+- Export and replace the Fsys store.
+- Detect and repair invalid Fsys Store CRC32.
+- Check the System Serial Number with EveryMac.
+
+**NVRAM:**
+- Clear NVRAM stores (VSS, SVS, NSS) with section header preservation.
+- Identify NVRAM stores with data, empty stores, and missing stores.
+- Detect and remove EFI lock.
+- 
+**Platform Data Region:**
+- Read the system Board-ID (UEFI version from 2013 onwards).
 
 **Application:**
-
-- Works with Wine (Better support coming in an update)
+- Works with Wine (Better support coming in the future)
 - Automatic handling of uncaught errors.
+- Ability to create a debug log.
 - No installation required.
 - Support for DPI scaling.
 - Drag and drop functionality.
-- Version checking mechanism.
+- Notification when a newer version is available.
 
 | SUGGESTED FEATURES                         | Status                |
 |--------------------------------------------|-----------------------|
