@@ -169,6 +169,11 @@ namespace Mac_EFI_Toolkit
         {
             SetControlForeColor(tlpTitle, Color.FromArgb(100, 100, 100));
         }
+
+        private void tlpVersionLabel_Click(object sender, EventArgs e)
+        {
+            ShowContextMenuAtCursor(sender, e, cmsApplication, false);
+        }
         #endregion
 
         #region KeyDown Events
@@ -1521,7 +1526,8 @@ namespace Mac_EFI_Toolkit
             // If a new version is available and update the UI
             if (result == VersionResult.NewVersionAvailable)
             {
-                lblVersion.ForeColor = Color.Tomato;
+                lblVersion.ForeColor = Color.FromArgb(255, 128, 128);
+                lblVersion.Text += " (Outdated)";
             }
         }
 
