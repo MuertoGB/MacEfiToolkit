@@ -55,7 +55,7 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 - Clear NVRAM stores (VSS, SVS, NSS) with section header preservation.
 - Identify NVRAM stores with data, empty stores, and missing stores.
 - Detect and remove EFI lock.
-- 
+
 **Platform Data Region:**
 - Read the system Board-ID (UEFI version from 2013 onwards).
 
