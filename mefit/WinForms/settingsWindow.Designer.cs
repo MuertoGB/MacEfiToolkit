@@ -47,8 +47,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblApplicationText = new System.Windows.Forms.Label();
             this.tlpDwf = new System.Windows.Forms.TableLayoutPanel();
             this.lblDwfText = new System.Windows.Forms.Label();
-            this.tlpDac = new System.Windows.Forms.TableLayoutPanel();
-            this.lblDacText = new System.Windows.Forms.Label();
+            this.tlpDisableLzma = new System.Windows.Forms.TableLayoutPanel();
+            this.lblDisableLzmaText = new System.Windows.Forms.Label();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.lblSettingsApplied = new System.Windows.Forms.Label();
             this.tlpDsbt = new System.Windows.Forms.TableLayoutPanel();
@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpCif.SuspendLayout();
             this.tlpDvc.SuspendLayout();
             this.tlpDwf.SuspendLayout();
-            this.tlpDac.SuspendLayout();
+            this.tlpDisableLzma.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpDsbt.SuspendLayout();
             this.tlpDisableMessageSounds.SuspendLayout();
@@ -348,42 +348,42 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDwfText.TabIndex = 99;
             this.lblDwfText.Text = "Disable Flashing UI Elements:";
             // 
-            // tlpDac
+            // tlpDisableLzma
             // 
-            this.tlpDac.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.tlpDac.ColumnCount = 2;
-            this.tlpDac.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDac.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tlpDac.Controls.Add(this.lblDacText, 0, 0);
-            this.tlpDac.Controls.Add(this.cbxDisableLzmaFsSearch, 1, 0);
-            this.tlpDac.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDac.Location = new System.Drawing.Point(0, 291);
-            this.tlpDac.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpDac.Name = "tlpDac";
-            this.tlpDac.RowCount = 1;
-            this.tlpDac.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDac.Size = new System.Drawing.Size(408, 30);
-            this.tlpDac.TabIndex = 6;
+            this.tlpDisableLzma.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.tlpDisableLzma.ColumnCount = 2;
+            this.tlpDisableLzma.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDisableLzma.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpDisableLzma.Controls.Add(this.lblDisableLzmaText, 0, 0);
+            this.tlpDisableLzma.Controls.Add(this.cbxDisableLzmaFsSearch, 1, 0);
+            this.tlpDisableLzma.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDisableLzma.Location = new System.Drawing.Point(0, 291);
+            this.tlpDisableLzma.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpDisableLzma.Name = "tlpDisableLzma";
+            this.tlpDisableLzma.RowCount = 1;
+            this.tlpDisableLzma.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpDisableLzma.Size = new System.Drawing.Size(408, 30);
+            this.tlpDisableLzma.TabIndex = 6;
             // 
-            // lblDacText
+            // lblDisableLzmaText
             // 
-            this.lblDacText.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblDacText.AutoSize = true;
-            this.lblDacText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDacText.ForeColor = System.Drawing.Color.White;
-            this.lblDacText.Location = new System.Drawing.Point(3, 5);
-            this.lblDacText.Name = "lblDacText";
-            this.lblDacText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lblDacText.Size = new System.Drawing.Size(317, 20);
-            this.lblDacText.TabIndex = 99;
-            this.lblDacText.Text = "Disable DXE Decompression for APFS Check";
+            this.lblDisableLzmaText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblDisableLzmaText.AutoSize = true;
+            this.lblDisableLzmaText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisableLzmaText.ForeColor = System.Drawing.Color.White;
+            this.lblDisableLzmaText.Location = new System.Drawing.Point(3, 5);
+            this.lblDisableLzmaText.Name = "lblDisableLzmaText";
+            this.lblDisableLzmaText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
+            this.lblDisableLzmaText.Size = new System.Drawing.Size(225, 20);
+            this.lblDisableLzmaText.TabIndex = 99;
+            this.lblDisableLzmaText.Text = "Disable LZMA Decompression:";
             // 
             // tlpMain
             // 
             this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Controls.Add(this.tlpDac, 0, 18);
+            this.tlpMain.Controls.Add(this.tlpDisableLzma, 0, 18);
             this.tlpMain.Controls.Add(this.lblApplicationText, 0, 4);
             this.tlpMain.Controls.Add(this.lblSettingsApplied, 0, 20);
             this.tlpMain.Controls.Add(this.lblStartupText, 0, 0);
@@ -680,8 +680,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDvc.PerformLayout();
             this.tlpDwf.ResumeLayout(false);
             this.tlpDwf.PerformLayout();
-            this.tlpDac.ResumeLayout(false);
-            this.tlpDac.PerformLayout();
+            this.tlpDisableLzma.ResumeLayout(false);
+            this.tlpDisableLzma.PerformLayout();
             this.tlpMain.ResumeLayout(false);
             this.tlpMain.PerformLayout();
             this.tlpDsbt.ResumeLayout(false);
@@ -714,8 +714,8 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.TableLayoutPanel tlpDwf;
         private System.Windows.Forms.Label lblDwfText;
         private UI.METCheckbox cbxDisableFlashingUI;
-        private System.Windows.Forms.TableLayoutPanel tlpDac;
-        private System.Windows.Forms.Label lblDacText;
+        private System.Windows.Forms.TableLayoutPanel tlpDisableLzma;
+        private System.Windows.Forms.Label lblDisableLzmaText;
         private UI.METCheckbox cbxDisableLzmaFsSearch;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.Label lblSettingsApplied;
