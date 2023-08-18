@@ -39,7 +39,7 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 - View the firmware CRC32, created and modified date.
 
 **Mac Specific:**
-- View if the firmware is APFS DXE driver is present.
+- View if the firmware supports APFS.
 - View the firmware version.
 - View Apple ROM section information.
 - View the configuration code, derived from the system serial number.
