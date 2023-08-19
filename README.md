@@ -4,7 +4,7 @@
 Mac EFI Toolkit V1.1.0
 </h1>
 
-<h4 align="center">A tool for analysis of Mac BIOS firmware, with limited editing capabilities.</h4>
+<h4 align="center">A tool for analysis of Mac BIOS/UEFI, with limited editing capabilities.</h4>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
@@ -17,7 +17,7 @@ Mac EFI Toolkit V1.1.0
 
 ## About
 
-Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in repairing Mac BIOS/EFI files. Designed to be compact, mefit provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if located in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
+Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in repairing Mac BIOS/UEFI. Designed to be compact, mefit provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if located in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
 
 In terms of editing, the application allows users to replace the System Serial Number (SSN) with automatic Hardware Configuration (HWC) matching and CRC32 masking. It also supports transplanting of exported Fsys stores with automatic CRC32 masking, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password.
 
@@ -79,7 +79,7 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.1.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| TBD | Yes | Stable |
+|[1.1.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 19th August, 2023 | Yes | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
