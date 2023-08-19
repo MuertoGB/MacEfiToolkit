@@ -161,7 +161,7 @@ First, the application retrieves the model identifier (e.g., IM161) from the UEF
   <img src="files/manual/serial.png">
 </kbd>
 
-This section consists of the System Serial Number (SSN) located in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
+This section consists of the System Serial Number (SSN) located in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters, and will be appended to the end of the serial data.
 
 ---
 
