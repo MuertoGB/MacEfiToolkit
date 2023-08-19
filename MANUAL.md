@@ -161,7 +161,7 @@ First, the application retrieves the model identifier (e.g., IM161) from the UEF
   <img src="files/manual/serial.png">
 </kbd>
 
-This section consists of the System Serial Number (SSN) located in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters.
+This section consists of the System Serial Number (SSN) located in the Fsys store, and one button. Clicking the 'Globe' button will open a browser window to EveryMac and automatically load in the serial number. A valid serial number will consist of either 11 or 12 characters, and will be appended to the end of the serial data.
 
 ---
 
@@ -223,12 +223,25 @@ This section provides information about the firmware version, and includes one b
   <img src="files/manual/nvram.png">
 </kbd>
 <kbd>
-  <img src="files/manual/nvramlocked.png">
+  <img src="files/manual/nvramalt.png">
 </kbd>
 
-This section is divided into four items. The first three items represent different NVRAM store types, indicating their status. Each store type will appear green when empty, white when data is present, and grey when the store is not found.
+This section is divided into three items, representing different NVRAM store types, indicating their status. Each store type will appear green when empty, white when data is present, and grey when the store is not found.
 
-The padlock item represents EFI Lock status. If the padlock icon is green and unlocked, it signifies that a Message Authentication Code (MAC) was not found, indicating that the EFI is likely not locked. Conversely, if the padlock icon is red and locked, it suggests that a Message Authentication Code (MAC) was found, indicating that the EFI is likely password locked.
+---
+
+#### EFI Lock:
+
+<kbd>
+  <img src="files/manual/efilockunlocked.png">
+</kbd>
+<kbd>
+  <img src="files/manual/efilocklocked.png">
+</kbd>
+
+This section provides information about whether the loaded firmware is password locked with a Message Authentication Code (MAC), commonly known as "EFI Lock", and includes one button. If no 'MAC' is found the text "UNLOCKED" will be shown. If a 'MAC' is found the text "LOCKED" will show in red.
+
+Clicking the "Unlock" button, which is enabled when the firmware is locked  with a password, will prompt a "Save As" dialog to export the binary file with an invalidated Message Authentication Code, thus safely removing the EFI password and retaining the SVS store data.
 
 ---
 
@@ -255,16 +268,6 @@ This section displays the 8-byte hexadecimal board-id obtained from the UEFI Pla
 </kbd>
 
 The application provides information regarding the presence of the UEFI APFS DXE driver and the firmware's capability to support APFS boot. If the driver is detected, it will display `YES (DXE)` to indicate that an uncompressed driver was found. If the driver is found within an LZMA compressed volume, it will display `YES (LZMA DXE)` to indicate that the driver was located in an LZMA compressed volume.
-
----
-
-#### FIT Version:
-
-<kbd>
-  <img src="files/manual/fit.png">
-</kbd>
-
-Displays the Flash Image Tool version found in the Intel Management Engine firmware FPT header.
 
 ---
 

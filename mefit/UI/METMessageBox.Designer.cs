@@ -232,7 +232,7 @@ namespace Mac_EFI_Toolkit.UI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.ClientSize = new System.Drawing.Size(492, 250);
             this.Controls.Add(this.pnlSplit);
             this.Controls.Add(this.tlpButtons);

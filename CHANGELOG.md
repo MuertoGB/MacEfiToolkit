@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-110">V1.1.0</a> •
   <a href="#version-103">V1.0.3</a> •
   <a href="#version-102">V1.0.2</a> •
   <a href="#version-101">V1.0.1</a> •
@@ -14,6 +15,25 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.1.0
+
+#### New:
+- Introduced a new option in the main window that allows users to remove EFI Lock without clearing the SVS NVRAM store (ALT + L). This method offers a safer approach as it retains the SVS NVRAM data whilst only invalidating the Message Authentication Code (Use of this feature will require acceptance of the editing terms).
+- Added dialog when text is copied via the main window copy menu.
+
+#### Enhancements:
+- Improved the Fsys parser by implementing dynamic reading of the Fsys store size. This improvement replaces the previous static approach of reading a hardcoded size of 0x800h (2048 bytes).
+- Expanded functionality of the main window copy menu by introducing new options to copy the following data: File Size (Hex), Config Code, PDR base, ME base, and BIOS base.
+- Reorganized some data in the main window user interface by relocating EFI Lock information to its own dedicated section.
+- The main window will now display the length of a system serial number.
+- Improved user interaction by enabling access to the main window application menu through a right-click action on the title area.
+- Debug logs will now show the detected Fsys store size if a firmware is loaded and the Fsys store is present.
+- Minor UI improvements.
+
+#### Misc:
+- Omitted display of the Intel Flash Image Tool version from the main window, while retaining its presence within the clipboard copy menu.
+- Removed setting "Enable valid flash descriptor enforcement" from the application, as it is no longer required or relevant.
 
 ## Version 1.0.3
 

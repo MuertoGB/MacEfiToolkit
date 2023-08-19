@@ -19,7 +19,6 @@ namespace Mac_EFI_Toolkit
         DisableTips,
         DisableConfDiag,
         DisableLzmaFsSearch,
-        DisableDescriptorEnforce,
         AcceptedEditingTerms
     }
 
@@ -50,7 +49,6 @@ namespace Mac_EFI_Toolkit
             settingsIni.Write("Application", "DisableConfDiag", "False");
             settingsIni.Write("Application", "InitialOfdPath", METPath.CurrentDirectory);
             settingsIni.Write("Firmware", "DisableLzmaFsSearch", "False");
-            settingsIni.Write("Firmware", "DisableDescriptorEnforce", "False");
             settingsIni.Write("Firmware", "AcceptedEditingTerms", "False");
         }
         #endregion
@@ -84,9 +82,6 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.DisableLzmaFsSearch:
                     section = "Firmware"; key = "DisableLzmaFsSearch";
-                    break;
-                case SettingsBoolType.DisableDescriptorEnforce:
-                    section = "Firmware"; key = "DisableDescriptorEnforce";
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
                     section = "Firmware"; key = "AcceptedEditingTerms";
@@ -193,9 +188,6 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.DisableLzmaFsSearch:
                     section = "Firmware"; key = "DisableLzmaFsSearch";
-                    break;
-                case SettingsBoolType.DisableDescriptorEnforce:
-                    section = "Firmware"; key = "DisableDescriptorEnforce";
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
                     section = "Firmware"; key = "AcceptedEditingTerms";

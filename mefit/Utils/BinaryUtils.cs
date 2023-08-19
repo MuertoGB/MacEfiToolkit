@@ -308,7 +308,7 @@ namespace Mac_EFI_Toolkit.Utils
             byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
 
             // Write the new bytes back to the Fsys store at the appropriate base
-            OverwriteBytesAtBase(fsysStore, FWBase.FSYS_CRC_POS, newCrcBytes);
+            OverwriteBytesAtBase(fsysStore, FWBase.FSYS_RGN_SIZE - FWBase.CRC32_SIZE, newCrcBytes);
 
             // Return the patched data
             return fsysStore;
@@ -323,7 +323,6 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="uiNewCrc">The new CRC value to be patched in the Fsys store.</param>
         /// <returns>The patched file byte array, or null if the new calculated crc does not match the crc in the Fsys store.</returns>
         internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes, int fsysBase, byte[] fsysStore, uint uiNewCrc)
-
         {
             // Create a new byte array to hold the patched binary
             byte[] patchedBytes = new byte[sourceBytes.Length];
@@ -340,11 +339,27 @@ namespace Mac_EFI_Toolkit.Utils
 
             // Compare the new checksums
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)
-            {
                 return null;
-            }
 
             return patchedBytes;
+        }
+
+        /// <summary>
+        /// Invalidates an SVS store Message Authentication Code, removing EFI Lock.
+        /// </summary>
+        /// <param name="storeData">The SVS store to unlock.</param>
+        /// <param name="lockCrcbase">The Message Authentication Code CRC base</param>
+        internal static byte[] PatchSvsStoreMac(byte[] storeData, int lockCrcbase)
+        {
+            // Some sanity checks
+            if (storeData == null || storeData.Length < 16)
+                return null;
+
+            // Write 0xFh length zeros over the MAC CRC from lockBase
+            OverwriteBytesAtBase(storeData, lockCrcbase, new byte[0x0F]);
+
+            // Returned the unlocked store
+            return storeData;
         }
         #endregion
 

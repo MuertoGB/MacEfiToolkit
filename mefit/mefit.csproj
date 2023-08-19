@@ -108,7 +108,6 @@
     <Compile Include="Common\Logger.cs" />
     <Compile Include="AppVersion.cs" />
     <Compile Include="UI\Chars.cs" />
-    <Compile Include="UI\ArrowDrawer.cs" />
     <Compile Include="UI\Enums.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
     <Compile Include="UI\METContextMenuStrip.cs">

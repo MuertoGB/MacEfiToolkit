@@ -114,7 +114,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
             if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
-            Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, cbxDisableDescriptorEnforce.Checked);
 
             _showSettingsAppliedLabel();
         }
@@ -135,7 +134,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, false);
             Settings.SettingsSetString(SettingsStringType.InitialDirectory, METPath.CurrentDirectory);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
-            Settings.SettingsSetBool(SettingsBoolType.DisableDescriptorEnforce, false);
 
             UpdateCheckBoxControls();
 
@@ -179,7 +177,6 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxDisableTips.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableTips) ? true : false;
             cbxDisableConfDiag.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag) ? true : false;
             cbxDisableLzmaFsSearch.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch) ? true : false;
-            cbxDisableDescriptorEnforce.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableDescriptorEnforce) ? true : false;
         }
         #endregion
 

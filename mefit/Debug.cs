@@ -128,6 +128,7 @@ namespace Mac_EFI_Toolkit
 
                 builder.AppendLine($"  Fsys Store  ->\r\n");
                 builder.AppendLine($"Fsys Base:   {FWBase.FsysStoreData.FsysBase:X2}h");
+                builder.AppendLine($"Fsys Size:   {FWBase.FSYS_RGN_SIZE:X2}h");
                 builder.AppendLine($"Serial Base: {FWBase.FsysStoreData.SerialBase:X2}h");
                 builder.AppendLine($"HWC Base:    {FWBase.FsysStoreData.HWCBase:X2}h\r\n");
 

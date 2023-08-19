@@ -1,10 +1,10 @@
 <h1 align="center">
 <img width="200" src="files/images/img128px.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit V1.0.3
+Mac EFI Toolkit V1.1.0
 </h1>
 
-<h4 align="center">A tool for analysis of Mac BIOS firmware, with limited editing capabilities.</h4>
+<h4 align="center">A tool for analysis of Mac BIOS/UEFI, with limited editing capabilities.</h4>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
@@ -17,71 +17,69 @@ Mac EFI Toolkit V1.0.3
 
 ## About
 
-Mac EFI Toolkit, or 'mefit', is a valuable tool designed to aid technicians in repairing Mac BIOS/EFI files. It provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if hidden in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
+Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in repairing Mac BIOS/UEFI. Designed to be compact, mefit provides information gathering capabilities and limited editing functionality. Key features of the application include detecting EFI lock in the NVRAM, identifying the APFS DXE driver even if located in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
 
-In terms of editing, mefit allows users to replace the System Serial Number (SSN) with automatic Hardware Configuration (HWC) matching and CRC32 masking. It also supports transplanting of exported Fsys stores with automatic CRC32 masking, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password.
+In terms of editing, the application allows users to replace the System Serial Number (SSN) with automatic Hardware Configuration (HWC) matching and CRC32 masking. It also supports transplanting of exported Fsys stores with automatic CRC32 masking, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password.
 
 >🛈 **Access to some features requires accepting the editing terms.**
 
-This application provides support for most Mac BIOS/UEFI, with the exception of the A1534 model (as of now). I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
-
 <img width="550" src="files/images/met.png" alt="MET">
-<img width="550" src="files/images/met_alt.png" alt="MET_ALT">
+
+This application provides support for most Mac BIOS/UEFI, with the exception of editing A1534 firmware (as of now). I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
 
 ## Features
-
-**Fsys Store:**
-- Export and replace the Fsys store.
-- View and edit the System Serial Number (ssn), and Hardware Configuration (hwc).
-- View the System Order Number (son).
-- Detect and repair invalid Fsys Store CRC32.
-- Check Serial Number with EveryMac.
-
-**NVRAM:**
-- Clear NVRAM stores (VSS, SVS, NSS) with section header preservation.
-- Identify NVRAM stores with data, empty stores, and missing stores.
-
-**Platform Data Region:**
-- Read the Board-ID (UEFI version from 2013 onwards).
-
-**Mac Specific:**
-- Detect EFI password lock.
-- Check APFS capability.
-- View the firmware version.
-- View Apple ROM section information.
-- Derive Configuration Code from the Hardware Configuration (hwc).
 
 **General:**
 - Edit copies of files in memory, preserving original files.
 - Read Intel Descriptor for UEFI section base and limit positions.
 - Utilize Knuth–Morris–Pratt algorithm for binary data search.
-- View Flash Image Tool and Management Engine versions.
-- Export the Intel Management Engine region.
-- Transplant the Intel Management Engine region.
-- Validate binary size.
+- View the Intel Management Engine version.
+- Export and transplant the Intel Management Engine region.
+- View and validate the binary size.
+- View the firmware CRC32, created and modified date.
+
+**Mac Specific:**
+- View if the firmware supports APFS.
+- View the firmware version.
+- View Apple ROM section information.
+- View the configuration code, derived from the system serial number.
+
+**Fsys Store:**
+- View and edit the System Serial Number (ssn), and Hardware Configuration (hwc).
+- View the System Order Number (son).
+- Export and replace the Fsys store.
+- Detect and repair invalid Fsys Store CRC32.
+- Check the System Serial Number with EveryMac.
+
+**NVRAM:**
+- Clear NVRAM stores (VSS, SVS, NSS) with section header preservation.
+- Identify NVRAM stores with data, empty stores, and missing stores.
+- Detect and remove EFI lock.
+
+**Platform Data Region:**
+- Read the system Board-ID (UEFI version from 2013 onwards).
 
 **Application:**
-
-- Works with Wine (Better support coming in an update)
+- Works with Wine (Better support coming in the future)
 - Automatic handling of uncaught errors.
+- Ability to create a debug log.
 - No installation required.
 - Support for DPI scaling.
 - Drag and drop functionality.
-- Version checking mechanism.
+- Notification when a newer version is available.
 
 | SUGGESTED FEATURES                         | Status                |
 |--------------------------------------------|-----------------------|
-| Batch process files for information        |🟢 Coming in an update |
-| Invalidate EFI lock without clearing SVS   |🟢 Coming in an update |
+| Batch process files for information        |🟢 Addition planned    |
+| Build clean firmware from FD               |🟢 Addition planned    |
 | Detect email address in the NVRAM          |🟠 Researching         |
-| Build clean firmware from FD               |🟠 Researching         |
 | Detect MDM status                          |🔴 Undecided           |
 
 ## Download
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.0.3](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 7th August, 2023 | Yes | Stable |
+|[1.1.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 19th August, 2023 | Yes | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
