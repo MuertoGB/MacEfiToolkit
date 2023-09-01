@@ -96,7 +96,7 @@ namespace Mac_EFI_Toolkit
             this.cmdReset = new System.Windows.Forms.Button();
             this.cmdOpen = new System.Windows.Forms.Button();
             this.lblWindowTitle = new System.Windows.Forms.Label();
-            this.pbxTitleLogo = new System.Windows.Forms.PictureBox();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
             this.pnlMenuSeperator1 = new System.Windows.Forms.Panel();
             this.cmdCopyMenu = new System.Windows.Forms.Button();
@@ -108,7 +108,7 @@ namespace Mac_EFI_Toolkit
             this.cmdClose = new System.Windows.Forms.Button();
             this.cmdMin = new System.Windows.Forms.Button();
             this.tlpVersionLabel = new System.Windows.Forms.TableLayoutPanel();
-            this.cmsMainMenu = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsOverflow = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.openLocalFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backupsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBuildsDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -165,11 +165,11 @@ namespace Mac_EFI_Toolkit
             this.tlpEfiLock.SuspendLayout();
             this.tlpSerial.SuspendLayout();
             this.tlpModel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxTitleLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
             this.tlpTitle.SuspendLayout();
             this.tlpVersionLabel.SuspendLayout();
-            this.cmsMainMenu.SuspendLayout();
+            this.cmsOverflow.SuspendLayout();
             this.cmsApplication.SuspendLayout();
             this.cmsClipboard.SuspendLayout();
             this.SuspendLayout();
@@ -1298,20 +1298,20 @@ namespace Mac_EFI_Toolkit
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblWindowTitle.Click += new System.EventHandler(this.lblWindowTitle_Click);
             // 
-            // pbxTitleLogo
+            // pbxLogo
             // 
-            this.pbxTitleLogo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.pbxTitleLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbxTitleLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pbxTitleLogo.Image = ((System.Drawing.Image)(resources.GetObject("pbxTitleLogo.Image")));
-            this.pbxTitleLogo.Location = new System.Drawing.Point(8, 9);
-            this.pbxTitleLogo.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.pbxTitleLogo.Name = "pbxTitleLogo";
-            this.pbxTitleLogo.Size = new System.Drawing.Size(32, 32);
-            this.pbxTitleLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbxTitleLogo.TabIndex = 1;
-            this.pbxTitleLogo.TabStop = false;
-            this.pbxTitleLogo.Click += new System.EventHandler(this.pbxTitleLogo_Click);
+            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.logo32px;
+            this.pbxLogo.Location = new System.Drawing.Point(8, 9);
+            this.pbxLogo.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(32, 32);
+            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbxLogo.TabIndex = 1;
+            this.pbxLogo.TabStop = false;
+            this.pbxLogo.Click += new System.EventHandler(this.pbxTitleLogo_Click);
             // 
             // tlpMenu
             // 
@@ -1465,7 +1465,7 @@ namespace Mac_EFI_Toolkit
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpTitle.Controls.Add(this.lblWindowTitle, 1, 0);
             this.tlpTitle.Controls.Add(this.cmdClose, 4, 0);
-            this.tlpTitle.Controls.Add(this.pbxTitleLogo, 0, 0);
+            this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTitle.Controls.Add(this.cmdMin, 3, 0);
             this.tlpTitle.Controls.Add(this.tlpVersionLabel, 2, 0);
             this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1537,12 +1537,12 @@ namespace Mac_EFI_Toolkit
             this.tlpVersionLabel.TabIndex = 100;
             this.tlpVersionLabel.Click += new System.EventHandler(this.tlpVersionLabel_Click);
             // 
-            // cmsMainMenu
+            // cmsOverflow
             // 
-            this.cmsMainMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.cmsMainMenu.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmsMainMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.cmsMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsOverflow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.cmsOverflow.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmsOverflow.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsOverflow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openLocalFolderToolStripMenuItem,
             this.backupsDirectoryToolStripMenuItem,
             this.openBuildsDirectoryToolStripMenuItem,
@@ -1557,8 +1557,8 @@ namespace Mac_EFI_Toolkit
             this.viewLogToolStripMenuItem,
             this.toolStripSeparator1,
             this.restartApplicationToolStripMenuItem});
-            this.cmsMainMenu.Name = "cmsMainMenu";
-            this.cmsMainMenu.Size = new System.Drawing.Size(245, 330);
+            this.cmsOverflow.Name = "cmsMainMenu";
+            this.cmsOverflow.Size = new System.Drawing.Size(245, 330);
             // 
             // openLocalFolderToolStripMenuItem
             // 
@@ -1960,12 +1960,12 @@ namespace Mac_EFI_Toolkit
             this.tlpEfiLock.ResumeLayout(false);
             this.tlpSerial.ResumeLayout(false);
             this.tlpModel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbxTitleLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpMenu.ResumeLayout(false);
             this.tlpTitle.ResumeLayout(false);
             this.tlpVersionLabel.ResumeLayout(false);
             this.tlpVersionLabel.PerformLayout();
-            this.cmsMainMenu.ResumeLayout(false);
+            this.cmsOverflow.ResumeLayout(false);
             this.cmsApplication.ResumeLayout(false);
             this.cmsClipboard.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1983,7 +1983,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblBoardId;
         private System.Windows.Forms.Label lblBoardIdText;
         private System.Windows.Forms.Button cmdOpen;
-        internal System.Windows.Forms.PictureBox pbxTitleLogo;
+        internal System.Windows.Forms.PictureBox pbxLogo;
         internal System.Windows.Forms.Label lblWindowTitle;
         private System.Windows.Forms.Label lblFsysStoreText;
         private System.Windows.Forms.Label lblSonText;
@@ -2060,7 +2060,7 @@ namespace Mac_EFI_Toolkit
         internal System.Windows.Forms.Button cmdMore;
         internal System.Windows.Forms.Button cmdMin;
         private System.Windows.Forms.TableLayoutPanel tlpVersionLabel;
-        private METContextMenuStrip cmsMainMenu;
+        private METContextMenuStrip cmsOverflow;
         private METContextMenuStrip cmsApplication;
         private METContextMenuStrip cmsClipboard;
         private System.Windows.Forms.Panel pnlMenuSeperator1;

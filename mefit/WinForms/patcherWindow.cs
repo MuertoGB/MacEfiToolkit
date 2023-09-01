@@ -50,6 +50,9 @@ namespace Mac_EFI_Toolkit.WinForms
             Load += editorWindow_Load;
             FormClosing += editorWindow_FormClosing;
             KeyDown += editorWindow_KeyDown;
+
+            pbxLogo.MouseMove += editorWindow_MouseMove;
+            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
             lblTitle.MouseMove += editorWindow_MouseMove;
 
             Font font = Program.FONT_MDL2_REG_9;
@@ -363,6 +366,14 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 CloseWindow();
             }
+        }
+        #endregion
+
+        #region Picturebox Events
+        private void pbxLogo_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                CenterToParent();
         }
         #endregion
 

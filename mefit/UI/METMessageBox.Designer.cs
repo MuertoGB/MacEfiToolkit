@@ -211,7 +211,7 @@ namespace Mac_EFI_Toolkit.UI
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.lblTitle.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblTitle.Size = new System.Drawing.Size(450, 40);
             this.lblTitle.TabIndex = 99;
             this.lblTitle.Text = "...";

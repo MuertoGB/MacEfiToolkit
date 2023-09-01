@@ -24,6 +24,7 @@
 
 #### Enhancements:
 - The settings window will now display the initial folder path.
+- Added the application icon to tool windows. These icons can be double-clicked to reset the position of the form, centring it to the main window.
 - User Interface improvements.
 
 ## Version 1.1.0

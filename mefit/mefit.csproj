@@ -226,6 +226,7 @@
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\logo24px.png" />
     <None Include="Resources\changelog.png" />
     <None Include="Resources\manual.png" />
     <None Include="Resources\home.png" />

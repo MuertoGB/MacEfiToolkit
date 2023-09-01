@@ -40,9 +40,12 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
-            lblTitle.MouseMove += settingsWindow_MouseMove;
             Load += settingsWindow_Load;
             KeyDown += aboutWindow_KeyDown;
+
+            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
+            pbxLogo.MouseMove += settingsWindow_MouseMove;
+            lblTitle.MouseMove += settingsWindow_MouseMove;
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Chars.EXIT_CROSS;
@@ -68,7 +71,7 @@ namespace Mac_EFI_Toolkit.WinForms
             lblInitialFolderPath.ForeColor = Directory.Exists(path)
                 ? Colours.DIM_TEXT
                 : Colours.WARNING_ORANGE;
-          
+
         }
         #endregion
 
@@ -202,6 +205,14 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxDisableTips.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableTips) ? true : false;
             cbxDisableConfDiag.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag) ? true : false;
             cbxDisableLzmaFsSearch.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch) ? true : false;
+        }
+        #endregion
+
+        #region Picturebox Events
+        private void pbxLogo_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                CenterToParent();
         }
         #endregion
 

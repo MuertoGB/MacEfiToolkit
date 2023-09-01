@@ -37,6 +37,9 @@ namespace Mac_EFI_Toolkit.WinForms
 
             Load += infoWindow_Load;
             KeyDown += infoWindow_KeyDown;
+
+            pbxLogo.MouseMove += infoWindow_MouseMove;
+            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
             lblTitle.MouseMove += infoWindow_MouseMove;
 
             InterfaceUtils.SetTableLayoutPanelHeight(tlpMain);
@@ -118,6 +121,14 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdClose_Click(object sender, System.EventArgs e)
         {
             Close();
+        }
+        #endregion
+
+        #region Picturebox Events
+        private void pbxLogo_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                CenterToParent();
         }
         #endregion
 

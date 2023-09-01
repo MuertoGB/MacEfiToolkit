@@ -77,6 +77,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdBuild = new System.Windows.Forms.Button();
             this.cmdOpenLast = new System.Windows.Forms.Button();
             this.cmdOpenBuildsDir = new System.Windows.Forms.Button();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.pnlMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpOptions.SuspendLayout();
@@ -92,6 +93,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOutput.SuspendLayout();
             this.tlpTitle.SuspendLayout();
             this.tlpButtons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -774,12 +776,13 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpTitle.ColumnCount = 2;
+            this.tlpTitle.ColumnCount = 3;
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpTitle.Controls.Add(this.lblTitle, 0, 0);
-            this.tlpTitle.Controls.Add(this.cmdClose, 1, 0);
+            this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
+            this.tlpTitle.Controls.Add(this.lblTitle, 1, 0);
+            this.tlpTitle.Controls.Add(this.cmdClose, 2, 0);
             this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpTitle.Location = new System.Drawing.Point(1, 1);
             this.tlpTitle.Margin = new System.Windows.Forms.Padding(2);
@@ -795,11 +798,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblTitle.Location = new System.Drawing.Point(40, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblTitle.Size = new System.Drawing.Size(908, 40);
+            this.lblTitle.Size = new System.Drawing.Size(868, 40);
             this.lblTitle.TabIndex = 99;
             this.lblTitle.Text = "Firmware Patcher";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -940,6 +942,17 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdOpenBuildsDir.UseVisualStyleBackColor = false;
             this.cmdOpenBuildsDir.Click += new System.EventHandler(this.cmdOpenBuildsDir_Click);
             // 
+            // pbxLogo
+            // 
+            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
+            this.pbxLogo.Location = new System.Drawing.Point(8, 8);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(24, 24);
+            this.pbxLogo.TabIndex = 100;
+            this.pbxLogo.TabStop = false;
+            // 
             // patcherWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -983,6 +996,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOutput.ResumeLayout(false);
             this.tlpTitle.ResumeLayout(false);
             this.tlpButtons.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1036,5 +1050,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.TableLayoutPanel tlpMeRegion;
         private System.Windows.Forms.Button cmdMePath;
         private UI.METCheckbox cbxReplaceMeRegion;
+        private System.Windows.Forms.PictureBox pbxLogo;
     }
 }

@@ -34,9 +34,12 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
-            Load += new EventHandler(aboutWindow_Load);
-            lblTitle.MouseMove += new MouseEventHandler(aboutWindow_MouseMove);
-            KeyDown += new KeyEventHandler(aboutWindow_KeyDown);
+            Load += aboutWindow_Load;
+            KeyDown += aboutWindow_KeyDown;
+
+            pbxLogo.MouseMove += aboutWindow_MouseMove;
+            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
+            lblTitle.MouseMove += aboutWindow_MouseMove;
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Chars.EXIT_CROSS;
@@ -96,6 +99,14 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdDonate_Click(object sender, EventArgs e)
         {
             Process.Start("https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ");
+        }
+        #endregion
+
+        #region Picturebox Events
+        private void pbxLogo_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                CenterToParent();
         }
         #endregion
 

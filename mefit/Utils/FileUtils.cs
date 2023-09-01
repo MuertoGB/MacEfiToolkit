@@ -215,15 +215,22 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="path">The path of the zip file to be created.</param>
         internal static void BackupFileToZip(byte[] sourceBytes, string entryName, string path)
         {
-            using (FileStream zipStream = new FileStream(path, FileMode.Create))
-            using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+            try
             {
-                ZipArchiveEntry fileEntry = archive.CreateEntry(entryName);
-
-                using (Stream fileStream = fileEntry.Open())
+                using (FileStream zipStream = new FileStream(path, FileMode.Create))
+                using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
                 {
-                    fileStream.Write(sourceBytes, 0, sourceBytes.Length);
+                    ZipArchiveEntry fileEntry = archive.CreateEntry(entryName);
+
+                    using (Stream fileStream = fileEntry.Open())
+                    {
+                        fileStream.Write(sourceBytes, 0, sourceBytes.Length);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Logger.WriteExceptionToAppLog(e);
             }
         }
 

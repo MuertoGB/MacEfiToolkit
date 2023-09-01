@@ -33,9 +33,12 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
-            lblTitle.MouseMove += termsWindow_MouseMove;
             Load += termsWindow_Load;
             KeyDown += termsWindow_KeyDown;
+
+            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
+            pbxLogo.MouseMove += termsWindow_MouseMove;
+            lblTitle.MouseMove += termsWindow_MouseMove;
 
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Chars.EXIT_CROSS;
@@ -89,6 +92,14 @@ namespace Mac_EFI_Toolkit.WinForms
                 DialogResult = DialogResult.No;
                 Close();
             }
+        }
+        #endregion
+
+        #region Picturebox Events
+        private void pbxLogo_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                CenterToParent();
         }
         #endregion
 

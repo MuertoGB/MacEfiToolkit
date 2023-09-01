@@ -196,7 +196,7 @@ namespace Mac_EFI_Toolkit
                         cmdCopyMenu.PerformClick();
                         break;
                     case Keys.M:
-                        ShowContextMenuAtControlPoint(cmdMore, cmsMainMenu, MenuPosition.BottomLeft);
+                        ShowContextMenuAtControlPoint(cmdMore, cmsOverflow, MenuPosition.BottomLeft);
                         break;
                     case Keys.S:
                         cmdSettings.PerformClick();
@@ -278,7 +278,7 @@ namespace Mac_EFI_Toolkit
 
         private void cmdMore_Click(object sender, EventArgs e)
         {
-            ShowContextMenuAtControlPoint(sender, cmsMainMenu, MenuPosition.BottomLeft);
+            ShowContextMenuAtControlPoint(sender, cmsOverflow, MenuPosition.BottomLeft);
         }
 
         private void cmdOpen_Click(object sender, EventArgs e)
@@ -440,13 +440,24 @@ namespace Mac_EFI_Toolkit
                 if (sfd.ShowDialog() != DialogResult.OK)
                     return;
 
-                string path = sfd.FileName;
-                FileUtils.BackupFileToZip(FWBase.LoadedBinaryBytes, FWBase.FileInfoData.FileNameWithExt, path);
+                string path =
+                    sfd.FileName;
+
+                FileUtils.BackupFileToZip(
+                    FWBase.LoadedBinaryBytes,
+                    FWBase.FileInfoData.FileNameWithExt,
+                    path);
+
+                if (!File.Exists(path))
+                {
+                    METMessageBox.Show(this, "Error", "The file could not be backed up.",
+                        METMessageType.Error, METMessageButtons.Okay);
+                    return;
+                }
+
                 METMessageBox.Show(this, "Backup", $"File backed up to:\r\n{path}".Replace(" ", Chars.NBSPACE),
                  METMessageType.Information, METMessageButtons.Okay);
-
             }
-
         }
 
         private void cmdEveryMacSearch_Click(object sender, EventArgs e)
@@ -1488,7 +1499,7 @@ namespace Mac_EFI_Toolkit
                     { cmdMore, "More options... (CTRL + M)"},
                     { cmdNavigate, "Open Explorer at file (ALT + N)" },
                     { cmdReload, "Reload file from Disk (ALT + R)" },
-                    { cmdBackupToZip, "Backup file to Zip (ALT + B)" },
+                    { cmdBackupToZip, "Backup file to .zip (ALT + B)" },
                     { cmdEveryMacSearch, "Search Serial Number on EveryMac (ALT + S)" },
                     { cmdFixFsysCrc, "Repair Fsys CRC32 (ALT + F)" },
                     { cmdExportFsys, "Export Fsys Store (ALT + E)" },
