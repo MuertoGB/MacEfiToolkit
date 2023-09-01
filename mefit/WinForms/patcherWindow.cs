@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class editorWindow : Form
+    public partial class patcherWindow : Form
     {
 
         #region Private Members
@@ -43,7 +43,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Constructor
-        public editorWindow()
+        public patcherWindow()
         {
             InitializeComponent();
 

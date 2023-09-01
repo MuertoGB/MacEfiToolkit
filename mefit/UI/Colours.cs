@@ -13,6 +13,7 @@ namespace Mac_EFI_Toolkit.UI
     {
         internal static readonly Color DISABLED_TEXT = Color.FromArgb(140, 140, 140);
         internal static readonly Color ENABLED_TEXT = Color.FromArgb(255, 255, 255);
+        internal static readonly Color DIM_TEXT = Color.FromArgb(220, 220, 220);
         internal static readonly Color DISABLED_CONTROL = Color.FromArgb(80, 80, 80);
         internal static readonly Color BORDER_INACTIVE = Color.FromArgb(120, 120, 120);
         internal static readonly Color BORDER_ACTIVE = Color.FromArgb(200, 200, 200);

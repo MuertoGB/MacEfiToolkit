@@ -8,6 +8,7 @@
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -19,6 +20,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Private Members
         private static string _strNewOfdInitialPath = string.Empty;
         private Timer _timer;
+        private bool _updateUI = true;
         #endregion
 
         #region Overrides Properties
@@ -52,6 +54,21 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             lblSettingsApplied.Hide();
             UpdateCheckBoxControls();
+            UpdatePathLabel();
+        }
+
+        private void UpdatePathLabel()
+        {
+            string path =
+                Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+
+            lblInitialFolderPath.Text =
+              path;
+
+            lblInitialFolderPath.ForeColor = Directory.Exists(path)
+                ? Colours.DIM_TEXT
+                : Colours.WARNING_ORANGE;
+          
         }
         #endregion
 
@@ -101,6 +118,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
+            _updateUI = false;
             cmdApply.PerformClick();
             Close();
         }
@@ -112,15 +130,22 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, cbxDisableMessageSounds.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableTips, cbxDisableTips.Checked);
             Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
-            if (_strNewOfdInitialPath != string.Empty) Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
+            if (_strNewOfdInitialPath != string.Empty)
+                Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
 
-            _showSettingsAppliedLabel();
+            if (_updateUI)
+            {
+                _showSettingsAppliedLabel();
+                UpdatePathLabel();
+            }
         }
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
-            DialogResult result = METMessageBox.Show(this, "Settings", "This will revert all settings to default, are you sure you want to set default settings?", METMessageType.Warning, METMessageButtons.YesNo);
+            DialogResult result =
+                METMessageBox.Show(this, "Settings", "This will revert all settings to default," +
+                "are you sure you want to set default settings?", METMessageType.Warning, METMessageButtons.YesNo);
 
             if (result != DialogResult.Yes)
             {
@@ -136,7 +161,7 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, false);
 
             UpdateCheckBoxControls();
-
+            UpdatePathLabel();
             _showSettingsAppliedLabel();
         }
         #endregion

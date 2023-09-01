@@ -17,12 +17,13 @@ namespace Mac_EFI_Toolkit.UI
         internal const string UNKNOWN = "\uE9CE";
         internal const string CHEVRON_RIGHT = "\uE76C";
         internal const string FILE_EXPLORER = "\uEC50";
-        internal const string SHOW = "\uE169";
+        internal const string MORE = "\uE712";
         internal const string REFRESH = "\uE72C";
         internal const string WEB_SEARCH = "\uF6FA";
         internal const string REPAIR = "\uE90F";
         internal const string SAVE = "\uE74E";
         internal const string FORWARD = "\uE72A";
+        internal const string UPLOAD = "\uE11C";
 
         // Non line-breaking space
         internal const string NBSPACE = "\u00A0";

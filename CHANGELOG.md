@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-111">V1.1.1</a> •
   <a href="#version-110">V1.1.0</a> •
   <a href="#version-103">V1.0.3</a> •
   <a href="#version-102">V1.0.2</a> •
@@ -15,6 +16,15 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.1.1
+
+#### New:
+- Introduced a new option in the main window that will automatically backup the loaded firmware to a zip archive (ALT + B).
+
+#### Enhancements:
+- The settings window will now display the initial folder path.
+- User Interface improvements.
 
 ## Version 1.1.0
 

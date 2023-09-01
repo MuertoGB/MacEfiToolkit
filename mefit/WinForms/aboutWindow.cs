@@ -46,7 +46,8 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void aboutWindow_Load(object sender, EventArgs e)
         {
-            lblBuild.Text = $"{Application.ProductVersion}.{METVersion.Build} · {METVersion.Channel}";
+            lblBuild.Text = $"{Application.ProductVersion}.{METVersion.Build}";
+            lblChannel.Text = METVersion.Channel.ToUpper();
         }
         #endregion
 

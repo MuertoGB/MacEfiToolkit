@@ -39,10 +39,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblInfo = new System.Windows.Forms.Label();
             this.pnlSplit = new System.Windows.Forms.Panel();
             this.tlpTop = new System.Windows.Forms.TableLayoutPanel();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.tlpTopLabels = new System.Windows.Forms.TableLayoutPanel();
             this.lblBuild = new System.Windows.Forms.Label();
-            this.lblName = new System.Windows.Forms.Label();
+            this.lblChannel = new System.Windows.Forms.Label();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
@@ -50,14 +50,14 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tlpTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpTopLabels.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpTitle.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
             // 
-            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.pnlMain.Controls.Add(this.tableLayoutPanel1);
             this.pnlMain.Controls.Add(this.lblInfo);
             this.pnlMain.Controls.Add(this.pnlSplit);
@@ -199,12 +199,12 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpTop
             // 
-            this.tlpTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tlpTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.tlpTop.ColumnCount = 2;
             this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpTop.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTop.Controls.Add(this.tlpTopLabels, 1, 0);
+            this.tlpTop.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpTop.Location = new System.Drawing.Point(0, 0);
             this.tlpTop.Name = "tlpTop";
@@ -213,10 +213,60 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTop.Size = new System.Drawing.Size(438, 93);
             this.tlpTop.TabIndex = 87;
             // 
+            // tlpTopLabels
+            // 
+            this.tlpTopLabels.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tlpTopLabels.BackColor = System.Drawing.Color.Transparent;
+            this.tlpTopLabels.ColumnCount = 1;
+            this.tlpTopLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTopLabels.Controls.Add(this.lblBuild, 0, 0);
+            this.tlpTopLabels.Controls.Add(this.lblChannel, 0, 1);
+            this.tlpTopLabels.Location = new System.Drawing.Point(100, 20);
+            this.tlpTopLabels.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpTopLabels.Name = "tlpTopLabels";
+            this.tlpTopLabels.RowCount = 3;
+            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tlpTopLabels.Size = new System.Drawing.Size(187, 52);
+            this.tlpTopLabels.TabIndex = 86;
+            // 
+            // lblBuild
+            // 
+            this.lblBuild.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblBuild.AutoSize = true;
+            this.lblBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.lblBuild.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBuild.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.lblBuild.Location = new System.Drawing.Point(3, 2);
+            this.lblBuild.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lblBuild.Name = "lblBuild";
+            this.lblBuild.Size = new System.Drawing.Size(23, 22);
+            this.lblBuild.TabIndex = 78;
+            this.lblBuild.Text = "...";
+            this.lblBuild.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblChannel
+            // 
+            this.lblChannel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblChannel.AutoSize = true;
+            this.lblChannel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.lblChannel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblChannel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblChannel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.lblChannel.Location = new System.Drawing.Point(3, 28);
+            this.lblChannel.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lblChannel.Name = "lblChannel";
+            this.lblChannel.Size = new System.Drawing.Size(20, 22);
+            this.lblChannel.TabIndex = 79;
+            this.lblChannel.Text = "...";
+            this.lblChannel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // pbxLogo
             // 
             this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbxLogo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
             this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbxLogo.Cursor = System.Windows.Forms.Cursors.Default;
             this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.imgmuerto64px;
@@ -227,54 +277,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbxLogo.TabIndex = 85;
             this.pbxLogo.TabStop = false;
-            // 
-            // tlpTopLabels
-            // 
-            this.tlpTopLabels.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tlpTopLabels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.tlpTopLabels.ColumnCount = 1;
-            this.tlpTopLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTopLabels.Controls.Add(this.lblBuild, 0, 1);
-            this.tlpTopLabels.Controls.Add(this.lblName, 0, 0);
-            this.tlpTopLabels.Location = new System.Drawing.Point(100, 20);
-            this.tlpTopLabels.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpTopLabels.Name = "tlpTopLabels";
-            this.tlpTopLabels.RowCount = 3;
-            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tlpTopLabels.Size = new System.Drawing.Size(316, 52);
-            this.tlpTopLabels.TabIndex = 86;
-            // 
-            // lblBuild
-            // 
-            this.lblBuild.AutoSize = true;
-            this.lblBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.lblBuild.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuild.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.lblBuild.Location = new System.Drawing.Point(0, 26);
-            this.lblBuild.Margin = new System.Windows.Forms.Padding(0);
-            this.lblBuild.Name = "lblBuild";
-            this.lblBuild.Size = new System.Drawing.Size(316, 26);
-            this.lblBuild.TabIndex = 78;
-            this.lblBuild.Text = "...";
-            this.lblBuild.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblName
-            // 
-            this.lblName.AutoSize = true;
-            this.lblName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.lblName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblName.ForeColor = System.Drawing.Color.White;
-            this.lblName.Location = new System.Drawing.Point(0, 0);
-            this.lblName.Margin = new System.Windows.Forms.Padding(0);
-            this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(316, 26);
-            this.lblName.TabIndex = 75;
-            this.lblName.Text = "Mac EFI Toolkit";
-            this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpTitle
             // 
@@ -307,7 +309,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblTitle.Size = new System.Drawing.Size(398, 40);
             this.lblTitle.TabIndex = 12;
-            this.lblTitle.Text = "About";
+            this.lblTitle.Text = "About Mac EFI Toolkit";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdClose
@@ -371,9 +373,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tlpTop.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpTopLabels.ResumeLayout(false);
             this.tlpTopLabels.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpTitle.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -385,7 +387,6 @@ namespace Mac_EFI_Toolkit.WinForms
         internal System.Windows.Forms.Button cmdClose;
         internal System.Windows.Forms.TableLayoutPanel tlpTopLabels;
         internal System.Windows.Forms.Label lblBuild;
-        internal System.Windows.Forms.Label lblName;
         internal System.Windows.Forms.PictureBox pbxLogo;
         private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.TableLayoutPanel tlpTop;
@@ -397,5 +398,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Button cmdEmail;
         private System.Windows.Forms.Button cmdSource;
         private System.Windows.Forms.Panel pnlSeperator;
+        internal System.Windows.Forms.Label lblChannel;
     }
 }

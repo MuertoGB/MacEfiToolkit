@@ -8,6 +8,7 @@ using Mac_EFI_Toolkit.Common;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Security.Cryptography;
 
 #region Enum
@@ -204,6 +205,26 @@ namespace Mac_EFI_Toolkit.Utils
             }
 
             return Status.FAILED;
+        }
+
+        /// <summary>
+        /// Backs up a byte array to a zip file.
+        /// </summary>
+        /// <param name="sourceBytes">The byte array to be backed up.</param>
+        /// <param name="entryName">The name of the entry to be created within the zip archive.</param>
+        /// <param name="path">The path of the zip file to be created.</param>
+        internal static void BackupFileToZip(byte[] sourceBytes, string entryName, string path)
+        {
+            using (FileStream zipStream = new FileStream(path, FileMode.Create))
+            using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+            {
+                ZipArchiveEntry fileEntry = archive.CreateEntry(entryName);
+
+                using (Stream fileStream = fileEntry.Open())
+                {
+                    fileStream.Write(sourceBytes, 0, sourceBytes.Length);
+                }
+            }
         }
 
     }

@@ -189,20 +189,20 @@ namespace Mac_EFI_Toolkit
                     case Keys.R:
                         cmdReset.PerformClick();
                         break;
-                    case Keys.E:
-                        cmdEdit.PerformClick();
+                    case Keys.P:
+                        cmdPatch.PerformClick();
                         break;
                     case Keys.C:
                         cmdCopyMenu.PerformClick();
                         break;
                     case Keys.M:
-                        ShowContextMenuAtControlPoint(cmdMainMenu, cmsMainMenu, MenuPosition.BottomLeft);
+                        ShowContextMenuAtControlPoint(cmdMore, cmsMainMenu, MenuPosition.BottomLeft);
                         break;
                     case Keys.S:
-                        settingsToolStripMenuItem.PerformClick();
+                        cmdSettings.PerformClick();
                         break;
                     case Keys.A:
-                        aboutToolStripMenuItem.PerformClick();
+                        cmdAbout.PerformClick();
                         break;
                     case Keys.V:
                         viewLogToolStripMenuItem.PerformClick();
@@ -218,6 +218,9 @@ namespace Mac_EFI_Toolkit
                         break;
                     case Keys.R:
                         cmdReload.PerformClick();
+                        break;
+                    case Keys.B:
+                        cmdBackupToZip.PerformClick();
                         break;
                     case Keys.S:
                         cmdEveryMacSearch.PerformClick();
@@ -273,7 +276,7 @@ namespace Mac_EFI_Toolkit
             WindowState = FormWindowState.Minimized;
         }
 
-        private void cmdMainMenu_Click(object sender, EventArgs e)
+        private void cmdMore_Click(object sender, EventArgs e)
         {
             ShowContextMenuAtControlPoint(sender, cmsMainMenu, MenuPosition.BottomLeft);
         }
@@ -313,7 +316,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void cmdEdit_Click(object sender, EventArgs e)
+        private void cmdPatch_Click(object sender, EventArgs e)
         {
             if (FWBase.LoadedBinaryBytes == null)
             {
@@ -338,7 +341,7 @@ namespace Mac_EFI_Toolkit
             if (bOpenEditor)
             {
                 SetHalfOpacity();
-                using (Form frm = new editorWindow())
+                using (Form frm = new patcherWindow())
                 {
                     frm.FormClosed += ChildWindowClosed;
                     frm.ShowDialog();
@@ -349,6 +352,43 @@ namespace Mac_EFI_Toolkit
         private void cmdCopyMenu_Click(object sender, EventArgs e)
         {
             ShowContextMenuAtControlPoint(sender, cmsClipboard, MenuPosition.BottomLeft);
+        }
+
+        private void cmdSettings_Click(object sender, EventArgs e)
+        {
+            SetHalfOpacity();
+
+            using (Form formWindow = new settingsWindow())
+            {
+                formWindow.FormClosed += ChildWindowClosed;
+                formWindow.ShowDialog();
+            }
+        }
+
+        private void cmdAbout_Click(object sender, EventArgs e)
+        {
+            SetHalfOpacity();
+
+            using (Form formWindow = new aboutWindow())
+            {
+                formWindow.FormClosed += ChildWindowClosed;
+                formWindow.ShowDialog();
+            }
+        }
+
+        private void cmdNavigate_Click(object sender, EventArgs e)
+        {
+            // Check the loaded binary path is not null or empty
+            if (string.IsNullOrEmpty(FWBase.LoadedBinaryPath))
+            {
+                // Binary path is null or empty
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.",
+                    METMessageType.Error, METMessageButtons.Okay);
+                return;
+            }
+
+            // Navigate and highlight the file in explorer
+            FileUtils.HighlightPathInExplorer(FWBase.LoadedBinaryPath);
         }
 
         private void cmdReload_Click(object sender, EventArgs e)
@@ -378,19 +418,35 @@ namespace Mac_EFI_Toolkit
             OpenBinary(FWBase.LoadedBinaryPath);
         }
 
-        private void cmdNavigate_Click(object sender, EventArgs e)
+        private void cmdBackupToZip_Click(object sender, EventArgs e)
         {
-            // Check the loaded binary path is not null or empty
-            if (string.IsNullOrEmpty(FWBase.LoadedBinaryPath))
+            if (FWBase.LoadedBinaryBytes == null)
             {
-                // Binary path is null or empty
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.",
+                  METMessageType.Error, METMessageButtons.Okay);
                 return;
             }
 
-            // Navigate and highlight the file in explorer
-            FileUtils.HighlightPathInExplorer(FWBase.LoadedBinaryPath);
+            if (!Directory.Exists(METPath.BackupsDirectory))
+                Directory.CreateDirectory(METPath.BackupsDirectory);
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.InitialDirectory = METPath.BackupsDirectory;
+                sfd.Filter = "Zip files (*.zip)|*.zip";
+                sfd.FileName = string.Concat(FWBase.FileInfoData.FileNameNoExt, "_backup");
+                sfd.OverwritePrompt = true;
+
+                if (sfd.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string path = sfd.FileName;
+                FileUtils.BackupFileToZip(FWBase.LoadedBinaryBytes, FWBase.FileInfoData.FileNameWithExt, path);
+                METMessageBox.Show(this, "Backup", $"File backed up to:\r\n{path}".Replace(" ", Chars.NBSPACE),
+                 METMessageType.Information, METMessageButtons.Okay);
+
+            }
+
         }
 
         private void cmdEveryMacSearch_Click(object sender, EventArgs e)
@@ -758,6 +814,18 @@ namespace Mac_EFI_Toolkit
             Process.Start("explorer.exe", METPath.CurrentDirectory);
         }
 
+        private void backupsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.BackupsDirectory))
+            {
+                Process.Start("explorer.exe", METPath.BackupsDirectory);
+                return;
+            }
+
+            METMessageBox.Show(this, "MET", "The backups folder has not been created yet.",
+                METMessageType.Information, METMessageButtons.Okay);
+        }
+
         private void openBuildsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(METPath.BuildsDirectory))
@@ -819,26 +887,9 @@ namespace Mac_EFI_Toolkit
             Program.PerformMetAction(this, MetAction.Restart);
         }
 
-        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetHalfOpacity();
-
-            using (Form formWindow = new settingsWindow())
-            {
-                formWindow.FormClosed += ChildWindowClosed;
-                formWindow.ShowDialog();
-            }
-        }
-
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetHalfOpacity();
 
-            using (Form formWindow = new aboutWindow())
-            {
-                formWindow.FormClosed += ChildWindowClosed;
-                formWindow.ShowDialog();
-            }
         }
 
         private void changelogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1002,9 +1053,9 @@ namespace Mac_EFI_Toolkit
 
             // Firmware Data
             UpdateModelLabel();
+            UpdateFsysLabel();
             UpdateFirmwareSerialNumber();
             UpdateHardwareConfigLabel();
-            UpdateFsysLabel();
             UpdateOrderNumberLabel();
             UpdateEfiVersionLabel();
             UpdateNvramLabel(lblVssStore, FWBase.VssStoreData, "VSS");
@@ -1078,6 +1129,22 @@ namespace Mac_EFI_Toolkit
             }
         }
 
+        private void UpdateFsysLabel()
+        {
+            if (FWBase.FsysStoreData.CrcString != null)
+            {
+                lblFsysCrc.Text =
+                    $"CRC: {FWBase.FsysStoreData.CrcString}h{(FWBase.ForceFoundFsys ? " [F]" : string.Empty)}";
+                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString)
+                    ? Colours.COMPLETE_GREEN
+                    : Colours.ERROR_RED;
+            }
+            else
+            {
+                lblFsysCrc.Text = "N/A";
+            }
+        }
+
         private void UpdateFirmwareSerialNumber()
         {
             string serialNumber = FWBase.FsysStoreData.Serial;
@@ -1095,22 +1162,6 @@ namespace Mac_EFI_Toolkit
             lblHwc.Text =
                 FWBase.FsysStoreData.HWC
                 ?? "N/A";
-        }
-
-        private void UpdateFsysLabel()
-        {
-            if (FWBase.FsysStoreData.CrcString != null)
-            {
-                lblFsysCrc.Text =
-                    $"CRC: {FWBase.FsysStoreData.CrcString}h{(FWBase.ForceFoundFsys ? " [F]" : string.Empty)}";
-                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString)
-                    ? Colours.COMPLETE_GREEN
-                    : Colours.ERROR_RED;
-            }
-            else
-            {
-                lblFsysCrc.Text = "N/A";
-            }
         }
 
         private void UpdateOrderNumberLabel()
@@ -1271,8 +1322,8 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdReset, cmdCopyMenu, cmdEdit, cmdNavigate, cmdReload,
-                cmdFixFsysCrc, cmdExportFsys, cmdAppleRomInfo,
+                cmdReset, cmdCopyMenu, cmdPatch, cmdNavigate, cmdReload,
+                cmdBackupToZip, cmdFixFsysCrc, cmdExportFsys, cmdAppleRomInfo,
                 cmdInvalidateEfiLock, cmdExportMe
             };
 
@@ -1295,7 +1346,7 @@ namespace Mac_EFI_Toolkit
             {
                 cmdFixFsysCrc.Enabled = false;
                 cmdExportFsys.Enabled = false;
-                cmdEdit.Enabled = false;
+                cmdPatch.Enabled = false;
             }
 
             cmdAppleRomInfo.Enabled =
@@ -1353,9 +1404,9 @@ namespace Mac_EFI_Toolkit
         {
             var buttons = new[]
             {
-                new { Button = cmdMainMenu,
-                    Font = Program.FONT_MDL2_REG_14,
-                    Text = Chars.SHOW },
+                new { Button = cmdMore,
+                    Font = Program.FONT_MDL2_REG_12,
+                    Text = Chars.MORE },
                 new { Button = cmdClose,
                     Font = Program.FONT_MDL2_REG_12,
                     Text = Chars.EXIT_CROSS },
@@ -1365,6 +1416,9 @@ namespace Mac_EFI_Toolkit
                 new { Button = cmdReload,
                     Font = Program.FONT_MDL2_REG_10,
                     Text = Chars.REFRESH },
+                new { Button = cmdBackupToZip,
+                    Font = Program.FONT_MDL2_REG_10,
+                    Text = Chars.UPLOAD },
                 new { Button = cmdEveryMacSearch,
                     Font = Program.FONT_MDL2_REG_9,
                     Text = Chars.WEB_SEARCH },
@@ -1396,9 +1450,9 @@ namespace Mac_EFI_Toolkit
         {
             Button[] buttons =
             {
-                cmdMainMenu, cmdOpen, cmdReset, cmdEdit, cmdNavigate, cmdReload,
-                cmdCopyMenu, cmdEveryMacSearch, cmdFixFsysCrc, cmdExportFsys,
-                cmdAppleRomInfo, cmdInvalidateEfiLock, cmdExportMe
+                cmdMore, cmdOpen, cmdReset, cmdPatch, cmdSettings, cmdAbout,
+                cmdNavigate, cmdReload, cmdBackupToZip, cmdCopyMenu, cmdEveryMacSearch,
+                cmdFixFsysCrc, cmdExportFsys, cmdAppleRomInfo, cmdInvalidateEfiLock, cmdExportMe
             };
 
             Label[] labels =
@@ -1427,11 +1481,14 @@ namespace Mac_EFI_Toolkit
                 {
                     { cmdOpen, "Open a Mac UEFI/BIOS (CTRL + O)" },
                     { cmdReset, "Reset Window Data (CTRL + R)" },
-                    { cmdEdit, "Open the Firmware Editor (CTRL + E)" },
+                    { cmdPatch, "Open the Firmware Patcher (CTRL + P)" },
                     { cmdCopyMenu, "Open the Clipboard Copy Menu (CTRL + C)" },
-                    { cmdMainMenu, "Open the Main Menu (CTRL + M)"},
-                    { cmdNavigate, "Open Explorer at File (ALT + N)" },
-                    { cmdReload, "Reload File from Disk (ALT + R)" },
+                    { cmdSettings, "Open Settings Window (CTRL + S)" },
+                    { cmdAbout, "Open About Window (CTRL + A)" },
+                    { cmdMore, "More options... (CTRL + M)"},
+                    { cmdNavigate, "Open Explorer at file (ALT + N)" },
+                    { cmdReload, "Reload file from Disk (ALT + R)" },
+                    { cmdBackupToZip, "Backup file to Zip (ALT + B)" },
                     { cmdEveryMacSearch, "Search Serial Number on EveryMac (ALT + S)" },
                     { cmdFixFsysCrc, "Repair Fsys CRC32 (ALT + F)" },
                     { cmdExportFsys, "Export Fsys Store (ALT + E)" },

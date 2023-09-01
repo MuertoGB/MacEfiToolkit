@@ -1,7 +1,7 @@
 ﻿
 namespace Mac_EFI_Toolkit.WinForms
 {
-    partial class editorWindow
+    partial class patcherWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(editorWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(patcherWindow));
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpOptions = new System.Windows.Forms.TableLayoutPanel();
@@ -801,7 +801,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblTitle.Size = new System.Drawing.Size(908, 40);
             this.lblTitle.TabIndex = 99;
-            this.lblTitle.Text = "Firmware Editor";
+            this.lblTitle.Text = "Firmware Patcher";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdClose
@@ -940,7 +940,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdOpenBuildsDir.UseVisualStyleBackColor = false;
             this.cmdOpenBuildsDir.Click += new System.EventHandler(this.cmdOpenBuildsDir_Click);
             // 
-            // editorWindow
+            // patcherWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -959,11 +959,11 @@ namespace Mac_EFI_Toolkit.WinForms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(950, 530);
-            this.Name = "editorWindow";
+            this.Name = "patcherWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Firmware Editor";
+            this.Text = "Firmware Patcher";
             this.pnlMain.ResumeLayout(false);
             this.tlpMain.ResumeLayout(false);
             this.tlpOptions.ResumeLayout(false);

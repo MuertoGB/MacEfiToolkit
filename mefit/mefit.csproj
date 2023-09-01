@@ -72,6 +72,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Drawing" />
@@ -129,11 +130,11 @@
     <Compile Include="WinForms\aboutWindow.Designer.cs">
       <DependentUpon>aboutWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\editorWindow.cs">
+    <Compile Include="WinForms\patcherWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\editorWindow.Designer.cs">
-      <DependentUpon>editorWindow.cs</DependentUpon>
+    <Compile Include="WinForms\patcherWindow.Designer.cs">
+      <DependentUpon>patcherWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="WinForms\infoWindow.cs">
       <SubType>Form</SubType>
@@ -179,8 +180,8 @@
       <DependentUpon>aboutWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\editorWindow.resx">
-      <DependentUpon>editorWindow.cs</DependentUpon>
+    <EmbeddedResource Include="WinForms\patcherWindow.resx">
+      <DependentUpon>patcherWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\infoWindow.resx">
       <DependentUpon>infoWindow.cs</DependentUpon>
@@ -225,13 +226,15 @@
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\changelog.png" />
+    <None Include="Resources\manual.png" />
+    <None Include="Resources\home.png" />
     <None Include="Resources\folder.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Assets\editorterms.txt" />
     <Content Include="Assets\met.ico" />
     <None Include="Resources\modeldb.xml" />
     <None Include="Resources\imgmuerto64px.png" />
-    <None Include="Resources\logo64px.png" />
     <None Include="Resources\logo32px.png" />
   </ItemGroup>
   <ItemGroup>
