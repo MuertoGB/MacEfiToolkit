@@ -292,7 +292,7 @@ Located at the bottom of the main window, the status bar serves multiple purpose
 This section explains the firmware editor window and its functionality.
 
 <kbd>
-  <img src="files/images/met_editor.png">
+  <img src="files/images/firmware_patcher.png">
 </kbd>
 
 ---
