@@ -69,6 +69,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblOutputText = new System.Windows.Forms.Label();
             this.cmdSaveLog = new System.Windows.Forms.Button();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
@@ -77,7 +78,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdBuild = new System.Windows.Forms.Button();
             this.cmdOpenLast = new System.Windows.Forms.Button();
             this.cmdOpenBuildsDir = new System.Windows.Forms.Button();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.pnlMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpOptions.SuspendLayout();
@@ -92,8 +92,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlLog.SuspendLayout();
             this.tlpOutput.SuspendLayout();
             this.tlpTitle.SuspendLayout();
-            this.tlpButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
+            this.tlpButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -231,7 +231,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxReplaceSerial.Location = new System.Drawing.Point(11, 4);
             this.cbxReplaceSerial.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
             this.cbxReplaceSerial.Name = "cbxReplaceSerial";
-            this.cbxReplaceSerial.Size = new System.Drawing.Size(192, 21);
+            this.cbxReplaceSerial.Size = new System.Drawing.Size(190, 21);
             this.cbxReplaceSerial.TabIndex = 0;
             this.cbxReplaceSerial.Text = "Replace Serial Number";
             this.cbxReplaceSerial.CheckedChanged += new System.EventHandler(this.cmdReplaceSerial_CheckedChanged);
@@ -287,7 +287,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxReplaceFsysStore.Location = new System.Drawing.Point(11, 4);
             this.cbxReplaceFsysStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
             this.cbxReplaceFsysStore.Name = "cbxReplaceFsysStore";
-            this.cbxReplaceFsysStore.Size = new System.Drawing.Size(163, 21);
+            this.cbxReplaceFsysStore.Size = new System.Drawing.Size(160, 21);
             this.cbxReplaceFsysStore.TabIndex = 0;
             this.cbxReplaceFsysStore.Text = "Replace Fsys Store";
             this.cbxReplaceFsysStore.CheckedChanged += new System.EventHandler(this.cbxReplaceFsysStore_CheckedChanged);
@@ -435,7 +435,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearNssStore.Location = new System.Drawing.Point(11, 4);
             this.cbxClearNssStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
             this.cbxClearNssStore.Name = "cbxClearNssStore";
-            this.cbxClearNssStore.Size = new System.Drawing.Size(149, 21);
+            this.cbxClearNssStore.Size = new System.Drawing.Size(140, 21);
             this.cbxClearNssStore.TabIndex = 0;
             this.cbxClearNssStore.Text = "Clear NSS Store";
             this.cbxClearNssStore.CheckedChanged += new System.EventHandler(this.cbxClearNssStore_CheckedChanged);
@@ -455,7 +455,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearNssBackup.Location = new System.Drawing.Point(190, 4);
             this.cbxClearNssBackup.Margin = new System.Windows.Forms.Padding(0);
             this.cbxClearNssBackup.Name = "cbxClearNssBackup";
-            this.cbxClearNssBackup.Size = new System.Drawing.Size(210, 21);
+            this.cbxClearNssBackup.Size = new System.Drawing.Size(190, 21);
             this.cbxClearNssBackup.TabIndex = 1;
             this.cbxClearNssBackup.Text = "Clear NSS Backup Store";
             // 
@@ -492,7 +492,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearSvsStore.Location = new System.Drawing.Point(11, 4);
             this.cbxClearSvsStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
             this.cbxClearSvsStore.Name = "cbxClearSvsStore";
-            this.cbxClearSvsStore.Size = new System.Drawing.Size(149, 21);
+            this.cbxClearSvsStore.Size = new System.Drawing.Size(140, 21);
             this.cbxClearSvsStore.TabIndex = 0;
             this.cbxClearSvsStore.Text = "Clear SVS Store";
             this.cbxClearSvsStore.CheckedChanged += new System.EventHandler(this.cbxClearSvsStore_CheckedChanged);
@@ -512,7 +512,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearSvsBackup.Location = new System.Drawing.Point(190, 4);
             this.cbxClearSvsBackup.Margin = new System.Windows.Forms.Padding(0);
             this.cbxClearSvsBackup.Name = "cbxClearSvsBackup";
-            this.cbxClearSvsBackup.Size = new System.Drawing.Size(210, 21);
+            this.cbxClearSvsBackup.Size = new System.Drawing.Size(190, 21);
             this.cbxClearSvsBackup.TabIndex = 1;
             this.cbxClearSvsBackup.Text = "Clear SVS Backup Store";
             // 
@@ -578,7 +578,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearVssBackup.Location = new System.Drawing.Point(190, 4);
             this.cbxClearVssBackup.Margin = new System.Windows.Forms.Padding(0);
             this.cbxClearVssBackup.Name = "cbxClearVssBackup";
-            this.cbxClearVssBackup.Size = new System.Drawing.Size(210, 21);
+            this.cbxClearVssBackup.Size = new System.Drawing.Size(190, 21);
             this.cbxClearVssBackup.TabIndex = 1;
             this.cbxClearVssBackup.Text = "Clear VSS Backup Store";
             // 
@@ -596,7 +596,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxClearVssStore.Location = new System.Drawing.Point(11, 4);
             this.cbxClearVssStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
             this.cbxClearVssStore.Name = "cbxClearVssStore";
-            this.cbxClearVssStore.Size = new System.Drawing.Size(149, 21);
+            this.cbxClearVssStore.Size = new System.Drawing.Size(140, 21);
             this.cbxClearVssStore.TabIndex = 0;
             this.cbxClearVssStore.Text = "Clear VSS Store";
             this.cbxClearVssStore.CheckedChanged += new System.EventHandler(this.cbxClearVssStore_CheckedChanged);
@@ -666,7 +666,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cbxReplaceMeRegion.Location = new System.Drawing.Point(11, 4);
             this.cbxReplaceMeRegion.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
             this.cbxReplaceMeRegion.Name = "cbxReplaceMeRegion";
-            this.cbxReplaceMeRegion.Size = new System.Drawing.Size(163, 21);
+            this.cbxReplaceMeRegion.Size = new System.Drawing.Size(164, 21);
             this.cbxReplaceMeRegion.TabIndex = 0;
             this.cbxReplaceMeRegion.Text = "Replace ME Region";
             this.cbxReplaceMeRegion.CheckedChanged += new System.EventHandler(this.cbxReplaceMeRegion_CheckedChanged);
@@ -791,6 +791,17 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.Size = new System.Drawing.Size(948, 40);
             this.tlpTitle.TabIndex = 99;
+            // 
+            // pbxLogo
+            // 
+            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
+            this.pbxLogo.Location = new System.Drawing.Point(8, 8);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(24, 24);
+            this.pbxLogo.TabIndex = 100;
+            this.pbxLogo.TabStop = false;
             // 
             // lblTitle
             // 
@@ -942,17 +953,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdOpenBuildsDir.UseVisualStyleBackColor = false;
             this.cmdOpenBuildsDir.Click += new System.EventHandler(this.cmdOpenBuildsDir_Click);
             // 
-            // pbxLogo
-            // 
-            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
-            this.pbxLogo.Location = new System.Drawing.Point(8, 8);
-            this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(24, 24);
-            this.pbxLogo.TabIndex = 100;
-            this.pbxLogo.TabStop = false;
-            // 
             // patcherWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -995,8 +995,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlLog.ResumeLayout(false);
             this.tlpOutput.ResumeLayout(false);
             this.tlpTitle.ResumeLayout(false);
-            this.tlpButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
+            this.tlpButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
