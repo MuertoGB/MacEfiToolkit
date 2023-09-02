@@ -20,12 +20,15 @@
 ## Version 1.1.1
 
 #### New:
-- Introduced a new option in the main window that will automatically backup the loaded firmware to a zip archive (ALT + B).
+- Added a new feature to the main window, allowing users to automatically create a backup of the loaded firmware as a zip archive (ALT + B). This feature offers users a convenient way to compress their firmware files for long term storage.
 
 #### Enhancements:
 - The settings window will now display the initial folder path.
-- Added the application icon to tool windows. These icons can be double-clicked to reset the position of the form, centring it to the main window.
+- Added application icon to tool windows. These icons can be double-clicked to reset the position of the window, centring it to the main window.
 - User Interface improvements.
+
+#### Bugs:
+- Fixed an issue where part of the main window's title area was unresponsive when attempting to drag the window.
 
 ## Version 1.1.0
 

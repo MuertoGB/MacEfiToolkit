@@ -257,7 +257,7 @@ namespace Mac_EFI_Toolkit
 
         private void SetMouseMoveEventHandlers()
         {
-            Control[] controls = { tlpMain, tlpTitle, lblWindowTitle, tlpMenu };
+            Control[] controls = { tlpMain, tlpTitle, lblWindowTitle, tlpVersionLabel, tlpMenu };
             foreach (Control control in controls)
             {
                 control.MouseMove += mainWindow_MouseMove;
@@ -1595,7 +1595,7 @@ namespace Mac_EFI_Toolkit
             if (result == VersionResult.NewVersionAvailable)
             {
                 lblVersion.ForeColor = Color.FromArgb(255, 128, 128);
-                lblVersion.Text += " (Outdated)";
+                lblVersion.Text += " (OUTDATED)";
             }
         }
 

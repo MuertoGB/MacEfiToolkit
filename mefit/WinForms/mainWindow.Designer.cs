@@ -1213,7 +1213,7 @@ namespace Mac_EFI_Toolkit
             this.lblVersion.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblVersion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblVersion.ForeColor = System.Drawing.Color.White;
-            this.lblVersion.Location = new System.Drawing.Point(103, 14);
+            this.lblVersion.Location = new System.Drawing.Point(132, 14);
             this.lblVersion.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(23, 22);
@@ -1292,7 +1292,7 @@ namespace Mac_EFI_Toolkit
             this.lblWindowTitle.Location = new System.Drawing.Point(50, 0);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(432, 50);
+            this.lblWindowTitle.Size = new System.Drawing.Size(403, 50);
             this.lblWindowTitle.TabIndex = 99;
             this.lblWindowTitle.Text = "Mac EFI Toolkit";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1459,10 +1459,9 @@ namespace Mac_EFI_Toolkit
             this.tlpTitle.ColumnCount = 5;
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpTitle.Controls.Add(this.lblWindowTitle, 1, 0);
             this.tlpTitle.Controls.Add(this.cmdClose, 4, 0);
             this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
@@ -1528,12 +1527,12 @@ namespace Mac_EFI_Toolkit
             this.tlpVersionLabel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpVersionLabel.Controls.Add(this.lblVersion, 0, 0);
             this.tlpVersionLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpVersionLabel.Location = new System.Drawing.Point(482, 0);
+            this.tlpVersionLabel.Location = new System.Drawing.Point(453, 0);
             this.tlpVersionLabel.Margin = new System.Windows.Forms.Padding(0);
             this.tlpVersionLabel.Name = "tlpVersionLabel";
             this.tlpVersionLabel.RowCount = 1;
             this.tlpVersionLabel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpVersionLabel.Size = new System.Drawing.Size(131, 50);
+            this.tlpVersionLabel.Size = new System.Drawing.Size(160, 50);
             this.tlpVersionLabel.TabIndex = 100;
             this.tlpVersionLabel.Click += new System.EventHandler(this.tlpVersionLabel_Click);
             // 
