@@ -33,6 +33,7 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 
 **General:**
 - Edit copies of files in memory, preserving original files.
+- Backup loaded firmware to a .zip file.
 - Read Intel Flash Descriptor for UEFI section positions.
 - Knuth–Morris–Pratt algorithm for binary data searching.
 - View the Intel Management Engine version.
