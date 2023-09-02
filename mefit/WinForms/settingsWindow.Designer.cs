@@ -37,33 +37,35 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlTitleMenuSplit = new System.Windows.Forms.Panel();
             this.lblFirmwareText = new System.Windows.Forms.Label();
             this.tlpDcd = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxDisableConfDiag = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.lblDcdText = new System.Windows.Forms.Label();
             this.tlpCif = new System.Windows.Forms.TableLayoutPanel();
-            this.lnlCifText = new System.Windows.Forms.Label();
             this.cmdEditCustomPath = new System.Windows.Forms.Button();
+            this.lnlCifText = new System.Windows.Forms.Label();
             this.tlpDvc = new System.Windows.Forms.TableLayoutPanel();
             this.lblDvcText = new System.Windows.Forms.Label();
+            this.cbxDisableVersionCheck = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.lblStartupText = new System.Windows.Forms.Label();
             this.lblApplicationText = new System.Windows.Forms.Label();
             this.tlpDwf = new System.Windows.Forms.TableLayoutPanel();
             this.lblDwfText = new System.Windows.Forms.Label();
+            this.cbxDisableFlashingUI = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.tlpDisableLzma = new System.Windows.Forms.TableLayoutPanel();
             this.lblDisableLzmaText = new System.Windows.Forms.Label();
+            this.cbxDisableLzmaFsSearch = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.lblSettingsApplied = new System.Windows.Forms.Label();
             this.tlpDsbt = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxDisableTips = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.lblDsbtText = new System.Windows.Forms.Label();
             this.tlpDisableMessageSounds = new System.Windows.Forms.TableLayoutPanel();
             this.lblDisableMessageSounds = new System.Windows.Forms.Label();
+            this.cbxDisableMessageSounds = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.lblInitialFolderPath = new METLabel();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.cbxDisableLzmaFsSearch = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.cbxDisableVersionCheck = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.cbxDisableConfDiag = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.cbxDisableFlashingUI = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.cbxDisableTips = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.cbxDisableMessageSounds = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.tlpButtons.SuspendLayout();
             this.tlpDcd.SuspendLayout();
             this.tlpCif.SuspendLayout();
@@ -74,6 +76,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDsbt.SuspendLayout();
             this.tlpDisableMessageSounds.SuspendLayout();
             this.tlpTitle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // tlpButtons
@@ -88,7 +91,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.Controls.Add(this.cmdApply, 3, 0);
             this.tlpButtons.Controls.Add(this.cmdOkay, 2, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 403);
+            this.tlpButtons.Location = new System.Drawing.Point(1, 438);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
@@ -169,10 +172,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblFirmwareText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFirmwareText.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFirmwareText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblFirmwareText.Location = new System.Drawing.Point(0, 256);
+            this.lblFirmwareText.Location = new System.Drawing.Point(0, 286);
             this.lblFirmwareText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFirmwareText.Name = "lblFirmwareText";
-            this.lblFirmwareText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblFirmwareText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lblFirmwareText.Size = new System.Drawing.Size(408, 34);
             this.lblFirmwareText.TabIndex = 99;
             this.lblFirmwareText.Text = "Firmware:";
@@ -195,6 +198,21 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDcd.Size = new System.Drawing.Size(408, 30);
             this.tlpDcd.TabIndex = 4;
             // 
+            // cbxDisableConfDiag
+            // 
+            this.cbxDisableConfDiag.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableConfDiag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cbxDisableConfDiag.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableConfDiag.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableConfDiag.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxDisableConfDiag.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableConfDiag.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableConfDiag.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableConfDiag.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableConfDiag.Name = "cbxDisableConfDiag";
+            this.cbxDisableConfDiag.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableConfDiag.TabIndex = 0;
+            // 
             // lblDcdText
             // 
             this.lblDcdText.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -203,8 +221,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDcdText.ForeColor = System.Drawing.Color.White;
             this.lblDcdText.Location = new System.Drawing.Point(3, 5);
             this.lblDcdText.Name = "lblDcdText";
-            this.lblDcdText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lblDcdText.Size = new System.Drawing.Size(221, 20);
+            this.lblDcdText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblDcdText.Size = new System.Drawing.Size(218, 20);
             this.lblDcdText.TabIndex = 99;
             this.lblDcdText.Text = "Disable Confirmation Dialogs:";
             // 
@@ -215,8 +233,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpCif.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpCif.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tlpCif.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpCif.Controls.Add(this.lnlCifText, 0, 0);
             this.tlpCif.Controls.Add(this.cmdEditCustomPath, 1, 0);
+            this.tlpCif.Controls.Add(this.lnlCifText, 0, 0);
             this.tlpCif.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpCif.Location = new System.Drawing.Point(0, 225);
             this.tlpCif.Margin = new System.Windows.Forms.Padding(0);
@@ -225,19 +243,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpCif.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpCif.Size = new System.Drawing.Size(408, 30);
             this.tlpCif.TabIndex = 5;
-            // 
-            // lnlCifText
-            // 
-            this.lnlCifText.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lnlCifText.AutoSize = true;
-            this.lnlCifText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lnlCifText.ForeColor = System.Drawing.Color.White;
-            this.lnlCifText.Location = new System.Drawing.Point(3, 5);
-            this.lnlCifText.Name = "lnlCifText";
-            this.lnlCifText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lnlCifText.Size = new System.Drawing.Size(198, 20);
-            this.lnlCifText.TabIndex = 99;
-            this.lnlCifText.Text = "Custom Initial Folder Path:";
             // 
             // cmdEditCustomPath
             // 
@@ -257,6 +262,19 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdEditCustomPath.Text = "Edit";
             this.cmdEditCustomPath.UseVisualStyleBackColor = false;
             this.cmdEditCustomPath.Click += new System.EventHandler(this.cmdEditCustomPath_Click);
+            // 
+            // lnlCifText
+            // 
+            this.lnlCifText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lnlCifText.AutoSize = true;
+            this.lnlCifText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lnlCifText.ForeColor = System.Drawing.Color.White;
+            this.lnlCifText.Location = new System.Drawing.Point(3, 5);
+            this.lnlCifText.Name = "lnlCifText";
+            this.lnlCifText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lnlCifText.Size = new System.Drawing.Size(195, 20);
+            this.lnlCifText.TabIndex = 99;
+            this.lnlCifText.Text = "Custom Initial Folder Path:";
             // 
             // tlpDvc
             // 
@@ -283,10 +301,25 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDvcText.ForeColor = System.Drawing.Color.White;
             this.lblDvcText.Location = new System.Drawing.Point(3, 5);
             this.lblDvcText.Name = "lblDvcText";
-            this.lblDvcText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lblDvcText.Size = new System.Drawing.Size(168, 20);
+            this.lblDvcText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblDvcText.Size = new System.Drawing.Size(165, 20);
             this.lblDvcText.TabIndex = 99;
             this.lblDvcText.Text = "Disable Version Check";
+            // 
+            // cbxDisableVersionCheck
+            // 
+            this.cbxDisableVersionCheck.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableVersionCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cbxDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableVersionCheck.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxDisableVersionCheck.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableVersionCheck.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableVersionCheck.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableVersionCheck.Name = "cbxDisableVersionCheck";
+            this.cbxDisableVersionCheck.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableVersionCheck.TabIndex = 0;
             // 
             // lblStartupText
             // 
@@ -297,7 +330,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblStartupText.Location = new System.Drawing.Point(0, 0);
             this.lblStartupText.Margin = new System.Windows.Forms.Padding(0);
             this.lblStartupText.Name = "lblStartupText";
-            this.lblStartupText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblStartupText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lblStartupText.Size = new System.Drawing.Size(408, 34);
             this.lblStartupText.TabIndex = 99;
             this.lblStartupText.Text = "Startup:";
@@ -312,7 +345,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblApplicationText.Location = new System.Drawing.Point(0, 66);
             this.lblApplicationText.Margin = new System.Windows.Forms.Padding(0);
             this.lblApplicationText.Name = "lblApplicationText";
-            this.lblApplicationText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblApplicationText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lblApplicationText.Size = new System.Drawing.Size(408, 34);
             this.lblApplicationText.TabIndex = 99;
             this.lblApplicationText.Text = "Application:";
@@ -343,10 +376,25 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDwfText.ForeColor = System.Drawing.Color.White;
             this.lblDwfText.Location = new System.Drawing.Point(3, 5);
             this.lblDwfText.Name = "lblDwfText";
-            this.lblDwfText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lblDwfText.Size = new System.Drawing.Size(217, 20);
+            this.lblDwfText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblDwfText.Size = new System.Drawing.Size(214, 20);
             this.lblDwfText.TabIndex = 99;
             this.lblDwfText.Text = "Disable Flashing UI Elements:";
+            // 
+            // cbxDisableFlashingUI
+            // 
+            this.cbxDisableFlashingUI.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableFlashingUI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cbxDisableFlashingUI.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableFlashingUI.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableFlashingUI.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxDisableFlashingUI.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableFlashingUI.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableFlashingUI.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableFlashingUI.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableFlashingUI.Name = "cbxDisableFlashingUI";
+            this.cbxDisableFlashingUI.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableFlashingUI.TabIndex = 0;
             // 
             // tlpDisableLzma
             // 
@@ -357,7 +405,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDisableLzma.Controls.Add(this.lblDisableLzmaText, 0, 0);
             this.tlpDisableLzma.Controls.Add(this.cbxDisableLzmaFsSearch, 1, 0);
             this.tlpDisableLzma.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDisableLzma.Location = new System.Drawing.Point(0, 291);
+            this.tlpDisableLzma.Location = new System.Drawing.Point(0, 321);
             this.tlpDisableLzma.Margin = new System.Windows.Forms.Padding(0);
             this.tlpDisableLzma.Name = "tlpDisableLzma";
             this.tlpDisableLzma.RowCount = 1;
@@ -373,32 +421,48 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableLzmaText.ForeColor = System.Drawing.Color.White;
             this.lblDisableLzmaText.Location = new System.Drawing.Point(3, 5);
             this.lblDisableLzmaText.Name = "lblDisableLzmaText";
-            this.lblDisableLzmaText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lblDisableLzmaText.Size = new System.Drawing.Size(225, 20);
+            this.lblDisableLzmaText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblDisableLzmaText.Size = new System.Drawing.Size(222, 20);
             this.lblDisableLzmaText.TabIndex = 99;
             this.lblDisableLzmaText.Text = "Disable LZMA Decompression:";
+            // 
+            // cbxDisableLzmaFsSearch
+            // 
+            this.cbxDisableLzmaFsSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableLzmaFsSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cbxDisableLzmaFsSearch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableLzmaFsSearch.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableLzmaFsSearch.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxDisableLzmaFsSearch.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableLzmaFsSearch.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableLzmaFsSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableLzmaFsSearch.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableLzmaFsSearch.Name = "cbxDisableLzmaFsSearch";
+            this.cbxDisableLzmaFsSearch.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableLzmaFsSearch.TabIndex = 0;
             // 
             // tlpMain
             // 
             this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Controls.Add(this.tlpDisableLzma, 0, 18);
+            this.tlpMain.Controls.Add(this.tlpDisableLzma, 0, 19);
             this.tlpMain.Controls.Add(this.lblApplicationText, 0, 4);
-            this.tlpMain.Controls.Add(this.lblSettingsApplied, 0, 20);
+            this.tlpMain.Controls.Add(this.lblSettingsApplied, 0, 21);
             this.tlpMain.Controls.Add(this.lblStartupText, 0, 0);
             this.tlpMain.Controls.Add(this.tlpDvc, 0, 2);
             this.tlpMain.Controls.Add(this.tlpCif, 0, 14);
             this.tlpMain.Controls.Add(this.tlpDcd, 0, 12);
-            this.tlpMain.Controls.Add(this.lblFirmwareText, 0, 16);
+            this.tlpMain.Controls.Add(this.lblFirmwareText, 0, 17);
             this.tlpMain.Controls.Add(this.tlpDwf, 0, 6);
             this.tlpMain.Controls.Add(this.tlpDsbt, 0, 10);
             this.tlpMain.Controls.Add(this.tlpDisableMessageSounds, 0, 8);
+            this.tlpMain.Controls.Add(this.lblInitialFolderPath, 0, 15);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMain.Location = new System.Drawing.Point(1, 43);
             this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
             this.tlpMain.Name = "tlpMain";
-            this.tlpMain.RowCount = 21;
+            this.tlpMain.RowCount = 22;
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
@@ -413,6 +477,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
@@ -420,9 +485,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMain.Size = new System.Drawing.Size(408, 360);
+            this.tlpMain.Size = new System.Drawing.Size(408, 395);
             this.tlpMain.TabIndex = 0;
             // 
             // lblSettingsApplied
@@ -431,7 +494,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblSettingsApplied.AutoSize = true;
             this.lblSettingsApplied.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSettingsApplied.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.lblSettingsApplied.Location = new System.Drawing.Point(134, 329);
+            this.lblSettingsApplied.Location = new System.Drawing.Point(134, 362);
             this.lblSettingsApplied.Name = "lblSettingsApplied";
             this.lblSettingsApplied.Size = new System.Drawing.Size(139, 23);
             this.lblSettingsApplied.TabIndex = 12;
@@ -454,6 +517,21 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDsbt.Size = new System.Drawing.Size(408, 30);
             this.tlpDsbt.TabIndex = 3;
             // 
+            // cbxDisableTips
+            // 
+            this.cbxDisableTips.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableTips.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cbxDisableTips.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableTips.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableTips.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxDisableTips.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableTips.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableTips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableTips.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableTips.Name = "cbxDisableTips";
+            this.cbxDisableTips.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableTips.TabIndex = 0;
+            // 
             // lblDsbtText
             // 
             this.lblDsbtText.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -462,8 +540,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDsbtText.ForeColor = System.Drawing.Color.White;
             this.lblDsbtText.Location = new System.Drawing.Point(3, 5);
             this.lblDsbtText.Name = "lblDsbtText";
-            this.lblDsbtText.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lblDsbtText.Size = new System.Drawing.Size(175, 20);
+            this.lblDsbtText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblDsbtText.Size = new System.Drawing.Size(172, 20);
             this.lblDsbtText.TabIndex = 99;
             this.lblDsbtText.Text = "Disable Status Bar Tips:";
             // 
@@ -492,21 +570,51 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableMessageSounds.ForeColor = System.Drawing.Color.White;
             this.lblDisableMessageSounds.Location = new System.Drawing.Point(3, 5);
             this.lblDisableMessageSounds.Name = "lblDisableMessageSounds";
-            this.lblDisableMessageSounds.Padding = new System.Windows.Forms.Padding(9, 0, 0, 0);
-            this.lblDisableMessageSounds.Size = new System.Drawing.Size(245, 20);
+            this.lblDisableMessageSounds.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblDisableMessageSounds.Size = new System.Drawing.Size(242, 20);
             this.lblDisableMessageSounds.TabIndex = 99;
             this.lblDisableMessageSounds.Text = "Disable Message Window Sounds";
+            // 
+            // cbxDisableMessageSounds
+            // 
+            this.cbxDisableMessageSounds.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxDisableMessageSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.cbxDisableMessageSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxDisableMessageSounds.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxDisableMessageSounds.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxDisableMessageSounds.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxDisableMessageSounds.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxDisableMessageSounds.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cbxDisableMessageSounds.Location = new System.Drawing.Point(370, 4);
+            this.cbxDisableMessageSounds.Name = "cbxDisableMessageSounds";
+            this.cbxDisableMessageSounds.Size = new System.Drawing.Size(21, 21);
+            this.cbxDisableMessageSounds.TabIndex = 0;
+            // 
+            // lblInitialFolderPath
+            // 
+            this.lblInitialFolderPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.lblInitialFolderPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblInitialFolderPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInitialFolderPath.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lblInitialFolderPath.Location = new System.Drawing.Point(0, 255);
+            this.lblInitialFolderPath.Margin = new System.Windows.Forms.Padding(0);
+            this.lblInitialFolderPath.Name = "lblInitialFolderPath";
+            this.lblInitialFolderPath.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+            this.lblInitialFolderPath.Size = new System.Drawing.Size(408, 30);
+            this.lblInitialFolderPath.TabIndex = 100;
+            this.lblInitialFolderPath.Text = "...";
             // 
             // tlpTitle
             // 
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpTitle.ColumnCount = 2;
+            this.tlpTitle.ColumnCount = 3;
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpTitle.Controls.Add(this.cmdClose, 1, 0);
-            this.tlpTitle.Controls.Add(this.lblTitle, 0, 0);
+            this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
+            this.tlpTitle.Controls.Add(this.cmdClose, 2, 0);
+            this.tlpTitle.Controls.Add(this.lblTitle, 1, 0);
             this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpTitle.Location = new System.Drawing.Point(1, 1);
             this.tlpTitle.Margin = new System.Windows.Forms.Padding(2);
@@ -548,104 +656,24 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblTitle.Location = new System.Drawing.Point(40, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblTitle.Size = new System.Drawing.Size(368, 40);
+            this.lblTitle.Size = new System.Drawing.Size(328, 40);
             this.lblTitle.TabIndex = 99;
             this.lblTitle.Text = "Settings";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // cbxDisableLzmaFsSearch
+            // pbxLogo
             // 
-            this.cbxDisableLzmaFsSearch.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableLzmaFsSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxDisableLzmaFsSearch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableLzmaFsSearch.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableLzmaFsSearch.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxDisableLzmaFsSearch.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableLzmaFsSearch.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableLzmaFsSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableLzmaFsSearch.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableLzmaFsSearch.Name = "cbxDisableLzmaFsSearch";
-            this.cbxDisableLzmaFsSearch.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableLzmaFsSearch.TabIndex = 0;
-            // 
-            // cbxDisableVersionCheck
-            // 
-            this.cbxDisableVersionCheck.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableVersionCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableVersionCheck.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxDisableVersionCheck.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableVersionCheck.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableVersionCheck.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableVersionCheck.Name = "cbxDisableVersionCheck";
-            this.cbxDisableVersionCheck.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableVersionCheck.TabIndex = 0;
-            // 
-            // cbxDisableConfDiag
-            // 
-            this.cbxDisableConfDiag.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableConfDiag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxDisableConfDiag.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableConfDiag.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableConfDiag.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxDisableConfDiag.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableConfDiag.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableConfDiag.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableConfDiag.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableConfDiag.Name = "cbxDisableConfDiag";
-            this.cbxDisableConfDiag.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableConfDiag.TabIndex = 0;
-            // 
-            // cbxDisableFlashingUI
-            // 
-            this.cbxDisableFlashingUI.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableFlashingUI.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxDisableFlashingUI.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableFlashingUI.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableFlashingUI.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxDisableFlashingUI.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableFlashingUI.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableFlashingUI.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableFlashingUI.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableFlashingUI.Name = "cbxDisableFlashingUI";
-            this.cbxDisableFlashingUI.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableFlashingUI.TabIndex = 0;
-            // 
-            // cbxDisableTips
-            // 
-            this.cbxDisableTips.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableTips.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxDisableTips.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableTips.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableTips.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxDisableTips.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableTips.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableTips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableTips.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableTips.Name = "cbxDisableTips";
-            this.cbxDisableTips.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableTips.TabIndex = 0;
-            // 
-            // cbxDisableMessageSounds
-            // 
-            this.cbxDisableMessageSounds.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxDisableMessageSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxDisableMessageSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxDisableMessageSounds.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxDisableMessageSounds.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxDisableMessageSounds.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxDisableMessageSounds.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxDisableMessageSounds.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cbxDisableMessageSounds.Location = new System.Drawing.Point(370, 4);
-            this.cbxDisableMessageSounds.Name = "cbxDisableMessageSounds";
-            this.cbxDisableMessageSounds.Size = new System.Drawing.Size(21, 21);
-            this.cbxDisableMessageSounds.TabIndex = 0;
+            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
+            this.pbxLogo.Location = new System.Drawing.Point(8, 8);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(24, 24);
+            this.pbxLogo.TabIndex = 100;
+            this.pbxLogo.TabStop = false;
             // 
             // settingsWindow
             // 
@@ -654,7 +682,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.ClientSize = new System.Drawing.Size(410, 450);
+            this.ClientSize = new System.Drawing.Size(410, 485);
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.pnlTitleMenuSplit);
             this.Controls.Add(this.tlpTitle);
@@ -665,7 +693,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(410, 450);
+            this.MinimumSize = new System.Drawing.Size(410, 485);
             this.Name = "settingsWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
@@ -689,6 +717,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDisableMessageSounds.ResumeLayout(false);
             this.tlpDisableMessageSounds.PerformLayout();
             this.tlpTitle.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -728,5 +757,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.TableLayoutPanel tlpDisableMessageSounds;
         private System.Windows.Forms.Label lblDisableMessageSounds;
         private UI.METCheckbox cbxDisableMessageSounds;
+        private METLabel lblInitialFolderPath;
+        private System.Windows.Forms.PictureBox pbxLogo;
     }
 }

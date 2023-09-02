@@ -23,9 +23,10 @@ namespace Mac_EFI_Toolkit
     {
         internal static string CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
         internal static string FriendlyName = AppDomain.CurrentDomain.FriendlyName;
+        internal static string BackupsDirectory = Path.Combine(CurrentDirectory, "backups");
+        internal static string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
         internal static string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
         internal static string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
-        internal static string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
         internal static string SettingsFile = Path.Combine(CurrentDirectory, "Settings.ini");
         internal static string DebugLog = Path.Combine(CurrentDirectory, "debug.log");
         internal static string UnhandledLog = Path.Combine(CurrentDirectory, "unhandled.log");
@@ -33,7 +34,7 @@ namespace Mac_EFI_Toolkit
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230819.2142";
+        internal static readonly string Build = "230902.0121";
         internal static readonly string Channel = "Stable";
     }
 

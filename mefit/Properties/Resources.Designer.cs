@@ -61,6 +61,16 @@ namespace Mac_EFI_Toolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap changelog {
+            get {
+                object obj = ResourceManager.GetObject("changelog", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The terms outlined below pertain to the usage of the Mac EFI Toolkit
         ///software. Throughout these terms, &quot;The user&quot; and &quot;You&quot; refer to any
         ///individual or group utilizing the software, while &quot;The Author&quot; denotes
@@ -83,6 +93,16 @@ namespace Mac_EFI_Toolkit.Properties {
         internal static System.Drawing.Bitmap folder {
             get {
                 object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap home {
+            get {
+                object obj = ResourceManager.GetObject("home", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -120,6 +140,16 @@ namespace Mac_EFI_Toolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap logo24px {
+            get {
+                object obj = ResourceManager.GetObject("logo24px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logo32px {
             get {
                 object obj = ResourceManager.GetObject("logo32px", resourceCulture);
@@ -130,9 +160,9 @@ namespace Mac_EFI_Toolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap logo64px {
+        internal static System.Drawing.Bitmap manual {
             get {
-                object obj = ResourceManager.GetObject("logo64px", resourceCulture);
+                object obj = ResourceManager.GetObject("manual", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

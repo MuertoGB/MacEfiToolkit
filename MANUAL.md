@@ -1,7 +1,7 @@
 <h4 align="center">Mac EFI Toolkit Manual</h4>
 <p align="center">
   <a href="#main-window">Main Window</a> •
-  <a href="#firmware-editor-window">Firmware Editor Window</a>
+  <a href="#firmware-patcher">Firmware Patcher</a>
 </p>
 
 ## Main Window
@@ -12,28 +12,48 @@ This section explains the main window and its functionality.
   <img src="files/images/met.png">
 </kbd>
 
-The executable and main window of the application support drag and drop functionality for files. You can easily drag and drop files from explorer directly onto the application. However, it's important to note that this functionality will not work if the application is run as an administrator, this limitation is due to the way Windows processes drag and drop operations in elevated privileges.
+The executable and main window of the application support drag and drop functionality for files, however, it's important to note that this feature not work if the application is run as an administrator, this limitation is due to the way Windows processes drag and drop operations in elevated privileges.
 
 ---
 
-#### Title Area:
+#### Main Buttons:
 
 <kbd>
-  <img src="files/manual/title.png">
+  <img src="files/manual/mainbuttons.png">
 </kbd>
 
-The current version of the application is displayed in this section. If there is a newer version available, the label will appear in orange. By clicking on the version number, you will be directed to the latest release in Github. The menu button opens the main menu, providing access to various options.
+**'Open':**\
+Prompts and open file dialog where you can choose and load a UEFI/BIOS file into the application.
 
----
+**'Reset':**\
+Unloads the currently loaded file and clears any buffers and data associated with it.
 
-#### Main Menu:
+**'Copy':**\
+Opens the copy menu, which enables quick copying of firmware data to the clipboard.
+
+**'Patcher':**\
+Opens the firmware patcher window. Alternatively, it can open the terms window, which must be accepted before access to the firmware patcher is granted.
+
+**'Settings':**\
+Opens the settings window where you can modify various application settings.
+
+**'About':**\
+Opens the about window, providing information about the application and its version.
+
+**'Three dots (More)':**\
+Opens the overflow menu with various extra options:
+
+#### Overflow menu:
 
 <kbd>
-  <img src="files/manual/mainmenu.png">
+  <img src="files/manual/overflowmenu.png">
 </kbd>
 
 **'Local Directory':**\
 Opens the working directory where the executable is located.
+
+**'Backups Directory':**\
+Navigates to the Backups directory. This is the default location where zipped file backups are exported.
 
 **'Builds Directory':**\
 Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved.
@@ -44,21 +64,6 @@ Navigates to the Fsys Store directory within the working directory. This is the 
 **'ME Region Directory':**\
 Navigates to the ME Region directory within the working directory. This is the default path where ME regions are exported.
 
-**'View Application Log':**\
-Opens the application log, if available, which contains details of any handled errors or relevant issues encountered during runtime.
-
-**'Create a Debug Log':**\
-Generates a debug text log (debug.log) in the working directory, which contains information useful for troubleshooting purposes.
-
-**'Restart Application':**\
-Closes the current instance of the application and launches a new one.
-
-**'Settings':**\
-Opens the settings window where you can modify various application settings.
-
-**'About':**\
-Opens the about window, providing information about the application and its version.
-
 **'Changelog':**\
 Opens a browser window directly to the application's changelog.
 
@@ -68,25 +73,14 @@ Opens a browser window to the application landing page.
 **'Usage Manual':**\
 Opens a browser window here, to the application manual.
 
-----
+**'Create a Debug Log':**\
+Generates a debug text log (debug.log) in the working directory, which contains information useful for troubleshooting purposes.
 
-#### Main Buttons:
+**'View Application Log':**\
+Opens the application log, if available, which contains details of any handled errors or relevant issues encountered during runtime.
 
-<kbd>
-  <img src="files/manual/mainbuttons.png">
-</kbd>
-
-**'OPEN':**\
-By clicking the 'OPEN' button, you can choose and load a UEFI/BIOS file into the application.
-
-**'RESET':**\
-Clicking the 'RESET' button unloads the currently loaded file and clears any buffers and data associated with it.
-
-**'COPY':**\
-Clicking the 'COPY' button opens the copy menu, which enables quick copying of text fields to the clipboard.
-
-**'EDITOR':**\
-Clicking the 'EDITOR' button will open the firmware editor window. Alternatively, it can open the terms window, which must be accepted before access to the editor is granted.
+**'Restart Application':**\
+Closes the current instance of the application and launches a new one.
 
 ---
 
@@ -96,7 +90,9 @@ Clicking the 'EDITOR' button will open the firmware editor window. Alternatively
   <img src="files/manual/file.png">
 </kbd>
 
-This section displays the name of the loaded file and includes two buttons. Clicking the 'Folder' button will open the file explorer and highlight the location of the loaded file. The 'Reload' button can be used to refresh the loaded file from disk in case any external changes have been made.
+This section displays the name of the currently loaded file and includes three buttons.
+
+Clicking the 'Explorer' button will open Windows Explorer at the location of the loaded file, with the file being highlighted. The 'Reload' button provides an option to reload the loaded file from disk in case any external changes have been made. Finally, the 'Backup' button triggers a "Save As" dialog, allowing you to create a backup of the loaded firmware as a zip archive.
 
 ---
 
@@ -155,6 +151,24 @@ First, the application retrieves the model identifier (e.g., IM161) from the UEF
 
 ---
 
+#### Fsys Store:
+
+<kbd>
+  <img src="files/manual/fsys.png">
+</kbd>
+<kbd>
+  <img src="files/manual/fsys_invalid.png">
+</kbd>
+<kbd>
+  <img src="files/manual/fsys_forced.png">
+</kbd>
+
+This section includes the checksum of the Fsys store and two buttons. If the CRC32 of the Fsys store is valid, the label will appear green and display the valid checksum. If the CRC32 is invalid, the label will appear red and display the invalid checksum. The presence of `[F]` appended to the checksum indicates the Fsys Store was force found by the application, and the firmware may be corrupt.
+
+Clicking the "Wrench" button, which is enabled when the Fsys store checksum is invalid, will prompt a "Save As" dialog to export the binary file with a repaired Fsys CRC32 checksum. The "Save" button allows exporting of the Fsys store.
+
+---
+
 #### Serial:
 
 <kbd>
@@ -172,24 +186,6 @@ This section consists of the System Serial Number (SSN) located in the Fsys stor
 </kbd>
 
 The Hardware Configuration Code (HWC) is located in the Fsys store and is derived from the System Serial Number (SSN). If the Serial Number is 11 characters long, the HWC will be 3 characters. If the Serial Number is 12 characters long, the HWC will be 4 characters.
-
----
-
-#### Fsys Store:
-
-<kbd>
-  <img src="files/manual/fsys.png">
-</kbd>
-<kbd>
-  <img src="files/manual/fsysinvalid.png">
-</kbd>
-<kbd>
-  <img src="files/manual/fsys_forced.png">
-</kbd>
-
-This section includes the checksum of the Fsys store and two buttons. If the CRC32 of the Fsys store is valid, the label will appear green and display the valid checksum. If the CRC32 is invalid, the label will appear red and display the invalid checksum. The presence of `[F]` appended to the checksum indicates the Fsys Store was force found by the application, and the firmware may be corrupt.
-
-Clicking the "Wrench" button, which is enabled when the Fsys store checksum is invalid, will prompt a "Save As" dialog to export the binary file with a repaired Fsys CRC32 checksum. The "Save" button allows exporting of the 2048-byte (0x800h) Fsys store.
 
 ---
 
@@ -291,12 +287,12 @@ Located at the bottom of the main window, the status bar serves multiple purpose
 
 ---
 
-## Firmware Editor Window
+## Firmware Patcher
 
 This section explains the firmware editor window and its functionality.
 
 <kbd>
-  <img src="files/images/met_editor.png">
+  <img src="files/images/firmware_patcher.png">
 </kbd>
 
 ---

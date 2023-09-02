@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-111">V1.1.1</a> •
   <a href="#version-110">V1.1.0</a> •
   <a href="#version-103">V1.0.3</a> •
   <a href="#version-102">V1.0.2</a> •
@@ -15,6 +16,19 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.1.1
+
+#### New:
+- Added a new feature to the main window, allowing users to automatically create a backup of the loaded firmware as a zip archive (ALT + B). This feature offers users a convenient way to compress their firmware files for long term storage.
+
+#### Enhancements:
+- The settings window will now display the initial folder path.
+- Added application icon to tool windows. These icons can be double-clicked to reset the position of the window, centring it to the main window.
+- User Interface improvements.
+
+#### Bugs:
+- Fixed an issue where part of the main window's title area was unresponsive when attempting to drag the window.
 
 ## Version 1.1.0
 
