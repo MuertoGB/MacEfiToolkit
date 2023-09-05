@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-112">V1.1.2</a> •
   <a href="#version-111">V1.1.1</a> •
   <a href="#version-110">V1.1.0</a> •
   <a href="#version-103">V1.0.3</a> •
@@ -16,6 +17,14 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.1.2
+
+#### Enhancements:
+- User Interface Improvements.
+
+#### Bugs:
+- Fixed image and text display issues when the Operating System UI scaling is set to 100% size.
 
 ## Version 1.1.1
 
