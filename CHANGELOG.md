@@ -21,7 +21,8 @@
 ## Version 1.1.2
 
 #### Enhancements:
-- User Interface Improvements.
+- User Interface improvements.
+- Altered the functionality of export dialogues. Rather than displaying the export path, users will now be prompted to decide whether they want to navigate to the file directly in an explorer window.
 
 #### Bugs:
 - Fixed image and text display issues when the Operating System UI scaling is set to 100% size.
