@@ -590,8 +590,13 @@ namespace Mac_EFI_Toolkit
                 // Save the Fsys stores bytes to disk
                 if (FileUtils.WriteAllBytesEx(fsysPath, FWBase.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
                 {
-                    METMessageBox.Show(this, "MET", $"Fsys export successful:\r\n'{fsysPath.Replace(" ", Chars.NBSPACE)}'",
-                        METMessageType.Information, METMessageButtons.Okay);
+                    DialogResult result =
+                    METMessageBox.Show(this, "MET", $"Fsys Store export successful. Navigate to file?",
+                        METMessageType.Information, METMessageButtons.YesNo);
+
+                    if (result == DialogResult.Yes)
+                        FileUtils.HighlightPathInExplorer(fsysPath);
+
                     return;
                 }
 
@@ -790,7 +795,7 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                FileName = string.Concat("ME_RGN_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                FileName = string.Concat("ME_REGION_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
                 OverwritePrompt = true,
                 InitialDirectory = METPath.MeDirectory
             })
@@ -806,8 +811,13 @@ namespace Mac_EFI_Toolkit
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
-                    METMessageBox.Show(this, "MET", $"ME export successful:\r\n'{mePath.Replace(" ", Chars.NBSPACE)}'",
-                        METMessageType.Information, METMessageButtons.Okay);
+                    DialogResult result =
+                    METMessageBox.Show(this, "MET", $"Intel ME export successful. Navigate to file?",
+                        METMessageType.Information, METMessageButtons.YesNo);
+
+                    if (result == DialogResult.Yes)
+                        FileUtils.HighlightPathInExplorer(mePath);
+
                     return;
                 }
 
