@@ -52,9 +52,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Controls.Add(this.tbxTermsText);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(1, 33);
-            this.pnlMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.pnlMain.Padding = new System.Windows.Forms.Padding(3);
             this.pnlMain.Size = new System.Drawing.Size(462, 205);
             this.pnlMain.TabIndex = 95;
             // 
@@ -103,7 +103,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
             this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pbxLogo.Location = new System.Drawing.Point(6, 6);
-            this.pbxLogo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pbxLogo.Margin = new System.Windows.Forms.Padding(2);
             this.pbxLogo.Name = "pbxLogo";
             this.pbxLogo.Size = new System.Drawing.Size(19, 19);
             this.pbxLogo.TabIndex = 14;
@@ -150,7 +150,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
             this.pnlSeperator.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlSeperator.Location = new System.Drawing.Point(1, 33);
-            this.pnlSeperator.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlSeperator.Margin = new System.Windows.Forms.Padding(2);
             this.pnlSeperator.Name = "pnlSeperator";
             this.pnlSeperator.Size = new System.Drawing.Size(462, 2);
             this.pnlSeperator.TabIndex = 97;
@@ -183,10 +183,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdAccept.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdAccept.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdAccept.ForeColor = System.Drawing.Color.White;
-            this.cmdAccept.Location = new System.Drawing.Point(378, 5);
+            this.cmdAccept.Location = new System.Drawing.Point(378, 4);
             this.cmdAccept.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAccept.Name = "cmdAccept";
-            this.cmdAccept.Size = new System.Drawing.Size(80, 27);
+            this.cmdAccept.Size = new System.Drawing.Size(80, 29);
             this.cmdAccept.TabIndex = 1;
             this.cmdAccept.Text = "Accept";
             this.cmdAccept.UseVisualStyleBackColor = false;
@@ -202,10 +202,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdDecline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDecline.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdDecline.ForeColor = System.Drawing.Color.White;
-            this.cmdDecline.Location = new System.Drawing.Point(294, 5);
+            this.cmdDecline.Location = new System.Drawing.Point(294, 4);
             this.cmdDecline.Margin = new System.Windows.Forms.Padding(0);
             this.cmdDecline.Name = "cmdDecline";
-            this.cmdDecline.Size = new System.Drawing.Size(80, 27);
+            this.cmdDecline.Size = new System.Drawing.Size(80, 29);
             this.cmdDecline.TabIndex = 0;
             this.cmdDecline.Text = "Decline";
             this.cmdDecline.UseVisualStyleBackColor = false;
@@ -227,7 +227,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(464, 276);

@@ -27,18 +27,5 @@ namespace Mac_EFI_Toolkit.UI
                 }
             }
         }
-
-        internal static void SetTableLayoutPanelHeight(TableLayoutPanel control)
-        {
-            int totalHeight = 0;
-
-            for (int i = 0; i < control.RowStyles.Count - 1; i++)
-            {
-                RowStyle rowStyle = control.RowStyles[i];
-                totalHeight += (int)rowStyle.Height;
-            }
-
-            control.Height = totalHeight;
-        }
     }
 }

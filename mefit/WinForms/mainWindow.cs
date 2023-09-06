@@ -66,8 +66,6 @@ namespace Mac_EFI_Toolkit
             Deactivate += mainWindow_Deactivate;
             lblVersion.MouseClick += lblVersion_MouseClick;
 
-            InterfaceUtils.SetTableLayoutPanelHeight(tlpMain);
-
             // Set tip handlers for controls
             SetTipHandlers();
 
