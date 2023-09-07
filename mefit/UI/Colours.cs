@@ -24,5 +24,8 @@ namespace Mac_EFI_Toolkit.UI
         internal static readonly Color ERROR_RED = Color.FromArgb(240, 70, 80);
         internal static readonly Color COMPLETE_GREEN = Color.FromArgb(128, 255, 128);
         internal static readonly Color INFO_BLUE = Color.FromArgb(85, 170, 255);
+        internal static readonly Color SWITCH_HEAD = Color.FromArgb(170, 170, 170);
+        internal static readonly Color SWITCH_HEAD_DISABLED = Color.FromArgb(100, 100, 100);
+
     }
 }

@@ -1542,11 +1542,11 @@ namespace Mac_EFI_Toolkit
             this.cmsOverflow.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmsOverflow.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsOverflow.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openLocalFolderToolStripMenuItem,
             this.backupsDirectoryToolStripMenuItem,
             this.openBuildsDirectoryToolStripMenuItem,
             this.openFsysStoresDirectoryToolStripMenuItem,
             this.openMeRegionDirectoryToolStripMenuItem,
+            this.openLocalFolderToolStripMenuItem,
             this.toolStripSeparator4,
             this.changelogToolStripMenuItem,
             this.homepageToolStripMenuItem,
@@ -1557,7 +1557,7 @@ namespace Mac_EFI_Toolkit
             this.toolStripSeparator1,
             this.restartApplicationToolStripMenuItem});
             this.cmsOverflow.Name = "cmsMainMenu";
-            this.cmsOverflow.Size = new System.Drawing.Size(245, 330);
+            this.cmsOverflow.Size = new System.Drawing.Size(245, 358);
             // 
             // openLocalFolderToolStripMenuItem
             // 
@@ -1566,7 +1566,7 @@ namespace Mac_EFI_Toolkit
             this.openLocalFolderToolStripMenuItem.Name = "openLocalFolderToolStripMenuItem";
             this.openLocalFolderToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.openLocalFolderToolStripMenuItem.Size = new System.Drawing.Size(244, 28);
-            this.openLocalFolderToolStripMenuItem.Text = "Local Directory";
+            this.openLocalFolderToolStripMenuItem.Text = "Working Directory";
             this.openLocalFolderToolStripMenuItem.Click += new System.EventHandler(this.openLocalFolderToolStripMenuItem_Click);
             // 
             // backupsDirectoryToolStripMenuItem
@@ -1575,7 +1575,7 @@ namespace Mac_EFI_Toolkit
             this.backupsDirectoryToolStripMenuItem.Image = global::Mac_EFI_Toolkit.Properties.Resources.folder;
             this.backupsDirectoryToolStripMenuItem.Name = "backupsDirectoryToolStripMenuItem";
             this.backupsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(244, 28);
-            this.backupsDirectoryToolStripMenuItem.Text = "Backups Directory";
+            this.backupsDirectoryToolStripMenuItem.Text = "Backups Folder";
             this.backupsDirectoryToolStripMenuItem.Click += new System.EventHandler(this.backupsDirectoryToolStripMenuItem_Click);
             // 
             // openBuildsDirectoryToolStripMenuItem
@@ -1585,7 +1585,7 @@ namespace Mac_EFI_Toolkit
             this.openBuildsDirectoryToolStripMenuItem.Name = "openBuildsDirectoryToolStripMenuItem";
             this.openBuildsDirectoryToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.openBuildsDirectoryToolStripMenuItem.Size = new System.Drawing.Size(244, 28);
-            this.openBuildsDirectoryToolStripMenuItem.Text = "Builds Directory";
+            this.openBuildsDirectoryToolStripMenuItem.Text = "Builds Folder";
             this.openBuildsDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openBuildsDirectoryToolStripMenuItem_Click);
             // 
             // openFsysStoresDirectoryToolStripMenuItem
@@ -1595,7 +1595,7 @@ namespace Mac_EFI_Toolkit
             this.openFsysStoresDirectoryToolStripMenuItem.Name = "openFsysStoresDirectoryToolStripMenuItem";
             this.openFsysStoresDirectoryToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.openFsysStoresDirectoryToolStripMenuItem.Size = new System.Drawing.Size(244, 28);
-            this.openFsysStoresDirectoryToolStripMenuItem.Text = "Fsys Store Directory";
+            this.openFsysStoresDirectoryToolStripMenuItem.Text = "Fsys Store Folder";
             this.openFsysStoresDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openFsysDirectoryToolStripMenuItem_Click);
             // 
             // openMeRegionDirectoryToolStripMenuItem
@@ -1605,7 +1605,7 @@ namespace Mac_EFI_Toolkit
             this.openMeRegionDirectoryToolStripMenuItem.Name = "openMeRegionDirectoryToolStripMenuItem";
             this.openMeRegionDirectoryToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.openMeRegionDirectoryToolStripMenuItem.Size = new System.Drawing.Size(244, 28);
-            this.openMeRegionDirectoryToolStripMenuItem.Text = "ME Region Directory";
+            this.openMeRegionDirectoryToolStripMenuItem.Text = "ME Region Folder";
             this.openMeRegionDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openMeRegionDirectoryToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
