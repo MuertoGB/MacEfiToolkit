@@ -37,8 +37,8 @@ namespace Mac_EFI_Toolkit.Utils
                 {
                     XDocument xmlDoc = XDocument.Load(stream);
                     string name = xmlDoc.Descendants("section")
-                        .FirstOrDefault(e => e.Element("cfgCode")?.Value == hwc)
-                        ?.Element("model")?.Value;
+                        .FirstOrDefault(e => e.Element("hwc")?.Value == hwc)
+                        ?.Element("configCode")?.Value;
 
                     if (!string.IsNullOrEmpty(name))
                     {
@@ -47,7 +47,7 @@ namespace Mac_EFI_Toolkit.Utils
                 }
 
                 // Retrieve data from the Apple server
-                string url = $"http://support-sp.apple.com/sp/product?cc={hwc}";
+                string url = $"http://support-sp.apple.com/sp/product?cc={hwc}&lang=en_GB";
                 if (!NetUtils.GetIsWebsiteAvailable(url))
                 {
                     return null;
