@@ -82,7 +82,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTitle.Name = "tlpTitle";
             this.tlpTitle.RowCount = 1;
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.Size = new System.Drawing.Size(478, 40);
+            this.tlpTitle.Size = new System.Drawing.Size(418, 40);
             this.tlpTitle.TabIndex = 73;
             // 
             // pbxLogo
@@ -107,7 +107,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Location = new System.Drawing.Point(40, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(398, 40);
+            this.lblTitle.Size = new System.Drawing.Size(338, 40);
             this.lblTitle.TabIndex = 12;
             this.lblTitle.Text = "ROM Information";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -124,7 +124,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdClose.ForeColor = System.Drawing.Color.White;
-            this.cmdClose.Location = new System.Drawing.Point(438, 0);
+            this.cmdClose.Location = new System.Drawing.Point(378, 0);
             this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
             this.cmdClose.MaximumSize = new System.Drawing.Size(40, 40);
             this.cmdClose.MinimumSize = new System.Drawing.Size(40, 40);
@@ -145,7 +145,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlSeperator.Location = new System.Drawing.Point(1, 41);
             this.pnlSeperator.Margin = new System.Windows.Forms.Padding(2);
             this.pnlSeperator.Name = "pnlSeperator";
-            this.pnlSeperator.Size = new System.Drawing.Size(478, 2);
+            this.pnlSeperator.Size = new System.Drawing.Size(418, 2);
             this.pnlSeperator.TabIndex = 95;
             // 
             // pnlMain
@@ -156,7 +156,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Location = new System.Drawing.Point(1, 43);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(478, 374);
+            this.pnlMain.Size = new System.Drawing.Size(418, 374);
             this.pnlMain.TabIndex = 96;
             // 
             // tlpMain
@@ -173,7 +173,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 339F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Size = new System.Drawing.Size(478, 374);
+            this.tlpMain.Size = new System.Drawing.Size(418, 374);
             this.tlpMain.TabIndex = 2;
             // 
             // lblSectionData
@@ -187,7 +187,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblSectionData.Margin = new System.Windows.Forms.Padding(0);
             this.lblSectionData.Name = "lblSectionData";
             this.lblSectionData.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblSectionData.Size = new System.Drawing.Size(478, 34);
+            this.lblSectionData.Size = new System.Drawing.Size(418, 34);
             this.lblSectionData.TabIndex = 101;
             this.lblSectionData.Text = "...";
             this.lblSectionData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -242,7 +242,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tlpInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tlpInfo.Size = new System.Drawing.Size(478, 339);
+            this.tlpInfo.Size = new System.Drawing.Size(418, 339);
             this.tlpInfo.TabIndex = 0;
             // 
             // lblBiosIdText
@@ -406,7 +406,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBiosId.Margin = new System.Windows.Forms.Padding(0);
             this.lblBiosId.Name = "lblBiosId";
             this.lblBiosId.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblBiosId.Size = new System.Drawing.Size(347, 33);
+            this.lblBiosId.Size = new System.Drawing.Size(287, 33);
             this.lblBiosId.TabIndex = 100;
             this.lblBiosId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -421,7 +421,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblModel.Margin = new System.Windows.Forms.Padding(0);
             this.lblModel.Name = "lblModel";
             this.lblModel.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblModel.Size = new System.Drawing.Size(347, 33);
+            this.lblModel.Size = new System.Drawing.Size(287, 33);
             this.lblModel.TabIndex = 101;
             this.lblModel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -436,7 +436,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblEfiVersion.Margin = new System.Windows.Forms.Padding(0);
             this.lblEfiVersion.Name = "lblEfiVersion";
             this.lblEfiVersion.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblEfiVersion.Size = new System.Drawing.Size(347, 33);
+            this.lblEfiVersion.Size = new System.Drawing.Size(287, 33);
             this.lblEfiVersion.TabIndex = 102;
             this.lblEfiVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -451,7 +451,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuiltBy.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuiltBy.Name = "lblBuiltBy";
             this.lblBuiltBy.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblBuiltBy.Size = new System.Drawing.Size(347, 33);
+            this.lblBuiltBy.Size = new System.Drawing.Size(287, 33);
             this.lblBuiltBy.TabIndex = 103;
             this.lblBuiltBy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -466,7 +466,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDateStamp.Margin = new System.Windows.Forms.Padding(0);
             this.lblDateStamp.Name = "lblDateStamp";
             this.lblDateStamp.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblDateStamp.Size = new System.Drawing.Size(347, 33);
+            this.lblDateStamp.Size = new System.Drawing.Size(287, 33);
             this.lblDateStamp.TabIndex = 104;
             this.lblDateStamp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -481,7 +481,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblRevision.Margin = new System.Windows.Forms.Padding(0);
             this.lblRevision.Name = "lblRevision";
             this.lblRevision.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblRevision.Size = new System.Drawing.Size(347, 33);
+            this.lblRevision.Size = new System.Drawing.Size(287, 33);
             this.lblRevision.TabIndex = 105;
             this.lblRevision.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -496,7 +496,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBootRom.Margin = new System.Windows.Forms.Padding(0);
             this.lblBootRom.Name = "lblBootRom";
             this.lblBootRom.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblBootRom.Size = new System.Drawing.Size(347, 33);
+            this.lblBootRom.Size = new System.Drawing.Size(287, 33);
             this.lblBootRom.TabIndex = 106;
             this.lblBootRom.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -511,7 +511,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuildcaveId.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuildcaveId.Name = "lblBuildcaveId";
             this.lblBuildcaveId.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblBuildcaveId.Size = new System.Drawing.Size(347, 33);
+            this.lblBuildcaveId.Size = new System.Drawing.Size(287, 33);
             this.lblBuildcaveId.TabIndex = 107;
             this.lblBuildcaveId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -526,7 +526,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuildType.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuildType.Name = "lblBuildType";
             this.lblBuildType.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblBuildType.Size = new System.Drawing.Size(347, 33);
+            this.lblBuildType.Size = new System.Drawing.Size(287, 33);
             this.lblBuildType.TabIndex = 108;
             this.lblBuildType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -541,7 +541,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblCompiler.Margin = new System.Windows.Forms.Padding(0);
             this.lblCompiler.Name = "lblCompiler";
             this.lblCompiler.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblCompiler.Size = new System.Drawing.Size(347, 33);
+            this.lblCompiler.Size = new System.Drawing.Size(287, 33);
             this.lblCompiler.TabIndex = 109;
             // 
             // infoWindow
@@ -551,7 +551,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.ClientSize = new System.Drawing.Size(480, 418);
+            this.ClientSize = new System.Drawing.Size(420, 418);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlSeperator);
             this.Controls.Add(this.tlpTitle);
@@ -560,7 +560,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(480, 418);
+            this.MinimumSize = new System.Drawing.Size(420, 418);
             this.Name = "infoWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
