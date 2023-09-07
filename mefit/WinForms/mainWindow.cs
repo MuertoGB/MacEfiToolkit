@@ -593,13 +593,7 @@ namespace Mac_EFI_Toolkit
                 // Save the Fsys stores bytes to disk
                 if (FileUtils.WriteAllBytesEx(fsysPath, FWBase.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
                 {
-                    DialogResult result =
-                    METMessageBox.Show(this, "MET", $"Fsys Store export successful. Navigate to file?",
-                        METMessageType.Information, METMessageButtons.YesNo);
-
-                    if (result == DialogResult.Yes)
-                        FileUtils.HighlightPathInExplorer(fsysPath);
-
+                    ShowExplorerNavigationPrompt("Fsys Store", fsysPath);
                     return;
                 }
 
@@ -814,13 +808,7 @@ namespace Mac_EFI_Toolkit
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
-                    DialogResult result =
-                    METMessageBox.Show(this, "MET", $"Intel ME export successful. Navigate to file?",
-                        METMessageType.Information, METMessageButtons.YesNo);
-
-                    if (result == DialogResult.Yes)
-                        FileUtils.HighlightPathInExplorer(mePath);
-
+                    ShowExplorerNavigationPrompt("Intel ME", mePath);
                     return;
                 }
 
@@ -902,12 +890,7 @@ namespace Mac_EFI_Toolkit
 
             if (File.Exists(METPath.DebugLog))
             {
-                DialogResult result =
-                METMessageBox.Show(this, "MET", $"Debug log created. Navigate to file?",
-                    METMessageType.Information, METMessageButtons.YesNo);
-
-                if (result == DialogResult.Yes)
-                    FileUtils.HighlightPathInExplorer(METPath.DebugLog);
+                ShowExplorerNavigationPrompt("Debug log", METPath.DebugLog);
             }
         }
 
@@ -1606,6 +1589,16 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Misc Events
+        private void ShowExplorerNavigationPrompt(string type, string path)
+        {
+            DialogResult result =
+                    METMessageBox.Show(this, "MET", $"{type} export successful. Navigate to file?",
+                        METMessageType.Information, METMessageButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+                FileUtils.HighlightPathInExplorer(path);
+        }
+
         internal async void CheckForNewVersion()
         {
             // Check for a new version using the specified URL
