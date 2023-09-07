@@ -26,6 +26,7 @@
 
 #### Bugs:
 - Fixed image and text display issues when the Operating System UI scaling is set to 100% size.
+- Fixed the custom initial directory setting not being reflected immediately when a firmware is not loaded, and a user changes the path.
 
 ## Version 1.1.1
 

@@ -1612,7 +1612,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void SetPrimaryInitialDirectory()
+        internal void SetPrimaryInitialDirectory()
         {
             // Get the initial directory from settings
             string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);

@@ -219,7 +219,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableConfirmationDialogs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swDisableConfirmationDialogs.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableConfirmationDialogs.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableConfirmationDialogs.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableConfirmationDialogs.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableConfirmationDialogs.Location = new System.Drawing.Point(365, 8);
             this.swDisableConfirmationDialogs.Name = "swDisableConfirmationDialogs";
             this.swDisableConfirmationDialogs.Size = new System.Drawing.Size(32, 18);
@@ -230,13 +230,13 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.lblDisableConfirmationDialogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblDisableConfirmationDialogs.AutoSize = true;
-            this.lblDisableConfirmationDialogs.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisableConfirmationDialogs.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableConfirmationDialogs.ForeColor = System.Drawing.Color.White;
             this.lblDisableConfirmationDialogs.Location = new System.Drawing.Point(2, 7);
             this.lblDisableConfirmationDialogs.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableConfirmationDialogs.Name = "lblDisableConfirmationDialogs";
             this.lblDisableConfirmationDialogs.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblDisableConfirmationDialogs.Size = new System.Drawing.Size(216, 20);
+            this.lblDisableConfirmationDialogs.Size = new System.Drawing.Size(213, 20);
             this.lblDisableConfirmationDialogs.TabIndex = 99;
             this.lblDisableConfirmationDialogs.Text = "Disable Confirmation Dialogs";
             // 
@@ -281,13 +281,13 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.lblCustomInitialFolderPath.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblCustomInitialFolderPath.AutoSize = true;
-            this.lblCustomInitialFolderPath.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCustomInitialFolderPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCustomInitialFolderPath.ForeColor = System.Drawing.Color.White;
             this.lblCustomInitialFolderPath.Location = new System.Drawing.Point(2, 7);
             this.lblCustomInitialFolderPath.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCustomInitialFolderPath.Name = "lblCustomInitialFolderPath";
             this.lblCustomInitialFolderPath.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblCustomInitialFolderPath.Size = new System.Drawing.Size(193, 20);
+            this.lblCustomInitialFolderPath.Size = new System.Drawing.Size(186, 20);
             this.lblCustomInitialFolderPath.TabIndex = 99;
             this.lblCustomInitialFolderPath.Text = "Custom Initial Folder Path";
             // 
@@ -312,13 +312,13 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.lblDisableVersionCheck.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblDisableVersionCheck.AutoSize = true;
-            this.lblDisableVersionCheck.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisableVersionCheck.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableVersionCheck.ForeColor = System.Drawing.Color.White;
             this.lblDisableVersionCheck.Location = new System.Drawing.Point(2, 7);
             this.lblDisableVersionCheck.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableVersionCheck.Name = "lblDisableVersionCheck";
             this.lblDisableVersionCheck.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblDisableVersionCheck.Size = new System.Drawing.Size(167, 20);
+            this.lblDisableVersionCheck.Size = new System.Drawing.Size(162, 20);
             this.lblDisableVersionCheck.TabIndex = 99;
             this.lblDisableVersionCheck.Text = "Disable Version Check";
             // 
@@ -329,7 +329,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swDisableVersionCheck.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableVersionCheck.Location = new System.Drawing.Point(365, 8);
             this.swDisableVersionCheck.Name = "swDisableVersionCheck";
             this.swDisableVersionCheck.Size = new System.Drawing.Size(32, 18);
@@ -390,7 +390,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableFlashingUiElements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swDisableFlashingUiElements.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableFlashingUiElements.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableFlashingUiElements.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableFlashingUiElements.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableFlashingUiElements.Location = new System.Drawing.Point(365, 8);
             this.swDisableFlashingUiElements.Name = "swDisableFlashingUiElements";
             this.swDisableFlashingUiElements.Size = new System.Drawing.Size(32, 18);
@@ -401,13 +401,13 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.lblDisableFlashingUiElements.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblDisableFlashingUiElements.AutoSize = true;
-            this.lblDisableFlashingUiElements.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisableFlashingUiElements.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableFlashingUiElements.ForeColor = System.Drawing.Color.White;
             this.lblDisableFlashingUiElements.Location = new System.Drawing.Point(2, 7);
             this.lblDisableFlashingUiElements.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableFlashingUiElements.Name = "lblDisableFlashingUiElements";
             this.lblDisableFlashingUiElements.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblDisableFlashingUiElements.Size = new System.Drawing.Size(212, 20);
+            this.lblDisableFlashingUiElements.Size = new System.Drawing.Size(207, 20);
             this.lblDisableFlashingUiElements.TabIndex = 99;
             this.lblDisableFlashingUiElements.Text = "Disable Flashing UI Elements";
             // 
@@ -435,7 +435,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableLzmaDecompression.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swDisableLzmaDecompression.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableLzmaDecompression.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableLzmaDecompression.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableLzmaDecompression.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableLzmaDecompression.Location = new System.Drawing.Point(365, 8);
             this.swDisableLzmaDecompression.Name = "swDisableLzmaDecompression";
             this.swDisableLzmaDecompression.Size = new System.Drawing.Size(32, 18);
@@ -446,13 +446,13 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.lblDisableLzmaDecompression.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblDisableLzmaDecompression.AutoSize = true;
-            this.lblDisableLzmaDecompression.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisableLzmaDecompression.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableLzmaDecompression.ForeColor = System.Drawing.Color.White;
             this.lblDisableLzmaDecompression.Location = new System.Drawing.Point(2, 7);
             this.lblDisableLzmaDecompression.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableLzmaDecompression.Name = "lblDisableLzmaDecompression";
             this.lblDisableLzmaDecompression.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblDisableLzmaDecompression.Size = new System.Drawing.Size(220, 20);
+            this.lblDisableLzmaDecompression.Size = new System.Drawing.Size(217, 20);
             this.lblDisableLzmaDecompression.TabIndex = 99;
             this.lblDisableLzmaDecompression.Text = "Disable LZMA Decompression";
             // 
@@ -526,7 +526,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableStatusBarTips.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swDisableStatusBarTips.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableStatusBarTips.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableStatusBarTips.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableStatusBarTips.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableStatusBarTips.Location = new System.Drawing.Point(365, 8);
             this.swDisableStatusBarTips.Name = "swDisableStatusBarTips";
             this.swDisableStatusBarTips.Size = new System.Drawing.Size(32, 18);
@@ -537,13 +537,13 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.lblDisableStatusBarTips.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblDisableStatusBarTips.AutoSize = true;
-            this.lblDisableStatusBarTips.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisableStatusBarTips.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableStatusBarTips.ForeColor = System.Drawing.Color.White;
             this.lblDisableStatusBarTips.Location = new System.Drawing.Point(2, 7);
             this.lblDisableStatusBarTips.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableStatusBarTips.Name = "lblDisableStatusBarTips";
             this.lblDisableStatusBarTips.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblDisableStatusBarTips.Size = new System.Drawing.Size(170, 20);
+            this.lblDisableStatusBarTips.Size = new System.Drawing.Size(168, 20);
             this.lblDisableStatusBarTips.TabIndex = 99;
             this.lblDisableStatusBarTips.Text = "Disable Status Bar Tips";
             // 
@@ -571,7 +571,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableMessageWindowSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swDisableMessageWindowSounds.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableMessageWindowSounds.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableMessageWindowSounds.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableMessageWindowSounds.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableMessageWindowSounds.Location = new System.Drawing.Point(365, 8);
             this.swDisableMessageWindowSounds.Name = "swDisableMessageWindowSounds";
             this.swDisableMessageWindowSounds.Size = new System.Drawing.Size(32, 18);
@@ -582,13 +582,13 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.lblDisableMessageWindowSounds.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblDisableMessageWindowSounds.AutoSize = true;
-            this.lblDisableMessageWindowSounds.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisableMessageWindowSounds.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableMessageWindowSounds.ForeColor = System.Drawing.Color.White;
             this.lblDisableMessageWindowSounds.Location = new System.Drawing.Point(2, 7);
             this.lblDisableMessageWindowSounds.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableMessageWindowSounds.Name = "lblDisableMessageWindowSounds";
             this.lblDisableMessageWindowSounds.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblDisableMessageWindowSounds.Size = new System.Drawing.Size(244, 20);
+            this.lblDisableMessageWindowSounds.Size = new System.Drawing.Size(240, 20);
             this.lblDisableMessageWindowSounds.TabIndex = 99;
             this.lblDisableMessageWindowSounds.Text = "Disable Message Window Sounds";
             // 

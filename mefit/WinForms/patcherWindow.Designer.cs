@@ -239,7 +239,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swReplaceSerialNumber.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swReplaceSerialNumber.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swReplaceSerialNumber.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceSerialNumber.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceSerialNumber.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swReplaceSerialNumber.Location = new System.Drawing.Point(13, 8);
             this.swReplaceSerialNumber.Name = "swReplaceSerialNumber";
             this.swReplaceSerialNumber.Size = new System.Drawing.Size(32, 18);
@@ -286,7 +286,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swReplaceFsysStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swReplaceFsysStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swReplaceFsysStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceFsysStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceFsysStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swReplaceFsysStore.Location = new System.Drawing.Point(13, 8);
             this.swReplaceFsysStore.Name = "swReplaceFsysStore";
             this.swReplaceFsysStore.Size = new System.Drawing.Size(32, 18);
@@ -684,7 +684,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swReplaceMeRegion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.swReplaceMeRegion.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swReplaceMeRegion.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceMeRegion.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceMeRegion.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swReplaceMeRegion.Location = new System.Drawing.Point(13, 8);
             this.swReplaceMeRegion.Name = "swReplaceMeRegion";
             this.swReplaceMeRegion.Size = new System.Drawing.Size(32, 18);
