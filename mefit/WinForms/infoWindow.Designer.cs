@@ -36,6 +36,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+            this.lblSectionData = new System.Windows.Forms.Label();
             this.tlpInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lblBiosIdText = new System.Windows.Forms.Label();
             this.lblModelText = new System.Windows.Forms.Label();
@@ -57,7 +58,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuildcaveId = new System.Windows.Forms.Label();
             this.lblBuildType = new System.Windows.Forms.Label();
             this.lblCompiler = new METLabel();
-            this.lblSectionData = new System.Windows.Forms.Label();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.pnlMain.SuspendLayout();
@@ -175,6 +175,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.Size = new System.Drawing.Size(478, 374);
             this.tlpMain.TabIndex = 2;
+            // 
+            // lblSectionData
+            // 
+            this.lblSectionData.AutoEllipsis = true;
+            this.lblSectionData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.lblSectionData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSectionData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSectionData.ForeColor = System.Drawing.Color.White;
+            this.lblSectionData.Location = new System.Drawing.Point(0, 340);
+            this.lblSectionData.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSectionData.Name = "lblSectionData";
+            this.lblSectionData.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblSectionData.Size = new System.Drawing.Size(478, 34);
+            this.lblSectionData.TabIndex = 101;
+            this.lblSectionData.Text = "...";
+            this.lblSectionData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpInfo
             // 
@@ -528,22 +544,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblCompiler.Size = new System.Drawing.Size(347, 33);
             this.lblCompiler.TabIndex = 109;
             // 
-            // lblSectionData
-            // 
-            this.lblSectionData.AutoEllipsis = true;
-            this.lblSectionData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.lblSectionData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSectionData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSectionData.ForeColor = System.Drawing.Color.White;
-            this.lblSectionData.Location = new System.Drawing.Point(0, 340);
-            this.lblSectionData.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSectionData.Name = "lblSectionData";
-            this.lblSectionData.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblSectionData.Size = new System.Drawing.Size(478, 34);
-            this.lblSectionData.TabIndex = 101;
-            this.lblSectionData.Text = "...";
-            this.lblSectionData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // infoWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -560,11 +560,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(480, 418);
             this.Name = "infoWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ROM Information";
             this.tlpTitle.ResumeLayout(false);

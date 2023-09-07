@@ -223,8 +223,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDcdText.Location = new System.Drawing.Point(2, 7);
             this.lblDcdText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDcdText.Name = "lblDcdText";
-            this.lblDcdText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblDcdText.Size = new System.Drawing.Size(218, 20);
+            this.lblDcdText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblDcdText.Size = new System.Drawing.Size(220, 20);
             this.lblDcdText.TabIndex = 99;
             this.lblDcdText.Text = "Disable Confirmation Dialogs:";
             // 
@@ -274,8 +274,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lnlCifText.Location = new System.Drawing.Point(2, 7);
             this.lnlCifText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lnlCifText.Name = "lnlCifText";
-            this.lnlCifText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lnlCifText.Size = new System.Drawing.Size(195, 20);
+            this.lnlCifText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lnlCifText.Size = new System.Drawing.Size(197, 20);
             this.lnlCifText.TabIndex = 99;
             this.lnlCifText.Text = "Custom Initial Folder Path:";
             // 
@@ -305,8 +305,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDvcText.Location = new System.Drawing.Point(2, 7);
             this.lblDvcText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDvcText.Name = "lblDvcText";
-            this.lblDvcText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblDvcText.Size = new System.Drawing.Size(165, 20);
+            this.lblDvcText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblDvcText.Size = new System.Drawing.Size(167, 20);
             this.lblDvcText.TabIndex = 99;
             this.lblDvcText.Text = "Disable Version Check";
             // 
@@ -382,8 +382,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDwfText.Location = new System.Drawing.Point(2, 7);
             this.lblDwfText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDwfText.Name = "lblDwfText";
-            this.lblDwfText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblDwfText.Size = new System.Drawing.Size(214, 20);
+            this.lblDwfText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblDwfText.Size = new System.Drawing.Size(216, 20);
             this.lblDwfText.TabIndex = 99;
             this.lblDwfText.Text = "Disable Flashing UI Elements:";
             // 
@@ -429,8 +429,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableLzmaText.Location = new System.Drawing.Point(2, 7);
             this.lblDisableLzmaText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableLzmaText.Name = "lblDisableLzmaText";
-            this.lblDisableLzmaText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblDisableLzmaText.Size = new System.Drawing.Size(222, 20);
+            this.lblDisableLzmaText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblDisableLzmaText.Size = new System.Drawing.Size(224, 20);
             this.lblDisableLzmaText.TabIndex = 99;
             this.lblDisableLzmaText.Text = "Disable LZMA Decompression:";
             // 
@@ -552,8 +552,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDsbtText.Location = new System.Drawing.Point(2, 7);
             this.lblDsbtText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDsbtText.Name = "lblDsbtText";
-            this.lblDsbtText.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblDsbtText.Size = new System.Drawing.Size(172, 20);
+            this.lblDsbtText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblDsbtText.Size = new System.Drawing.Size(174, 20);
             this.lblDsbtText.TabIndex = 99;
             this.lblDsbtText.Text = "Disable Status Bar Tips:";
             // 
@@ -583,8 +583,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableMessageSounds.Location = new System.Drawing.Point(2, 7);
             this.lblDisableMessageSounds.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableMessageSounds.Name = "lblDisableMessageSounds";
-            this.lblDisableMessageSounds.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblDisableMessageSounds.Size = new System.Drawing.Size(242, 20);
+            this.lblDisableMessageSounds.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblDisableMessageSounds.Size = new System.Drawing.Size(244, 20);
             this.lblDisableMessageSounds.TabIndex = 99;
             this.lblDisableMessageSounds.Text = "Disable Message Window Sounds";
             // 
@@ -613,7 +613,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblInitialFolderPath.Location = new System.Drawing.Point(0, 287);
             this.lblInitialFolderPath.Margin = new System.Windows.Forms.Padding(0);
             this.lblInitialFolderPath.Name = "lblInitialFolderPath";
-            this.lblInitialFolderPath.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+            this.lblInitialFolderPath.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
             this.lblInitialFolderPath.Size = new System.Drawing.Size(428, 34);
             this.lblInitialFolderPath.TabIndex = 100;
             this.lblInitialFolderPath.Text = "...";
@@ -708,12 +708,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(430, 530);
             this.Name = "settingsWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             this.tlpButtons.ResumeLayout(false);

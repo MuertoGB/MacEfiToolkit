@@ -181,6 +181,9 @@ namespace Mac_EFI_Toolkit
             {
                 switch (e.KeyCode)
                 {
+                    case Keys.G:
+                        Process.Start(METUrl.LatestGithubRelease);
+                        break;
                     case Keys.O:
                         cmdOpen.PerformClick();
                         break;
@@ -898,7 +901,14 @@ namespace Mac_EFI_Toolkit
             File.WriteAllText(METPath.DebugLog, Debug.GenerateDebugReport(null));
 
             if (File.Exists(METPath.DebugLog))
-                FileUtils.HighlightPathInExplorer(METPath.DebugLog);
+            {
+                DialogResult result =
+                METMessageBox.Show(this, "MET", $"Debug log created. Navigate to file?",
+                    METMessageType.Information, METMessageButtons.YesNo);
+
+                if (result == DialogResult.Yes)
+                    FileUtils.HighlightPathInExplorer(METPath.DebugLog);
+            }
         }
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1379,7 +1389,8 @@ namespace Mac_EFI_Toolkit
                 Descriptor.MeBase != 0 &&
                 Descriptor.MeLimit != 0;
 
-            tlpMain.Enabled = enable;
+            tlpFile.Enabled = enable;
+            tlpRom.Enabled = enable;
         }
 
         private void ToggleCopyMenuItemEnable()
@@ -1476,7 +1487,7 @@ namespace Mac_EFI_Toolkit
 
             Label[] labels =
             {
-                lblVssStore, lblSvsStore, lblNssStore
+                lblVssStore, lblSvsStore, lblNssStore, lblVersion
             };
 
             foreach (Button button in buttons)
@@ -1517,6 +1528,7 @@ namespace Mac_EFI_Toolkit
                     { lblVssStore, SetNvramStoreTip(FWBase.VssStoreData, "VSS") },
                     { lblSvsStore, SetNvramStoreTip(FWBase.SvsStoreData, "SVS") },
                     { lblNssStore, SetNvramStoreTip(FWBase.NssStoreData, "NSS") },
+                    { lblVersion, "Go to latest release (CTRL + G)" },
                 };
 
                 if (tooltips.ContainsKey(sender))

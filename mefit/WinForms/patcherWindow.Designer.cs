@@ -696,7 +696,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlLog.Location = new System.Drawing.Point(0, 35);
             this.pnlLog.Margin = new System.Windows.Forms.Padding(0);
             this.pnlLog.Name = "pnlLog";
-            this.pnlLog.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlLog.Padding = new System.Windows.Forms.Padding(4);
             this.pnlLog.Size = new System.Drawing.Size(547, 404);
             this.pnlLog.TabIndex = 3;
             // 
@@ -973,11 +973,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(950, 530);
             this.Name = "patcherWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Firmware Patcher";
             this.pnlMain.ResumeLayout(false);
