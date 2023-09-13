@@ -152,14 +152,14 @@ namespace Mac_EFI_Toolkit.UI
             using (SolidBrush brush = new SolidBrush(switchClient))
             {
                 Rectangle innerRect = new Rectangle(2, 2, Width - 4, Height - 4);
-                innerRect.Inflate(-1, -1);
+                innerRect.Inflate(-2, -2);
                 g.FillRectangle(brush, innerRect);
             }
 
-            // Draw the 1px gap between switch head and client area
-            using (Pen pen = new Pen(BackColor))
+            // Draw the 2px gap between switch head and client area
+            using (Pen pen = new Pen(BackColor, 2)) // Set the pen width to 2 pixels
             {
-                int gapWidth = (int)(Checked ? Width - Width / 3 - 1 : 0);
+                int gapWidth = (int)(Checked ? Width - Width / 3 - 1 : 1); // Adjust for 2 pixels
                 Rectangle gapRect = new Rectangle(gapWidth, 0, (int)(Width / 3), Height);
                 g.DrawRectangle(pen, gapRect);
             }
