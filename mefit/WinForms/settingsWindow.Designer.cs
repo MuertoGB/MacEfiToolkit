@@ -216,14 +216,15 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.swDisableConfirmationDialogs.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.swDisableConfirmationDialogs.BackColor = System.Drawing.Color.Black;
-            this.swDisableConfirmationDialogs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.swDisableConfirmationDialogs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableConfirmationDialogs.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableConfirmationDialogs.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableConfirmationDialogs.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.swDisableConfirmationDialogs.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swDisableConfirmationDialogs.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableConfirmationDialogs.Location = new System.Drawing.Point(335, 8);
             this.swDisableConfirmationDialogs.Name = "swDisableConfirmationDialogs";
             this.swDisableConfirmationDialogs.Size = new System.Drawing.Size(32, 18);
-            this.swDisableConfirmationDialogs.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swDisableConfirmationDialogs.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableConfirmationDialogs.TabIndex = 0;
             // 
             // lblDisableConfirmationDialogs
@@ -326,14 +327,15 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.swDisableVersionCheck.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.swDisableVersionCheck.BackColor = System.Drawing.Color.Black;
-            this.swDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.swDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableVersionCheck.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.swDisableVersionCheck.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableVersionCheck.Location = new System.Drawing.Point(335, 8);
             this.swDisableVersionCheck.Name = "swDisableVersionCheck";
             this.swDisableVersionCheck.Size = new System.Drawing.Size(32, 18);
-            this.swDisableVersionCheck.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swDisableVersionCheck.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableVersionCheck.TabIndex = 0;
             // 
             // lblStartup
@@ -387,14 +389,15 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.swDisableFlashingUiElements.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.swDisableFlashingUiElements.BackColor = System.Drawing.Color.Black;
-            this.swDisableFlashingUiElements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.swDisableFlashingUiElements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableFlashingUiElements.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableFlashingUiElements.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableFlashingUiElements.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.swDisableFlashingUiElements.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swDisableFlashingUiElements.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableFlashingUiElements.Location = new System.Drawing.Point(335, 8);
             this.swDisableFlashingUiElements.Name = "swDisableFlashingUiElements";
             this.swDisableFlashingUiElements.Size = new System.Drawing.Size(32, 18);
-            this.swDisableFlashingUiElements.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swDisableFlashingUiElements.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableFlashingUiElements.TabIndex = 0;
             // 
             // lblDisableFlashingUiElements
@@ -432,14 +435,15 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.swDisableLzmaDecompression.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.swDisableLzmaDecompression.BackColor = System.Drawing.Color.Black;
-            this.swDisableLzmaDecompression.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.swDisableLzmaDecompression.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableLzmaDecompression.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableLzmaDecompression.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableLzmaDecompression.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.swDisableLzmaDecompression.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swDisableLzmaDecompression.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableLzmaDecompression.Location = new System.Drawing.Point(335, 8);
             this.swDisableLzmaDecompression.Name = "swDisableLzmaDecompression";
             this.swDisableLzmaDecompression.Size = new System.Drawing.Size(32, 18);
-            this.swDisableLzmaDecompression.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swDisableLzmaDecompression.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableLzmaDecompression.TabIndex = 0;
             // 
             // lblDisableLzmaDecompression
@@ -525,14 +529,15 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.swDisableStatusBarTips.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.swDisableStatusBarTips.BackColor = System.Drawing.Color.Black;
-            this.swDisableStatusBarTips.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.swDisableStatusBarTips.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableStatusBarTips.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableStatusBarTips.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableStatusBarTips.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.swDisableStatusBarTips.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swDisableStatusBarTips.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableStatusBarTips.Location = new System.Drawing.Point(335, 8);
             this.swDisableStatusBarTips.Name = "swDisableStatusBarTips";
             this.swDisableStatusBarTips.Size = new System.Drawing.Size(32, 18);
-            this.swDisableStatusBarTips.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swDisableStatusBarTips.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableStatusBarTips.TabIndex = 0;
             // 
             // lblDisableStatusBarTips
@@ -570,14 +575,15 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.swDisableMessageWindowSounds.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.swDisableMessageWindowSounds.BackColor = System.Drawing.Color.Black;
-            this.swDisableMessageWindowSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.swDisableMessageWindowSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableMessageWindowSounds.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableMessageWindowSounds.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableMessageWindowSounds.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.swDisableMessageWindowSounds.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swDisableMessageWindowSounds.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableMessageWindowSounds.Location = new System.Drawing.Point(335, 8);
             this.swDisableMessageWindowSounds.Name = "swDisableMessageWindowSounds";
             this.swDisableMessageWindowSounds.Size = new System.Drawing.Size(32, 18);
-            this.swDisableMessageWindowSounds.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swDisableMessageWindowSounds.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableMessageWindowSounds.TabIndex = 0;
             // 
             // lblDisableMessageWindowSounds

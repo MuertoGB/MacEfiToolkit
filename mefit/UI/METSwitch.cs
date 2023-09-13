@@ -15,11 +15,13 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
 {
+    [DefaultBindingProperty("CheckState")]
+    [DefaultProperty("Checked")]
     [Designer(typeof(METSwitchDesigner))]
     public class METSwitch : CheckBox
     {
         #region Fields
-        private bool MouseHovered = false;
+        private bool _mouseHovered = false;
         #endregion
 
         #region Constructor
@@ -31,86 +33,118 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Properties
-        private Color BorderInactive_ = Colours.BORDER_INACTIVE;
-
-        [Description("Set the control border color.")]
+        private Color _borderColorInactive = Colours.BORDER_INACTIVE;
+        [Description("The border color of the control when inactive.")]
         [Category("Appearance (MET)")]
         public Color BorderColor
         {
-            get { return BorderInactive_; }
+            get
+            {
+                return _borderColorInactive;
+            }
             set
             {
-                BorderInactive_ = value;
+                _borderColorInactive = value;
                 Invalidate();
             }
         }
 
-        private Color BorderActive_ = Colours.BORDER_ACTIVE;
-
-        [Description("Set the control mouseover border color.")]
+        private Color _borderColorActive = Colours.BORDER_ACTIVE;
+        [Description("The border color of the control when the mouse is over it.")]
         [Category("Appearance (MET)")]
         public Color BorderColorActive
         {
-            get { return BorderActive_; }
+            get
+            {
+                return _borderColorActive;
+            }
             set
             {
-                BorderActive_ = value;
+                _borderColorActive = value;
                 Invalidate();
             }
         }
 
-        private Color HeadColor_ = Colours.SWITCH_HEAD;
-
-        [Description("Set the switch head color")]
+        private Color _clientColorInactive = Colours.CLIENT_INACTIVE;
+        [Description("The background color of the control when inactive.")]
         [Category("Appearance (MET)")]
-        public Color SwitchHeadColor
+        public Color ClientColor
         {
-            get { return HeadColor_; }
+            get
+            {
+                return _clientColorInactive;
+            }
             set
             {
-                HeadColor_ = value;
+                _clientColorInactive = value;
                 Invalidate();
             }
         }
 
-        private Color CheckedColor_ = Colours.CHECKED;
-
-        [Description("Set the control toggle on color.")]
-        [Category("Appearance (MET)")]
-        public Color CheckedColor
-        {
-            get { return CheckedColor_; }
-            set
-            {
-                CheckedColor_ = value;
-                Invalidate();
-            }
-        }
-
-        private Color ClientActive_ = Colours.CLIENT_ACTIVE;
-
-        [Description("Sets the mouseover background color when the switch is set to off.")]
+        private Color _clientColorActive = Colours.CLIENT_ACTIVE;
+        [Description("The background color of the control when the mouse is over it.")]
         [Category("Appearance (MET)")]
         public Color ClientColorActive
         {
-            get { return ClientActive_; }
+            get
+            {
+                return _clientColorActive;
+            }
             set
             {
-                ClientActive_ = value;
+                _clientColorActive = value;
+                Invalidate();
+            }
+        }
+
+        private Color _checkedColor = Colours.CHECKED;
+        [Description("The color of the control when it is checked.")]
+        [Category("Appearance (MET)")]
+        public Color CheckedColor
+        {
+            get
+            {
+                return _checkedColor;
+            }
+            set
+            {
+                _checkedColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color _switchHeadColor = Colours.SWITCH_HEAD;
+
+        [Description("The color of the control switch head.")]
+        [Category("Appearance (MET)")]
+        public Color SwitchHeadColor
+        {
+            get
+            {
+                return _switchHeadColor;
+            }
+            set
+            {
+                _switchHeadColor = value;
                 Invalidate();
             }
         }
         #endregion
 
         #region Paint Methods
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            OnPaintBackground(e);
+            OnPaintForeground(e);
+        }
+
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             if (e != null)
             {
-                Graphics g = e.Graphics;
                 if (BackColor.A == 255)
                 {
-                    g.Clear(BackColor);
+                    e.Graphics.Clear(BackColor);
                     return;
                 }
             }
@@ -120,40 +154,33 @@ namespace Mac_EFI_Toolkit.UI
 
         protected virtual void OnPaintForeground(PaintEventArgs e)
         {
-            if (e == null) return;
-
-            Graphics g = e.Graphics;
-            Color switchBorder, switchClient;
+            if (e == null)
+                return;
 
             // Determine the switch border color based on state
-            if (Enabled)
-            {
-                switchBorder = Focused ? BorderColorActive : BorderColor;
-            }
-            else
-            {
-                switchBorder = Colours.DISABLED_CONTROL;
-            }
+            Color setCheckBorderColor = Enabled
+                ? Focused ? BorderColorActive : BorderColor
+                : Colours.DISABLED_CONTROL;
 
             // Draw the switch border
-            using (Pen pen = new Pen(switchBorder) { Width = 2.0F })
+            using (Pen pen = new Pen(setCheckBorderColor) { Width = 2.0F })
             {
                 int innerWidth = Width - 2;
                 Rectangle rect = new Rectangle(1, 1, innerWidth, ClientRectangle.Height - 2);
-                g.DrawRectangle(pen, rect);
+                e.Graphics.DrawRectangle(pen, rect);
             }
 
             // Determine the switch client color based on state
-            switchClient = MouseHovered
+            Color setClientColor = _mouseHovered
                 ? Checked ? CheckedColor : ClientColorActive
                 : Checked ? CheckedColor : BackColor;
 
             // Fill the switch client area
-            using (SolidBrush brush = new SolidBrush(switchClient))
+            using (SolidBrush brush = new SolidBrush(setClientColor))
             {
                 Rectangle innerRect = new Rectangle(2, 2, Width - 4, Height - 4);
                 innerRect.Inflate(-2, -2);
-                g.FillRectangle(brush, innerRect);
+                e.Graphics.FillRectangle(brush, innerRect);
             }
 
             // Draw the 2px gap between switch head and client area
@@ -161,7 +188,7 @@ namespace Mac_EFI_Toolkit.UI
             {
                 int gapWidth = (int)(Checked ? Width - Width / 3 - 1 : 1); // Adjust for 2 pixels
                 Rectangle gapRect = new Rectangle(gapWidth, 0, (int)(Width / 3), Height);
-                g.DrawRectangle(pen, gapRect);
+                e.Graphics.DrawRectangle(pen, gapRect);
             }
 
             // Fill the switch head area
@@ -169,15 +196,20 @@ namespace Mac_EFI_Toolkit.UI
             {
                 int switchHeadWidth = (int)(Width / 3);
                 int switchHeadLeft = (int)(Checked ? Width - switchHeadWidth : 0);
-                Rectangle switchHeadRect = new Rectangle(switchHeadLeft, 0, switchHeadWidth, Height);
-                g.FillRectangle(brush, switchHeadRect);
+                Rectangle rect = new Rectangle(switchHeadLeft, 0, switchHeadWidth, Height);
+                e.Graphics.FillRectangle(brush, rect);
             }
-        }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            OnPaintBackground(e);
-            OnPaintForeground(e);
+            //if (Focused)
+            //{
+            //    using (Pen pen = new Pen(Colours.FOCUS_RECTANGLE, 1))
+            //    {
+            //        pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+            //        Rectangle rect = ClientRectangle;
+            //        rect.Width -= 1; rect.Height -= 1;
+            //        e.Graphics.DrawRectangle(pen, rect);
+            //    }
+            //}
         }
         #endregion
 
@@ -191,13 +223,13 @@ namespace Mac_EFI_Toolkit.UI
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             base.OnMouseLeave(eventargs);
-            MouseHovered = false;
+            _mouseHovered = false;
         }
 
         protected override void OnMouseEnter(EventArgs eventargs)
         {
             base.OnMouseEnter(eventargs);
-            MouseHovered = true;
+            _mouseHovered = true;
         }
 
         protected override void OnResize(EventArgs e)

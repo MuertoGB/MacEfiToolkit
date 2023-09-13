@@ -28,8 +28,8 @@ namespace Mac_EFI_Toolkit.UI
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
 
-            MouseEnter += new EventHandler(ProcessMouse);
-            MouseLeave += new EventHandler(ProcessMouse);
+            MouseEnter += new EventHandler(HandleMouseEnter);
+            MouseLeave += new EventHandler(HandleMouseEnter);
             BackColor = Color.Transparent;
             ForeColor = Colours.ENABLED_TEXT;
         }
@@ -150,17 +150,6 @@ namespace Mac_EFI_Toolkit.UI
             Rectangle outerRectangle =
                 new Rectangle(2, 2, diameter - 2, diameter - 2);
 
-            if (Focused)
-            {
-                using (Pen pen = new Pen(Colours.FOCUS_RECTANGLE, 1))
-                {
-                    pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                    Rectangle rect = ClientRectangle;
-                    rect.Width -= 1; rect.Height -= 1;
-                    e.Graphics.DrawRectangle(pen, rect);
-                }
-            }
-
             Color setCheckBorderColor = Enabled
                 ? (MouseHovered ? BorderColorActive : BorderColor)
                 : Colours.DISABLED_CONTROL;
@@ -200,6 +189,17 @@ namespace Mac_EFI_Toolkit.UI
             {
                 e.Graphics.DrawRectangle(Pens.Transparent, textArea);
                 e.Graphics.DrawString(Text, Font, brush, textArea, format);
+            }
+
+            if (Focused)
+            {
+                using (Pen pen = new Pen(Colours.FOCUS_RECTANGLE, 1))
+                {
+                    pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                    Rectangle rect = ClientRectangle;
+                    rect.Width -= 1; rect.Height -= 1;
+                    e.Graphics.DrawRectangle(pen, rect);
+                }
             }
         }
         #endregion
@@ -281,7 +281,7 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Custom Methods
-        private void ProcessMouse(object sender, EventArgs e)
+        private void HandleMouseEnter(object sender, EventArgs e)
         {
             if (ClientRectangle.Contains(PointToClient(MousePosition)))
                 if (!MouseHovered) { MouseHovered = true; Invalidate(); }

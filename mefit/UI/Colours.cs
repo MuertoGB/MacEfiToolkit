@@ -26,6 +26,6 @@ namespace Mac_EFI_Toolkit.UI
         internal static readonly Color INFO_BLUE = Color.FromArgb(85, 170, 255);
         internal static readonly Color SWITCH_HEAD = Color.FromArgb(170, 170, 170);
         internal static readonly Color SWITCH_HEAD_DISABLED = Color.FromArgb(100, 100, 100);
-        internal static readonly Color FOCUS_RECTANGLE = Color.FromArgb(239, 244, 255);
+        internal static readonly Color FOCUS_RECTANGLE = Color.FromArgb(150, 150, 150);
     }
 }
