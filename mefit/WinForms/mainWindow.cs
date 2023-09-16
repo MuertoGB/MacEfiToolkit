@@ -441,23 +441,22 @@ namespace Mac_EFI_Toolkit
                 if (sfd.ShowDialog() != DialogResult.OK)
                     return;
 
-                string path =
+                string backupPath =
                     sfd.FileName;
 
                 FileUtils.BackupFileToZip(
                     FWBase.LoadedBinaryBytes,
                     FWBase.FileInfoData.FileNameWithExt,
-                    path);
+                    backupPath);
 
-                if (!File.Exists(path))
+                if (File.Exists(backupPath))
                 {
-                    METMessageBox.Show(this, "Error", "The file could not be backed up.",
-                        METMessageType.Error, METMessageButtons.Okay);
+                    ShowExplorerNavigationPrompt("Backup archive created successfully.", backupPath);
                     return;
                 }
 
-                METMessageBox.Show(this, "Backup", $"File backed up to:\r\n{path}".Replace(" ", Chars.NBSPACE),
-                 METMessageType.Information, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "The file could not be backed up.",
+                     METMessageType.Error, METMessageButtons.Okay);
             }
         }
 
@@ -593,7 +592,7 @@ namespace Mac_EFI_Toolkit
                 // Save the Fsys stores bytes to disk
                 if (FileUtils.WriteAllBytesEx(fsysPath, FWBase.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
                 {
-                    ShowExplorerNavigationPrompt("Fsys Store", fsysPath);
+                    ShowExplorerNavigationPrompt("Fsys Store export successful.", fsysPath);
                     return;
                 }
 
@@ -808,7 +807,7 @@ namespace Mac_EFI_Toolkit
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
-                    ShowExplorerNavigationPrompt("Intel ME", mePath);
+                    ShowExplorerNavigationPrompt("Intel ME export successful.", mePath);
                     return;
                 }
 
@@ -1589,10 +1588,10 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Misc Events
-        private void ShowExplorerNavigationPrompt(string type, string path)
+        private void ShowExplorerNavigationPrompt(string message, string path)
         {
             DialogResult result =
-                    METMessageBox.Show(this, "MET", $"{type} export successful. Navigate to file?",
+                    METMessageBox.Show(this, "MET", $"{message} Navigate to file?",
                         METMessageType.Information, METMessageButtons.YesNo);
 
             if (result == DialogResult.Yes)
