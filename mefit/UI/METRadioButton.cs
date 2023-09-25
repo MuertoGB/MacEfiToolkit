@@ -1,22 +1,16 @@
-﻿// Mac EFI Toolkit
-// https://github.com/MuertoGB/MacEfiToolkit
-
-// UI Components
-// METCheckbox.cs
-// Released under the GNU GLP v3.0
-
-using Mac_EFI_Toolkit.UI.Design;
+﻿using Mac_EFI_Toolkit.UI.Design;
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
 {
-    [DefaultBindingProperty("CheckState")]
+    [DefaultBindingProperty("Checked")]
     [DefaultProperty("Checked")]
-    [Designer(typeof(METCheckboxDesigner))]
-    public class METCheckbox : CheckBox
+    [Designer(typeof(METRadioButtonDesigner))]
+    public class METRadioButton : RadioButton
     {
 
         #region Fields
@@ -24,9 +18,9 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Constructor
-        public METCheckbox() : base()
+        public METRadioButton()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
 
             MouseEnter += new EventHandler(HandleMouseEnter);
             MouseLeave += new EventHandler(HandleMouseEnter);
@@ -121,7 +115,7 @@ namespace Mac_EFI_Toolkit.UI
         protected override void OnPaint(PaintEventArgs e)
         {
             OnPaintBackground(e);
-            OnPaintForeground(e);
+            OnPaintForegound(e);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
@@ -133,30 +127,41 @@ namespace Mac_EFI_Toolkit.UI
                     e.Graphics.Clear(BackColor);
                     return;
                 }
+
+                base.OnPaintBackground(e);
             }
-            base.OnPaintBackground(e);
         }
 
-        protected virtual void OnPaintForeground(PaintEventArgs e)
+        protected virtual void OnPaintForegound(PaintEventArgs e)
         {
             if (e == null)
                 return;
 
-            int diameter =
-                ClientRectangle.Height - 2;
+            int Diameter =
+                ClientRectangle.Height - 1;
 
-            Rectangle innerRectangle =
-                new Rectangle(2, 2, diameter - 2, diameter - 2);
-            Rectangle outerRectangle =
-                new Rectangle(2, 2, diameter - 2, diameter - 2);
+            RectangleF outerRectangle =
+                new RectangleF(0, 0, Diameter, Diameter);
+            RectangleF innerRectangle =
+                new RectangleF(1, 1, Diameter - 2, Diameter - 2);
+
+            outerRectangle.Inflate(-1, -1);
+
+            e.Graphics.InterpolationMode =
+                InterpolationMode.HighQualityBicubic;
+            e.Graphics.SmoothingMode =
+                SmoothingMode.AntiAlias;
+            e.Graphics.CompositingQuality =
+                CompositingQuality.HighQuality;
 
             Color setCheckBorderColor = Enabled
                 ? (MouseHovered ? BorderColorActive : BorderColor)
                 : Colours.DISABLED_CONTROL;
 
-            using (Pen pen = new Pen(setCheckBorderColor, 2.0f))
+            using (Pen pen = new Pen(setCheckBorderColor, width: 2))
             {
-                e.Graphics.DrawRectangle(pen, outerRectangle);
+                e.Graphics.DrawArc(pen, outerRectangle, 135, 180);
+                e.Graphics.DrawArc(pen, outerRectangle, -45, 180);
             }
 
             innerRectangle.Inflate(-1, -1);
@@ -167,24 +172,23 @@ namespace Mac_EFI_Toolkit.UI
 
             using (SolidBrush brush = new SolidBrush(setCheckInnerColor))
             {
-                e.Graphics.FillRectangle(brush, innerRectangle);
+                e.Graphics.FillEllipse(brush, innerRectangle);
             }
 
             if (Checked)
             {
-                innerRectangle = new Rectangle(1, 1, diameter, diameter);
+                innerRectangle = new RectangleF(1, 1, Diameter - 2, Diameter - 2);
                 innerRectangle.Inflate(-4, -4); // Control size of check
-
                 using (SolidBrush brush = new SolidBrush(CheckedColor))
                 {
-                    e.Graphics.FillRectangle(brush, innerRectangle);
+                    e.Graphics.FillEllipse(brush, innerRectangle);
                 }
             }
 
-            Rectangle textArea = new Rectangle(outerRectangle.Width + 6, 0, Width - outerRectangle.Width - 6, Height);
+            Rectangle textArea = new Rectangle((int)outerRectangle.Width + 5, 0, Width - (int)outerRectangle.Width - 6, Height);
             Color textColor = Enabled ? ForeColor : Colours.DISABLED_TEXT;
 
-            using (StringFormat format = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
+            using (StringFormat format = new StringFormat() { LineAlignment = StringAlignment.Center })
             using (SolidBrush brush = new SolidBrush(textColor))
             {
                 e.Graphics.DrawRectangle(Pens.Transparent, textArea);

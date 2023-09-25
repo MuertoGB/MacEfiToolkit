@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-112">V1.1.2</a> •
   <a href="#version-111">V1.1.1</a> •
   <a href="#version-110">V1.1.0</a> •
   <a href="#version-103">V1.0.3</a> •
@@ -16,6 +17,16 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.1.2
+
+#### Enhancements:
+- User Interface improvements.
+- Altered the functionality of export dialogues. Rather than displaying the export path, users will now be prompted to decide whether they want to navigate to the file directly in an explorer window.
+
+#### Bugs:
+- Fixed image and text display issues when the Operating System UI scaling is set to 100% size.
+- Fixed the custom initial directory setting not being reflected immediately when a firmware is not loaded, and a user changes the path.
 
 ## Version 1.1.1
 

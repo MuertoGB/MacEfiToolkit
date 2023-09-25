@@ -33,17 +33,17 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tbxTermsText = new System.Windows.Forms.TextBox();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.cmdClose = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.cmdAccept = new System.Windows.Forms.Button();
             this.cmdDecline = new System.Windows.Forms.Button();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.pnlMain.SuspendLayout();
             this.tlpTitle.SuspendLayout();
-            this.tlpButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
+            this.tlpButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -51,10 +51,11 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.pnlMain.Controls.Add(this.tbxTermsText);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(1, 41);
+            this.pnlMain.Location = new System.Drawing.Point(1, 33);
+            this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlMain.Size = new System.Drawing.Size(578, 257);
+            this.pnlMain.Padding = new System.Windows.Forms.Padding(3);
+            this.pnlMain.Size = new System.Drawing.Size(462, 205);
             this.pnlMain.TabIndex = 95;
             // 
             // tbxTermsText
@@ -64,14 +65,14 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tbxTermsText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbxTermsText.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbxTermsText.ForeColor = System.Drawing.Color.White;
-            this.tbxTermsText.Location = new System.Drawing.Point(4, 4);
+            this.tbxTermsText.Location = new System.Drawing.Point(3, 3);
             this.tbxTermsText.Margin = new System.Windows.Forms.Padding(0);
             this.tbxTermsText.MaxLength = 5000;
             this.tbxTermsText.Multiline = true;
             this.tbxTermsText.Name = "tbxTermsText";
             this.tbxTermsText.ReadOnly = true;
             this.tbxTermsText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbxTermsText.Size = new System.Drawing.Size(570, 249);
+            this.tbxTermsText.Size = new System.Drawing.Size(456, 199);
             this.tbxTermsText.TabIndex = 0;
             this.tbxTermsText.TabStop = false;
             // 
@@ -80,9 +81,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
             this.tlpTitle.ColumnCount = 3;
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTitle.Controls.Add(this.cmdClose, 1, 0);
             this.tlpTitle.Controls.Add(this.lblTitle, 1, 0);
@@ -92,8 +93,21 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTitle.Name = "tlpTitle";
             this.tlpTitle.RowCount = 1;
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.Size = new System.Drawing.Size(578, 40);
+            this.tlpTitle.Size = new System.Drawing.Size(462, 32);
             this.tlpTitle.TabIndex = 96;
+            // 
+            // pbxLogo
+            // 
+            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
+            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pbxLogo.Location = new System.Drawing.Point(6, 6);
+            this.pbxLogo.Margin = new System.Windows.Forms.Padding(2);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(19, 19);
+            this.pbxLogo.TabIndex = 14;
+            this.pbxLogo.TabStop = false;
             // 
             // cmdClose
             // 
@@ -106,11 +120,11 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdClose.ForeColor = System.Drawing.Color.White;
-            this.cmdClose.Location = new System.Drawing.Point(538, 0);
+            this.cmdClose.Location = new System.Drawing.Point(430, 0);
             this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
             this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 3, 0, 1);
-            this.cmdClose.Size = new System.Drawing.Size(40, 40);
+            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 2, 0, 1);
+            this.cmdClose.Size = new System.Drawing.Size(32, 32);
             this.cmdClose.TabIndex = 13;
             this.cmdClose.TabStop = false;
             this.cmdClose.Text = "X";
@@ -123,10 +137,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(40, 0);
+            this.lblTitle.Location = new System.Drawing.Point(32, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(498, 40);
+            this.lblTitle.Size = new System.Drawing.Size(398, 32);
             this.lblTitle.TabIndex = 12;
             this.lblTitle.Text = "Terms of Use";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -135,9 +149,10 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(160)))), ((int)(((byte)(235)))));
             this.pnlSeperator.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlSeperator.Location = new System.Drawing.Point(1, 41);
+            this.pnlSeperator.Location = new System.Drawing.Point(1, 33);
+            this.pnlSeperator.Margin = new System.Windows.Forms.Padding(2);
             this.pnlSeperator.Name = "pnlSeperator";
-            this.pnlSeperator.Size = new System.Drawing.Size(578, 2);
+            this.pnlSeperator.Size = new System.Drawing.Size(462, 2);
             this.pnlSeperator.TabIndex = 97;
             // 
             // tlpButtons
@@ -145,17 +160,17 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
             this.tlpButtons.ColumnCount = 3;
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88F));
             this.tlpButtons.Controls.Add(this.cmdAccept, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdDecline, 1, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 298);
+            this.tlpButtons.Location = new System.Drawing.Point(1, 238);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.Size = new System.Drawing.Size(578, 46);
+            this.tlpButtons.Size = new System.Drawing.Size(462, 37);
             this.tlpButtons.TabIndex = 1;
             // 
             // cmdAccept
@@ -168,10 +183,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdAccept.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdAccept.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdAccept.ForeColor = System.Drawing.Color.White;
-            this.cmdAccept.Location = new System.Drawing.Point(473, 6);
+            this.cmdAccept.Location = new System.Drawing.Point(378, 4);
             this.cmdAccept.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAccept.Name = "cmdAccept";
-            this.cmdAccept.Size = new System.Drawing.Size(100, 34);
+            this.cmdAccept.Size = new System.Drawing.Size(80, 29);
             this.cmdAccept.TabIndex = 1;
             this.cmdAccept.Text = "Accept";
             this.cmdAccept.UseVisualStyleBackColor = false;
@@ -187,34 +202,23 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdDecline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDecline.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdDecline.ForeColor = System.Drawing.Color.White;
-            this.cmdDecline.Location = new System.Drawing.Point(368, 6);
+            this.cmdDecline.Location = new System.Drawing.Point(294, 4);
             this.cmdDecline.Margin = new System.Windows.Forms.Padding(0);
             this.cmdDecline.Name = "cmdDecline";
-            this.cmdDecline.Size = new System.Drawing.Size(100, 34);
+            this.cmdDecline.Size = new System.Drawing.Size(80, 29);
             this.cmdDecline.TabIndex = 0;
             this.cmdDecline.Text = "Decline";
             this.cmdDecline.UseVisualStyleBackColor = false;
             this.cmdDecline.Click += new System.EventHandler(this.cmdDecline_Click);
             // 
-            // pbxLogo
-            // 
-            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbxLogo.Image = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
-            this.pbxLogo.Location = new System.Drawing.Point(8, 8);
-            this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(24, 24);
-            this.pbxLogo.TabIndex = 14;
-            this.pbxLogo.TabStop = false;
-            // 
             // termsWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.ClientSize = new System.Drawing.Size(580, 345);
+            this.ClientSize = new System.Drawing.Size(464, 276);
             this.Controls.Add(this.pnlSeperator);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tlpTitle);
@@ -223,9 +227,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(580, 345);
+            this.MinimumSize = new System.Drawing.Size(464, 276);
             this.Name = "termsWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
@@ -234,8 +239,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
             this.tlpTitle.ResumeLayout(false);
-            this.tlpButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
+            this.tlpButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

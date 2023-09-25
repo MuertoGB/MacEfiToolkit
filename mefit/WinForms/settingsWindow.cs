@@ -5,6 +5,7 @@
 // settingsWindow.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
@@ -55,7 +56,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void settingsWindow_Load(object sender, EventArgs e)
         {
-            lblSettingsApplied.Hide();
+            lblSettingsSaved.Hide();
             UpdateCheckBoxControls();
             UpdatePathLabel();
         }
@@ -65,10 +66,10 @@ namespace Mac_EFI_Toolkit.WinForms
             string path =
                 Settings.SettingsGetString(SettingsStringType.InitialDirectory);
 
-            lblInitialFolderPath.Text =
+            lblPath.Text =
               path;
 
-            lblInitialFolderPath.ForeColor = Directory.Exists(path)
+            lblPath.ForeColor = Directory.Exists(path)
                 ? Colours.DIM_TEXT
                 : Colours.WARNING_ORANGE;
 
@@ -128,14 +129,17 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdApply_Click(object sender, EventArgs e)
         {
-            Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, cbxDisableVersionCheck.Checked);
-            Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, cbxDisableFlashingUI.Checked);
-            Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, cbxDisableMessageSounds.Checked);
-            Settings.SettingsSetBool(SettingsBoolType.DisableTips, cbxDisableTips.Checked);
-            Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, cbxDisableConfDiag.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableVersionCheck, swDisableVersionCheck.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableFlashingUI, swDisableFlashingUiElements.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableMessageSounds, swDisableMessageWindowSounds.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableTips, swDisableStatusBarTips.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableConfDiag, swDisableConfirmationDialogs.Checked);
             if (_strNewOfdInitialPath != string.Empty)
                 Settings.SettingsSetString(SettingsStringType.InitialDirectory, _strNewOfdInitialPath);
-            Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, cbxDisableLzmaFsSearch.Checked);
+            Settings.SettingsSetBool(SettingsBoolType.DisableLzmaFsSearch, swDisableLzmaDecompression.Checked);
+
+            if (!FWBase.FirmwareLoaded)
+                Program.mWindow.SetPrimaryInitialDirectory();
 
             if (_updateUI)
             {
@@ -147,7 +151,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
             DialogResult result =
-                METMessageBox.Show(this, "Settings", "This will revert all settings to default," +
+                METMessageBox.Show(this, "Settings", "This will revert all settings to default, " +
                 "are you sure you want to set default settings?", METMessageType.Warning, METMessageButtons.YesNo);
 
             if (result != DialogResult.Yes)
@@ -172,7 +176,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Label Events
         private void _showSettingsAppliedLabel()
         {
-            lblSettingsApplied.Show();
+            lblSettingsSaved.Show();
 
             if (_timer != null && _timer.Enabled)
             {
@@ -190,7 +194,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            lblSettingsApplied.Hide();
+            lblSettingsSaved.Hide();
             _timer.Stop();
             _timer.Dispose();
         }
@@ -199,12 +203,12 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Checkbox Events
         private void UpdateCheckBoxControls()
         {
-            cbxDisableVersionCheck.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck) ? true : false;
-            cbxDisableFlashingUI.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI) ? true : false;
-            cbxDisableMessageSounds.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds) ? true : false;
-            cbxDisableTips.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableTips) ? true : false;
-            cbxDisableConfDiag.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag) ? true : false;
-            cbxDisableLzmaFsSearch.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch) ? true : false;
+            swDisableVersionCheck.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableVersionCheck) ? true : false;
+            swDisableFlashingUiElements.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI) ? true : false;
+            swDisableMessageWindowSounds.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds) ? true : false;
+            swDisableStatusBarTips.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableTips) ? true : false;
+            swDisableConfirmationDialogs.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag) ? true : false;
+            swDisableLzmaDecompression.Checked = Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch) ? true : false;
         }
         #endregion
 

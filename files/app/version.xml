@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
  <MET>
-    <VersionString>1.1.1</VersionString>
-    <Build>230902.0121</Build>
-    <ReleaseDate>02.09.2023</ReleaseDate>
+    <VersionString>1.1.2</VersionString>
+    <Build>230925.2100</Build>
+    <ReleaseDate>25.09.2023</ReleaseDate>
     <Channel>Stable</Channel>
-    <SHA256>c4b77627d620a411e31afae1bf76a9265af88c4ac6a3a45645a1d08161fc6b38</SHA256>
-    <VT>https://www.virustotal.com/gui/file-analysis/MmFmNzA4YzE1MDFlMmMwY2NkMTU1MTZkNzFlZmVhMzk6MTY5MzYxNTY0MQ==</VT>>
+    <SHA256>3d0372b74fd1301a90cf44f12d975839471c13b779e4658d4b6c07ae230e46f3</SHA256>
+    <VT>https://www.virustotal.com/gui/file/3d0372b74fd1301a90cf44f12d975839471c13b779e4658d4b6c07ae230e46f3</VT>>
  </MET>
 </data>

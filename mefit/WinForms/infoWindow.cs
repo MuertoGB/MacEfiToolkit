@@ -42,8 +42,6 @@ namespace Mac_EFI_Toolkit.WinForms
             pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
             lblTitle.MouseMove += infoWindow_MouseMove;
 
-            InterfaceUtils.SetTableLayoutPanelHeight(tlpMain);
-
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Chars.EXIT_CROSS;
         }
@@ -86,7 +84,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 $"Size: {FWBase.AppleRomInfoSectionData.SectionBytes.Length:X2}h"
                 ?? string.Empty;
 
-            foreach (Label label in tlpMain.Controls)
+            foreach (Label label in tlpInfo.Controls)
             {
                 if (label.Text == "N/A")
                 {

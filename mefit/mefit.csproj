@@ -109,6 +109,8 @@
     <Compile Include="Common\Logger.cs" />
     <Compile Include="AppVersion.cs" />
     <Compile Include="UI\Chars.cs" />
+    <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
+    <Compile Include="UI\Design\METSwitchDesigner.cs" />
     <Compile Include="UI\Enums.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
     <Compile Include="UI\METContextMenuStrip.cs">
@@ -122,6 +124,12 @@
     </Compile>
     <Compile Include="UI\METMessageBox.Designer.cs">
       <DependentUpon>METMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\METRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\METSwitch.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Utils\OSUtils.cs" />
     <Compile Include="WinForms\aboutWindow.cs">

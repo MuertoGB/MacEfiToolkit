@@ -19,10 +19,13 @@ namespace Mac_EFI_Toolkit.UI
         internal static readonly Color BORDER_ACTIVE = Color.FromArgb(200, 200, 200);
         internal static readonly Color CLIENT_INACTIVE = Color.FromArgb(10, 10, 10);
         internal static readonly Color CLIENT_ACTIVE = Color.FromArgb(30, 30, 30);
-        internal static readonly Color CHECKED = Color.FromArgb(120, 180, 0);
+        internal static readonly Color CHECKED = Color.FromArgb(85, 170, 255);
         internal static readonly Color WARNING_ORANGE = Color.Tomato;
         internal static readonly Color ERROR_RED = Color.FromArgb(240, 70, 80);
         internal static readonly Color COMPLETE_GREEN = Color.FromArgb(128, 255, 128);
         internal static readonly Color INFO_BLUE = Color.FromArgb(85, 170, 255);
+        internal static readonly Color SWITCH_HEAD = Color.FromArgb(170, 170, 170);
+        internal static readonly Color SWITCH_HEAD_DISABLED = Color.FromArgb(100, 100, 100);
+        internal static readonly Color FOCUS_RECTANGLE = Color.FromArgb(150, 150, 150);
     }
 }

@@ -34,7 +34,7 @@ namespace Mac_EFI_Toolkit
 
     internal struct METVersion
     {
-        internal static readonly string Build = "230902.0121";
+        internal static readonly string Build = "230925.2100";
         internal static readonly string Channel = "Stable";
     }
 
@@ -240,12 +240,12 @@ namespace Mac_EFI_Toolkit
 
             if (action == MetAction.Restart)
             {
-                title = "Restart application";
+                title = "Restart";
                 message = "Are you sure you want to restart the application?";
             }
             else if (action == MetAction.Exit)
             {
-                title = "Exit application";
+                title = "Quit";
                 message = "Are you sure you want to quit the application?";
             }
             else

@@ -49,20 +49,20 @@ Opens the overflow menu with various extra options:
   <img src="files/manual/overflowmenu.png">
 </kbd>
 
-**'Local Directory':**\
-Opens the working directory where the executable is located.
-
-**'Backups Directory':**\
+**'Backups Folder':**\
 Navigates to the Backups directory. This is the default location where zipped file backups are exported.
 
-**'Builds Directory':**\
+**'Builds Folder':**\
 Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved.
 
-**'Fsys Store Directory':**\
+**'Fsys Store Folder':**\
 Navigates to the Fsys Store directory within the working directory. This is the default location where Fsys Stores are exported.
 
-**'ME Region Directory':**\
+**'ME Region Folder':**\
 Navigates to the ME Region directory within the working directory. This is the default path where ME regions are exported.
+
+**'Working Directory':**\
+Opens the current working directory where the executable is located.
 
 **'Changelog':**\
 Opens a browser window directly to the application's changelog.
@@ -300,37 +300,29 @@ This section explains the firmware editor window and its functionality.
 #### Fsys Store:
 
 <kbd>
-  <img src="files/manual/fsys_replace.png">
+  <img src="files/manual/patcher_fsys.png">
 </kbd>
 
-When the checkbox is activated, an open file dialog will be prompted, enabling the selection and opening of the new Fsys Store. If you want to choose a different file, simply click the 'Change File' button to reopen the file dialog.
+This section comprises of two main functions.
+
+When the "Replace Fsys Store" switch is activated, an open file dialog will be prompted, enabling the selection and opening of the new Fsys Store. If you want to choose a different file, simply click the '...' button to reopen the file dialog.
 
 The application will verify the new Fsys Store, if CRC masking is require this will be done automatically at build time.
 
-> 🛈 The `Replace Serial Number` option is not available when `Replace Fsys Store` is selected.
+> 🛈 Only one option is available at a time. If you choose one, the other is disabled.
 
----
-
-#### Serial Number:
-
-<kbd>
-  <img src="files/manual/serial_replace.png">
-</kbd>
-
-When the checkbox is activated, it will enable the 'SSN' textbox, allowing input of a new serial number. Once a valid serial number is entered, the Hardware Configuration code (HWC) will be automatically determined based on the provided serial number. It is important to note that you cannot change the HWC separately from the serial number. The HWC must match the serial number and cannot be modified independently.
+When the "Replace Serial Number" switch is activated, it will enable the 'SSN' textbox, allowing input of a new serial number. Once a valid serial number is entered, the Hardware Configuration code (HWC) will be automatically determined based on the provided serial number. It is important to note that you cannot change the HWC separately from the serial number. The HWC must match the serial number and the application does not allow independent modification.
 
 The application will automatically enforce the required length of the serial number, allowing for either 11 or 12 characters. It will also provide validation to ensure that only valid characters are entered. This helps to ensure that the serial number input meets the necessary criteria and maintains the expected format.
 
 The editor will automatically verify and mask the Fsys Store CRC32 after the serial number patching is complete.
-
-> 🛈 The `Replace Fsys Store` option is not available when `Replace Serial Number` is selected.
 
 ---
 
 #### NVRAM:
 
 <kbd>
-  <img src="files/manual/nvram_clear.png">
+  <img src="files/manual/patcher_nvram.png">
 </kbd>
 
 In this section, you have the option to clear specific NVRAM stores. By selecting 'Clear VSS Store', a general PRAM reset will be performed, similar to using CMD + SHIFT + P + R on the Mac keyboard. This action helps in resetting parameters stored in the VSS Store.
@@ -341,13 +333,13 @@ The NSS store's specific purpose is currently unknown to me. It is included as a
 
 ---
 
-#### ME Region:
+#### Intel ME:
 
 <kbd>
-  <img src="files/manual/me_replace.png">
+  <img src="files/manual/patcher_intelme.png">
 </kbd>
 
-When the checkbox is activated, an open file dialog will be prompted, allowing selection of a donor or clean Management Engine (ME) firmware. This feature proves useful for scenarios such as migrating a ME Region from a faulty UEFI to a donor UEFI. Additionally, it can be utilized to write a configured ME Region from a matching clean Apple firmware.
+When the switch is activated, an open file dialog will be prompted, allowing selection of a donor or clean Management Engine (ME) firmware. This feature proves useful for scenarios such as migrating a ME Region from a faulty UEFI to a donor UEFI. Additionally, it can be utilized to write a configured ME Region from a matching clean Apple firmware.
 
 A repository of clean Apple firmware can be found here on [Github](https://github.com/gdbinit/firmware_vault). This repository provides a collection of clean Apple firmware files containing clean and configured ME regions.
 
@@ -360,7 +352,7 @@ For users who require a higher level of certainty and guidance in replacing the 
 #### Output:
 
 <kbd>
-  <img src="files/manual/output.png">
+  <img src="files/manual/patcher_output.png">
 </kbd>
 
 This section includes a single button and the output log. By clicking the 'Save Log' button, a save file dialog will be prompted, allowing you to export the log text to a file of your choice.

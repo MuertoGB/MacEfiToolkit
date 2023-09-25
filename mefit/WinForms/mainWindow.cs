@@ -66,8 +66,6 @@ namespace Mac_EFI_Toolkit
             Deactivate += mainWindow_Deactivate;
             lblVersion.MouseClick += lblVersion_MouseClick;
 
-            InterfaceUtils.SetTableLayoutPanelHeight(tlpMain);
-
             // Set tip handlers for controls
             SetTipHandlers();
 
@@ -183,6 +181,9 @@ namespace Mac_EFI_Toolkit
             {
                 switch (e.KeyCode)
                 {
+                    case Keys.G:
+                        Process.Start(METUrl.LatestGithubRelease);
+                        break;
                     case Keys.O:
                         cmdOpen.PerformClick();
                         break;
@@ -440,23 +441,22 @@ namespace Mac_EFI_Toolkit
                 if (sfd.ShowDialog() != DialogResult.OK)
                     return;
 
-                string path =
+                string backupPath =
                     sfd.FileName;
 
                 FileUtils.BackupFileToZip(
                     FWBase.LoadedBinaryBytes,
                     FWBase.FileInfoData.FileNameWithExt,
-                    path);
+                    backupPath);
 
-                if (!File.Exists(path))
+                if (File.Exists(backupPath))
                 {
-                    METMessageBox.Show(this, "Error", "The file could not be backed up.",
-                        METMessageType.Error, METMessageButtons.Okay);
+                    ShowExplorerNavigationPrompt("Backup archive created successfully.", backupPath);
                     return;
                 }
 
-                METMessageBox.Show(this, "Backup", $"File backed up to:\r\n{path}".Replace(" ", Chars.NBSPACE),
-                 METMessageType.Information, METMessageButtons.Okay);
+                METMessageBox.Show(this, "Error", "The file could not be backed up.",
+                     METMessageType.Error, METMessageButtons.Okay);
             }
         }
 
@@ -592,8 +592,7 @@ namespace Mac_EFI_Toolkit
                 // Save the Fsys stores bytes to disk
                 if (FileUtils.WriteAllBytesEx(fsysPath, FWBase.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
                 {
-                    METMessageBox.Show(this, "MET", $"Fsys export successful:\r\n'{fsysPath.Replace(" ", Chars.NBSPACE)}'",
-                        METMessageType.Information, METMessageButtons.Okay);
+                    ShowExplorerNavigationPrompt("Fsys Store export successful.", fsysPath);
                     return;
                 }
 
@@ -792,7 +791,7 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                FileName = string.Concat("ME_RGN_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                FileName = string.Concat("ME_REGION_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
                 OverwritePrompt = true,
                 InitialDirectory = METPath.MeDirectory
             })
@@ -808,8 +807,7 @@ namespace Mac_EFI_Toolkit
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
-                    METMessageBox.Show(this, "MET", $"ME export successful:\r\n'{mePath.Replace(" ", Chars.NBSPACE)}'",
-                        METMessageType.Information, METMessageButtons.Okay);
+                    ShowExplorerNavigationPrompt("Intel ME export successful.", mePath);
                     return;
                 }
 
@@ -890,7 +888,9 @@ namespace Mac_EFI_Toolkit
             File.WriteAllText(METPath.DebugLog, Debug.GenerateDebugReport(null));
 
             if (File.Exists(METPath.DebugLog))
-                FileUtils.HighlightPathInExplorer(METPath.DebugLog);
+            {
+                ShowExplorerNavigationPrompt("Debug log", METPath.DebugLog);
+            }
         }
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1371,7 +1371,8 @@ namespace Mac_EFI_Toolkit
                 Descriptor.MeBase != 0 &&
                 Descriptor.MeLimit != 0;
 
-            tlpMain.Enabled = enable;
+            tlpFile.Enabled = enable;
+            tlpRom.Enabled = enable;
         }
 
         private void ToggleCopyMenuItemEnable()
@@ -1468,7 +1469,7 @@ namespace Mac_EFI_Toolkit
 
             Label[] labels =
             {
-                lblVssStore, lblSvsStore, lblNssStore
+                lblVssStore, lblSvsStore, lblNssStore, lblVersion
             };
 
             foreach (Button button in buttons)
@@ -1509,6 +1510,7 @@ namespace Mac_EFI_Toolkit
                     { lblVssStore, SetNvramStoreTip(FWBase.VssStoreData, "VSS") },
                     { lblSvsStore, SetNvramStoreTip(FWBase.SvsStoreData, "SVS") },
                     { lblNssStore, SetNvramStoreTip(FWBase.NssStoreData, "NSS") },
+                    { lblVersion, "Go to latest release (CTRL + G)" },
                 };
 
                 if (tooltips.ContainsKey(sender))
@@ -1586,6 +1588,16 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Misc Events
+        private void ShowExplorerNavigationPrompt(string message, string path)
+        {
+            DialogResult result =
+                    METMessageBox.Show(this, "MET", $"{message} Navigate to file?",
+                        METMessageType.Information, METMessageButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+                FileUtils.HighlightPathInExplorer(path);
+        }
+
         internal async void CheckForNewVersion()
         {
             // Check for a new version using the specified URL
@@ -1599,7 +1611,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void SetPrimaryInitialDirectory()
+        internal void SetPrimaryInitialDirectory()
         {
             // Get the initial directory from settings
             string path = Settings.SettingsGetString(SettingsStringType.InitialDirectory);

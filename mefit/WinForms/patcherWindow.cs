@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (FWBase.FsysStoreData.Serial == null)
             {
-                cbxReplaceSerial.Enabled = false;
+                swReplaceSerialNumber.Enabled = false;
             }
             else
             {
@@ -162,7 +162,7 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
-                    cbxReplaceFsysStore.Checked = false;
+                    swReplaceFsysStore.Checked = false;
                     return;
                 }
 
@@ -170,7 +170,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 _bytesNewFsysStore = File.ReadAllBytes(dialog.FileName);
 
                 if (!ValidateNewFsysStore(_bytesNewFsysStore))
-                    cbxReplaceFsysStore.Checked = false;
+                    swReplaceFsysStore.Checked = false;
             }
         }
 
@@ -184,7 +184,7 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
-                    cbxReplaceMeRegion.Checked = false;
+                    swReplaceMeRegion.Checked = false;
                     return;
                 }
 
@@ -193,7 +193,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 _bytesNewMeRegion = File.ReadAllBytes(dialog.FileName);
 
                 if (!ValidateNewMeRegion(_bytesNewMeRegion))
-                    cbxReplaceMeRegion.Checked = false;
+                    swReplaceMeRegion.Checked = false;
             }
         }
 
@@ -205,14 +205,14 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 _bytesNewBinary = FWBase.LoadedBinaryBytes;
 
-                if (cbxReplaceFsysStore.Checked)
+                if (swReplaceFsysStore.Checked)
                 {
                     Logger.WriteLogTextToRtb("Replacing Fsys Store:-", RtbLogPrefix.Info, rtbLog);
                     if (!WriteNewFsysStore())
                         return;
                 }
 
-                if (cbxReplaceSerial.Checked)
+                if (swReplaceSerialNumber.Checked)
                 {
                     Logger.WriteLogTextToRtb($"Replacing Serial Number data:-", RtbLogPrefix.Info, rtbLog);
 
@@ -241,7 +241,7 @@ namespace Mac_EFI_Toolkit.WinForms
                         return;
                 }
 
-                if (cbxReplaceMeRegion.Checked)
+                if (swReplaceMeRegion.Checked)
                 {
                     Logger.WriteLogTextToRtb("Writing new ME Region:", RtbLogPrefix.Info, rtbLog);
                     if (!WriteNewMeRegion())
@@ -314,19 +314,19 @@ namespace Mac_EFI_Toolkit.WinForms
             _maskCrc = false;
             _fullBuildPath = string.Empty;
 
-            cbxReplaceFsysStore.Checked = false;
-            cbxReplaceSerial.Checked = false;
+            swReplaceFsysStore.Checked = false;
+            swReplaceSerialNumber.Checked = false;
             cbxClearVssStore.Checked = false;
             cbxClearSvsStore.Checked = false;
             cbxClearNssStore.Checked = false;
-            cbxReplaceMeRegion.Checked = false;
+            swReplaceMeRegion.Checked = false;
 
             cmdOpenLast.Enabled = false;
         }
 
-        private void cmdReplaceSerial_CheckedChanged(object sender, EventArgs e)
+        private void swReplaceSerialNumber_CheckedChanged(object sender, EventArgs e)
         {
-            METCheckbox cb = (METCheckbox)sender;
+            CheckBox cb = (CheckBox)sender;
             bool isChecked = cb.Checked;
 
             tlpSerialB.Enabled = isChecked;
@@ -418,9 +418,9 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
-        private void cbxReplaceFsysStore_CheckedChanged(object sender, EventArgs e)
+        private void swReplaceFsysStore_CheckedChanged(object sender, EventArgs e)
         {
-            METCheckbox control = (METCheckbox)sender;
+            CheckBox control = (CheckBox)sender;
             bool isChecked = control.Checked;
 
             cmdFsysPath.Enabled = isChecked;
@@ -432,9 +432,9 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
-        private void cbxReplaceMeRegion_CheckedChanged(object sender, EventArgs e)
+        private void swReplaceMeRegion_CheckedChanged(object sender, EventArgs e)
         {
-            METCheckbox control = (METCheckbox)sender;
+            CheckBox control = (CheckBox)sender;
 
             cmdMePath.Enabled = control.Checked;
             cmdMePath.PerformClick();
@@ -534,7 +534,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
             else
             {
-                cbxReplaceMeRegion.Enabled = false;
+                swReplaceMeRegion.Enabled = false;
                 Logger.WriteLogTextToRtb($"ME Region not found: Option disabled", RtbLogPrefix.Warning, rtbLog);
             }
 
