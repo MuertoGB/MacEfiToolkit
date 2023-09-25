@@ -771,7 +771,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblOutputText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblOutputText.Size = new System.Drawing.Size(416, 34);
             this.lblOutputText.TabIndex = 99;
-            this.lblOutputText.Text = "Output";
+            this.lblOutputText.Text = "OUTPUT";
             this.lblOutputText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdSaveLog
@@ -789,7 +789,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdSaveLog.Margin = new System.Windows.Forms.Padding(0);
             this.cmdSaveLog.Name = "cmdSaveLog";
             this.cmdSaveLog.Size = new System.Drawing.Size(90, 34);
-            this.cmdSaveLog.TabIndex = 4;
+            this.cmdSaveLog.TabIndex = 0;
             this.cmdSaveLog.Text = "Save Log";
             this.cmdSaveLog.UseVisualStyleBackColor = false;
             this.cmdSaveLog.Click += new System.EventHandler(this.cmdSaveLog_Click);
