@@ -947,7 +947,7 @@ namespace Mac_EFI_Toolkit
 
         private void sizeHexToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText($"0x{FWBase.FileInfoData.FileLength:X}h");
+            SetClipboardText($"{FWBase.FileInfoData.FileLength:X}h");
         }
 
         private void crc32ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1097,10 +1097,10 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateFileSizeLabel()
         {
-            int fileSize = (int)FWBase.FileInfoData.FileLength;
-            bool isValidSize = FileUtils.GetIsValidBinSize(fileSize);
+            int fileSizeDecimal = (int)FWBase.FileInfoData.FileLength;
+            bool isValidSize = FileUtils.GetIsValidBinSize(fileSizeDecimal);
 
-            lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileSize);
+            lblFileSizeBytes.Text = $"{FileUtils.FormatFileSize(fileSizeDecimal)} • {fileSizeDecimal:X}h";
 
             if (!isValidSize)
             {
@@ -1109,7 +1109,7 @@ namespace Mac_EFI_Toolkit
                 lblFileSizeBytes.Text +=
                     isValidSize
                     ? string.Empty
-                    : $" ({FileUtils.GetSizeDifference(fileSize)})";
+                    : $" ({FileUtils.GetSizeDifference(fileSizeDecimal)})";
             }
         }
 

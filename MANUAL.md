@@ -96,7 +96,7 @@ Clicking the 'Explorer' button will open Windows Explorer at the location of the
 
 ---
 
-#### Size (Bytes):
+#### Size:
 
 <kbd>
   <img src="files/manual/filesize.png">
@@ -105,9 +105,9 @@ Clicking the 'Explorer' button will open Windows Explorer at the location of the
   <img src="files/manual/filesizeinvalid.png">
 </kbd>
 
-The file size of the loaded file is measured in bytes. If the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
+The loaded file's size is displayed in bytes, followed by the hexadecimal representation. If the file size is invalid, the data will be shown in red, and any byte discrepancies will be calculated and appended.
 
-> 🛈 8,388,615 (>7) would indicate the given firmware is 7 bytes too large.
+> 🛈 8,388,672 • 800040h (>64) would indicate the given firmware is 64 bytes too large.
 
 ---
 
