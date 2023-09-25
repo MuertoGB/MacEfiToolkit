@@ -305,7 +305,7 @@ This section explains the firmware editor window and its functionality.
 
 This section comprises of two main functions.
 
-When the "Replace Fsys Store" switch is activated, an open file dialog will be prompted, enabling the selection and opening of the new Fsys Store. If you want to choose a different file, simply click the 'Change File' button to reopen the file dialog.
+When the "Replace Fsys Store" switch is activated, an open file dialog will be prompted, enabling the selection and opening of the new Fsys Store. If you want to choose a different file, simply click the '...' button to reopen the file dialog.
 
 The application will verify the new Fsys Store, if CRC masking is require this will be done automatically at build time.
 
@@ -339,7 +339,7 @@ The NSS store's specific purpose is currently unknown to me. It is included as a
   <img src="files/manual/patcher_intelme.png">
 </kbd>
 
-When the checkbox is activated, an open file dialog will be prompted, allowing selection of a donor or clean Management Engine (ME) firmware. This feature proves useful for scenarios such as migrating a ME Region from a faulty UEFI to a donor UEFI. Additionally, it can be utilized to write a configured ME Region from a matching clean Apple firmware.
+When the switch is activated, an open file dialog will be prompted, allowing selection of a donor or clean Management Engine (ME) firmware. This feature proves useful for scenarios such as migrating a ME Region from a faulty UEFI to a donor UEFI. Additionally, it can be utilized to write a configured ME Region from a matching clean Apple firmware.
 
 A repository of clean Apple firmware can be found here on [Github](https://github.com/gdbinit/firmware_vault). This repository provides a collection of clean Apple firmware files containing clean and configured ME regions.
 
