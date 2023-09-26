@@ -269,24 +269,48 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (status == Status.FAILED)
                 {
                     METMessageBox.Show(this, "MET", "Failed to create the builds directory.", METMessageType.Error, METMessageButtons.Okay);
+                    return false;
                 }
             }
 
-            string filename = FWBase.FileInfoData.FileNameWithExt.StartsWith("outimage_")
-                ? $"{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"
-                : $"outimage_{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin";
-
-            _fullBuildPath = Path.Combine(METPath.BuildsDirectory, filename);
-
-            if (!FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary))
+            if (_bytesNewBinary == null)
             {
-                Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned false, file could not be saved!", RtbLogPrefix.Error, rtbLog);
+                METMessageBox.Show(this, "MET", "New binary data is empty. Cannot continue.", METMessageType.Error, METMessageButtons.Okay);
                 return false;
             }
 
-            Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
+            FsysStore fsysStore = FWBase.GetFsysStoreData(_bytesNewBinary, false);
+            string serialNumber = string.IsNullOrEmpty(fsysStore.Serial) ? "SERIALNUM" : fsysStore.Serial;
+            string fileName = $"outimage_{serialNumber}_{MacUtils.GetFirmwareVersion()}";
 
-            return true;
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                InitialDirectory = METPath.BuildsDirectory,
+                OverwritePrompt = true,
+                FileName = fileName
+            })
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _fullBuildPath = saveFileDialog.FileName;
+
+                    if (!FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary))
+                    {
+                        Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned false, file could not be saved!", RtbLogPrefix.Error, rtbLog);
+                        return false;
+                    }
+
+                    Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
+
+                    return true;
+                }
+                else
+                {
+                    Logger.WriteLogTextToRtb($"Build action cancelled by user", RtbLogPrefix.Warning, rtbLog);
+                    return false;
+                }
+            }
         }
 
         private void cmdOpenLast_Click(object sender, EventArgs e)
