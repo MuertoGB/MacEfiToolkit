@@ -380,7 +380,7 @@ namespace Mac_EFI_Toolkit.WinForms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
-                FileName = $"metlog_{DateTime.Now:yyMMdd_HHmmss}.txt",
+                FileName = $"patcherlog_{DateTime.Now:yyMMdd_HHmmss}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.CurrentDirectory
             })

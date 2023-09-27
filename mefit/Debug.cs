@@ -54,6 +54,7 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine("<-- Application -->\r\n");
                 builder.AppendLine($"Name:     {Application.ProductName}");
                 builder.AppendLine($"Version:  {Application.ProductVersion}.{METVersion.Build}");
+                builder.AppendLine($"LZMA SDK: {METVersion.SDK}");
                 builder.AppendLine($"Channel:  {METVersion.Channel}");
                 builder.AppendLine($"Mode:     {BitnessMode()}");
                 builder.AppendLine($"Debug:    {IsDebugMode()}");
