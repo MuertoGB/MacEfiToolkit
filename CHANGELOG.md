@@ -29,6 +29,9 @@
 - User Interface layout changes.
 - Added LZMA SDK version to the debug log, and about window.
 
+#### Bugs:
+- Fixed a malformed string in the debug log navigation prompt.
+
 ## Version 1.1.2
 
 #### Enhancements:
