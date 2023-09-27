@@ -31,6 +31,7 @@
 
 #### Bugs:
 - Fixed a malformed string in the debug log navigation prompt.
+- Fixed inaccurate main window tooltip stating both designated NVRAM stores were 'empty' when only the backup store contained data.
 
 ## Version 1.1.2
 

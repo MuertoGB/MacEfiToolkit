@@ -1194,12 +1194,11 @@ namespace Mac_EFI_Toolkit
         {
             label.Text = text;
 
-            Color foreColor =
-                !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
+            Color foreColor = storeData.PrimaryStoreBase == -1
+                ? Colours.DISABLED_TEXT
+                : !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
                 ? Color.White
-                : storeData.PrimaryStoreBase != -1
-                ? Colours.COMPLETE_GREEN
-                : Colours.DISABLED_TEXT;
+                : Colours.COMPLETE_GREEN;
 
             label.ForeColor = foreColor;
         }
@@ -1532,6 +1531,8 @@ namespace Mac_EFI_Toolkit
                 return $"Data present in both {storeType} stores";
             else if (!storeData.IsPrimaryStoreEmpty && storeData.IsBackupStoreEmpty)
                 return $"Data present in the primary {storeType} store";
+            else if (storeData.IsPrimaryStoreEmpty && !storeData.IsBackupStoreEmpty)
+                return $"Data present in the backup {storeType} store";
             else if (storeData.PrimaryStoreBase != -1)
                 return $"{storeType} NVRAM stores are empty (0xFF)";
 
