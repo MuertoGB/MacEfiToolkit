@@ -269,7 +269,6 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (status == Status.FAILED)
                 {
                     METMessageBox.Show(this, "MET", "Failed to create the builds directory.", METMessageType.Error, METMessageButtons.Okay);
-                    return false;
                 }
             }
 

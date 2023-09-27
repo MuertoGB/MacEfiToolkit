@@ -576,8 +576,8 @@ namespace Mac_EFI_Toolkit
             // Set SaveFileDialog params
             using (SaveFileDialog dialog = new SaveFileDialog
             {
-                Filter = "Binary Files (*.bin)|*.bin",
-                FileName = string.Concat("FSYS_STORE_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                FileName = $"FSYS_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.FsysDirectory
             })
@@ -790,8 +790,8 @@ namespace Mac_EFI_Toolkit
             // Set SaveFileDialog params
             using (SaveFileDialog dialog = new SaveFileDialog
             {
-                Filter = "Binary Files (*.bin)|*.bin",
-                FileName = string.Concat("ME_REGION_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                FileName = $"ME_REGION_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.MeDirectory
             })
