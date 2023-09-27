@@ -131,7 +131,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
-        private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
+        private void cmdBuildsFolder_Click(object sender, EventArgs e)
         {
             if (!Directory.Exists(METPath.BuildsDirectory))
             {
@@ -252,7 +252,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     return;
 
                 Logger.WriteLogTextToRtb($"Process Completed!", RtbLogPrefix.Complete, rtbLog);
-                cmdOpenLast.Enabled = true;
+                cmdShowLastBuild.Enabled = true;
+                cmdLoadLastBuild.Enabled = true;
             }
             finally
             {
@@ -312,7 +313,18 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
-        private void cmdOpenLast_Click(object sender, EventArgs e)
+        private void cmdShowLastBuild_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_fullBuildPath))
+            {
+                FileUtils.HighlightPathInExplorer(_fullBuildPath);
+                return;
+            }
+
+            Logger.WriteLogTextToRtb($"The last build path is empty!", RtbLogPrefix.Warning, rtbLog);
+        }
+
+        private void cmdLoadLastBuild_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(_fullBuildPath))
             {
@@ -344,7 +356,8 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearNssStore.Checked = false;
             swReplaceMeRegion.Checked = false;
 
-            cmdOpenLast.Enabled = false;
+            cmdShowLastBuild.Enabled = false;
+            cmdLoadLastBuild.Enabled = false;
         }
 
         private void swReplaceSerialNumber_CheckedChanged(object sender, EventArgs e)

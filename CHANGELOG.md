@@ -25,6 +25,8 @@
 - Added hexadecimal format to the main window file size data.
 - Enabled the 'All Files' option, and modified the default filename when exporting Fsys Store or ME Region binary data in the main window.
 - The patcher window now triggers a 'Save As' dialog upon clicking the 'Build' button, allowing users to choose the desired save location and filename.
+- Introduced button 'Show Last Build' in the patcher window that opens file explorer and highlights the last build when clicked.
+- User Interface layout changes.
 
 ## Version 1.1.2
 

@@ -791,6 +791,7 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                //FileName = $"ME_{FWBase.MeVersion}_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
                 FileName = $"ME_REGION_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.MeDirectory
