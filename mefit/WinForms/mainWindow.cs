@@ -890,7 +890,7 @@ namespace Mac_EFI_Toolkit
 
             if (File.Exists(METPath.DebugLog))
             {
-                ShowExplorerNavigationPrompt("Debug log", METPath.DebugLog);
+                ShowExplorerNavigationPrompt("Debug log created successfully.", METPath.DebugLog);
             }
         }
 
