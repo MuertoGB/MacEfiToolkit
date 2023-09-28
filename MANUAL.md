@@ -379,7 +379,7 @@ Navigates to the latest build in the file explorer and highlights the file.
 **Load Last Build:**\
 Clicking this button will close the firmware editor window and load in the last successfully built binary into the main window.
 
-**Build**\
+**Build:**\
 The 'Build' button generates a new binary file based on the user specified preferences.
 
 ---
