@@ -83,7 +83,7 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| NOT SET, 2023 | Yes | Stable |
+|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 28th September, 2023 | Yes | Stable |
 |[1.1.2](https://github.com/MuertoGB/MacEfiToolkit/releases/112)| 25th September, 2023 | No | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
