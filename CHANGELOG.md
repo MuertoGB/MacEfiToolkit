@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-113">V1.1.3</a> •
   <a href="#version-112">V1.1.2</a> •
   <a href="#version-111">V1.1.1</a> •
   <a href="#version-110">V1.1.0</a> •
@@ -17,6 +18,20 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.1.3
+
+#### Enhancements:
+- Added hexadecimal format to the main window file size data.
+- Enabled the 'All Files' option, and modified the default filename when exporting Fsys Store or ME Region binary data in the main window.
+- The patcher window now triggers a 'Save As' dialog upon clicking the 'Build' button, allowing users to choose the desired save location and filename.
+- Introduced button 'Show Last Build' in the patcher window that opens file explorer and highlights the last build when clicked.
+- User Interface layout changes.
+- Added LZMA SDK version to the debug log, and about window.
+
+#### Bugs:
+- Fixed a malformed string in the debug log navigation prompt.
+- Fixed inaccurate main window tooltip stating both designated NVRAM stores were 'empty' when only the backup store contained data.
 
 ## Version 1.1.2
 

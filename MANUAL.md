@@ -96,7 +96,7 @@ Clicking the 'Explorer' button will open Windows Explorer at the location of the
 
 ---
 
-#### Size (Bytes):
+#### Size:
 
 <kbd>
   <img src="files/manual/filesize.png">
@@ -105,9 +105,9 @@ Clicking the 'Explorer' button will open Windows Explorer at the location of the
   <img src="files/manual/filesizeinvalid.png">
 </kbd>
 
-The file size of the loaded file is measured in bytes. If the file size is invalid, the label will appear red, and any discrepancy in bytes will be calculated and displayed.
+The loaded file's size is displayed in bytes, followed by the hexadecimal representation. If the file size is invalid, the data will be shown in red, and any byte discrepancies will be calculated and appended.
 
-> 🛈 8,388,615 (>7) would indicate the given firmware is 7 bytes too large.
+> 🛈 8,388,672 • 800040h (>64) would indicate the given firmware is 64 bytes too large.
 
 ---
 
@@ -361,22 +361,25 @@ The output log serves as a valuable source of information during the validation 
 
 ---
 
-#### Editor Buttons:
+#### Patcher Buttons:
 
 <kbd>
-  <img src="files/manual/editorbuttons.png">
+  <img src="files/manual/patcher_buttons.png">
 </kbd>
 
 **Reset:**\
 When you click the 'Reset' button, it initiates a process that resets the editor and unloads any loaded files, such as the Fsys store and ME region.
 
-**Open Build Directory:**\
+**Builds Folder:**\
 Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved when the 'Build' button is used.
 
-**Open Last Build:**\
-Clicking 'Open Last Build' will close the firmware editor window and load in the last successfully built binary into the main window.
+**Show Last Build:**\
+Navigates to the latest build in the file explorer and highlights the file.
 
-**Build**\
+**Load Last Build:**\
+Clicking this button will close the firmware editor window and load in the last successfully built binary into the main window.
+
+**Build:**\
 The 'Build' button generates a new binary file based on the user specified preferences.
 
 ---

@@ -131,7 +131,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
-        private void cmdOpenBuildsDir_Click(object sender, EventArgs e)
+        private void cmdBuildsFolder_Click(object sender, EventArgs e)
         {
             if (!Directory.Exists(METPath.BuildsDirectory))
             {
@@ -252,7 +252,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     return;
 
                 Logger.WriteLogTextToRtb($"Process Completed!", RtbLogPrefix.Complete, rtbLog);
-                cmdOpenLast.Enabled = true;
+                cmdShowLastBuild.Enabled = true;
+                cmdLoadLastBuild.Enabled = true;
             }
             finally
             {
@@ -272,24 +273,58 @@ namespace Mac_EFI_Toolkit.WinForms
                 }
             }
 
-            string filename = FWBase.FileInfoData.FileNameWithExt.StartsWith("outimage_")
-                ? $"{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin"
-                : $"outimage_{FWBase.FileInfoData.FileNameNoExt}_{DateTime.Now:yyyyMMddHHmmss}.bin";
-
-            _fullBuildPath = Path.Combine(METPath.BuildsDirectory, filename);
-
-            if (!FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary))
+            if (_bytesNewBinary == null)
             {
-                Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned false, file could not be saved!", RtbLogPrefix.Error, rtbLog);
+                METMessageBox.Show(this, "MET", "New binary data is empty. Cannot continue.", METMessageType.Error, METMessageButtons.Okay);
                 return false;
             }
 
-            Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
+            FsysStore fsysStore = FWBase.GetFsysStoreData(_bytesNewBinary, false);
+            string serialNumber = string.IsNullOrEmpty(fsysStore.Serial) ? "SERIALNUM" : fsysStore.Serial;
+            string fileName = $"outimage_{serialNumber}_{MacUtils.GetFirmwareVersion()}";
 
-            return true;
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                InitialDirectory = METPath.BuildsDirectory,
+                OverwritePrompt = true,
+                FileName = fileName
+            })
+            {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _fullBuildPath = saveFileDialog.FileName;
+
+                    if (!FileUtils.WriteAllBytesEx(_fullBuildPath, _bytesNewBinary))
+                    {
+                        Logger.WriteLogTextToRtb($"'WriteAllBytesEx' returned false, file could not be saved!", RtbLogPrefix.Error, rtbLog);
+                        return false;
+                    }
+
+                    Logger.WriteLogTextToRtb($"Save path: {_fullBuildPath}", RtbLogPrefix.Info, rtbLog);
+
+                    return true;
+                }
+                else
+                {
+                    Logger.WriteLogTextToRtb($"Build action cancelled by user", RtbLogPrefix.Warning, rtbLog);
+                    return false;
+                }
+            }
         }
 
-        private void cmdOpenLast_Click(object sender, EventArgs e)
+        private void cmdShowLastBuild_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(_fullBuildPath))
+            {
+                FileUtils.HighlightPathInExplorer(_fullBuildPath);
+                return;
+            }
+
+            Logger.WriteLogTextToRtb($"The last build path is empty!", RtbLogPrefix.Warning, rtbLog);
+        }
+
+        private void cmdLoadLastBuild_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(_fullBuildPath))
             {
@@ -321,7 +356,8 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearNssStore.Checked = false;
             swReplaceMeRegion.Checked = false;
 
-            cmdOpenLast.Enabled = false;
+            cmdShowLastBuild.Enabled = false;
+            cmdLoadLastBuild.Enabled = false;
         }
 
         private void swReplaceSerialNumber_CheckedChanged(object sender, EventArgs e)
@@ -344,7 +380,7 @@ namespace Mac_EFI_Toolkit.WinForms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
-                FileName = $"metlog_{DateTime.Now:yyMMdd_HHmmss}.txt",
+                FileName = $"patcherlog_{DateTime.Now:yyMMdd_HHmmss}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.CurrentDirectory
             })

@@ -76,10 +76,11 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
-            this.cmdReset = new System.Windows.Forms.Button();
             this.cmdBuild = new System.Windows.Forms.Button();
-            this.cmdOpenLast = new System.Windows.Forms.Button();
-            this.cmdOpenBuildsDir = new System.Windows.Forms.Button();
+            this.cmdLoadLastBuild = new System.Windows.Forms.Button();
+            this.cmdReset = new System.Windows.Forms.Button();
+            this.cmdBuildsFolder = new System.Windows.Forms.Button();
+            this.cmdShowLastBuild = new System.Windows.Forms.Button();
             this.pnlMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpOptions.SuspendLayout();
@@ -106,7 +107,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Location = new System.Drawing.Point(1, 43);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(908, 385);
+            this.pnlMain.Size = new System.Drawing.Size(838, 385);
             this.pnlMain.TabIndex = 0;
             // 
             // tlpMain
@@ -123,7 +124,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.Name = "tlpMain";
             this.tlpMain.RowCount = 1;
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Size = new System.Drawing.Size(908, 385);
+            this.tlpMain.Size = new System.Drawing.Size(838, 385);
             this.tlpMain.TabIndex = 0;
             this.tlpMain.TabStop = true;
             // 
@@ -708,7 +709,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpLog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpLog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpLog.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpLog.Size = new System.Drawing.Size(507, 385);
+            this.tlpLog.Size = new System.Drawing.Size(437, 385);
             this.tlpLog.TabIndex = 1;
             // 
             // pnlLog
@@ -720,7 +721,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlLog.Margin = new System.Windows.Forms.Padding(0);
             this.pnlLog.Name = "pnlLog";
             this.pnlLog.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlLog.Size = new System.Drawing.Size(507, 349);
+            this.pnlLog.Size = new System.Drawing.Size(437, 349);
             this.pnlLog.TabIndex = 3;
             // 
             // rtbLog
@@ -734,7 +735,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.rtbLog.Margin = new System.Windows.Forms.Padding(0);
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
-            this.rtbLog.Size = new System.Drawing.Size(499, 341);
+            this.rtbLog.Size = new System.Drawing.Size(429, 341);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.TabStop = false;
             this.rtbLog.Text = "";
@@ -756,7 +757,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOutput.Name = "tlpOutput";
             this.tlpOutput.RowCount = 1;
             this.tlpOutput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpOutput.Size = new System.Drawing.Size(507, 34);
+            this.tlpOutput.Size = new System.Drawing.Size(437, 34);
             this.tlpOutput.TabIndex = 6;
             // 
             // lblOutputText
@@ -769,7 +770,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblOutputText.Margin = new System.Windows.Forms.Padding(0);
             this.lblOutputText.Name = "lblOutputText";
             this.lblOutputText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblOutputText.Size = new System.Drawing.Size(416, 34);
+            this.lblOutputText.Size = new System.Drawing.Size(346, 34);
             this.lblOutputText.TabIndex = 99;
             this.lblOutputText.Text = "OUTPUT";
             this.lblOutputText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -785,7 +786,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdSaveLog.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdSaveLog.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdSaveLog.ForeColor = System.Drawing.Color.White;
-            this.cmdSaveLog.Location = new System.Drawing.Point(417, 0);
+            this.cmdSaveLog.Location = new System.Drawing.Point(347, 0);
             this.cmdSaveLog.Margin = new System.Windows.Forms.Padding(0);
             this.cmdSaveLog.Name = "cmdSaveLog";
             this.cmdSaveLog.Size = new System.Drawing.Size(90, 34);
@@ -811,7 +812,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTitle.Name = "tlpTitle";
             this.tlpTitle.RowCount = 1;
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.Size = new System.Drawing.Size(908, 40);
+            this.tlpTitle.Size = new System.Drawing.Size(838, 40);
             this.tlpTitle.TabIndex = 99;
             // 
             // pbxLogo
@@ -836,7 +837,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Location = new System.Drawing.Point(40, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(828, 40);
+            this.lblTitle.Size = new System.Drawing.Size(758, 40);
             this.lblTitle.TabIndex = 99;
             this.lblTitle.Text = "Firmware Patcher";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -853,7 +854,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdClose.ForeColor = System.Drawing.Color.White;
-            this.cmdClose.Location = new System.Drawing.Point(868, 0);
+            this.cmdClose.Location = new System.Drawing.Point(798, 0);
             this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
             this.cmdClose.MaximumSize = new System.Drawing.Size(40, 40);
             this.cmdClose.MinimumSize = new System.Drawing.Size(40, 40);
@@ -874,49 +875,32 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlSeperator.Location = new System.Drawing.Point(1, 41);
             this.pnlSeperator.Margin = new System.Windows.Forms.Padding(2);
             this.pnlSeperator.Name = "pnlSeperator";
-            this.pnlSeperator.Size = new System.Drawing.Size(908, 2);
+            this.pnlSeperator.Size = new System.Drawing.Size(838, 2);
             this.pnlSeperator.TabIndex = 97;
             // 
             // tlpButtons
             // 
             this.tlpButtons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.tlpButtons.ColumnCount = 4;
+            this.tlpButtons.ColumnCount = 6;
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 126F));
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 195F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155F));
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tlpButtons.Controls.Add(this.cmdBuild, 5, 0);
+            this.tlpButtons.Controls.Add(this.cmdLoadLastBuild, 4, 0);
             this.tlpButtons.Controls.Add(this.cmdReset, 0, 0);
-            this.tlpButtons.Controls.Add(this.cmdBuild, 3, 0);
-            this.tlpButtons.Controls.Add(this.cmdOpenLast, 2, 0);
-            this.tlpButtons.Controls.Add(this.cmdOpenBuildsDir, 1, 0);
+            this.tlpButtons.Controls.Add(this.cmdBuildsFolder, 1, 0);
+            this.tlpButtons.Controls.Add(this.cmdShowLastBuild, 3, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tlpButtons.Location = new System.Drawing.Point(1, 428);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.Size = new System.Drawing.Size(908, 46);
+            this.tlpButtons.Size = new System.Drawing.Size(838, 46);
             this.tlpButtons.TabIndex = 1;
-            // 
-            // cmdReset
-            // 
-            this.cmdReset.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.cmdReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.cmdReset.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
-            this.cmdReset.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
-            this.cmdReset.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
-            this.cmdReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdReset.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdReset.ForeColor = System.Drawing.Color.White;
-            this.cmdReset.Location = new System.Drawing.Point(408, 5);
-            this.cmdReset.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdReset.Name = "cmdReset";
-            this.cmdReset.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.cmdReset.Size = new System.Drawing.Size(70, 36);
-            this.cmdReset.TabIndex = 0;
-            this.cmdReset.Text = "Reset";
-            this.cmdReset.UseVisualStyleBackColor = false;
-            this.cmdReset.Click += new System.EventHandler(this.cmdReset_Click);
             // 
             // cmdBuild
             // 
@@ -928,55 +912,96 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdBuild.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdBuild.ForeColor = System.Drawing.Color.White;
-            this.cmdBuild.Location = new System.Drawing.Point(833, 5);
+            this.cmdBuild.Location = new System.Drawing.Point(763, 5);
             this.cmdBuild.Margin = new System.Windows.Forms.Padding(0);
             this.cmdBuild.Name = "cmdBuild";
             this.cmdBuild.Size = new System.Drawing.Size(70, 36);
-            this.cmdBuild.TabIndex = 3;
+            this.cmdBuild.TabIndex = 4;
             this.cmdBuild.Text = "Build";
             this.cmdBuild.UseVisualStyleBackColor = false;
             this.cmdBuild.Click += new System.EventHandler(this.cmdBuild_Click);
             // 
-            // cmdOpenLast
+            // cmdLoadLastBuild
             // 
-            this.cmdOpenLast.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.cmdOpenLast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.cmdOpenLast.Enabled = false;
-            this.cmdOpenLast.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
-            this.cmdOpenLast.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
-            this.cmdOpenLast.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
-            this.cmdOpenLast.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdOpenLast.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdOpenLast.ForeColor = System.Drawing.Color.White;
-            this.cmdOpenLast.Location = new System.Drawing.Point(678, 5);
-            this.cmdOpenLast.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdOpenLast.Name = "cmdOpenLast";
-            this.cmdOpenLast.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.cmdOpenLast.Size = new System.Drawing.Size(150, 36);
-            this.cmdOpenLast.TabIndex = 2;
-            this.cmdOpenLast.Text = "Open Last Build";
-            this.cmdOpenLast.UseVisualStyleBackColor = false;
-            this.cmdOpenLast.Click += new System.EventHandler(this.cmdOpenLast_Click);
+            this.cmdLoadLastBuild.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cmdLoadLastBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdLoadLastBuild.Enabled = false;
+            this.cmdLoadLastBuild.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdLoadLastBuild.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdLoadLastBuild.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdLoadLastBuild.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdLoadLastBuild.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdLoadLastBuild.ForeColor = System.Drawing.Color.White;
+            this.cmdLoadLastBuild.Location = new System.Drawing.Point(608, 5);
+            this.cmdLoadLastBuild.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdLoadLastBuild.Name = "cmdLoadLastBuild";
+            this.cmdLoadLastBuild.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdLoadLastBuild.Size = new System.Drawing.Size(150, 36);
+            this.cmdLoadLastBuild.TabIndex = 3;
+            this.cmdLoadLastBuild.Text = "Load Last Build";
+            this.cmdLoadLastBuild.UseVisualStyleBackColor = false;
+            this.cmdLoadLastBuild.Click += new System.EventHandler(this.cmdLoadLastBuild_Click);
             // 
-            // cmdOpenBuildsDir
+            // cmdReset
             // 
-            this.cmdOpenBuildsDir.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.cmdOpenBuildsDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.cmdOpenBuildsDir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
-            this.cmdOpenBuildsDir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
-            this.cmdOpenBuildsDir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
-            this.cmdOpenBuildsDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdOpenBuildsDir.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdOpenBuildsDir.ForeColor = System.Drawing.Color.White;
-            this.cmdOpenBuildsDir.Location = new System.Drawing.Point(483, 5);
-            this.cmdOpenBuildsDir.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdOpenBuildsDir.Name = "cmdOpenBuildsDir";
-            this.cmdOpenBuildsDir.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.cmdOpenBuildsDir.Size = new System.Drawing.Size(190, 36);
-            this.cmdOpenBuildsDir.TabIndex = 1;
-            this.cmdOpenBuildsDir.Text = "Open Builds Folder";
-            this.cmdOpenBuildsDir.UseVisualStyleBackColor = false;
-            this.cmdOpenBuildsDir.Click += new System.EventHandler(this.cmdOpenBuildsDir_Click);
+            this.cmdReset.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cmdReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdReset.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdReset.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdReset.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdReset.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdReset.ForeColor = System.Drawing.Color.White;
+            this.cmdReset.Location = new System.Drawing.Point(5, 5);
+            this.cmdReset.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdReset.Name = "cmdReset";
+            this.cmdReset.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdReset.Size = new System.Drawing.Size(70, 36);
+            this.cmdReset.TabIndex = 0;
+            this.cmdReset.Text = "Reset";
+            this.cmdReset.UseVisualStyleBackColor = false;
+            this.cmdReset.Click += new System.EventHandler(this.cmdReset_Click);
+            // 
+            // cmdBuildsFolder
+            // 
+            this.cmdBuildsFolder.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cmdBuildsFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdBuildsFolder.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdBuildsFolder.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdBuildsFolder.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdBuildsFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdBuildsFolder.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdBuildsFolder.ForeColor = System.Drawing.Color.White;
+            this.cmdBuildsFolder.Location = new System.Drawing.Point(80, 5);
+            this.cmdBuildsFolder.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdBuildsFolder.Name = "cmdBuildsFolder";
+            this.cmdBuildsFolder.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdBuildsFolder.Size = new System.Drawing.Size(126, 36);
+            this.cmdBuildsFolder.TabIndex = 1;
+            this.cmdBuildsFolder.Text = "Builds Folder";
+            this.cmdBuildsFolder.UseVisualStyleBackColor = false;
+            this.cmdBuildsFolder.Click += new System.EventHandler(this.cmdBuildsFolder_Click);
+            // 
+            // cmdShowLastBuild
+            // 
+            this.cmdShowLastBuild.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cmdShowLastBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdShowLastBuild.Enabled = false;
+            this.cmdShowLastBuild.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdShowLastBuild.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(100)))), ((int)(((byte)(120)))));
+            this.cmdShowLastBuild.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
+            this.cmdShowLastBuild.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdShowLastBuild.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdShowLastBuild.ForeColor = System.Drawing.Color.White;
+            this.cmdShowLastBuild.Location = new System.Drawing.Point(453, 5);
+            this.cmdShowLastBuild.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdShowLastBuild.Name = "cmdShowLastBuild";
+            this.cmdShowLastBuild.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdShowLastBuild.Size = new System.Drawing.Size(150, 36);
+            this.cmdShowLastBuild.TabIndex = 2;
+            this.cmdShowLastBuild.Text = "Show Last Build";
+            this.cmdShowLastBuild.UseVisualStyleBackColor = false;
+            this.cmdShowLastBuild.Click += new System.EventHandler(this.cmdShowLastBuild_Click);
             // 
             // patcherWindow
             // 
@@ -985,7 +1010,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.ClientSize = new System.Drawing.Size(910, 475);
+            this.ClientSize = new System.Drawing.Size(840, 475);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlSeperator);
             this.Controls.Add(this.tlpTitle);
@@ -996,7 +1021,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(910, 475);
+            this.MinimumSize = new System.Drawing.Size(840, 475);
             this.Name = "patcherWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -1061,8 +1086,8 @@ namespace Mac_EFI_Toolkit.WinForms
         private UI.METCheckbox cbxClearNssStore;
         private System.Windows.Forms.Button cmdBuild;
         private System.Windows.Forms.Button cmdSaveLog;
-        private System.Windows.Forms.Button cmdOpenBuildsDir;
-        private System.Windows.Forms.Button cmdOpenLast;
+        private System.Windows.Forms.Button cmdBuildsFolder;
+        private System.Windows.Forms.Button cmdLoadLastBuild;
         private System.Windows.Forms.Button cmdReset;
         private System.Windows.Forms.TableLayoutPanel tlpMeRegion;
         private System.Windows.Forms.Button cmdMePath;
@@ -1077,5 +1102,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Label lblReplaceFsysStore;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button cmdShowLastBuild;
     }
 }

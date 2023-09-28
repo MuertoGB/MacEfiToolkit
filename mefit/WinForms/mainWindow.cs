@@ -576,8 +576,8 @@ namespace Mac_EFI_Toolkit
             // Set SaveFileDialog params
             using (SaveFileDialog dialog = new SaveFileDialog
             {
-                Filter = "Binary Files (*.bin)|*.bin",
-                FileName = string.Concat("FSYS_STORE_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                FileName = $"FSYS_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.FsysDirectory
             })
@@ -790,8 +790,9 @@ namespace Mac_EFI_Toolkit
             // Set SaveFileDialog params
             using (SaveFileDialog dialog = new SaveFileDialog
             {
-                Filter = "Binary Files (*.bin)|*.bin",
-                FileName = string.Concat("ME_REGION_", FWBase.FileInfoData.FileNameNoExt, ".bin"),
+                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                //FileName = $"ME_{FWBase.MeVersion}_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
+                FileName = $"ME_REGION_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.MeDirectory
             })
@@ -889,7 +890,7 @@ namespace Mac_EFI_Toolkit
 
             if (File.Exists(METPath.DebugLog))
             {
-                ShowExplorerNavigationPrompt("Debug log", METPath.DebugLog);
+                ShowExplorerNavigationPrompt("Debug log created successfully.", METPath.DebugLog);
             }
         }
 
@@ -947,7 +948,7 @@ namespace Mac_EFI_Toolkit
 
         private void sizeHexToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText($"0x{FWBase.FileInfoData.FileLength:X}h");
+            SetClipboardText($"{FWBase.FileInfoData.FileLength:X}h");
         }
 
         private void crc32ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1097,10 +1098,10 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateFileSizeLabel()
         {
-            int fileSize = (int)FWBase.FileInfoData.FileLength;
-            bool isValidSize = FileUtils.GetIsValidBinSize(fileSize);
+            int fileSizeDecimal = (int)FWBase.FileInfoData.FileLength;
+            bool isValidSize = FileUtils.GetIsValidBinSize(fileSizeDecimal);
 
-            lblFileSizeBytes.Text = FileUtils.FormatFileSize(fileSize);
+            lblFileSizeBytes.Text = $"{FileUtils.FormatFileSize(fileSizeDecimal)} • {fileSizeDecimal:X}h";
 
             if (!isValidSize)
             {
@@ -1109,7 +1110,7 @@ namespace Mac_EFI_Toolkit
                 lblFileSizeBytes.Text +=
                     isValidSize
                     ? string.Empty
-                    : $" ({FileUtils.GetSizeDifference(fileSize)})";
+                    : $" ({FileUtils.GetSizeDifference(fileSizeDecimal)})";
             }
         }
 
@@ -1193,12 +1194,11 @@ namespace Mac_EFI_Toolkit
         {
             label.Text = text;
 
-            Color foreColor =
-                !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
+            Color foreColor = storeData.PrimaryStoreBase == -1
+                ? Colours.DISABLED_TEXT
+                : !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
                 ? Color.White
-                : storeData.PrimaryStoreBase != -1
-                ? Colours.COMPLETE_GREEN
-                : Colours.DISABLED_TEXT;
+                : Colours.COMPLETE_GREEN;
 
             label.ForeColor = foreColor;
         }
@@ -1531,6 +1531,8 @@ namespace Mac_EFI_Toolkit
                 return $"Data present in both {storeType} stores";
             else if (!storeData.IsPrimaryStoreEmpty && storeData.IsBackupStoreEmpty)
                 return $"Data present in the primary {storeType} store";
+            else if (storeData.IsPrimaryStoreEmpty && !storeData.IsBackupStoreEmpty)
+                return $"Data present in the backup {storeType} store";
             else if (storeData.PrimaryStoreBase != -1)
                 return $"{storeType} NVRAM stores are empty (0xFF)";
 
