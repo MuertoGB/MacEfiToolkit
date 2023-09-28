@@ -361,20 +361,23 @@ The output log serves as a valuable source of information during the validation 
 
 ---
 
-#### Editor Buttons:
+#### Patcher Buttons:
 
 <kbd>
-  <img src="files/manual/editorbuttons.png">
+  <img src="files/manual/patcher_buttons.png">
 </kbd>
 
 **Reset:**\
 When you click the 'Reset' button, it initiates a process that resets the editor and unloads any loaded files, such as the Fsys store and ME region.
 
-**Open Build Directory:**\
+**Builds Folder:**\
 Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved when the 'Build' button is used.
 
-**Open Last Build:**\
-Clicking 'Open Last Build' will close the firmware editor window and load in the last successfully built binary into the main window.
+**Show Last Build:**\
+Navigates to the latest build in the file explorer and highlights the file.
+
+**Load Last Build:**\
+Clicking this button will close the firmware editor window and load in the last successfully built binary into the main window.
 
 **Build**\
 The 'Build' button generates a new binary file based on the user specified preferences.
