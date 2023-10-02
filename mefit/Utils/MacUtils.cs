@@ -59,7 +59,8 @@ namespace Mac_EFI_Toolkit.Utils
 
                 if (!string.IsNullOrEmpty(data))
                 {
-                    Logger.WriteToLogFile($"'{hwc}' not present in local db > Server returned: '{data}'", LogType.Database);
+                    Logger.WriteToLogFile(
+                        $"'{hwc}' not present in local db > Server returned: '{data}'", LogType.Database);
                 }
 
                 return string.IsNullOrEmpty(data) ? null : data;
@@ -88,14 +89,14 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The calculated Fsys CRC32 uint</returns>
         internal static uint GetUintFsysCrc32(byte[] fsysStore)
         {
-            if (fsysStore.Length < FWBase.FSYS_RGN_SIZE)
+            if (fsysStore.Length < AppleEFI.FSYS_RGN_SIZE)
                 throw new ArgumentException(nameof(fsysStore), "Given bytes are too small.");
 
-            if (fsysStore.Length > FWBase.FSYS_RGN_SIZE)
+            if (fsysStore.Length > AppleEFI.FSYS_RGN_SIZE)
                 throw new ArgumentException(nameof(fsysStore), "Given bytes are too large.");
 
             // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes
-            byte[] bytesTempFsys = new byte[FWBase.FSYS_RGN_SIZE - FWBase.CRC32_SIZE];
+            byte[] bytesTempFsys = new byte[AppleEFI.FSYS_RGN_SIZE - AppleEFI.CRC32_SIZE];
 
             if (fsysStore != null)
             {
@@ -157,38 +158,48 @@ namespace Mac_EFI_Toolkit.Utils
 
         internal static string GetFirmwareVersion()
         {
-            if (FWBase.AppleRomInfoSectionData.EfiVersion != null)
+            if (AppleEFI.AppleRomInfoSectionData.EfiVersion != null)
             {
-                return FWBase.AppleRomInfoSectionData.EfiVersion;
+                return AppleEFI.AppleRomInfoSectionData.EfiVersion;
             }
 
-            string modelPart = FWBase.EfiBiosIdSectionData.ModelPart;
-            string majorPart = FWBase.EfiBiosIdSectionData.MajorPart;
-            string minorPart = FWBase.EfiBiosIdSectionData.MinorPart;
+            string modelPart = AppleEFI.EfiBiosIdSectionData.ModelPart;
+            string majorPart = AppleEFI.EfiBiosIdSectionData.MajorPart;
+            string minorPart = AppleEFI.EfiBiosIdSectionData.MinorPart;
 
-            string romVersion = FWBase.AppleRomInfoSectionData.RomVersion;
+            string romVersion = AppleEFI.AppleRomInfoSectionData.RomVersion;
             string[] ignoredVersions = { "F000_B00", "Official Build" };
 
-            if (!string.IsNullOrWhiteSpace(romVersion) && !ignoredVersions.Contains(romVersion, StringComparer.OrdinalIgnoreCase))
+            if (!string.IsNullOrWhiteSpace(romVersion) &&
+                !ignoredVersions.Contains(romVersion, StringComparer.OrdinalIgnoreCase))
             {
                 return $"{modelPart}.{romVersion.Replace("_", ".")}";
             }
 
-            string biosId = FWBase.AppleRomInfoSectionData.BiosId;
+            string biosId = AppleEFI.AppleRomInfoSectionData.BiosId;
             string notSet = "F000.B00";
 
-            if (!string.IsNullOrWhiteSpace(biosId) && biosId.IndexOf(notSet, StringComparison.OrdinalIgnoreCase) == -1)
+            if (!string.IsNullOrWhiteSpace(biosId) &&
+                biosId.IndexOf(notSet, StringComparison.OrdinalIgnoreCase) == -1)
             {
                 string[] parts = biosId.Split('.');
                 if (parts.Length != 5)
                 {
-                    return GetFormattedEfiVersion(parts[0], parts[2], parts[3]);
+                    return GetFormattedEfiVersion(
+                        parts[0],
+                        parts[2],
+                        parts[3]);
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(modelPart) && !string.IsNullOrWhiteSpace(majorPart) && !string.IsNullOrWhiteSpace(minorPart))
+            if (!string.IsNullOrWhiteSpace(modelPart) &&
+                !string.IsNullOrWhiteSpace(majorPart) &&
+                !string.IsNullOrWhiteSpace(minorPart))
             {
-                return GetFormattedEfiVersion(modelPart, majorPart, minorPart);
+                return GetFormattedEfiVersion(
+                    modelPart,
+                    majorPart,
+                    minorPart);
             }
 
             return null;

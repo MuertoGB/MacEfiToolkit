@@ -43,6 +43,7 @@ namespace Mac_EFI_Toolkit.Common
                 return $"{size:N2} {suffixes[0]}";
 
             int suffixIndex = (int)(Math.Log(size) / Math.Log(1024));
+
             double sizeInSuffix = size / Math.Pow(1024, suffixIndex);
 
             return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";

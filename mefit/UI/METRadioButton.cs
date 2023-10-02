@@ -141,9 +141,18 @@ namespace Mac_EFI_Toolkit.UI
                 ClientRectangle.Height - 1;
 
             RectangleF outerRectangle =
-                new RectangleF(0, 0, Diameter, Diameter);
+                new RectangleF(
+                    0,
+                    0,
+                    Diameter,
+                    Diameter);
+
             RectangleF innerRectangle =
-                new RectangleF(1, 1, Diameter - 2, Diameter - 2);
+                new RectangleF(
+                    1,
+                    1,
+                    Diameter - 2,
+                    Diameter - 2);
 
             outerRectangle.Inflate(-1, -1);
 
@@ -160,8 +169,17 @@ namespace Mac_EFI_Toolkit.UI
 
             using (Pen pen = new Pen(setCheckBorderColor, width: 2))
             {
-                e.Graphics.DrawArc(pen, outerRectangle, 135, 180);
-                e.Graphics.DrawArc(pen, outerRectangle, -45, 180);
+                e.Graphics.DrawArc(
+                    pen,
+                    outerRectangle,
+                    135,
+                    180);
+
+                e.Graphics.DrawArc(
+                    pen,
+                    outerRectangle,
+                    -45,
+                    180);
             }
 
             innerRectangle.Inflate(-1, -1);
@@ -172,27 +190,53 @@ namespace Mac_EFI_Toolkit.UI
 
             using (SolidBrush brush = new SolidBrush(setCheckInnerColor))
             {
-                e.Graphics.FillEllipse(brush, innerRectangle);
+                e.Graphics.FillEllipse(
+                    brush,
+                    innerRectangle);
             }
 
             if (Checked)
             {
-                innerRectangle = new RectangleF(1, 1, Diameter - 2, Diameter - 2);
+                innerRectangle =
+                    new RectangleF(
+                        1,
+                        1,
+                        Diameter - 2,
+                        Diameter - 2);
+
                 innerRectangle.Inflate(-4, -4); // Control size of check
+
                 using (SolidBrush brush = new SolidBrush(CheckedColor))
                 {
-                    e.Graphics.FillEllipse(brush, innerRectangle);
+                    e.Graphics.FillEllipse(
+                        brush,
+                        innerRectangle);
                 }
             }
 
-            Rectangle textArea = new Rectangle((int)outerRectangle.Width + 5, 0, Width - (int)outerRectangle.Width - 6, Height);
-            Color textColor = Enabled ? ForeColor : Colours.DISABLED_TEXT;
+            Rectangle textArea =
+                new Rectangle((int)outerRectangle.Width + 5,
+                0,
+                Width - (int)outerRectangle.Width - 6,
+                Height);
+
+            Color textColor = Enabled
+                ? ForeColor
+                : Colours.DISABLED_TEXT;
 
             using (StringFormat format = new StringFormat() { LineAlignment = StringAlignment.Center })
             using (SolidBrush brush = new SolidBrush(textColor))
             {
-                e.Graphics.DrawRectangle(Pens.Transparent, textArea);
-                e.Graphics.DrawString(Text, Font, brush, textArea, format);
+                e.Graphics.DrawRectangle(
+                    Pens.Transparent,
+                    textArea);
+
+                e.Graphics.DrawString(
+                    Text,
+                    Font,
+                    brush,
+                    textArea,
+                    format);
             }
 
             if (Focused)
@@ -248,6 +292,7 @@ namespace Mac_EFI_Toolkit.UI
                     Invalidate();
                 }
             }
+
             base.OnMouseDown(e);
         }
 
@@ -293,7 +338,8 @@ namespace Mac_EFI_Toolkit.UI
         }
         private Size GetPreferredSizeN()
         {
-            return GetPreferredSize(new Size(0, 0));
+            return GetPreferredSize(
+                new Size(0, 0));
         }
         #endregion
 

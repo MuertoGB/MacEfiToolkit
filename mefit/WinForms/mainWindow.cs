@@ -44,8 +44,13 @@ namespace Mac_EFI_Toolkit
             get
             {
                 CreateParams Params = base.CreateParams;
+
                 Params.Style |= Program.WS_MINIMIZEBOX;
-                Params.ClassStyle = Params.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
+
+                Params.ClassStyle = Params.ClassStyle
+                    | Program.CS_DBLCLKS
+                    | Program.CS_DROP;
+
                 return Params;
             }
         }
@@ -102,7 +107,12 @@ namespace Mac_EFI_Toolkit
 
             // Set up memory timer to retrieve private memory usage
             TimerCallback callback = new TimerCallback(GetPrivateMemoryUsage);
-            Program.memoryTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+
+            Program.memoryTimer = new System.Threading.Timer(
+                callback,
+                null,
+                TimeSpan.Zero,
+                TimeSpan.FromSeconds(5));
         }
 
         private void mainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -197,7 +207,10 @@ namespace Mac_EFI_Toolkit
                         cmdCopyMenu.PerformClick();
                         break;
                     case Keys.M:
-                        ShowContextMenuAtControlPoint(cmdMore, cmsOverflow, MenuPosition.BottomLeft);
+                        ShowContextMenuAtControlPoint(
+                            cmdMore,
+                            cmsOverflow,
+                            MenuPosition.BottomLeft);
                         break;
                     case Keys.S:
                         cmdSettings.PerformClick();
@@ -251,8 +264,14 @@ namespace Mac_EFI_Toolkit
         {
             if (e.Button == MouseButtons.Left)
             {
-                NativeMethods.ReleaseCapture(new HandleRef(this, Handle));
-                NativeMethods.SendMessage(new HandleRef(this, Handle), Program.WM_NCLBUTTONDOWN, (IntPtr)Program.HT_CAPTION, (IntPtr)0);
+                NativeMethods.ReleaseCapture(
+                    new HandleRef(this, Handle));
+
+                NativeMethods.SendMessage(
+                    new HandleRef(this, Handle),
+                    Program.WM_NCLBUTTONDOWN,
+                    (IntPtr)Program.HT_CAPTION,
+                    (IntPtr)0);
             }
         }
 
@@ -307,8 +326,12 @@ namespace Mac_EFI_Toolkit
             }
 
             DialogResult result =
-                METMessageBox.Show(this, "Reset", "This will unload the firmware and all associated data, are you sure you want to reset?",
-                METMessageType.Warning, METMessageButtons.YesNo);
+                METMessageBox.Show(
+                    this,
+                    "Reset",
+                    "This will unload the firmware and all associated data, are you sure you want to reset?",
+                METMessageType.Warning,
+                METMessageButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {
@@ -319,10 +342,15 @@ namespace Mac_EFI_Toolkit
 
         private void cmdPatch_Click(object sender, EventArgs e)
         {
-            if (FWBase.LoadedBinaryBytes == null)
+            if (AppleEFI.LoadedBinaryBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.",
-                    METMessageType.Warning, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.",
+                    METMessageType.Warning,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
@@ -352,7 +380,10 @@ namespace Mac_EFI_Toolkit
 
         private void cmdCopyMenu_Click(object sender, EventArgs e)
         {
-            ShowContextMenuAtControlPoint(sender, cmsClipboard, MenuPosition.BottomLeft);
+            ShowContextMenuAtControlPoint(
+                sender,
+                cmsClipboard,
+                MenuPosition.BottomLeft);
         }
 
         private void cmdSettings_Click(object sender, EventArgs e)
@@ -380,51 +411,71 @@ namespace Mac_EFI_Toolkit
         private void cmdNavigate_Click(object sender, EventArgs e)
         {
             // Check the loaded binary path is not null or empty
-            if (string.IsNullOrEmpty(FWBase.LoadedBinaryPath))
+            if (string.IsNullOrEmpty(AppleEFI.LoadedBinaryPath))
             {
                 // Binary path is null or empty
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "FWBase.LoadedBinaryPath data is null.\r\nCannot continue.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
             // Navigate and highlight the file in explorer
-            FileUtils.HighlightPathInExplorer(FWBase.LoadedBinaryPath);
+            FileUtils.HighlightPathInExplorer(AppleEFI.LoadedBinaryPath);
         }
 
         private void cmdReload_Click(object sender, EventArgs e)
         {
             // Check the loaded binary exists
-            if (!File.Exists(FWBase.LoadedBinaryPath))
+            if (!File.Exists(AppleEFI.LoadedBinaryPath))
             {
                 // Loaded binary not exist
-                METMessageBox.Show(this, "MET", "The file on disk could not be found, it may have been moved or deleted.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "MET",
+                    "The file on disk could not be found, it may have been moved or deleted.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
             // Load bytes from loaded binary file
-            byte[] fileBytes = File.ReadAllBytes(FWBase.LoadedBinaryPath);
+            byte[] fileBytes = File.ReadAllBytes(AppleEFI.LoadedBinaryPath);
 
             // Check if the binaries match in size and data
-            if (BinaryUtils.ByteArraysMatch(fileBytes, FWBase.LoadedBinaryBytes))
+            if (BinaryUtils.ByteArraysMatch(fileBytes, AppleEFI.LoadedBinaryBytes))
             {
                 // Loaded binaries match
-                METMessageBox.Show(this, "MET", "File on disk matches file in memory, data was not refreshed.",
-                    METMessageType.Information, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "MET",
+                    "File on disk matches file in memory, data was not refreshed.",
+                    METMessageType.Information,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
             // File data has changed
-            OpenBinary(FWBase.LoadedBinaryPath);
+            OpenBinary(AppleEFI.LoadedBinaryPath);
         }
 
         private void cmdBackupToZip_Click(object sender, EventArgs e)
         {
-            if (FWBase.LoadedBinaryBytes == null)
+            if (AppleEFI.LoadedBinaryBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.",
-                  METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "FWBase.LoadedBinaryBytes data is null.\r\nCannot continue.",
+                  METMessageType.Error,
+                  METMessageButtons.Okay);
+
                 return;
             }
 
@@ -435,7 +486,7 @@ namespace Mac_EFI_Toolkit
             {
                 sfd.InitialDirectory = METPath.BackupsDirectory;
                 sfd.Filter = "Zip files (*.zip)|*.zip";
-                sfd.FileName = string.Concat(FWBase.FileInfoData.FileNameNoExt, "_backup");
+                sfd.FileName = string.Concat(AppleEFI.FileInfoData.FileNameNoExt, "_backup");
                 sfd.OverwritePrompt = true;
 
                 if (sfd.ShowDialog() != DialogResult.OK)
@@ -445,32 +496,46 @@ namespace Mac_EFI_Toolkit
                     sfd.FileName;
 
                 FileUtils.BackupFileToZip(
-                    FWBase.LoadedBinaryBytes,
-                    FWBase.FileInfoData.FileNameWithExt,
+                    AppleEFI.LoadedBinaryBytes,
+                    AppleEFI.FileInfoData.FileNameWithExt,
                     backupPath);
 
                 if (File.Exists(backupPath))
                 {
-                    ShowExplorerNavigationPrompt("Backup archive created successfully.", backupPath);
+                    ShowExplorerNavigationPrompt(
+                        "Backup archive created successfully.",
+                        backupPath);
+
                     return;
                 }
 
-                METMessageBox.Show(this, "Error", "The file could not be backed up.",
-                     METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "The file could not be backed up.",
+                     METMessageType.Error,
+                     METMessageButtons.Okay);
             }
         }
 
         private void cmdEveryMacSearch_Click(object sender, EventArgs e)
         {
 
-            if (FWBase.FsysStoreData.Serial == null)
+            if (AppleEFI.FsysStoreData.Serial == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.Serial data is null.\r\nCannot continue.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "FsysSectionData.Serial data is null.\r\nCannot continue.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
-            Process.Start(string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=", FWBase.FsysStoreData.Serial));
+            Process.Start(
+                string.Concat("https://everymac.com/ultimate-mac-lookup/?search_keywords=",
+                AppleEFI.FsysStoreData.Serial));
         }
 
         private void cmdFixFsysCrc_Click(object sender, EventArgs e)
@@ -478,17 +543,22 @@ namespace Mac_EFI_Toolkit
             Button control = (Button)sender;
 
             // Fsys store was not found by the firmware parser
-            if (FWBase.FsysStoreData.FsysBytes == null)
+            if (AppleEFI.FsysStoreData.FsysBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "FsysSectionData.FsysBytes data is null.\r\nCannot continue.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                FileName = $"CRC_FIXED_{FWBase.FileInfoData.FileNameNoExt}.bin",
+                FileName = $"CRC_FIXED_{AppleEFI.FileInfoData.FileNameNoExt}.bin",
                 OverwritePrompt = true,
                 InitialDirectory = _strInitialDirectory
             })
@@ -502,33 +572,41 @@ namespace Mac_EFI_Toolkit
                 bool buildFailed = false;
 
                 // Make binary with patched Fsys crc
-                byte[] patchedBinary = BinaryUtils.MakeFsysCrcPatchedBinary
-                    (
-                    FWBase.LoadedBinaryBytes,
-                    FWBase.FsysStoreData.FsysBase,
-                    FWBase.FsysStoreData.FsysBytes,
-                    FWBase.FsysStoreData.CRC32CalcInt
-                    );
+                byte[] patchedBinary = BinaryUtils.MakeFsysCrcPatchedBinary(
+                    AppleEFI.LoadedBinaryBytes,
+                    AppleEFI.FsysStoreData.FsysBase,
+                    AppleEFI.FsysStoreData.FsysBytes,
+                    AppleEFI.FsysStoreData.CRC32CalcInt);
 
                 // Check patchedBinary is not null
                 if (patchedBinary == null)
                 {
-                    Logger.WriteToLogFile($"[{control.Name}] 'MakeCrcPatchedBinary' returned null data", LogType.Application);
+                    Logger.WriteToLogFile(
+                        $"[{control.Name}] 'MakeCrcPatchedBinary' returned null data",
+                        LogType.Application);
+
                     buildFailed = true;
                 }
 
                 // Check binary was written without error
                 if (!FileUtils.WriteAllBytesEx(dialog.FileName, patchedBinary))
                 {
-                    Logger.WriteToLogFile($"[{control.Name}] 'WriteAllBytesEx' returned false", LogType.Application);
+                    Logger.WriteToLogFile(
+                        $"[{control.Name}] 'WriteAllBytesEx' returned false",
+                        LogType.Application);
+
                     buildFailed = true;
                 }
 
                 // The build failed flag was set
                 if (buildFailed)
                 {
-                    DialogResult failResult = METMessageBox.Show(this, "Error", "Fsys patching failed. Open the log?",
-                        METMessageType.Error, METMessageButtons.YesNo);
+                    DialogResult failResult = METMessageBox.Show(
+                        this,
+                        "Error",
+                        "Fsys patching failed. Open the log?",
+                        METMessageType.Error,
+                        METMessageButtons.YesNo);
 
                     if (failResult == DialogResult.Yes)
                     {
@@ -539,8 +617,12 @@ namespace Mac_EFI_Toolkit
                 }
 
                 // Ask if user wants to open the repaired file
-                DialogResult result = METMessageBox.Show(this, "File Saved", "Fsys checksum repaired. Would you like to load the new file?",
-                    METMessageType.Information, METMessageButtons.YesNo);
+                DialogResult result = METMessageBox.Show(
+                    this,
+                    "File Saved",
+                    "Fsys checksum repaired. Would you like to load the new file?",
+                    METMessageType.Information,
+                    METMessageButtons.YesNo);
 
                 if (result == DialogResult.Yes)
                 {
@@ -552,10 +634,15 @@ namespace Mac_EFI_Toolkit
         private void cmdExportFsys_Click(object sender, EventArgs e)
         {
             // Fsys store bytes were null
-            if (FWBase.FsysStoreData.FsysBytes == null)
+            if (AppleEFI.FsysStoreData.FsysBytes == null)
             {
-                METMessageBox.Show(this, "Error", "FsysSectionData.FsysBytes data is null.\r\nCannot continue.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "FsysSectionData.FsysBytes data is null.\r\nCannot continue.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
@@ -568,8 +655,12 @@ namespace Mac_EFI_Toolkit
                 // Directory creation failed
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "MET", "Failed to create the Fsys Stores directory.",
-                        METMessageType.Error, METMessageButtons.Okay);
+                    METMessageBox.Show(
+                        this,
+                        "MET",
+                        "Failed to create the Fsys Stores directory.",
+                        METMessageType.Error,
+                        METMessageButtons.Okay);
                 }
             }
 
@@ -577,7 +668,7 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
-                FileName = $"FSYS_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
+                FileName = $"FSYS_{AppleEFI.FsysStoreData.Serial}_{AppleEFI.EfiBiosIdSectionData.ModelPart}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.FsysDirectory
             })
@@ -590,25 +681,39 @@ namespace Mac_EFI_Toolkit
                 string fsysPath = dialog.FileName;
 
                 // Save the Fsys stores bytes to disk
-                if (FileUtils.WriteAllBytesEx(fsysPath, FWBase.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
+                if (FileUtils.WriteAllBytesEx(
+                    fsysPath,
+                    AppleEFI.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
                 {
-                    ShowExplorerNavigationPrompt("Fsys Store export successful.", fsysPath);
+                    ShowExplorerNavigationPrompt(
+                        "Fsys Store export successful.",
+                        fsysPath);
+
                     return;
                 }
 
-                METMessageBox.Show(this, "Error", "Fsys export failed.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "Fsys export failed.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
             }
         }
 
         private void cmdAppleRomInfo_Click(object sender, EventArgs e)
         {
             // Check the Rom Information section exists
-            if (FWBase.AppleRomInfoSectionData.SectionExists == false)
+            if (AppleEFI.AppleRomInfoSectionData.SectionExists == false)
             {
                 // ROM Information section does not exist
-                METMessageBox.Show(this, "Error", "ROMInfoData.SectionExists returned false.\r\nCannot continue.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "ROMInfoData.SectionExists returned false.\r\nCannot continue.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
@@ -628,18 +733,28 @@ namespace Mac_EFI_Toolkit
             Button control = (Button)sender;
 
             // SVS primary store bytes were null
-            if (FWBase.SvsStoreData.PrimaryStoreBytes == null)
+            if (AppleEFI.SvsStoreData.PrimaryStoreBytes == null)
             {
-                METMessageBox.Show(this, "Error", "SvsStoreData.PrimaryStoreBytes data is null.\r\nCannot continue.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "SvsStoreData.PrimaryStoreBytes data is null.\r\nCannot continue.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
             // SVS primary store base was not set
-            if (FWBase.SvsStoreData.PrimaryStoreBase == -1)
+            if (AppleEFI.SvsStoreData.PrimaryStoreBase == -1)
             {
-                METMessageBox.Show(this, "Error", "SvsStoreData.PrimaryStoreBase base not found.\r\nCannot continue.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "SvsStoreData.PrimaryStoreBase base not found.\r\nCannot continue.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
@@ -667,7 +782,7 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin",
-                FileName = $"UNLOCKED_{FWBase.FileInfoData.FileNameNoExt}.bin",
+                FileName = $"UNLOCKED_{AppleEFI.FileInfoData.FileNameNoExt}.bin",
                 OverwritePrompt = true,
                 InitialDirectory = _strInitialDirectory
             })
@@ -681,7 +796,7 @@ namespace Mac_EFI_Toolkit
                 bool buildFailed = false;
 
                 // Clone the loaded binary
-                byte[] patchedBinary = FWBase.LoadedBinaryBytes;
+                byte[] patchedBinary = AppleEFI.LoadedBinaryBytes;
 
                 // Create empty stores
                 byte[] unlockedPrimaryStore = null;
@@ -690,34 +805,43 @@ namespace Mac_EFI_Toolkit
                 // Create a patched primary store
                 unlockedPrimaryStore = BinaryUtils.PatchSvsStoreMac
                 (
-                    FWBase.SvsStoreData.PrimaryStoreBytes,
-                    FWBase.EfiPrimaryLockData.LockCrcBase
+                    AppleEFI.SvsStoreData.PrimaryStoreBytes,
+                    AppleEFI.EfiPrimaryLockData.LockCrcBase
                 );
 
                 // Write patched primary store to the cloned binary
-                BinaryUtils.OverwriteBytesAtBase(patchedBinary, FWBase.SvsStoreData.PrimaryStoreBase, unlockedPrimaryStore);
+                BinaryUtils.OverwriteBytesAtBase(
+                    patchedBinary,
+                    AppleEFI.SvsStoreData.PrimaryStoreBase,
+                    unlockedPrimaryStore);
 
                 // We should probably patch any Message Authentication Code in the backup SVS store as well
-                if (FWBase.EfiBackupLockData.LockCrcBase != -1)
+                if (AppleEFI.EfiBackupLockData.LockCrcBase != -1)
                 {
                     // A MAC CRC base was found in the backup store so we need to patch it
-                    unlockedBackupStore = BinaryUtils.PatchSvsStoreMac
-                        (
-                        FWBase.SvsStoreData.BackupStoreBytes,
-                        FWBase.EfiBackupLockData.LockCrcBase
-                        );
+                    unlockedBackupStore = BinaryUtils.PatchSvsStoreMac(
+                        AppleEFI.SvsStoreData.BackupStoreBytes,
+                        AppleEFI.EfiBackupLockData.LockCrcBase);
 
                     // Write patched backup store to the cloned binary
-                    BinaryUtils.OverwriteBytesAtBase(patchedBinary, FWBase.SvsStoreData.BackupStoreBase, unlockedBackupStore);
+                    BinaryUtils.OverwriteBytesAtBase(
+                        patchedBinary,
+                        AppleEFI.SvsStoreData.BackupStoreBase,
+                        unlockedBackupStore);
                 }
 
                 // Load SVS NVRAM stores from the patched binary
-                NvramStore svsStore = FWBase.GetNvramStoreData(patchedBinary, NvramStoreType.SVS);
+                NvramStore svsStore = AppleEFI.GetNvramStoreData(
+                    patchedBinary,
+                    NvramStoreType.SVS);
 
                 // Check patched primary store matches the patched buffer
                 if (!BinaryUtils.ByteArraysMatch(svsStore.PrimaryStoreBytes, unlockedPrimaryStore))
                 {
-                    Logger.WriteToLogFile($"[{control.Name}] Patched primary store does not match buffer", LogType.Application);
+                    Logger.WriteToLogFile(
+                        $"[{control.Name}] Patched primary store does not match buffer",
+                        LogType.Application);
+
                     buildFailed = true;
                 }
 
@@ -726,7 +850,10 @@ namespace Mac_EFI_Toolkit
                 {
                     if (!BinaryUtils.ByteArraysMatch(svsStore.BackupStoreBytes, unlockedBackupStore))
                     {
-                        Logger.WriteToLogFile($"[{control.Name}] Patched backup store does not match buffer", LogType.Application);
+                        Logger.WriteToLogFile(
+                            $"[{control.Name}] Patched backup store does not match buffer",
+                            LogType.Application);
+
                         buildFailed = true;
                     }
                 }
@@ -734,15 +861,22 @@ namespace Mac_EFI_Toolkit
                 // Check binary was written without error
                 if (!FileUtils.WriteAllBytesEx(dialog.FileName, patchedBinary))
                 {
-                    Logger.WriteToLogFile($"[{control.Name}] 'WriteAllBytesEx' returned false", LogType.Application);
+                    Logger.WriteToLogFile(
+                        $"[{control.Name}] 'WriteAllBytesEx' returned false",
+                        LogType.Application);
+
                     buildFailed = true;
                 }
 
                 // The build failed flag was set
                 if (buildFailed)
                 {
-                    DialogResult failResult = METMessageBox.Show(this, "Error", "Invalidating EFI Lock failed. Open the log?",
-                        METMessageType.Error, METMessageButtons.YesNo);
+                    DialogResult failResult = METMessageBox.Show(
+                        this,
+                        "Error",
+                        "Invalidating EFI Lock failed. Open the log?",
+                        METMessageType.Error,
+                        METMessageButtons.YesNo);
 
                     if (failResult == DialogResult.Yes)
                     {
@@ -753,8 +887,12 @@ namespace Mac_EFI_Toolkit
                 }
 
                 // Ask if user wants to open the patched file
-                DialogResult result = METMessageBox.Show(this, "File Saved", "Unlock successful. Would you like to load the new file?",
-                    METMessageType.Information, METMessageButtons.YesNo);
+                DialogResult result = METMessageBox.Show(
+                    this,
+                    "File Saved",
+                    "Unlock successful. Would you like to load the new file?",
+                    METMessageType.Information,
+                    METMessageButtons.YesNo);
 
                 if (result == DialogResult.Yes)
                 {
@@ -766,10 +904,15 @@ namespace Mac_EFI_Toolkit
 
         private void cmdExportMe_Click(object sender, EventArgs e)
         {
-            if (Descriptor.MeBase == 0 || Descriptor.MeLimit == 0)
+            if (Descriptor.ME_REGION_BASE == 0 || Descriptor.ME_REGION_LIMIT == 0)
             {
-                METMessageBox.Show(this, "Error", "Management Engine base or limit not found.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "Management Engine base or limit not found.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return;
             }
 
@@ -782,8 +925,12 @@ namespace Mac_EFI_Toolkit
                 // Directory creation failed
                 if (status == Status.FAILED)
                 {
-                    METMessageBox.Show(this, "Error", "Failed to create the ME region directory.",
-                        METMessageType.Error, METMessageButtons.Okay);
+                    METMessageBox.Show(
+                        this,
+                        "Error",
+                        "Failed to create the ME region directory.",
+                        METMessageType.Error,
+                        METMessageButtons.Okay);
                 }
             }
 
@@ -791,8 +938,7 @@ namespace Mac_EFI_Toolkit
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
-                //FileName = $"ME_{FWBase.MeVersion}_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
-                FileName = $"ME_REGION_{FWBase.FsysStoreData.Serial}_{FWBase.EfiBiosIdSectionData.ModelPart}",
+                FileName = $"ME_REGION_{AppleEFI.FsysStoreData.Serial}_{AppleEFI.EfiBiosIdSectionData.ModelPart}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.MeDirectory
             })
@@ -804,16 +950,26 @@ namespace Mac_EFI_Toolkit
 
                 string mePath = dialog.FileName;
 
-                byte[] meBytes = BinaryUtils.GetBytesBaseLength(FWBase.LoadedBinaryBytes, (int)Descriptor.MeBase, (int)Descriptor.MeSize);
+                byte[] meBytes = BinaryUtils.GetBytesBaseLength(
+                    AppleEFI.LoadedBinaryBytes,
+                    (int)Descriptor.ME_REGION_BASE,
+                    (int)Descriptor.ME_REGION_SIZE);
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
-                    ShowExplorerNavigationPrompt("Intel ME export successful.", mePath);
+                    ShowExplorerNavigationPrompt(
+                        "Intel ME export successful.",
+                        mePath);
+
                     return;
                 }
 
-                METMessageBox.Show(this, "Error", $"ME export failed.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "ME export failed.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
             }
         }
         #endregion
@@ -821,102 +977,142 @@ namespace Mac_EFI_Toolkit
         #region Toolstrip Events
         private void openLocalFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", METPath.CurrentDirectory);
+            Process.Start(
+                "explorer.exe",
+                METPath.CurrentDirectory);
         }
 
         private void backupsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(METPath.BackupsDirectory))
             {
-                Process.Start("explorer.exe", METPath.BackupsDirectory);
+                Process.Start(
+                    "explorer.exe",
+                    METPath.BackupsDirectory);
+
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The backups folder has not been created yet.",
-                METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(
+                this,
+                "MET",
+                "The backups folder has not been created yet.",
+                METMessageType.Information,
+                METMessageButtons.Okay);
         }
 
         private void openBuildsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(METPath.BuildsDirectory))
             {
-                Process.Start("explorer.exe", METPath.BuildsDirectory);
+                Process.Start(
+                    "explorer.exe",
+                    METPath.BuildsDirectory);
+
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The builds folder has not been created yet.",
-                METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(
+                this,
+                "MET",
+                "The builds folder has not been created yet.",
+                METMessageType.Information,
+                METMessageButtons.Okay);
         }
 
         private void openFsysDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(METPath.FsysDirectory))
             {
-                Process.Start("explorer.exe", METPath.FsysDirectory);
+                Process.Start(
+                    "explorer.exe",
+                    METPath.FsysDirectory);
+
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The Fsys folder has not been created yet.",
-                METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(
+                this,
+                "MET",
+                "The Fsys folder has not been created yet.",
+                METMessageType.Information,
+                METMessageButtons.Okay);
         }
 
         private void openMeRegionDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(METPath.MeDirectory))
             {
-                Process.Start("explorer.exe", METPath.MeDirectory);
+                Process.Start(
+                    "explorer.exe",
+                    METPath.MeDirectory);
+
                 return;
             }
 
-            METMessageBox.Show(this, "MET", "The ME folder has not been created yet.",
-                METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(
+                this,
+                "MET",
+                "The ME folder has not been created yet.",
+                METMessageType.Information,
+                METMessageButtons.Okay);
         }
 
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (File.Exists(Logger.strLogFilePath))
             {
-                Process.Start(Logger.strLogFilePath);
+                Process.Start(
+                    Logger.strLogFilePath);
+
                 return;
             }
 
-            METMessageBox.Show(this, "File Information", "The log file has not been created yet.",
-                METMessageType.Information, METMessageButtons.Okay);
+            METMessageBox.Show(
+                this,
+                "File Information",
+                "The log file has not been created yet.",
+                METMessageType.Information,
+                METMessageButtons.Okay);
         }
 
         private void createADebugLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            File.WriteAllText(METPath.DebugLog, Debug.GenerateDebugReport(null));
+            File.WriteAllText(
+                METPath.DebugLog,
+                Debug.GenerateDebugReport(null));
 
             if (File.Exists(METPath.DebugLog))
             {
-                ShowExplorerNavigationPrompt("Debug log created successfully.", METPath.DebugLog);
+                ShowExplorerNavigationPrompt(
+                    "Debug log created successfully.",
+                    METPath.DebugLog);
             }
         }
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.PerformMetAction(this, MetAction.Restart);
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
+            Program.PerformMetAction(
+                this,
+                MetAction.Restart);
         }
 
         private void changelogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(METUrl.Changelog);
+            Process.Start(
+                METUrl.Changelog);
         }
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(METUrl.Homepage);
+            Process.Start(
+                METUrl.Homepage);
         }
 
         private void usageManualToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(METUrl.Manual);
+            Process.Start(
+                METUrl.Manual);
         }
 
         private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -931,105 +1127,128 @@ namespace Mac_EFI_Toolkit
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.PerformMetAction(this, MetAction.Exit);
+            Program.PerformMetAction(
+                this,
+                MetAction.Exit);
         }
 
         // File Clipboard Menu
         private void filenameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FileInfoData.FileNameWithExt);
+            SetClipboardText(
+                AppleEFI.FileInfoData.FileNameWithExt);
         }
 
         private void sizeBytesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string size = FileUtils.FormatFileSize(FWBase.FileInfoData.FileLength);
+            string size = FileUtils.FormatFileSize(
+                AppleEFI.FileInfoData.FileLength);
+
             SetClipboardText($"{size} bytes");
         }
 
         private void sizeHexToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText($"{FWBase.FileInfoData.FileLength:X}h");
+            SetClipboardText(
+                $"{AppleEFI.FileInfoData.FileLength:X}h");
         }
 
         private void crc32ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText($"{FWBase.FileInfoData.CRC32:X8}");
+            SetClipboardText(
+                $"{AppleEFI.FileInfoData.CRC32:X8}");
         }
 
         private void createdDateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FileInfoData.CreationTime);
+            SetClipboardText(
+                AppleEFI.FileInfoData.CreationTime);
         }
 
         private void modifiedDateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FileInfoData.LastWriteTime);
+            SetClipboardText(
+                AppleEFI.FileInfoData.LastWriteTime);
         }
 
         // Firmware Clipboard Menu
         private void modelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(MacUtils.ConvertEfiModelCode(FWBase.EfiBiosIdSectionData.ModelPart));
+            SetClipboardText(
+                MacUtils.ConvertEfiModelCode(
+                    AppleEFI.EfiBiosIdSectionData.ModelPart));
         }
 
         private void configCodeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(_configCode);
+            SetClipboardText(
+                _configCode);
         }
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FsysStoreData.Serial);
+            SetClipboardText(
+                AppleEFI.FsysStoreData.Serial);
         }
 
         private void hwcToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FsysStoreData.HWC);
+            SetClipboardText(
+                AppleEFI.FsysStoreData.HWC);
         }
 
         private void fsysCRC32ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FsysStoreData.CrcString);
+            SetClipboardText(
+                AppleEFI.FsysStoreData.CrcString);
         }
 
         private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FsysStoreData.SON);
+            SetClipboardText(
+                AppleEFI.FsysStoreData.SON);
         }
 
         private void efiVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FirmwareVersion);
+            SetClipboardText(
+                AppleEFI.FirmwareVersion);
         }
 
         private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.PdrSectionData.BoardId);
+            SetClipboardText(
+                AppleEFI.PdrSectionData.BoardId);
         }
 
         private void fitVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.FitVersion);
+            SetClipboardText(
+                AppleEFI.FitVersion);
         }
 
         private void meVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText(FWBase.MeVersion);
+            SetClipboardText(
+                AppleEFI.MeVersion);
         }
 
         private void pdrBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText($"{Descriptor.PdrBase:X}h ({Descriptor.PdrBase} decimal)");
+            SetClipboardText(
+                $"{Descriptor.PDR_REGION_BASE:X}h ({Descriptor.PDR_REGION_BASE} decimal)");
         }
 
         private void meBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText($"{Descriptor.MeBase:X}h ({Descriptor.MeBase} decimal)");
+            SetClipboardText(
+                $"{Descriptor.ME_REGION_BASE:X}h ({Descriptor.ME_REGION_BASE} decimal)");
         }
 
         private void biosBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetClipboardText($"{Descriptor.BiosBase:X}h ({Descriptor.BiosBase} decimal)");
+            SetClipboardText(
+                $"{Descriptor.BIOS_REGION_BASE:X}h ({Descriptor.BIOS_REGION_BASE} decimal)");
         }
         #endregion
 
@@ -1049,7 +1268,10 @@ namespace Mac_EFI_Toolkit
         #region Picturebox Events
         private void pbxTitleLogo_Click(object sender, EventArgs e)
         {
-            ShowContextMenuAtControlPoint(sender, cmsApplication, MenuPosition.BottomLeft);
+            ShowContextMenuAtControlPoint(
+                sender,
+                cmsApplication,
+                MenuPosition.BottomLeft);
         }
         #endregion
 
@@ -1070,9 +1292,9 @@ namespace Mac_EFI_Toolkit
             UpdateHardwareConfigLabel();
             UpdateOrderNumberLabel();
             UpdateEfiVersionLabel();
-            UpdateNvramLabel(lblVssStore, FWBase.VssStoreData, "VSS");
-            UpdateNvramLabel(lblSvsStore, FWBase.SvsStoreData, "SVS");
-            UpdateNvramLabel(lblNssStore, FWBase.NssStoreData, "NSS");
+            UpdateNvramLabel(lblVssStore, AppleEFI.VssStoreData, "VSS");
+            UpdateNvramLabel(lblSvsStore, AppleEFI.SvsStoreData, "SVS");
+            UpdateNvramLabel(lblNssStore, AppleEFI.NssStoreData, "NSS");
             UpdateEfiLockLabel();
             UpdateBoardIdLabel();
             UpdateApfsCapableLabel();
@@ -1093,12 +1315,12 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateFileNameLabel()
         {
-            lblFilename.Text = $"FILE: '{FWBase.FileInfoData.FileNameWithExt}'";
+            lblFilename.Text = $"FILE: '{AppleEFI.FileInfoData.FileNameWithExt}'";
         }
 
         private void UpdateFileSizeLabel()
         {
-            int fileSizeDecimal = (int)FWBase.FileInfoData.FileLength;
+            int fileSizeDecimal = (int)AppleEFI.FileInfoData.FileLength;
             bool isValidSize = FileUtils.GetIsValidBinSize(fileSizeDecimal);
 
             lblFileSizeBytes.Text = $"{FileUtils.FormatFileSize(fileSizeDecimal)} • {fileSizeDecimal:X}h";
@@ -1116,38 +1338,38 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateFileCrc32Label()
         {
-            lblFileCrc.Text = $"{FWBase.FileInfoData.CRC32:X8}";
+            lblFileCrc.Text = $"{AppleEFI.FileInfoData.CRC32:X8}";
         }
 
         private void UpdateFileCreationDateLabel()
         {
-            lblFileCreatedDate.Text = FWBase.FileInfoData.CreationTime;
+            lblFileCreatedDate.Text = AppleEFI.FileInfoData.CreationTime;
         }
 
         private void UpdateFileModifiedDateLabel()
         {
-            lblFileModifiedDate.Text = FWBase.FileInfoData.LastWriteTime;
+            lblFileModifiedDate.Text = AppleEFI.FileInfoData.LastWriteTime;
         }
 
         private void UpdateModelLabel()
         {
             lblModel.Text =
-                $"MODEL: {MacUtils.ConvertEfiModelCode(FWBase.EfiBiosIdSectionData.ModelPart) ?? "N/A"}";
+                $"MODEL: {MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart) ?? "N/A"}";
 
             // Load and append the config code asynchronously
-            if (FWBase.FsysStoreData.HWC != null)
-            {
-                AppendConfigCodeTextAsync(FWBase.FsysStoreData.HWC);
-            }
+            if (AppleEFI.FsysStoreData.HWC != null)
+                AppendConfigCodeTextAsync(AppleEFI.FsysStoreData.HWC);
         }
 
         private void UpdateFsysLabel()
         {
-            if (FWBase.FsysStoreData.CrcString != null)
+            if (AppleEFI.FsysStoreData.CrcString != null)
             {
                 lblFsysCrc.Text =
-                    $"CRC: {FWBase.FsysStoreData.CrcString}h{(FWBase.ForceFoundFsys ? " [F]" : string.Empty)}";
-                lblFsysCrc.ForeColor = string.Equals(FWBase.FsysStoreData.CrcCalcString, FWBase.FsysStoreData.CrcString)
+                    $"CRC: {AppleEFI.FsysStoreData.CrcString}h{(AppleEFI.ForceFoundFsys ? " [F]" : string.Empty)}";
+                lblFsysCrc.ForeColor = string.Equals(
+                    AppleEFI.FsysStoreData.CrcCalcString,
+                    AppleEFI.FsysStoreData.CrcString)
                     ? Colours.COMPLETE_GREEN
                     : Colours.ERROR_RED;
             }
@@ -1159,34 +1381,36 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateFirmwareSerialNumber()
         {
-            string serialNumber = FWBase.FsysStoreData.Serial;
+            string serialNumber = AppleEFI.FsysStoreData.Serial;
 
             lblSerialNumber.Text =
                 serialNumber
                 ?? "N/A";
 
-            if (!string.IsNullOrEmpty(serialNumber) && (serialNumber.Length == 11 || serialNumber.Length == 12))
+            if (!string.IsNullOrEmpty(serialNumber)
+                && (serialNumber.Length == 11
+                || serialNumber.Length == 12))
                 lblSerialNumber.Text += $" ({serialNumber.Length})";
         }
 
         private void UpdateHardwareConfigLabel()
         {
             lblHwc.Text =
-                FWBase.FsysStoreData.HWC
+                AppleEFI.FsysStoreData.HWC
                 ?? "N/A";
         }
 
         private void UpdateOrderNumberLabel()
         {
             lblOrderNo.Text =
-                FWBase.FsysStoreData.SON
+                AppleEFI.FsysStoreData.SON
                 ?? "N/A";
         }
 
         private void UpdateEfiVersionLabel()
         {
             lblEfiVersion.Text =
-                FWBase.FirmwareVersion
+                AppleEFI.FirmwareVersion
                 ?? "N/A";
         }
 
@@ -1205,7 +1429,7 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateEfiLockLabel()
         {
-            switch (FWBase.EfiPrimaryLockData.LockStatus)
+            switch (AppleEFI.EfiPrimaryLockData.LockStatus)
             {
                 case EfiLockStatus.Locked:
                     lblEfiLockStatus.Text = "LOCKED";
@@ -1225,14 +1449,14 @@ namespace Mac_EFI_Toolkit
         private void UpdateBoardIdLabel()
         {
             lblBoardId.Text =
-                FWBase.PdrSectionData.BoardId
+                AppleEFI.PdrSectionData.BoardId
                 ?? "N/A";
         }
 
         private void UpdateApfsCapableLabel()
         {
 
-            switch (FWBase.IsApfsCapable)
+            switch (AppleEFI.IsApfsCapable)
             {
                 case ApfsCapable.Guid:
                     lblApfsCapable.Text = "YES (DXE)";
@@ -1254,15 +1478,15 @@ namespace Mac_EFI_Toolkit
         private void UpdateIntelMeLabel()
         {
             lblMeVersion.Text =
-                FWBase.MeVersion
+                AppleEFI.MeVersion
                 ?? "N/A";
 
-            if (Descriptor.MeBase != 0)
+            if (Descriptor.ME_REGION_BASE != 0)
             {
-                if (!string.IsNullOrEmpty(FWBase.MeVersion))
+                if (!string.IsNullOrEmpty(AppleEFI.MeVersion))
                 {
                     lblMeVersion.Text +=
-                        $" ({Descriptor.MeBase:X2}h)";
+                        $" ({Descriptor.ME_REGION_BASE:X2}h)";
                 }
             }
         }
@@ -1296,7 +1520,8 @@ namespace Mac_EFI_Toolkit
 
             if (control == null)
             {
-                throw new ArgumentException("Invalid sender object type. Expected a Control.");
+                throw new ArgumentException(
+                    "Invalid sender object type. Expected a Control.");
             }
 
             Point position;
@@ -1304,13 +1529,20 @@ namespace Mac_EFI_Toolkit
             switch (menuPosition)
             {
                 case MenuPosition.TopRight:
-                    position = control.PointToScreen(new Point(control.Width + 1, -1));
+                    position = control.PointToScreen(
+                        new Point(
+                            control.Width + 1,
+                            -1));
                     break;
                 case MenuPosition.BottomLeft:
-                    position = control.PointToScreen(new Point(0, control.Height + 1));
+                    position = control.PointToScreen(
+                        new Point(
+                            0,
+                            control.Height + 1));
                     break;
                 default:
-                    throw new ArgumentException("Invalid MenuPosition value.");
+                    throw new ArgumentException(
+                        "Invalid MenuPosition value.");
             }
 
             menu.Show(position);
@@ -1344,12 +1576,13 @@ namespace Mac_EFI_Toolkit
             }
 
             cmdEveryMacSearch.Enabled =
-                FWBase.FsysStoreData.Serial != null;
+                AppleEFI.FsysStoreData.Serial != null;
 
-            if (FWBase.FsysStoreData.FsysBytes != null)
+            if (AppleEFI.FsysStoreData.FsysBytes != null)
             {
                 cmdFixFsysCrc.Enabled =
-                    MacUtils.GetUintFsysCrc32(FWBase.FsysStoreData.FsysBytes).ToString("X8") == FWBase.FsysStoreData.CrcString
+                    MacUtils.GetUintFsysCrc32(
+                        AppleEFI.FsysStoreData.FsysBytes).ToString("X8") == AppleEFI.FsysStoreData.CrcString
                     ? false
                     : true;
             }
@@ -1361,15 +1594,15 @@ namespace Mac_EFI_Toolkit
             }
 
             cmdAppleRomInfo.Enabled =
-                FWBase.AppleRomInfoSectionData.SectionExists;
+                AppleEFI.AppleRomInfoSectionData.SectionExists;
 
             cmdInvalidateEfiLock.Enabled =
-                FWBase.EfiPrimaryLockData.LockStatus == EfiLockStatus.Locked;
+                AppleEFI.EfiPrimaryLockData.LockStatus == EfiLockStatus.Locked;
 
             cmdExportMe.Enabled =
                 Descriptor.DescriptorMode &&
-                Descriptor.MeBase != 0 &&
-                Descriptor.MeLimit != 0;
+                Descriptor.ME_REGION_BASE != 0 &&
+                Descriptor.ME_REGION_LIMIT != 0;
 
             tlpFile.Enabled = enable;
             tlpRom.Enabled = enable;
@@ -1378,32 +1611,32 @@ namespace Mac_EFI_Toolkit
         private void ToggleCopyMenuItemEnable()
         {
             modelToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.EfiBiosIdSectionData.ModelPart);
+                IsStringNotEmpty(AppleEFI.EfiBiosIdSectionData.ModelPart);
             configCodeToolStripMenuItem.Enabled =
                 IsStringNotEmpty(_configCode);
             serialToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.FsysStoreData.Serial);
+                IsStringNotEmpty(AppleEFI.FsysStoreData.Serial);
             hwcToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.FsysStoreData.HWC);
+                IsStringNotEmpty(AppleEFI.FsysStoreData.HWC);
             fsysCRC32ToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.FsysStoreData.CrcString);
+                IsStringNotEmpty(AppleEFI.FsysStoreData.CrcString);
             orderNoToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.FsysStoreData.SON);
+                IsStringNotEmpty(AppleEFI.FsysStoreData.SON);
             efiVersionToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.FirmwareVersion);
+                IsStringNotEmpty(AppleEFI.FirmwareVersion);
             boardIDToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.PdrSectionData.BoardId);
+                IsStringNotEmpty(AppleEFI.PdrSectionData.BoardId);
             fitVersionToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.FitVersion);
+                IsStringNotEmpty(AppleEFI.FitVersion);
             meVersionToolStripMenuItem.Enabled =
-                IsStringNotEmpty(FWBase.MeVersion);
+                IsStringNotEmpty(AppleEFI.MeVersion);
 
             pdrBaseToolStripMenuItem.Enabled =
-                Descriptor.PdrBase != 0;
+                Descriptor.PDR_REGION_BASE != 0;
             meBaseToolStripMenuItem.Enabled =
-                Descriptor.MeBase != 0;
+                Descriptor.ME_REGION_BASE != 0;
             biosBaseToolStripMenuItem.Enabled =
-                Descriptor.BiosBase != 0;
+                Descriptor.BIOS_REGION_BASE != 0;
 
         }
 
@@ -1507,9 +1740,9 @@ namespace Mac_EFI_Toolkit
                     { cmdAppleRomInfo, "Open the ROM Information Window (ALT + I)" },
                     { cmdInvalidateEfiLock, "Remove EFI Lock (ALT + L)" },
                     { cmdExportMe, "Export ME Region (ALT + M)" },
-                    { lblVssStore, SetNvramStoreTip(FWBase.VssStoreData, "VSS") },
-                    { lblSvsStore, SetNvramStoreTip(FWBase.SvsStoreData, "SVS") },
-                    { lblNssStore, SetNvramStoreTip(FWBase.NssStoreData, "NSS") },
+                    { lblVssStore, SetNvramStoreTip(AppleEFI.VssStoreData, "VSS") },
+                    { lblSvsStore, SetNvramStoreTip(AppleEFI.SvsStoreData, "SVS") },
+                    { lblNssStore, SetNvramStoreTip(AppleEFI.NssStoreData, "NSS") },
                     { lblVersion, "Go to latest release (CTRL + G)" },
                 };
 
@@ -1593,8 +1826,12 @@ namespace Mac_EFI_Toolkit
         private void ShowExplorerNavigationPrompt(string message, string path)
         {
             DialogResult result =
-                    METMessageBox.Show(this, "MET", $"{message} Navigate to file?",
-                        METMessageType.Information, METMessageButtons.YesNo);
+                METMessageBox.Show(
+                        this,
+                        "MET",
+                        $"{message} Navigate to file?",
+                        METMessageType.Information,
+                        METMessageButtons.YesNo);
 
             if (result == DialogResult.Yes)
                 FileUtils.HighlightPathInExplorer(path);
@@ -1621,7 +1858,9 @@ namespace Mac_EFI_Toolkit
             // If the path is not empty check if it exists and set it as the initial directory
             if (!string.IsNullOrEmpty(path))
             {
-                _strInitialDirectory = Directory.Exists(path) ? path : METPath.CurrentDirectory;
+                _strInitialDirectory = Directory.Exists(path)
+                    ? path
+                    : METPath.CurrentDirectory;
             }
         }
 
@@ -1631,7 +1870,7 @@ namespace Mac_EFI_Toolkit
             ToggleControlEnable(false);
 
             // If a firmware is loaded, reset all data
-            if (FWBase.FirmwareLoaded)
+            if (AppleEFI.FirmwareLoaded)
             {
                 ResetAllData();
             }
@@ -1644,18 +1883,24 @@ namespace Mac_EFI_Toolkit
             }
 
             // Set the binary path and load the bytes
-            FWBase.LoadedBinaryPath = filePath;
-            FWBase.LoadedBinaryBytes = File.ReadAllBytes(filePath);
+            AppleEFI.LoadedBinaryPath = filePath;
+            AppleEFI.LoadedBinaryBytes = File.ReadAllBytes(filePath);
 
             // Process the descriptor
-            Descriptor.Parse(FWBase.LoadedBinaryBytes);
+            Descriptor.Parse(AppleEFI.LoadedBinaryBytes);
 
             // Check if the image is what we're looking for
-            if (!FWBase.IsValidImage(FWBase.LoadedBinaryBytes))
+            if (!AppleEFI.IsValidImage(AppleEFI.LoadedBinaryBytes))
             {
-                METMessageBox.Show(this, "Error", "The selected file is not a valid firmware image.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    "The selected file is not a valid firmware image.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 ResetAllData();
+
                 return;
             }
 
@@ -1670,19 +1915,22 @@ namespace Mac_EFI_Toolkit
             {
                 IsBackground = true
             };
+
             thr.Start();
         }
 
         private void LoadFirmwareBase(string filePath)
         {
             // Load firmware base data from loaded binary bytes
-            FWBase.LoadFirmwareBaseData(FWBase.LoadedBinaryBytes, filePath);
+            AppleEFI.LoadFirmwareBaseData(
+                AppleEFI.LoadedBinaryBytes,
+                filePath);
 
             // Update controls on the main UI thread using Invoke
             Invoke((MethodInvoker)UpdateUI);
 
             // Set firmware loaded flag to true
-            FWBase.FirmwareLoaded = true;
+            AppleEFI.FirmwareLoaded = true;
         }
 
         private bool IsValidMinMaxSize(string filePath)
@@ -1690,20 +1938,30 @@ namespace Mac_EFI_Toolkit
             FileInfo fileInfo = new FileInfo(filePath);
 
             // Check if the file size is smaller than the minimum allowed size
-            if (fileInfo.Length < FWBase.MIN_IMAGE_SIZE) // 1048576 bytes
+            if (fileInfo.Length < AppleEFI.MIN_IMAGE_SIZE) // 1048576 bytes
             {
                 // Show an error message if the file is too small
-                METMessageBox.Show(this, "Error", $"The selected file does not meet the minimum size requirement of {FWBase.MIN_IMAGE_SIZE:X}h.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    $"The selected file does not meet the minimum size requirement of {AppleEFI.MIN_IMAGE_SIZE:X}h.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return false;
             }
 
             // Check if the file size is larger than the maximum allowed size
-            if (fileInfo.Length > FWBase.MAX_IMAGE_SIZE) // 33554432 bytes
+            if (fileInfo.Length > AppleEFI.MAX_IMAGE_SIZE) // 33554432 bytes
             {
                 // Show an error message if the file is too large
-                METMessageBox.Show(this, "Error", $"The selected file exceeds the maximum size limit of {FWBase.MAX_IMAGE_SIZE:X}h.",
-                    METMessageType.Error, METMessageButtons.Okay);
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    $"The selected file exceeds the maximum size limit of {AppleEFI.MAX_IMAGE_SIZE:X}h.",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+
                 return false;
             }
 
@@ -1737,17 +1995,22 @@ namespace Mac_EFI_Toolkit
             SetPrimaryInitialDirectory();
 
             // Reset descriptor values
-            Descriptor.ResetValues();
+            Descriptor.ClearRegionData();
 
             // Reset FWBase
-            FWBase.ResetFirmwareBaseData();
+            AppleEFI.ResetFirmwareBaseData();
         }
 
         internal void SetClipboardText(string text)
         {
             Clipboard.SetText(text);
-            METMessageBox.Show(this, "Information", $"'{text}'" +
-                $" copied to the clipboard.", METMessageType.Information, METMessageButtons.Okay);
+
+            METMessageBox.Show(
+                this,
+                "Information",
+                $"'{text}' copied to the clipboard.",
+                METMessageType.Information,
+                METMessageButtons.Okay);
         }
         #endregion
 

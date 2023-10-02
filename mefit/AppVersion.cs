@@ -45,7 +45,9 @@ namespace Mac_EFI_Toolkit
                         Version remoteVersion = new Version(node.InnerText);
                         Version localVersion = new Version(Application.ProductVersion);
 
-                        return remoteVersion > localVersion ? VersionResult.NewVersionAvailable : VersionResult.UpToDate;
+                        return remoteVersion > localVersion
+                            ? VersionResult.NewVersionAvailable
+                            : VersionResult.UpToDate;
                     }
                 }
             }

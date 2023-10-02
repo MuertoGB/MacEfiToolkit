@@ -18,11 +18,20 @@ namespace Mac_EFI_Toolkit.UI
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableFlashingUI))
             {
                 Color originalColor = control.ForeColor;
+
                 for (int i = 0; i < 3; i++)
                 {
-                    control.ForeColor = Color.FromArgb(control.ForeColor.A, 130, 130, 130);
+                    control.ForeColor =
+                        Color.FromArgb(
+                            control.ForeColor.A,
+                            130,
+                            130,
+                            130);
+
                     await Task.Delay(70);
+
                     control.ForeColor = originalColor;
+
                     await Task.Delay(70);
                 }
             }

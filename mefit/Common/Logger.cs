@@ -40,7 +40,8 @@ namespace Mac_EFI_Toolkit
 
             using (StreamWriter writer = new StreamWriter(pathString, true))
             {
-                writer.WriteLine($"{DateTime.Now} : {logMessage}");
+                writer.WriteLine(
+                    $"{DateTime.Now} : {logMessage}");
             }
         }
 
@@ -99,15 +100,20 @@ namespace Mac_EFI_Toolkit
             }
 
             richTextBox.AppendText(timestamp);
-            richTextBox.Select(richTextBox.TextLength - timestamp.Length, timestamp.Length - 1);
+            richTextBox.Select(
+                richTextBox.TextLength - timestamp.Length,
+                timestamp.Length - 1);
             richTextBox.SelectionColor = prefixColor;
-            richTextBox.AppendText(messageString + Environment.NewLine);
+            richTextBox.AppendText(
+                messageString + Environment.NewLine);
             richTextBox.ScrollToCaret();
         }
 
         internal static void WriteExceptionToAppLog(Exception e)
         {
-            WriteToLogFile($"{e.GetType().Name}:- {e.Message}\r\n\r\n{e}\r\n\r\n -------------------", LogType.Application);
+            WriteToLogFile(
+                $"{e.GetType().Name}:- {e.Message}\r\n\r\n{e}\r\n\r\n -------------------",
+                LogType.Application);
         }
 
     }

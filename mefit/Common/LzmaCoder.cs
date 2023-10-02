@@ -22,14 +22,31 @@ namespace Mac_EFI_Toolkit
                 using (MemoryStream compressedInput = new MemoryStream(sourceBytes))
                 {
                     byte[] propertyBytes = new byte[5];
-                    compressedInput.Read(propertyBytes, 0, 5);
+
+                    compressedInput.Read(
+                        propertyBytes,
+                        0,
+                        5);
 
                     byte[] decompressedLength = new byte[8];
-                    compressedInput.Read(decompressedLength, 0, 8);
-                    long fileLength = BitConverter.ToInt64(decompressedLength, 0);
+
+                    compressedInput.Read(
+                        decompressedLength,
+                        0,
+                        8);
+
+                    long fileLength =
+                        BitConverter.ToInt64(
+                            decompressedLength,
+                            0);
 
                     decoder.SetDecoderProperties(propertyBytes);
-                    decoder.Code(compressedInput, decoderStream, compressedInput.Length, fileLength, null);
+
+                    decoder.Code(
+                        compressedInput,
+                        decoderStream,
+                        compressedInput.Length,
+                        fileLength, null);
                 }
 
                 return decoderStream.ToArray();

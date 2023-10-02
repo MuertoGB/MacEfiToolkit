@@ -22,7 +22,11 @@ namespace Mac_EFI_Toolkit.WinForms
             get
             {
                 CreateParams Params = base.CreateParams;
-                Params.ClassStyle = Params.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
+
+                Params.ClassStyle = Params.ClassStyle
+                    | Program.CS_DBLCLKS
+                    | Program.CS_DROP;
+
                 return Params;
             }
         }
@@ -57,8 +61,14 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (e.Button == MouseButtons.Left)
             {
-                NativeMethods.ReleaseCapture(new HandleRef(this, Handle));
-                NativeMethods.SendMessage(new HandleRef(this, Handle), Program.WM_NCLBUTTONDOWN, (IntPtr)Program.HT_CAPTION, (IntPtr)0);
+                NativeMethods.ReleaseCapture(
+                    new HandleRef(this, Handle));
+
+                NativeMethods.SendMessage(
+                    new HandleRef(this, Handle),
+                    Program.WM_NCLBUTTONDOWN,
+                    (IntPtr)Program.HT_CAPTION,
+                    (IntPtr)0);
             }
         }
         #endregion
@@ -67,19 +77,25 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdDecline_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.No;
+
             Close();
         }
 
         private void cmdAccept_Click(object sender, EventArgs e)
         {
-            Settings.SettingsSetBool(SettingsBoolType.AcceptedEditingTerms, true);
+            Settings.SettingsSetBool(
+                SettingsBoolType.AcceptedEditingTerms,
+                true);
+
             DialogResult = DialogResult.Yes;
+
             Close();
         }
 
         private void cmdClose_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.No;
+
             Close();
         }
         #endregion

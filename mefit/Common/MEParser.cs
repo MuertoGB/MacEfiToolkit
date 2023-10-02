@@ -54,47 +54,57 @@ namespace Mac_EFI_Toolkit.Common
     {
         internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
         {
-            int meBase = (Descriptor.MeBase != 0 ? (int)Descriptor.MeBase : 0);
-            int meLimit = (Descriptor.MeLimit != 0 ? (int)Descriptor.MeLimit : FWBase.FileInfoData.FileLength);
-
             int headerPos = -1;
-            int readLen = 0;
-            string result = null;
+            int dataLength = 0;
+            string version = null;
 
             switch (headerType)
             {
                 case HeaderType.FlashImageTool:
-                    headerPos = BinaryUtils.GetBasePosition(sourceBytes, FPT_SIGNATURE, meBase, meLimit);
-                    readLen = 0x20;
+                    headerPos = BinaryUtils.GetBasePosition(
+                        sourceBytes,
+                        FPT_SIGNATURE,
+                        (int)Descriptor.ME_REGION_BASE,
+                        (int)Descriptor.ME_REGION_SIZE);
+                    dataLength = 0x20;
                     break;
 
                 case HeaderType.ManagementEngine:
-                    headerPos = BinaryUtils.GetBasePosition(sourceBytes, MN2_SIGNATURE, meBase, meLimit);
-                    readLen = 0x10;
+                    headerPos = BinaryUtils.GetBasePosition(
+                        sourceBytes,
+                        MN2_SIGNATURE,
+                        (int)Descriptor.ME_REGION_BASE,
+                        (int)Descriptor.ME_REGION_SIZE);
+                    dataLength = 0x10;
                     break;
             }
 
             if (headerPos != -1)
             {
-                byte[] headerBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, headerPos, readLen);
+                byte[] headerBytes = BinaryUtils.GetBytesBaseLength(
+                    sourceBytes,
+                    headerPos,
+                    dataLength);
+
                 if (headerBytes != null)
                 {
                     if (headerType == HeaderType.FlashImageTool)
                     {
                         FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(headerBytes);
-                        result = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
+                        version = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                     }
                     else if (headerType == HeaderType.ManagementEngine)
                     {
                         MN2Manifest mn2Header = Helper.DeserializeHeader<MN2Manifest>(headerBytes);
-                        result = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
+                        version = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
                     }
                 }
             }
 
-            if (result == "0.0.0.0") return null;
+            if (version == "0.0.0.0")
+                return null;
 
-            return result;
+            return version;
         }
 
 

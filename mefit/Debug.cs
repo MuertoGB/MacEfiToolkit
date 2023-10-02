@@ -108,7 +108,7 @@ namespace Mac_EFI_Toolkit
 
         private static string GetFirmwareData()
         {
-            if (!FWBase.FirmwareLoaded)
+            if (!AppleEFI.FirmwareLoaded)
                 return "There is no UEFI/BIOS loaded.\r\n";
 
             StringBuilder builder = new StringBuilder();
@@ -118,28 +118,28 @@ namespace Mac_EFI_Toolkit
                 if (Descriptor.DescriptorMode)
                 {
                     builder.AppendLine($"  Descriptor ->\r\n");
-                    builder.AppendLine($"Des_Mode: {Descriptor.DescriptorMode}");
-                    builder.AppendLine($"PDR:      {Descriptor.PdrBase:X2}h, {Descriptor.PdrLimit:X2}h");
-                    builder.AppendLine($"ME:       {Descriptor.MeBase:X2}h, {Descriptor.MeLimit:X2}h");
-                    builder.AppendLine($"BIOS:     {Descriptor.BiosBase:X2}h, {Descriptor.BiosLimit:X2}h\r\n");
+                    builder.AppendLine($"Descriptor Mode: {Descriptor.DescriptorMode}\r\n");
+                    builder.AppendLine($"PDR Base: {Descriptor.PDR_REGION_BASE:X2}h, PDR Limit: {Descriptor.PDR_REGION_LIMIT:X2}h");
+                    builder.AppendLine($"ME Base: {Descriptor.ME_REGION_BASE:X2}h, ME Limit: {Descriptor.ME_REGION_LIMIT:X2}h");
+                    builder.AppendLine($"BIOS Base: {Descriptor.BIOS_REGION_BASE:X2}h, BIOS Limit: {Descriptor.BIOS_REGION_LIMIT:X2}h\r\n");
                 }
 
                 builder.AppendLine($"  File ->\r\n");
-                builder.AppendLine($"File Size: {FWBase.FileInfoData.FileLength:X2}h\r\n");
+                builder.AppendLine($"File Size: {AppleEFI.FileInfoData.FileLength:X2}h\r\n");
 
                 builder.AppendLine($"  Fsys Store  ->\r\n");
-                builder.AppendLine($"Fsys Base:   {FWBase.FsysStoreData.FsysBase:X2}h");
-                builder.AppendLine($"Fsys Size:   {FWBase.FSYS_RGN_SIZE:X2}h");
-                builder.AppendLine($"Serial Base: {FWBase.FsysStoreData.SerialBase:X2}h");
-                builder.AppendLine($"HWC Base:    {FWBase.FsysStoreData.HWCBase:X2}h\r\n");
+                builder.AppendLine($"Fsys Base:   {AppleEFI.FsysStoreData.FsysBase:X2}h");
+                builder.AppendLine($"Fsys Size:   {AppleEFI.FSYS_RGN_SIZE:X2}h");
+                builder.AppendLine($"Serial Base: {AppleEFI.FsysStoreData.SerialBase:X2}h");
+                builder.AppendLine($"HWC Base:    {AppleEFI.FsysStoreData.HWCBase:X2}h\r\n");
 
                 builder.AppendLine($"  NVRAM  ->\r\n");
-                builder.AppendLine($"VSS Primary: Base {FWBase.VssStoreData.PrimaryStoreBase:X2}h, Size {FWBase.VssStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"VSS Backup:  Base {FWBase.VssStoreData.BackupStoreBase:X2}h, Size {FWBase.VssStoreData.BackupStoreSize:X2}h");
-                builder.AppendLine($"SVS Primary: Base {FWBase.SvsStoreData.PrimaryStoreBase:X2}h, Size {FWBase.SvsStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"SVS Backup:  Base {FWBase.SvsStoreData.BackupStoreBase:X2}h, Size {FWBase.SvsStoreData.BackupStoreSize:X2}h");
-                builder.AppendLine($"NSS Primary: Base {FWBase.NssStoreData.PrimaryStoreBase:X2}h, Size {FWBase.NssStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"NSS Backup:  Base {FWBase.NssStoreData.BackupStoreBase:X2}h, Size {FWBase.NssStoreData.BackupStoreSize:X2}h");
+                builder.AppendLine($"VSS Primary: Base {AppleEFI.VssStoreData.PrimaryStoreBase:X2}h, Size {AppleEFI.VssStoreData.PrimaryStoreSize:X2}h");
+                builder.AppendLine($"VSS Backup:  Base {AppleEFI.VssStoreData.BackupStoreBase:X2}h, Size {AppleEFI.VssStoreData.BackupStoreSize:X2}h");
+                builder.AppendLine($"SVS Primary: Base {AppleEFI.SvsStoreData.PrimaryStoreBase:X2}h, Size {AppleEFI.SvsStoreData.PrimaryStoreSize:X2}h");
+                builder.AppendLine($"SVS Backup:  Base {AppleEFI.SvsStoreData.BackupStoreBase:X2}h, Size {AppleEFI.SvsStoreData.BackupStoreSize:X2}h");
+                builder.AppendLine($"NSS Primary: Base {AppleEFI.NssStoreData.PrimaryStoreBase:X2}h, Size {AppleEFI.NssStoreData.PrimaryStoreSize:X2}h");
+                builder.AppendLine($"NSS Backup:  Base {AppleEFI.NssStoreData.BackupStoreBase:X2}h, Size {AppleEFI.NssStoreData.BackupStoreSize:X2}h");
 
                 return builder.ToString();
             }

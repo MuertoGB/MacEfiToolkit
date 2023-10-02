@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit
     internal struct METVersion
     {
         internal static readonly string SDK = "23.01";
-        internal static readonly string Build = "230928.0615";
+        internal static readonly string Build = "231001.0130";
         internal static readonly string Channel = "Stable";
     }
 
@@ -103,15 +103,34 @@ namespace Mac_EFI_Toolkit
 
             if (fontData != null)
             {
-                FONT_MDL2_REG_9 = new Font(FontResolver.LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
-                FONT_MDL2_REG_10 = new Font(FontResolver.LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
-                FONT_MDL2_REG_12 = new Font(FontResolver.LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
-                FONT_MDL2_REG_14 = new Font(FontResolver.LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
-                FONT_MDL2_REG_20 = new Font(FontResolver.LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
+                FONT_MDL2_REG_9 = new Font(
+                    FontResolver.LoadFontFromResource(fontData),
+                    9.0F,
+                    FontStyle.Regular);
+                FONT_MDL2_REG_10 = new Font(
+                    FontResolver.LoadFontFromResource(fontData),
+                    10.0F,
+                    FontStyle.Regular);
+                FONT_MDL2_REG_12 = new Font(
+                    FontResolver.LoadFontFromResource(fontData),
+                    12.0F,
+                    FontStyle.Regular);
+                FONT_MDL2_REG_14 = new Font(
+                    FontResolver.LoadFontFromResource(fontData),
+                    14.0F,
+                    FontStyle.Regular);
+                FONT_MDL2_REG_20 = new Font(
+                    FontResolver.LoadFontFromResource(fontData),
+                    20.0F,
+                    FontStyle.Regular);
             }
             else
             {
-                MessageBox.Show("Segoe MDL2 Assets font failed to load, see ./mefit.log for more details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Segoe MDL2 Assets font failed to load, see ./mefit.log for more details.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
 
             // Settings
@@ -191,13 +210,12 @@ namespace Mac_EFI_Toolkit
 
             if (File.Exists(METPath.UnhandledLog))
             {
-                result = MessageBox.Show
-                   (
-                   $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NBSPACE)}'\r\n\r\nForce quit application?",
+                result = MessageBox.Show(
+                   $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NBSPACE)}" +
+                   $"'\r\n\r\nForce quit application?",
                    $"MET Exception Handler",
                    MessageBoxButtons.YesNo,
-                   MessageBoxIcon.Error
-                   );
+                   MessageBoxIcon.Error);
             }
             else
             {
@@ -211,7 +229,8 @@ namespace Mac_EFI_Toolkit
 
             if (result == DialogResult.Yes)
             {
-                HandleExitCleanup(); // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
+                // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
+                HandleExitCleanup();
                 Environment.Exit(-1);
             }
 
@@ -269,7 +288,13 @@ namespace Mac_EFI_Toolkit
 
         private static bool ShowConfirmationDialog(Form owner, string title, string message)
         {
-            DialogResult result = METMessageBox.Show(owner, title, message, METMessageType.Question, METMessageButtons.YesNo);
+            DialogResult result = METMessageBox.Show(
+                owner,
+                title,
+                message,
+                METMessageType.Question,
+                METMessageButtons.YesNo);
+
             return result == DialogResult.Yes;
         }
 

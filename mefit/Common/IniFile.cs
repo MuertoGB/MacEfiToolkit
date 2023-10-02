@@ -24,13 +24,25 @@ namespace Mac_EFI_Toolkit.Common
 
         internal void Write(string section, string key, string value)
         {
-            NativeMethods.WritePrivateProfileString(section, key, value, _strFilePath);
+            NativeMethods.WritePrivateProfileString(
+                section,
+                key,
+                value,
+                _strFilePath);
         }
 
         internal string Read(string section, string key, string defaultValue = "")
         {
             StringBuilder builder = new StringBuilder(255);
-            NativeMethods.GetPrivateProfileString(section, key, defaultValue, builder, 255, _strFilePath);
+
+            NativeMethods.GetPrivateProfileString(
+                section,
+                key,
+                defaultValue,
+                builder,
+                255,
+                _strFilePath);
+
             return builder.ToString();
         }
 
@@ -84,12 +96,19 @@ namespace Mac_EFI_Toolkit.Common
             try
             {
                 lpszReturnBuffer = Marshal.AllocCoTaskMem(MAX_BUFFER);
-                uint data = NativeMethods.GetPrivateProfileSectionNames(lpszReturnBuffer, MAX_BUFFER, lpFileName);
+
+                uint data = NativeMethods.GetPrivateProfileSectionNames(
+                    lpszReturnBuffer,
+                    MAX_BUFFER,
+                    lpFileName);
 
                 if (data == 0)
                     return null;
 
-                string ansiString = Marshal.PtrToStringAnsi(lpszReturnBuffer, (int)data).ToString();
+                string ansiString = Marshal.PtrToStringAnsi(
+                    lpszReturnBuffer,
+                    (int)data).ToString();
+
                 return ansiString.Substring(0, ansiString.Length - 1).Split('\0');
             }
             catch (Exception e)
@@ -110,12 +129,20 @@ namespace Mac_EFI_Toolkit.Common
             try
             {
                 lpReturnedString = Marshal.AllocCoTaskMem(MAX_BUFFER);
-                uint data = NativeMethods.GetPrivateProfileSection(lpAppName, lpReturnedString, MAX_BUFFER, lpFileName);
+
+                uint data = NativeMethods.GetPrivateProfileSection(
+                    lpAppName,
+                    lpReturnedString,
+                    MAX_BUFFER,
+                    lpFileName);
 
                 if (data == 0)
                     return null;
 
-                string ansiString = Marshal.PtrToStringAnsi(lpReturnedString, (int)data).ToString();
+                string ansiString = Marshal.PtrToStringAnsi(
+                    lpReturnedString,
+                    (int)data).ToString();
+
                 string[] keys = ansiString.Substring(0, ansiString.Length - 1).Split('\0');
 
                 for (int i = 0; i < keys.Length; i++)

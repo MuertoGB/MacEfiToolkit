@@ -13,7 +13,7 @@ namespace Mac_EFI_Toolkit.UI.Renderers
     class METMenuRenderer : ToolStripRenderer
     {
         private readonly Color BorderColor = Color.FromArgb(80, 80, 80);
-        private readonly Color ItemHoverColor = Color.FromArgb(60,60,60);
+        private readonly Color ItemHoverColor = Color.FromArgb(60, 60, 60);
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
@@ -23,22 +23,44 @@ namespace Mac_EFI_Toolkit.UI.Renderers
 
             using (Pen pen = new Pen(BorderColor))
             {
-                e.Graphics.DrawRectangle(pen, rect.X, rect.Y, rect.Width - 1, rect.Height - 1);
+                e.Graphics.DrawRectangle(
+                    pen,
+                    rect.X,
+                    rect.Y,
+                    rect.Width - 1,
+                    rect.Height - 1);
             }
         }
 
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
-            Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
-            Rectangle rectItemBorder = new Rectangle(rect.X + 3, rect.Y + 2, rect.Width - 6, rect.Height - 4);
+            Rectangle rect =
+                new Rectangle(
+                    Point.Empty,
+                    e.Item.Size);
 
-            using (SolidBrush brush = new SolidBrush(e.Item.Selected ? ItemHoverColor : Color.Transparent))
+            Rectangle rectItemBorder =
+                new Rectangle(
+                    rect.X + 3,
+                    rect.Y + 2,
+                    rect.Width - 6,
+                    rect.Height - 4);
+
+            using (SolidBrush brush = new SolidBrush(
+                e.Item.Selected
+                ? ItemHoverColor
+                : Color.Transparent))
             using (Pen pen = new Pen(BorderColor))
             {
                 if (e.Item.Selected)
                 {
-                    e.Graphics.FillRectangle(brush, rectItemBorder);
-                    e.Graphics.DrawRectangle(pen, rectItemBorder);
+                    e.Graphics.FillRectangle(
+                        brush,
+                        rectItemBorder);
+
+                    e.Graphics.DrawRectangle(
+                        pen,
+                        rectItemBorder);
                 }
             }
         }
@@ -51,20 +73,31 @@ namespace Mac_EFI_Toolkit.UI.Renderers
             }
             else
             {
-                Rectangle rect = new Rectangle(Point.Empty, e.Item.Size);
+                Rectangle rect =
+                    new Rectangle(
+                        Point.Empty,
+                        e.Item.Size);
 
                 int y = rect.Bottom - (rect.Height / 2) - 1;
+
                 int left = rect.Left + 5;
+
                 int right = rect.Right - 5;
 
                 using (SolidBrush brush = new SolidBrush(Color.Transparent))
                 {
-                    e.Graphics.FillRectangle(brush, rect);
+                    e.Graphics.FillRectangle(
+                        brush,
+                        rect);
                 }
 
                 using (SolidBrush brush = new SolidBrush(BorderColor))
                 {
-                    e.Graphics.DrawLine(new Pen(brush), left, y, right, y);
+                    e.Graphics.DrawLine(
+                        new Pen(brush),
+                        left,
+                        y,
+                        right, y);
                 }
             }
         }

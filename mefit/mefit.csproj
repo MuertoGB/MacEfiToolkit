@@ -84,8 +84,8 @@
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Common\KeyboardHookManager.cs" />
     <Compile Include="Common\ToInt24.cs" />
-    <Compile Include="Common\FSGuids.cs" />
-    <Compile Include="Common\FWBase.cs" />
+    <Compile Include="Common\Guids.cs" />
+    <Compile Include="Common\AppleEFI.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Common\MEParser.cs" />

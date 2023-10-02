@@ -24,7 +24,11 @@ namespace Mac_EFI_Toolkit.Common
             try
             {
                 uint pNumFonts = 0;
-                NativeMethods.AddFontMemResourceEx(pFileView, (uint)fontData.Length, IntPtr.Zero, ref pNumFonts);
+                NativeMethods.AddFontMemResourceEx(
+                    pFileView,
+                    (uint)fontData.Length,
+                    IntPtr.Zero,
+                    ref pNumFonts);
                 _privateFontCollection.AddMemoryFont(pFileView, fontData.Length);
                 return _privateFontCollection.Families.Last();
             }

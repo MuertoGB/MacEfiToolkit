@@ -83,19 +83,24 @@ namespace Mac_EFI_Toolkit.Common
         internal const uint DESCRIPTOR_BASE = 0; // 0h
         internal const uint DESCRIPTOR_LENGTH = 4096; // 1000h
 
+        internal static uint
+            BIOS_REGION_BASE,
+            BIOS_REGION_LIMIT,
+            BIOS_REGION_SIZE = 0;
+
+        internal static uint
+            ME_REGION_BASE,
+            ME_REGION_LIMIT,
+            ME_REGION_SIZE = 0;
+
+        internal static uint
+            PDR_REGION_BASE,
+            PDR_REGION_LIMIT,
+            PDR_REGION_SIZE = 0;
+
         internal static DescriptorHeader Header;
         internal static DescriptorMap Map;
         internal static DescriptorRegions Regions;
-
-        internal static uint BiosBase = 0;
-        internal static uint BiosLimit = 0;
-        internal static uint BiosSize = 0;
-        internal static uint MeBase = 0;
-        internal static uint MeLimit = 0;
-        internal static uint MeSize = 0;
-        internal static uint PdrBase = 0;
-        internal static uint PdrLimit = 0;
-        internal static uint PdrSize = 0;
 
         internal static bool DescriptorMode = false;
         #endregion
@@ -120,11 +125,22 @@ namespace Mac_EFI_Toolkit.Common
         internal static void Parse(byte[] sourceBytes)
         {
             // Read in the flash descriptor
-            byte[] DescriptorBytes = BinaryUtils.GetBytesBaseLength(sourceBytes, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
+            byte[] DescriptorBytes = BinaryUtils.GetBytesBaseLength(
+                sourceBytes,
+                (int)DESCRIPTOR_BASE,
+                (int)DESCRIPTOR_LENGTH);
 
             // Deserialize the header
-            byte[] HeaderBytes = new byte[Marshal.SizeOf(typeof(DescriptorHeader))];
-            Array.Copy(DescriptorBytes, 0, HeaderBytes, 0, Marshal.SizeOf(typeof(DescriptorHeader)));
+            byte[] HeaderBytes =
+                new byte[Marshal.SizeOf(typeof(DescriptorHeader))];
+
+            Array.Copy(
+                DescriptorBytes,
+                0,
+                HeaderBytes,
+                0,
+                Marshal.SizeOf(typeof(DescriptorHeader)));
+
             Header = Helper.DeserializeHeader<DescriptorHeader>(HeaderBytes);
 
             // Match flash descriptor tag (5AA5F00F)
@@ -135,50 +151,95 @@ namespace Mac_EFI_Toolkit.Common
             {
                 // Deserialize the flash map
                 byte[] MapBytes = new byte[Marshal.SizeOf(typeof(DescriptorMap))];
-                Array.Copy(DescriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)), MapBytes, 0, Marshal.SizeOf(typeof(DescriptorMap)));
+
+                Array.Copy(
+                    DescriptorBytes,
+                    Marshal.SizeOf(typeof(DescriptorHeader)),
+                    MapBytes,
+                    0,
+                    Marshal.SizeOf(typeof(DescriptorMap)));
+
                 Map = Helper.DeserializeHeader<DescriptorMap>(MapBytes);
 
                 // Deserialize the regions data
                 byte[] RegionBytes = new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
-                int RegionBase = Map.RegionBase << 4; // Left shift right four bits: Example: 04h: 0000 0100 << 40h: 0100 0000
-                Array.Copy(DescriptorBytes, RegionBase, RegionBytes, 0, Marshal.SizeOf(typeof(DescriptorRegions)));
+
+                // Left shift right four bits: Example: 04h: 0000 0100 << 40h: 0100 0000
+                int RegionBase = Map.RegionBase << 4;
+
+                Array.Copy(
+                    DescriptorBytes,
+                    RegionBase,
+                    RegionBytes,
+                    0,
+                    Marshal.SizeOf(typeof(DescriptorRegions)));
+
                 Regions = Helper.DeserializeHeader<DescriptorRegions>(RegionBytes);
 
                 // BIOS base, size, limit
-                BiosBase = CalculateRegionBase(Regions.BiosBase);
-                if (BiosBase > sourceBytes.Length) BiosBase = 0;
-                BiosSize = CalculateRegionSize(Regions.BiosBase, Regions.BiosLimit);
-                BiosLimit = BiosBase + BiosSize;
+                BIOS_REGION_BASE = CalculateRegionBase(Regions.BiosBase);
+
+                if (BIOS_REGION_BASE > sourceBytes.Length) BIOS_REGION_BASE = 0;
+                if (Regions.BiosLimit == 0 || Regions.BiosLimit > sourceBytes.Length)
+                {
+                    BIOS_REGION_LIMIT = (uint)sourceBytes.Length; BIOS_REGION_SIZE = 0;
+                }
+                else
+                {
+                    BIOS_REGION_SIZE = CalculateRegionSize(Regions.BiosBase, Regions.BiosLimit);
+                    BIOS_REGION_LIMIT = BIOS_REGION_BASE + BIOS_REGION_SIZE;
+                }
 
                 // Management Engine base, size, limit
-                MeBase = CalculateRegionBase(Regions.MeBase);
-                if (MeBase > sourceBytes.Length) MeBase = 0;
-                MeSize = CalculateRegionSize(Regions.MeBase, Regions.MeLimit);
-                MeLimit = MeBase + MeSize;
+                ME_REGION_BASE = CalculateRegionBase(Regions.MeBase);
+
+                if (ME_REGION_BASE > sourceBytes.Length) ME_REGION_BASE = 0;
+
+                if (Regions.MeLimit == 0 || Regions.MeLimit > sourceBytes.Length)
+                {
+                    ME_REGION_LIMIT = (uint)sourceBytes.Length; ; ME_REGION_SIZE = 0;
+                }
+                else
+                {
+                    ME_REGION_SIZE = CalculateRegionSize(Regions.MeBase, Regions.MeLimit);
+                    ME_REGION_LIMIT = ME_REGION_BASE + ME_REGION_SIZE;
+                }
 
                 // Platform Data Region base, size, limit
-                PdrBase = CalculateRegionBase(Regions.PdrBase);
-                if (PdrBase > sourceBytes.Length) PdrBase = 0;
-                PdrSize = CalculateRegionSize(Regions.PdrBase, Regions.PdrLimit);
-                PdrLimit = PdrBase + PdrSize;
+                PDR_REGION_BASE = CalculateRegionBase(Regions.PdrBase);
+
+                if (PDR_REGION_BASE > sourceBytes.Length) PDR_REGION_BASE = 0;
+
+                if (Regions.BiosLimit == 0 || Regions.BiosLimit > sourceBytes.Length)
+                {
+                    ME_REGION_LIMIT = (uint)sourceBytes.Length; ME_REGION_SIZE = 0;
+                }
+                else
+                {
+                    PDR_REGION_SIZE = CalculateRegionSize(Regions.PdrBase, Regions.PdrLimit);
+                    PDR_REGION_LIMIT = PDR_REGION_BASE + PDR_REGION_SIZE;
+                }
+
+                // We end execution here when descriptor mode is set.
+                return;
             }
+
+            // Base/Size data is already set to zero, we need to set region limits
+            // as the file length when descriptor mode is not set.
+            PDR_REGION_LIMIT = (uint)sourceBytes.Length;
+            ME_REGION_LIMIT = (uint)sourceBytes.Length;
+            BIOS_REGION_LIMIT = (uint)sourceBytes.Length;
         }
 
-        internal static void ResetValues()
+        internal static void ClearRegionData()
         {
             Header = default;
             Map = default;
             Regions = default;
 
-            BiosBase = 0;
-            BiosLimit = 0;
-            BiosSize = 0;
-            MeBase = 0;
-            MeLimit = 0;
-            MeSize = 0;
-            PdrBase = 0;
-            PdrLimit = 0;
-            PdrSize = 0;
+            BIOS_REGION_BASE = 0; BIOS_REGION_LIMIT = 0; BIOS_REGION_SIZE = 0;
+            ME_REGION_BASE = 0; ME_REGION_LIMIT = 0; ME_REGION_SIZE = 0;
+            PDR_REGION_BASE = 0; PDR_REGION_LIMIT = 0; PDR_REGION_SIZE = 0;
 
             DescriptorMode = false;
         }

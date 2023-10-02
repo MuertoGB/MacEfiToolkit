@@ -34,7 +34,11 @@ namespace Mac_EFI_Toolkit.Common
             using (Process process = Process.GetCurrentProcess())
             using (ProcessModule module = process.MainModule)
             {
-                return NativeMethods.SetWindowsHookExA(WH_KEYBOARD_LL, kbProc, NativeMethods.GetModuleHandleA(module.ModuleName), 0);
+                return NativeMethods.SetWindowsHookExA(
+                    WH_KEYBOARD_LL,
+                    kbProc,
+                    NativeMethods.GetModuleHandleA(module.ModuleName),
+                    0);
             }
         }
 
@@ -51,7 +55,11 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
+            return NativeMethods.CallNextHookEx(
+                _hookId,
+                nCode,
+                wParam,
+                lParam);
         }
 
         internal static void Hook()

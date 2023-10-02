@@ -24,7 +24,11 @@ namespace Mac_EFI_Toolkit.WinForms
             get
             {
                 CreateParams Params = base.CreateParams;
-                Params.ClassStyle = Params.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
+
+                Params.ClassStyle = Params.ClassStyle
+                    | Program.CS_DBLCLKS
+                    | Program.CS_DROP;
+
                 return Params;
             }
         }
@@ -50,38 +54,38 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void infoWindow_Load(object sender, EventArgs e)
         {
-            lblBiosId.Text = FWBase.AppleRomInfoSectionData.BiosId
+            lblBiosId.Text = AppleEFI.AppleRomInfoSectionData.BiosId
                 ?? "N/A";
-            lblModel.Text = FWBase.AppleRomInfoSectionData.Model != null
-                ? $"{FWBase.AppleRomInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(FWBase.AppleRomInfoSectionData.Model)})"
+            lblModel.Text = AppleEFI.AppleRomInfoSectionData.Model != null
+                ? $"{AppleEFI.AppleRomInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(AppleEFI.AppleRomInfoSectionData.Model)})"
                 : "N/A";
             lblEfiVersion.Text =
-                FWBase.AppleRomInfoSectionData.EfiVersion
+                AppleEFI.AppleRomInfoSectionData.EfiVersion
                 ?? "N/A";
             lblBuiltBy.Text =
-                FWBase.AppleRomInfoSectionData.BuiltBy
+                AppleEFI.AppleRomInfoSectionData.BuiltBy
                 ?? "N/A";
             lblDateStamp.Text =
-                FWBase.AppleRomInfoSectionData.DateStamp
+                AppleEFI.AppleRomInfoSectionData.DateStamp
                 ?? "N/A";
             lblRevision.Text =
-                FWBase.AppleRomInfoSectionData.Revision
+                AppleEFI.AppleRomInfoSectionData.Revision
                 ?? "N/A";
             lblBootRom.Text =
-                FWBase.AppleRomInfoSectionData.RomVersion
+                AppleEFI.AppleRomInfoSectionData.RomVersion
                 ?? "N/A";
             lblBuildcaveId.Text =
-                FWBase.AppleRomInfoSectionData.BuildcaveId
+                AppleEFI.AppleRomInfoSectionData.BuildcaveId
                 ?? "N/A";
             lblBuildType.Text =
-                FWBase.AppleRomInfoSectionData.BuildType
+                AppleEFI.AppleRomInfoSectionData.BuildType
                 ?? "N/A";
             lblCompiler.Text =
-                FWBase.AppleRomInfoSectionData.Compiler
+                AppleEFI.AppleRomInfoSectionData.Compiler
                 ?? "N/A";
             lblSectionData.Text =
-                $"Base: {FWBase.AppleRomInfoSectionData.SectionBase:X2}h, " +
-                $"Size: {FWBase.AppleRomInfoSectionData.SectionBytes.Length:X2}h"
+                $"Base: {AppleEFI.AppleRomInfoSectionData.SectionBase:X2}h, " +
+                $"Size: {AppleEFI.AppleRomInfoSectionData.SectionBytes.Length:X2}h"
                 ?? string.Empty;
 
             foreach (Label label in tlpInfo.Controls)
@@ -99,8 +103,14 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (e.Button == MouseButtons.Left)
             {
-                NativeMethods.ReleaseCapture(new HandleRef(this, Handle));
-                NativeMethods.SendMessage(new HandleRef(this, Handle), Program.WM_NCLBUTTONDOWN, (IntPtr)Program.HT_CAPTION, (IntPtr)0);
+                NativeMethods.ReleaseCapture(
+                    new HandleRef(this, Handle));
+
+                NativeMethods.SendMessage(
+                    new HandleRef(this, Handle),
+                    Program.WM_NCLBUTTONDOWN,
+                    (IntPtr)Program.HT_CAPTION,
+                    (IntPtr)0);
             }
         }
         #endregion
@@ -109,9 +119,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void infoWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
-            {
                 Close();
-            }
         }
         #endregion
 

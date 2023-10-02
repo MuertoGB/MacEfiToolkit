@@ -1,7 +1,7 @@
 <h1 align="center">
 <img width="200" src="files/images/img128px.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit V1.1.3
+Mac EFI Toolkit V1.1.4
 </h1>
 
 <h4 align="center">A tool for analysis of Mac BIOS/UEFI, with limited editing capabilities.</h4>
@@ -83,8 +83,8 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 28th September, 2023 | Yes | Stable |
-|[1.1.2](https://github.com/MuertoGB/MacEfiToolkit/releases/112)| 25th September, 2023 | No | Stable |
+|[1.1.4](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set, 2023 | Yes | Stable |
+|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/113)| 28th September, 2023 | No | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 

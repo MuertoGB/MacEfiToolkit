@@ -84,8 +84,8 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>True if the size is valid, otherwise false.</returns>
         internal static bool GetIsValidBinSize(long size)
         {
-            int expectedSize = FWBase.MIN_IMAGE_SIZE;
-            int maxSize = FWBase.MAX_IMAGE_SIZE;
+            int expectedSize = AppleEFI.MIN_IMAGE_SIZE;
+            int maxSize = AppleEFI.MAX_IMAGE_SIZE;
 
             while (expectedSize <= maxSize)
             {
@@ -109,13 +109,13 @@ namespace Mac_EFI_Toolkit.Utils
         internal static string GetSizeDifference(long size)
         {
             // Initialize the closest size with the minimum image size
-            long closestSize = FWBase.MIN_IMAGE_SIZE;
+            long closestSize = AppleEFI.MIN_IMAGE_SIZE;
 
             // Calculate the initial difference between the input size and the closest size
             long difference = Math.Abs(size - closestSize);
 
             // Iterate through the valid sizes to find the closest size
-            while (closestSize <= FWBase.MAX_IMAGE_SIZE)
+            while (closestSize <= AppleEFI.MAX_IMAGE_SIZE)
             {
                 // Calculate the doubled size and its difference from the input size
                 long doubledSize = closestSize * 2;

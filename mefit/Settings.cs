@@ -94,7 +94,9 @@ namespace Mac_EFI_Toolkit
 
             if (!settingsIni.SectionExists(section))
             {
-                Logger.WriteToLogFile($"SettingsGetBool: Section '{section}' was missing and created automatically.", LogType.Application);
+                Logger.WriteToLogFile(
+                    $"SettingsGetBool: Section '{section}' was missing and created automatically.",
+                    LogType.Application);
 
                 using (StreamWriter writer = new StreamWriter(METPath.SettingsFile, true))
                 {
@@ -102,13 +104,18 @@ namespace Mac_EFI_Toolkit
                 }
 
                 settingsIni.Write(section, key, "False");
+
                 return false;
             }
 
             if (!settingsIni.KeyExists(section, key))
             {
-                Logger.WriteToLogFile($"SettingsGetBool: Key '{key}' was missing and created automatically.", LogType.Application);
+                Logger.WriteToLogFile(
+                    $"SettingsGetBool: Key '{key}' was missing and created automatically.",
+                    LogType.Application);
+
                 settingsIni.Write(section, key, "False");
+
                 return false;
             }
 
@@ -137,7 +144,9 @@ namespace Mac_EFI_Toolkit
 
             if (!settingsIni.SectionExists(section))
             {
-                Logger.WriteToLogFile($"SettingsGetString: Section '{section}' was missing and created automatically.", LogType.Application);
+                Logger.WriteToLogFile(
+                    $"SettingsGetString: Section '{section}' was missing and created automatically.",
+                    LogType.Application);
 
                 using (StreamWriter writer = new StreamWriter(METPath.SettingsFile, true))
                 {
@@ -145,13 +154,18 @@ namespace Mac_EFI_Toolkit
                 }
 
                 settingsIni.Write(section, key, "False");
+
                 return string.Empty;
             }
 
             if (!settingsIni.KeyExists(section, key))
             {
-                Logger.WriteToLogFile($"SettingsGetString: Key '{key}' was missing and created automatically.", LogType.Application);
+                Logger.WriteToLogFile(
+                    $"SettingsGetString: Key '{key}' was missing and created automatically.",
+                    LogType.Application);
+
                 settingsIni.Write(section, key, "False");
+
                 return string.Empty;
             }
 
@@ -206,7 +220,9 @@ namespace Mac_EFI_Toolkit
                 }
                 else
                 {
-                    Logger.WriteToLogFile($"{section} > {key} > Key not found, setting was not written.", LogType.Application);
+                    Logger.WriteToLogFile(
+                        $"{section} > {key} > Key not found, setting was not written.",
+                        LogType.Application);
                 }
             }
 
@@ -228,14 +244,19 @@ namespace Mac_EFI_Toolkit
             }
 
             IniFile ini = new IniFile(METPath.SettingsFile);
-            if (!ini.SectionExists(section)) ini.Write(section, string.Empty, null);
+
+            if (!ini.SectionExists(section))
+                ini.Write(section, string.Empty, null);
+
             if (ini.KeyExists(section, key))
             {
                 ini.Write(section, key, value);
             }
             else
             {
-                Logger.WriteToLogFile($"{section} > {key} > Key not found, setting was not written.", LogType.Application);
+                Logger.WriteToLogFile(
+                    $"{section} > {key} > Key not found, setting was not written.",
+                    LogType.Application);
             }
 
         }
