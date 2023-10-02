@@ -32,8 +32,12 @@ namespace Mac_EFI_Toolkit.Utils
         {
             using (SHA256 provider = SHA256.Create())
             {
-                byte[] digestBytes = provider.ComputeHash(sourceBytes);
-                return BitConverter.ToString(digestBytes).Replace("-", "").ToLower();
+                byte[] digestBytes =
+                    provider.ComputeHash(
+                        sourceBytes);
+
+                return BitConverter.ToString(
+                    digestBytes).Replace("-", "").ToLower();
             }
         }
 
@@ -46,13 +50,13 @@ namespace Mac_EFI_Toolkit.Utils
         {
             const uint polynomial = 0xEDB88320;
             uint crc = 0xFFFFFFFF;
+
             for (int i = 0; i < sourceBytes.Length; i++)
             {
                 crc ^= sourceBytes[i];
+
                 for (int j = 0; j < 8; j++)
-                {
                     crc = (uint)((crc >> 1) ^ (polynomial & -(crc & 1)));
-                }
             }
 
             return crc ^ 0xFFFFFFFF;
@@ -65,7 +69,8 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>A string representation of the number of bytes with commas.</returns>
         internal static string FormatFileSize(long size)
         {
-            return string.Format("{0:#,##0}", size);
+            return string.Format
+                ("{0:#,##0}", size);
         }
 
         /// <summary>
@@ -74,7 +79,8 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="path">The path of the file to open in Windows Explorer.</param>
         internal static void HighlightPathInExplorer(string path)
         {
-            Process.Start("explorer.exe", $"/select,\"{path}\"");
+            Process.Start(
+                "explorer.exe", $"/select,\"{path}\"");
         }
 
         /// <summary>
@@ -93,8 +99,10 @@ namespace Mac_EFI_Toolkit.Utils
                 {
                     return true;
                 }
+
                 expectedSize *= 2;
             }
+
             return false;
         }
 
@@ -112,14 +120,19 @@ namespace Mac_EFI_Toolkit.Utils
             long closestSize = AppleEFI.MIN_IMAGE_SIZE;
 
             // Calculate the initial difference between the input size and the closest size
-            long difference = Math.Abs(size - closestSize);
+            long difference =
+                Math.Abs(
+                    size - closestSize);
 
             // Iterate through the valid sizes to find the closest size
             while (closestSize <= AppleEFI.MAX_IMAGE_SIZE)
             {
                 // Calculate the doubled size and its difference from the input size
                 long doubledSize = closestSize * 2;
-                long doubledDifference = Math.Abs(size - doubledSize);
+
+                long doubledDifference =
+                    Math.Abs(
+                        size - doubledSize);
 
                 // If the doubled difference is smaller, update the closest size and difference
                 if (doubledDifference < difference)
@@ -164,18 +177,23 @@ namespace Mac_EFI_Toolkit.Utils
             {
                 using (FileStream fileStream = new FileStream(path, FileMode.Create))
                 {
-                    fileStream.Write(sourceBytes, 0, sourceBytes.Length);
+                    fileStream.Write(
+                        sourceBytes,
+                        0,
+                        sourceBytes.Length);
                 }
 
                 using (FileStream fileStream = new FileStream(path, FileMode.Open))
                 {
                     byte[] fileBytes = new byte[fileStream.Length];
-                    fileStream.Read(fileBytes, 0, fileBytes.Length);
+
+                    fileStream.Read(
+                        fileBytes,
+                        0,
+                        fileBytes.Length);
 
                     if (!BinaryUtils.ByteArraysMatch(sourceBytes, fileBytes))
-                    {
                         return false; // Integrity check failed
-                    }
                 }
             }
             catch (Exception e)
@@ -200,9 +218,7 @@ namespace Mac_EFI_Toolkit.Utils
             Directory.CreateDirectory(directory);
 
             if (Directory.Exists(directory))
-            {
                 return Status.SUCCESS;
-            }
 
             return Status.FAILED;
         }
@@ -220,12 +236,15 @@ namespace Mac_EFI_Toolkit.Utils
                 using (FileStream zipStream = new FileStream(path, FileMode.Create))
                 using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
                 {
-                    ZipArchiveEntry fileEntry = archive.CreateEntry(entryName);
+                    ZipArchiveEntry fileEntry =
+                        archive.CreateEntry(
+                            entryName);
 
                     using (Stream fileStream = fileEntry.Open())
-                    {
-                        fileStream.Write(sourceBytes, 0, sourceBytes.Length);
-                    }
+                        fileStream.Write(
+                            sourceBytes,
+                            0,
+                            sourceBytes.Length);
                 }
             }
             catch (Exception e)
@@ -233,6 +252,5 @@ namespace Mac_EFI_Toolkit.Utils
                 Logger.WriteExceptionToAppLog(e);
             }
         }
-
     }
 }

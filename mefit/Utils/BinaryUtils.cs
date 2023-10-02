@@ -60,10 +60,15 @@ namespace Mac_EFI_Toolkit.Utils
         internal static int GetBasePosition(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
         {
             // Ensure that maxSearchLength is within the bounds of the sourceBytes array.
-            maxSearchLength = Math.Min(maxSearchLength, sourceBytes.Length - basePosition);
+            maxSearchLength =
+                Math.Min(
+                    maxSearchLength,
+                    sourceBytes.Length - basePosition);
 
             // Build the partial match table for the pattern using the Knuth-Morris-Pratt algorithm.
-            int[] partialMatchTable = BuildPartialMatchTable(patternBytes);
+            int[] partialMatchTable =
+                BuildPartialMatchTable(
+                    patternBytes);
 
             // Initialize the source and pattern indices.
             int sourceIndex = basePosition;
@@ -110,6 +115,7 @@ namespace Mac_EFI_Toolkit.Utils
             int[] table = new int[patternBytes.Length];
             int i = 0;
             int j = 1;
+
             while (j < patternBytes.Length)
             {
                 if (patternBytes[i] == patternBytes[j])
@@ -128,6 +134,7 @@ namespace Mac_EFI_Toolkit.Utils
                     j++;
                 }
             }
+
             return table;
         }
         #endregion
@@ -169,7 +176,13 @@ namespace Mac_EFI_Toolkit.Utils
                 return new byte[0]; // Nothing to read
 
             int length = limitPosition - basePosition;
-            ArraySegment<byte> segment = new ArraySegment<byte>(sourceBytes, basePosition, length);
+
+            ArraySegment<byte> segment =
+                new ArraySegment<byte>(
+                    sourceBytes,
+                    basePosition,
+                    length);
+
             return segment.ToArray();
         }
 
@@ -215,7 +228,8 @@ namespace Mac_EFI_Toolkit.Utils
         {
             if (sourceBytes == null)
             {
-                throw new ArgumentNullException(nameof(sourceBytes));
+                throw new ArgumentNullException(
+                    nameof(sourceBytes));
             }
 
             for (int i = 0; i < sourceBytes.Length; i++)
@@ -254,9 +268,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="newBytes">The new bytes to write.</param>
         internal static void OverwriteBytesAtBase(byte[] sourceBytes, int basePosition, byte[] newBytes)
         {
-            if (basePosition < 0
-                || basePosition + newBytes.Length
-                > sourceBytes.Length)
+            if (basePosition < 0 || basePosition + newBytes.Length > sourceBytes.Length)
                 throw new ArgumentOutOfRangeException(
                     nameof(basePosition),
                     "Base position is out of range.");
@@ -285,19 +297,20 @@ namespace Mac_EFI_Toolkit.Utils
 
             // Find the index of the last non-padding byte
             while (end >= 0 && sourceBytes[end] == paddingByte)
-            {
                 end--;
-            }
 
             // If all bytes are padding, return an empty byte array
             if (end < 0)
-            {
                 return new byte[0];
-            }
 
             // Create a new byte array without the trailing padding bytes
             byte[] result = new byte[end + 1];
-            Array.Copy(sourceBytes, result, end + 1);
+
+            Array.Copy(
+                sourceBytes,
+                result,
+                end + 1);
+
             return result;
         }
 
@@ -311,9 +324,7 @@ namespace Mac_EFI_Toolkit.Utils
                 throw new ArgumentNullException(nameof(sourceBytes));
 
             for (int i = 0; i < sourceBytes.Length; i++)
-            {
                 sourceBytes[i] = eraseByte;
-            }
         }
 
         /// <summary>
@@ -366,7 +377,10 @@ namespace Mac_EFI_Toolkit.Utils
                 sourceBytes.Length);
 
             // Patch the Fsys store crc
-            byte[] patchedStore = PatchFsysCrc(fsysStore, uiNewCrc);
+            byte[] patchedStore =
+                PatchFsysCrc(
+                    fsysStore,
+                    uiNewCrc);
 
             // Overwrite the loaded Fsys crc32 with the newly calculated crc32
             OverwriteBytesAtBase(
@@ -375,7 +389,10 @@ namespace Mac_EFI_Toolkit.Utils
                 patchedStore);
 
             // Load the Fsys store from the new binary
-            FsysStore newBinaryFsys = AppleEFI.GetFsysStoreData(patchedBytes, false);
+            FsysStore newBinaryFsys =
+                AppleEFI.GetFsysStoreData(
+                    patchedBytes,
+                    false);
 
             // Compare the new checksums
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)
