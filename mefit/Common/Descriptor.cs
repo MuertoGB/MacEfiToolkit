@@ -125,10 +125,11 @@ namespace Mac_EFI_Toolkit.Common
         internal static void Parse(byte[] sourceBytes)
         {
             // Read in the flash descriptor
-            byte[] DescriptorBytes = BinaryUtils.GetBytesBaseLength(
-                sourceBytes,
-                (int)DESCRIPTOR_BASE,
-                (int)DESCRIPTOR_LENGTH);
+            byte[] DescriptorBytes =
+                BinaryUtils.GetBytesBaseLength(
+                    sourceBytes,
+                    (int)DESCRIPTOR_BASE,
+                    (int)DESCRIPTOR_LENGTH);
 
             // Deserialize the header
             byte[] HeaderBytes =
@@ -141,10 +142,14 @@ namespace Mac_EFI_Toolkit.Common
                 0,
                 Marshal.SizeOf(typeof(DescriptorHeader)));
 
-            Header = Helper.DeserializeHeader<DescriptorHeader>(HeaderBytes);
+            Header =
+                Helper.DeserializeHeader<DescriptorHeader>(
+                    HeaderBytes);
 
             // Match flash descriptor tag (5AA5F00F)
-            DescriptorMode = Header.Tag.SequenceEqual(FLASH_DESC_SIGNATURE);
+            DescriptorMode =
+                Header.Tag.SequenceEqual(
+                    FLASH_DESC_SIGNATURE);
 
             // Descriptor mode
             if (DescriptorMode)
@@ -159,7 +164,9 @@ namespace Mac_EFI_Toolkit.Common
                     0,
                     Marshal.SizeOf(typeof(DescriptorMap)));
 
-                Map = Helper.DeserializeHeader<DescriptorMap>(MapBytes);
+                Map =
+                    Helper.DeserializeHeader<DescriptorMap>(
+                        MapBytes);
 
                 // Deserialize the regions data
                 byte[] RegionBytes = new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
@@ -174,16 +181,19 @@ namespace Mac_EFI_Toolkit.Common
                     0,
                     Marshal.SizeOf(typeof(DescriptorRegions)));
 
-                Regions = Helper.DeserializeHeader<DescriptorRegions>(RegionBytes);
+                Regions =
+                    Helper.DeserializeHeader<DescriptorRegions>(
+                        RegionBytes);
 
                 // BIOS base, size, limit
-                BIOS_REGION_BASE = CalculateRegionBase(Regions.BiosBase);
+                BIOS_REGION_BASE =
+                    CalculateRegionBase(
+                        Regions.BiosBase);
 
                 if (BIOS_REGION_BASE > sourceBytes.Length) BIOS_REGION_BASE = 0;
+
                 if (Regions.BiosLimit == 0 || Regions.BiosLimit > sourceBytes.Length)
-                {
                     BIOS_REGION_LIMIT = (uint)sourceBytes.Length; BIOS_REGION_SIZE = 0;
-                }
                 else
                 {
                     BIOS_REGION_SIZE = CalculateRegionSize(Regions.BiosBase, Regions.BiosLimit);
@@ -196,9 +206,7 @@ namespace Mac_EFI_Toolkit.Common
                 if (ME_REGION_BASE > sourceBytes.Length) ME_REGION_BASE = 0;
 
                 if (Regions.MeLimit == 0 || Regions.MeLimit > sourceBytes.Length)
-                {
                     ME_REGION_LIMIT = (uint)sourceBytes.Length; ; ME_REGION_SIZE = 0;
-                }
                 else
                 {
                     ME_REGION_SIZE = CalculateRegionSize(Regions.MeBase, Regions.MeLimit);
@@ -211,9 +219,7 @@ namespace Mac_EFI_Toolkit.Common
                 if (PDR_REGION_BASE > sourceBytes.Length) PDR_REGION_BASE = 0;
 
                 if (Regions.BiosLimit == 0 || Regions.BiosLimit > sourceBytes.Length)
-                {
                     ME_REGION_LIMIT = (uint)sourceBytes.Length; ME_REGION_SIZE = 0;
-                }
                 else
                 {
                     PDR_REGION_SIZE = CalculateRegionSize(Regions.PdrBase, Regions.PdrLimit);

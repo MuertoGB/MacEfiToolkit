@@ -90,12 +90,18 @@ namespace Mac_EFI_Toolkit.Common
                 {
                     if (headerType == HeaderType.FlashImageTool)
                     {
-                        FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(headerBytes);
+                        FPTHeader fptHeader =
+                            Helper.DeserializeHeader<FPTHeader>(
+                                headerBytes);
+
                         version = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                     }
                     else if (headerType == HeaderType.ManagementEngine)
                     {
-                        MN2Manifest mn2Header = Helper.DeserializeHeader<MN2Manifest>(headerBytes);
+                        MN2Manifest mn2Header =
+                            Helper.DeserializeHeader<MN2Manifest>(
+                                headerBytes);
+
                         version = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
                     }
                 }

@@ -47,7 +47,10 @@ namespace Mac_EFI_Toolkit.Common
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
-                int vkCode = Marshal.ReadInt32(lParam);
+                int vkCode =
+                    Marshal.ReadInt32(
+                        lParam);
+
                 if (vkCode == VK_UP && (NativeMethods.GetKeyState(VK_LWIN) & KEY_PRESSED) != 0)
                 {
                     // Disable the Windows+Up shortcut by not passing it to the operating system

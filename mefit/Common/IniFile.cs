@@ -65,9 +65,7 @@ namespace Mac_EFI_Toolkit.Common
                 foreach (string s in sectionNames)
                 {
                     if (s == section)
-                    {
                         return true;
-                    }
                 }
             }
 
@@ -93,21 +91,26 @@ namespace Mac_EFI_Toolkit.Common
         internal static string[] GetSectionNames(string lpFileName)
         {
             IntPtr lpszReturnBuffer = IntPtr.Zero;
+
             try
             {
-                lpszReturnBuffer = Marshal.AllocCoTaskMem(MAX_BUFFER);
+                lpszReturnBuffer =
+                    Marshal.AllocCoTaskMem(
+                        MAX_BUFFER);
 
-                uint data = NativeMethods.GetPrivateProfileSectionNames(
-                    lpszReturnBuffer,
-                    MAX_BUFFER,
-                    lpFileName);
+                uint data =
+                    NativeMethods.GetPrivateProfileSectionNames(
+                        lpszReturnBuffer,
+                        MAX_BUFFER,
+                        lpFileName);
 
                 if (data == 0)
                     return null;
 
-                string ansiString = Marshal.PtrToStringAnsi(
-                    lpszReturnBuffer,
-                    (int)data).ToString();
+                string ansiString =
+                    Marshal.PtrToStringAnsi(
+                        lpszReturnBuffer,
+                        (int)data).ToString();
 
                 return ansiString.Substring(0, ansiString.Length - 1).Split('\0');
             }
@@ -126,9 +129,12 @@ namespace Mac_EFI_Toolkit.Common
         internal static string[] GetSectionKeys(string lpAppName, string lpFileName)
         {
             IntPtr lpReturnedString = IntPtr.Zero;
+
             try
             {
-                lpReturnedString = Marshal.AllocCoTaskMem(MAX_BUFFER);
+                lpReturnedString =
+                    Marshal.AllocCoTaskMem(
+                        MAX_BUFFER);
 
                 uint data = NativeMethods.GetPrivateProfileSection(
                     lpAppName,
@@ -148,6 +154,7 @@ namespace Mac_EFI_Toolkit.Common
                 for (int i = 0; i < keys.Length; i++)
                 {
                     int separatorIndex = keys[i].IndexOf('=');
+
                     if (separatorIndex != -1)
                         keys[i] = keys[i].Substring(0, separatorIndex);
                 }
@@ -165,6 +172,5 @@ namespace Mac_EFI_Toolkit.Common
                     Marshal.FreeCoTaskMem(lpReturnedString);
             }
         }
-
     }
 }

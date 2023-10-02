@@ -78,6 +78,7 @@ namespace Mac_EFI_Toolkit
         internal static void WriteLogTextToRtb(string messageString, RtbLogPrefix logPrefix, RichTextBox richTextBox)
         {
             Color prefixColor;
+
             string timestamp = $"{DateTime.Now:HH:mm:ss}: ";
 
             switch (logPrefix)
@@ -100,12 +101,16 @@ namespace Mac_EFI_Toolkit
             }
 
             richTextBox.AppendText(timestamp);
+
             richTextBox.Select(
                 richTextBox.TextLength - timestamp.Length,
                 timestamp.Length - 1);
+
             richTextBox.SelectionColor = prefixColor;
+
             richTextBox.AppendText(
                 messageString + Environment.NewLine);
+
             richTextBox.ScrollToCaret();
         }
 

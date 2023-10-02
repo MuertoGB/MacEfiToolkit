@@ -19,17 +19,30 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static FontFamily LoadFontFromResource(byte[] fontData)
         {
-            IntPtr pFileView = Marshal.AllocCoTaskMem(fontData.Length);
-            Marshal.Copy(fontData, 0, pFileView, fontData.Length);
+            IntPtr pFileView =
+                Marshal.AllocCoTaskMem(
+                    fontData.Length);
+
+            Marshal.Copy(
+                fontData,
+                0,
+                pFileView,
+                fontData.Length);
+
             try
             {
                 uint pNumFonts = 0;
+
                 NativeMethods.AddFontMemResourceEx(
                     pFileView,
                     (uint)fontData.Length,
                     IntPtr.Zero,
                     ref pNumFonts);
-                _privateFontCollection.AddMemoryFont(pFileView, fontData.Length);
+
+                _privateFontCollection.AddMemoryFont(
+                    pFileView,
+                    fontData.Length);
+
                 return _privateFontCollection.Families.Last();
             }
             catch (Exception e)
@@ -40,9 +53,7 @@ namespace Mac_EFI_Toolkit.Common
             finally
             {
                 if (pFileView != IntPtr.Zero)
-                {
                     Marshal.FreeCoTaskMem(pFileView);
-                }
             }
         }
     }
