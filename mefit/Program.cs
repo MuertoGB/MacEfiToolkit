@@ -87,7 +87,9 @@ namespace Mac_EFI_Toolkit
         static void Main(string[] args)
         {
             // Register exception handler events early
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.SetUnhandledExceptionMode(
+                UnhandledExceptionMode.CatchException);
+
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
@@ -206,7 +208,9 @@ namespace Mac_EFI_Toolkit
         {
             DialogResult result;
 
-            File.WriteAllText(METPath.UnhandledLog, Debug.GenerateDebugReport(e));
+            File.WriteAllText(
+                METPath.UnhandledLog,
+                Debug.GenerateDebugReport(e));
 
             if (File.Exists(METPath.UnhandledLog))
             {

@@ -43,11 +43,17 @@ namespace Mac_EFI_Toolkit
         internal static string GenerateDebugReport(Exception e)
         {
             StringBuilder builder = new StringBuilder();
-            string exePath = Path.Combine(METPath.CurrentDirectory, METPath.FriendlyName);
+
+            string exePath =
+                Path.Combine(
+                    METPath.CurrentDirectory,
+                    METPath.FriendlyName);
 
             try
             {
-                byte[] appBytes = File.ReadAllBytes(exePath);
+                byte[] appBytes =
+                    File.ReadAllBytes(
+                        exePath);
 
                 builder.AppendLine($"# // Mac EFI Toolkit Debug Log - {DateTime.Now}\r\n");
 
