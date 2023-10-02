@@ -1887,7 +1887,7 @@ namespace Mac_EFI_Toolkit
             AppleEFI.LoadedBinaryBytes = File.ReadAllBytes(filePath);
 
             // Process the descriptor
-            Descriptor.Parse(AppleEFI.LoadedBinaryBytes);
+            Descriptor.ParseRegionData(AppleEFI.LoadedBinaryBytes);
 
             // Check if the image is what we're looking for
             if (!AppleEFI.IsValidImage(AppleEFI.LoadedBinaryBytes))

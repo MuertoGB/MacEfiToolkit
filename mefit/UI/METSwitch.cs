@@ -27,7 +27,12 @@ namespace Mac_EFI_Toolkit.UI
         #region Constructor
         public METSwitch()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            SetStyle(
+                ControlStyles.AllPaintingInWmPaint
+                | ControlStyles.OptimizedDoubleBuffer
+                | ControlStyles.ResizeRedraw,
+                true);
+
             BackColor = Color.Black;
         }
         #endregion
@@ -144,7 +149,9 @@ namespace Mac_EFI_Toolkit.UI
             {
                 if (BackColor.A == 255)
                 {
-                    e.Graphics.Clear(BackColor);
+                    e.Graphics.Clear(
+                        BackColor);
+
                     return;
                 }
             }

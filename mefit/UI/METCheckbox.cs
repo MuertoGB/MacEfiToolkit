@@ -135,7 +135,9 @@ namespace Mac_EFI_Toolkit.UI
             {
                 if (BackColor.A == 255)
                 {
-                    e.Graphics.Clear(BackColor);
+                    e.Graphics.Clear(
+                        BackColor);
+
                     return;
                 }
             }
@@ -343,7 +345,9 @@ namespace Mac_EFI_Toolkit.UI
         private Size GetPreferredSizeN()
         {
             return GetPreferredSize(
-                new Size(0, 0));
+                new Size(
+                    0,
+                    0));
         }
         #endregion
 

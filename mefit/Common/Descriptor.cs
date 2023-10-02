@@ -122,7 +122,7 @@ namespace Mac_EFI_Toolkit.Common
             return 0;
         }
 
-        internal static void Parse(byte[] sourceBytes)
+        internal static void ParseRegionData(byte[] sourceBytes)
         {
             // Read in the flash descriptor
             byte[] DescriptorBytes =
@@ -132,8 +132,7 @@ namespace Mac_EFI_Toolkit.Common
                     (int)DESCRIPTOR_LENGTH);
 
             // Deserialize the header
-            byte[] HeaderBytes =
-                new byte[Marshal.SizeOf(typeof(DescriptorHeader))];
+            byte[] HeaderBytes = new byte[Marshal.SizeOf(typeof(DescriptorHeader))];
 
             Array.Copy(
                 DescriptorBytes,
@@ -185,7 +184,7 @@ namespace Mac_EFI_Toolkit.Common
                     Helper.DeserializeHeader<DescriptorRegions>(
                         RegionBytes);
 
-                // BIOS base, size, limit
+                // Parse BIOS Region base, limit and size,
                 BIOS_REGION_BASE =
                     CalculateRegionBase(
                         Regions.BiosBase);
@@ -193,33 +192,43 @@ namespace Mac_EFI_Toolkit.Common
                 if (BIOS_REGION_BASE > sourceBytes.Length) BIOS_REGION_BASE = 0;
 
                 if (Regions.BiosLimit == 0 || Regions.BiosLimit > sourceBytes.Length)
+                {
                     BIOS_REGION_LIMIT = (uint)sourceBytes.Length; BIOS_REGION_SIZE = 0;
+                }
                 else
                 {
                     BIOS_REGION_SIZE = CalculateRegionSize(Regions.BiosBase, Regions.BiosLimit);
                     BIOS_REGION_LIMIT = BIOS_REGION_BASE + BIOS_REGION_SIZE;
                 }
 
-                // Management Engine base, size, limit
-                ME_REGION_BASE = CalculateRegionBase(Regions.MeBase);
+                // Parse Management Engine Region base, limit and size.
+                ME_REGION_BASE =
+                    CalculateRegionBase(
+                        Regions.MeBase);
 
                 if (ME_REGION_BASE > sourceBytes.Length) ME_REGION_BASE = 0;
 
                 if (Regions.MeLimit == 0 || Regions.MeLimit > sourceBytes.Length)
+                {
                     ME_REGION_LIMIT = (uint)sourceBytes.Length; ; ME_REGION_SIZE = 0;
+                }
                 else
                 {
                     ME_REGION_SIZE = CalculateRegionSize(Regions.MeBase, Regions.MeLimit);
                     ME_REGION_LIMIT = ME_REGION_BASE + ME_REGION_SIZE;
                 }
 
-                // Platform Data Region base, size, limit
-                PDR_REGION_BASE = CalculateRegionBase(Regions.PdrBase);
+                // Parse Platform Data Region base, limit and size.
+                PDR_REGION_BASE =
+                    CalculateRegionBase(
+                        Regions.PdrBase);
 
                 if (PDR_REGION_BASE > sourceBytes.Length) PDR_REGION_BASE = 0;
 
                 if (Regions.BiosLimit == 0 || Regions.BiosLimit > sourceBytes.Length)
+                {
                     ME_REGION_LIMIT = (uint)sourceBytes.Length; ME_REGION_SIZE = 0;
+                }
                 else
                 {
                     PDR_REGION_SIZE = CalculateRegionSize(Regions.PdrBase, Regions.PdrLimit);

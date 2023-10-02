@@ -97,7 +97,8 @@ namespace Mac_EFI_Toolkit.UI.Renderers
                         new Pen(brush),
                         left,
                         y,
-                        right, y);
+                        right,
+                        y);
                 }
             }
         }

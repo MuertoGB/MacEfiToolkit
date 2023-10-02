@@ -20,7 +20,11 @@ namespace Mac_EFI_Toolkit.UI
         #region Constructor
         public METRadioButton()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
+            SetStyle(
+                ControlStyles.AllPaintingInWmPaint
+                | ControlStyles.OptimizedDoubleBuffer
+                | ControlStyles.ResizeRedraw
+                | ControlStyles.UserPaint, true);
 
             MouseEnter += new EventHandler(HandleMouseEnter);
             MouseLeave += new EventHandler(HandleMouseEnter);
@@ -124,7 +128,9 @@ namespace Mac_EFI_Toolkit.UI
             {
                 if (BackColor.A == 255)
                 {
-                    e.Graphics.Clear(BackColor);
+                    e.Graphics.Clear(
+                        BackColor);
+
                     return;
                 }
 
@@ -158,8 +164,10 @@ namespace Mac_EFI_Toolkit.UI
 
             e.Graphics.InterpolationMode =
                 InterpolationMode.HighQualityBicubic;
+
             e.Graphics.SmoothingMode =
                 SmoothingMode.AntiAlias;
+
             e.Graphics.CompositingQuality =
                 CompositingQuality.HighQuality;
 
@@ -244,9 +252,14 @@ namespace Mac_EFI_Toolkit.UI
                 using (Pen pen = new Pen(Colours.FOCUS_RECTANGLE, 1))
                 {
                     pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
                     Rectangle rect = ClientRectangle;
+
                     rect.Width -= 1; rect.Height -= 1;
-                    e.Graphics.DrawRectangle(pen, rect);
+
+                    e.Graphics.DrawRectangle(
+                        pen,
+                        rect);
                 }
             }
         }
@@ -339,7 +352,9 @@ namespace Mac_EFI_Toolkit.UI
         private Size GetPreferredSizeN()
         {
             return GetPreferredSize(
-                new Size(0, 0));
+                new Size(
+                    0,
+                    0));
         }
         #endregion
 

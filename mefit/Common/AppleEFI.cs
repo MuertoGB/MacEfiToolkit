@@ -271,18 +271,17 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
-            int dxeCore = BinaryUtils.GetBasePosition(
-                sourceBytes,
-                Guids.DXE_CORE,
-                16,
-                16);
+            int dxeCore =
+                BinaryUtils.GetBasePosition(
+                    sourceBytes,
+                    Guids.DXE_CORE,
+                    16,
+                    16);
 
             if (!Descriptor.DescriptorMode)
             {
                 if (dxeCore == -1)
-                {
                     return false;
-                }
             }
 
             return true;
@@ -301,8 +300,8 @@ namespace Mac_EFI_Toolkit.Common
                 FileNameWithExt = fileInfo.Name,
 
                 FileNameNoExt =
-                Path.GetFileNameWithoutExtension
-                (fileName),
+                    Path.GetFileNameWithoutExtension
+                        (fileName),
 
                 CreationTime = fileInfo.CreationTime.ToString(),
 
@@ -311,8 +310,8 @@ namespace Mac_EFI_Toolkit.Common
                 FileLength = (int)fileInfo.Length,
 
                 CRC32 =
-                FileUtils.GetCrc32Digest(
-                    LoadedBinaryBytes)
+                    FileUtils.GetCrc32Digest(
+                        LoadedBinaryBytes)
             };
         }
         #endregion 
@@ -327,11 +326,9 @@ namespace Mac_EFI_Toolkit.Common
                     (int)Descriptor.PDR_REGION_BASE,
                     (int)Descriptor.PDR_REGION_LIMIT);
 
+            // Platform data region not found
             if (guidBase == -1)
-            {
-                // Platform data region not found
                 return DefaultPdrSection();
-            }
 
             // Look for the board id signature bytes
             int bidBase =
@@ -340,11 +337,9 @@ namespace Mac_EFI_Toolkit.Common
                     PDR_BOARD_ID_SIGNATURE,
                     guidBase);
 
+            // Board id signature not found
             if (bidBase == -1)
-            {
-                // Board id signature not found
                 return DefaultPdrSection();
-            }
 
             int boardIdLength = 8;
             int dataStartPosition = 5;
@@ -356,9 +351,7 @@ namespace Mac_EFI_Toolkit.Common
                     boardIdLength);
 
             if (bidBytes == null)
-            {
                 return DefaultPdrSection();
-            }
 
             // Return the board id
             return new PdrSection
@@ -397,9 +390,7 @@ namespace Mac_EFI_Toolkit.Common
             int paddingLen = 0;
 
             if (nvramPos == -1)
-            {
                 return DefaultNvramStoreData();
-            }
 
             int primaryStoreSize = -1;
             int primaryStoreBase = -1;
@@ -413,7 +404,9 @@ namespace Mac_EFI_Toolkit.Common
                     nvramPos);
 
             if (primaryStoreHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(
-                sourceBytes, primaryStoreHeaderBase, 6) is byte[] bytesPrimaryHeader)
+                sourceBytes,
+                primaryStoreHeaderBase, 6)
+                is byte[] bytesPrimaryHeader)
             {
                 NvramStoreHeader primaryStoreHeader =
                     Helper.DeserializeHeader<NvramStoreHeader>
@@ -464,7 +457,9 @@ namespace Mac_EFI_Toolkit.Common
                         primaryStoreBase + primaryStoreSize + paddingLen);
 
                 if (backupStoreHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(
-                    sourceBytes, backupStoreHeaderBase, 6) is byte[] bytesBackupHeader)
+                    sourceBytes,
+                    backupStoreHeaderBase,
+                    6) is byte[] bytesBackupHeader)
                 {
                     NvramStoreHeader backupStoreHeader =
                         Helper.DeserializeHeader<NvramStoreHeader>(
@@ -974,11 +969,9 @@ namespace Mac_EFI_Toolkit.Common
                         dataLengthBytes,
                         0);
 
+                // Skip reading the section if the length is under 6
                 if (sectionLength <= 6)
-                {
-                    // Skip reading the section if the length is under 6
                     continue;
-                }
 
                 // Read the entire AppleRomInformation section using sectionLength as the max search length
                 romSectionBytes =
@@ -1020,9 +1013,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 // Update the original romInfoData dictionary with the extracted and updated values
                 foreach (KeyValuePair<byte[], string> kvPair in updatedRomInfoData)
-                {
                     romInfoData[kvPair.Key] = kvPair.Value;
-                }
 
                 // Create and return an instance of AppleRomInformation with the extracted data
                 return new AppleRomInformationSection
@@ -1221,9 +1212,7 @@ namespace Mac_EFI_Toolkit.Common
                 Guids.APFS_DXE_GUID,
                 (int)Descriptor.BIOS_REGION_BASE,
                 (int)Descriptor.BIOS_REGION_LIMIT) != -1)
-            {
                 return ApfsCapable.Guid;
-            }
 
             // Disable compressed DXE searching is enabled (Maybe I should get rid of this?)
             if (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch))
@@ -1238,14 +1227,12 @@ namespace Mac_EFI_Toolkit.Common
                     (int)Descriptor.BIOS_REGION_LIMIT);
 
             if (lzmaDxeBase == -1)
-            {
                 lzmaDxeBase =
                     BinaryUtils.GetBasePosition(
                         sourceBytes,
                         Guids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID,
                         (int)Descriptor.BIOS_REGION_BASE,
                         (int)Descriptor.BIOS_REGION_LIMIT);
-            }
 
             // No compressed DXE volume was found
             if (lzmaDxeBase == -1)
@@ -1289,10 +1276,8 @@ namespace Mac_EFI_Toolkit.Common
             if (BinaryUtils.GetBasePosition(
                 decompressedBytes,
                 Guids.APFS_DXE_GUID) == -1)
-            {
                 // The APFS DXE GUID was not found in the compressed volume
                 return ApfsCapable.No;
-            }
 
             // The APFS DXE GUID was present in the compressed volume
             return ApfsCapable.Lzma;
