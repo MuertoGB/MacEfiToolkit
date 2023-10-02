@@ -96,9 +96,7 @@ namespace Mac_EFI_Toolkit.Utils
             while (expectedSize <= maxSize)
             {
                 if (size == expectedSize)
-                {
                     return true;
-                }
 
                 expectedSize *= 2;
             }

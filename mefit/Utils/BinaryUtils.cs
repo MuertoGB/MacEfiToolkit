@@ -196,15 +196,19 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The bytes read from the byte array up to the terminating byte.</returns>
         internal static byte[] GetBytesDelimited(byte[] sourceBytes, int basePosition, byte startByte, params byte[] terminationBytes)
         {
-            int startIndex = Array.IndexOf(sourceBytes, startByte, basePosition);
+            int startIndex =
+                Array.IndexOf(
+                    sourceBytes,
+                    startByte,
+                    basePosition);
+
             if (startIndex < 0 || startIndex == sourceBytes.Length - 1)
                 return null;
 
             startIndex++;
+
             while (startIndex < sourceBytes.Length && sourceBytes[startIndex] == startByte)
-            {
                 startIndex++;
-            }
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -321,7 +325,8 @@ namespace Mac_EFI_Toolkit.Utils
         internal static void EraseByteArray(byte[] sourceBytes, byte eraseByte)
         {
             if (sourceBytes == null)
-                throw new ArgumentNullException(nameof(sourceBytes));
+                throw new ArgumentNullException(
+                    nameof(sourceBytes));
 
             for (int i = 0; i < sourceBytes.Length; i++)
                 sourceBytes[i] = eraseByte;
@@ -347,7 +352,9 @@ namespace Mac_EFI_Toolkit.Utils
                     "Given bytes are too large.");
 
             // Convert the new CRC value to bytes
-            byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
+            byte[] newCrcBytes =
+                BitConverter.GetBytes
+                (newCrc);
 
             // Write the new bytes back to the Fsys store at the appropriate base
             OverwriteBytesAtBase(
@@ -371,6 +378,7 @@ namespace Mac_EFI_Toolkit.Utils
         {
             // Create a new byte array to hold the patched binary
             byte[] patchedBytes = new byte[sourceBytes.Length];
+
             Array.Copy(
                 sourceBytes,
                 patchedBytes,

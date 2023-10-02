@@ -19,7 +19,6 @@ namespace Mac_EFI_Toolkit.Utils
 {
     class MacUtils
     {
-
         /// <summary>
         /// Retrieves the configuration model string for a given HWC identifier. 
         /// Prioritizes retrieving data from the embedded XML db. 
