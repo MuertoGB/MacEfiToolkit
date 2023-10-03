@@ -42,7 +42,9 @@ namespace Mac_EFI_Toolkit
 
                         doc.Load(reader);
 
-                        XmlNode node = doc.SelectSingleNode("data/MET/VersionString");
+                        XmlNode node =
+                            doc.SelectSingleNode(
+                                "data/MET/VersionString");
 
                         if (node == null)
                             return VersionResult.Error;

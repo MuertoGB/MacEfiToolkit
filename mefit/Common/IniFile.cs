@@ -61,13 +61,9 @@ namespace Mac_EFI_Toolkit.Common
             string[] sectionNames = GetSectionNames(_strFilePath);
 
             if (sectionNames != null)
-            {
                 foreach (string s in sectionNames)
-                {
                     if (s == section)
                         return true;
-                }
-            }
 
             return false;
         }
@@ -77,10 +73,8 @@ namespace Mac_EFI_Toolkit.Common
             string[] keyNames = GetSectionKeys(section, _strFilePath);
 
             foreach (string s in keyNames)
-            {
                 if (s == key)
                     return true;
-            }
 
             return false;
         }

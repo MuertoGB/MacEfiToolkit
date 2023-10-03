@@ -279,10 +279,8 @@ namespace Mac_EFI_Toolkit.Common
                     16);
 
             if (!Descriptor.DescriptorMode)
-            {
                 if (dxeCore == -1)
                     return false;
-            }
 
             return true;
         }
@@ -300,8 +298,8 @@ namespace Mac_EFI_Toolkit.Common
                 FileNameWithExt = fileInfo.Name,
 
                 FileNameNoExt =
-                    Path.GetFileNameWithoutExtension
-                        (fileName),
+                    Path.GetFileNameWithoutExtension(
+                        fileName),
 
                 CreationTime = fileInfo.CreationTime.ToString(),
 

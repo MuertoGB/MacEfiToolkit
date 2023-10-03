@@ -20,7 +20,7 @@ namespace Mac_EFI_Toolkit
     {
 
         #region Functions
-        internal static bool IsDebugMode()
+        internal static bool GetIsDebugMode()
         {
 #if DEBUG
             return true;
@@ -29,14 +29,18 @@ namespace Mac_EFI_Toolkit
 #endif
         }
 
-        internal static bool IsRunAsAdmin()
+        internal static bool GetIsRunAsAdmin()
         {
-            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+            return new WindowsPrincipal(
+                WindowsIdentity.GetCurrent()).IsInRole(
+                    WindowsBuiltInRole.Administrator);
         }
 
-        internal static string BitnessMode()
+        internal static string GetBitnessMode()
         {
-            return IntPtr.Size == 8 ? "x64" : "x86";
+            return IntPtr.Size == 8
+                ? "x64"
+                : "x86";
         }
         #endregion
 
@@ -62,9 +66,9 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"Version:  {Application.ProductVersion}.{METVersion.Build}");
                 builder.AppendLine($"LZMA SDK: {METVersion.SDK}");
                 builder.AppendLine($"Channel:  {METVersion.Channel}");
-                builder.AppendLine($"Mode:     {BitnessMode()}");
-                builder.AppendLine($"Debug:    {IsDebugMode()}");
-                builder.AppendLine($"Elevated: {IsRunAsAdmin()}");
+                builder.AppendLine($"Mode:     {GetBitnessMode()}");
+                builder.AppendLine($"Debug:    {GetIsDebugMode()}");
+                builder.AppendLine($"Elevated: {GetIsRunAsAdmin()}");
                 builder.AppendLine($"SHA256:   {FileUtils.GetSha256Digest(appBytes)}\r\n");
 
                 builder.AppendLine("<-- Operating System -->\r\n");

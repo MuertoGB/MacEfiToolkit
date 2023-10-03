@@ -199,7 +199,9 @@ namespace Mac_EFI_Toolkit
 
         internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Exception ex = (Exception)e.ExceptionObject;
+            Exception ex =
+                (Exception)e.ExceptionObject;
+
             if (ex != null)
                 ExceptionHandler(ex);
         }
