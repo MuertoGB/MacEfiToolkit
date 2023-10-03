@@ -160,7 +160,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     METMessageBox.Show(
                         this,
                         "Error",
-                        "Fsys export failed.",
+                        "Data export failed.",
                         METMessageType.Error,
                         METMessageButtons.Okay);
 
