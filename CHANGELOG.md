@@ -26,7 +26,7 @@
 - Introduced an export button in the ROM Information window, enabling users to export the AppleRomSectionInformation data displayed in the window.
 
 #### Bugs:
-- Resolved an issue where the '&' symbol was not correctly displayed in the 'Revision' data within the info window.
+- Resolved an issue where the ampersand '&' symbol was not correctly displayed in specific UI elements. This issue was caused by the 'Use Mnemonic' property being set to true.
 
 ## Version 1.1.3
 
