@@ -453,6 +453,7 @@ namespace Mac_EFI_Toolkit
             this.lblFileModifiedDate.Size = new System.Drawing.Size(237, 33);
             this.lblFileModifiedDate.TabIndex = 99;
             this.lblFileModifiedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFileModifiedDate.UseMnemonic = false;
             // 
             // lblFileCrc
             // 
@@ -468,6 +469,7 @@ namespace Mac_EFI_Toolkit
             this.lblFileCrc.Size = new System.Drawing.Size(237, 33);
             this.lblFileCrc.TabIndex = 99;
             this.lblFileCrc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFileCrc.UseMnemonic = false;
             // 
             // lblCreatedText
             // 
@@ -498,6 +500,7 @@ namespace Mac_EFI_Toolkit
             this.lblFileSizeBytes.Size = new System.Drawing.Size(237, 33);
             this.lblFileSizeBytes.TabIndex = 99;
             this.lblFileSizeBytes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFileSizeBytes.UseMnemonic = false;
             // 
             // lblModifiedText
             // 
@@ -685,6 +688,7 @@ namespace Mac_EFI_Toolkit
             this.lblEfiVersion.Size = new System.Drawing.Size(203, 33);
             this.lblEfiVersion.TabIndex = 100;
             this.lblEfiVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblEfiVersion.UseMnemonic = false;
             // 
             // cmdAppleRomInfo
             // 
@@ -742,6 +746,7 @@ namespace Mac_EFI_Toolkit
             this.lblFsysCrc.Size = new System.Drawing.Size(169, 33);
             this.lblFsysCrc.TabIndex = 15;
             this.lblFsysCrc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFsysCrc.UseMnemonic = false;
             // 
             // cmdFixFsysCrc
             // 
@@ -822,6 +827,7 @@ namespace Mac_EFI_Toolkit
             this.lblNssStore.Size = new System.Drawing.Size(79, 33);
             this.lblNssStore.TabIndex = 100;
             this.lblNssStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblNssStore.UseMnemonic = false;
             // 
             // lblSvsStore
             // 
@@ -837,6 +843,7 @@ namespace Mac_EFI_Toolkit
             this.lblSvsStore.Size = new System.Drawing.Size(78, 33);
             this.lblSvsStore.TabIndex = 100;
             this.lblSvsStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSvsStore.UseMnemonic = false;
             // 
             // lblVssStore
             // 
@@ -852,6 +859,7 @@ namespace Mac_EFI_Toolkit
             this.lblVssStore.Size = new System.Drawing.Size(78, 33);
             this.lblVssStore.TabIndex = 99;
             this.lblVssStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblVssStore.UseMnemonic = false;
             // 
             // lblSonText
             // 
@@ -882,6 +890,7 @@ namespace Mac_EFI_Toolkit
             this.lblOrderNo.Size = new System.Drawing.Size(237, 33);
             this.lblOrderNo.TabIndex = 99;
             this.lblOrderNo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblOrderNo.UseMnemonic = false;
             // 
             // lblMeVersionText
             // 
@@ -929,6 +938,7 @@ namespace Mac_EFI_Toolkit
             this.lblMeVersion.Size = new System.Drawing.Size(203, 33);
             this.lblMeVersion.TabIndex = 100;
             this.lblMeVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblMeVersion.UseMnemonic = false;
             // 
             // cmdExportMe
             // 
@@ -965,6 +975,7 @@ namespace Mac_EFI_Toolkit
             this.lblBoardId.Size = new System.Drawing.Size(237, 33);
             this.lblBoardId.TabIndex = 99;
             this.lblBoardId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblBoardId.UseMnemonic = false;
             // 
             // lblBoardIdText
             // 
@@ -1011,6 +1022,7 @@ namespace Mac_EFI_Toolkit
             this.lblApfsCapable.Size = new System.Drawing.Size(237, 33);
             this.lblApfsCapable.TabIndex = 99;
             this.lblApfsCapable.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblApfsCapable.UseMnemonic = false;
             // 
             // lblApfsCapableText
             // 
@@ -1080,6 +1092,7 @@ namespace Mac_EFI_Toolkit
             this.lblEfiLockStatus.Size = new System.Drawing.Size(203, 33);
             this.lblEfiLockStatus.TabIndex = 99;
             this.lblEfiLockStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblEfiLockStatus.UseMnemonic = false;
             // 
             // lblHwc
             // 
@@ -1095,6 +1108,7 @@ namespace Mac_EFI_Toolkit
             this.lblHwc.Size = new System.Drawing.Size(237, 33);
             this.lblHwc.TabIndex = 99;
             this.lblHwc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblHwc.UseMnemonic = false;
             // 
             // lblFsysStoreText
             // 
@@ -1164,6 +1178,7 @@ namespace Mac_EFI_Toolkit
             this.lblSerialNumber.Size = new System.Drawing.Size(203, 33);
             this.lblSerialNumber.TabIndex = 99;
             this.lblSerialNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSerialNumber.UseMnemonic = false;
             // 
             // tlpModel
             // 

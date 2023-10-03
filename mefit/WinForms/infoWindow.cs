@@ -71,7 +71,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 AppleEFI.AppleRomInfoSectionData.DateStamp
                 ?? "N/A";
             lblRevision.Text =
-                AppleEFI.AppleRomInfoSectionData.Revision.Replace("&", "&&")
+                AppleEFI.AppleRomInfoSectionData.Revision
                 ?? "N/A";
             lblBootRom.Text =
                 AppleEFI.AppleRomInfoSectionData.RomVersion
