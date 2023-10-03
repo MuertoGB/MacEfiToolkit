@@ -36,7 +36,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.lblSectionData = new System.Windows.Forms.Label();
             this.tlpInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lblBiosIdText = new System.Windows.Forms.Label();
             this.lblModelText = new System.Windows.Forms.Label();
@@ -59,6 +58,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuildType = new System.Windows.Forms.Label();
             this.lblCompiler = new METLabel();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
+            this.lblSectionData = new System.Windows.Forms.Label();
             this.cmdExport = new System.Windows.Forms.Button();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
@@ -178,22 +178,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.Size = new System.Drawing.Size(418, 374);
             this.tlpMain.TabIndex = 2;
-            // 
-            // lblSectionData
-            // 
-            this.lblSectionData.AutoEllipsis = true;
-            this.lblSectionData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.lblSectionData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSectionData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSectionData.ForeColor = System.Drawing.Color.White;
-            this.lblSectionData.Location = new System.Drawing.Point(0, 0);
-            this.lblSectionData.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSectionData.Name = "lblSectionData";
-            this.lblSectionData.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblSectionData.Size = new System.Drawing.Size(337, 34);
-            this.lblSectionData.TabIndex = 101;
-            this.lblSectionData.Text = "...";
-            this.lblSectionData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpInfo
             // 
@@ -564,6 +548,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpStatusBar.Size = new System.Drawing.Size(418, 34);
             this.tlpStatusBar.TabIndex = 1;
             // 
+            // lblSectionData
+            // 
+            this.lblSectionData.AutoEllipsis = true;
+            this.lblSectionData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.lblSectionData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSectionData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSectionData.ForeColor = System.Drawing.Color.White;
+            this.lblSectionData.Location = new System.Drawing.Point(0, 0);
+            this.lblSectionData.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSectionData.Name = "lblSectionData";
+            this.lblSectionData.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblSectionData.Size = new System.Drawing.Size(337, 34);
+            this.lblSectionData.TabIndex = 101;
+            this.lblSectionData.Text = "...";
+            this.lblSectionData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // cmdExport
             // 
             this.cmdExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
@@ -582,6 +582,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdExport.TabIndex = 0;
             this.cmdExport.Text = "Export";
             this.cmdExport.UseVisualStyleBackColor = false;
+            this.cmdExport.Click += new System.EventHandler(this.cmdExport_Click);
             // 
             // infoWindow
             // 

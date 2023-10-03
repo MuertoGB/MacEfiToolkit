@@ -515,7 +515,8 @@ namespace Mac_EFI_Toolkit
 
                 if (File.Exists(backupPath))
                 {
-                    ShowExplorerNavigationPrompt(
+                    InterfaceUtils.ShowExplorerNavigationPrompt(
+                        this,
                         "Backup archive created successfully.",
                         backupPath);
 
@@ -694,7 +695,8 @@ namespace Mac_EFI_Toolkit
                     fsysPath,
                     AppleEFI.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
                 {
-                    ShowExplorerNavigationPrompt(
+                    InterfaceUtils.ShowExplorerNavigationPrompt(
+                        this,
                         "Fsys Store export successful.",
                         fsysPath);
 
@@ -966,7 +968,8 @@ namespace Mac_EFI_Toolkit
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
-                    ShowExplorerNavigationPrompt(
+                    InterfaceUtils.ShowExplorerNavigationPrompt(
+                        this,
                         "Intel ME export successful.",
                         mePath);
 
@@ -1092,7 +1095,8 @@ namespace Mac_EFI_Toolkit
                 Debug.GenerateDebugReport(null));
 
             if (File.Exists(METPath.DebugLog))
-                ShowExplorerNavigationPrompt(
+                InterfaceUtils.ShowExplorerNavigationPrompt(
+                    this,
                     "Debug log created successfully.",
                     METPath.DebugLog);
         }
@@ -1882,20 +1886,6 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Misc Events
-        private void ShowExplorerNavigationPrompt(string message, string path)
-        {
-            DialogResult result =
-                METMessageBox.Show(
-                        this,
-                        "MET",
-                        $"{message} Navigate to file?",
-                        METMessageType.Information,
-                        METMessageButtons.YesNo);
-
-            if (result == DialogResult.Yes)
-                FileUtils.HighlightPathInExplorer(path);
-        }
-
         internal async void CheckForNewVersion()
         {
             // Check for a new version using the specified URL

@@ -10,7 +10,9 @@ using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
@@ -69,7 +71,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 AppleEFI.AppleRomInfoSectionData.DateStamp
                 ?? "N/A";
             lblRevision.Text =
-                AppleEFI.AppleRomInfoSectionData.Revision
+                AppleEFI.AppleRomInfoSectionData.Revision.Replace("&", "&&")
                 ?? "N/A";
             lblBootRom.Text =
                 AppleEFI.AppleRomInfoSectionData.RomVersion
@@ -124,6 +126,54 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Button Events
+        private void cmdExport_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                FileName = $"AppleRomSectionInformation_{AppleEFI.FsysStoreData.Serial}",
+                OverwritePrompt = true,
+                InitialDirectory = METPath.CurrentDirectory
+            })
+            {
+                // Action was cancelled
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                StringBuilder builder = new StringBuilder();
+
+                builder.AppendLine($"Bios ID:       {(AppleEFI.AppleRomInfoSectionData.BiosId ?? "N/A")}");
+                builder.AppendLine($"Model:         {(AppleEFI.AppleRomInfoSectionData.Model ?? "N/A")}");
+                builder.AppendLine($"EFI Version:   {(AppleEFI.AppleRomInfoSectionData.EfiVersion ?? "N/A")}");
+                builder.AppendLine($"Built By:      {(AppleEFI.AppleRomInfoSectionData.BuiltBy ?? "N/A")}");
+                builder.AppendLine($"Date Stamp:    {(AppleEFI.AppleRomInfoSectionData.DateStamp ?? "N/A")}");
+                builder.AppendLine($"Revision:      {(AppleEFI.AppleRomInfoSectionData.Revision ?? "N/A")}");
+                builder.AppendLine($"Boot ROM:      {(AppleEFI.AppleRomInfoSectionData.RomVersion ?? "N/A")}");
+                builder.AppendLine($"Buildcave ID:  {(AppleEFI.AppleRomInfoSectionData.BuildcaveId ?? "N/A")}");
+                builder.AppendLine($"Built Type:    {(AppleEFI.AppleRomInfoSectionData.BuildType ?? "N/A")}");
+                builder.AppendLine($"Compiler:      {(AppleEFI.AppleRomInfoSectionData.Compiler ?? "N/A")}");
+
+                File.WriteAllText(dialog.FileName, builder.ToString());
+
+                if (!File.Exists(dialog.FileName))
+                {
+                    METMessageBox.Show(
+                        this,
+                        "Error",
+                        "Fsys export failed.",
+                        METMessageType.Error,
+                        METMessageButtons.Okay);
+
+                    return;
+                }
+
+                InterfaceUtils.ShowExplorerNavigationPrompt(
+                 this,
+                 "Data exported successfully.",
+                 dialog.FileName);
+            }
+        }
+
         private void cmdClose_Click(object sender, System.EventArgs e)
         {
             Close();

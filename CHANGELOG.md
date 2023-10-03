@@ -1,5 +1,6 @@
 <h4 align="center">Version History</h4>
 <p align="center">
+  <a href="#version-114">V1.1.4</a> •
   <a href="#version-113">V1.1.3</a> •
   <a href="#version-112">V1.1.2</a> •
   <a href="#version-111">V1.1.1</a> •
@@ -18,6 +19,14 @@
   <a href="#version-044">V0.4.4</a> •
   <a href="#version-034">V0.3.4</a>
 </p>
+
+## Version 1.1.4
+
+#### Enhancements:
+- Introduced an export button in the ROM Information window, enabling users to export the AppleRomSectionInformation data displayed in the window.
+
+#### Bugs:
+- Resolved an issue where the '&' symbol was not correctly displayed in the 'Revision' data within the info window.
 
 ## Version 1.1.3
 

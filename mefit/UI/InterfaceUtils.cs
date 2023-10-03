@@ -5,6 +5,7 @@
 // InterfaceUtils.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Utils;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -35,6 +36,20 @@ namespace Mac_EFI_Toolkit.UI
                     await Task.Delay(70);
                 }
             }
+        }
+
+        internal static void ShowExplorerNavigationPrompt(Form owner, string message, string path)
+        {
+            DialogResult result =
+                METMessageBox.Show(
+                        owner,
+                        "MET",
+                        $"{message} Navigate to file?",
+                        METMessageType.Information,
+                        METMessageButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+                FileUtils.HighlightPathInExplorer(path);
         }
     }
 }
