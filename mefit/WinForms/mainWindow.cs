@@ -1534,7 +1534,7 @@ namespace Mac_EFI_Toolkit
             {
                 if (!string.IsNullOrEmpty(AppleEFI.MeVersion))
                 {
-                    lblMeVersion.Text += $" (0x{IntelFD.ME_REGION_BASE:X2}h)";
+                    lblMeVersion.Text += $" (0x{IntelFD.ME_REGION_BASE:X}h)";
                 }
             }
         }
