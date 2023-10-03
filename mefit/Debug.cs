@@ -129,27 +129,28 @@ namespace Mac_EFI_Toolkit
                 {
                     builder.AppendLine($"  Descriptor ->\r\n");
                     builder.AppendLine($"Descriptor Mode: {IntelFD.IsDescriptorMode}\r\n");
-                    builder.AppendLine($"PDR Base: {IntelFD.PDR_REGION_BASE:X2}h, PDR Limit: {IntelFD.PDR_REGION_LIMIT:X2}h");
-                    builder.AppendLine($"ME Base: {IntelFD.ME_REGION_BASE:X2}h, ME Limit: {IntelFD.ME_REGION_LIMIT:X2}h");
-                    builder.AppendLine($"BIOS Base: {IntelFD.BIOS_REGION_BASE:X2}h, BIOS Limit: {IntelFD.BIOS_REGION_LIMIT:X2}h\r\n");
+                    builder.AppendLine($"PDR Base:  0x{IntelFD.PDR_REGION_BASE:X}h, PDR Limit: 0x{IntelFD.PDR_REGION_LIMIT:X}h");
+                    builder.AppendLine($"ME Base:   0x{IntelFD.ME_REGION_BASE:X}h, ME Limit: 0x{IntelFD.ME_REGION_LIMIT:X}h");
+                    builder.AppendLine($"BIOS Base: 0x{IntelFD.BIOS_REGION_BASE:X}h, BIOS Limit: 0x{IntelFD.BIOS_REGION_LIMIT:X}h\r\n");
                 }
 
                 builder.AppendLine($"  File ->\r\n");
-                builder.AppendLine($"File Size: {AppleEFI.FileInfoData.FileLength:X2}h\r\n");
+                builder.AppendLine($"File Size: {AppleEFI.FileInfoData.FileLength:X}h\r\n");
 
                 builder.AppendLine($"  Fsys Store  ->\r\n");
-                builder.AppendLine($"Fsys Base:   {AppleEFI.FsysStoreData.FsysBase:X2}h");
-                builder.AppendLine($"Fsys Size:   {AppleEFI.FSYS_RGN_SIZE:X2}h");
-                builder.AppendLine($"Serial Base: {AppleEFI.FsysStoreData.SerialBase:X2}h");
-                builder.AppendLine($"HWC Base:    {AppleEFI.FsysStoreData.HWCBase:X2}h\r\n");
+                builder.AppendLine($"Fsys Base:    0x{AppleEFI.FsysStoreData.FsysBase:X}h");
+                builder.AppendLine($"Fsys Size:    {AppleEFI.FSYS_RGN_SIZE:X}h");
+                builder.AppendLine($"Serial Base:  0x{AppleEFI.FsysStoreData.SerialBase:X}h");
+                builder.AppendLine($"HWC Base:     0x{AppleEFI.FsysStoreData.HWCBase:X}h\r\n");
 
                 builder.AppendLine($"  NVRAM  ->\r\n");
-                builder.AppendLine($"VSS Primary: Base {AppleEFI.VssStoreData.PrimaryStoreBase:X2}h, Size {AppleEFI.VssStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"VSS Backup:  Base {AppleEFI.VssStoreData.BackupStoreBase:X2}h, Size {AppleEFI.VssStoreData.BackupStoreSize:X2}h");
-                builder.AppendLine($"SVS Primary: Base {AppleEFI.SvsStoreData.PrimaryStoreBase:X2}h, Size {AppleEFI.SvsStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"SVS Backup:  Base {AppleEFI.SvsStoreData.BackupStoreBase:X2}h, Size {AppleEFI.SvsStoreData.BackupStoreSize:X2}h");
-                builder.AppendLine($"NSS Primary: Base {AppleEFI.NssStoreData.PrimaryStoreBase:X2}h, Size {AppleEFI.NssStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"NSS Backup:  Base {AppleEFI.NssStoreData.BackupStoreBase:X2}h, Size {AppleEFI.NssStoreData.BackupStoreSize:X2}h");
+                builder.AppendLine($"NVRAM Region:  Base 0x{AppleEFI.NVRAM_BASE:X}h, Size {AppleEFI.NVRAM_SIZE:X}h");
+                builder.AppendLine($"VSS Primary:   Base 0x{AppleEFI.VssStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.VssStoreData.PrimaryStoreSize:X}h");
+                builder.AppendLine($"VSS Backup:    Base 0x{AppleEFI.VssStoreData.BackupStoreBase:X}h, Size {AppleEFI.VssStoreData.BackupStoreSize:X}h");
+                builder.AppendLine($"SVS Primary:   Base 0x{AppleEFI.SvsStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.SvsStoreData.PrimaryStoreSize:X}h");
+                builder.AppendLine($"SVS Backup:    Base 0x{AppleEFI.SvsStoreData.BackupStoreBase:X}h, Size {AppleEFI.SvsStoreData.BackupStoreSize:X}h");
+                builder.AppendLine($"NSS Primary:   Base 0x{AppleEFI.NssStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.NssStoreData.PrimaryStoreSize:X}h");
+                builder.AppendLine($"NSS Backup:    Base 0x{AppleEFI.NssStoreData.BackupStoreBase:X}h, Size {AppleEFI.NssStoreData.BackupStoreSize:X}h");
 
                 return builder.ToString();
             }

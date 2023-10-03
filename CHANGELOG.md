@@ -24,6 +24,9 @@
 
 #### Enhancements:
 - Introduced an export button in the ROM Information window, enabling users to export the AppleRomSectionInformation data displayed in the window.
+- Added '0x' prefix to the beginning of region base data to better represent it as an address.
+- Improvements to the AppleEFI firmware parser.
+- Added NVRAM base address and size to the debug log.
 
 #### Bugs:
 - Resolved an issue where the ampersand '&' symbol was not correctly displayed in specific UI elements. This issue was caused by the 'Use Mnemonic' property being set to true.

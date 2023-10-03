@@ -1248,19 +1248,19 @@ namespace Mac_EFI_Toolkit
         private void pdrBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetClipboardText(
-                $"0x{IntelFD.PDR_REGION_BASE:X}h ({IntelFD.PDR_REGION_BASE} decimal)");
+                $"0x{IntelFD.PDR_REGION_BASE:X}h ({IntelFD.PDR_REGION_BASE})");
         }
 
         private void meBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetClipboardText(
-                $"0x{IntelFD.ME_REGION_BASE:X}h ({IntelFD.ME_REGION_BASE} decimal)");
+                $"0x{IntelFD.ME_REGION_BASE:X}h ({IntelFD.ME_REGION_BASE})");
         }
 
         private void biosBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetClipboardText(
-                $"0x{IntelFD.BIOS_REGION_BASE:X}h ({IntelFD.BIOS_REGION_BASE} decimal)");
+                $"0x{IntelFD.BIOS_REGION_BASE:X}h ({IntelFD.BIOS_REGION_BASE})");
         }
         #endregion
 

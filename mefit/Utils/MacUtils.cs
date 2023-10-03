@@ -137,7 +137,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The full model identifier representation.</returns>
         internal static string ConvertEfiModelCode(string model)
         {
-            // Example MPB121 becomes MacBookPro12,1
+            // Example MBP121 becomes MacBookPro12,1
             if (string.IsNullOrEmpty(model))
                 return null;
 
