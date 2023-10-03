@@ -278,7 +278,7 @@ namespace Mac_EFI_Toolkit.Common
                     16,
                     16);
 
-            if (!Descriptor.DescriptorMode)
+            if (!IntelFD.IsDescriptorMode)
                 if (dxeCore == -1)
                     return false;
 
@@ -321,8 +321,8 @@ namespace Mac_EFI_Toolkit.Common
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     Guids.PDR_SECTION_GUID,
-                    (int)Descriptor.PDR_REGION_BASE,
-                    (int)Descriptor.PDR_REGION_LIMIT);
+                    (int)IntelFD.PDR_REGION_BASE,
+                    (int)IntelFD.PDR_REGION_LIMIT);
 
             // Platform data region not found
             if (guidBase == -1)
@@ -382,8 +382,8 @@ namespace Mac_EFI_Toolkit.Common
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     Guids.NVRAM_SECTION_GUID,
-                    (int)Descriptor.BIOS_REGION_BASE,
-                    (int)Descriptor.BIOS_REGION_LIMIT);
+                    (int)IntelFD.BIOS_REGION_BASE,
+                    (int)IntelFD.BIOS_REGION_LIMIT);
 
             int paddingLen = 0;
 
@@ -729,15 +729,15 @@ namespace Mac_EFI_Toolkit.Common
                 return BinaryUtils.GetBasePosition(
                     sourceBytes,
                     FSYS_SIG,
-                    (int)Descriptor.BIOS_REGION_BASE,
-                    (int)Descriptor.BIOS_REGION_LIMIT);
+                    (int)IntelFD.BIOS_REGION_BASE,
+                    (int)IntelFD.BIOS_REGION_LIMIT);
 
             int guidBase =
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     Guids.NVRAM_SECTION_GUID,
-                    (int)Descriptor.BIOS_REGION_BASE,
-                    (int)Descriptor.BIOS_REGION_LIMIT);
+                    (int)IntelFD.BIOS_REGION_BASE,
+                    (int)IntelFD.BIOS_REGION_LIMIT);
 
             if (guidBase == -1)
                 return -1;
@@ -921,8 +921,8 @@ namespace Mac_EFI_Toolkit.Common
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     Guids.APPLE_ROM_INFO_GUID,
-                    (int)Descriptor.BIOS_REGION_BASE,
-                    (int)Descriptor.BIOS_REGION_LIMIT);
+                    (int)IntelFD.BIOS_REGION_BASE,
+                    (int)IntelFD.BIOS_REGION_LIMIT);
 
             // Seach all GUIDs
             while (guidBase != -1)
@@ -936,7 +936,7 @@ namespace Mac_EFI_Toolkit.Common
                         sourceBytes,
                         Guids.APPLE_ROM_INFO_GUID,
                         guidBase + 1,
-                        (int)Descriptor.BIOS_REGION_LIMIT);
+                        (int)IntelFD.BIOS_REGION_LIMIT);
             }
 
             // AppleRomInformation GUID was not found, so return default data
@@ -1132,8 +1132,8 @@ namespace Mac_EFI_Toolkit.Common
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     Guids.EFI_BIOS_ID_GUID,
-                    (int)Descriptor.BIOS_REGION_BASE,
-                    (int)Descriptor.BIOS_REGION_LIMIT);
+                    (int)IntelFD.BIOS_REGION_BASE,
+                    (int)IntelFD.BIOS_REGION_LIMIT);
 
             if (guidBase == -1)
                 return DefaultEfiBiosIdSection();
@@ -1207,8 +1207,8 @@ namespace Mac_EFI_Toolkit.Common
             if (BinaryUtils.GetBasePosition(
                 sourceBytes,
                 Guids.APFS_DXE_GUID,
-                (int)Descriptor.BIOS_REGION_BASE,
-                (int)Descriptor.BIOS_REGION_LIMIT) != -1)
+                (int)IntelFD.BIOS_REGION_BASE,
+                (int)IntelFD.BIOS_REGION_LIMIT) != -1)
                 return ApfsCapable.Guid;
 
             // Disable compressed DXE searching is enabled (Maybe I should get rid of this?)
@@ -1220,16 +1220,16 @@ namespace Mac_EFI_Toolkit.Common
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     Guids.LZMA_DXE_VOLUME_IMAGE_GUID,
-                    (int)Descriptor.BIOS_REGION_BASE,
-                    (int)Descriptor.BIOS_REGION_LIMIT);
+                    (int)IntelFD.BIOS_REGION_BASE,
+                    (int)IntelFD.BIOS_REGION_LIMIT);
 
             if (lzmaDxeBase == -1)
                 lzmaDxeBase =
                     BinaryUtils.GetBasePosition(
                         sourceBytes,
                         Guids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID,
-                        (int)Descriptor.BIOS_REGION_BASE,
-                        (int)Descriptor.BIOS_REGION_LIMIT);
+                        (int)IntelFD.BIOS_REGION_BASE,
+                        (int)IntelFD.BIOS_REGION_LIMIT);
 
             // No compressed DXE volume was found
             if (lzmaDxeBase == -1)

@@ -125,13 +125,13 @@ namespace Mac_EFI_Toolkit
 
             try
             {
-                if (Descriptor.DescriptorMode)
+                if (IntelFD.IsDescriptorMode)
                 {
                     builder.AppendLine($"  Descriptor ->\r\n");
-                    builder.AppendLine($"Descriptor Mode: {Descriptor.DescriptorMode}\r\n");
-                    builder.AppendLine($"PDR Base: {Descriptor.PDR_REGION_BASE:X2}h, PDR Limit: {Descriptor.PDR_REGION_LIMIT:X2}h");
-                    builder.AppendLine($"ME Base: {Descriptor.ME_REGION_BASE:X2}h, ME Limit: {Descriptor.ME_REGION_LIMIT:X2}h");
-                    builder.AppendLine($"BIOS Base: {Descriptor.BIOS_REGION_BASE:X2}h, BIOS Limit: {Descriptor.BIOS_REGION_LIMIT:X2}h\r\n");
+                    builder.AppendLine($"Descriptor Mode: {IntelFD.IsDescriptorMode}\r\n");
+                    builder.AppendLine($"PDR Base: {IntelFD.PDR_REGION_BASE:X2}h, PDR Limit: {IntelFD.PDR_REGION_LIMIT:X2}h");
+                    builder.AppendLine($"ME Base: {IntelFD.ME_REGION_BASE:X2}h, ME Limit: {IntelFD.ME_REGION_LIMIT:X2}h");
+                    builder.AppendLine($"BIOS Base: {IntelFD.BIOS_REGION_BASE:X2}h, BIOS Limit: {IntelFD.BIOS_REGION_LIMIT:X2}h\r\n");
                 }
 
                 builder.AppendLine($"  File ->\r\n");

@@ -64,8 +64,8 @@ namespace Mac_EFI_Toolkit.Common
                     headerPos = BinaryUtils.GetBasePosition(
                         sourceBytes,
                         FPT_SIGNATURE,
-                        (int)Descriptor.ME_REGION_BASE,
-                        (int)Descriptor.ME_REGION_SIZE);
+                        (int)IntelFD.ME_REGION_BASE,
+                        (int)IntelFD.ME_REGION_SIZE);
                     dataLength = 0x20;
                     break;
 
@@ -73,8 +73,8 @@ namespace Mac_EFI_Toolkit.Common
                     headerPos = BinaryUtils.GetBasePosition(
                         sourceBytes,
                         MN2_SIGNATURE,
-                        (int)Descriptor.ME_REGION_BASE,
-                        (int)Descriptor.ME_REGION_SIZE);
+                        (int)IntelFD.ME_REGION_BASE,
+                        (int)IntelFD.ME_REGION_SIZE);
                     dataLength = 0x10;
                     break;
             }

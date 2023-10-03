@@ -76,7 +76,7 @@ namespace Mac_EFI_Toolkit.Common
     }
     #endregion
 
-    class Descriptor
+    class IntelFD
     {
 
         #region Internal Members
@@ -102,7 +102,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static DescriptorMap Map;
         internal static DescriptorRegions Regions;
 
-        internal static bool DescriptorMode = false;
+        internal static bool IsDescriptorMode = false;
         #endregion
 
         internal static uint CalculateRegionBase(ushort basePosition)
@@ -146,12 +146,12 @@ namespace Mac_EFI_Toolkit.Common
                     HeaderBytes);
 
             // Match flash descriptor tag (5AA5F00F)
-            DescriptorMode =
+            IsDescriptorMode =
                 Header.Tag.SequenceEqual(
                     FLASH_DESC_SIGNATURE);
 
             // Descriptor mode
-            if (DescriptorMode)
+            if (IsDescriptorMode)
             {
                 // Deserialize the flash map
                 byte[] MapBytes = new byte[Marshal.SizeOf(typeof(DescriptorMap))];
@@ -256,7 +256,7 @@ namespace Mac_EFI_Toolkit.Common
             ME_REGION_BASE = 0; ME_REGION_LIMIT = 0; ME_REGION_SIZE = 0;
             PDR_REGION_BASE = 0; PDR_REGION_LIMIT = 0; PDR_REGION_SIZE = 0;
 
-            DescriptorMode = false;
+            IsDescriptorMode = false;
         }
 
         internal static readonly byte[] FLASH_DESC_SIGNATURE =

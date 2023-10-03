@@ -897,7 +897,7 @@ namespace Mac_EFI_Toolkit
 
         private void cmdExportMe_Click(object sender, EventArgs e)
         {
-            if (Descriptor.ME_REGION_BASE == 0 || Descriptor.ME_REGION_LIMIT == 0)
+            if (IntelFD.ME_REGION_BASE == 0 || IntelFD.ME_REGION_LIMIT == 0)
             {
                 METMessageBox.Show(
                     this,
@@ -947,8 +947,8 @@ namespace Mac_EFI_Toolkit
                 byte[] meBytes =
                     BinaryUtils.GetBytesBaseLength(
                         AppleEFI.LoadedBinaryBytes,
-                        (int)Descriptor.ME_REGION_BASE,
-                        (int)Descriptor.ME_REGION_SIZE);
+                        (int)IntelFD.ME_REGION_BASE,
+                        (int)IntelFD.ME_REGION_SIZE);
 
                 if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
                 {
@@ -1230,19 +1230,19 @@ namespace Mac_EFI_Toolkit
         private void pdrBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetClipboardText(
-                $"{Descriptor.PDR_REGION_BASE:X}h ({Descriptor.PDR_REGION_BASE} decimal)");
+                $"{IntelFD.PDR_REGION_BASE:X}h ({IntelFD.PDR_REGION_BASE} decimal)");
         }
 
         private void meBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetClipboardText(
-                $"{Descriptor.ME_REGION_BASE:X}h ({Descriptor.ME_REGION_BASE} decimal)");
+                $"{IntelFD.ME_REGION_BASE:X}h ({IntelFD.ME_REGION_BASE} decimal)");
         }
 
         private void biosBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetClipboardText(
-                $"{Descriptor.BIOS_REGION_BASE:X}h ({Descriptor.BIOS_REGION_BASE} decimal)");
+                $"{IntelFD.BIOS_REGION_BASE:X}h ({IntelFD.BIOS_REGION_BASE} decimal)");
         }
         #endregion
 
@@ -1512,11 +1512,11 @@ namespace Mac_EFI_Toolkit
                 AppleEFI.MeVersion
                 ?? "N/A";
 
-            if (Descriptor.ME_REGION_BASE != 0)
+            if (IntelFD.ME_REGION_BASE != 0)
             {
                 if (!string.IsNullOrEmpty(AppleEFI.MeVersion))
                 {
-                    lblMeVersion.Text += $" ({Descriptor.ME_REGION_BASE:X2}h)";
+                    lblMeVersion.Text += $" ({IntelFD.ME_REGION_BASE:X2}h)";
                 }
             }
         }
@@ -1621,9 +1621,9 @@ namespace Mac_EFI_Toolkit
                 AppleEFI.EfiPrimaryLockData.LockStatus == EfiLockStatus.Locked;
 
             cmdExportMe.Enabled =
-                Descriptor.DescriptorMode &&
-                Descriptor.ME_REGION_BASE != 0 &&
-                Descriptor.ME_REGION_LIMIT != 0;
+                IntelFD.IsDescriptorMode &&
+                IntelFD.ME_REGION_BASE != 0 &&
+                IntelFD.ME_REGION_LIMIT != 0;
 
             tlpFile.Enabled = enable;
             tlpRom.Enabled = enable;
@@ -1653,11 +1653,11 @@ namespace Mac_EFI_Toolkit
                 IsStringNotEmpty(AppleEFI.MeVersion);
 
             pdrBaseToolStripMenuItem.Enabled =
-                Descriptor.PDR_REGION_BASE != 0;
+                IntelFD.PDR_REGION_BASE != 0;
             meBaseToolStripMenuItem.Enabled =
-                Descriptor.ME_REGION_BASE != 0;
+                IntelFD.ME_REGION_BASE != 0;
             biosBaseToolStripMenuItem.Enabled =
-                Descriptor.BIOS_REGION_BASE != 0;
+                IntelFD.BIOS_REGION_BASE != 0;
 
         }
 
@@ -1910,7 +1910,7 @@ namespace Mac_EFI_Toolkit
             AppleEFI.LoadedBinaryBytes = File.ReadAllBytes(filePath);
 
             // Process the descriptor
-            Descriptor.ParseRegionData(
+            IntelFD.ParseRegionData(
                 AppleEFI.LoadedBinaryBytes);
 
             // Check if the image is what we're looking for
@@ -2023,7 +2023,7 @@ namespace Mac_EFI_Toolkit
             SetPrimaryInitialDirectory();
 
             // Reset descriptor values
-            Descriptor.ClearRegionData();
+            IntelFD.ClearRegionData();
 
             // Reset FWBase
             AppleEFI.ResetFirmwareBaseData();

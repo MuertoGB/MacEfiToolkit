@@ -708,18 +708,18 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void LogDescriptorData()
         {
-            if (Descriptor.PDR_REGION_BASE != 0 && Descriptor.PDR_REGION_LIMIT != 0)
+            if (IntelFD.PDR_REGION_BASE != 0 && IntelFD.PDR_REGION_LIMIT != 0)
             {
                 Logger.WriteLogTextToRtb(
-                    $"PDR Region: Base {Descriptor.PDR_REGION_BASE:X2}h, Limit {Descriptor.PDR_REGION_LIMIT:X2}h",
+                    $"PDR Region: Base {IntelFD.PDR_REGION_BASE:X2}h, Limit {IntelFD.PDR_REGION_LIMIT:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
             }
 
-            if (Descriptor.ME_REGION_BASE != 0 && Descriptor.ME_REGION_LIMIT != 0)
+            if (IntelFD.ME_REGION_BASE != 0 && IntelFD.ME_REGION_LIMIT != 0)
             {
                 Logger.WriteLogTextToRtb(
-                    $"ME Region: Base {Descriptor.ME_REGION_BASE:X2}h, Limit {Descriptor.ME_REGION_LIMIT:X2}h",
+                    $"ME Region: Base {IntelFD.ME_REGION_BASE:X2}h, Limit {IntelFD.ME_REGION_LIMIT:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
             }
@@ -733,10 +733,10 @@ namespace Mac_EFI_Toolkit.WinForms
                     rtbLog);
             }
 
-            if (Descriptor.BIOS_REGION_BASE != 0 && Descriptor.BIOS_REGION_LIMIT != 0)
+            if (IntelFD.BIOS_REGION_BASE != 0 && IntelFD.BIOS_REGION_LIMIT != 0)
             {
                 Logger.WriteLogTextToRtb(
-                    $"BIOS Region: Base {Descriptor.BIOS_REGION_BASE:X2}h, Limit {Descriptor.BIOS_REGION_LIMIT:X2}h",
+                    $"BIOS Region: Base {IntelFD.BIOS_REGION_BASE:X2}h, Limit {IntelFD.BIOS_REGION_LIMIT:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
             }
@@ -913,17 +913,17 @@ namespace Mac_EFI_Toolkit.WinForms
                 return false;
             }
 
-            if (sourceBytes.Length > Descriptor.ME_REGION_SIZE)
+            if (sourceBytes.Length > IntelFD.ME_REGION_SIZE)
             {
                 Logger.WriteLogTextToRtb(
-                    $"ME will not fit: {sourceBytes.Length:X2}h > {Descriptor.ME_REGION_SIZE:X2}h",
+                    $"ME will not fit: {sourceBytes.Length:X2}h > {IntelFD.ME_REGION_SIZE:X2}h",
                     RtbLogPrefix.Error,
                     rtbLog);
 
                 return false;
             }
 
-            if (sourceBytes.Length < Descriptor.ME_REGION_SIZE)
+            if (sourceBytes.Length < IntelFD.ME_REGION_SIZE)
             {
                 Logger.WriteLogTextToRtb(
                     $"ME is smaller ({sourceBytes.Length:X2}h) and will be adjusted at build time",
@@ -1030,7 +1030,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool WriteNewMeRegion()
         {
             // Create a blank array
-            byte[] meData = new byte[Descriptor.ME_REGION_SIZE];
+            byte[] meData = new byte[IntelFD.ME_REGION_SIZE];
 
             // 0xFF the blank array
             BinaryUtils.EraseByteArray(meData, 0xFF);
@@ -1048,15 +1048,15 @@ namespace Mac_EFI_Toolkit.WinForms
                 meData,
                 0,
                 _bytesNewBinary,
-                Descriptor.ME_REGION_BASE,
+                IntelFD.ME_REGION_BASE,
                 meData.Length);
 
             // Validate write
             byte[] meNewBinary =
                 BinaryUtils.GetBytesBaseLimit(
                     _bytesNewBinary,
-                    (int)Descriptor.ME_REGION_BASE,
-                    (int)Descriptor.ME_REGION_LIMIT);
+                    (int)IntelFD.ME_REGION_BASE,
+                    (int)IntelFD.ME_REGION_LIMIT);
 
             if (!BinaryUtils.ByteArraysMatch(meNewBinary, meData))
             {
