@@ -294,12 +294,13 @@ namespace Mac_EFI_Toolkit
 
         private static bool ShowConfirmationDialog(Form owner, string title, string message)
         {
-            DialogResult result = METMessageBox.Show(
-                owner,
-                title,
-                message,
-                METMessageType.Question,
-                METMessageButtons.YesNo);
+            DialogResult result =
+                METMessageBox.Show(
+                    owner,
+                    title,
+                    message,
+                    METMessageType.Question,
+                    METMessageButtons.YesNo);
 
             return result == DialogResult.Yes;
         }

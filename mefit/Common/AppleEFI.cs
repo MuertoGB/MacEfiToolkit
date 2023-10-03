@@ -592,7 +592,7 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region Fsys Store
-        // Fsys resides in the NVRAM at either base: 20000h, or 22000h.
+        // Fsys resides in the NVRAM at either base: 0x20000h, or 0x22000h.
         internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFind = false)
         {
             // Find the base position of Fsys Store
@@ -682,9 +682,13 @@ namespace Mac_EFI_Toolkit.Common
                 FsysBytes = fsysStoreBytes,
                 FsysBase = fsysBase,
                 Serial = serialString,
-                SerialBase = snDataStart != -1 ? snDataStart + LITERAL_POS : -1,
+                SerialBase = snDataStart != -1
+                ? snDataStart + LITERAL_POS
+                : -1,
                 HWC = hwcString,
-                HWCBase = hwcDataStart != -1 ? hwcDataStart + LITERAL_POS : -1,
+                HWCBase = hwcDataStart != -1
+                ? hwcDataStart + LITERAL_POS
+                : -1,
                 SON = sonString,
                 CrcString = crcString,
                 CrcCalcString = crcCalcString,
@@ -892,7 +896,7 @@ namespace Mac_EFI_Toolkit.Common
         };
         #endregion
 
-        #region ROM Section
+        #region Apple ROM Information Section
         internal static AppleRomInformationSection GetRomInformationData(byte[] sourceBytes)
         {
             // Define index and termination bytes for data extraction
