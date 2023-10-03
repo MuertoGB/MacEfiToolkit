@@ -149,7 +149,8 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The bytes read from the byte array.</returns>
         internal static byte[] GetBytesBaseLength(byte[] sourceBytes, int basePosition, int length)
         {
-            if (basePosition < 0 || basePosition + length > sourceBytes.Length) return null;
+            if (basePosition < 0 || basePosition + length > sourceBytes.Length)
+                return null;
 
             byte[] buffer = new byte[length];
 

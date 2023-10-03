@@ -20,14 +20,14 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>True if the website is available, false otherwise.</returns>
         internal static bool GetIsWebsiteAvailable(string url)
         {
-            WebRequest req;
+            WebRequest webRequest;
 
             try
             {
-                req = WebRequest.Create(url);
-                req.Timeout = 5000;
-                req.Method = "HEAD";
-                using (WebResponse response = req.GetResponse())
+                webRequest = WebRequest.Create(url);
+                webRequest.Timeout = 5000;
+                webRequest.Method = "HEAD";
+                using (WebResponse webResponse = webRequest.GetResponse())
                     return true;
             }
             catch (Exception e)

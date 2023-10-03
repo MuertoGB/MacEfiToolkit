@@ -97,34 +97,39 @@ namespace Mac_EFI_Toolkit
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Web Security Protocol
+            // Set Web Security Protocol
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
-            // Font Data
+            // Load fonts into memory
             byte[] fontData = Properties.Resources.segmdl2;
 
             if (fontData != null)
             {
-                FONT_MDL2_REG_9 = new Font(
-                    FontResolver.LoadFontFromResource(fontData),
-                    9.0F,
-                    FontStyle.Regular);
-                FONT_MDL2_REG_10 = new Font(
-                    FontResolver.LoadFontFromResource(fontData),
-                    10.0F,
-                    FontStyle.Regular);
-                FONT_MDL2_REG_12 = new Font(
-                    FontResolver.LoadFontFromResource(fontData),
-                    12.0F,
-                    FontStyle.Regular);
-                FONT_MDL2_REG_14 = new Font(
-                    FontResolver.LoadFontFromResource(fontData),
-                    14.0F,
-                    FontStyle.Regular);
-                FONT_MDL2_REG_20 = new Font(
-                    FontResolver.LoadFontFromResource(fontData),
-                    20.0F,
-                    FontStyle.Regular);
+                FONT_MDL2_REG_9 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        9.0F,
+                        FontStyle.Regular);
+                FONT_MDL2_REG_10 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        10.0F,
+                        FontStyle.Regular);
+                FONT_MDL2_REG_12 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        12.0F,
+                        FontStyle.Regular);
+                FONT_MDL2_REG_14 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        14.0F,
+                        FontStyle.Regular);
+                FONT_MDL2_REG_20 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        20.0F,
+                        FontStyle.Regular);
             }
             else
             {
@@ -170,19 +175,19 @@ namespace Mac_EFI_Toolkit
         #region OnExit
         private static void OnExiting(object sender, EventArgs e)
         {
-            HandleExitCleanup();
+            HandleOnExitingCleanup();
         }
 
-        private static void HandleExitCleanup()
+        private static void HandleOnExitingCleanup()
         {
-            // Dispose fonts
+            // Dispose of memory fonts
             FONT_MDL2_REG_9.Dispose();
             FONT_MDL2_REG_10.Dispose();
             FONT_MDL2_REG_12.Dispose();
             FONT_MDL2_REG_14.Dispose();
             FONT_MDL2_REG_20.Dispose();
 
-            // Dispose memory stats timer
+            // Dispose of memory stats timer
             memoryTimer.Dispose();
 
             // Unhook the low level keyboard hook
@@ -236,7 +241,7 @@ namespace Mac_EFI_Toolkit
             if (result == DialogResult.Yes)
             {
                 // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
-                HandleExitCleanup();
+                HandleOnExitingCleanup();
                 Environment.Exit(-1);
             }
 

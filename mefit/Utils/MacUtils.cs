@@ -41,9 +41,10 @@ namespace Mac_EFI_Toolkit.Utils
                         XDocument.Load(
                             stream);
 
-                    string name = xmlDoc.Descendants("section")
-                        .FirstOrDefault(e => e.Element("hwc")?.Value == hwc)
-                        ?.Element("configCode")?.Value;
+                    string name = xmlDoc.Descendants(
+                        "section").FirstOrDefault(e => e.Element(
+                            "hwc")?.Value == hwc)?.Element(
+                                "configCode")?.Value;
 
                     if (!string.IsNullOrEmpty(name))
                         return name;
