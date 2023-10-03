@@ -218,12 +218,12 @@ namespace Mac_EFI_Toolkit.Common
             FitVersion =
                 IntelME.GetVersionData(
                     LoadedBinaryBytes,
-                    HeaderType.FlashImageTool);
+                    VersionType.FlashImageTool);
 
             MeVersion =
                 IntelME.GetVersionData(
                     LoadedBinaryBytes,
-                    HeaderType.ManagementEngine);
+                    VersionType.ManagementEngine);
 
             if (FsysStoreData.FsysBytes == null)
             {

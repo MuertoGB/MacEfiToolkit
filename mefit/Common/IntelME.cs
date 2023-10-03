@@ -42,8 +42,8 @@ namespace Mac_EFI_Toolkit.Common
     }
     #endregion
 
-    #region MEParser
-    internal enum HeaderType
+    #region Enums
+    internal enum VersionType
     {
         FlashImageTool,
         ManagementEngine
@@ -52,15 +52,15 @@ namespace Mac_EFI_Toolkit.Common
 
     class IntelME
     {
-        internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
+        internal static string GetVersionData(byte[] sourceBytes, VersionType versionType)
         {
             int headerPos = -1;
             int dataLength = 0;
             string version = null;
 
-            switch (headerType)
+            switch (versionType)
             {
-                case HeaderType.FlashImageTool:
+                case VersionType.FlashImageTool:
                     headerPos = BinaryUtils.GetBasePosition(
                         sourceBytes,
                         FPT_SIGNATURE,
@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.Common
                     dataLength = 0x20;
                     break;
 
-                case HeaderType.ManagementEngine:
+                case VersionType.ManagementEngine:
                     headerPos = BinaryUtils.GetBasePosition(
                         sourceBytes,
                         MN2_SIGNATURE,
@@ -88,7 +88,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 if (headerBytes != null)
                 {
-                    if (headerType == HeaderType.FlashImageTool)
+                    if (versionType == VersionType.FlashImageTool)
                     {
                         FPTHeader fptHeader =
                             Helper.DeserializeHeader<FPTHeader>(
@@ -100,7 +100,7 @@ namespace Mac_EFI_Toolkit.Common
                             $"{fptHeader.FitHotfix}." +
                             $"{fptHeader.FitBuild}";
                     }
-                    else if (headerType == HeaderType.ManagementEngine)
+                    else if (versionType == VersionType.ManagementEngine)
                     {
                         MN2Manifest mn2Header =
                             Helper.DeserializeHeader<MN2Manifest>(

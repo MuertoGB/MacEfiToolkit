@@ -934,7 +934,7 @@ namespace Mac_EFI_Toolkit.WinForms
             string meVersion =
                 IntelME.GetVersionData(
                     _bytesNewMeRegion,
-                    HeaderType.ManagementEngine);
+                    VersionType.ManagementEngine);
 
             Logger.WriteLogTextToRtb(
                 $"ME Version: {meVersion}",
