@@ -88,7 +88,7 @@
     <Compile Include="Common\AppleEFI.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
-    <Compile Include="Common\MEParser.cs" />
+    <Compile Include="Common\IntelME.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />

@@ -339,8 +339,16 @@ namespace Mac_EFI_Toolkit.UI
         private void HandleMouseEnter(object sender, EventArgs e)
         {
             if (ClientRectangle.Contains(PointToClient(MousePosition)))
-                if (!MouseHovered) { MouseHovered = true; Invalidate(); }
-                else { MouseHovered = false; Invalidate(); }
+                if (!MouseHovered)
+                {
+                    MouseHovered = true;
+                    Invalidate();
+                }
+                else
+                {
+                    MouseHovered = false;
+                    Invalidate();
+                }
         }
         private Size GetPreferredSizeN()
         {

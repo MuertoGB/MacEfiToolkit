@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// MEParser.cs
+// IntelME.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Utils;
@@ -50,7 +50,7 @@ namespace Mac_EFI_Toolkit.Common
     }
     #endregion
 
-    class MEParser
+    class IntelME
     {
         internal static string GetVersionData(byte[] sourceBytes, HeaderType headerType)
         {
@@ -94,7 +94,11 @@ namespace Mac_EFI_Toolkit.Common
                             Helper.DeserializeHeader<FPTHeader>(
                                 headerBytes);
 
-                        version = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
+                        version =
+                            $"{fptHeader.FitMajor}." +
+                            $"{fptHeader.FitMinor}." +
+                            $"{fptHeader.FitHotfix}." +
+                            $"{fptHeader.FitBuild}";
                     }
                     else if (headerType == HeaderType.ManagementEngine)
                     {
@@ -102,7 +106,11 @@ namespace Mac_EFI_Toolkit.Common
                             Helper.DeserializeHeader<MN2Manifest>(
                                 headerBytes);
 
-                        version = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
+                        version =
+                            $"{mn2Header.EngineMajor}." +
+                            $"{mn2Header.EngineMinor}." +
+                            $"{mn2Header.EngineHotfix}." +
+                            $"{mn2Header.EngineBuild}";
                     }
                 }
             }

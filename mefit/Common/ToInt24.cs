@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// BitConvert.cs
+// ToInt24.cs
 // Released under the GNU GLP v3.0
 
 using System;

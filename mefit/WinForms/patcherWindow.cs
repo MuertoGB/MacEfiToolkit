@@ -901,7 +901,7 @@ namespace Mac_EFI_Toolkit.WinForms
             int fptSignature =
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
-                    MEParser.FPT_SIGNATURE);
+                    IntelME.FPT_SIGNATURE);
 
             if (fptSignature == -1)
             {
@@ -932,7 +932,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             string meVersion =
-                MEParser.GetVersionData(
+                IntelME.GetVersionData(
                     _bytesNewMeRegion,
                     HeaderType.ManagementEngine);
 

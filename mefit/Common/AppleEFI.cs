@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// FWBase.cs - Handles parsing of firmware data
+// AppleEFI.cs - Handles parsing of firmware data
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Utils;
@@ -216,12 +216,12 @@ namespace Mac_EFI_Toolkit.Common
             FirmwareVersion = MacUtils.GetFirmwareVersion();
 
             FitVersion =
-                MEParser.GetVersionData(
+                IntelME.GetVersionData(
                     LoadedBinaryBytes,
                     HeaderType.FlashImageTool);
 
             MeVersion =
-                MEParser.GetVersionData(
+                IntelME.GetVersionData(
                     LoadedBinaryBytes,
                     HeaderType.ManagementEngine);
 
@@ -378,7 +378,7 @@ namespace Mac_EFI_Toolkit.Common
         {
             byte[] nvramSig = GetNvramSignature(storeType);
 
-            int nvramPos =
+            int nvramBase =
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     Guids.NVRAM_SECTION_GUID,
@@ -387,7 +387,7 @@ namespace Mac_EFI_Toolkit.Common
 
             int paddingLen = 0;
 
-            if (nvramPos == -1)
+            if (nvramBase == -1)
                 return DefaultNvramStoreData();
 
             int primaryStoreSize = -1;
@@ -399,7 +399,7 @@ namespace Mac_EFI_Toolkit.Common
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     nvramSig,
-                    nvramPos);
+                    nvramBase);
 
             if (primaryStoreHeaderBase != -1 && BinaryUtils.GetBytesBaseLength(
                 sourceBytes,
@@ -796,7 +796,6 @@ namespace Mac_EFI_Toolkit.Common
 
         private static byte[] GetFsysStoreBytes(byte[] sourceBytes, int fsysBase)
         {
-
             // Get Fsys Store size bytes - fsys base + 0x09, length 2 bytes (int16)
             byte[] sizeData =
                 BinaryUtils.GetBytesBaseLength(
@@ -918,7 +917,7 @@ namespace Mac_EFI_Toolkit.Common
             // First we need to locate the AppleRomInformation section GUID
             List<int> romSectionBases = new List<int>();
 
-            int guidPosition =
+            int guidBase =
                 BinaryUtils.GetBasePosition(
                     sourceBytes,
                     Guids.APPLE_ROM_INFO_GUID,
@@ -926,17 +925,17 @@ namespace Mac_EFI_Toolkit.Common
                     (int)Descriptor.BIOS_REGION_LIMIT);
 
             // Seach all GUIDs
-            while (guidPosition != -1)
+            while (guidBase != -1)
             {
                 // Store the base position of the AppleRomInformation section
-                romSectionBases.Add(guidPosition);
+                romSectionBases.Add(guidBase);
 
                 // Move the search position to the next occurrence of the GUID
-                guidPosition =
+                guidBase =
                     BinaryUtils.GetBasePosition(
                         sourceBytes,
                         Guids.APPLE_ROM_INFO_GUID,
-                        guidPosition + 1,
+                        guidBase + 1,
                         (int)Descriptor.BIOS_REGION_LIMIT);
             }
 
