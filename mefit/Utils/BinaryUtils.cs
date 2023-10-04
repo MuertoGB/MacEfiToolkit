@@ -23,10 +23,10 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="sourceBytes">The byte array to search in.</param>
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBasePosition(byte[] sourceBytes, byte[] pattern)
+        internal static int GetBaseAddress(byte[] sourceBytes, byte[] pattern)
         {
             // Call the overload that takes a basePos parameter and sets it to 0.
-            return GetBasePosition(
+            return GetBaseAddress(
                 sourceBytes,
                 pattern,
                 0);
@@ -39,10 +39,10 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <param name="basePosition">The base to start the search from.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBasePosition(byte[] sourceBytes, byte[] pattern, int basePosition)
+        internal static int GetBaseAddress(byte[] sourceBytes, byte[] pattern, int basePosition)
         {
             // Call the overload that takes a basePosition and maxSearchLength parameters and sets maxSearchLength to the remaining length of the sourceBytes array.
-            return GetBasePosition(
+            return GetBaseAddress(
                 sourceBytes,
                 pattern,
                 basePosition,
@@ -57,7 +57,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="basePosition">The base to start the search from.</param>
         /// <param name="maxSearchLength">The maximum length of the search within the byte array.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBasePosition(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
+        internal static int GetBaseAddress(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
         {
             // Ensure that maxSearchLength is within the bounds of the sourceBytes array.
             maxSearchLength =

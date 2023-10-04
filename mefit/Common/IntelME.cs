@@ -61,7 +61,7 @@ namespace Mac_EFI_Toolkit.Common
             switch (versionType)
             {
                 case VersionType.FlashImageTool:
-                    headerPos = BinaryUtils.GetBasePosition(
+                    headerPos = BinaryUtils.GetBaseAddress(
                         sourceBytes,
                         FPT_SIGNATURE,
                         (int)IntelFD.ME_REGION_BASE,
@@ -70,7 +70,7 @@ namespace Mac_EFI_Toolkit.Common
                     break;
 
                 case VersionType.ManagementEngine:
-                    headerPos = BinaryUtils.GetBasePosition(
+                    headerPos = BinaryUtils.GetBaseAddress(
                         sourceBytes,
                         MN2_SIGNATURE,
                         (int)IntelFD.ME_REGION_BASE,

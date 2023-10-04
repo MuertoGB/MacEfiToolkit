@@ -804,7 +804,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 rtbLog);
 
             int fsysSigPos =
-                BinaryUtils.GetBasePosition(
+                BinaryUtils.GetBaseAddress(
                 sourceBytes,
                 AppleEFI.FSYS_SIG);
 
@@ -899,7 +899,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 rtbLog);
 
             int fptSignature =
-                BinaryUtils.GetBasePosition(
+                BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     IntelME.FPT_SIGNATURE);
 
