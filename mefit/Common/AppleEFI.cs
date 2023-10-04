@@ -366,7 +366,7 @@ namespace Mac_EFI_Toolkit.Common
                 return DefaultPdrSection();
 
             // Look for the board id signature bytes
-            int bidBaseAddress =
+            int baseAddress =
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     PDR_BOARD_ID_SIGNATURE,
@@ -374,7 +374,7 @@ namespace Mac_EFI_Toolkit.Common
                     (int)IntelFD.PDR_REGION_SIZE);
 
             // Board id signature not found
-            if (bidBaseAddress == -1)
+            if (baseAddress == -1)
                 return DefaultPdrSection();
 
             int boardIdLength = 8;
@@ -383,7 +383,7 @@ namespace Mac_EFI_Toolkit.Common
             byte[] bidBytes =
                 BinaryUtils.GetBytesBaseLength(
                     sourceBytes,
-                    bidBaseAddress + dataStartPosition,
+                    baseAddress + dataStartPosition,
                     boardIdLength);
 
             if (bidBytes == null)
@@ -466,9 +466,9 @@ namespace Mac_EFI_Toolkit.Common
             };
         }
 
-        private static (int Size, int Base, byte[] Data, bool IsEmpty) ParseStoreData(
+        private static (int Size, int BaseAddress, byte[] Data, bool IsEmpty) ParseStoreData(
             byte[] sourceBytes,
-            byte[] nvramSig,
+            byte[] storeSignatureType,
             int baseAddress,
             int headerSize)
         {
@@ -479,7 +479,7 @@ namespace Mac_EFI_Toolkit.Common
             int storeBaseAddress =
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
-                    nvramSig,
+                    storeSignatureType,
                     baseAddress);
 
             if (storeBaseAddress != -1 &&
@@ -496,6 +496,7 @@ namespace Mac_EFI_Toolkit.Common
                 if (storeHeader.SizeOfData != 0xFFFF && storeHeader.SizeOfData != 0)
                 {
                     storeSize = storeHeader.SizeOfData;
+
                     storeData =
                         BinaryUtils.GetBytesBaseLength(
                             sourceBytes,
@@ -610,14 +611,14 @@ namespace Mac_EFI_Toolkit.Common
 
         #region Fsys Store
         // Fsys resides in the NVRAM at either base: 0x20000h, or 0x22000h.
-        internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFind = false)
+        internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFindFsysStore = false)
         {
             // Find the base position of Fsys Store
             int fsysBaseAddress =
                 FindFsysBaseAddress(
                     sourceBytes,
                     isFsysStoreOnly,
-                    forceFind);
+                    forceFindFsysStore);
 
             // If Fsys Store base is not found, return default data
             if (fsysBaseAddress == -1)
@@ -922,7 +923,7 @@ namespace Mac_EFI_Toolkit.Common
             };
 
             // First we need to locate the AppleRomInformation section GUID
-            List<int> romSectionBases = new List<int>();
+            List<int> romSectionBaseAddresses = new List<int>();
 
             int guidBaseAddress =
                 BinaryUtils.GetBaseAddress(
@@ -935,7 +936,7 @@ namespace Mac_EFI_Toolkit.Common
             while (guidBaseAddress != -1)
             {
                 // Store the base position of the AppleRomInformation section
-                romSectionBases.Add(guidBaseAddress);
+                romSectionBaseAddresses.Add(guidBaseAddress);
 
                 // Move the search position to the next occurrence of the GUID
                 guidBaseAddress =
@@ -947,14 +948,14 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             // AppleRomInformation GUID was not found, so return default data
-            if (romSectionBases.Count == 0)
+            if (romSectionBaseAddresses.Count == 0)
                 return DefaultRomInformationBase();
 
             // Declare the variables outside the loop to ensure accessibility
             byte[] romSectionBytes = null;
 
             // Process each AppleRomInformation section
-            foreach (int sectionBaseAddress in romSectionBases)
+            foreach (int sectionBaseAddress in romSectionBaseAddresses)
             {
                 // Header Length (18h) AppleRomInformation section size (2h, int16)
                 int headerLength = 24; // 18h
@@ -968,13 +969,13 @@ namespace Mac_EFI_Toolkit.Common
                         dataLength);
 
                 // Convert first two bytes to an int16 value and get the AppleRomInformation section size
-                int sectionLength =
+                int sectionSize =
                     BitConverter.ToInt16(
                         dataLengthBytes,
                         0);
 
                 // Skip reading the section if the length is under 6
-                if (sectionLength <= 6)
+                if (sectionSize <= 6)
                     continue;
 
                 // Read the entire AppleRomInformation section using sectionLength as the max search length
@@ -982,7 +983,7 @@ namespace Mac_EFI_Toolkit.Common
                     BinaryUtils.GetBytesBaseLength(
                         sourceBytes,
                         sectionBaseAddress + headerLength,
-                        sectionLength);
+                        sectionSize);
 
                 if (romSectionBytes == null)
                     return DefaultRomInformationBase();
@@ -1022,7 +1023,7 @@ namespace Mac_EFI_Toolkit.Common
                 // Create and return an instance of AppleRomInformation with the extracted data
                 return new AppleRomInformationSection
                 {
-                    SectionExists = sectionLength > 6,
+                    SectionExists = sectionSize > 6,
                     SectionBytes = romSectionBytes,
                     SectionBase = sectionBaseAddress,
                     BiosId = romInfoData[BIOS_ID_SIGNATURE],
@@ -1154,7 +1155,7 @@ namespace Mac_EFI_Toolkit.Common
             if (efiBiosIdBaseAddress == -1)
                 return DefaultEfiBiosIdSection();
 
-            int efiBiosIdLimit =
+            int efiBiosIdLimitAddress =
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     new byte[] { 0x00, 0x00, 0x00 },
@@ -1164,7 +1165,7 @@ namespace Mac_EFI_Toolkit.Common
                 BinaryUtils.GetBytesBaseLimit(
                     sourceBytes,
                     efiBiosIdBaseAddress + EFI_BIOS_ID_SIGNATURE.Length,
-                    efiBiosIdLimit);
+                    efiBiosIdLimitAddress);
 
             if (efiBiosIdBytes == null)
                 return DefaultEfiBiosIdSection();
@@ -1250,12 +1251,12 @@ namespace Mac_EFI_Toolkit.Common
                     3);
 
             // Convert section length bytes to int24
-            int sectionLength =
+            int sectionSize =
                 BitConvert.ToInt24(
                     dataLengthBytes);
 
             // Determine the end of the lzma guid section
-            int lzmaDxeLimit = lzmaDxeBaseAddress + sectionLength;
+            int lzmaDxeLimitAddress = lzmaDxeBaseAddress + sectionSize;
 
             // Search for the LZMA signature byte
             lzmaDxeBaseAddress =
@@ -1270,7 +1271,7 @@ namespace Mac_EFI_Toolkit.Common
                     BinaryUtils.GetBytesBaseLimit(
                         sourceBytes,
                         lzmaDxeBaseAddress,
-                        lzmaDxeLimit));
+                        lzmaDxeLimitAddress));
 
             // There was an issue decompressing the volume (Error saved to './mefit.log')
             if (decompressedBytes == null)
@@ -1280,8 +1281,7 @@ namespace Mac_EFI_Toolkit.Common
             if (BinaryUtils.GetBaseAddress(
                 decompressedBytes,
                 Guids.APFS_DXE_GUID) == -1)
-                // The APFS DXE GUID was not found in the compressed volume
-                return ApfsCapable.No;
+                return ApfsCapable.No; // The APFS DXE GUID was not found in the compressed volume
 
             // The APFS DXE GUID was present in the compressed volume
             return ApfsCapable.Lzma;
