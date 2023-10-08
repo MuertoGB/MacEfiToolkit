@@ -164,20 +164,14 @@ namespace Mac_EFI_Toolkit
             OpenBinary(draggedFilename);
         }
 
-        private void mainWindow_Activated(object sender, EventArgs e)
-        {
+        private void mainWindow_Activated(object sender, EventArgs e) =>
             SetControlForeColor(tlpTitle, Color.White);
-        }
 
-        private void mainWindow_Deactivate(object sender, EventArgs e)
-        {
+        private void mainWindow_Deactivate(object sender, EventArgs e) =>
             SetControlForeColor(tlpTitle, Color.FromArgb(100, 100, 100));
-        }
 
-        private void tlpVersionLabel_Click(object sender, EventArgs e)
-        {
+        private void tlpVersionLabel_Click(object sender, EventArgs e) =>
             ShowContextMenuAtCursor(sender, e, cmsApplication, false);
-        }
         #endregion
 
         #region KeyDown Events
@@ -274,7 +268,6 @@ namespace Mac_EFI_Toolkit
         private void SetMouseMoveEventHandlers()
         {
             Control[] controls = {
-                tlpMain,
                 tlpTitle,
                 lblWindowTitle,
                 tlpVersionLabel,
@@ -288,25 +281,17 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e)
-        {
-            Program.PerformMetAction(
-                this,
-                MetAction.Exit);
-        }
+        private void cmdClose_Click(object sender, EventArgs e) =>
+            Program.PerformMetAction(this, MetAction.Exit);
 
-        private void cmdMin_Click(object sender, EventArgs e)
-        {
+        private void cmdMin_Click(object sender, EventArgs e) =>
             WindowState = FormWindowState.Minimized;
-        }
 
-        private void cmdMore_Click(object sender, EventArgs e)
-        {
+        private void cmdMore_Click(object sender, EventArgs e) =>
             ShowContextMenuAtControlPoint(
                 sender,
                 cmsOverflow,
                 MenuPosition.BottomLeft);
-        }
 
         private void cmdOpen_Click(object sender, EventArgs e)
         {
@@ -987,12 +972,8 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Toolstrip Events
-        private void openLocalFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start(
-                "explorer.exe",
-                METPath.CurrentDirectory);
-        }
+        private void openLocalFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Process.Start("explorer.exe", METPath.CurrentDirectory);
 
         private void backupsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1101,178 +1082,87 @@ namespace Mac_EFI_Toolkit
                     METPath.DebugLog);
         }
 
-        private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Program.PerformMetAction(
-                this,
-                MetAction.Restart);
-        }
+        private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Program.PerformMetAction(this, MetAction.Restart);
 
-        private void changelogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start(
-                METUrl.Changelog);
-        }
+        private void changelogToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Process.Start(METUrl.Changelog);
 
-        private void homepageToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start(
-                METUrl.Homepage);
-        }
+        private void homepageToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Process.Start(METUrl.Homepage);
 
-        private void usageManualToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start(
-                METUrl.Manual);
-        }
+        private void usageManualToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Process.Start(METUrl.Manual);
 
-        private void minimizeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void minimizeToolStripMenuItem_Click(object sender, EventArgs e) =>
             WindowState = FormWindowState.Minimized;
-        }
 
-        private void resetPositionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void resetPositionToolStripMenuItem_Click(object sender, EventArgs e) =>
             CenterToScreen();
-        }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Program.PerformMetAction(
-                this,
-                MetAction.Exit);
-        }
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Program.PerformMetAction(this, MetAction.Exit);
 
         // File Clipboard Menu
-        private void filenameToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FileInfoData.FileNameWithExt);
-        }
+        private void filenameToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFilename(true);
 
-        private void sizeBytesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string size =
-                FileUtils.FormatFileSize(
-                    AppleEFI.FileInfoData.FileLength);
+        private void sizeBytesToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFileSize();
 
-            SetClipboardText($"{size} bytes");
-        }
+        private void crc32ToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFileCrc32();
 
-        private void sizeHexToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                $"{AppleEFI.FileInfoData.FileLength:X}h");
-        }
+        private void createdDateToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFileCreationTime();
 
-        private void crc32ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                $"{AppleEFI.FileInfoData.CRC32:X8}");
-        }
-
-        private void createdDateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FileInfoData.CreationTime);
-        }
-
-        private void modifiedDateToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FileInfoData.LastWriteTime);
-        }
+        private void modifiedDateToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFileModifiedTime();
 
         // Firmware Clipboard Menu
-        private void modelToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                MacUtils.ConvertEfiModelCode(
-                    AppleEFI.EfiBiosIdSectionData.ModelPart));
-        }
+        private void modelToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareModel();
 
-        private void configCodeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                _configCode);
-        }
+        private void configCodeToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareConfigCode();
 
-        private void serialToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FsysStoreData.Serial);
-        }
+        private void fsysCRC32ToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareFsysCrc32();
 
-        private void hwcToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FsysStoreData.HWC);
-        }
+        private void serialToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareSerial();
 
-        private void fsysCRC32ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FsysStoreData.CrcString);
-        }
+        private void hwcToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareHwc();
 
-        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FsysStoreData.SON);
-        }
+        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareOrderNumber();
 
-        private void efiVersionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FirmwareVersion);
-        }
+        private void efiVersionToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareVersion();
 
-        private void boardIDToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.PdrSectionData.BoardId);
-        }
+        private void boardIDToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareBoardId();
 
-        private void fitVersionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.FitVersion);
-        }
+        private void fitVersionToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareFitVersion();
 
-        private void meVersionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                AppleEFI.MeVersion);
-        }
+        private void meVersionToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareMeVersion();
 
-        private void pdrBaseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                $"0x{IntelFD.PDR_REGION_BASE:X}h ({IntelFD.PDR_REGION_BASE})");
-        }
+        private void pdrBaseToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetPdrRegionOffsets();
 
-        private void meBaseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                $"0x{IntelFD.ME_REGION_BASE:X}h ({IntelFD.ME_REGION_BASE})");
-        }
+        private void meBaseToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetMeRegionOffsets();
 
-        private void biosBaseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetClipboardText(
-                $"0x{IntelFD.BIOS_REGION_BASE:X}h ({IntelFD.BIOS_REGION_BASE})");
-        }
+        private void biosBaseToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetBiosRegionOffsets();
         #endregion
 
         #region Label Events
-        private void lblWindowTitle_Click(object sender, EventArgs e)
-        {
-            ShowContextMenuAtCursor(
-                sender,
-                e,
-                cmsApplication,
-                false);
-        }
+        private void lblWindowTitle_Click(object sender, EventArgs e) =>
+            ShowContextMenuAtCursor(sender, e, cmsApplication, false);
 
         private void lblVersion_MouseClick(object sender, MouseEventArgs e)
         {
@@ -1280,16 +1170,53 @@ namespace Mac_EFI_Toolkit
                 Process.Start(
                     METUrl.LatestGithubRelease);
         }
+
+        private void lblFilename_Click(object sender, EventArgs e) =>
+            ClipboardSetFilename(true);
+
+        private void lblFileSizeBytes_Click(object sender, EventArgs e) =>
+            ClipboardSetFileSize();
+
+        private void lblFileCrc_Click(object sender, EventArgs e) =>
+            ClipboardSetFileCrc32();
+
+        private void lblFileCreatedDate_Click(object sender, EventArgs e) =>
+            ClipboardSetFileCreationTime();
+
+        private void lblFileModifiedDate_Click(object sender, EventArgs e) =>
+            ClipboardSetFileModifiedTime();
+
+        private void lblModel_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareFullModel();
+
+        private void lblFsysCrc_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareFsysCrc32();
+
+        private void lblSerialNumber_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareSerial();
+
+        private void lblHwc_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareHwc();
+
+        private void lblOrderNo_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareOrderNumber();
+
+        private void lblEfiVersion_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareVersion();
+
+        private void lblBoardId_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareBoardId();
+
+        private void lblMeVersion_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareMeVersion();
         #endregion
 
         #region Picturebox Events
-        private void pbxTitleLogo_Click(object sender, EventArgs e)
-        {
+        private void pbxTitleLogo_Click(object sender, EventArgs e) =>
             ShowContextMenuAtControlPoint(
                 sender,
                 cmsApplication,
                 MenuPosition.BottomLeft);
-        }
         #endregion
 
         #region Update Main Window
@@ -1357,10 +1284,8 @@ namespace Mac_EFI_Toolkit
             pbxLoad.Image = null;
         }
 
-        private void UpdateFileNameLabel()
-        {
+        private void UpdateFileNameLabel() =>
             lblFilename.Text = $"FILE: '{AppleEFI.FileInfoData.FileNameWithExt}'";
-        }
 
         private void UpdateFileSizeLabel()
         {
@@ -1370,7 +1295,7 @@ namespace Mac_EFI_Toolkit
                 FileUtils.GetIsValidBinSize(
                     fileSizeDecimal);
 
-            lblFileSizeBytes.Text = $"{FileUtils.FormatFileSize(fileSizeDecimal)} • {fileSizeDecimal:X}h";
+            lblFileSizeBytes.Text = $"{FileUtils.FormatFileSize(fileSizeDecimal)} Bytes ({fileSizeDecimal:X}h)";
 
             if (!isValidSize)
             {
@@ -1383,20 +1308,14 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void UpdateFileCrc32Label()
-        {
+        private void UpdateFileCrc32Label() =>
             lblFileCrc.Text = $"{AppleEFI.FileInfoData.CRC32:X8}";
-        }
 
-        private void UpdateFileCreationDateLabel()
-        {
+        private void UpdateFileCreationDateLabel() =>
             lblFileCreatedDate.Text = AppleEFI.FileInfoData.CreationTime;
-        }
 
-        private void UpdateFileModifiedDateLabel()
-        {
+        private void UpdateFileModifiedDateLabel() =>
             lblFileModifiedDate.Text = AppleEFI.FileInfoData.LastWriteTime;
-        }
 
         private void UpdateModelLabel()
         {
@@ -1442,26 +1361,20 @@ namespace Mac_EFI_Toolkit
                 lblSerialNumber.Text += $" ({serialNumber.Length})";
         }
 
-        private void UpdateHardwareConfigLabel()
-        {
+        private void UpdateHardwareConfigLabel() =>
             lblHwc.Text =
                 AppleEFI.FsysStoreData.HWC
                 ?? "N/A";
-        }
 
-        private void UpdateOrderNumberLabel()
-        {
+        private void UpdateOrderNumberLabel() =>
             lblOrderNo.Text =
                 AppleEFI.FsysStoreData.SON
                 ?? "N/A";
-        }
 
-        private void UpdateEfiVersionLabel()
-        {
+        private void UpdateEfiVersionLabel() =>
             lblEfiVersion.Text =
                 AppleEFI.FirmwareVersion
                 ?? "N/A";
-        }
 
         private void UpdateNvramLabel(Label label, NvramStore storeData, string text)
         {
@@ -1495,12 +1408,10 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void UpdateBoardIdLabel()
-        {
+        private void UpdateBoardIdLabel() =>
             lblBoardId.Text =
                 AppleEFI.PdrSectionData.BoardId
                 ?? "N/A";
-        }
 
         private void UpdateApfsCapableLabel()
         {
@@ -1541,10 +1452,8 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region UI Events
-        internal void SetHalfOpacity()
-        {
+        internal void SetHalfOpacity() =>
             Opacity = 0.5;
-        }
 
         private void ChildWindowClosed(object sender, EventArgs e)
         {
@@ -1651,7 +1560,14 @@ namespace Mac_EFI_Toolkit
                 IntelFD.ME_REGION_BASE != 0 &&
                 IntelFD.ME_REGION_LIMIT != 0;
 
+            tlpFilename.Enabled = enable;
+            lblFilename.Enabled = enable;
+
             tlpFile.Enabled = enable;
+
+            tlpModel.Enabled = enable;
+            lblModel.Enabled = enable;
+
             tlpRom.Enabled = enable;
         }
 
@@ -1814,10 +1730,8 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void HandleMouseLeaveTip(object sender, EventArgs e)
-        {
+        private void HandleMouseLeaveTip(object sender, EventArgs e) =>
             lblMessage.Text = string.Empty;
-        }
 
         private string SetNvramStoreTip(NvramStore storeData, string storeType)
         {
@@ -1879,9 +1793,7 @@ namespace Mac_EFI_Toolkit
         private void SetControlForeColor(Control parentControl, Color foreColor)
         {
             foreach (Control ctrl in parentControl.Controls)
-            {
                 ctrl.ForeColor = foreColor;
-            }
         }
         #endregion
 
@@ -2074,9 +1986,22 @@ namespace Mac_EFI_Toolkit
             // Reset FWBase
             AppleEFI.ResetFirmwareBaseData();
         }
+        #endregion
 
+        #region Clipboard
         internal void SetClipboardText(string text)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                METMessageBox.Show(
+                    this,
+                    "Error",
+                    $"Input string was null or empty",
+                    METMessageType.Error,
+                    METMessageButtons.Okay);
+                return;
+            }
+
             Clipboard.SetText(text);
 
             METMessageBox.Show(
@@ -2086,6 +2011,73 @@ namespace Mac_EFI_Toolkit
                 METMessageType.Information,
                 METMessageButtons.Okay);
         }
+
+        private void ClipboardSetFilename(bool showExtension) => SetClipboardText(
+            showExtension
+            ? AppleEFI.FileInfoData.FileNameWithExt
+            : AppleEFI.FileInfoData.FileNameNoExt);
+
+        private void ClipboardSetFileSize() => SetClipboardText(
+            $"{FileUtils.FormatFileSize(AppleEFI.FileInfoData.FileLength)} " +
+            $"Bytes ({AppleEFI.FileInfoData.FileLength:X}h)");
+
+        private void ClipboardSetFileCrc32() => SetClipboardText(
+            $"{AppleEFI.FileInfoData.CRC32:X8}");
+
+        private void ClipboardSetFileCreationTime() => SetClipboardText(
+            AppleEFI.FileInfoData.CreationTime);
+
+        private void ClipboardSetFileModifiedTime() => SetClipboardText(
+            AppleEFI.FileInfoData.LastWriteTime);
+
+        private void ClipboardSetFirmwareModel() => SetClipboardText(
+            $"{MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart)}");
+
+        private void ClipboardSetFirmwareFullModel() => SetClipboardText(
+            $"{MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart)} " +
+            $"'{_configCode}'");
+
+        private void ClipboardSetFirmwareConfigCode() => SetClipboardText(
+                _configCode);
+
+        private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(
+            AppleEFI.FsysStoreData.CrcString);
+
+        private void ClipboardSetFirmwareSerial() => SetClipboardText(
+                AppleEFI.FsysStoreData.Serial);
+
+        private void ClipboardSetFirmwareHwc() => SetClipboardText(
+            AppleEFI.FsysStoreData.HWC);
+
+        private void ClipboardSetFirmwareOrderNumber() => SetClipboardText(
+            AppleEFI.FsysStoreData.SON);
+
+        private void ClipboardSetFirmwareVersion() => SetClipboardText(
+            AppleEFI.FirmwareVersion);
+
+        private void ClipboardSetFirmwareBoardId() => SetClipboardText(
+            AppleEFI.PdrSectionData.BoardId);
+
+        private void ClipboardSetFirmwareFitVersion() => SetClipboardText(
+            AppleEFI.FitVersion);
+
+        private void ClipboardSetFirmwareMeVersion() => SetClipboardText(
+            AppleEFI.MeVersion);
+
+        private void ClipboardSetPdrRegionOffsets() => SetClipboardText(
+            $"Base: 0x{IntelFD.PDR_REGION_BASE:X}h, " +
+            $"Limit: 0x{IntelFD.PDR_REGION_LIMIT:X}h, " +
+            $"Size: 0x{IntelFD.PDR_REGION_SIZE:X}h");
+
+        private void ClipboardSetMeRegionOffsets() => SetClipboardText(
+            $"Base: 0x{IntelFD.ME_REGION_BASE:X}h, " +
+            $"Limit: 0x{IntelFD.ME_REGION_LIMIT:X}h, " +
+            $"Size: 0x{IntelFD.ME_REGION_SIZE:X}h");
+
+        private void ClipboardSetBiosRegionOffsets() => SetClipboardText(
+            $"Base: 0x{IntelFD.BIOS_REGION_BASE:X}h, " +
+            $"Limit: 0x{IntelFD.BIOS_REGION_LIMIT:X}h, " +
+            $"Size: 0x{IntelFD.BIOS_REGION_SIZE:X}h");
         #endregion
 
     }

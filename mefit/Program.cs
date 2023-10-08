@@ -35,20 +35,21 @@ namespace Mac_EFI_Toolkit
     internal struct METVersion
     {
         internal static readonly string SDK = "23.01";
-        internal static readonly string Build = "231004.0345";
+        internal static readonly string Build = "231008.2340";
         internal static readonly string Channel = "Stable";
     }
 
     internal struct METUrl
     {
-        internal static string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
-        internal static string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
-        internal static string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
-        internal static string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
-        internal static string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+        internal static readonly string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
+        internal static readonly string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
+        internal static readonly string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal static readonly string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
+        internal static readonly string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+        internal static readonly string AppleFirmwareIntelMacs = "https://support.apple.com/en-us/HT201518";
     }
     #endregion
-
+        
     #region Enum
     internal enum MetAction
     {
