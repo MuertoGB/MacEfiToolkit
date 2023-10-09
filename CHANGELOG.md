@@ -8,7 +8,7 @@
   <a href="#version-111">V1.1.1</a> •
   <a href="#version-112">V1.1.2</a> •
   <a href="#version-113">V1.1.3</a> •
-  <a href="#version-114">V1.1.4</a> •
+  <a href="#version-114">V1.1.4</a>
 </p>
 
 ## Version 1.1.4
