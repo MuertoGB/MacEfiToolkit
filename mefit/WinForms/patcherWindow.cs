@@ -140,16 +140,15 @@ namespace Mac_EFI_Toolkit.WinForms
 
         #region Button Events
 
-        private void cmdClose_Click(object sender, EventArgs e)
-        {
+        private void cmdClose_Click(object sender, EventArgs e) =>
             CloseWindow();
-        }
 
         private void CloseWindow()
         {
             if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
             {
                 Close();
+
                 return;
             }
 
@@ -210,6 +209,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     swReplaceFsysStore.Checked = false;
+
                     return;
                 }
 
@@ -236,6 +236,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     swReplaceMeRegion.Checked = false;
+
                     return;
                 }
 
@@ -448,7 +449,9 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 Program.openLastBuild = true;
                 Program.lastBuildPath = _fullBuildPath;
+
                 Close();
+
                 return;
             }
 
@@ -507,9 +510,7 @@ namespace Mac_EFI_Toolkit.WinForms
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
-                {
                     return;
-                }
 
                 File.WriteAllText(dialog.FileName, rtbLog.Text);
             }
@@ -543,9 +544,7 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearVssBackup.Enabled = control.Checked;
 
             if (!control.Checked)
-            {
                 cbxClearVssBackup.Checked = false;
-            }
         }
 
         private void cbxClearSvsStore_CheckedChanged(object sender, EventArgs e)
@@ -557,9 +556,7 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearSvsBackup.Enabled = control.Checked;
 
             if (!control.Checked)
-            {
                 cbxClearSvsBackup.Checked = false;
-            }
         }
 
         private void cbxClearNssStore_CheckedChanged(object sender, EventArgs e)
@@ -571,9 +568,7 @@ namespace Mac_EFI_Toolkit.WinForms
             cbxClearNssBackup.Enabled = control.Checked;
 
             if (!control.Checked)
-            {
                 cbxClearNssBackup.Checked = false;
-            }
         }
 
         private void swReplaceFsysStore_CheckedChanged(object sender, EventArgs e)
@@ -587,9 +582,7 @@ namespace Mac_EFI_Toolkit.WinForms
             tlpSerialA.Enabled = !isChecked;
 
             if (isChecked)
-            {
                 cmdFsysPath.PerformClick();
-            }
         }
 
         private void swReplaceMeRegion_CheckedChanged(object sender, EventArgs e)
@@ -604,37 +597,62 @@ namespace Mac_EFI_Toolkit.WinForms
         #region TextBox Events
         private void tbxSerialNumber_TextChanged(object sender, EventArgs e)
         {
-            TextBox tb = (TextBox)sender;
-            int textLength = tb.Text.Length;
+            TextBox tb =
+                (TextBox)sender;
+
+            int textLength =
+                tb.Text.Length;
 
             if (textLength == AppleEFI.FsysStoreData.Serial.Length)
             {
                 if (MacUtils.GetIsValidSerialChars(tb.Text))
                 {
-                    UpdateTextBoxColor(tb, Colours.COMPLETE_GREEN);
-                    Logger.WriteLogTextToRtb("Valid serial characters entered", RtbLogPrefix.Info, rtbLog);
+                    UpdateTextBoxColor(
+                        tb,
+                        Colours.COMPLETE_GREEN);
+
+                    Logger.WriteLogTextToRtb(
+                        "Valid serial characters entered",
+                        RtbLogPrefix.Info,
+                        rtbLog);
+
                     if (AppleEFI.FsysStoreData.Serial.Length == 11)
                     {
-                        UpdateHwcTextBoxText(tb.Text.Substring(textLength - 3));
+                        UpdateHwcTextBoxText(
+                            tb.Text.Substring(textLength - 3));
                     }
                     if (AppleEFI.FsysStoreData.Serial.Length == 12)
                     {
-                        UpdateHwcTextBoxText(tb.Text.Substring(textLength - 4));
+                        UpdateHwcTextBoxText(
+                            tb.Text.Substring(textLength - 4));
                     }
                     cmdBuild.Enabled = true;
                 }
                 else
                 {
-                    UpdateTextBoxColor(tb, Colours.ERROR_RED);
-                    Logger.WriteLogTextToRtb("Invalid serial characters entered", RtbLogPrefix.Error, rtbLog);
+                    UpdateTextBoxColor(
+                        tb,
+                        Colours.ERROR_RED);
+
+                    Logger.WriteLogTextToRtb(
+                        "Invalid serial characters entered",
+                        RtbLogPrefix.Error,
+                        rtbLog);
+
                     UpdateHwcTextBoxText("???");
+
                     cmdBuild.Enabled = false;
                 }
             }
             else
             {
-                UpdateTextBoxColor(tb, Color.White);
-                UpdateHwcTextBoxText(string.Empty);
+                UpdateTextBoxColor(
+                    tb,
+                    Color.White);
+
+                UpdateHwcTextBoxText(
+                    string.Empty);
+
                 cmdBuild.Enabled = true;
             }
         }
@@ -649,7 +667,9 @@ namespace Mac_EFI_Toolkit.WinForms
                 rtbLog);
 
             LogBinarySize();
+
             LogDescriptorData();
+
             LogFsysData();
 
             if (AppleEFI.VssStoreData.PrimaryStoreBase == -1)
@@ -709,12 +729,10 @@ namespace Mac_EFI_Toolkit.WinForms
         private void LogDescriptorData()
         {
             if (IntelFD.PDR_REGION_BASE != 0 && IntelFD.PDR_REGION_LIMIT != 0)
-            {
                 Logger.WriteLogTextToRtb(
                     $"PDR Region: Base {IntelFD.PDR_REGION_BASE:X2}h, Limit {IntelFD.PDR_REGION_LIMIT:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
-            }
 
             if (IntelFD.ME_REGION_BASE != 0 && IntelFD.ME_REGION_LIMIT != 0)
             {
@@ -734,12 +752,10 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             if (IntelFD.BIOS_REGION_BASE != 0 && IntelFD.BIOS_REGION_LIMIT != 0)
-            {
                 Logger.WriteLogTextToRtb(
                     $"BIOS Region: Base {IntelFD.BIOS_REGION_BASE:X2}h, Limit {IntelFD.BIOS_REGION_LIMIT:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
-            }
         }
 
         private void LogFsysData()
@@ -765,15 +781,11 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
-        private void UpdateTextBoxColor(TextBox textBox, Color color)
-        {
+        private void UpdateTextBoxColor(TextBox textBox, Color color) =>
             textBox.ForeColor = color;
-        }
 
-        private void UpdateHwcTextBoxText(string text)
-        {
+        private void UpdateHwcTextBoxText(string text) =>
             tbxHwc.Text = text;
-        }
 
         private void SetLabelProperties(Label label, Font font, string text)
         {
@@ -924,12 +936,10 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             if (sourceBytes.Length < IntelFD.ME_REGION_SIZE)
-            {
                 Logger.WriteLogTextToRtb(
                     $"ME is smaller ({sourceBytes.Length:X2}h) and will be adjusted at build time",
                     RtbLogPrefix.Warning,
                     rtbLog);
-            }
 
             string meVersion =
                 IntelME.GetVersionData(
@@ -1109,9 +1119,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Write new serial number bytes
-            string newSerial = tbxSerialNumber.Text;
-
-            byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
+            byte[] newSerialBytes = Encoding.UTF8.GetBytes(tbxSerialNumber.Text);
 
             BinaryUtils.OverwriteBytesAtBase(
                 _bytesNewBinary,
@@ -1119,11 +1127,10 @@ namespace Mac_EFI_Toolkit.WinForms
                 newSerialBytes);
 
             // Write new HWC bytes
-            string newHwc = tbxHwc.Text;
 
             if (AppleEFI.FsysStoreData.HWCBase != -1)
             {
-                byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
+                byte[] newHwcBytes = Encoding.UTF8.GetBytes(tbxHwc.Text);
 
                 BinaryUtils.OverwriteBytesAtBase(
                     _bytesNewBinary,
@@ -1145,7 +1152,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     false);
 
             // Check serial numbers match
-            if (!string.Equals(newSerial, newFsys.Serial))
+            if (!string.Equals(tbxSerialNumber.Text, newFsys.Serial))
             {
                 HandleBuildFailure(
                     "Serial number comparison failed");
@@ -1155,15 +1162,13 @@ namespace Mac_EFI_Toolkit.WinForms
 
             // Check HWC's match
             if (AppleEFI.FsysStoreData.HWCBase != -1)
-            {
-                if (!string.Equals(newHwc, newFsys.HWC))
+                if (!string.Equals(tbxHwc.Text, newFsys.HWC))
                 {
                     HandleBuildFailure(
                         "HWC comparison failed");
 
                     return false;
                 }
-            }
 
             Logger.WriteLogTextToRtb(
                 "Serial number comparison successful",

@@ -53,8 +53,11 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void aboutWindow_Load(object sender, EventArgs e)
         {
-            lblBuild.Text = $"{Application.ProductVersion}.{METVersion.Build}";
-            lblChannel.Text = $"{METVersion.Channel.ToUpper()} • SDK {METVersion.SDK}";
+            lblBuild.Text =
+                $"{Application.ProductVersion}.{METVersion.Build}";
+
+            lblChannel.Text =
+                $"{METVersion.Channel.ToUpper()} • SDK {METVersion.SDK}";
         }
         #endregion
 
@@ -84,34 +87,24 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e)
-        {
+        private void cmdClose_Click(object sender, EventArgs e) =>
             Close();
-        }
 
-        private void cmdEmail_Click(object sender, EventArgs e)
-        {
+        private void cmdEmail_Click(object sender, EventArgs e) =>
             Process.Start(
                 "mailto:muertogb@proton.me");
-        }
 
-        private void cmdSource_Click(object sender, EventArgs e)
-        {
+        private void cmdSource_Click(object sender, EventArgs e) =>
             Process.Start(
                 "https://github.com/MuertoGB/MacEfiToolkit");
-        }
 
-        private void cmdIssues_Click(object sender, EventArgs e)
-        {
+        private void cmdIssues_Click(object sender, EventArgs e) =>
             Process.Start(
                 "https://github.com/MuertoGB/MacEfiToolkit/issues");
-        }
 
-        private void cmdDonate_Click(object sender, EventArgs e)
-        {
+        private void cmdDonate_Click(object sender, EventArgs e) =>
             Process.Start(
                 "https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ");
-        }
         #endregion
 
         #region Picturebox Events

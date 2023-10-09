@@ -59,7 +59,8 @@ namespace Mac_EFI_Toolkit.WinForms
             lblBiosId.Text = AppleEFI.AppleRomInfoSectionData.BiosId
                 ?? "N/A";
             lblModel.Text = AppleEFI.AppleRomInfoSectionData.Model != null
-                ? $"{AppleEFI.AppleRomInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(AppleEFI.AppleRomInfoSectionData.Model)})"
+                ? $"{AppleEFI.AppleRomInfoSectionData.Model} " +
+                $"({MacUtils.ConvertEfiModelCode(AppleEFI.AppleRomInfoSectionData.Model)})"
                 : "N/A";
             lblEfiVersion.Text =
                 AppleEFI.AppleRomInfoSectionData.EfiVersion
@@ -91,12 +92,8 @@ namespace Mac_EFI_Toolkit.WinForms
                 ?? string.Empty;
 
             foreach (Label label in tlpInfo.Controls)
-            {
                 if (label.Text == "N/A")
-                {
                     label.ForeColor = Colours.DISABLED_TEXT;
-                }
-            }
         }
         #endregion
 
@@ -174,10 +171,8 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
-        private void cmdClose_Click(object sender, System.EventArgs e)
-        {
+        private void cmdClose_Click(object sender, System.EventArgs e) =>
             Close();
-        }
         #endregion
 
         #region Picturebox Events

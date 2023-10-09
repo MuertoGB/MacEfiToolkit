@@ -76,7 +76,6 @@ namespace Mac_EFI_Toolkit.WinForms
             lblPath.ForeColor = Directory.Exists(path)
                 ? Colours.DIM_TEXT
                 : Colours.WARNING_ORANGE;
-
         }
         #endregion
 
@@ -106,25 +105,21 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e)
-        {
+        private void cmdClose_Click(object sender, EventArgs e) =>
             Close();
-        }
 
         private void cmdEditCustomPath_Click(object sender, EventArgs e)
         {
-            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                fbd.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty)
+                dialog.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty)
                     ? METPath.CurrentDirectory
                     : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
-                fbd.Description = "Select a folder";
-                fbd.ShowNewFolderButton = false;
+                dialog.Description = "Select a folder";
+                dialog.ShowNewFolderButton = false;
 
-                if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    _strNewOfdInitialPath = fbd.SelectedPath;
-                }
+                if (dialog.ShowDialog() == DialogResult.OK)
+                    _strNewOfdInitialPath = dialog.SelectedPath;
             }
         }
 

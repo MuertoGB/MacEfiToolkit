@@ -50,10 +50,8 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Window Events
-        private void termsWindow_Load(object sender, EventArgs e)
-        {
+        private void termsWindow_Load(object sender, EventArgs e) =>
             tbxTermsText.Text = Properties.Resources.editorterms;
-        }
         #endregion
 
         #region Mouse Events

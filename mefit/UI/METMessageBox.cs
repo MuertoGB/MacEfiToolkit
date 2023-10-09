@@ -45,6 +45,7 @@ namespace Mac_EFI_Toolkit.UI
         {
             InitializeComponent();
             lblTitle.MouseMove += metMessage_MouseMove;
+
             Load += new EventHandler(METMessageBox_Load);
             Shown += new EventHandler(METMessageBox_Shown);
             KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
@@ -101,9 +102,7 @@ namespace Mac_EFI_Toolkit.UI
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds))
-            {
                 ssMmbSound.Play();
-            }
 
             InterfaceUtils.FlashForecolor(lblTitle);
             InterfaceUtils.FlashForecolor(cmdClose);
