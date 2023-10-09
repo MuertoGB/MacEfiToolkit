@@ -613,8 +613,9 @@ namespace Mac_EFI_Toolkit
                 DialogResult result =
                     METMessageBox.Show(
                         this,
-                        "File Saved",
-                        "Fsys checksum repaired. Would you like to load the new file?",
+                        "Information",
+                        "Fsys checksum repaired successfully. " +
+                        "Would you like to load the new file?",
                         METMessageType.Information,
                         METMessageButtons.YesNo);
 
@@ -880,8 +881,9 @@ namespace Mac_EFI_Toolkit
                 DialogResult result =
                     METMessageBox.Show(
                         this,
-                        "File Saved",
-                        "Unlock successful. Would you like to load the new file?",
+                        "Unlock Successful",
+                        "Make sure to perform an NVRAM reset on first boot. " +
+                        "Would you like to load the new file?",
                         METMessageType.Information,
                         METMessageButtons.YesNo);
 
@@ -1181,7 +1183,10 @@ namespace Mac_EFI_Toolkit
         private void lblModel_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareFullModel();
 
-        private void lblFsysCrc_Click(object sender, EventArgs e) =>
+        private void lblConfigCode_Click(object sender, EventArgs e) =>
+            ClipboardSetFirmwareConfigCode();
+
+        private void lblFsysCrc32_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareFsysCrc32();
 
         private void lblSerialNumber_Click(object sender, EventArgs e) =>
@@ -1190,7 +1195,7 @@ namespace Mac_EFI_Toolkit
         private void lblHwc_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareHwc();
 
-        private void lblOrderNo_Click(object sender, EventArgs e) =>
+        private void lblOrderNumber_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareOrderNumber();
 
         private void lblEfiVersion_Click(object sender, EventArgs e) =>
@@ -1215,19 +1220,20 @@ namespace Mac_EFI_Toolkit
         internal void UpdateUI()
         {
             // File information
-            UpdateFileNameLabel();
+            UpdateFileNameControls();
             UpdateFileSizeLabel();
             UpdateFileCrc32Label();
             UpdateFileCreationDateLabel();
             UpdateFileModifiedDateLabel();
 
             // Firmware Data
-            UpdateModelLabel();
-            UpdateFsysLabel();
-            UpdateFirmwareSerialNumber();
-            UpdateHardwareConfigLabel();
-            UpdateOrderNumberLabel();
-            UpdateEfiVersionLabel();
+            UpdateModelControls();
+            UpdateConfigCodeControls();
+            UpdateFsysControls();
+            UpdateSerialNumberControls();
+            UpdateHardwareConfigControls();
+            UpdateOrderNumberControls();
+            UpdateEfiVersionControls();
 
             UpdateNvramLabel(
                 lblVssStore,
@@ -1242,18 +1248,24 @@ namespace Mac_EFI_Toolkit
                 AppleEFI.NssStoreData,
                 "NSS");
 
-            UpdateEfiLockLabel();
-            UpdateBoardIdLabel();
-            UpdateApfsCapableLabel();
-            UpdateIntelMeLabel();
+            UpdateEfiLockControls();
+            UpdateBoardIdControls();
+            UpdateApfsCapableControls();
+            UpdateIntelFitControls();
+            UpdateIntelMeControls();
 
             // Apply DISABLED_TEXT color to N/A text labels
             ApplyNestedPanelLabelForeColor(
-                tlpRom,
+                tlpFirmware,
                 Colours.DISABLED_TEXT);
 
             // Check which copy menu items should be enabled
-            ToggleCopyMenuItemEnable();
+            pdrBaseToolStripMenuItem.Enabled =
+                IntelFD.PDR_REGION_BASE != 0;
+            meBaseToolStripMenuItem.Enabled =
+                IntelFD.ME_REGION_BASE != 0;
+            biosBaseToolStripMenuItem.Enabled =
+                IntelFD.BIOS_REGION_BASE != 0;
 
             // Check and set control enable
             ToggleControlEnable(true);
@@ -1262,24 +1274,27 @@ namespace Mac_EFI_Toolkit
             pbxLoad.Image = null;
         }
 
-        private void UpdateFileNameLabel() =>
+        private void UpdateFileNameControls() =>
             lblFilename.Text = $"FILE: '{AppleEFI.FileInfoData.FileNameWithExt}'";
 
         private void UpdateFileSizeLabel()
         {
-            int fileSizeDecimal = (int)AppleEFI.FileInfoData.FileLength;
+            int fileSizeDecimal =
+                AppleEFI.FileInfoData.FileLength;
 
             bool isValidSize =
                 FileUtils.GetIsValidBinSize(
                     fileSizeDecimal);
 
-            lblFileSizeBytes.Text = $"{FileUtils.FormatFileSize(fileSizeDecimal)} bytes ({fileSizeDecimal:X}h)";
+            lblFilesize.Text =
+                $"{FileUtils.FormatFileSize(fileSizeDecimal)} bytes ({fileSizeDecimal:X}h)";
 
             if (!isValidSize)
             {
-                lblFileSizeBytes.ForeColor = Colours.ERROR_RED;
+                lblFilesize.ForeColor =
+                    Colours.ERROR_RED;
 
-                lblFileSizeBytes.Text +=
+                lblFilesize.Text +=
                     isValidSize
                     ? string.Empty
                     : $" ({FileUtils.GetSizeDifference(fileSizeDecimal)})";
@@ -1287,45 +1302,82 @@ namespace Mac_EFI_Toolkit
         }
 
         private void UpdateFileCrc32Label() =>
-            lblFileCrc.Text = $"{AppleEFI.FileInfoData.CRC32:X8}";
+            lblFileCrc32.Text = $"{AppleEFI.FileInfoData.CRC32:X8}";
 
         private void UpdateFileCreationDateLabel() =>
             lblFileCreatedDate.Text = AppleEFI.FileInfoData.CreationTime;
 
         private void UpdateFileModifiedDateLabel() =>
-            lblFileModifiedDate.Text = AppleEFI.FileInfoData.LastWriteTime;
+            lblFileModifiedData.Text = AppleEFI.FileInfoData.LastWriteTime;
 
-        private void UpdateModelLabel()
+        private void UpdateModelControls()
         {
-            lblModel.Text =
-                $"MODEL: {MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart) ?? "N/A"}";
+            string model =
+                MacUtils.ConvertEfiModelCode(
+                    AppleEFI.EfiBiosIdSectionData.ModelPart);
 
-            // Load and append the config code asynchronously
-            if (AppleEFI.FsysStoreData.HWC != null)
-                AppendConfigCodeTextAsync(
-                    AppleEFI.FsysStoreData.HWC);
+            lblModel.Text =
+                model
+                ?? "N/A";
+
+            if (!string.IsNullOrEmpty(model))
+            {
+                modelToolStripMenuItem.Enabled = true;
+
+                lblModel.Click += lblModel_Click;
+                lblModel.Cursor = Cursors.Hand;
+
+                return;
+            }
+
+            modelToolStripMenuItem.Enabled = false;
+            lblModel.Cursor = Cursors.Default;
         }
 
-        private void UpdateFsysLabel()
+        private void UpdateConfigCodeControls()
         {
-            if (AppleEFI.FsysStoreData.CrcString != null)
+            if (!string.IsNullOrEmpty(AppleEFI.FsysStoreData.HWC))
             {
-                lblFsysCrc.Text =
-                    $"CRC: {AppleEFI.FsysStoreData.CrcString}h{(AppleEFI.ForceFoundFsys ? " [F]" : string.Empty)}";
+                AppendConfigCodeAsync(
+                     AppleEFI.FsysStoreData.HWC);
 
-                lblFsysCrc.ForeColor = string.Equals(
-                    AppleEFI.FsysStoreData.CrcCalcString,
-                    AppleEFI.FsysStoreData.CrcString)
+                return;
+            }
+
+            configCodeToolStripMenuItem.Enabled = false;
+            lblConfigCode.Text = "N/A";
+            lblConfigCode.Cursor = Cursors.Default;
+        }
+
+        private void UpdateFsysControls()
+        {
+            string fsysCrc32 =
+                AppleEFI.FsysStoreData.CrcString;
+
+            if (!string.IsNullOrEmpty(fsysCrc32))
+            {
+                lblFsysCrc32.Text =
+                    $"CRC: {fsysCrc32}h{(AppleEFI.ForceFoundFsys ? " [F]" : string.Empty)}";
+
+                lblFsysCrc32.ForeColor = string.Equals(
+                    fsysCrc32,
+                    AppleEFI.FsysStoreData.CrcCalcString)
                     ? Colours.COMPLETE_GREEN
                     : Colours.ERROR_RED;
+
+                fsysCRC32ToolStripMenuItem.Enabled = true;
+                lblFsysCrc32.Click += lblFsysCrc32_Click;
+                lblFsysCrc32.Cursor = Cursors.Hand;
+
+                return;
             }
-            else
-            {
-                lblFsysCrc.Text = "N/A";
-            }
+
+            fsysCRC32ToolStripMenuItem.Enabled = false;
+            lblFsysCrc32.Text = "N/A";
+            lblFsysCrc32.Cursor = Cursors.Default;
         }
 
-        private void UpdateFirmwareSerialNumber()
+        private void UpdateSerialNumberControls()
         {
             string serialNumber =
                 AppleEFI.FsysStoreData.Serial;
@@ -1334,65 +1386,146 @@ namespace Mac_EFI_Toolkit
                 serialNumber
                 ?? "N/A";
 
-            if (!string.IsNullOrEmpty(serialNumber)
-                && (serialNumber.Length == 11
-                || serialNumber.Length == 12))
-                lblSerialNumber.Text += $" ({serialNumber.Length})";
+            if (!string.IsNullOrEmpty(serialNumber))
+            {
+                lblSerialNumber.Text +=
+                    (serialNumber.Length == 11 || serialNumber.Length == 12)
+                    ? $" ({serialNumber.Length})"
+                    : string.Empty;
+
+                serialToolStripMenuItem.Enabled = true;
+                lblSerialNumber.Click += lblSerialNumber_Click;
+                lblSerialNumber.Cursor = Cursors.Hand;
+
+                return;
+            }
+
+            serialToolStripMenuItem.Enabled = false;
+            lblSerialNumber.Cursor = Cursors.Default;
         }
 
-        private void UpdateHardwareConfigLabel() =>
-            lblHwc.Text =
-                AppleEFI.FsysStoreData.HWC
-                ?? "N/A";
-
-        private void UpdateOrderNumberLabel() =>
-            lblOrderNo.Text =
-                AppleEFI.FsysStoreData.SON
-                ?? "N/A";
-
-        private void UpdateEfiVersionLabel() =>
-            lblEfiVersion.Text =
-                AppleEFI.FirmwareVersion
-                ?? "N/A";
-
-        private void UpdateNvramLabel(Label label, NvramStore storeData, string text)
+        private void UpdateHardwareConfigControls()
         {
-            label.Text = text;
+            string hwc =
+                AppleEFI.FsysStoreData.HWC;
 
-            Color foreColor = storeData.PrimaryStoreBase == -1
+            lblHwc.Text =
+                 hwc
+                 ?? "N/A";
+
+            if (!string.IsNullOrEmpty(hwc))
+            {
+                hwcToolStripMenuItem.Enabled = true;
+                lblHwc.Click += lblHwc_Click;
+                lblHwc.Cursor = Cursors.Hand;
+
+                return;
+            }
+
+            hwcToolStripMenuItem.Enabled = false;
+            lblHwc.Cursor = Cursors.Default;
+        }
+
+        private void UpdateOrderNumberControls()
+        {
+            string orderNumber =
+                AppleEFI.FsysStoreData.SON;
+
+            lblOrderNumber.Text =
+                orderNumber
+                ?? "N/A";
+
+            if (!string.IsNullOrEmpty(orderNumber))
+            {
+                orderNoToolStripMenuItem.Enabled = true;
+                lblOrderNumber.Click += lblOrderNumber_Click;
+                lblOrderNumber.Cursor = Cursors.Hand;
+
+                return;
+            }
+
+            orderNoToolStripMenuItem.Enabled = false;
+            lblOrderNumber.Cursor = Cursors.Default;
+        }
+
+        private void UpdateEfiVersionControls()
+        {
+            string efiVersion =
+                AppleEFI.FirmwareVersion;
+
+            lblEfiVersion.Text =
+                efiVersion
+                ?? "N/A";
+
+            if (!string.IsNullOrEmpty(efiVersion))
+            {
+                efiVersionToolStripMenuItem.Enabled = true;
+                lblEfiVersion.Click += lblEfiVersion_Click;
+                lblEfiVersion.Cursor = Cursors.Hand;
+
+                return;
+            }
+
+            efiVersionToolStripMenuItem.Enabled = false;
+            lblEfiVersion.Cursor = Cursors.Default;
+        }
+
+        private void UpdateNvramLabel(Label nvramLabel, NvramStore storeData, string text)
+        {
+            nvramLabel.Text = text;
+
+            Color foreColor =
+                storeData.PrimaryStoreBase == -1
                 ? Colours.DISABLED_TEXT
                 : !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
                 ? Color.White
                 : Colours.COMPLETE_GREEN;
 
-            label.ForeColor = foreColor;
+            nvramLabel.ForeColor = foreColor;
         }
 
-        private void UpdateEfiLockLabel()
+        private void UpdateEfiLockControls()
         {
             switch (AppleEFI.EfiPrimaryLockData.LockStatus)
             {
                 case EfiLockStatus.Locked:
-                    lblEfiLockStatus.Text = "LOCKED";
-                    lblEfiLockStatus.ForeColor = Colours.ERROR_RED;
+                    lblEfiLock.Text = "LOCKED";
+                    lblEfiLock.ForeColor = Colours.ERROR_RED;
                     break;
                 case EfiLockStatus.Unlocked:
-                    lblEfiLockStatus.Text = "UNLOCKED";
+                    lblEfiLock.Text = "UNLOCKED";
                     break;
                 case EfiLockStatus.Unknown:
                 default:
-                    lblEfiLockStatus.Text = "UNKNOWN";
-                    lblEfiLockStatus.ForeColor = Colours.WARNING_ORANGE;
+                    lblEfiLock.Text = "UNKNOWN";
+                    lblEfiLock.ForeColor = Colours.WARNING_ORANGE;
                     break;
             }
         }
 
-        private void UpdateBoardIdLabel() =>
+        private void UpdateBoardIdControls()
+        {
+            string boardId =
+                AppleEFI.PdrSectionData.BoardId;
+
             lblBoardId.Text =
-                AppleEFI.PdrSectionData.BoardId
+                boardId
                 ?? "N/A";
 
-        private void UpdateApfsCapableLabel()
+            if (!string.IsNullOrEmpty(boardId))
+            {
+                boardIDToolStripMenuItem.Enabled = true;
+                lblBoardId.Click += lblBoardId_Click;
+                lblBoardId.Cursor = Cursors.Hand;
+
+                return;
+            }
+
+            boardIDToolStripMenuItem.Enabled = false;
+            lblBoardId.Cursor = Cursors.Default;
+        }
+
+        private void UpdateApfsCapableControls()
         {
             switch (AppleEFI.IsApfsCapable)
             {
@@ -1413,15 +1546,36 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void UpdateIntelMeLabel()
+        private void UpdateIntelFitControls() =>
+            fitVersionToolStripMenuItem.Enabled =
+            !string.IsNullOrEmpty(AppleEFI.FitVersion)
+            ? true
+            : false;
+
+        private void UpdateIntelMeControls()
         {
+            string meVersion =
+                AppleEFI.MeVersion;
+
             lblMeVersion.Text =
-                AppleEFI.MeVersion
+                meVersion
                 ?? "N/A";
 
-            if (IntelFD.ME_REGION_BASE != 0)
-                if (!string.IsNullOrEmpty(AppleEFI.MeVersion))
-                    lblMeVersion.Text += $" (0x{IntelFD.ME_REGION_BASE:X}h)";
+            if (!string.IsNullOrEmpty(meVersion))
+            {
+                if (IntelFD.ME_REGION_BASE != 0)
+                    if (!string.IsNullOrEmpty(meVersion))
+                        lblMeVersion.Text += $" (0x{IntelFD.ME_REGION_BASE:X}h)";
+
+                meVersionToolStripMenuItem.Enabled = true;
+                lblMeVersion.Click += lblMeVersion_Click;
+                lblMeVersion.Cursor = Cursors.Hand;
+
+                return;
+            }
+
+            meVersionToolStripMenuItem.Enabled = false;
+            lblMeVersion.Cursor = Cursors.Default;
         }
         #endregion
 
@@ -1477,10 +1631,11 @@ namespace Mac_EFI_Toolkit
 
         private void ShowContextMenuAtCursor(object sender, EventArgs e, ContextMenuStrip menu, bool showOnLeftClick)
         {
-            MouseEventArgs mouseEventArgs = e as MouseEventArgs;
+            MouseEventArgs mouseEventArgs =
+                e as MouseEventArgs;
 
-            if (mouseEventArgs != null && (
-                mouseEventArgs.Button == MouseButtons.Right
+            if (mouseEventArgs != null
+                && (mouseEventArgs.Button == MouseButtons.Right
                 || (showOnLeftClick && mouseEventArgs.Button == MouseButtons.Left)))
                 menu.Show(Cursor.Position);
         }
@@ -1535,51 +1690,7 @@ namespace Mac_EFI_Toolkit
                 IntelFD.ME_REGION_LIMIT != 0;
 
             tlpFilename.Enabled = enable;
-            lblFilename.Enabled = enable;
-
-            tlpFile.Enabled = enable;
-
-            tlpModel.Enabled = enable;
-            lblModel.Enabled = enable;
-
-            tlpRom.Enabled = enable;
-        }
-
-        private void ToggleCopyMenuItemEnable()
-        {
-            modelToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.EfiBiosIdSectionData.ModelPart);
-            configCodeToolStripMenuItem.Enabled =
-                IsStringNotEmpty(_configCode);
-            serialToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.FsysStoreData.Serial);
-            hwcToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.FsysStoreData.HWC);
-            fsysCRC32ToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.FsysStoreData.CrcString);
-            orderNoToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.FsysStoreData.SON);
-            efiVersionToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.FirmwareVersion);
-            boardIDToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.PdrSectionData.BoardId);
-            fitVersionToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.FitVersion);
-            meVersionToolStripMenuItem.Enabled =
-                IsStringNotEmpty(AppleEFI.MeVersion);
-
-            pdrBaseToolStripMenuItem.Enabled =
-                IntelFD.PDR_REGION_BASE != 0;
-            meBaseToolStripMenuItem.Enabled =
-                IntelFD.ME_REGION_BASE != 0;
-            biosBaseToolStripMenuItem.Enabled =
-                IntelFD.BIOS_REGION_BASE != 0;
-
-        }
-
-        private bool IsStringNotEmpty(string value)
-        {
-            return !string.IsNullOrEmpty(value);
+            tlpFirmware.Enabled = enable;
         }
 
         private void SetButtonProperties()
@@ -1700,12 +1811,12 @@ namespace Mac_EFI_Toolkit
                 };
 
                 if (tooltips.ContainsKey(sender))
-                    lblMessage.Text = tooltips[sender];
+                    lblStatusBarTip.Text = tooltips[sender];
             }
         }
 
         private void HandleMouseLeaveTip(object sender, EventArgs e) =>
-            lblMessage.Text = string.Empty;
+            lblStatusBarTip.Text = string.Empty;
 
         private string SetNvramStoreTip(NvramStore storeData, string storeType)
         {
@@ -1727,21 +1838,34 @@ namespace Mac_EFI_Toolkit
             {
                 using (Process currentProcess = Process.GetCurrentProcess())
                 {
-                    lblPrivateMemory.Invoke((Action)(() => lblPrivateMemory.Text =
+                    lblPrivateMemoryUsage.Invoke((Action)(() => lblPrivateMemoryUsage.Text =
                         $"{Helper.GetBytesReadableSize(currentProcess.PrivateMemorySize64)}"));
                 }
             }
         }
 
-        internal async void AppendConfigCodeTextAsync(string strHwc)
+        internal async void AppendConfigCodeAsync(string hwc)
         {
-            string configCode = await MacUtils.GetDeviceConfigCodeAsync(strHwc);
+            string configCode =
+                await MacUtils.GetDeviceConfigCodeAsync(hwc);
 
-            if (configCode != null)
+            lblConfigCode.Text =
+                configCode
+                ?? "N/A";
+
+            if (!string.IsNullOrEmpty(configCode))
             {
                 _configCode = configCode;
-                lblModel.Text += $" '{configCode}'";
+                configCodeToolStripMenuItem.Enabled = true;
+                lblConfigCode.Click += lblConfigCode_Click;
+                lblConfigCode.Cursor = Cursors.Hand;
+
+                return;
             }
+
+            _configCode = null;
+            configCodeToolStripMenuItem.Enabled = false;
+            lblConfigCode.Cursor = Cursors.Default;
         }
 
         void ApplyNestedPanelLabelForeColor(TableLayoutPanel tableLayoutPanel, Color color)
@@ -1915,20 +2039,21 @@ namespace Mac_EFI_Toolkit
             Label[] labels =
             {
                 lblFilename,
-                lblFileSizeBytes,
-                lblFileCrc,
+                lblFilesize,
+                lblFileCrc32,
                 lblFileCreatedDate,
-                lblFileModifiedDate,
+                lblFileModifiedData,
                 lblModel,
+                lblConfigCode,
                 lblSerialNumber,
                 lblHwc,
-                lblFsysCrc,
-                lblOrderNo,
+                lblFsysCrc32,
+                lblOrderNumber,
                 lblEfiVersion,
                 lblVssStore,
                 lblSvsStore,
                 lblNssStore,
-                lblEfiLockStatus,
+                lblEfiLock,
                 lblBoardId,
                 lblApfsCapable,
                 lblMeVersion
@@ -1940,12 +2065,23 @@ namespace Mac_EFI_Toolkit
                 label.ForeColor = Color.White;
             }
 
+            // Remove click event handlers
+            lblModel.Click -= lblModel_Click;
+            lblConfigCode.Click -= lblConfigCode_Click;
+            lblFsysCrc32.Click -= lblFsysCrc32_Click;
+            lblSerialNumber.Click -= lblSerialNumber_Click;
+            lblHwc.Click -= lblHwc_Click;
+            lblOrderNumber.Click -= lblOrderNumber_Click;
+            lblEfiVersion.Click -= lblEfiVersion_Click;
+            lblBoardId.Click -= lblBoardId_Click;
+            lblMeVersion.Click -= lblMeVersion_Click;
+
             // Clear private member
             _configCode = string.Empty;
 
             // Reset label colours
             ApplyNestedPanelLabelForeColor(
-                tlpRom,
+                tlpFirmware,
                 Color.White);
 
             // Reset initial directory
@@ -1963,15 +2099,7 @@ namespace Mac_EFI_Toolkit
         internal void SetClipboardText(string text)
         {
             if (string.IsNullOrEmpty(text))
-            {
-                METMessageBox.Show(
-                    this,
-                    "Error",
-                    $"Input string was null or empty",
-                    METMessageType.Error,
-                    METMessageButtons.Okay);
                 return;
-            }
 
             Clipboard.SetText(text);
 
@@ -2005,8 +2133,7 @@ namespace Mac_EFI_Toolkit
             $"{MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart)}");
 
         private void ClipboardSetFirmwareFullModel() => SetClipboardText(
-            $"{MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart)} " +
-            $"'{_configCode}'");
+            MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart));
 
         private void ClipboardSetFirmwareConfigCode() => SetClipboardText(
                 _configCode);
