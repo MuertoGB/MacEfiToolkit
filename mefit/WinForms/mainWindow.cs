@@ -86,7 +86,8 @@ namespace Mac_EFI_Toolkit
         private void mainWindow_Load(object sender, EventArgs e)
         {
             // Set version text
-            lblVersion.Text = Application.ProductVersion;
+            lblVersion.Text =
+                Application.ProductVersion;
 
             // Get and set the primary file dialog initial directory
             SetPrimaryInitialDirectory();
@@ -104,7 +105,8 @@ namespace Mac_EFI_Toolkit
                 CheckForNewVersion();
 
             // Set up memory timer to retrieve private memory usage
-            TimerCallback callback = new TimerCallback(GetPrivateMemoryUsage);
+            TimerCallback callback = new TimerCallback(
+                GetPrivateMemoryUsage);
 
             Program.memoryTimer = new System.Threading.Timer(
                 callback,
@@ -274,9 +276,7 @@ namespace Mac_EFI_Toolkit
                 tlpMenu };
 
             foreach (Control control in controls)
-            {
                 control.MouseMove += mainWindow_MouseMove;
-            }
         }
         #endregion
 
@@ -372,13 +372,11 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void cmdCopyMenu_Click(object sender, EventArgs e)
-        {
+        private void cmdCopyMenu_Click(object sender, EventArgs e) =>
             ShowContextMenuAtControlPoint(
                 sender,
                 cmsClipboard,
                 MenuPosition.BottomLeft);
-        }
 
         private void cmdSettings_Click(object sender, EventArgs e)
         {
@@ -480,30 +478,28 @@ namespace Mac_EFI_Toolkit
                 Directory.CreateDirectory(
                     METPath.BackupsDirectory);
 
-            using (SaveFileDialog sfd = new SaveFileDialog())
+            using (SaveFileDialog dialog = new SaveFileDialog())
             {
-                sfd.InitialDirectory = METPath.BackupsDirectory;
-                sfd.Filter = "Zip files (*.zip)|*.zip";
-                sfd.FileName = $"{AppleEFI.FileInfoData.FileNameNoExt}_backup";
-                sfd.OverwritePrompt = true;
+                dialog.InitialDirectory = METPath.BackupsDirectory;
+                dialog.Filter = "Zip files (*.zip)|*.zip";
+                dialog.FileName = $"{AppleEFI.FileInfoData.FileNameNoExt}_backup";
+                dialog.OverwritePrompt = true;
 
                 // Action was cancelled
-                if (sfd.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                     return;
-
-                string backupPath = sfd.FileName;
 
                 FileUtils.BackupFileToZip(
                     AppleEFI.LoadedBinaryBytes,
                     AppleEFI.FileInfoData.FileNameWithExt,
-                    backupPath);
+                    dialog.FileName);
 
-                if (File.Exists(backupPath))
+                if (File.Exists(dialog.FileName))
                 {
                     InterfaceUtils.ShowExplorerNavigationPrompt(
                         this,
                         "Backup archive created successfully.",
-                        backupPath);
+                        dialog.FileName);
 
                     return;
                 }
@@ -673,17 +669,15 @@ namespace Mac_EFI_Toolkit
                 if (dialog.ShowDialog() != DialogResult.OK)
                     return;
 
-                string fsysPath = dialog.FileName;
-
                 // Save the Fsys stores bytes to disk
                 if (FileUtils.WriteAllBytesEx(
-                    fsysPath,
-                    AppleEFI.FsysStoreData.FsysBytes) && File.Exists(fsysPath))
+                    dialog.FileName,
+                    AppleEFI.FsysStoreData.FsysBytes) && File.Exists(dialog.FileName))
                 {
                     InterfaceUtils.ShowExplorerNavigationPrompt(
                         this,
                         "Fsys Store export successful.",
-                        fsysPath);
+                        dialog.FileName);
 
                     return;
                 }
@@ -943,20 +937,18 @@ namespace Mac_EFI_Toolkit
                 if (dialog.ShowDialog() != DialogResult.OK)
                     return;
 
-                string mePath = dialog.FileName;
-
                 byte[] meBytes =
                     BinaryUtils.GetBytesBaseLength(
                         AppleEFI.LoadedBinaryBytes,
                         (int)IntelFD.ME_REGION_BASE,
                         (int)IntelFD.ME_REGION_SIZE);
 
-                if (FileUtils.WriteAllBytesEx(mePath, meBytes) && File.Exists(mePath))
+                if (FileUtils.WriteAllBytesEx(dialog.FileName, meBytes) && File.Exists(dialog.FileName))
                 {
                     InterfaceUtils.ShowExplorerNavigationPrompt(
                         this,
                         "Intel ME export successful.",
-                        mePath);
+                        dialog.FileName);
 
                     return;
                 }
@@ -1224,49 +1216,35 @@ namespace Mac_EFI_Toolkit
         {
             // File information
             UpdateFileNameLabel();
-
             UpdateFileSizeLabel();
-
             UpdateFileCrc32Label();
-
             UpdateFileCreationDateLabel();
-
             UpdateFileModifiedDateLabel();
 
             // Firmware Data
             UpdateModelLabel();
-
             UpdateFsysLabel();
-
             UpdateFirmwareSerialNumber();
-
             UpdateHardwareConfigLabel();
-
             UpdateOrderNumberLabel();
-
             UpdateEfiVersionLabel();
 
             UpdateNvramLabel(
                 lblVssStore,
                 AppleEFI.VssStoreData,
                 "VSS");
-
             UpdateNvramLabel(
                 lblSvsStore,
                 AppleEFI.SvsStoreData,
                 "SVS");
-
             UpdateNvramLabel(
                 lblNssStore,
                 AppleEFI.NssStoreData,
                 "NSS");
 
             UpdateEfiLockLabel();
-
             UpdateBoardIdLabel();
-
             UpdateApfsCapableLabel();
-
             UpdateIntelMeLabel();
 
             // Apply DISABLED_TEXT color to N/A text labels
@@ -1295,7 +1273,7 @@ namespace Mac_EFI_Toolkit
                 FileUtils.GetIsValidBinSize(
                     fileSizeDecimal);
 
-            lblFileSizeBytes.Text = $"{FileUtils.FormatFileSize(fileSizeDecimal)} Bytes ({fileSizeDecimal:X}h)";
+            lblFileSizeBytes.Text = $"{FileUtils.FormatFileSize(fileSizeDecimal)} bytes ({fileSizeDecimal:X}h)";
 
             if (!isValidSize)
             {
@@ -1349,7 +1327,8 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateFirmwareSerialNumber()
         {
-            string serialNumber = AppleEFI.FsysStoreData.Serial;
+            string serialNumber =
+                AppleEFI.FsysStoreData.Serial;
 
             lblSerialNumber.Text =
                 serialNumber
@@ -1415,7 +1394,6 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateApfsCapableLabel()
         {
-
             switch (AppleEFI.IsApfsCapable)
             {
                 case ApfsCapable.Guid:
@@ -1442,12 +1420,8 @@ namespace Mac_EFI_Toolkit
                 ?? "N/A";
 
             if (IntelFD.ME_REGION_BASE != 0)
-            {
                 if (!string.IsNullOrEmpty(AppleEFI.MeVersion))
-                {
                     lblMeVersion.Text += $" (0x{IntelFD.ME_REGION_BASE:X}h)";
-                }
-            }
         }
         #endregion
 
@@ -1753,11 +1727,8 @@ namespace Mac_EFI_Toolkit
             {
                 using (Process currentProcess = Process.GetCurrentProcess())
                 {
-                    lblPrivateMemory.Invoke((Action)(() =>
-                    {
-                        lblPrivateMemory.Text =
-                            $"{Helper.GetBytesReadableSize(currentProcess.PrivateMemorySize64)}";
-                    }));
+                    lblPrivateMemory.Invoke((Action)(() => lblPrivateMemory.Text =
+                        $"{Helper.GetBytesReadableSize(currentProcess.PrivateMemorySize64)}"));
                 }
             }
         }
@@ -1878,12 +1849,12 @@ namespace Mac_EFI_Toolkit
             _strInitialDirectory = Path.GetDirectoryName(filePath);
 
             // Load the firmware base in a separate thread
-            Thread thr = new Thread(() => LoadFirmwareBase(filePath))
+            Thread thread = new Thread(() => LoadFirmwareBase(filePath))
             {
                 IsBackground = true
             };
 
-            thr.Start();
+            thread.Start();
         }
 
         private void LoadFirmwareBase(string filePath)
@@ -2019,7 +1990,7 @@ namespace Mac_EFI_Toolkit
 
         private void ClipboardSetFileSize() => SetClipboardText(
             $"{FileUtils.FormatFileSize(AppleEFI.FileInfoData.FileLength)} " +
-            $"Bytes ({AppleEFI.FileInfoData.FileLength:X}h)");
+            $"bytes ({AppleEFI.FileInfoData.FileLength:X}h)");
 
         private void ClipboardSetFileCrc32() => SetClipboardText(
             $"{AppleEFI.FileInfoData.CRC32:X8}");
