@@ -411,7 +411,7 @@ namespace Mac_EFI_Toolkit.Common
         };
         #endregion
 
-        #region NVRAM Stores
+        #region NVRAM / EFI Lock
         internal static NvramStore GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
         {
             byte[] storeTypeSignature =

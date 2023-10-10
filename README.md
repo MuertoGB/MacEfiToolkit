@@ -8,7 +8,7 @@ Mac EFI Toolkit V1.1.4
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
-  <a href="MANUAL.md">Manual</a> •
+  <a href="#manual">Manual</a> •
   <a href="#download">Download</a> •
   <a href="#requirements">Requirements</a> •
   <a href="#acknowledgements">Acknowledgements</a> •
@@ -87,6 +87,10 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 |[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/113)| 28th September, 2023 | No | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
+
+## Manual
+
+Instructions on how to use the application can be viewed in [manual](MANUAL.md).
 
 ## Requirements
 

@@ -49,7 +49,7 @@ namespace Mac_EFI_Toolkit
         internal static readonly string AppleFirmwareIntelMacs = "https://support.apple.com/en-us/HT201518";
     }
     #endregion
-        
+
     #region Enum
     internal enum MetAction
     {
