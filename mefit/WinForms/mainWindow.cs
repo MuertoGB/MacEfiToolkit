@@ -1168,10 +1168,10 @@ namespace Mac_EFI_Toolkit
         private void lblFilename_Click(object sender, EventArgs e) =>
             ClipboardSetFilename(true);
 
-        private void lblFileSizeBytes_Click(object sender, EventArgs e) =>
+        private void lblFileSize_Click(object sender, EventArgs e) =>
             ClipboardSetFileSize();
 
-        private void lblFileCrc_Click(object sender, EventArgs e) =>
+        private void lblFileCrc32_Click(object sender, EventArgs e) =>
             ClipboardSetFileCrc32();
 
         private void lblFileCreatedDate_Click(object sender, EventArgs e) =>
@@ -1259,7 +1259,7 @@ namespace Mac_EFI_Toolkit
                 tlpFirmware,
                 Colours.DISABLED_TEXT);
 
-            // Check which copy menu items should be enabled
+            // Check which descriptor copy menu items should be enabled
             pdrBaseToolStripMenuItem.Enabled =
                 IntelFD.PDR_REGION_BASE != 0;
             meBaseToolStripMenuItem.Enabled =
