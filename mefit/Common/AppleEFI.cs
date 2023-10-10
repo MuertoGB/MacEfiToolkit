@@ -187,7 +187,10 @@ namespace Mac_EFI_Toolkit.Common
                 - ZERO_VECTOR_SIZE;
 
             if (NVRAM_BASE < 0 || NVRAM_BASE > FileInfoData.FileLength)
+            {
+                Logger.WriteToLogFile($"Invalid NVRAM base address: {NVRAM_BASE}", LogType.Application);
                 NVRAM_BASE = -1;
+            }
 
             // Determine size of the NVRAM section.
             // Int32 value is stored at NVRAM_BASE + 0x20 (32 decimal).
@@ -201,7 +204,10 @@ namespace Mac_EFI_Toolkit.Common
                     0);
 
             if (NVRAM_SIZE < 0 || NVRAM_SIZE > FileInfoData.FileLength)
+            {
+                Logger.WriteToLogFile($"Invalid NVRAM size: {NVRAM_SIZE}", LogType.Application);
                 NVRAM_SIZE = -1;
+            }
 
             // Parse NVRAM VSS Store data.
             VssStoreData =

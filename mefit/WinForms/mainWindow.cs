@@ -1865,6 +1865,7 @@ namespace Mac_EFI_Toolkit
 
             _configCode = null;
             configCodeToolStripMenuItem.Enabled = false;
+            lblConfigCode.ForeColor = Colours.DISABLED_TEXT;
             lblConfigCode.Cursor = Cursors.Default;
         }
 
@@ -1929,9 +1930,7 @@ namespace Mac_EFI_Toolkit
 
             // If a firmware is loaded, reset all data
             if (AppleEFI.FirmwareLoaded)
-            {
                 ResetAllData();
-            }
 
             // Check the filesize
             if (!IsValidMinMaxSize(filePath))
@@ -2061,8 +2060,11 @@ namespace Mac_EFI_Toolkit
 
             foreach (Label label in labels)
             {
-                label.Text = string.Empty;
-                label.ForeColor = Color.White;
+                label.BeginInvoke((MethodInvoker)delegate
+                {
+                    label.Text = string.Empty;
+                    label.ForeColor = Color.White;
+                });
             }
 
             // Remove click event handlers
@@ -2078,11 +2080,6 @@ namespace Mac_EFI_Toolkit
 
             // Clear private member
             _configCode = string.Empty;
-
-            // Reset label colours
-            ApplyNestedPanelLabelForeColor(
-                tlpFirmware,
-                Color.White);
 
             // Reset initial directory
             SetPrimaryInitialDirectory();

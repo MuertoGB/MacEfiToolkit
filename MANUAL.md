@@ -14,6 +14,8 @@ This section explains the main window and its functionality.
 
 The executable and main window of the application support drag and drop functionality for files, however, it's important to note that this feature does not work if the application is run as an administrator, this limitation is due to the way Windows processes drag and drop operations in elevated privileges.
 
+Most labels in the main window can be clicked to copy their respective data to the clipboard.
+
 ---
 
 #### Main Buttons:

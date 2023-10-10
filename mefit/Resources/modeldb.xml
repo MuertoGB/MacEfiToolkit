@@ -33449,6 +33449,10 @@
     <configCode>MacBook (Retina, 12-inch, 2017)</configCode>
 </section>
 <section>
+	<hwc>HH27</hwc>
+	<configCode>MacBook (Retina, 12-inch, 2017)</configCode>
+</section>
+<section>
     <hwc>HLF9</hwc>
     <configCode>iPad (5th generation)</configCode>
 </section>
