@@ -201,6 +201,7 @@ namespace Mac_EFI_Toolkit.Common
                     0);
 
             if (NVRAM_SIZE < 0 || NVRAM_SIZE > FileInfoData.FileLength)
+                NVRAM_SIZE = -1;
 
             // Parse NVRAM VSS Store data.
             VssStoreData =
