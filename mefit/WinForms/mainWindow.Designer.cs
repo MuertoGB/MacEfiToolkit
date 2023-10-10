@@ -403,7 +403,7 @@ namespace Mac_EFI_Toolkit
             this.lblModel.Location = new System.Drawing.Point(131, 70);
             this.lblModel.Margin = new System.Windows.Forms.Padding(0);
             this.lblModel.Name = "lblModel";
-            this.lblModel.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblModel.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblModel.Size = new System.Drawing.Size(237, 34);
             this.lblModel.TabIndex = 99;
             this.lblModel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -562,7 +562,7 @@ namespace Mac_EFI_Toolkit
             this.lblFilesize.Name = "lblFilesize";
             this.lblFilesize.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblFilesize.Size = new System.Drawing.Size(237, 34);
-            this.lblFilesize.TabIndex = 100;
+            this.lblFilesize.TabIndex = 99;
             this.lblFilesize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblFilesize.UseMnemonic = false;
             this.lblFilesize.Click += new System.EventHandler(this.lblFileSize_Click);
@@ -1161,7 +1161,7 @@ namespace Mac_EFI_Toolkit
             this.lblConfigCode.Name = "lblConfigCode";
             this.lblConfigCode.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblConfigCode.Size = new System.Drawing.Size(237, 34);
-            this.lblConfigCode.TabIndex = 102;
+            this.lblConfigCode.TabIndex = 99;
             this.lblConfigCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpStatusBar
