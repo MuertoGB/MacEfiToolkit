@@ -26,10 +26,15 @@ namespace Mac_EFI_Toolkit.UI
         #region Constructor
         public METCheckbox() : base()
         {
-            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+            SetStyle(
+                ControlStyles.AllPaintingInWmPaint
+                | ControlStyles.OptimizedDoubleBuffer
+                | ControlStyles.ResizeRedraw,
+                true);
 
             MouseEnter += new EventHandler(HandleMouseEnter);
             MouseLeave += new EventHandler(HandleMouseEnter);
+
             BackColor = Color.Transparent;
             ForeColor = Colours.ENABLED_TEXT;
         }
@@ -130,10 +135,13 @@ namespace Mac_EFI_Toolkit.UI
             {
                 if (BackColor.A == 255)
                 {
-                    e.Graphics.Clear(BackColor);
+                    e.Graphics.Clear(
+                        BackColor);
+
                     return;
                 }
             }
+
             base.OnPaintBackground(e);
         }
 
@@ -142,13 +150,21 @@ namespace Mac_EFI_Toolkit.UI
             if (e == null)
                 return;
 
-            int diameter =
-                ClientRectangle.Height - 2;
+            int diameter = ClientRectangle.Height - 2;
 
             Rectangle innerRectangle =
-                new Rectangle(2, 2, diameter - 2, diameter - 2);
+                new Rectangle(
+                    2,
+                    2,
+                    diameter - 2,
+                    diameter - 2);
+
             Rectangle outerRectangle =
-                new Rectangle(2, 2, diameter - 2, diameter - 2);
+                new Rectangle(
+                    2,
+                    2,
+                    diameter - 2,
+                    diameter - 2);
 
             Color setCheckBorderColor = Enabled
                 ? (MouseHovered ? BorderColorActive : BorderColor)
@@ -156,7 +172,9 @@ namespace Mac_EFI_Toolkit.UI
 
             using (Pen pen = new Pen(setCheckBorderColor, 2.0f))
             {
-                e.Graphics.DrawRectangle(pen, outerRectangle);
+                e.Graphics.DrawRectangle(
+                    pen,
+                    outerRectangle);
             }
 
             innerRectangle.Inflate(-1, -1);
@@ -167,28 +185,59 @@ namespace Mac_EFI_Toolkit.UI
 
             using (SolidBrush brush = new SolidBrush(setCheckInnerColor))
             {
-                e.Graphics.FillRectangle(brush, innerRectangle);
+                e.Graphics.FillRectangle(
+                    brush,
+                    innerRectangle);
             }
 
             if (Checked)
             {
-                innerRectangle = new Rectangle(1, 1, diameter, diameter);
-                innerRectangle.Inflate(-4, -4); // Control size of check
+                innerRectangle =
+                    new Rectangle(
+                        1,
+                        1,
+                        diameter,
+                        diameter);
+
+                // Control size of check
+                innerRectangle.Inflate(-4, -4);
 
                 using (SolidBrush brush = new SolidBrush(CheckedColor))
                 {
-                    e.Graphics.FillRectangle(brush, innerRectangle);
+                    e.Graphics.FillRectangle(
+                        brush,
+                        innerRectangle);
                 }
             }
 
-            Rectangle textArea = new Rectangle(outerRectangle.Width + 6, 0, Width - outerRectangle.Width - 6, Height);
-            Color textColor = Enabled ? ForeColor : Colours.DISABLED_TEXT;
+            Rectangle textArea =
+                new Rectangle(
+                    outerRectangle.Width + 6,
+                    0,
+                    Width - outerRectangle.Width - 6,
+                    Height);
 
-            using (StringFormat format = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
+            Color textColor = Enabled
+                ? ForeColor
+                : Colours.DISABLED_TEXT;
+
+            using (StringFormat format = new StringFormat
+            {
+                LineAlignment = StringAlignment.Center,
+                Alignment = StringAlignment.Near
+            })
             using (SolidBrush brush = new SolidBrush(textColor))
             {
-                e.Graphics.DrawRectangle(Pens.Transparent, textArea);
-                e.Graphics.DrawString(Text, Font, brush, textArea, format);
+                e.Graphics.DrawRectangle(
+                    Pens.Transparent,
+                    textArea);
+
+                e.Graphics.DrawString(
+                    Text,
+                    Font,
+                    brush,
+                    textArea,
+                    format);
             }
 
             if (Focused)
@@ -196,9 +245,14 @@ namespace Mac_EFI_Toolkit.UI
                 using (Pen pen = new Pen(Colours.FOCUS_RECTANGLE, 1))
                 {
                     pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
                     Rectangle rect = ClientRectangle;
+
                     rect.Width -= 1; rect.Height -= 1;
-                    e.Graphics.DrawRectangle(pen, rect);
+
+                    e.Graphics.DrawRectangle(
+                        pen,
+                        rect);
                 }
             }
         }
@@ -244,6 +298,7 @@ namespace Mac_EFI_Toolkit.UI
                     Invalidate();
                 }
             }
+
             base.OnMouseDown(e);
         }
 
@@ -284,12 +339,23 @@ namespace Mac_EFI_Toolkit.UI
         private void HandleMouseEnter(object sender, EventArgs e)
         {
             if (ClientRectangle.Contains(PointToClient(MousePosition)))
-                if (!MouseHovered) { MouseHovered = true; Invalidate(); }
-                else { MouseHovered = false; Invalidate(); }
+                if (!MouseHovered)
+                {
+                    MouseHovered = true;
+                    Invalidate();
+                }
+                else
+                {
+                    MouseHovered = false;
+                    Invalidate();
+                }
         }
         private Size GetPreferredSizeN()
         {
-            return GetPreferredSize(new Size(0, 0));
+            return GetPreferredSize(
+                new Size(
+                    0,
+                    0));
         }
         #endregion
 

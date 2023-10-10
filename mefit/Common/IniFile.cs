@@ -24,13 +24,25 @@ namespace Mac_EFI_Toolkit.Common
 
         internal void Write(string section, string key, string value)
         {
-            NativeMethods.WritePrivateProfileString(section, key, value, _strFilePath);
+            NativeMethods.WritePrivateProfileString(
+                section,
+                key,
+                value,
+                _strFilePath);
         }
 
         internal string Read(string section, string key, string defaultValue = "")
         {
             StringBuilder builder = new StringBuilder(255);
-            NativeMethods.GetPrivateProfileString(section, key, defaultValue, builder, 255, _strFilePath);
+
+            NativeMethods.GetPrivateProfileString(
+                section,
+                key,
+                defaultValue,
+                builder,
+                255,
+                _strFilePath);
+
             return builder.ToString();
         }
 
@@ -49,15 +61,9 @@ namespace Mac_EFI_Toolkit.Common
             string[] sectionNames = GetSectionNames(_strFilePath);
 
             if (sectionNames != null)
-            {
                 foreach (string s in sectionNames)
-                {
                     if (s == section)
-                    {
                         return true;
-                    }
-                }
-            }
 
             return false;
         }
@@ -67,10 +73,8 @@ namespace Mac_EFI_Toolkit.Common
             string[] keyNames = GetSectionKeys(section, _strFilePath);
 
             foreach (string s in keyNames)
-            {
                 if (s == key)
                     return true;
-            }
 
             return false;
         }
@@ -81,15 +85,27 @@ namespace Mac_EFI_Toolkit.Common
         internal static string[] GetSectionNames(string lpFileName)
         {
             IntPtr lpszReturnBuffer = IntPtr.Zero;
+
             try
             {
-                lpszReturnBuffer = Marshal.AllocCoTaskMem(MAX_BUFFER);
-                uint data = NativeMethods.GetPrivateProfileSectionNames(lpszReturnBuffer, MAX_BUFFER, lpFileName);
+                lpszReturnBuffer =
+                    Marshal.AllocCoTaskMem(
+                        MAX_BUFFER);
+
+                uint data =
+                    NativeMethods.GetPrivateProfileSectionNames(
+                        lpszReturnBuffer,
+                        MAX_BUFFER,
+                        lpFileName);
 
                 if (data == 0)
                     return null;
 
-                string ansiString = Marshal.PtrToStringAnsi(lpszReturnBuffer, (int)data).ToString();
+                string ansiString =
+                    Marshal.PtrToStringAnsi(
+                        lpszReturnBuffer,
+                        (int)data).ToString();
+
                 return ansiString.Substring(0, ansiString.Length - 1).Split('\0');
             }
             catch (Exception e)
@@ -107,20 +123,32 @@ namespace Mac_EFI_Toolkit.Common
         internal static string[] GetSectionKeys(string lpAppName, string lpFileName)
         {
             IntPtr lpReturnedString = IntPtr.Zero;
+
             try
             {
-                lpReturnedString = Marshal.AllocCoTaskMem(MAX_BUFFER);
-                uint data = NativeMethods.GetPrivateProfileSection(lpAppName, lpReturnedString, MAX_BUFFER, lpFileName);
+                lpReturnedString =
+                    Marshal.AllocCoTaskMem(
+                        MAX_BUFFER);
+
+                uint data = NativeMethods.GetPrivateProfileSection(
+                    lpAppName,
+                    lpReturnedString,
+                    MAX_BUFFER,
+                    lpFileName);
 
                 if (data == 0)
                     return null;
 
-                string ansiString = Marshal.PtrToStringAnsi(lpReturnedString, (int)data).ToString();
+                string ansiString = Marshal.PtrToStringAnsi(
+                    lpReturnedString,
+                    (int)data).ToString();
+
                 string[] keys = ansiString.Substring(0, ansiString.Length - 1).Split('\0');
 
                 for (int i = 0; i < keys.Length; i++)
                 {
                     int separatorIndex = keys[i].IndexOf('=');
+
                     if (separatorIndex != -1)
                         keys[i] = keys[i].Substring(0, separatorIndex);
                 }
@@ -138,6 +166,5 @@ namespace Mac_EFI_Toolkit.Common
                     Marshal.FreeCoTaskMem(lpReturnedString);
             }
         }
-
     }
 }

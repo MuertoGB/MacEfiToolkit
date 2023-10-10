@@ -37,12 +37,8 @@ namespace Mac_EFI_Toolkit.UI.Design
             };
 
             if (Properties != null)
-            {
                 foreach (string Item in PropList)
-                {
                     Properties.Remove(Item);
-                }
-            }
 
             base.PreFilterProperties(Properties);
         }

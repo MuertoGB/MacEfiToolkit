@@ -15,18 +15,27 @@ namespace Mac_EFI_Toolkit.Common
         internal static T DeserializeHeader<T>(byte[] binary) where T : struct
         {
             IntPtr ptr = IntPtr.Zero;
+
             try
             {
                 int size = Marshal.SizeOf(typeof(T));
-                ptr = Marshal.AllocHGlobal(size);
 
-                Marshal.Copy(binary, 0, ptr, size);
+                ptr =
+                    Marshal.AllocHGlobal(
+                        size);
+
+                Marshal.Copy(
+                    binary,
+                    0,
+                    ptr,
+                    size);
 
                 return (T)Marshal.PtrToStructure(ptr, typeof(T));
             }
             finally
             {
-                if (ptr != IntPtr.Zero) Marshal.FreeHGlobal(ptr);
+                if (ptr != IntPtr.Zero)
+                    Marshal.FreeHGlobal(ptr);
             }
         }
 
@@ -43,6 +52,7 @@ namespace Mac_EFI_Toolkit.Common
                 return $"{size:N2} {suffixes[0]}";
 
             int suffixIndex = (int)(Math.Log(size) / Math.Log(1024));
+
             double sizeInSuffix = size / Math.Pow(1024, suffixIndex);
 
             return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";

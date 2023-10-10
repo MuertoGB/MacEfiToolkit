@@ -16,7 +16,8 @@ namespace Mac_EFI_Toolkit.UI
         #region Constructor
         public METContextMenuStrip()
         {
-            Renderer = new METMenuRenderer();
+            Renderer =
+                new METMenuRenderer();
         }
         #endregion
 

@@ -19,7 +19,6 @@ namespace Mac_EFI_Toolkit.Utils
 {
     class MacUtils
     {
-
         /// <summary>
         /// Retrieves the configuration model string for a given HWC identifier. 
         /// Prioritizes retrieving data from the embedded XML db. 
@@ -32,37 +31,49 @@ namespace Mac_EFI_Toolkit.Utils
             try
             {
                 // Attempt to load the data from the embedded XML db
-                byte[] xmlData = Encoding.UTF8.GetBytes(Properties.Resources.modeldb);
+                byte[] xmlData =
+                    Encoding.UTF8.GetBytes(
+                        Properties.Resources.modeldb);
+
                 using (MemoryStream stream = new MemoryStream(xmlData))
                 {
-                    XDocument xmlDoc = XDocument.Load(stream);
-                    string name = xmlDoc.Descendants("section")
-                        .FirstOrDefault(e => e.Element("hwc")?.Value == hwc)
-                        ?.Element("configCode")?.Value;
+                    XDocument xmlDoc =
+                        XDocument.Load(
+                            stream);
+
+                    string name = xmlDoc.Descendants(
+                        "section").FirstOrDefault(e => e.Element(
+                            "hwc")?.Value == hwc)?.Element(
+                                "configCode")?.Value;
 
                     if (!string.IsNullOrEmpty(name))
-                    {
                         return name;
-                    }
                 }
 
                 // Retrieve data from the Apple server
                 string url = $"http://support-sp.apple.com/sp/product?cc={hwc}&lang=en_GB";
+
                 if (!NetUtils.GetIsWebsiteAvailable(url))
-                {
                     return null;
-                }
 
                 string xml = await new WebClient().DownloadStringTaskAsync(url);
-                XDocument doc = XDocument.Parse(xml);
-                string data = doc.XPathSelectElement("/root/configCode")?.Value;
+
+                XDocument doc =
+                    XDocument.Parse(
+                        xml);
+
+                string data =
+                    doc.XPathSelectElement(
+                        "/root/configCode")?.Value;
 
                 if (!string.IsNullOrEmpty(data))
-                {
-                    Logger.WriteToLogFile($"'{hwc}' not present in local db > Server returned: '{data}'", LogType.Database);
-                }
+                    Logger.WriteToLogFile(
+                        $"'{hwc}' not present in local db > Server returned: '{data}'",
+                        LogType.Database);
 
-                return string.IsNullOrEmpty(data) ? null : data;
+                return string.IsNullOrEmpty(data)
+                    ? null
+                    : data;
             }
             catch (Exception e)
             {
@@ -78,7 +89,9 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>True if the input string contains only valid characters, otherwise false.</returns>
         internal static bool GetIsValidSerialChars(string serial)
         {
-            return Regex.IsMatch(serial, "^[0-9A-Z]+$");
+            return Regex.IsMatch(
+                serial,
+                "^[0-9A-Z]+$");
         }
 
         /// <summary>
@@ -88,19 +101,30 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The calculated Fsys CRC32 uint</returns>
         internal static uint GetUintFsysCrc32(byte[] fsysStore)
         {
-            if (fsysStore.Length < FWBase.FSYS_RGN_SIZE)
-                throw new ArgumentException(nameof(fsysStore), "Given bytes are too small.");
+            if (fsysStore.Length < AppleEFI.FSYS_RGN_SIZE)
+                throw new ArgumentException(
+                    nameof(fsysStore),
+                    "Given bytes are too small.");
 
-            if (fsysStore.Length > FWBase.FSYS_RGN_SIZE)
-                throw new ArgumentException(nameof(fsysStore), "Given bytes are too large.");
+            if (fsysStore.Length > AppleEFI.FSYS_RGN_SIZE)
+                throw new ArgumentException(
+                    nameof(fsysStore),
+                    "Given bytes are too large.");
 
             // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes
-            byte[] bytesTempFsys = new byte[FWBase.FSYS_RGN_SIZE - FWBase.CRC32_SIZE];
+            byte[] bytesTempFsys = new byte[AppleEFI.FSYS_RGN_SIZE - AppleEFI.CRC32_SIZE];
 
             if (fsysStore != null)
             {
-                Array.Copy(fsysStore, 0, bytesTempFsys, 0, bytesTempFsys.Length);
-                return FileUtils.GetCrc32Digest(bytesTempFsys);
+                Array.Copy(
+                    fsysStore,
+                    0,
+                    bytesTempFsys,
+                    0,
+                    bytesTempFsys.Length);
+
+                return FileUtils.GetCrc32Digest(
+                    bytesTempFsys);
             }
 
             return 0xFFFFFFFF;
@@ -113,21 +137,22 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The full model identifier representation.</returns>
         internal static string ConvertEfiModelCode(string model)
         {
-            // Example MPB121 becomes MacBookPro12,1
+            // Example MBP121 becomes MacBookPro12,1
             if (string.IsNullOrEmpty(model))
                 return null;
 
-            string letters = new string(model.Where(char.IsLetter).ToArray());
-            string numbers = new string(model.Where(char.IsDigit).ToArray());
+            string letters = new string(
+                model.Where(char.IsLetter).ToArray());
+
+            string numbers =
+                new string(model.Where(char.IsDigit).ToArray());
 
             int minLength = 2;
             int maxLength = 3;
 
             if (letters.Length < minLength || letters.Length > maxLength ||
                 numbers.Length < minLength || numbers.Length > maxLength)
-            {
                 return model;
-            }
 
             if (model.Contains("MBP"))
                 letters = "MacBookPro";
@@ -157,39 +182,43 @@ namespace Mac_EFI_Toolkit.Utils
 
         internal static string GetFirmwareVersion()
         {
-            if (FWBase.AppleRomInfoSectionData.EfiVersion != null)
-            {
-                return FWBase.AppleRomInfoSectionData.EfiVersion;
-            }
+            if (AppleEFI.AppleRomInfoSectionData.EfiVersion != null)
+                return AppleEFI.AppleRomInfoSectionData.EfiVersion;
 
-            string modelPart = FWBase.EfiBiosIdSectionData.ModelPart;
-            string majorPart = FWBase.EfiBiosIdSectionData.MajorPart;
-            string minorPart = FWBase.EfiBiosIdSectionData.MinorPart;
+            string modelPart = AppleEFI.EfiBiosIdSectionData.ModelPart;
+            string majorPart = AppleEFI.EfiBiosIdSectionData.MajorPart;
+            string minorPart = AppleEFI.EfiBiosIdSectionData.MinorPart;
 
-            string romVersion = FWBase.AppleRomInfoSectionData.RomVersion;
+            string romVersion = AppleEFI.AppleRomInfoSectionData.RomVersion;
+
             string[] ignoredVersions = { "F000_B00", "Official Build" };
 
-            if (!string.IsNullOrWhiteSpace(romVersion) && !ignoredVersions.Contains(romVersion, StringComparer.OrdinalIgnoreCase))
-            {
+            if (!string.IsNullOrWhiteSpace(romVersion) &&
+                !ignoredVersions.Contains(romVersion, StringComparer.OrdinalIgnoreCase))
                 return $"{modelPart}.{romVersion.Replace("_", ".")}";
-            }
 
-            string biosId = FWBase.AppleRomInfoSectionData.BiosId;
+            string biosId = AppleEFI.AppleRomInfoSectionData.BiosId;
+
             string notSet = "F000.B00";
 
-            if (!string.IsNullOrWhiteSpace(biosId) && biosId.IndexOf(notSet, StringComparison.OrdinalIgnoreCase) == -1)
+            if (!string.IsNullOrWhiteSpace(biosId) &&
+                biosId.IndexOf(notSet, StringComparison.OrdinalIgnoreCase) == -1)
             {
                 string[] parts = biosId.Split('.');
                 if (parts.Length != 5)
-                {
-                    return GetFormattedEfiVersion(parts[0], parts[2], parts[3]);
-                }
+                    return GetFormattedEfiVersion(
+                        parts[0],
+                        parts[2],
+                        parts[3]);
             }
 
-            if (!string.IsNullOrWhiteSpace(modelPart) && !string.IsNullOrWhiteSpace(majorPart) && !string.IsNullOrWhiteSpace(minorPart))
-            {
-                return GetFormattedEfiVersion(modelPart, majorPart, minorPart);
-            }
+            if (!string.IsNullOrWhiteSpace(modelPart) &&
+                !string.IsNullOrWhiteSpace(majorPart) &&
+                !string.IsNullOrWhiteSpace(minorPart))
+                return GetFormattedEfiVersion(
+                    modelPart,
+                    majorPart,
+                    minorPart);
 
             return null;
         }

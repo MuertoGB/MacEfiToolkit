@@ -20,7 +20,7 @@ namespace Mac_EFI_Toolkit
     {
 
         #region Functions
-        internal static bool IsDebugMode()
+        internal static bool GetIsDebugMode()
         {
 #if DEBUG
             return true;
@@ -29,25 +29,35 @@ namespace Mac_EFI_Toolkit
 #endif
         }
 
-        internal static bool IsRunAsAdmin()
+        internal static bool GetIsRunAsAdmin()
         {
-            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+            return new WindowsPrincipal(
+                WindowsIdentity.GetCurrent()).IsInRole(
+                    WindowsBuiltInRole.Administrator);
         }
 
-        internal static string BitnessMode()
+        internal static string GetBitnessMode()
         {
-            return IntPtr.Size == 8 ? "x64" : "x86";
+            return IntPtr.Size == 8
+                ? "x64"
+                : "x86";
         }
         #endregion
 
         internal static string GenerateDebugReport(Exception e)
         {
             StringBuilder builder = new StringBuilder();
-            string exePath = Path.Combine(METPath.CurrentDirectory, METPath.FriendlyName);
+
+            string exePath =
+                Path.Combine(
+                    METPath.CurrentDirectory,
+                    METPath.FriendlyName);
 
             try
             {
-                byte[] appBytes = File.ReadAllBytes(exePath);
+                byte[] appBytes =
+                    File.ReadAllBytes(
+                        exePath);
 
                 builder.AppendLine($"# // Mac EFI Toolkit Debug Log - {DateTime.Now}\r\n");
 
@@ -56,9 +66,9 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"Version:  {Application.ProductVersion}.{METVersion.Build}");
                 builder.AppendLine($"LZMA SDK: {METVersion.SDK}");
                 builder.AppendLine($"Channel:  {METVersion.Channel}");
-                builder.AppendLine($"Mode:     {BitnessMode()}");
-                builder.AppendLine($"Debug:    {IsDebugMode()}");
-                builder.AppendLine($"Elevated: {IsRunAsAdmin()}");
+                builder.AppendLine($"Mode:     {GetBitnessMode()}");
+                builder.AppendLine($"Debug:    {GetIsDebugMode()}");
+                builder.AppendLine($"Elevated: {GetIsRunAsAdmin()}");
                 builder.AppendLine($"SHA256:   {FileUtils.GetSha256Digest(appBytes)}\r\n");
 
                 builder.AppendLine("<-- Operating System -->\r\n");
@@ -108,38 +118,39 @@ namespace Mac_EFI_Toolkit
 
         private static string GetFirmwareData()
         {
-            if (!FWBase.FirmwareLoaded)
+            if (!AppleEFI.FirmwareLoaded)
                 return "There is no UEFI/BIOS loaded.\r\n";
 
             StringBuilder builder = new StringBuilder();
 
             try
             {
-                if (Descriptor.DescriptorMode)
+                if (IntelFD.IsDescriptorMode)
                 {
                     builder.AppendLine($"  Descriptor ->\r\n");
-                    builder.AppendLine($"Des_Mode: {Descriptor.DescriptorMode}");
-                    builder.AppendLine($"PDR:      {Descriptor.PdrBase:X2}h, {Descriptor.PdrLimit:X2}h");
-                    builder.AppendLine($"ME:       {Descriptor.MeBase:X2}h, {Descriptor.MeLimit:X2}h");
-                    builder.AppendLine($"BIOS:     {Descriptor.BiosBase:X2}h, {Descriptor.BiosLimit:X2}h\r\n");
+                    builder.AppendLine($"Descriptor Mode: {IntelFD.IsDescriptorMode}\r\n");
+                    builder.AppendLine($"PDR Base:  0x{IntelFD.PDR_REGION_BASE:X}h, PDR Limit: 0x{IntelFD.PDR_REGION_LIMIT:X}h");
+                    builder.AppendLine($"ME Base:   0x{IntelFD.ME_REGION_BASE:X}h, ME Limit: 0x{IntelFD.ME_REGION_LIMIT:X}h");
+                    builder.AppendLine($"BIOS Base: 0x{IntelFD.BIOS_REGION_BASE:X}h, BIOS Limit: 0x{IntelFD.BIOS_REGION_LIMIT:X}h\r\n");
                 }
 
                 builder.AppendLine($"  File ->\r\n");
-                builder.AppendLine($"File Size: {FWBase.FileInfoData.FileLength:X2}h\r\n");
+                builder.AppendLine($"File Size: {AppleEFI.FileInfoData.FileLength:X}h\r\n");
 
                 builder.AppendLine($"  Fsys Store  ->\r\n");
-                builder.AppendLine($"Fsys Base:   {FWBase.FsysStoreData.FsysBase:X2}h");
-                builder.AppendLine($"Fsys Size:   {FWBase.FSYS_RGN_SIZE:X2}h");
-                builder.AppendLine($"Serial Base: {FWBase.FsysStoreData.SerialBase:X2}h");
-                builder.AppendLine($"HWC Base:    {FWBase.FsysStoreData.HWCBase:X2}h\r\n");
+                builder.AppendLine($"Fsys Base:    0x{AppleEFI.FsysStoreData.FsysBase:X}h");
+                builder.AppendLine($"Fsys Size:    {AppleEFI.FSYS_RGN_SIZE:X}h");
+                builder.AppendLine($"Serial Base:  0x{AppleEFI.FsysStoreData.SerialBase:X}h");
+                builder.AppendLine($"HWC Base:     0x{AppleEFI.FsysStoreData.HWCBase:X}h\r\n");
 
                 builder.AppendLine($"  NVRAM  ->\r\n");
-                builder.AppendLine($"VSS Primary: Base {FWBase.VssStoreData.PrimaryStoreBase:X2}h, Size {FWBase.VssStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"VSS Backup:  Base {FWBase.VssStoreData.BackupStoreBase:X2}h, Size {FWBase.VssStoreData.BackupStoreSize:X2}h");
-                builder.AppendLine($"SVS Primary: Base {FWBase.SvsStoreData.PrimaryStoreBase:X2}h, Size {FWBase.SvsStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"SVS Backup:  Base {FWBase.SvsStoreData.BackupStoreBase:X2}h, Size {FWBase.SvsStoreData.BackupStoreSize:X2}h");
-                builder.AppendLine($"NSS Primary: Base {FWBase.NssStoreData.PrimaryStoreBase:X2}h, Size {FWBase.NssStoreData.PrimaryStoreSize:X2}h");
-                builder.AppendLine($"NSS Backup:  Base {FWBase.NssStoreData.BackupStoreBase:X2}h, Size {FWBase.NssStoreData.BackupStoreSize:X2}h");
+                builder.AppendLine($"NVRAM Region:  Base 0x{AppleEFI.NVRAM_BASE:X}h, Size {AppleEFI.NVRAM_SIZE:X}h");
+                builder.AppendLine($"VSS Primary:   Base 0x{AppleEFI.VssStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.VssStoreData.PrimaryStoreSize:X}h");
+                builder.AppendLine($"VSS Backup:    Base 0x{AppleEFI.VssStoreData.BackupStoreBase:X}h, Size {AppleEFI.VssStoreData.BackupStoreSize:X}h");
+                builder.AppendLine($"SVS Primary:   Base 0x{AppleEFI.SvsStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.SvsStoreData.PrimaryStoreSize:X}h");
+                builder.AppendLine($"SVS Backup:    Base 0x{AppleEFI.SvsStoreData.BackupStoreBase:X}h, Size {AppleEFI.SvsStoreData.BackupStoreSize:X}h");
+                builder.AppendLine($"NSS Primary:   Base 0x{AppleEFI.NssStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.NssStoreData.PrimaryStoreSize:X}h");
+                builder.AppendLine($"NSS Backup:    Base 0x{AppleEFI.NssStoreData.BackupStoreBase:X}h, Size {AppleEFI.NssStoreData.BackupStoreSize:X}h");
 
                 return builder.ToString();
             }

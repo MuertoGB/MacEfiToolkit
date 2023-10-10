@@ -2,7 +2,8 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // BinaryUtils.cs - A collection of functions to handle binary data.
-// This code uses the Knuth-Morris-Pratt algorithm for pattern matching and string searching, developed by Donald Knuth, Vaughan Pratt, and James Morris.
+// This code uses the Knuth-Morris-Pratt algorithm for pattern matching and string searching,
+// developed by Donald Knuth, Vaughan Pratt, and James Morris.
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
@@ -22,10 +23,13 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="sourceBytes">The byte array to search in.</param>
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBasePosition(byte[] sourceBytes, byte[] pattern)
+        internal static int GetBaseAddress(byte[] sourceBytes, byte[] pattern)
         {
             // Call the overload that takes a basePos parameter and sets it to 0.
-            return GetBasePosition(sourceBytes, pattern, 0);
+            return GetBaseAddress(
+                sourceBytes,
+                pattern,
+                0);
         }
 
         /// <summary>
@@ -35,10 +39,14 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <param name="basePosition">The base to start the search from.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBasePosition(byte[] sourceBytes, byte[] pattern, int basePosition)
+        internal static int GetBaseAddress(byte[] sourceBytes, byte[] pattern, int basePosition)
         {
             // Call the overload that takes a basePosition and maxSearchLength parameters and sets maxSearchLength to the remaining length of the sourceBytes array.
-            return GetBasePosition(sourceBytes, pattern, basePosition, sourceBytes.Length - basePosition);
+            return GetBaseAddress(
+                sourceBytes,
+                pattern,
+                basePosition,
+                sourceBytes.Length - basePosition);
         }
 
         /// <summary>
@@ -49,13 +57,18 @@ namespace Mac_EFI_Toolkit.Utils
         /// <param name="basePosition">The base to start the search from.</param>
         /// <param name="maxSearchLength">The maximum length of the search within the byte array.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBasePosition(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
+        internal static int GetBaseAddress(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
         {
             // Ensure that maxSearchLength is within the bounds of the sourceBytes array.
-            maxSearchLength = Math.Min(maxSearchLength, sourceBytes.Length - basePosition);
+            maxSearchLength =
+                Math.Min(
+                    maxSearchLength,
+                    sourceBytes.Length - basePosition);
 
             // Build the partial match table for the pattern using the Knuth-Morris-Pratt algorithm.
-            int[] partialMatchTable = BuildPartialMatchTable(patternBytes);
+            int[] partialMatchTable =
+                BuildPartialMatchTable(
+                    patternBytes);
 
             // Initialize the source and pattern indices.
             int sourceIndex = basePosition;
@@ -102,6 +115,7 @@ namespace Mac_EFI_Toolkit.Utils
             int[] table = new int[patternBytes.Length];
             int i = 0;
             int j = 1;
+
             while (j < patternBytes.Length)
             {
                 if (patternBytes[i] == patternBytes[j])
@@ -120,6 +134,7 @@ namespace Mac_EFI_Toolkit.Utils
                     j++;
                 }
             }
+
             return table;
         }
         #endregion
@@ -134,10 +149,18 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The bytes read from the byte array.</returns>
         internal static byte[] GetBytesBaseLength(byte[] sourceBytes, int basePosition, int length)
         {
-            if (basePosition < 0 || basePosition + length > sourceBytes.Length) return null;
+            if (basePosition < 0 || basePosition + length > sourceBytes.Length)
+                return null;
 
             byte[] buffer = new byte[length];
-            Buffer.BlockCopy(sourceBytes, basePosition, buffer, 0, length);
+
+            Buffer.BlockCopy(
+                sourceBytes,
+                basePosition,
+                buffer,
+                0,
+                length);
+
             return buffer;
         }
 
@@ -150,10 +173,17 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The bytes read from the byte array.</returns>
         internal static byte[] GetBytesBaseLimit(byte[] sourceBytes, int basePosition, int limitPosition)
         {
-            if (limitPosition <= basePosition) return new byte[0]; // Nothing to read
+            if (limitPosition <= basePosition)
+                return new byte[0]; // Nothing to read
 
             int length = limitPosition - basePosition;
-            ArraySegment<byte> segment = new ArraySegment<byte>(sourceBytes, basePosition, length);
+
+            ArraySegment<byte> segment =
+                new ArraySegment<byte>(
+                    sourceBytes,
+                    basePosition,
+                    length);
+
             return segment.ToArray();
         }
 
@@ -167,19 +197,24 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The bytes read from the byte array up to the terminating byte.</returns>
         internal static byte[] GetBytesDelimited(byte[] sourceBytes, int basePosition, byte startByte, params byte[] terminationBytes)
         {
-            int startIndex = Array.IndexOf(sourceBytes, startByte, basePosition);
+            int startIndex =
+                Array.IndexOf(
+                    sourceBytes,
+                    startByte,
+                    basePosition);
+
             if (startIndex < 0 || startIndex == sourceBytes.Length - 1)
                 return null;
 
             startIndex++;
+
             while (startIndex < sourceBytes.Length && sourceBytes[startIndex] == startByte)
-            {
                 startIndex++;
-            }
 
             using (MemoryStream ms = new MemoryStream())
             {
-                while (startIndex < sourceBytes.Length && !terminationBytes.Contains(sourceBytes[startIndex]))
+                while (startIndex < sourceBytes.Length &&
+                    !terminationBytes.Contains(sourceBytes[startIndex]))
                 {
                     ms.WriteByte(sourceBytes[startIndex]);
                     startIndex++;
@@ -198,7 +233,8 @@ namespace Mac_EFI_Toolkit.Utils
         {
             if (sourceBytes == null)
             {
-                throw new ArgumentNullException(nameof(sourceBytes));
+                throw new ArgumentNullException(
+                    nameof(sourceBytes));
             }
 
             for (int i = 0; i < sourceBytes.Length; i++)
@@ -238,9 +274,16 @@ namespace Mac_EFI_Toolkit.Utils
         internal static void OverwriteBytesAtBase(byte[] sourceBytes, int basePosition, byte[] newBytes)
         {
             if (basePosition < 0 || basePosition + newBytes.Length > sourceBytes.Length)
-                throw new ArgumentOutOfRangeException(nameof(basePosition), "Base position is out of range.");
+                throw new ArgumentOutOfRangeException(
+                    nameof(basePosition),
+                    "Base position is out of range.");
 
-            Buffer.BlockCopy(newBytes, 0, sourceBytes, basePosition, newBytes.Length);
+            Buffer.BlockCopy(
+                newBytes,
+                0,
+                sourceBytes,
+                basePosition,
+                newBytes.Length);
         }
 
         /// <summary>
@@ -252,25 +295,27 @@ namespace Mac_EFI_Toolkit.Utils
         internal static byte[] RemovePadding(byte[] sourceBytes, byte paddingByte)
         {
             if (sourceBytes == null)
-                throw new ArgumentNullException(nameof(sourceBytes));
+                throw new ArgumentNullException(
+                    nameof(sourceBytes));
 
             int end = sourceBytes.Length - 1;
 
             // Find the index of the last non-padding byte
             while (end >= 0 && sourceBytes[end] == paddingByte)
-            {
                 end--;
-            }
 
             // If all bytes are padding, return an empty byte array
             if (end < 0)
-            {
                 return new byte[0];
-            }
 
             // Create a new byte array without the trailing padding bytes
             byte[] result = new byte[end + 1];
-            Array.Copy(sourceBytes, result, end + 1);
+
+            Array.Copy(
+                sourceBytes,
+                result,
+                end + 1);
+
             return result;
         }
 
@@ -281,12 +326,11 @@ namespace Mac_EFI_Toolkit.Utils
         internal static void EraseByteArray(byte[] sourceBytes, byte eraseByte)
         {
             if (sourceBytes == null)
-                throw new ArgumentNullException(nameof(sourceBytes));
+                throw new ArgumentNullException(
+                    nameof(sourceBytes));
 
             for (int i = 0; i < sourceBytes.Length; i++)
-            {
                 sourceBytes[i] = eraseByte;
-            }
         }
 
         /// <summary>
@@ -298,17 +342,26 @@ namespace Mac_EFI_Toolkit.Utils
         internal static byte[] PatchFsysCrc(byte[] fsysStore, uint newCrc)
         {
             // Check if the size of the byte array is valid
-            if (fsysStore.Length < FWBase.FSYS_RGN_SIZE)
-                throw new ArgumentException(nameof(fsysStore), "Given bytes are too small.");
+            if (fsysStore.Length < AppleEFI.FSYS_RGN_SIZE)
+                throw new ArgumentException(
+                    nameof(fsysStore),
+                    "Given bytes are too small.");
 
-            if (fsysStore.Length > FWBase.FSYS_RGN_SIZE)
-                throw new ArgumentException(nameof(fsysStore), "Given bytes are too large.");
+            if (fsysStore.Length > AppleEFI.FSYS_RGN_SIZE)
+                throw new ArgumentException(
+                    nameof(fsysStore),
+                    "Given bytes are too large.");
 
             // Convert the new CRC value to bytes
-            byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
+            byte[] newCrcBytes =
+                BitConverter.GetBytes
+                (newCrc);
 
             // Write the new bytes back to the Fsys store at the appropriate base
-            OverwriteBytesAtBase(fsysStore, FWBase.FSYS_RGN_SIZE - FWBase.CRC32_SIZE, newCrcBytes);
+            OverwriteBytesAtBase(
+                fsysStore,
+                AppleEFI.FSYS_RGN_SIZE - AppleEFI.CRC32_SIZE,
+                newCrcBytes);
 
             // Return the patched data
             return fsysStore;
@@ -326,16 +379,29 @@ namespace Mac_EFI_Toolkit.Utils
         {
             // Create a new byte array to hold the patched binary
             byte[] patchedBytes = new byte[sourceBytes.Length];
-            Array.Copy(sourceBytes, patchedBytes, sourceBytes.Length);
+
+            Array.Copy(
+                sourceBytes,
+                patchedBytes,
+                sourceBytes.Length);
 
             // Patch the Fsys store crc
-            byte[] patchedStore = PatchFsysCrc(fsysStore, uiNewCrc);
+            byte[] patchedStore =
+                PatchFsysCrc(
+                    fsysStore,
+                    uiNewCrc);
 
             // Overwrite the loaded Fsys crc32 with the newly calculated crc32
-            OverwriteBytesAtBase(patchedBytes, fsysBase, patchedStore);
+            OverwriteBytesAtBase(
+                patchedBytes,
+                fsysBase,
+                patchedStore);
 
             // Load the Fsys store from the new binary
-            FsysStore newBinaryFsys = FWBase.GetFsysStoreData(patchedBytes, false);
+            FsysStore newBinaryFsys =
+                AppleEFI.GetFsysStoreData(
+                    patchedBytes,
+                    false);
 
             // Compare the new checksums
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)
@@ -356,7 +422,10 @@ namespace Mac_EFI_Toolkit.Utils
                 return null;
 
             // Write 0xFh length zeros over the MAC CRC from lockBase
-            OverwriteBytesAtBase(storeData, lockCrcbase, new byte[0x0F]);
+            OverwriteBytesAtBase(
+                storeData,
+                lockCrcbase,
+                new byte[0x0F]);
 
             // Returned the unlocked store
             return storeData;

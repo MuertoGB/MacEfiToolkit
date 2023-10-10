@@ -1,14 +1,14 @@
 <h1 align="center">
 <img width="200" src="files/images/img128px.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit V1.1.3
+Mac EFI Toolkit V1.1.4
 </h1>
 
 <h4 align="center">A tool for analysis of Mac BIOS/UEFI, with limited editing capabilities.</h4>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
-  <a href="MANUAL.md">Manual</a> •
+  <a href="#manual">Manual</a> •
   <a href="#download">Download</a> •
   <a href="#requirements">Requirements</a> •
   <a href="#acknowledgements">Acknowledgements</a> •
@@ -27,7 +27,7 @@ In terms of editing, the application allows users to replace the System Serial N
 
 <img width="550" src="files/images/met.png" alt="MET">
 
-This application provides support for most Mac BIOS/UEFI, with the exception of editing A1534 firmware (as of now). I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
+I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
 
 ## Features
 
@@ -83,10 +83,14 @@ This application provides support for most Mac BIOS/UEFI, with the exception of 
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 28th September, 2023 | Yes | Stable |
-|[1.1.2](https://github.com/MuertoGB/MacEfiToolkit/releases/112)| 25th September, 2023 | No | Stable |
+|[1.1.4](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 11th October, 2023 | Yes | Stable |
+|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/113)| 28th September, 2023 | No | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
+
+## Manual
+
+Instructions on how to use the application can be viewed in [manual](MANUAL.md).
 
 ## Requirements
 

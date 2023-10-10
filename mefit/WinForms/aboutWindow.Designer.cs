@@ -192,6 +192,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
     "erto, so don\'t eat it.\r\nThe \'Muerto\' avatar was hand crafted by Hammi.";
             this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblInfo.UseMnemonic = false;
             // 
             // pnlSplit
             // 
@@ -253,6 +254,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuild.TabIndex = 78;
             this.lblBuild.Text = "...";
             this.lblBuild.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblBuild.UseMnemonic = false;
             // 
             // lblChannel
             // 
@@ -269,6 +271,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblChannel.TabIndex = 79;
             this.lblChannel.Text = "...";
             this.lblChannel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblChannel.UseMnemonic = false;
             // 
             // pbxMuerto
             // 

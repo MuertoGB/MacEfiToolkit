@@ -35,17 +35,18 @@ namespace Mac_EFI_Toolkit
     internal struct METVersion
     {
         internal static readonly string SDK = "23.01";
-        internal static readonly string Build = "230928.0615";
+        internal static readonly string Build = "231010.2332";
         internal static readonly string Channel = "Stable";
     }
 
     internal struct METUrl
     {
-        internal static string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
-        internal static string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
-        internal static string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
-        internal static string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
-        internal static string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+        internal static readonly string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
+        internal static readonly string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
+        internal static readonly string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal static readonly string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
+        internal static readonly string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+        internal static readonly string AppleFirmwareIntelMacs = "https://support.apple.com/en-us/HT201518";
     }
     #endregion
 
@@ -87,7 +88,9 @@ namespace Mac_EFI_Toolkit
         static void Main(string[] args)
         {
             // Register exception handler events early
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.SetUnhandledExceptionMode(
+                UnhandledExceptionMode.CatchException);
+
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
@@ -95,23 +98,47 @@ namespace Mac_EFI_Toolkit
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Web Security Protocol
+            // Set Web Security Protocol
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
-            // Font Data
+            // Load fonts into memory
             byte[] fontData = Properties.Resources.segmdl2;
 
             if (fontData != null)
             {
-                FONT_MDL2_REG_9 = new Font(FontResolver.LoadFontFromResource(fontData), 9.0F, FontStyle.Regular);
-                FONT_MDL2_REG_10 = new Font(FontResolver.LoadFontFromResource(fontData), 10.0F, FontStyle.Regular);
-                FONT_MDL2_REG_12 = new Font(FontResolver.LoadFontFromResource(fontData), 12.0F, FontStyle.Regular);
-                FONT_MDL2_REG_14 = new Font(FontResolver.LoadFontFromResource(fontData), 14.0F, FontStyle.Regular);
-                FONT_MDL2_REG_20 = new Font(FontResolver.LoadFontFromResource(fontData), 20.0F, FontStyle.Regular);
+                FONT_MDL2_REG_9 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        9.0F,
+                        FontStyle.Regular);
+                FONT_MDL2_REG_10 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        10.0F,
+                        FontStyle.Regular);
+                FONT_MDL2_REG_12 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        12.0F,
+                        FontStyle.Regular);
+                FONT_MDL2_REG_14 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        14.0F,
+                        FontStyle.Regular);
+                FONT_MDL2_REG_20 =
+                    new Font(
+                        FontResolver.LoadFontFromResource(fontData),
+                        20.0F,
+                        FontStyle.Regular);
             }
             else
             {
-                MessageBox.Show("Segoe MDL2 Assets font failed to load, see ./mefit.log for more details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Segoe MDL2 Assets font failed to load, see ./mefit.log for more details.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
 
             // Settings
@@ -149,19 +176,19 @@ namespace Mac_EFI_Toolkit
         #region OnExit
         private static void OnExiting(object sender, EventArgs e)
         {
-            HandleExitCleanup();
+            HandleOnExitingCleanup();
         }
 
-        private static void HandleExitCleanup()
+        private static void HandleOnExitingCleanup()
         {
-            // Dispose fonts
+            // Dispose of memory fonts
             FONT_MDL2_REG_9.Dispose();
             FONT_MDL2_REG_10.Dispose();
             FONT_MDL2_REG_12.Dispose();
             FONT_MDL2_REG_14.Dispose();
             FONT_MDL2_REG_20.Dispose();
 
-            // Dispose memory stats timer
+            // Dispose of memory stats timer
             memoryTimer.Dispose();
 
             // Unhook the low level keyboard hook
@@ -178,7 +205,9 @@ namespace Mac_EFI_Toolkit
 
         internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Exception ex = (Exception)e.ExceptionObject;
+            Exception ex =
+                (Exception)e.ExceptionObject;
+
             if (ex != null)
                 ExceptionHandler(ex);
         }
@@ -187,17 +216,18 @@ namespace Mac_EFI_Toolkit
         {
             DialogResult result;
 
-            File.WriteAllText(METPath.UnhandledLog, Debug.GenerateDebugReport(e));
+            File.WriteAllText(
+                METPath.UnhandledLog,
+                Debug.GenerateDebugReport(e));
 
             if (File.Exists(METPath.UnhandledLog))
             {
-                result = MessageBox.Show
-                   (
-                   $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NBSPACE)}'\r\n\r\nForce quit application?",
+                result = MessageBox.Show(
+                   $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NBSPACE)}" +
+                   $"'\r\n\r\nForce quit application?",
                    $"MET Exception Handler",
                    MessageBoxButtons.YesNo,
-                   MessageBoxIcon.Error
-                   );
+                   MessageBoxIcon.Error);
             }
             else
             {
@@ -211,7 +241,8 @@ namespace Mac_EFI_Toolkit
 
             if (result == DialogResult.Yes)
             {
-                HandleExitCleanup(); // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
+                // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
+                HandleOnExitingCleanup();
                 Environment.Exit(-1);
             }
 
@@ -269,7 +300,14 @@ namespace Mac_EFI_Toolkit
 
         private static bool ShowConfirmationDialog(Form owner, string title, string message)
         {
-            DialogResult result = METMessageBox.Show(owner, title, message, METMessageType.Question, METMessageButtons.YesNo);
+            DialogResult result =
+                METMessageBox.Show(
+                    owner,
+                    title,
+                    message,
+                    METMessageType.Question,
+                    METMessageButtons.YesNo);
+
             return result == DialogResult.Yes;
         }
 

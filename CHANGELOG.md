@@ -1,23 +1,29 @@
 <h4 align="center">Version History</h4>
 <p align="center">
-  <a href="#version-113">V1.1.3</a> •
-  <a href="#version-112">V1.1.2</a> •
-  <a href="#version-111">V1.1.1</a> •
-  <a href="#version-110">V1.1.0</a> •
-  <a href="#version-103">V1.0.3</a> •
-  <a href="#version-102">V1.0.2</a> •
-  <a href="#version-101">V1.0.1</a> •
   <a href="#version-100">V1.0.0</a> •
-  <a href="#version-070">V0.7.0</a> •
-  <a href="#version-060">V0.6.0</a> •
-  <a href="#version-052">V0.5.2</a> •
-  <a href="#version-051">V0.5.1</a> •
-  <a href="#version-050">V0.5.0</a> •
-  <a href="#version-046">V0.4.6</a> •
-  <a href="#version-045">V0.4.5</a> •
-  <a href="#version-044">V0.4.4</a> •
-  <a href="#version-034">V0.3.4</a>
+  <a href="#version-101">V1.0.1</a> •
+  <a href="#version-102">V1.0.2</a> •
+  <a href="#version-103">V1.0.3</a> •
+  <a href="#version-110">V1.1.0</a> •
+  <a href="#version-111">V1.1.1</a> •
+  <a href="#version-112">V1.1.2</a> •
+  <a href="#version-113">V1.1.3</a> •
+  <a href="#version-114">V1.1.4</a>
 </p>
+
+## Version 1.1.4
+
+#### Enhancements:
+- Implemented single-click functionality for most main window labels, enabling users to instantly copy text to the clipboard.
+- Updated the main window copy menu to include all respective descriptor region offsets when copying PDR, ME, and BIOS region data stored in the flash descriptor.
+- Introduced an export button in the ROM Information window, enabling users to export the AppleRomSectionInformation data displayed in the window.
+- Added '0x' prefix to the beginning of region base data to better represent it as an address.
+- Improvements to the AppleEFI firmware parser.
+- Added NVRAM base address and size to the debug log.
+- User Interface layout changes.
+
+#### Bugs:
+- Resolved an issue where the ampersand '&' symbol was not correctly displayed in specific UI elements. This issue was caused by the 'Use Mnemonic' property being set to true.
 
 ## Version 1.1.3
 

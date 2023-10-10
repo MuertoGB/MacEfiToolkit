@@ -1,12 +1,12 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// FSGuids.cs
+// Guids.cs
 // Released under the GNU GLP v3.0
 
 namespace Mac_EFI_Toolkit.Common
 {
-    class FSGuids
+    class Guids
     {
         internal static readonly byte[] LZMA_DXE_VOLUME_IMAGE_OLD_GUID =
         {

@@ -30,7 +30,11 @@ namespace Mac_EFI_Toolkit.UI
             get
             {
                 CreateParams crParams = base.CreateParams;
-                crParams.ClassStyle = crParams.ClassStyle | Program.CS_DBLCLKS | Program.CS_DROP;
+
+                crParams.ClassStyle = crParams.ClassStyle
+                    | Program.CS_DBLCLKS
+                    | Program.CS_DROP;
+
                 return crParams;
             }
         }
@@ -41,6 +45,7 @@ namespace Mac_EFI_Toolkit.UI
         {
             InitializeComponent();
             lblTitle.MouseMove += metMessage_MouseMove;
+
             Load += new EventHandler(METMessageBox_Load);
             Shown += new EventHandler(METMessageBox_Shown);
             KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
@@ -97,9 +102,7 @@ namespace Mac_EFI_Toolkit.UI
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
             if (!Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds))
-            {
                 ssMmbSound.Play();
-            }
 
             InterfaceUtils.FlashForecolor(lblTitle);
             InterfaceUtils.FlashForecolor(cmdClose);
@@ -122,14 +125,25 @@ namespace Mac_EFI_Toolkit.UI
         {
             if (e.Button == MouseButtons.Left)
             {
-                NativeMethods.ReleaseCapture(new HandleRef(this, Handle));
-                NativeMethods.SendMessage(new HandleRef(this, Handle), Program.WM_NCLBUTTONDOWN, (IntPtr)Program.HT_CAPTION, (IntPtr)0);
+                NativeMethods.ReleaseCapture(
+                    new HandleRef(this, Handle));
+
+                NativeMethods.SendMessage(
+                    new HandleRef(this, Handle),
+                    Program.WM_NCLBUTTONDOWN,
+                    (IntPtr)Program.HT_CAPTION,
+                    (IntPtr)0);
             }
         }
         #endregion
 
         #region Overriden Events
-        public static DialogResult Show(Form owner, string title, string message, METMessageType type, METMessageButtons buttons = METMessageButtons.Okay)
+        public static DialogResult Show(
+            Form owner,
+            string title,
+            string message,
+            METMessageType type,
+            METMessageButtons buttons = METMessageButtons.Okay)
         {
             strTitle = title;
             strMessage = message;
@@ -146,8 +160,10 @@ namespace Mac_EFI_Toolkit.UI
                 {
                     messageBox.StartPosition = FormStartPosition.CenterParent;
                 }
+
                 messageBox.ShowDialog(owner);
             }
+
             return dialogResult;
         }
         #endregion
@@ -155,13 +171,17 @@ namespace Mac_EFI_Toolkit.UI
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e)
         {
-            dialogResult = DialogResult.Cancel;
+            dialogResult =
+                DialogResult.Cancel;
+
             Close();
         }
 
         private void cmdYes_Click(object sender, EventArgs e)
         {
-            dialogResult = DialogResult.Yes;
+            dialogResult =
+                DialogResult.Yes;
+
             Close();
         }
 
@@ -169,11 +189,13 @@ namespace Mac_EFI_Toolkit.UI
         {
             if (messageBoxButtons == METMessageButtons.Okay)
             {
-                dialogResult = DialogResult.OK;
+                dialogResult =
+                    DialogResult.OK;
             }
             else
             {
-                dialogResult = DialogResult.Cancel;
+                dialogResult =
+                    DialogResult.Cancel;
             }
 
             Close();
