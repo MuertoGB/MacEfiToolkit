@@ -150,7 +150,7 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static int FSYS_RGN_SIZE = 0;
         internal static int NVRAM_BASE = -1;
-        internal static int NVRAM_SIZE = 0;
+        internal static int NVRAM_SIZE = -1;
 
         internal const int MIN_IMAGE_SIZE = 1048576;  // 100000h
         internal const int MAX_IMAGE_SIZE = 33554432; // 2000000h
@@ -186,6 +186,9 @@ namespace Mac_EFI_Toolkit.Common
                     (int)IntelFD.BIOS_REGION_LIMIT)
                 - ZERO_VECTOR_SIZE;
 
+            if (NVRAM_BASE < 0 || NVRAM_BASE > FileInfoData.FileLength)
+                NVRAM_BASE = -1;
+
             // Determine size of the NVRAM section.
             // Int32 value is stored at NVRAM_BASE + 0x20 (32 decimal).
             NVRAM_SIZE =
@@ -196,6 +199,8 @@ namespace Mac_EFI_Toolkit.Common
                         (ZERO_VECTOR_SIZE + GUID_SIZE),
                         4),
                     0);
+
+            if (NVRAM_SIZE < 0 || NVRAM_SIZE > FileInfoData.FileLength)
 
             // Parse NVRAM VSS Store data.
             VssStoreData =
@@ -306,7 +311,7 @@ namespace Mac_EFI_Toolkit.Common
 
             FSYS_RGN_SIZE = 0;
             NVRAM_BASE = -1;
-            NVRAM_SIZE = 0;
+            NVRAM_SIZE = -1;
         }
 
         internal static bool IsValidImage(byte[] sourceBytes)
@@ -756,6 +761,9 @@ namespace Mac_EFI_Toolkit.Common
                     (int)IntelFD.BIOS_REGION_LIMIT);
 
             if (NVRAM_BASE == -1)
+                return -1;
+
+            if (NVRAM_SIZE == -1)
                 return -1;
 
             return BinaryUtils.GetBaseAddress(
