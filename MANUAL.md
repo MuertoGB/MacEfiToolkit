@@ -107,14 +107,14 @@ Clicking the 'Explorer' button will open Windows Explorer at the location of the
 
 The loaded file's size is displayed in bytes, followed by the hexadecimal representation. If the file size is invalid, the data will be shown in red, and any byte discrepancies will be calculated and appended.
 
-> 🛈 8,388,672 • 800040h (>64) would indicate the given firmware is 64 bytes too large.
+> 🛈 8,388,615 bytes (800007h) (>7) would indicate the given firmware is 7 bytes too large.
 
 ---
 
 #### CRC32:
 
 <kbd>
-  <img src="files/manual/crc.png">
+  <img src="files/manual/filecrc.png">
 </kbd>
 
 The CRC32 value calculated for the loaded file.
@@ -124,7 +124,7 @@ The CRC32 value calculated for the loaded file.
 #### Created:
 
 <kbd>
-  <img src="files/manual/created.png">
+  <img src="files/manual/filecreateddate.png">
 </kbd>
 
 The creation date of the loaded file.
@@ -134,7 +134,7 @@ The creation date of the loaded file.
 #### Modified:
 
 <kbd>
-  <img src="files/manual/modified.png">
+  <img src="files/manual/filemodifieddate.png">
 </kbd>
 
 The last write time of the loaded file.
@@ -147,7 +147,17 @@ The last write time of the loaded file.
   <img src="files/manual/model.png">
 </kbd>
 
-First, the application retrieves the model identifier (e.g., IM161) from the UEFI/BIOS and then converts it into a readable format (e.g., iMac16,1). If the Hardware Configuration (HWC) is available in the Fsys store, the application appends the corresponding Configuration Code obtained from the internal database or Apple's server, resulting in a complete model name (e.g., "iMac (21.5-inch, Late 2015)").
+Displays the device model number. The application retrieves the model identifier (e.g., IM161) from the UEFI/BIOS and then converts it into a readable format (e.g., iMac16,1)
+
+---
+
+#### Config Code:
+
+<kbd>
+  <img src="files/manual/configcode.png">
+</kbd>
+
+Displays the device configuration code if the Hardware Configuration Code (HWC) is available within the firmware.
 
 ---
 
@@ -289,7 +299,7 @@ Located at the bottom of the main window, the status bar serves multiple purpose
 
 ## Firmware Patcher
 
-This section explains the firmware editor window and its functionality.
+This section explains the firmware patcher window and its functionality.
 
 <kbd>
   <img src="files/images/firmware_patcher.png">
@@ -315,7 +325,7 @@ When the "Replace Serial Number" switch is activated, it will enable the 'SSN' t
 
 The application will automatically enforce the required length of the serial number, allowing for either 11 or 12 characters. It will also provide validation to ensure that only valid characters are entered. This helps to ensure that the serial number input meets the necessary criteria and maintains the expected format.
 
-The editor will automatically verify and mask the Fsys Store CRC32 after the serial number patching is complete.
+The patcher will automatically verify and mask the Fsys Store CRC32 after the serial number patching is complete.
 
 ---
 
@@ -368,7 +378,7 @@ The output log serves as a valuable source of information during the validation 
 </kbd>
 
 **Reset:**\
-When you click the 'Reset' button, it initiates a process that resets the editor and unloads any loaded files, such as the Fsys store and ME region.
+When you click the 'Reset' button, it initiates a process that resets the patcher and unloads any loaded files, such as the Fsys store and ME region.
 
 **Builds Folder:**\
 Navigates to the Builds directory within the working directory, this is where edited binaries are automatically saved when the 'Build' button is used.
@@ -377,7 +387,7 @@ Navigates to the Builds directory within the working directory, this is where ed
 Navigates to the latest build in the file explorer and highlights the file.
 
 **Load Last Build:**\
-Clicking this button will close the firmware editor window and load in the last successfully built binary into the main window.
+Clicking this button will close the firmware patcher window and load in the last successfully built binary into the main window.
 
 **Build:**\
 The 'Build' button generates a new binary file based on the user specified preferences.
