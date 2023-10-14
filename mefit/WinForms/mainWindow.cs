@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -34,7 +35,6 @@ namespace Mac_EFI_Toolkit
 
         #region Private Members
         private string _strInitialDirectory = METPath.CurrentDirectory;
-        private string _configCode = string.Empty;
         private static readonly object _lockObject = new object();
         #endregion
 
@@ -421,6 +421,106 @@ namespace Mac_EFI_Toolkit
                 ?? "NOFWVER";
 
             SetClipboardText($"{model}_{serial}_{efiversion}");
+        }
+
+        private void cmdExportInfo_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                FileName = $"FirmwareInfo_{AppleEFI.FileInfoData.FileNameNoExt}",
+                OverwritePrompt = true,
+                InitialDirectory = _strInitialDirectory
+            })
+            {
+                // Action was cancelled
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                StringBuilder builder = new StringBuilder();
+
+                builder.AppendLine("File");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"Filename:        {AppleEFI.FileInfoData.FileNameWithExt}");
+                builder.AppendLine($"Size (Bytes):    {FileUtils.FormatFileSize(AppleEFI.FileInfoData.FileLength)} bytes");
+                builder.AppendLine($"Size (Hex):      {AppleEFI.FileInfoData.FileLength:X}h");
+                builder.AppendLine($"Size (MB):       {Helper.GetBytesReadableSize(AppleEFI.FileInfoData.FileLength)}");
+                builder.AppendLine($"CRC32:           {AppleEFI.FileInfoData.CRC32:X}");
+                builder.AppendLine($"Created:         {AppleEFI.FileInfoData.CreationTime}");
+                builder.AppendLine($"Modified:        {AppleEFI.FileInfoData.LastWriteTime}\r\n");
+
+                builder.AppendLine("Descriptor Regions");
+                builder.AppendLine("----------------------------------");
+                if (IntelFD.IsDescriptorMode)
+                {
+                    builder.AppendLine(
+                        $"PDR Region:      Base: 0x{IntelFD.PDR_REGION_BASE:X}h, " +
+                        $"Limit: 0x{IntelFD.PDR_REGION_LIMIT:X}h, " +
+                        $"Size: {IntelFD.PDR_REGION_SIZE:X}h");
+                    builder.AppendLine(
+                        $"ME Region:       Base: 0x{IntelFD.ME_REGION_BASE:X}h, " +
+                        $"Limit: 0x{IntelFD.ME_REGION_LIMIT:X}h, " +
+                        $"Size: {IntelFD.ME_REGION_SIZE:X}h");
+                    builder.AppendLine(
+                        $"BIOS Region:     Base: 0x{IntelFD.BIOS_REGION_BASE:X}h, " +
+                        $"Limit: 0x{IntelFD.BIOS_REGION_LIMIT:X}h, " +
+                        $"Size: {IntelFD.BIOS_REGION_SIZE:X}h\r\n");
+                }
+                else
+                {
+                    builder.AppendLine("Descriptor mode is disabled.\r\n");
+                }
+
+                builder.AppendLine("Model Information");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"Identifier:      {AppleEFI.EfiBiosIdSectionData.ModelPart ?? "N/A"}");
+                builder.AppendLine($"Model:           {MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart) ?? "N/A"}");
+                builder.AppendLine($"Configuration:   {AppleEFI.ConfigCode ?? "N/A"}");
+                builder.AppendLine($"Board ID:        {AppleEFI.PdrSectionData.BoardId ?? "N/A"}\r\n");
+
+                builder.AppendLine("Fsys Store");
+                builder.AppendLine("----------------------------------");
+                if (AppleEFI.FsysStoreData.FsysBytes != null)
+                {
+                    builder.AppendLine($"Base:            0x{AppleEFI.FsysStoreData.FsysBase:X}h");
+                    builder.AppendLine($"Size:            {AppleEFI.FSYS_RGN_SIZE:X}h");
+                    builder.AppendLine($"CRC32:           {AppleEFI.FsysStoreData.CrcString ?? "N/A"}");
+                    builder.AppendLine($"Serial:          {AppleEFI.FsysStoreData.Serial ?? "N/A"}");
+                    builder.AppendLine($"HWC:             {AppleEFI.FsysStoreData.HWC ?? "N/A"}");
+                    builder.AppendLine($"SON:             {AppleEFI.FsysStoreData.SON ?? "N/A"}\r\n");
+                }
+                else
+                {
+                    builder.AppendLine("Fsys Store was not found.\r\n");
+                }
+
+                builder.AppendLine("Firmware");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"EFI Version:     {AppleEFI.FirmwareVersion ?? "N/A"}");
+                builder.AppendLine($"EFI Lock:        {AppleEFI.EfiPrimaryLockData.LockStatus.ToString() ?? "N/A"}");
+                builder.AppendLine($"APFS Capable:    {AppleEFI.IsApfsCapable.ToString() ?? "N/A"}\r\n");
+
+                File.WriteAllText(
+                    dialog.FileName,
+                    builder.ToString());
+
+                if (!File.Exists(dialog.FileName))
+                {
+                    METMessageBox.Show(
+                        this,
+                        "Error",
+                        "Data export failed.",
+                        METMessageType.Error,
+                        METMessageButtons.Okay);
+
+                    return;
+                }
+
+                InterfaceUtils.ShowExplorerNavigationPrompt(
+                 this,
+                 "Data exported successfully.",
+                 dialog.FileName);
+            }
         }
 
         private void cmdBackupToZip_Click(object sender, EventArgs e)
@@ -1363,31 +1463,18 @@ namespace Mac_EFI_Toolkit
 
         private void UpdateConfigCodeControls()
         {
-            string hwc =
-                AppleEFI.FsysStoreData.HWC;
+            string configCode =
+                AppleEFI.ConfigCode;
 
-            if (!string.IsNullOrEmpty(hwc))
+            lblConfigCode.Text =
+                configCode
+                ?? "N/A";
+
+            if (!string.IsNullOrEmpty(configCode))
             {
-                string configCode =
-                    MacUtils.GetDeviceConfigCode(hwc);
-
-                lblConfigCode.Text =
-                    configCode
-                    ?? "N/A";
-
-                if (!string.IsNullOrEmpty(configCode))
-                {
-                    _configCode = configCode;
-                    configCodeToolStripMenuItem.Enabled = true;
-                    lblConfigCode.Click += lblConfigCode_Click;
-                    lblConfigCode.Cursor = Cursors.Hand;
-
-                    return;
-                }
-
-                _configCode = null;
-                configCodeToolStripMenuItem.Enabled = false;
-                lblConfigCode.Cursor = Cursors.Default;
+                configCodeToolStripMenuItem.Enabled = true;
+                lblConfigCode.Click += lblConfigCode_Click;
+                lblConfigCode.Cursor = Cursors.Hand;
 
                 return;
             }
@@ -1742,7 +1829,7 @@ namespace Mac_EFI_Toolkit
                         AppleEFI.FsysStoreData.CrcString);
 
                 cmdGenerateName.Enabled = modelPartExists;
-                //cmdExportInfo.Enabled = modelPartExists;
+                cmdExportInfo.Enabled = modelPartExists;
                 cmdFixFsysCrc.Enabled = fsysCrcMismatch;
                 cmdExportFsys.Enabled = fsysBytesExist;
 
@@ -2137,9 +2224,6 @@ namespace Mac_EFI_Toolkit
             lblBoardId.Click -= lblBoardId_Click;
             lblMeVersion.Click -= lblMeVersion_Click;
 
-            // Clear private member.
-            _configCode = string.Empty;
-
             // Reset initial directory.
             SetPrimaryInitialDirectory();
 
@@ -2192,7 +2276,7 @@ namespace Mac_EFI_Toolkit
             MacUtils.ConvertEfiModelCode(AppleEFI.EfiBiosIdSectionData.ModelPart));
 
         private void ClipboardSetFirmwareConfigCode() => SetClipboardText(
-                _configCode);
+                AppleEFI.ConfigCode);
 
         private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(
             AppleEFI.FsysStoreData.CrcString);

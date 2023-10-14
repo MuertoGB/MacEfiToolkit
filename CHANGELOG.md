@@ -19,11 +19,12 @@
 - Added a button in the main window that permits the output of firmware information to a text file (ALT + T).
 
 #### Enhancements:
-- Improved the management of control enabling and disabling in the main window.
+- Improved the management of control enabled states in the main window.
 - Improved the validation process for serial numbers.
 - EveryMac button is now disabled when an invalid serial number is detected.
 - Internal database updated.
 - User Interface improvements.
+- Modified default file name when exporting information in the ROM Information window.
 
 #### Bugs:
 - Fixed rare occurrences of malformed Intel ME version numbers.

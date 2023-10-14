@@ -131,6 +131,7 @@ namespace Mac_EFI_Toolkit.Common
         internal static byte[] LoadedBinaryBytes = null;
         internal static bool FirmwareLoaded = false;
         internal static string FirmwareVersion = null;
+        internal static string ConfigCode = null;
         internal static bool ForceFoundFsys = false;
         internal static string FitVersion = null;
         internal static string MeVersion = null;
@@ -241,6 +242,11 @@ namespace Mac_EFI_Toolkit.Common
                 GetFsysStoreData(
                     sourceBytes,
                     false);
+
+            // Fetch the Config Code
+            ConfigCode = FsysStoreData.HWC != null
+                ? MacUtils.GetDeviceConfigCode(FsysStoreData.HWC)
+                : null;
 
             // Parse AppleRomSectionInformation region data.
             AppleRomInfoSectionData =

@@ -128,7 +128,7 @@ namespace Mac_EFI_Toolkit.WinForms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
-                FileName = $"AppleRomSectionInformation_{AppleEFI.FsysStoreData.Serial}",
+                FileName = $"AppleRomSectionInformation_{AppleEFI.FileInfoData.FileNameNoExt}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.CurrentDirectory
             })
@@ -139,18 +139,20 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 StringBuilder builder = new StringBuilder();
 
-                builder.AppendLine($"Bios ID:       {(AppleEFI.AppleRomInfoSectionData.BiosId ?? "N/A")}");
-                builder.AppendLine($"Model:         {(AppleEFI.AppleRomInfoSectionData.Model ?? "N/A")}");
-                builder.AppendLine($"EFI Version:   {(AppleEFI.AppleRomInfoSectionData.EfiVersion ?? "N/A")}");
-                builder.AppendLine($"Built By:      {(AppleEFI.AppleRomInfoSectionData.BuiltBy ?? "N/A")}");
-                builder.AppendLine($"Date Stamp:    {(AppleEFI.AppleRomInfoSectionData.DateStamp ?? "N/A")}");
-                builder.AppendLine($"Revision:      {(AppleEFI.AppleRomInfoSectionData.Revision ?? "N/A")}");
-                builder.AppendLine($"Boot ROM:      {(AppleEFI.AppleRomInfoSectionData.RomVersion ?? "N/A")}");
-                builder.AppendLine($"Buildcave ID:  {(AppleEFI.AppleRomInfoSectionData.BuildcaveId ?? "N/A")}");
-                builder.AppendLine($"Built Type:    {(AppleEFI.AppleRomInfoSectionData.BuildType ?? "N/A")}");
-                builder.AppendLine($"Compiler:      {(AppleEFI.AppleRomInfoSectionData.Compiler ?? "N/A")}");
+                builder.AppendLine($"Bios ID:       {AppleEFI.AppleRomInfoSectionData.BiosId ?? "N/A"}");
+                builder.AppendLine($"Model:         {AppleEFI.AppleRomInfoSectionData.Model ?? "N/A"}");
+                builder.AppendLine($"EFI Version:   {AppleEFI.AppleRomInfoSectionData.EfiVersion ?? "N/A"}");
+                builder.AppendLine($"Built By:      {AppleEFI.AppleRomInfoSectionData.BuiltBy ?? "N/A"}");
+                builder.AppendLine($"Date Stamp:    {AppleEFI.AppleRomInfoSectionData.DateStamp ?? "N/A"}");
+                builder.AppendLine($"Revision:      {AppleEFI.AppleRomInfoSectionData.Revision ?? "N/A"}");
+                builder.AppendLine($"Boot ROM:      {AppleEFI.AppleRomInfoSectionData.RomVersion ?? "N/A"}");
+                builder.AppendLine($"Buildcave ID:  {AppleEFI.AppleRomInfoSectionData.BuildcaveId ?? "N/A"}");
+                builder.AppendLine($"Built Type:    {AppleEFI.AppleRomInfoSectionData.BuildType ?? "N/A"}");
+                builder.AppendLine($"Compiler:      {AppleEFI.AppleRomInfoSectionData.Compiler ?? "N/A"}");
 
-                File.WriteAllText(dialog.FileName, builder.ToString());
+                File.WriteAllText(
+                    dialog.FileName,
+                    builder.ToString());
 
                 if (!File.Exists(dialog.FileName))
                 {
