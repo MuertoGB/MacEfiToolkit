@@ -14,7 +14,7 @@ namespace Mac_EFI_Toolkit.Common
         {
             if (bytes.Length != 3)
                 throw new ArgumentException(
-                    "Byte array must be 3 bytes long.",
+                    "Byte data must be 3 bytes long.",
                     nameof(bytes));
 
             return (bytes[2] << 16) | (bytes[1] << 8) | bytes[0];

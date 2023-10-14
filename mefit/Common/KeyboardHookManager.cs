@@ -42,7 +42,7 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        // Define the keyboard hook callback function
+        // Define the keyboard hook callback function.
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
@@ -51,7 +51,7 @@ namespace Mac_EFI_Toolkit.Common
                     Marshal.ReadInt32(
                         lParam);
 
-                // Disable the Windows+Up shortcut by not passing it to the operating system
+                // Disable the Windows+Up shortcut by not passing it to the operating system.
                 if (vkCode == VK_UP && (NativeMethods.GetKeyState(VK_LWIN) & KEY_PRESSED) != 0)
                     return (IntPtr)1;
             }

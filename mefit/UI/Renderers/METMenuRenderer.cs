@@ -15,7 +15,8 @@ namespace Mac_EFI_Toolkit.UI.Renderers
         private readonly Color BorderColor = Color.FromArgb(80, 80, 80);
         private readonly Color ItemHoverColor = Color.FromArgb(60, 60, 60);
 
-        protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
+        protected override void OnRenderToolStripBorder(
+            ToolStripRenderEventArgs e)
         {
             base.OnRenderToolStripBorder(e);
 
@@ -32,7 +33,8 @@ namespace Mac_EFI_Toolkit.UI.Renderers
             }
         }
 
-        protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
+        protected override void OnRenderMenuItemBackground(
+            ToolStripItemRenderEventArgs e)
         {
             Rectangle rect =
                 new Rectangle(
@@ -65,7 +67,8 @@ namespace Mac_EFI_Toolkit.UI.Renderers
             }
         }
 
-        protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
+        protected override void OnRenderSeparator(
+            ToolStripSeparatorRenderEventArgs e)
         {
             if (e.Vertical || !(e.Item is ToolStripSeparator))
             {

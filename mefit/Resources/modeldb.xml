@@ -33573,12 +33573,24 @@
     <configCode>MacBook Pro (13-inch, 2017, Two Thunderbolt 3 ports)</configCode>
 </section>
 <section>
+	<hwc>HV2L</hwc>
+	<configCode>MacBook Pro (13-inch, 2017, Four Thunderbolt 3 Ports)</configCode>
+</section>
+<section>
+	<hwc>HV2M</hwc>
+	<configCode>MacBook Pro (13-inch, 2017, Four Thunderbolt 3 Ports)</configCode>
+</section>	
+<section>
     <hwc>HV2N</hwc>
     <configCode>MacBook Pro (13-inch, 2017, Four Thunderbolt 3 Ports)</configCode>
 </section>	
 <section>
     <hwc>HV2Q</hwc>
     <configCode>MacBook Pro (13-inch, 2017, Four Thunderbolt 3 Ports)</configCode>
+</section>
+<section>
+	<hwc>HV2R</hwc>
+	<configCode>MacBook Pro (13-inch, 2017, Four Thunderbolt 3 Ports)</configCode>
 </section>
 <section>
     <hwc>HV2T</hwc>
@@ -33608,6 +33620,10 @@
     <hwc>J1GT</hwc>
     <configCode>iMac (Retina 5K, 27-inch, 2017)</configCode>
 </section>
+<section>
+    <hwc>J1WK</hwc>
+    <configCode>MacBook Air (13-inch, 2017)</configCode>
+</section>	
 <section>
     <hwc>J1WL</hwc>
     <configCode>MacBook Air (13-inch, 2017)</configCode>
@@ -33645,8 +33661,12 @@
     <configCode>MacBook Pro (15-inch, 2017)</configCode>
 </section>
 <section>
-    <hwc>J926</hwc>
-    <configCode>MacBook Pro (15-inch, 2017)</configCode>
+	<hwc>J926</hwc>
+	<configCode>MacBook Pro (15-inch, 2017)</configCode>
+</section>
+<section>
+	<hwc>J9J5</hwc>
+	<configCode>MacBook Pro (13-inch, 2017, Four Thunderbolt 3 Ports)</configCode>
 </section>
 <section>
     <hwc>JC67</hwc>

@@ -8,8 +8,29 @@
   <a href="#version-111">V1.1.1</a> •
   <a href="#version-112">V1.1.2</a> •
   <a href="#version-113">V1.1.3</a> •
-  <a href="#version-114">V1.1.4</a>
+  <a href="#version-114">V1.1.4</a> •
+  <a href="#version-120">V1.2.0</a>
 </p>
+
+## Version 1.2.0
+
+#### New:
+- Added a button in the main window that can generate a structured file name for the loaded firmware and copy it to the clipboard (ALT + G).
+- Added a button in the main window that permits the output of firmware information to a text file (ALT + T).
+
+#### Enhancements:
+- Improved the management of control enabling and disabling in the main window.
+- Improved the validation process for serial numbers.
+- EveryMac button is now disabled when an invalid serial number is detected.
+- Internal database updated.
+- User Interface improvements.
+
+#### Bugs:
+- Fixed rare occurrences of malformed Intel ME version numbers.
+- Fixed a UI bug related to the METLabel, where the ForeColor property could be overridden even when the control was disabled.
+
+#### Misc:
+- Due to the seemingly permanent removal of back-end data from Apple's support-sp website, the loading of Config Code data from the server has been indefinitely disabled as a precaution, however, the application will continue to utilize the internal database to display this data.
 
 ## Version 1.1.4
 

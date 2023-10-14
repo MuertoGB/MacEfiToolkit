@@ -6,14 +6,12 @@
 
 using Mac_EFI_Toolkit.Common;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.XPath;
 
 namespace Mac_EFI_Toolkit.Utils
 {
@@ -26,11 +24,11 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static async Task<string> GetDeviceConfigCodeAsync(string hwc)
+        internal static string GetDeviceConfigCode(string hwc)
         {
             try
             {
-                // Attempt to load the data from the embedded XML db
+                // Attempt to load the data from the embedded XML db.
                 byte[] xmlData =
                     Encoding.UTF8.GetBytes(
                         Properties.Resources.modeldb);
@@ -50,30 +48,7 @@ namespace Mac_EFI_Toolkit.Utils
                         return name;
                 }
 
-                // Retrieve data from the Apple server
-                string url = $"http://support-sp.apple.com/sp/product?cc={hwc}&lang=en_GB";
-
-                if (!NetUtils.GetIsWebsiteAvailable(url))
-                    return null;
-
-                string xml = await new WebClient().DownloadStringTaskAsync(url);
-
-                XDocument doc =
-                    XDocument.Parse(
-                        xml);
-
-                string data =
-                    doc.XPathSelectElement(
-                        "/root/configCode")?.Value;
-
-                if (!string.IsNullOrEmpty(data))
-                    Logger.WriteToLogFile(
-                        $"'{hwc}' not present in local db > Server returned: '{data}'",
-                        LogType.Database);
-
-                return string.IsNullOrEmpty(data)
-                    ? null
-                    : data;
+                return null;
             }
             catch (Exception e)
             {
@@ -87,11 +62,43 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="serial">The serial number string to check.</param>
         /// <returns>True if the input string contains only valid characters, otherwise false.</returns>
-        internal static bool GetIsValidSerialChars(string serial)
+        internal static bool IsValidSerialChars(string serial)
         {
             return Regex.IsMatch(
                 serial,
                 "^[0-9A-Z]+$");
+        }
+
+        public static bool IsBannedSerial(string serial)
+        {
+            List<string> ignoredSerials = new List<string>
+            {
+                "serialnumbe",
+                "serialnumber",
+                "serial-numbe",
+                "serial-number",
+                "modelnumbe",
+                "modelnumber",
+                "model-numbe",
+                "model-number",
+                "12345678901",
+                "123456789012",
+                "abcdefghilj",
+                "abcdefghiljk"
+            };
+
+            if (!IsValidSerialChars(serial))
+                return true;
+
+            if (ignoredSerials.Any(
+                ignoredSerial => serial.IndexOf(
+                    ignoredSerial, StringComparison.OrdinalIgnoreCase) >= 0))
+                return true;
+
+            if (serial.All(c => c == serial[0]))
+                return true;
+
+            return false;
         }
 
         /// <summary>
@@ -111,7 +118,7 @@ namespace Mac_EFI_Toolkit.Utils
                     nameof(fsysStore),
                     "Given bytes are too large.");
 
-            // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes
+            // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes.
             byte[] bytesTempFsys = new byte[AppleEFI.FSYS_RGN_SIZE - AppleEFI.CRC32_SIZE];
 
             if (fsysStore != null)
@@ -137,7 +144,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The full model identifier representation.</returns>
         internal static string ConvertEfiModelCode(string model)
         {
-            // Example MBP121 becomes MacBookPro12,1
+            // Example MBP121 becomes MacBookPro12,1.
             if (string.IsNullOrEmpty(model))
                 return null;
 

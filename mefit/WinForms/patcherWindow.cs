@@ -605,7 +605,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (textLength == AppleEFI.FsysStoreData.Serial.Length)
             {
-                if (MacUtils.GetIsValidSerialChars(tb.Text))
+                if (MacUtils.IsValidSerialChars(tb.Text))
                 {
                     UpdateTextBoxColor(
                         tb,

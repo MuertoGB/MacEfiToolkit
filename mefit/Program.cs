@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit
     internal struct METVersion
     {
         internal static readonly string SDK = "23.01";
-        internal static readonly string Build = "231010.2332";
+        internal static readonly string Build = "231014.0425";
         internal static readonly string Channel = "Stable";
     }
 
@@ -68,11 +68,10 @@ namespace Mac_EFI_Toolkit
         internal static System.Threading.Timer memoryTimer;
         internal static mainWindow mWindow;
 
-        internal static Font FONT_MDL2_REG_20;
-        internal static Font FONT_MDL2_REG_14;
-        internal static Font FONT_MDL2_REG_12;
-        internal static Font FONT_MDL2_REG_10;
         internal static Font FONT_MDL2_REG_9;
+        internal static Font FONT_MDL2_REG_10;
+        internal static Font FONT_MDL2_REG_12;
+        internal static Font FONT_MDL2_REG_20;
         #endregion
 
         #region Const Members
@@ -86,22 +85,27 @@ namespace Mac_EFI_Toolkit
         #region Main Entry Point
         [STAThread]
         static void Main(string[] args)
+
         {
-            // Register exception handler events early
+            // Register exception handler events early.
             Application.SetUnhandledExceptionMode(
                 UnhandledExceptionMode.CatchException);
 
-            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            Application.ThreadException +=
+                new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+
+            AppDomain.CurrentDomain.UnhandledException +=
+                new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             // Default framework stuff.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Set Web Security Protocol
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+            // Set Web Security Protocol.
+            ServicePointManager.SecurityProtocol =
+                (SecurityProtocolType)3072;
 
-            // Load fonts into memory
+            // Load fonts into memory.
             byte[] fontData = Properties.Resources.segmdl2;
 
             if (fontData != null)
@@ -121,11 +125,6 @@ namespace Mac_EFI_Toolkit
                         FontResolver.LoadFontFromResource(fontData),
                         12.0F,
                         FontStyle.Regular);
-                FONT_MDL2_REG_14 =
-                    new Font(
-                        FontResolver.LoadFontFromResource(fontData),
-                        14.0F,
-                        FontStyle.Regular);
                 FONT_MDL2_REG_20 =
                     new Font(
                         FontResolver.LoadFontFromResource(fontData),
@@ -141,7 +140,7 @@ namespace Mac_EFI_Toolkit
                     MessageBoxIcon.Error);
             }
 
-            // Settings
+            // Check settings.
             if (!File.Exists(METPath.SettingsFile))
                 Settings.SettingsCreateFile();
 
@@ -151,10 +150,10 @@ namespace Mac_EFI_Toolkit
             // Register low level keyboard hook for preventing WinKey+Up.
             KeyboardHookManager.Hook();
 
-            // Get dragged filepath
+            // Get dragged filepath.
             draggedFilePath = GetDraggedFilePath(args);
 
-            // Create main window instance
+            // Create main window instance.
             mWindow = new mainWindow();
 
             // Run mWindow instance.
@@ -164,9 +163,7 @@ namespace Mac_EFI_Toolkit
         private static string GetDraggedFilePath(string[] args)
         {
             if (args.Length > 0 && File.Exists(args[0]))
-            {
                 return args[0];
-            }
 
             return string.Empty;
         }
@@ -174,24 +171,21 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region OnExit
-        private static void OnExiting(object sender, EventArgs e)
-        {
+        private static void OnExiting(object sender, EventArgs e) =>
             HandleOnExitingCleanup();
-        }
 
         private static void HandleOnExitingCleanup()
         {
-            // Dispose of memory fonts
+            // Dispose of memory fonts.
             FONT_MDL2_REG_9.Dispose();
             FONT_MDL2_REG_10.Dispose();
             FONT_MDL2_REG_12.Dispose();
-            FONT_MDL2_REG_14.Dispose();
             FONT_MDL2_REG_20.Dispose();
 
-            // Dispose of memory stats timer
+            // Dispose of memory stats timer.
             memoryTimer.Dispose();
 
-            // Unhook the low level keyboard hook
+            // Unhook the low level keyboard hook.
             KeyboardHookManager.Unhook();
         }
         #endregion
@@ -246,7 +240,7 @@ namespace Mac_EFI_Toolkit
                 Environment.Exit(-1);
             }
 
-            // Fix for mainWindow opacity getting stuck at 0.5
+            // Fix for mainWindow opacity getting stuck at 0.5.
             if (mWindow.Opacity != 1.0)
                 mWindow.Opacity = 1.0;
         }
@@ -265,6 +259,7 @@ namespace Mac_EFI_Toolkit
                 {
                     Application.Exit();
                 }
+
                 return;
             }
 
@@ -320,8 +315,8 @@ namespace Mac_EFI_Toolkit
             }
             catch (Win32Exception)
             {
-                // Do nothing.
-                // The application throws an unhandled exception when a user cancels the UAC prompt.
+                // Do nothing. The application throws an unhandled
+                // exception when a user cancels the UAC prompt.
                 return;
             }
         }

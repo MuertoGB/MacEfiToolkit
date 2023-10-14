@@ -24,6 +24,8 @@ namespace Mac_EFI_Toolkit.UI
         internal const string SAVE = "\uE74E";
         internal const string FORWARD = "\uE72A";
         internal const string UPLOAD = "\uE11C";
+        internal const string EXPORT = "\uEDE1";
+        internal const string RENAME = "\uE8AC";
 
         // Non line-breaking space
         internal const string NBSPACE = "\u00A0";

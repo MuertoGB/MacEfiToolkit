@@ -199,7 +199,7 @@ namespace Mac_EFI_Toolkit.UI
                         diameter,
                         diameter);
 
-                // Control size of check
+                // Control size of check.
                 innerRectangle.Inflate(-4, -4);
 
                 using (SolidBrush brush = new SolidBrush(CheckedColor))

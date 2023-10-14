@@ -108,14 +108,14 @@ namespace Mac_EFI_Toolkit.Common
         internal static uint CalculateRegionBase(ushort basePosition)
         {
             // For example:
-            // BIOS Base:  LE: 3701h > 137h * 1000h = A bios base of 137000h
+            // BIOS Base:  LE: 3701h > 137h * 1000h = A bios base of 137000h.
             return basePosition * DESCRIPTOR_LENGTH;
         }
 
         internal static uint CalculateRegionSize(ushort basePosition, ushort limitPosition)
         {
             // For example:
-            // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h
+            // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h.
             if (limitPosition != 0)
                 return (uint)(limitPosition + 1 - basePosition) * DESCRIPTOR_LENGTH;
 
@@ -124,7 +124,7 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static void ParseRegionData(byte[] sourceBytes)
         {
-            // Read in the flash descriptor
+            // Read in the flash descriptor.
             byte[] DescriptorBytes =
                 BinaryUtils.GetBytesBaseLength(
                     sourceBytes,
@@ -132,7 +132,8 @@ namespace Mac_EFI_Toolkit.Common
                     (int)DESCRIPTOR_LENGTH);
 
             // Deserialize the header
-            byte[] HeaderBytes = new byte[Marshal.SizeOf(typeof(DescriptorHeader))];
+            byte[] HeaderBytes =
+                new byte[Marshal.SizeOf(typeof(DescriptorHeader))];
 
             Array.Copy(
                 DescriptorBytes,
@@ -145,16 +146,17 @@ namespace Mac_EFI_Toolkit.Common
                 Helper.DeserializeHeader<DescriptorHeader>(
                     HeaderBytes);
 
-            // Match flash descriptor tag (5AA5F00F)
+            // Match flash descriptor tag (5AA5F00F).
             IsDescriptorMode =
                 Header.Tag.SequenceEqual(
                     FLASH_DESC_SIGNATURE);
 
-            // Descriptor mode
+            // Descriptor mode.
             if (IsDescriptorMode)
             {
-                // Deserialize the flash map
-                byte[] MapBytes = new byte[Marshal.SizeOf(typeof(DescriptorMap))];
+                // Deserialize the flash map.
+                byte[] MapBytes =
+                    new byte[Marshal.SizeOf(typeof(DescriptorMap))];
 
                 Array.Copy(
                     DescriptorBytes,
@@ -167,10 +169,11 @@ namespace Mac_EFI_Toolkit.Common
                     Helper.DeserializeHeader<DescriptorMap>(
                         MapBytes);
 
-                // Deserialize the regions data
-                byte[] RegionBytes = new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
+                // Deserialize the regions data.
+                byte[] RegionBytes =
+                    new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
 
-                // Left shift right four bits: Example: 04h: 0000 0100 << 40h: 0100 0000
+                // Left shift right four bits: Example: 04h: 0000 0100 << 40h: 0100 0000.
                 int RegionBase = Map.RegionBase << 4;
 
                 Array.Copy(
@@ -184,7 +187,7 @@ namespace Mac_EFI_Toolkit.Common
                     Helper.DeserializeHeader<DescriptorRegions>(
                         RegionBytes);
 
-                // Parse BIOS Region base, limit and size,
+                // Parse BIOS Region base, limit and size.
                 BIOS_REGION_BASE =
                     CalculateRegionBase(
                         Regions.BiosBase);

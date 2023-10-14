@@ -83,7 +83,7 @@ namespace Mac_EFI_Toolkit.Common
             {
                 byte[] headerBytes = BinaryUtils.GetBytesBaseLength(
                     sourceBytes,
-                    headerPos,
+                    headerPos + 2,
                     dataLength);
 
                 if (headerBytes != null)
@@ -129,7 +129,7 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static readonly byte[] MN2_SIGNATURE =
         {
-            0x24, 0x4D, 0x4E, 0x32
+            0x00, 0x00, 0x24, 0x4D, 0x4E, 0x32
         };
 
     }

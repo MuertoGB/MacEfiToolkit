@@ -9,11 +9,15 @@ namespace Mac_EFI_Toolkit.UI
 {
     public enum METMessageType
     {
-        Error, Warning, Information, Question
+        Error,
+        Warning,
+        Information,
+        Question
     }
 
     public enum METMessageButtons
     {
-        Okay, YesNo
+        Okay,
+        YesNo
     }
 }
