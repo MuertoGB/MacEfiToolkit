@@ -74,8 +74,8 @@ namespace Mac_EFI_Toolkit.WinForms
               path;
 
             lblPath.ForeColor = Directory.Exists(path)
-                ? Colours.DIM_TEXT
-                : Colours.WARNING_ORANGE;
+                ? AppColours.DIMMED_TEXT
+                : AppColours.WARNING;
         }
         #endregion
 

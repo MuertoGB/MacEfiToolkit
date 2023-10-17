@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit
 #endif
         }
 
-        internal static bool GetIsRunAsAdmin()
+        internal static bool IsElevated()
         {
             return new WindowsPrincipal(
                 WindowsIdentity.GetCurrent()).IsInRole(
@@ -68,7 +68,7 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"Channel:  {METVersion.Channel}");
                 builder.AppendLine($"Mode:     {GetBitnessMode()}");
                 builder.AppendLine($"Debug:    {GetIsDebugMode()}");
-                builder.AppendLine($"Elevated: {GetIsRunAsAdmin()}");
+                builder.AppendLine($"Elevated: {IsElevated()}");
                 builder.AppendLine($"SHA256:   {FileUtils.GetSha256Digest(appBytes)}\r\n");
 
                 builder.AppendLine("<-- Operating System -->\r\n");
@@ -77,10 +77,10 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"Kernel:   {OSUtils.GetKernelVersion.ProductVersion}\r\n");
 
                 builder.AppendLine("<-- Fonts -->\r\n");
-                builder.AppendLine($"Segoe UI Reg: {OSUtils.IsFontStyleAvailable("Segoe UI", FontStyle.Regular)}");
-                builder.AppendLine($"Segoe UI Bol: {OSUtils.IsFontStyleAvailable("Segoe UI", FontStyle.Bold)}");
-                builder.AppendLine($"Segoe UI Sem: {OSUtils.IsFontStyleAvailable("Segoe UI Semibold", FontStyle.Regular)}");
-                builder.AppendLine($"Consolas Reg: {OSUtils.IsFontStyleAvailable("Consolas", FontStyle.Bold)}\r\n");
+                builder.AppendLine($"Segoe UI Reg: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Regular)}");
+                builder.AppendLine($"Segoe UI Bol: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Bold)}");
+                builder.AppendLine($"Segoe UI Sem: {FontResolver.IsFontStyleAvailable("Segoe UI Semibold", FontStyle.Regular)}");
+                builder.AppendLine($"Consolas Reg: {FontResolver.IsFontStyleAvailable("Consolas", FontStyle.Bold)}\r\n");
 
                 builder.AppendLine("<-- Exception Data -->\r\n");
                 builder.AppendLine(GetExceptionData(e));

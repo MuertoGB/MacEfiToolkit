@@ -93,7 +93,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             foreach (Label label in tlpInfo.Controls)
                 if (label.Text == "N/A")
-                    label.ForeColor = Colours.DISABLED_TEXT;
+                    label.ForeColor = AppColours.DISABLED_TEXT;
         }
         #endregion
 

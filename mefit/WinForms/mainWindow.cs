@@ -67,9 +67,9 @@ namespace Mac_EFI_Toolkit
             KeyDown += mainWindow_KeyDown;
             DragEnter += mainWindow_DragEnter;
             DragDrop += mainWindow_DragDrop;
-            Activated += mainWindow_Activated;
             Deactivate += mainWindow_Deactivate;
-            lblVersion.MouseClick += lblVersion_MouseClick;
+            Activated += mainWindow_Activated;
+            lblAppVersion.MouseClick += lblVersion_MouseClick;
 
             // Set tip handlers for controls.
             SetTipHandlers();
@@ -86,7 +86,7 @@ namespace Mac_EFI_Toolkit
         private void mainWindow_Load(object sender, EventArgs e)
         {
             // Set version text.
-            lblVersion.Text =
+            lblAppVersion.Text =
                 Application.ProductVersion;
 
             // Get and set the primary file dialog initial directory.
@@ -166,11 +166,11 @@ namespace Mac_EFI_Toolkit
             OpenBinary(draggedFilename);
         }
 
-        private void mainWindow_Activated(object sender, EventArgs e) =>
-            SetControlForeColor(tlpTitle, Color.White);
-
         private void mainWindow_Deactivate(object sender, EventArgs e) =>
-            SetControlForeColor(tlpTitle, Color.FromArgb(100, 100, 100));
+    SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
+
+        private void mainWindow_Activated(object sender, EventArgs e) =>
+            SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
 
         private void tlpVersionLabel_Click(object sender, EventArgs e) =>
             ShowContextMenuAtCursor(sender, e, cmsApplication, false);
@@ -275,7 +275,6 @@ namespace Mac_EFI_Toolkit
             Control[] controls = {
                 tlpTitle,
                 lblWindowTitle,
-                tlpVersionLabel,
                 tlpMenu };
 
             foreach (Control control in controls)
@@ -678,9 +677,8 @@ namespace Mac_EFI_Toolkit
                 // Check patchedBinary is not null.
                 if (patchedBinary == null)
                 {
-                    Logger.WriteToLogFile(
-                        $"[{control.Name}] 'MakeCrcPatchedBinary' returned null data",
-                        LogType.Application);
+                    Logger.WriteToAppLog(
+                        $"[{control.Name}] 'MakeCrcPatchedBinary' returned null data");
 
                     buildFailed = true;
                 }
@@ -688,9 +686,8 @@ namespace Mac_EFI_Toolkit
                 // Check binary was written without error.
                 if (!FileUtils.WriteAllBytesEx(dialog.FileName, patchedBinary))
                 {
-                    Logger.WriteToLogFile(
-                        $"[{control.Name}] 'WriteAllBytesEx' returned false",
-                        LogType.Application);
+                    Logger.WriteToAppLog(
+                        $"[{control.Name}] 'WriteAllBytesEx' returned false");
 
                     buildFailed = true;
                 }
@@ -707,8 +704,7 @@ namespace Mac_EFI_Toolkit
                             METMessageButtons.YesNo);
 
                     if (failResult == DialogResult.Yes)
-                        Logger.ViewLogFile(
-                            LogType.Application);
+                        Logger.ViewLogFile();
 
                     return;
                 }
@@ -933,9 +929,8 @@ namespace Mac_EFI_Toolkit
                 // Check patched primary store matches the patched buffer.
                 if (!BinaryUtils.ByteArraysMatch(svsStore.PrimaryStoreBytes, unlockedPrimaryStore))
                 {
-                    Logger.WriteToLogFile(
-                        $"[{control.Name}] Patched primary store does not match buffer",
-                        LogType.Application);
+                    Logger.WriteToAppLog(
+                        $"[{control.Name}] Patched primary store does not match buffer");
 
                     buildFailed = true;
                 }
@@ -945,9 +940,8 @@ namespace Mac_EFI_Toolkit
                 {
                     if (!BinaryUtils.ByteArraysMatch(svsStore.BackupStoreBytes, unlockedBackupStore))
                     {
-                        Logger.WriteToLogFile(
-                            $"[{control.Name}] Patched backup store does not match buffer",
-                            LogType.Application);
+                        Logger.WriteToAppLog(
+                            $"[{control.Name}] Patched backup store does not match buffer");
 
                         buildFailed = true;
                     }
@@ -956,9 +950,8 @@ namespace Mac_EFI_Toolkit
                 // Check binary was written without error.
                 if (!FileUtils.WriteAllBytesEx(dialog.FileName, patchedBinary))
                 {
-                    Logger.WriteToLogFile(
-                        $"[{control.Name}] 'WriteAllBytesEx' returned false",
-                        LogType.Application);
+                    Logger.WriteToAppLog(
+                        $"[{control.Name}] 'WriteAllBytesEx' returned false");
 
                     buildFailed = true;
                 }
@@ -975,8 +968,7 @@ namespace Mac_EFI_Toolkit
                             METMessageButtons.YesNo);
 
                     if (failResult == DialogResult.Yes)
-                        Logger.ViewLogFile(
-                            LogType.Application);
+                        Logger.ViewLogFile();
 
                     return;
                 }
@@ -1170,10 +1162,9 @@ namespace Mac_EFI_Toolkit
 
         private void viewLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Logger.strLogFilePath))
+            if (File.Exists(METPath.ApplicationLog))
             {
-                Process.Start(
-                    Logger.strLogFilePath);
+                Logger.ViewLogFile();
 
                 return;
             }
@@ -1380,7 +1371,7 @@ namespace Mac_EFI_Toolkit
             // Apply DISABLED_TEXT color to N/A text labels.
             ApplyNestedPanelLabelForeColor(
                 tlpFirmware,
-                Colours.DISABLED_TEXT);
+                AppColours.DISABLED_TEXT);
 
             // Check which descriptor copy menu items should be enabled.
             pdrBaseToolStripMenuItem.Enabled =
@@ -1415,7 +1406,7 @@ namespace Mac_EFI_Toolkit
             if (!isValidSize)
             {
                 lblFilesize.ForeColor =
-                    Colours.ERROR_RED;
+                    AppColours.ERROR;
 
                 lblFilesize.Text +=
                     isValidSize
@@ -1497,8 +1488,8 @@ namespace Mac_EFI_Toolkit
                 lblFsysCrc32.ForeColor = string.Equals(
                     fsysCrc32,
                     AppleEFI.FsysStoreData.CrcCalcString)
-                    ? Colours.COMPLETE_GREEN
-                    : Colours.ERROR_RED;
+                    ? AppColours.COMPLETE
+                    : AppColours.ERROR;
 
                 fsysCRC32ToolStripMenuItem.Enabled = true;
                 lblFsysCrc32.Click += lblFsysCrc32_Click;
@@ -1612,10 +1603,10 @@ namespace Mac_EFI_Toolkit
 
             Color foreColor =
                 storeData.PrimaryStoreBase == -1
-                ? Colours.DISABLED_TEXT
+                ? AppColours.DISABLED_TEXT
                 : !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
                 ? Color.White
-                : Colours.COMPLETE_GREEN;
+                : AppColours.COMPLETE;
 
             nvramLabel.ForeColor = foreColor;
         }
@@ -1626,7 +1617,7 @@ namespace Mac_EFI_Toolkit
             {
                 case EfiLockStatus.Locked:
                     lblEfiLock.Text = "LOCKED";
-                    lblEfiLock.ForeColor = Colours.ERROR_RED;
+                    lblEfiLock.ForeColor = AppColours.ERROR;
                     break;
                 case EfiLockStatus.Unlocked:
                     lblEfiLock.Text = "UNLOCKED";
@@ -1634,7 +1625,7 @@ namespace Mac_EFI_Toolkit
                 case EfiLockStatus.Unknown:
                 default:
                     lblEfiLock.Text = "UNKNOWN";
-                    lblEfiLock.ForeColor = Colours.WARNING_ORANGE;
+                    lblEfiLock.ForeColor = AppColours.WARNING;
                     break;
             }
         }
@@ -1673,11 +1664,11 @@ namespace Mac_EFI_Toolkit
                     break;
                 case ApfsCapable.No:
                     lblApfsCapable.Text = "DRIVER NOT FOUND";
-                    lblApfsCapable.ForeColor = Colours.WARNING_ORANGE;
+                    lblApfsCapable.ForeColor = AppColours.WARNING;
                     break;
                 case ApfsCapable.Unknown:
                     lblApfsCapable.Text = "UNKNOWN";
-                    lblApfsCapable.ForeColor = Colours.ERROR_RED;
+                    lblApfsCapable.ForeColor = AppColours.ERROR;
                     break;
             }
         }
@@ -1939,7 +1930,7 @@ namespace Mac_EFI_Toolkit
                 lblVssStore,
                 lblSvsStore,
                 lblNssStore,
-                lblVersion
+                lblAppVersion
             };
 
             foreach (Button button in buttons)
@@ -1982,7 +1973,7 @@ namespace Mac_EFI_Toolkit
                     { lblVssStore, SetNvramStoreTip(AppleEFI.VssStoreData, "VSS") },
                     { lblSvsStore, SetNvramStoreTip(AppleEFI.SvsStoreData, "SVS") },
                     { lblNssStore, SetNvramStoreTip(AppleEFI.NssStoreData, "NSS") },
-                    { lblVersion, "Go to latest release (CTRL + G)" },
+                    { lblAppVersion, "Go to latest release (CTRL + G)" },
                 };
 
                 if (tooltips.ContainsKey(sender))
@@ -2048,14 +2039,14 @@ namespace Mac_EFI_Toolkit
         {
             // Check for a new version using the specified URL.
             VersionResult result =
-                await AppVersion.CheckForNewVersion(
+                await Mac_EFI_Toolkit.Update.CheckForNewVersion(
                     METUrl.VersionXml);
 
             // If a new version is available and update the UI.
             if (result == VersionResult.NewVersionAvailable)
             {
-                lblVersion.ForeColor = Color.FromArgb(255, 128, 128);
-                lblVersion.Text += " (OUTDATED)";
+                lblAppVersion.ForeColor = Color.FromArgb(255, 128, 128);
+                lblAppVersion.Text += " (OUTDATED)";
             }
         }
 

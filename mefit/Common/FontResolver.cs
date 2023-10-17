@@ -4,6 +4,7 @@
 // FontResolver.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Drawing;
@@ -62,5 +63,23 @@ namespace Mac_EFI_Toolkit.Common
                     Marshal.FreeCoTaskMem(pFileView);
             }
         }
+
+        internal static FontStatus IsFontStyleAvailable(string fontFamily, FontStyle fontStyle)
+        {
+            try
+            {
+                using (FontFamily family = new FontFamily(fontFamily))
+                    if (family.IsStyleAvailable(fontStyle))
+                        return FontStatus.Available;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteExceptionToAppLog(e);
+                return FontStatus.Unknown;
+            }
+
+            return FontStatus.Missing;
+        }
+
     }
 }

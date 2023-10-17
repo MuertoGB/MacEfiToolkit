@@ -609,7 +609,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 {
                     UpdateTextBoxColor(
                         tb,
-                        Colours.COMPLETE_GREEN);
+                        AppColours.COMPLETE);
 
                     Logger.WriteLogTextToRtb(
                         "Valid serial characters entered",
@@ -632,7 +632,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 {
                     UpdateTextBoxColor(
                         tb,
-                        Colours.ERROR_RED);
+                        AppColours.ERROR);
 
                     Logger.WriteLogTextToRtb(
                         "Invalid serial characters entered",

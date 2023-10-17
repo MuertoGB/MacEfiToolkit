@@ -6,7 +6,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 
 namespace Mac_EFI_Toolkit.Utils
@@ -38,21 +37,5 @@ namespace Mac_EFI_Toolkit.Utils
                     Environment.SystemDirectory,
                     "kernel32.dll"));
 
-        internal static FontStatus IsFontStyleAvailable(string fontFamily, FontStyle fontStyle)
-        {
-            try
-            {
-                using (FontFamily family = new FontFamily(fontFamily))
-                    if (family.IsStyleAvailable(fontStyle))
-                        return FontStatus.Available;
-            }
-            catch (Exception e)
-            {
-                Logger.WriteExceptionToAppLog(e);
-                return FontStatus.Unknown;
-            }
-
-            return FontStatus.Missing;
-        }
     }
 }

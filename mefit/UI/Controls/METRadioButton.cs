@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit.UI
             MouseEnter += new EventHandler(HandleMouseEnter);
             MouseLeave += new EventHandler(HandleMouseEnter);
             BackColor = Color.Transparent;
-            ForeColor = Colours.ENABLED_TEXT;
+            ForeColor = Colours.CONTROL_WHITE_TEXT;
         }
         #endregion
 
@@ -230,7 +230,7 @@ namespace Mac_EFI_Toolkit.UI
 
             Color textColor = Enabled
                 ? ForeColor
-                : Colours.DISABLED_TEXT;
+                : Colours.CONTROL_DISABLED_TEXT;
 
             using (StringFormat format = new StringFormat() { LineAlignment = StringAlignment.Center })
             using (SolidBrush brush = new SolidBrush(textColor))

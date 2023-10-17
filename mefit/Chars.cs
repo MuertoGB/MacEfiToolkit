@@ -5,7 +5,7 @@
 // Chars.cs
 // Released under the GNU GLP v3.0
 
-namespace Mac_EFI_Toolkit.UI
+namespace Mac_EFI_Toolkit
 {
     class Chars
     {
@@ -28,6 +28,6 @@ namespace Mac_EFI_Toolkit.UI
         internal const string RENAME = "\uE8AC";
 
         // Non line-breaking space
-        internal const string NBSPACE = "\u00A0";
+        internal const string NB_SPACE = "\u00A0";
     }
 }

@@ -4,8 +4,6 @@
 // UI Components
 // METCheckbox.cs
 // Released under the GNU GLP v3.0
-// Extremely bad port from my UI framework,
-// will refactor later, it works :shrug:
 
 using Mac_EFI_Toolkit.UI.Design;
 using System;
@@ -17,15 +15,16 @@ namespace Mac_EFI_Toolkit.UI
 {
     [DefaultBindingProperty("CheckState")]
     [DefaultProperty("Checked")]
-    [Designer(typeof(METSwitchDesigner))]
-    public class METSwitch : CheckBox
+    [Designer(typeof(METCheckboxDesigner))]
+    public class METCheckbox : CheckBox
     {
+
         #region Fields
-        private bool _mouseHovered = false;
+        private bool MouseHovered = false;
         #endregion
 
         #region Constructor
-        public METSwitch()
+        public METCheckbox() : base()
         {
             SetStyle(
                 ControlStyles.AllPaintingInWmPaint
@@ -33,7 +32,11 @@ namespace Mac_EFI_Toolkit.UI
                 | ControlStyles.ResizeRedraw,
                 true);
 
-            BackColor = Color.Black;
+            MouseEnter += new EventHandler(HandleMouseEnter);
+            MouseLeave += new EventHandler(HandleMouseEnter);
+
+            BackColor = Color.Transparent;
+            ForeColor = Colours.CONTROL_WHITE_TEXT;
         }
         #endregion
 
@@ -117,23 +120,6 @@ namespace Mac_EFI_Toolkit.UI
                 Invalidate();
             }
         }
-
-        private Color _switchHeadColor = Colours.SWITCH_HEAD;
-
-        [Description("The color of the control switch head.")]
-        [Category("Appearance (MET)")]
-        public Color SwitchHeadColor
-        {
-            get
-            {
-                return _switchHeadColor;
-            }
-            set
-            {
-                _switchHeadColor = value;
-                Invalidate();
-            }
-        }
         #endregion
 
         #region Paint Methods
@@ -164,89 +150,115 @@ namespace Mac_EFI_Toolkit.UI
             if (e == null)
                 return;
 
-            // Determine the switch border color based on state
+            int diameter = ClientRectangle.Height - 2;
+
+            Rectangle innerRectangle =
+                new Rectangle(
+                    2,
+                    2,
+                    diameter - 2,
+                    diameter - 2);
+
+            Rectangle outerRectangle =
+                new Rectangle(
+                    2,
+                    2,
+                    diameter - 2,
+                    diameter - 2);
+
             Color setCheckBorderColor = Enabled
-                ? Focused ? BorderColorActive : BorderColor
+                ? (MouseHovered ? BorderColorActive : BorderColor)
                 : Colours.DISABLED_CONTROL;
 
-            // Draw the switch border
-            using (Pen pen = new Pen(setCheckBorderColor) { Width = 2.0F })
+            using (Pen pen = new Pen(setCheckBorderColor, 2.0f))
             {
-                int innerWidth = Width - 2;
+                e.Graphics.DrawRectangle(
+                    pen,
+                    outerRectangle);
+            }
 
-                Rectangle rect =
+            innerRectangle.Inflate(-1, -1);
+
+            Color setCheckInnerColor = MouseHovered
+                ? ClientColorActive
+                : ClientColor;
+
+            using (SolidBrush brush = new SolidBrush(setCheckInnerColor))
+            {
+                e.Graphics.FillRectangle(
+                    brush,
+                    innerRectangle);
+            }
+
+            if (Checked)
+            {
+                innerRectangle =
                     new Rectangle(
                         1,
                         1,
-                        innerWidth,
-                        ClientRectangle.Height - 2);
+                        diameter,
+                        diameter);
 
+                // Control size of check.
+                innerRectangle.Inflate(-4, -4);
+
+                using (SolidBrush brush = new SolidBrush(CheckedColor))
+                {
+                    e.Graphics.FillRectangle(
+                        brush,
+                        innerRectangle);
+                }
+            }
+
+            Rectangle textArea =
+                new Rectangle(
+                    outerRectangle.Width + 6,
+                    0,
+                    Width - outerRectangle.Width - 6,
+                    Height);
+
+            Color textColor = Enabled
+                ? ForeColor
+                : Colours.CONTROL_DISABLED_TEXT;
+
+            using (StringFormat format = new StringFormat
+            {
+                LineAlignment = StringAlignment.Center,
+                Alignment = StringAlignment.Near
+            })
+            using (SolidBrush brush = new SolidBrush(textColor))
+            {
                 e.Graphics.DrawRectangle(
-                    pen,
-                    rect);
-            }
+                    Pens.Transparent,
+                    textArea);
 
-            // Determine the switch client color based on state
-            Color setClientColor = _mouseHovered
-                ? Checked ? CheckedColor : ClientColorActive
-                : Checked ? CheckedColor : BackColor;
-
-            // Fill the switch client area
-            using (SolidBrush brush = new SolidBrush(setClientColor))
-            {
-                Rectangle innerRect =
-                    new Rectangle(
-                        2,
-                        2,
-                       Width - 4,
-                       Height - 4);
-
-                innerRect.Inflate(-2, -2);
-
-                e.Graphics.FillRectangle(
+                e.Graphics.DrawString(
+                    Text,
+                    Font,
                     brush,
-                    innerRect);
+                    textArea,
+                    format);
             }
 
-            // Draw the 2px gap between switch head and client area
-            using (Pen pen = new Pen(BackColor, 2)) // Set the pen width to 2 pixels
+            if (Focused)
             {
-                int gapWidth = (int)(Checked ? Width - Width / 3 - 1 : 1); // Adjust for 2 pixels
+                using (Pen pen = new Pen(Colours.FOCUS_RECTANGLE, 1))
+                {
+                    pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-                Rectangle gapRect =
-                    new Rectangle(
-                        gapWidth,
-                        0,
-                        (int)(Width / 3),
-                        Height);
+                    Rectangle rect = ClientRectangle;
 
-                e.Graphics.DrawRectangle(
-                    pen,
-                    gapRect);
-            }
+                    rect.Width -= 1; rect.Height -= 1;
 
-            // Fill the switch head area
-            using (SolidBrush brush = new SolidBrush(Enabled ? SwitchHeadColor : Colours.SWITCH_HEAD_DISABLED))
-            {
-                int switchHeadWidth = (int)(Width / 3);
-
-                int switchHeadLeft = (int)(Checked ? Width - switchHeadWidth : 0);
-
-                Rectangle rect =
-                    new Rectangle(
-                        switchHeadLeft,
-                        0,
-                        switchHeadWidth,
-                        Height);
-
-                e.Graphics.FillRectangle(
-                    brush,
-                    rect);
+                    e.Graphics.DrawRectangle(
+                        pen,
+                        rect);
+                }
             }
         }
         #endregion
 
-        #region Overridden Methods
+        #region Overriden Methods
         protected override void OnCheckedChanged(EventArgs e)
         {
             base.OnCheckedChanged(e);
@@ -256,19 +268,25 @@ namespace Mac_EFI_Toolkit.UI
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             base.OnMouseLeave(eventargs);
-            _mouseHovered = false;
+            MouseHovered = false;
         }
 
         protected override void OnMouseEnter(EventArgs eventargs)
         {
             base.OnMouseEnter(eventargs);
-            _mouseHovered = true;
+            MouseHovered = true;
         }
 
         protected override void OnResize(EventArgs e)
         {
             ResizeRedraw = true;
             base.OnResize(e);
+        }
+
+        protected override void OnTextChanged(EventArgs e)
+        {
+            GetPreferredSizeN();
+            Invalidate();
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -315,12 +333,29 @@ namespace Mac_EFI_Toolkit.UI
                 base.OnKeyDown(e);
             }
         }
+        #endregion
 
-        public override Size GetPreferredSize(Size preferredSize)
+        #region Custom Methods
+        private void HandleMouseEnter(object sender, EventArgs e)
         {
-            preferredSize.Width = 34;
-            preferredSize.Height = 20;
-            return preferredSize;
+            if (ClientRectangle.Contains(PointToClient(MousePosition)))
+                if (!MouseHovered)
+                {
+                    MouseHovered = true;
+                    Invalidate();
+                }
+                else
+                {
+                    MouseHovered = false;
+                    Invalidate();
+                }
+        }
+        private Size GetPreferredSizeN()
+        {
+            return GetPreferredSize(
+                new Size(
+                    0,
+                    0));
         }
         #endregion
 

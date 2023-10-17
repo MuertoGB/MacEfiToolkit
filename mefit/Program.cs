@@ -19,34 +19,35 @@ namespace Mac_EFI_Toolkit
 {
 
     #region Struct
-    internal struct METPath
+    internal readonly struct METPath
     {
-        internal static string CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        internal static string FriendlyName = AppDomain.CurrentDomain.FriendlyName;
-        internal static string BackupsDirectory = Path.Combine(CurrentDirectory, "backups");
-        internal static string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
-        internal static string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
-        internal static string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
-        internal static string SettingsFile = Path.Combine(CurrentDirectory, "Settings.ini");
-        internal static string DebugLog = Path.Combine(CurrentDirectory, "debug.log");
-        internal static string UnhandledLog = Path.Combine(CurrentDirectory, "unhandled.log");
+        internal static readonly string CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        internal static readonly string FriendlyName = AppDomain.CurrentDomain.FriendlyName;
+        internal static readonly string BackupsDirectory = Path.Combine(CurrentDirectory, "backups");
+        internal static readonly string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
+        internal static readonly string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
+        internal static readonly string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
+        internal static readonly string SettingsFile = Path.Combine(CurrentDirectory, "Settings.ini");
+        internal static readonly string DebugLog = Path.Combine(CurrentDirectory, "debug.log");
+        internal static readonly string UnhandledLog = Path.Combine(CurrentDirectory, "unhandled.log");
+        internal static readonly string ApplicationLog = Path.Combine(CurrentDirectory, "mefit.log");
     }
 
-    internal struct METVersion
+    internal readonly struct METVersion
     {
-        internal static readonly string SDK = "23.01";
-        internal static readonly string Build = "231015.0050";
-        internal static readonly string Channel = "Stable";
+        internal const string SDK = "23.01";
+        internal const string Build = "231015.0050";
+        internal const string Channel = "Stable";
     }
 
-    internal struct METUrl
+    internal readonly struct METUrl
     {
-        internal static readonly string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
-        internal static readonly string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
-        internal static readonly string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
-        internal static readonly string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
-        internal static readonly string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
-        internal static readonly string AppleFirmwareIntelMacs = "https://support.apple.com/en-us/HT201518";
+        internal const string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
+        internal const string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
+        internal const string LatestGithubRelease = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal const string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
+        internal const string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+        internal const string AppleFirmwareIntelMacs = "https://support.apple.com/en-us/HT201518";
     }
     #endregion
 
@@ -85,7 +86,6 @@ namespace Mac_EFI_Toolkit
         #region Main Entry Point
         [STAThread]
         static void Main(string[] args)
-
         {
             // Register exception handler events early.
             Application.SetUnhandledExceptionMode(
@@ -100,6 +100,12 @@ namespace Mac_EFI_Toolkit
             // Default framework stuff.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Register application exit event.
+            Application.ApplicationExit += OnExiting;
+
+            // Register low level keyboard hook that disables Win+Up.
+            KeyboardHookManager.Hook();
 
             // Set Web Security Protocol.
             ServicePointManager.SecurityProtocol =
@@ -144,12 +150,6 @@ namespace Mac_EFI_Toolkit
             if (!File.Exists(METPath.SettingsFile))
                 Settings.SettingsCreateFile();
 
-            // Register application exit event.
-            Application.ApplicationExit += OnExiting;
-
-            // Register low level keyboard hook for preventing WinKey+Up.
-            KeyboardHookManager.Hook();
-
             // Get dragged filepath.
             draggedFilePath = GetDraggedFilePath(args);
 
@@ -177,13 +177,13 @@ namespace Mac_EFI_Toolkit
         private static void HandleOnExitingCleanup()
         {
             // Dispose of memory fonts.
-            FONT_MDL2_REG_9.Dispose();
-            FONT_MDL2_REG_10.Dispose();
-            FONT_MDL2_REG_12.Dispose();
-            FONT_MDL2_REG_20.Dispose();
+            FONT_MDL2_REG_9?.Dispose();
+            FONT_MDL2_REG_10?.Dispose();
+            FONT_MDL2_REG_12?.Dispose();
+            FONT_MDL2_REG_20?.Dispose();
 
             // Dispose of memory stats timer.
-            memoryTimer.Dispose();
+            memoryTimer?.Dispose();
 
             // Unhook the low level keyboard hook.
             KeyboardHookManager.Unhook();
@@ -199,8 +199,7 @@ namespace Mac_EFI_Toolkit
 
         internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Exception ex =
-                (Exception)e.ExceptionObject;
+            Exception ex = (Exception)e.ExceptionObject;
 
             if (ex != null)
                 ExceptionHandler(ex);
@@ -216,27 +215,30 @@ namespace Mac_EFI_Toolkit
 
             if (File.Exists(METPath.UnhandledLog))
             {
-                result = MessageBox.Show(
-                   $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NBSPACE)}" +
-                   $"'\r\n\r\nForce quit application?",
-                   $"MET Exception Handler",
-                   MessageBoxButtons.YesNo,
-                   MessageBoxIcon.Error);
+                result =
+                    MessageBox.Show(
+                        $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NB_SPACE)}" +
+                        $"'\r\n\r\nForce quit application?",
+                        $"MET Exception Handler",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Error);
             }
             else
             {
-                result = MessageBox.Show
-                    (
-                    $"{e.Message}\r\n\r\n{e}\r\n\r\nForce quit application?",
-                    $"{e.GetType()}",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Error);
+                result =
+                    MessageBox.Show(
+                        $"{e.Message}\r\n\r\n{e}\r\n\r\nForce quit application?",
+                        $"{e.GetType()}",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Error);
             }
 
             if (result == DialogResult.Yes)
             {
-                // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
+                // We need to clean any necessary objects as OnExit will not fire
+                // when Environment.Exit is called.
                 HandleOnExitingCleanup();
+
                 Environment.Exit(-1);
             }
 

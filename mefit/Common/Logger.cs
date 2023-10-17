@@ -14,12 +14,6 @@ namespace Mac_EFI_Toolkit
 {
 
     #region Enums
-    internal enum LogType
-    {
-        Application,
-        Database
-    }
-
     public enum RtbLogPrefix
     {
         Complete,
@@ -31,48 +25,34 @@ namespace Mac_EFI_Toolkit
 
     class Logger
     {
-        internal static string strLogFilePath = Path.Combine(METPath.CurrentDirectory, "mefit.log");
-        internal static string strDbReportPath = Path.Combine(METPath.CurrentDirectory, "dbreport.log");
-
-        internal static void WriteToLogFile(string logMessage, LogType logType)
+        internal static void WriteToAppLog(string logMessage)
         {
-            string pathString = GetLogFilePath(logType);
-
-            using (StreamWriter writer = new StreamWriter(pathString, true))
+            using (StreamWriter writer = new StreamWriter(METPath.ApplicationLog, true))
             {
                 writer.WriteLine(
                     $"{DateTime.Now} : {logMessage}");
             }
         }
 
-        internal static void ViewLogFile(LogType logType)
+        internal static void WriteExceptionToAppLog(Exception e)
         {
-            string pathString = GetLogFilePath(logType);
-
-            if (File.Exists(pathString))
-            {
-                Process.Start(pathString);
-            }
+            WriteToAppLog(
+                $"{e.GetType().Name}:- {e.Message}\r\n\r\n{e}\r\n\r\n -------------------");
         }
 
-        private static string GetLogFilePath(LogType logType)
+        internal static void ViewLogFile()
         {
-            string pathString;
-
-            switch (logType)
+            if (File.Exists(METPath.ApplicationLog))
             {
-                case LogType.Application:
-                    pathString = strLogFilePath;
-                    break;
-                case LogType.Database:
-                    pathString = strDbReportPath;
-                    break;
-                default:
-                    pathString = strLogFilePath;
-                    break;
+                Process.Start(METPath.ApplicationLog);
+                return;
             }
 
-            return pathString;
+            MessageBox.Show(         
+                "The application log has not been created.",
+                "Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
 
         internal static void WriteLogTextToRtb(string messageString, RtbLogPrefix logPrefix, RichTextBox richTextBox)
@@ -113,13 +93,5 @@ namespace Mac_EFI_Toolkit
 
             richTextBox.ScrollToCaret();
         }
-
-        internal static void WriteExceptionToAppLog(Exception e)
-        {
-            WriteToLogFile(
-                $"{e.GetType().Name}:- {e.Message}\r\n\r\n{e}\r\n\r\n -------------------",
-                LogType.Application);
-        }
-
     }
 }

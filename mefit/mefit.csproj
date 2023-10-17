@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppColours.cs" />
     <Compile Include="Common\IntelFD.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Common\KeyboardHookManager.cs" />
@@ -107,28 +108,28 @@
     <Compile Include="Common\SevenZip\ICoder.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
-    <Compile Include="AppVersion.cs" />
-    <Compile Include="UI\Chars.cs" />
+    <Compile Include="Update.cs" />
+    <Compile Include="Chars.cs" />
     <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
-    <Compile Include="UI\Enums.cs" />
+    <Compile Include="UI\METMessageBox\Enums.cs" />
     <Compile Include="UI\InterfaceUtils.cs" />
-    <Compile Include="UI\METContextMenuStrip.cs">
+    <Compile Include="UI\Controls\METContextMenuStrip.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\METLabel.cs">
+    <Compile Include="UI\Controls\METLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\METMessageBox.cs">
+    <Compile Include="UI\METMessageBox\METMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\METMessageBox.Designer.cs">
+    <Compile Include="UI\METMessageBox\METMessageBox.Designer.cs">
       <DependentUpon>METMessageBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\METRadioButton.cs">
+    <Compile Include="UI\Controls\METRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\METSwitch.cs">
+    <Compile Include="UI\Controls\METSwitch.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Utils\OSUtils.cs" />
@@ -161,7 +162,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Colours.cs" />
     <Compile Include="UI\Design\METCheckboxDesigner.cs" />
-    <Compile Include="UI\METCheckbox.cs">
+    <Compile Include="UI\Controls\METCheckbox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\Renderers\METMenuRenderer.cs" />
@@ -181,7 +182,7 @@
     <Compile Include="WinForms\termsWindow.Designer.cs">
       <DependentUpon>termsWindow.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\METMessageBox.resx">
+    <EmbeddedResource Include="UI\METMessageBox\METMessageBox.resx">
       <DependentUpon>METMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\aboutWindow.resx">

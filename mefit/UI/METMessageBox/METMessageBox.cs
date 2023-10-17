@@ -62,22 +62,22 @@ namespace Mac_EFI_Toolkit.UI
             switch (messageBoxType)
             {
                 case METMessageType.Error:
-                    lblMessageIcon.ForeColor = Colours.ERROR_RED;
+                    lblMessageIcon.ForeColor = Colours.ERROR_BOX;
                     lblMessageIcon.Text = Chars.STATUS_ERROR_FULL;
                     ssMmbSound = System.Media.SystemSounds.Hand;
                     break;
                 case METMessageType.Warning:
-                    lblMessageIcon.ForeColor = Colours.WARNING_ORANGE;
+                    lblMessageIcon.ForeColor = Colours.WARNING_BOX;
                     lblMessageIcon.Text = Chars.INCIDENT_TRIANGLE;
                     ssMmbSound = System.Media.SystemSounds.Exclamation;
                     break;
                 case METMessageType.Information:
-                    lblMessageIcon.ForeColor = Colours.INFO_BLUE;
+                    lblMessageIcon.ForeColor = Colours.INFO_BOX;
                     lblMessageIcon.Text = Chars.INFO_SOLID;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
                 case METMessageType.Question:
-                    lblMessageIcon.ForeColor = Colours.INFO_BLUE;
+                    lblMessageIcon.ForeColor = Colours.INFO_BOX;
                     lblMessageIcon.Text = Chars.UNKNOWN;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
