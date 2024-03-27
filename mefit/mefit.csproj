@@ -81,16 +81,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppColours.cs" />
-    <Compile Include="Common\IntelFD.cs" />
+    <Compile Include="EFI\IntelFD.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Common\KeyboardHookManager.cs" />
     <Compile Include="Common\ToInt24.cs" />
-    <Compile Include="Common\Guids.cs" />
-    <Compile Include="Common\AppleEFI.cs" />
+    <Compile Include="EFI\Guids.cs" />
+    <Compile Include="EFI\AppleEFI.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
-    <Compile Include="Common\IntelME.cs" />
+    <Compile Include="EFI\IntelME.cs" />
     <Compile Include="Debug.cs" />
+    <Compile Include="EFI\Enums\Types.cs" />
+    <Compile Include="EFI\Structs\Binary.cs" />
+    <Compile Include="EFI\Structs\EFILock.cs" />
+    <Compile Include="EFI\Structs\Sections.cs" />
+    <Compile Include="EFI\Structs\Stores.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />
     <Compile Include="Common\SevenZip\Common\CRC.cs" />
@@ -108,8 +113,9 @@
     <Compile Include="Common\SevenZip\ICoder.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
-    <Compile Include="Update.cs" />
+    <Compile Include="AppUpdate.cs" />
     <Compile Include="Chars.cs" />
+    <Compile Include="Strings.cs" />
     <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
     <Compile Include="UI\METMessageBox\Enums.cs" />
@@ -237,9 +243,6 @@
   <ItemGroup>
     <None Include="Resources\logo24px.png" />
     <None Include="Resources\changelog.png" />
-    <None Include="Resources\manual.png" />
-    <None Include="Resources\home.png" />
-    <None Include="Resources\folder.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Assets\editorterms.txt" />
     <Content Include="Assets\met.ico" />

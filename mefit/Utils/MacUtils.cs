@@ -5,6 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.EFI;
 using System;
 using System.Collections.Generic;
 using System.IO;

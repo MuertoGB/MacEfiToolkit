@@ -12,5 +12,6 @@ namespace Mac_EFI_Toolkit
         internal static readonly Color DEACTIVATED_TEXT = Color.FromArgb(100, 100, 100);
         internal static readonly Color DISABLED_TEXT = Color.FromArgb(140, 140, 140);
         internal static readonly Color WHITE_TEXT = Color.FromArgb(255, 255, 255);
+        internal static readonly Color OUTDATED_VERSION = Color.FromArgb(255, 128, 128);
     }
 }

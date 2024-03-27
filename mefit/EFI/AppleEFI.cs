@@ -4,125 +4,18 @@
 // AppleEFI.cs - Handles parsing of firmware data
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.EFI.Enums;
+using Mac_EFI_Toolkit.EFI.Structs;
 using Mac_EFI_Toolkit.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Mac_EFI_Toolkit.Common
+namespace Mac_EFI_Toolkit.EFI
 {
-
-    #region Structs
-    internal struct FileInfoStore
-    {
-        internal string FileNameWithExt { get; set; }
-        internal string FileNameNoExt { get; set; }
-        internal string CreationTime { get; set; }
-        internal string LastWriteTime { get; set; }
-        internal int FileLength { get; set; }
-        internal uint CRC32 { get; set; }
-    }
-
-    internal struct PdrSection
-    {
-        internal string BoardId { get; set; }
-    }
-
-    internal struct NvramStore
-    {
-        internal NvramStoreType StoreType { get; set; }
-        internal int PrimaryStoreBase { get; set; }
-        internal int PrimaryStoreSize { get; set; }
-        internal byte[] PrimaryStoreBytes { get; set; }
-        internal bool IsPrimaryStoreEmpty { get; set; }
-        internal int BackupStoreBase { get; set; }
-        internal int BackupStoreSize { get; set; }
-        internal byte[] BackupStoreBytes { get; set; }
-        internal bool IsBackupStoreEmpty { get; set; }
-    }
-
-    internal struct FsysStore
-    {
-        internal byte[] FsysBytes { get; set; }
-        internal int FsysBase { get; set; }
-        internal string Serial { get; set; }
-        internal int SerialBase { get; set; }
-        internal string HWC { get; set; }
-        internal int HWCBase { get; set; }
-        internal string SON { get; set; }
-        internal string CrcString { get; set; }
-        internal string CrcCalcString { get; set; }
-        internal uint CRC32CalcInt { get; set; }
-    }
-
-    internal struct EfiLock
-    {
-        internal EfiLockStatus LockStatus { get; set; }
-        internal int LockCrcBase { get; set; }
-    }
-
-    internal struct AppleRomInformationSection
-    {
-        internal bool SectionExists { get; set; }
-        internal byte[] SectionBytes { get; set; }
-        internal int SectionBase { get; set; }
-        internal string BiosId { get; set; }
-        internal string Model { get; set; }
-        internal string EfiVersion { get; set; }
-        internal string BuiltBy { get; set; }
-        internal string DateStamp { get; set; }
-        internal string Revision { get; set; }
-        internal string RomVersion { get; set; }
-        internal string BuildcaveId { get; set; }
-        internal string BuildType { get; set; }
-        internal string Compiler { get; set; }
-    }
-
-    internal struct EfiBiosIdSection
-    {
-        internal string ModelPart { get; set; }
-        internal string zzPart { get; set; }
-        internal string MajorPart { get; set; }
-        internal string MinorPart { get; set; }
-        internal string DatePart { get; set; }
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct NvramStoreHeader
-    {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        internal char[] Signature;
-        internal ushort SizeOfData;
-    }
-    #endregion
-
-    #region Enums
-    internal enum ApfsCapable
-    {
-        Guid,
-        Lzma,
-        No,
-        Unknown
-    }
-
-    internal enum EfiLockStatus
-    {
-        Locked,
-        Unlocked,
-        Unknown
-    }
-
-    internal enum NvramStoreType
-    {
-        VSS,
-        SVS,
-        NSS
-    }
-    #endregion
-
     class AppleEFI
     {
 
@@ -136,18 +29,18 @@ namespace Mac_EFI_Toolkit.Common
         internal static string FitVersion = null;
         internal static string MeVersion = null;
 
-        internal static FileInfoStore FileInfoData;
+        internal static Binary FileInfoData;
         internal static PdrSection PdrSectionData;
         internal static NvramStore VssStoreData;
         internal static NvramStore SvsStoreData;
         internal static NvramStore NssStoreData;
-        internal static EfiLock EfiPrimaryLockData;
-        internal static EfiLock EfiBackupLockData;
+        internal static EFILock EfiPrimaryLockData;
+        internal static EFILock EfiBackupLockData;
         internal static FsysStore FsysStoreData;
         internal static AppleRomInformationSection AppleRomInfoSectionData;
         internal static EfiBiosIdSection EfiBiosIdSectionData;
 
-        internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
+        internal static ApfsType IsApfsCapable = ApfsType.Unknown;
 
         internal static int FSYS_RGN_SIZE = 0;
         internal static int NVRAM_BASE = -1;
@@ -187,7 +80,7 @@ namespace Mac_EFI_Toolkit.Common
                     (int)IntelFD.BIOS_REGION_LIMIT)
                 - ZERO_VECTOR_SIZE;
 
-            if (NVRAM_BASE < 0 || NVRAM_BASE > FileInfoData.FileLength)
+            if (NVRAM_BASE < 0 || NVRAM_BASE > FileInfoData.Length)
             {
                 Logger.WriteToAppLog($"Invalid NVRAM base address: {NVRAM_BASE}");
                 NVRAM_BASE = -1;
@@ -204,7 +97,7 @@ namespace Mac_EFI_Toolkit.Common
                         4),
                     0);
 
-            if (NVRAM_SIZE < 0 || NVRAM_SIZE > FileInfoData.FileLength)
+            if (NVRAM_SIZE < 0 || NVRAM_SIZE > FileInfoData.Length)
             {
                 Logger.WriteToAppLog($"Invalid NVRAM size: {NVRAM_SIZE}");
                 NVRAM_SIZE = -1;
@@ -294,7 +187,7 @@ namespace Mac_EFI_Toolkit.Common
 
                     Logger.WriteToAppLog(
                         $"Force found Fsys Store at {FsysStoreData.FsysBase:X}h. " +
-                        $"The image may be misaligned or corrupt ({FileInfoData.FileNameWithExt}).");
+                        $"The image may be misaligned or corrupt ({FileInfoData.FileNameExt}).");
                 }
             }
         }
@@ -319,7 +212,7 @@ namespace Mac_EFI_Toolkit.Common
             FsysStoreData = default;
             AppleRomInfoSectionData = default;
             EfiBiosIdSectionData = default;
-            IsApfsCapable = ApfsCapable.Unknown;
+            IsApfsCapable = ApfsType.Unknown;
 
             FSYS_RGN_SIZE = 0;
             NVRAM_BASE = -1;
@@ -344,17 +237,17 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region File Information
-        private static FileInfoStore GetBinaryFileInfo(string fileName)
+        private static Binary GetBinaryFileInfo(string fileName)
         {
             FileInfo fileInfo =
                 new FileInfo(
                     fileName);
 
-            return new FileInfoStore
+            return new Binary
             {
-                FileNameWithExt = fileInfo.Name,
+                FileNameExt = fileInfo.Name,
 
-                FileNameNoExt =
+                FileName =
                     Path.GetFileNameWithoutExtension(
                         fileName),
 
@@ -362,7 +255,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 LastWriteTime = fileInfo.LastWriteTime.ToString(),
 
-                FileLength = (int)fileInfo.Length,
+                Length = (int)fileInfo.Length,
 
                 CRC32 =
                     FileUtils.GetCrc32Digest(
@@ -569,7 +462,7 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        internal static EfiLock GetIsEfiLocked(byte[] nvramStoreBytes)
+        internal static EFILock GetIsEfiLocked(byte[] nvramStoreBytes)
         {
             // NVRAM store is empty.
             if (nvramStoreBytes == null)
@@ -586,18 +479,18 @@ namespace Mac_EFI_Toolkit.Common
                 return DefaultEfiLockStatus();
 
             // MAC present
-            return new EfiLock
+            return new EFILock
             {
-                LockStatus = EfiLockStatus.Locked,
+                LockType = EfiLockType.Locked,
                 LockCrcBase = crcBaseAddress
             };
         }
 
-        private static EfiLock DefaultEfiLockStatus()
+        private static EFILock DefaultEfiLockStatus()
         {
-            return new EfiLock
+            return new EFILock
             {
-                LockStatus = EfiLockStatus.Unlocked,
+                LockType = EfiLockType.Unlocked,
                 LockCrcBase = -1,
             };
         }
@@ -1227,7 +1120,7 @@ namespace Mac_EFI_Toolkit.Common
         #endregion
 
         #region APFSJumpStart
-        internal static ApfsCapable GetIsApfsCapable(byte[] sourceBytes)
+        internal static ApfsType GetIsApfsCapable(byte[] sourceBytes)
         {
             // APFS DXE GUID found.
             if (BinaryUtils.GetBaseAddress(
@@ -1235,11 +1128,11 @@ namespace Mac_EFI_Toolkit.Common
                 Guids.APFS_DXE_GUID,
                 (int)IntelFD.BIOS_REGION_BASE,
                 (int)IntelFD.BIOS_REGION_LIMIT) != -1)
-                return ApfsCapable.Guid;
+                return ApfsType.Guid;
 
             // Disable compressed DXE searching is enabled (Maybe I should get rid of this?).
-            if (Settings.SettingsGetBool(SettingsBoolType.DisableLzmaFsSearch))
-                return ApfsCapable.Unknown;
+            if (Settings.ReadBool(SettingsBoolType.DisableLzmaFsSearch))
+                return ApfsType.Unknown;
 
             // Look for a compressed volume GUID.
             int lzmaDxeBaseAddress =
@@ -1259,7 +1152,7 @@ namespace Mac_EFI_Toolkit.Common
 
             // No compressed DXE volume was found.
             if (lzmaDxeBaseAddress == -1)
-                return ApfsCapable.No;
+                return ApfsType.None;
 
             // Get bytes containing section length (0x3).
             byte[] dataLengthBytes =
@@ -1293,16 +1186,16 @@ namespace Mac_EFI_Toolkit.Common
 
             // There was an issue decompressing the volume (Error saved to './mefit.log').
             if (decompressedBytes == null)
-                return ApfsCapable.Unknown;
+                return ApfsType.Unknown;
 
             // Search the decompressed DXE volume for the APFS DXE GUID.
             if (BinaryUtils.GetBaseAddress(
                 decompressedBytes,
                 Guids.APFS_DXE_GUID) == -1)
-                return ApfsCapable.No; // The APFS DXE GUID was not found in the compressed volume.
+                return ApfsType.None; // The APFS DXE GUID was not found in the compressed volume.
 
             // The APFS DXE GUID was present in the compressed volume.
-            return ApfsCapable.Lzma;
+            return ApfsType.Lzma;
         }
         #endregion
 

@@ -1,7 +1,6 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// UI Components
 // Chars.cs
 // Released under the GNU GLP v3.0
 
@@ -11,10 +10,6 @@ namespace Mac_EFI_Toolkit
     {
         internal const string EXIT_CROSS = "\uE947";
         internal const string UNLOCKED = "\uE785";
-        internal const string STATUS_ERROR_FULL = "\uEB90";
-        internal const string INCIDENT_TRIANGLE = "\uE814";
-        internal const string INFO_SOLID = "\uF167";
-        internal const string UNKNOWN = "\uE9CE";
         internal const string CHEVRON_RIGHT = "\uE76C";
         internal const string FILE_EXPLORER = "\uEC50";
         internal const string MORE = "\uE712";

@@ -18,10 +18,18 @@ namespace Mac_EFI_Toolkit.UI
         #region Static Members
         static string strTitle;
         static string strMessage;
-        static METMessageType messageBoxType;
-        static METMessageButtons messageBoxButtons;
+        static METMessageBoxType messageBoxType;
+        static METMessageBoxButtons messageBoxButtons;
         static DialogResult dialogResult;
         static System.Media.SystemSound ssMmbSound;
+        #endregion
+
+        #region Private Members
+        private const string STATUS_ERROR_FULL = "\uEB90";
+        private const string INCIDENT_TRIANGLE = "\uE814";
+        private const string INFO_SOLID = "\uF167";
+        private const string UNKNOWN = "\uE9CE";
+        private const string EXIT_CROSS = "\uE947";
         #endregion
 
         #region Overrides
@@ -52,7 +60,7 @@ namespace Mac_EFI_Toolkit.UI
 
             lblMessageIcon.Font = Program.FONT_MDL2_REG_20;
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Chars.EXIT_CROSS;
+            cmdClose.Text = EXIT_CROSS;
         }
         #endregion
 
@@ -61,24 +69,24 @@ namespace Mac_EFI_Toolkit.UI
         {
             switch (messageBoxType)
             {
-                case METMessageType.Error:
+                case METMessageBoxType.Error:
                     lblMessageIcon.ForeColor = Colours.ERROR_BOX;
-                    lblMessageIcon.Text = Chars.STATUS_ERROR_FULL;
+                    lblMessageIcon.Text = STATUS_ERROR_FULL;
                     ssMmbSound = System.Media.SystemSounds.Hand;
                     break;
-                case METMessageType.Warning:
+                case METMessageBoxType.Warning:
                     lblMessageIcon.ForeColor = Colours.WARNING_BOX;
-                    lblMessageIcon.Text = Chars.INCIDENT_TRIANGLE;
+                    lblMessageIcon.Text = INCIDENT_TRIANGLE;
                     ssMmbSound = System.Media.SystemSounds.Exclamation;
                     break;
-                case METMessageType.Information:
+                case METMessageBoxType.Information:
                     lblMessageIcon.ForeColor = Colours.INFO_BOX;
-                    lblMessageIcon.Text = Chars.INFO_SOLID;
+                    lblMessageIcon.Text = INFO_SOLID;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
-                case METMessageType.Question:
+                case METMessageBoxType.Question:
                     lblMessageIcon.ForeColor = Colours.INFO_BOX;
-                    lblMessageIcon.Text = Chars.UNKNOWN;
+                    lblMessageIcon.Text = UNKNOWN;
                     ssMmbSound = System.Media.SystemSounds.Beep;
                     break;
             }
@@ -86,12 +94,12 @@ namespace Mac_EFI_Toolkit.UI
             lblTitle.Text = strTitle;
             lblMessage.Text = strMessage;
 
-            if (messageBoxButtons == METMessageButtons.Okay)
+            if (messageBoxButtons == METMessageBoxButtons.Okay)
             {
                 cmdYes.Hide();
                 cmdNo.Text = "Okay";
             }
-            if (messageBoxButtons != METMessageButtons.Okay)
+            if (messageBoxButtons != METMessageBoxButtons.Okay)
             {
                 cmdYes.Show();
                 cmdNo.Show();
@@ -101,7 +109,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
-            if (!Settings.SettingsGetBool(SettingsBoolType.DisableMessageSounds))
+            if (!Settings.ReadBool(SettingsBoolType.DisableMessageSounds))
                 ssMmbSound.Play();
 
             InterfaceUtils.FlashForecolor(lblTitle);
@@ -142,8 +150,8 @@ namespace Mac_EFI_Toolkit.UI
             Form owner,
             string title,
             string message,
-            METMessageType type,
-            METMessageButtons buttons = METMessageButtons.Okay)
+            METMessageBoxType type,
+            METMessageBoxButtons buttons = METMessageBoxButtons.Okay)
         {
             strTitle = title;
             strMessage = message;
@@ -187,7 +195,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private void cmdNo_Click(object sender, EventArgs e)
         {
-            if (messageBoxButtons == METMessageButtons.Okay)
+            if (messageBoxButtons == METMessageBoxButtons.Okay)
             {
                 dialogResult =
                     DialogResult.OK;

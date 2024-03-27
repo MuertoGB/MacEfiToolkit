@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.EFI;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
@@ -128,7 +129,7 @@ namespace Mac_EFI_Toolkit.WinForms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
-                FileName = $"AppleRomSectionInformation_{AppleEFI.FileInfoData.FileNameNoExt}",
+                FileName = $"AppleRomSectionInformation_{AppleEFI.FileInfoData.FileName}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.CurrentDirectory
             })
@@ -160,8 +161,8 @@ namespace Mac_EFI_Toolkit.WinForms
                         this,
                         "Error",
                         "Data export failed.",
-                        METMessageType.Error,
-                        METMessageButtons.Okay);
+                        METMessageBoxType.Error,
+                        METMessageBoxButtons.Okay);
 
                     return;
                 }

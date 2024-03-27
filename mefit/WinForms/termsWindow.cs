@@ -81,7 +81,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdAccept_Click(object sender, EventArgs e)
         {
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.AcceptedEditingTerms,
                 true);
 

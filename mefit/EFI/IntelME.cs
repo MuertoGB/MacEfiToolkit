@@ -4,10 +4,11 @@
 // IntelME.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Utils;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.Common
+namespace Mac_EFI_Toolkit.EFI
 {
 
     #region Structs
@@ -52,6 +53,8 @@ namespace Mac_EFI_Toolkit.Common
 
     class IntelME
     {
+        private static string _default = "0.0.0.0";
+
         internal static string GetVersionData(byte[] sourceBytes, VersionType versionType)
         {
             int headerPos = -1;
@@ -115,12 +118,11 @@ namespace Mac_EFI_Toolkit.Common
                 }
             }
 
-            if (version == "0.0.0.0")
+            if (string.IsNullOrEmpty(version) || version == _default)
                 return null;
 
             return version;
         }
-
 
         internal static readonly byte[] FPT_SIGNATURE =
         {
@@ -131,6 +133,5 @@ namespace Mac_EFI_Toolkit.Common
         {
             0x00, 0x00, 0x24, 0x4D, 0x4E, 0x32
         };
-
     }
 }

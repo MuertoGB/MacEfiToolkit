@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("N/A")]
 [assembly: AssemblyProduct("Mac EFI Toolkit")]
-[assembly: AssemblyCopyright("David Roberts © 2023")]
+[assembly: AssemblyCopyright("© David Roberts 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

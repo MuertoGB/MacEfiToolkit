@@ -5,6 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using System;
 using System.IO;
 
 namespace Mac_EFI_Toolkit
@@ -31,66 +32,89 @@ namespace Mac_EFI_Toolkit
     class Settings
     {
 
-        #region Check File Exists
-        private static bool GetSettingsFileExists()
+        #region Private Members
+        private const string SECT_STARTUP = "Startup";
+        private const string KEY_DISABLE_VERSION_CHECK = "DisableVersionCheck";
+
+        private const string SECT_APPLICATION = "Application";
+
+        private const string SECT_FIRMWARE = "Firmware";
+        #endregion
+
+        #region Initialize
+        internal static void Initialize()
         {
-            return File.Exists(METPath.SettingsFile);
+            IniFile ini =
+                new IniFile(METPath.SettingsFile);
+
+            WriteSections(ini);
+
+            WriteStartupKeys(ini);
+
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "DisableFlashingUI"))
+            {
+                ini.Write("Application", "DisableFlashingUI", "False");
+            }
+
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "DisableMessageSounds"))
+            {
+                ini.Write("Application", "DisableMessageSounds", "False");
+            }
+
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "DisableTips"))
+            {
+                ini.Write("Application", "DisableTips", "False");
+            }
+
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "DisableConfDiag"))
+            {
+                ini.Write("Application", "DisableConfDiag", "False");
+            }
+
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "InitialOfdPath"))
+            {
+                ini.Write("Application", "InitialOfdPath", METPath.CurrentDirectory);
+            }
+
+            if (!ini.SectionExists("Firmware") || !ini.KeyExists("Firmware", "DisableLzmaFsSearch"))
+            {
+                ini.Write("Firmware", "DisableLzmaFsSearch", "False");
+            }
+
+            if (!ini.SectionExists("Firmware") || !ini.KeyExists("Firmware", "AcceptedEditingTerms"))
+            {
+                ini.Write("Firmware", "AcceptedEditingTerms", "False");
+            }
+        }
+
+        #endregion
+
+        #region Write Sections
+        private static void WriteSections(IniFile ini)
+        {
+            if (!ini.SectionExists(SECT_STARTUP))
+                ini.WriteSection(SECT_STARTUP);
+
+            if (!ini.SectionExists(SECT_APPLICATION))
+                ini.WriteSection(SECT_APPLICATION);
+
+            if (!ini.SectionExists(SECT_FIRMWARE))
+                ini.WriteSection(SECT_FIRMWARE);
         }
         #endregion
 
-        #region Create File
-        internal static void SettingsCreateFile()
+        #region Write Keys
+        private static void WriteStartupKeys(IniFile ini)
         {
-            IniFile settingsIni =
-                new IniFile
-                (METPath.SettingsFile);
-
-            settingsIni.Write(
-                "Startup",
-                "DisableVersionCheck",
-                "False");
-
-            settingsIni.Write(
-                "Application",
-                "DisableFlashingUI",
-                "False");
-
-            settingsIni.Write(
-                "Application",
-                "DisableMessageSounds",
-                "False");
-
-            settingsIni.Write(
-                "Application",
-                "DisableTips",
-                "False");
-
-            settingsIni.Write(
-                "Application",
-                "DisableConfDiag",
-                "False");
-
-            settingsIni.Write(
-                "Application",
-                "InitialOfdPath",
-                METPath.CurrentDirectory);
-
-            settingsIni.Write(
-                "Firmware",
-                "DisableLzmaFsSearch",
-                "False");
-
-            settingsIni.Write(
-                "Firmware",
-                "AcceptedEditingTerms",
-                "False");
+            if (!ini.KeyExists(SECT_STARTUP, KEY_DISABLE_VERSION_CHECK))
+                ini.Write(SECT_STARTUP, KEY_DISABLE_VERSION_CHECK, "False");
         }
         #endregion
 
-        #region Get Values
-        internal static bool SettingsGetBool(SettingsBoolType settingType)
+        #region Read Values
+        internal static bool ReadBool(SettingsBoolType settingType)
         {
-            if (!GetSettingsFileExists())
+            if (!SettingsFileExists())
                 return false;
 
             string section, key;
@@ -159,9 +183,9 @@ namespace Mac_EFI_Toolkit
             return bool.Parse(settingsIni.Read(section, key));
         }
 
-        internal static string SettingsGetString(SettingsStringType settingType)
+        internal static string ReadString(SettingsStringType settingType)
         {
-            if (!GetSettingsFileExists())
+            if (!SettingsFileExists())
                 return string.Empty;
 
             string section, key;
@@ -215,10 +239,10 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Set Values
-        internal static void SettingsSetBool(SettingsBoolType settingType, bool value)
+        #region Write Values
+        internal static void SetBool(SettingsBoolType settingType, bool value)
         {
-            if (!GetSettingsFileExists())
+            if (!SettingsFileExists())
                 return;
 
             string section, key;
@@ -271,9 +295,9 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void SettingsSetString(SettingsStringType settingType, string value)
+        internal static void SetString(SettingsStringType settingType, string value)
         {
-            if (!GetSettingsFileExists())
+            if (!SettingsFileExists())
                 return;
 
             string section, key;
@@ -310,6 +334,30 @@ namespace Mac_EFI_Toolkit
                     $"{section} > {key} > Key not found, setting was not written.");
             }
 
+        }
+        #endregion
+
+        #region Bools
+        private static bool SettingsFileExists()
+        {
+            return File.Exists(METPath.SettingsFile);
+        }
+
+        internal static bool Delete()
+        {
+            try
+            {
+                File.Delete(
+                    METPath.SettingsFile);
+
+                return SettingsFileExists();
+            }
+            catch (Exception e)
+            {
+                Logger.WriteExceptionToAppLog(e);
+
+                return false;
+            }
         }
         #endregion
 

@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.EFI;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
@@ -68,7 +69,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void UpdatePathLabel()
         {
             string path =
-                Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+                Settings.ReadString(SettingsStringType.InitialDirectory);
 
             lblPath.Text =
               path;
@@ -112,9 +113,9 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                dialog.SelectedPath = (Settings.SettingsGetString(SettingsStringType.InitialDirectory) == string.Empty)
+                dialog.SelectedPath = (Settings.ReadString(SettingsStringType.InitialDirectory) == string.Empty)
                     ? METPath.CurrentDirectory
-                    : Settings.SettingsGetString(SettingsStringType.InitialDirectory);
+                    : Settings.ReadString(SettingsStringType.InitialDirectory);
                 dialog.Description = "Select a folder";
                 dialog.ShowNewFolderButton = false;
 
@@ -132,37 +133,37 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdApply_Click(object sender, EventArgs e)
         {
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableVersionCheck,
                 swDisableVersionCheck.Checked);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableFlashingUI,
                 swDisableFlashingUiElements.Checked);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableMessageSounds,
                 swDisableMessageWindowSounds.Checked);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableTips,
                 swDisableStatusBarTips.Checked);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableConfDiag,
                 swDisableConfirmationDialogs.Checked);
 
             if (_strNewOfdInitialPath != string.Empty)
-                Settings.SettingsSetString(
+                Settings.SetString(
                     SettingsStringType.InitialDirectory,
                     _strNewOfdInitialPath);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableLzmaFsSearch,
                 swDisableLzmaDecompression.Checked);
 
             if (!AppleEFI.FirmwareLoaded)
-                Program.mWindow.SetPrimaryInitialDirectory();
+                Program.MAIN_WINDOW.SetPrimaryInitialDirectory();
 
             if (_updateUI)
             {
@@ -178,37 +179,37 @@ namespace Mac_EFI_Toolkit.WinForms
                     this,
                     "Settings",
                     "This will revert all settings to default, are you sure you want to set default settings?",
-                    METMessageType.Warning,
-                    METMessageButtons.YesNo);
+                    METMessageBoxType.Warning,
+                    METMessageBoxButtons.YesNo);
 
             if (result != DialogResult.Yes)
                 return;
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableVersionCheck,
                 false);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableFlashingUI,
                 false);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableMessageSounds,
                 false);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableTips,
                 false);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableConfDiag,
                 false);
 
-            Settings.SettingsSetString(
+            Settings.SetString(
                 SettingsStringType.InitialDirectory,
                 METPath.CurrentDirectory);
 
-            Settings.SettingsSetBool(
+            Settings.SetBool(
                 SettingsBoolType.DisableLzmaFsSearch,
                 false);
 
@@ -249,32 +250,32 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Checkbox Events
         private void UpdateCheckBoxControls()
         {
-            swDisableVersionCheck.Checked = Settings.SettingsGetBool(
+            swDisableVersionCheck.Checked = Settings.ReadBool(
                 SettingsBoolType.DisableVersionCheck)
                 ? true :
                 false;
 
-            swDisableFlashingUiElements.Checked = Settings.SettingsGetBool(
+            swDisableFlashingUiElements.Checked = Settings.ReadBool(
                 SettingsBoolType.DisableFlashingUI)
                 ? true :
                 false;
 
-            swDisableMessageWindowSounds.Checked = Settings.SettingsGetBool(
+            swDisableMessageWindowSounds.Checked = Settings.ReadBool(
                 SettingsBoolType.DisableMessageSounds)
                 ? true
                 : false;
 
-            swDisableStatusBarTips.Checked = Settings.SettingsGetBool(
+            swDisableStatusBarTips.Checked = Settings.ReadBool(
                 SettingsBoolType.DisableTips)
                 ? true
                 : false;
 
-            swDisableConfirmationDialogs.Checked = Settings.SettingsGetBool(
+            swDisableConfirmationDialogs.Checked = Settings.ReadBool(
                 SettingsBoolType.DisableConfDiag)
                 ? true :
                 false;
 
-            swDisableLzmaDecompression.Checked = Settings.SettingsGetBool(
+            swDisableLzmaDecompression.Checked = Settings.ReadBool(
                 SettingsBoolType.DisableLzmaFsSearch)
                 ? true :
                 false;

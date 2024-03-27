@@ -6,6 +6,8 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.EFI;
+using Mac_EFI_Toolkit.EFI.Structs;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
@@ -100,7 +102,7 @@ namespace Mac_EFI_Toolkit.WinForms
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
                 // We need to cancel the original request to close first, otherwise ExitMet() will close the application regardless of user choice.
-                if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
+                if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
                 {
                     e.Cancel = false;
                     return;
@@ -111,8 +113,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     this,
                     "Close Editor",
                     "Are you sure you want to close the editor?",
-                    METMessageType.Question,
-                    METMessageButtons.YesNo);
+                    METMessageBoxType.Question,
+                    METMessageBoxButtons.YesNo);
 
                 e.Cancel = result == DialogResult.Yes
                     ? false
@@ -145,7 +147,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void CloseWindow()
         {
-            if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
             {
                 Close();
 
@@ -157,8 +159,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     this,
                     "Close Editor",
                     "Are you sure you want to close the editor?",
-                    METMessageType.Question,
-                    METMessageButtons.YesNo);
+                    METMessageBoxType.Question,
+                    METMessageBoxButtons.YesNo);
 
             if (result == DialogResult.Yes)
                 Close();
@@ -172,8 +174,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     this,
                     "MET",
                     "The builds directory has not been created yet.",
-                    METMessageType.Information,
-                    METMessageButtons.Okay);
+                    METMessageBoxType.Information,
+                    METMessageBoxButtons.Okay);
 
                 return;
             }
@@ -195,8 +197,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     METMessageBox.Show(
                         this, "MET",
                         "Failed to create the Fsys Stores directory.",
-                        METMessageType.Error,
-                        METMessageButtons.Okay);
+                        METMessageBoxType.Error,
+                        METMessageBoxButtons.Okay);
                 }
             }
 
@@ -360,8 +362,8 @@ namespace Mac_EFI_Toolkit.WinForms
                         this,
                         "MET",
                         "Failed to create the builds directory.",
-                        METMessageType.Error,
-                        METMessageButtons.Okay);
+                        METMessageBoxType.Error,
+                        METMessageBoxButtons.Okay);
                 }
             }
 
@@ -371,8 +373,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     this,
                     "MET",
                     "New binary data is empty. Cannot continue.",
-                    METMessageType.Error,
-                    METMessageButtons.Okay);
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
 
                 return false;
             }
@@ -710,10 +712,10 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void LogBinarySize()
         {
-            if (!FileUtils.GetIsValidBinSize(AppleEFI.FileInfoData.FileLength))
+            if (!FileUtils.GetIsValidBinSize(AppleEFI.FileInfoData.Length))
             {
                 Logger.WriteLogTextToRtb(
-                    $"Loaded binary size {AppleEFI.FileInfoData.FileLength:X2}h is invalid.",
+                    $"Loaded binary size {AppleEFI.FileInfoData.Length:X2}h is invalid.",
                     RtbLogPrefix.Error,
                     rtbLog);
 
@@ -721,7 +723,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             Logger.WriteLogTextToRtb(
-                $"Loaded binary size {AppleEFI.FileInfoData.FileLength:X2}h is valid",
+                $"Loaded binary size {AppleEFI.FileInfoData.Length:X2}h is valid",
                 RtbLogPrefix.Info,
                 rtbLog);
         }

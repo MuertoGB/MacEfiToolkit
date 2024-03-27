@@ -5,6 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.EFI;
 using Mac_EFI_Toolkit.Utils;
 using System;
 using System.Diagnostics;
@@ -135,7 +136,7 @@ namespace Mac_EFI_Toolkit
                 }
 
                 builder.AppendLine($"  File ->\r\n");
-                builder.AppendLine($"File Size: {AppleEFI.FileInfoData.FileLength:X}h\r\n");
+                builder.AppendLine($"File Size: {AppleEFI.FileInfoData.Length:X}h\r\n");
 
                 builder.AppendLine($"  Fsys Store  ->\r\n");
                 builder.AppendLine($"Fsys Base:    0x{AppleEFI.FsysStoreData.FsysBase:X}h");

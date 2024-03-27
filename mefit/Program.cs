@@ -36,7 +36,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "231015.0050";
+        internal const string Build = "240327.0344";
         internal const string Channel = "Stable";
     }
 
@@ -52,7 +52,7 @@ namespace Mac_EFI_Toolkit
     #endregion
 
     #region Enum
-    internal enum MetAction
+    internal enum ExitAction
     {
         Restart,
         Exit
@@ -67,7 +67,7 @@ namespace Mac_EFI_Toolkit
         internal static string lastBuildPath = string.Empty;
         internal static bool openLastBuild = false;
         internal static System.Threading.Timer memoryTimer;
-        internal static mainWindow mWindow;
+        internal static mainWindow MAIN_WINDOW;
 
         internal static Font FONT_MDL2_REG_9;
         internal static Font FONT_MDL2_REG_10;
@@ -97,19 +97,16 @@ namespace Mac_EFI_Toolkit
             AppDomain.CurrentDomain.UnhandledException +=
                 new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            // Default framework stuff.
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
             // Register application exit event.
             Application.ApplicationExit += OnExiting;
-
-            // Register low level keyboard hook that disables Win+Up.
-            KeyboardHookManager.Hook();
 
             // Set Web Security Protocol.
             ServicePointManager.SecurityProtocol =
                 (SecurityProtocolType)3072;
+
+            // Default framework stuff.
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
             // Load fonts into memory.
             byte[] fontData = Properties.Resources.segmdl2;
@@ -146,18 +143,20 @@ namespace Mac_EFI_Toolkit
                     MessageBoxIcon.Error);
             }
 
-            // Check settings.
-            if (!File.Exists(METPath.SettingsFile))
-                Settings.SettingsCreateFile();
+            // Initialize settings.
+            Settings.Initialize();
 
             // Get dragged filepath.
             draggedFilePath = GetDraggedFilePath(args);
 
+            // Register low level keyboard hook that disables Win+Up.
+            KeyboardHookManager.Hook();
+
             // Create main window instance.
-            mWindow = new mainWindow();
+            MAIN_WINDOW = new mainWindow();
 
             // Run mWindow instance.
-            Application.Run(mWindow);
+            Application.Run(MAIN_WINDOW);
         }
 
         private static string GetDraggedFilePath(string[] args)
@@ -243,21 +242,22 @@ namespace Mac_EFI_Toolkit
             }
 
             // Fix for mainWindow opacity getting stuck at 0.5.
-            if (mWindow.Opacity != 1.0)
-                mWindow.Opacity = 1.0;
+            if (MAIN_WINDOW != null)
+                if (MAIN_WINDOW.Opacity != 1.0)
+                    MAIN_WINDOW.Opacity = 1.0;
         }
         #endregion
 
-        #region MET Action
-        internal static void PerformMetAction(Form owner, MetAction action)
+        #region Exit Action
+        internal static void PerformExitAction(Form owner, ExitAction action)
         {
-            if (Settings.SettingsGetBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
             {
-                if (action == MetAction.Restart)
+                if (action == ExitAction.Restart)
                 {
                     Restart();
                 }
-                else if (action == MetAction.Exit)
+                else if (action == ExitAction.Exit)
                 {
                     Application.Exit();
                 }
@@ -267,12 +267,12 @@ namespace Mac_EFI_Toolkit
 
             string title, message;
 
-            if (action == MetAction.Restart)
+            if (action == ExitAction.Restart)
             {
                 title = "Restart";
                 message = "Are you sure you want to restart the application?";
             }
-            else if (action == MetAction.Exit)
+            else if (action == ExitAction.Exit)
             {
                 title = "Quit";
                 message = "Are you sure you want to quit the application?";
@@ -284,11 +284,11 @@ namespace Mac_EFI_Toolkit
 
             if (ShowConfirmationDialog(owner, title, message))
             {
-                if (action == MetAction.Restart)
+                if (action == ExitAction.Restart)
                 {
                     Restart();
                 }
-                else if (action == MetAction.Exit)
+                else if (action == ExitAction.Exit)
                 {
                     Application.Exit();
                 }
@@ -302,8 +302,8 @@ namespace Mac_EFI_Toolkit
                     owner,
                     title,
                     message,
-                    METMessageType.Question,
-                    METMessageButtons.YesNo);
+                    METMessageBoxType.Question,
+                    METMessageBoxButtons.YesNo);
 
             return result == DialogResult.Yes;
         }
@@ -315,12 +315,7 @@ namespace Mac_EFI_Toolkit
                 Process.Start(Application.ExecutablePath);
                 Application.Exit();
             }
-            catch (Win32Exception)
-            {
-                // Do nothing. The application throws an unhandled
-                // exception when a user cancels the UAC prompt.
-                return;
-            }
+            catch (Win32Exception) { return; }
         }
         #endregion
 

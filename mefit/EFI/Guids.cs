@@ -4,7 +4,7 @@
 // Guids.cs
 // Released under the GNU GLP v3.0
 
-namespace Mac_EFI_Toolkit.Common
+namespace Mac_EFI_Toolkit.EFI
 {
     class Guids
     {

@@ -1,4 +1,11 @@
-﻿using Mac_EFI_Toolkit.UI.Design;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// UI Components
+// METRadioButton.cs
+// Released under the GNU GLP v3.0
+
+using Mac_EFI_Toolkit.UI.Design;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -325,20 +332,6 @@ namespace Mac_EFI_Toolkit.UI
         {
             base.OnLostFocus(e);
             Invalidate();
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                Checked = !Checked;
-                e.Handled = true;
-                e.SuppressKeyPress = true;
-            }
-            else
-            {
-                base.OnKeyDown(e);
-            }
         }
         #endregion
 

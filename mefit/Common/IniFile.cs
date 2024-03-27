@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -17,18 +18,20 @@ namespace Mac_EFI_Toolkit.Common
         private readonly string _strFilePath;
         private const int MAX_BUFFER = 32767;
 
-        internal IniFile(string filePath)
-        {
+        internal IniFile(string filePath) =>
             this._strFilePath = filePath;
-        }
 
-        internal void Write(string section, string key, string value)
-        {
+        internal void Write(string section, string key, string value) =>
             NativeMethods.WritePrivateProfileString(
                 section,
                 key,
                 value,
                 _strFilePath);
+
+        internal void WriteSection(string section)
+        {
+            using (StreamWriter writer = new StreamWriter(_strFilePath, true))
+                writer.WriteLine($"[{section}]");
         }
 
         internal string Read(string section, string key, string defaultValue = "")
@@ -46,15 +49,11 @@ namespace Mac_EFI_Toolkit.Common
             return builder.ToString();
         }
 
-        internal void DeleteKey(string section, string key)
-        {
-            Write(section, key, null);
-        }
-
-        internal void DeleteSection(string section)
-        {
+        internal void DeleteSection(string section) =>
             Write(section, null, null);
-        }
+
+        internal void DeleteKey(string section, string key) =>
+            Write(section, key, null);
 
         internal bool SectionExists(string section)
         {
@@ -70,7 +69,13 @@ namespace Mac_EFI_Toolkit.Common
 
         internal bool KeyExists(string section, string key)
         {
-            string[] keyNames = GetSectionKeys(section, _strFilePath);
+            string[] keyNames =
+                GetSectionKeys(
+                    section,
+                    _strFilePath);
+
+            if (keyNames == null)
+                return false;
 
             foreach (string s in keyNames)
                 if (s == key)
@@ -130,20 +135,24 @@ namespace Mac_EFI_Toolkit.Common
                     Marshal.AllocCoTaskMem(
                         MAX_BUFFER);
 
-                uint data = NativeMethods.GetPrivateProfileSection(
-                    lpAppName,
-                    lpReturnedString,
-                    MAX_BUFFER,
-                    lpFileName);
+                uint data =
+                    NativeMethods.GetPrivateProfileSection(
+                        lpAppName,
+                        lpReturnedString,
+                        MAX_BUFFER,
+                        lpFileName);
 
                 if (data == 0)
                     return null;
 
-                string ansiString = Marshal.PtrToStringAnsi(
-                    lpReturnedString,
-                    (int)data).ToString();
+                string ansiString =
+                    Marshal.PtrToStringAnsi(
+                        lpReturnedString,
+                        (int)data).ToString();
 
-                string[] keys = ansiString.Substring(0, ansiString.Length - 1).Split('\0');
+                string[] keys =
+                    ansiString.Substring(
+                        0, ansiString.Length - 1).Split('\0');
 
                 for (int i = 0; i < keys.Length; i++)
                 {

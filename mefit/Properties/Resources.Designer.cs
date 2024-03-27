@@ -90,26 +90,6 @@ namespace Mac_EFI_Toolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap folder {
-            get {
-                object obj = ResourceManager.GetObject("folder", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap home {
-            get {
-                object obj = ResourceManager.GetObject("home", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap imgmuerto64px {
             get {
                 object obj = ResourceManager.GetObject("imgmuerto64px", resourceCulture);
@@ -158,36 +138,26 @@ namespace Mac_EFI_Toolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap manual {
-            get {
-                object obj = ResourceManager.GetObject("manual", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;data&gt;
         ///    &lt;section&gt;
-        ///        &lt;cfgCode&gt;000&lt;/cfgCode&gt;
-        ///        &lt;model&gt;Power Mac G5&lt;/model&gt;
+        ///        &lt;hwc&gt;000&lt;/hwc&gt;
+        ///        &lt;configCode&gt;Power Mac G5&lt;/configCode&gt;
         ///    &lt;/section&gt;
         ///    &lt;section&gt;
-        ///        &lt;cfgCode&gt;00W&lt;/cfgCode&gt;
-        ///        &lt;model&gt;Xserve (Late 2006)&lt;/model&gt;
+        ///        &lt;hwc&gt;00W&lt;/hwc&gt;
+        ///        &lt;configCode&gt;Xserve (Late 2006)&lt;/configCode&gt;
         ///    &lt;/section&gt;
         ///    &lt;section&gt;
-        ///        &lt;cfgCode&gt;01P&lt;/cfgCode&gt;
-        ///        &lt;model&gt;MacBook (13-inch, Late 2007)&lt;/model&gt;
+        ///        &lt;hwc&gt;01P&lt;/hwc&gt;
+        ///        &lt;configCode&gt;MacBook (13-inch, Late 2007)&lt;/configCode&gt;
         ///    &lt;/section&gt;
         ///    &lt;section&gt;
-        ///        &lt;cfgCode&gt;01V&lt;/cfgCode&gt;
-        ///        &lt;model&gt;MacBook (13-inch, Late 2007)&lt;/model&gt;
+        ///        &lt;hwc&gt;01V&lt;/hwc&gt;
+        ///        &lt;configCode&gt;MacBook (13-inch, Late 2007)&lt;/configCode&gt;
         ///    &lt;/section&gt;
         ///    &lt;section&gt;
-        ///        &lt;cf [rest of string was truncated]&quot;;.
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string modeldb {
             get {

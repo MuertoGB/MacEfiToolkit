@@ -64,12 +64,11 @@ namespace Mac_EFI_Toolkit.Common
             // Calculate the appropriate suffix based on the size of the file.
             int suffixIndex = (int)(Math.Log(size) / Math.Log(1024));
 
-            // Calculate the size in the chosen suffix and format it nicely.
+            // Calculate the size in the chosen suffix and format it.
             double sizeInSuffix = size / Math.Pow(1024, suffixIndex);
 
             return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";
         }
-
 
     }
 }
