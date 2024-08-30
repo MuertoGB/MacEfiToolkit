@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.EFI
 {
@@ -33,14 +34,13 @@ namespace Mac_EFI_Toolkit.EFI
         internal static PdrSection PdrSectionData;
         internal static NvramStore VssStoreData;
         internal static NvramStore SvsStoreData;
-        internal static NvramStore NssStoreData;
         internal static EFILock EfiPrimaryLockData;
         internal static EFILock EfiBackupLockData;
         internal static FsysStore FsysStoreData;
         internal static AppleRomInformationSection AppleRomInfoSectionData;
         internal static EfiBiosIdSection EfiBiosIdSectionData;
 
-        internal static ApfsType IsApfsCapable = ApfsType.Unknown;
+        internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
 
         internal static int FSYS_RGN_SIZE = 0;
         internal static int NVRAM_BASE = -1;
@@ -54,7 +54,7 @@ namespace Mac_EFI_Toolkit.EFI
         #region Private Members
         private const int GUID_SIZE = 16;          // 10h
         private const int ZERO_VECTOR_SIZE = 16;   // 10h
-        private const int LITERAL_POS = 2;           // 2h
+        private const int LITERAL_POS = 2;         // 2h
         private static readonly Encoding _utf8 = Encoding.UTF8;
         #endregion
 
@@ -115,12 +115,6 @@ namespace Mac_EFI_Toolkit.EFI
                     sourceBytes,
                     NvramStoreType.SVS);
 
-            // Parse NVRAM NSS Store data.
-            NssStoreData =
-                GetNvramStoreData(
-                    sourceBytes,
-                    NvramStoreType.NSS);
-
             // Search both NVRAM SVS stores for a Message Authentication Code.
             EfiPrimaryLockData =
                 GetIsEfiLocked(
@@ -138,7 +132,7 @@ namespace Mac_EFI_Toolkit.EFI
 
             // Fetch the Config Code
             ConfigCode = FsysStoreData.HWC != null
-                ? MacUtils.GetDeviceConfigCode(FsysStoreData.HWC)
+                ? MacUtils.GetDeviceConfigCodeLocalLocal(FsysStoreData.HWC)
                 : null;
 
             // Parse AppleRomSectionInformation region data.
@@ -198,6 +192,7 @@ namespace Mac_EFI_Toolkit.EFI
             LoadedBinaryBytes = null;
             FirmwareLoaded = false;
             FirmwareVersion = null;
+            ConfigCode = null;
             ForceFoundFsys = false;
             FitVersion = null;
             MeVersion = null;
@@ -206,13 +201,12 @@ namespace Mac_EFI_Toolkit.EFI
             PdrSectionData = default;
             VssStoreData = default;
             SvsStoreData = default;
-            NssStoreData = default;
             EfiPrimaryLockData = default;
             EfiBackupLockData = default;
             FsysStoreData = default;
             AppleRomInfoSectionData = default;
             EfiBiosIdSectionData = default;
-            IsApfsCapable = ApfsType.Unknown;
+            IsApfsCapable = ApfsCapable.Unknown;
 
             FSYS_RGN_SIZE = 0;
             NVRAM_BASE = -1;
@@ -365,6 +359,7 @@ namespace Mac_EFI_Toolkit.EFI
 
             return new NvramStore
             {
+                StoreType = storeType,
                 PrimaryStoreSize = primaryStoreSize,
                 PrimaryStoreBase = primaryStoreBase,
                 PrimaryStoreBytes = primaryStoreData,
@@ -454,8 +449,6 @@ namespace Mac_EFI_Toolkit.EFI
                     return SVS_STORE_SIG;
                 case NvramStoreType.VSS:
                     return VSS_STORE_SIG;
-                case NvramStoreType.NSS:
-                    return NSS_STORE_SIGNATURE;
                 default:
                     throw new ArgumentException(
                         "Invalid NVRAM header type.");
@@ -511,11 +504,6 @@ namespace Mac_EFI_Toolkit.EFI
         internal static readonly byte[] SVS_STORE_SIG =
         {
             0x24, 0x53, 0x56, 0x53
-        };
-
-        internal static readonly byte[] NSS_STORE_SIGNATURE =
-        {
-            0x24, 0x4E, 0x53, 0x53
         };
         #endregion
 
@@ -1120,7 +1108,7 @@ namespace Mac_EFI_Toolkit.EFI
         #endregion
 
         #region APFSJumpStart
-        internal static ApfsType GetIsApfsCapable(byte[] sourceBytes)
+        internal static ApfsCapable GetIsApfsCapable(byte[] sourceBytes)
         {
             // APFS DXE GUID found.
             if (BinaryUtils.GetBaseAddress(
@@ -1128,11 +1116,11 @@ namespace Mac_EFI_Toolkit.EFI
                 Guids.APFS_DXE_GUID,
                 (int)IntelFD.BIOS_REGION_BASE,
                 (int)IntelFD.BIOS_REGION_LIMIT) != -1)
-                return ApfsType.Guid;
+                return ApfsCapable.Yes;
 
             // Disable compressed DXE searching is enabled (Maybe I should get rid of this?).
             if (Settings.ReadBool(SettingsBoolType.DisableLzmaFsSearch))
-                return ApfsType.Unknown;
+                return ApfsCapable.Unknown;
 
             // Look for a compressed volume GUID.
             int lzmaDxeBaseAddress =
@@ -1152,7 +1140,7 @@ namespace Mac_EFI_Toolkit.EFI
 
             // No compressed DXE volume was found.
             if (lzmaDxeBaseAddress == -1)
-                return ApfsType.None;
+                return ApfsCapable.No;
 
             // Get bytes containing section length (0x3).
             byte[] dataLengthBytes =
@@ -1186,16 +1174,16 @@ namespace Mac_EFI_Toolkit.EFI
 
             // There was an issue decompressing the volume (Error saved to './mefit.log').
             if (decompressedBytes == null)
-                return ApfsType.Unknown;
+                return ApfsCapable.Unknown;
 
             // Search the decompressed DXE volume for the APFS DXE GUID.
             if (BinaryUtils.GetBaseAddress(
                 decompressedBytes,
                 Guids.APFS_DXE_GUID) == -1)
-                return ApfsType.None; // The APFS DXE GUID was not found in the compressed volume.
+                return ApfsCapable.No; // The APFS DXE GUID was not found in the compressed volume.
 
             // The APFS DXE GUID was present in the compressed volume.
-            return ApfsType.Lzma;
+            return ApfsCapable.Yes;
         }
         #endregion
 

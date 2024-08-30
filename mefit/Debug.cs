@@ -150,8 +150,6 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"VSS Backup:    Base 0x{AppleEFI.VssStoreData.BackupStoreBase:X}h, Size {AppleEFI.VssStoreData.BackupStoreSize:X}h");
                 builder.AppendLine($"SVS Primary:   Base 0x{AppleEFI.SvsStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.SvsStoreData.PrimaryStoreSize:X}h");
                 builder.AppendLine($"SVS Backup:    Base 0x{AppleEFI.SvsStoreData.BackupStoreBase:X}h, Size {AppleEFI.SvsStoreData.BackupStoreSize:X}h");
-                builder.AppendLine($"NSS Primary:   Base 0x{AppleEFI.NssStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.NssStoreData.PrimaryStoreSize:X}h");
-                builder.AppendLine($"NSS Backup:    Base 0x{AppleEFI.NssStoreData.BackupStoreBase:X}h, Size {AppleEFI.NssStoreData.BackupStoreSize:X}h");
 
                 return builder.ToString();
             }

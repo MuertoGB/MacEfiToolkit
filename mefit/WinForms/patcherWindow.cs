@@ -5,8 +5,8 @@
 // editorWindow.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.EFI;
+using Mac_EFI_Toolkit.EFI.Enums;
 using Mac_EFI_Toolkit.EFI.Structs;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
@@ -62,21 +62,6 @@ namespace Mac_EFI_Toolkit.WinForms
             lblTitle.MouseMove += editorWindow_MouseMove;
 
             Font font = Program.FONT_MDL2_REG_9;
-
-            SetLabelProperties(
-                lblSvsChevRight,
-                font,
-                Chars.CHEVRON_RIGHT);
-
-            SetLabelProperties(
-                lblVssChevRight,
-                font,
-                Chars.CHEVRON_RIGHT);
-
-            SetLabelProperties(
-                lblNssChevRight,
-                font,
-                Chars.CHEVRON_RIGHT);
 
             SetButtonProperties();
         }
@@ -141,7 +126,6 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Button Events
-
         private void cmdClose_Click(object sender, EventArgs e) =>
             CloseWindow();
 
@@ -265,8 +249,8 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (swReplaceFsysStore.Checked)
                 {
                     Logger.WriteLogTextToRtb(
-                        "Replacing Fsys Store:-",
-                        RtbLogPrefix.Info,
+                        "Replacing Fsys Store:",
+                        RtbLogPrefix.Start,
                         rtbLog);
 
                     if (!WriteNewFsysStore())
@@ -276,8 +260,8 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (swReplaceSerialNumber.Checked)
                 {
                     Logger.WriteLogTextToRtb(
-                        $"Replacing Serial Number data:-",
-                        RtbLogPrefix.Info,
+                        $"Replacing Serial Number data:",
+                        RtbLogPrefix.Start,
                         rtbLog);
 
                     if (!WriteNewSerialData())
@@ -288,45 +272,27 @@ namespace Mac_EFI_Toolkit.WinForms
                 {
                     Logger.WriteLogTextToRtb(
                         "Clearing VSS NVRAM data:",
-                        RtbLogPrefix.Info,
+                        RtbLogPrefix.Start,
                         rtbLog);
 
-                    if (!ClearNvramStore(
-                        AppleEFI.VssStoreData,
-                        cbxClearVssBackup.Checked))
-                        return;
+                    EraseNvramStore(AppleEFI.VssStoreData);
                 }
 
                 if (cbxClearSvsStore.Checked)
                 {
                     Logger.WriteLogTextToRtb(
                         "Clearing SVS NVRAM data:",
-                        RtbLogPrefix.Info,
+                        RtbLogPrefix.Start,
                         rtbLog);
 
-                    if (!ClearNvramStore(
-                        AppleEFI.SvsStoreData,
-                        cbxClearSvsBackup.Checked))
-                        return;
-                }
-
-                if (cbxClearNssStore.Checked)
-                {
-                    Logger.WriteLogTextToRtb(
-                        "Clearing NSS NVRAM data:",
-                        RtbLogPrefix.Info, rtbLog);
-
-                    if (!ClearNvramStore(
-                        AppleEFI.NssStoreData,
-                        cbxClearNssBackup.Checked))
-                        return;
+                    EraseNvramStore(AppleEFI.SvsStoreData);
                 }
 
                 if (swReplaceMeRegion.Checked)
                 {
                     Logger.WriteLogTextToRtb(
                         "Writing new ME Region:",
-                        RtbLogPrefix.Info,
+                        RtbLogPrefix.Start,
                         rtbLog);
 
                     if (!WriteNewMeRegion())
@@ -337,7 +303,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     return;
 
                 Logger.WriteLogTextToRtb(
-                    $"Process Completed!",
+                    $"Firmware patching completed",
                     RtbLogPrefix.Complete,
                     rtbLog);
 
@@ -420,7 +386,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 else
                 {
                     Logger.WriteLogTextToRtb(
-                        $"Build action cancelled by user",
+                        $"File export cancelled by user",
                         RtbLogPrefix.Warning,
                         rtbLog);
 
@@ -479,7 +445,6 @@ namespace Mac_EFI_Toolkit.WinForms
             swReplaceSerialNumber.Checked = false;
             cbxClearVssStore.Checked = false;
             cbxClearSvsStore.Checked = false;
-            cbxClearNssStore.Checked = false;
             swReplaceMeRegion.Checked = false;
 
             cmdShowLastBuild.Enabled = false;
@@ -537,42 +502,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
         #region Checkbox Events
 
-        private void cbxClearVssStore_CheckedChanged(object sender, EventArgs e)
-        {
-            METCheckbox control = (METCheckbox)sender;
-
-            lblVssChevRight.Visible = control.Checked;
-
-            cbxClearVssBackup.Enabled = control.Checked;
-
-            if (!control.Checked)
-                cbxClearVssBackup.Checked = false;
-        }
-
-        private void cbxClearSvsStore_CheckedChanged(object sender, EventArgs e)
-        {
-            METCheckbox control = (METCheckbox)sender;
-
-            lblSvsChevRight.Visible = control.Checked;
-
-            cbxClearSvsBackup.Enabled = control.Checked;
-
-            if (!control.Checked)
-                cbxClearSvsBackup.Checked = false;
-        }
-
-        private void cbxClearNssStore_CheckedChanged(object sender, EventArgs e)
-        {
-            METCheckbox control = (METCheckbox)sender;
-
-            lblNssChevRight.Visible = control.Checked;
-
-            cbxClearNssBackup.Enabled = control.Checked;
-
-            if (!control.Checked)
-                cbxClearNssBackup.Checked = false;
-        }
-
         private void swReplaceFsysStore_CheckedChanged(object sender, EventArgs e)
         {
             CheckBox control = (CheckBox)sender;
@@ -615,7 +544,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
                     Logger.WriteLogTextToRtb(
                         "Valid serial characters entered",
-                        RtbLogPrefix.Info,
+                        RtbLogPrefix.Complete,
                         rtbLog);
 
                     if (AppleEFI.FsysStoreData.Serial.Length == 11)
@@ -679,7 +608,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 cbxClearVssStore.Enabled = false;
 
                 Logger.WriteLogTextToRtb(
-                    "VSS store not found: Option disabled",
+                    "VSS store not found or initialised",
                     RtbLogPrefix.Warning,
                     rtbLog);
             }
@@ -689,17 +618,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 cbxClearSvsStore.Enabled = false;
 
                 Logger.WriteLogTextToRtb(
-                    "SVS store not found: Option disabled",
-                    RtbLogPrefix.Warning,
-                    rtbLog);
-            }
-
-            if (AppleEFI.NssStoreData.PrimaryStoreBase == -1)
-            {
-                cbxClearNssStore.Enabled = false;
-
-                Logger.WriteLogTextToRtb(
-                    $"NSS store not found: Option disabled",
+                    "SVS store not found or initialised",
                     RtbLogPrefix.Warning,
                     rtbLog);
             }
@@ -789,13 +708,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private void UpdateHwcTextBoxText(string text) =>
             tbxHwc.Text = text;
 
-        private void SetLabelProperties(Label label, Font font, string text)
-        {
-            label.Font = font;
-            label.Text = text;
-            label.Visible = false;
-        }
-
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
@@ -813,7 +725,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool ValidateNewFsysStore(byte[] sourceBytes)
         {
             Logger.WriteLogTextToRtb(
-                "Validating donor Fsys store:-",
+                "Validating donor Fsys store:",
                 RtbLogPrefix.Info,
                 rtbLog);
 
@@ -908,7 +820,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool ValidateNewMeRegion(byte[] sourceBytes)
         {
             Logger.WriteLogTextToRtb(
-                "Validating ME Region:-",
+                "Validating ME Region:",
                 RtbLogPrefix.Info,
                 rtbLog);
 
@@ -1183,7 +1095,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 rtbLog);
 
             Logger.WriteLogTextToRtb(
-                "Masking Fsys CRC32:-",
+                "Masking Fsys CRC32:",
                 RtbLogPrefix.Info,
                 rtbLog);
 
@@ -1217,132 +1129,97 @@ namespace Mac_EFI_Toolkit.WinForms
             return true;
         }
 
-        private bool ClearNvramStore(NvramStore storeData, bool clearBackup)
+        private bool EraseNvramStore(NvramStore store)
         {
-            int headerLen = 0x10;
-            int primBodyStart = storeData.PrimaryStoreBase + headerLen;
-            int primBodyEnd = storeData.PrimaryStoreSize - headerLen;
-            int backBodyStart = storeData.BackupStoreBase + headerLen;
-            int backBodyEnd = storeData.BackupStoreSize - headerLen;
-
-            if (!storeData.IsPrimaryStoreEmpty)
+            // Oh what's this? Well what could this possibly be?
+            // Because it looks like you're inside a function, INSIDE a function.
+            bool EraseAndWriteStore(int baseAddress, int storeSize, byte[] storeBytes, Func<NvramStore, bool> isStoreEmpty)
             {
+                int headerLen = 0x10;
+                int bodyEnd = storeSize - headerLen;
+
                 Logger.WriteLogTextToRtb(
-                    $"Primary {storeData.StoreType} store is not empty",
+                    $"Erasing {store.StoreType} store at 0x{baseAddress:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
 
-                byte[] primaryData =
+                Logger.WriteLogTextToRtb(
+                    "Initialising store header",
+                    RtbLogPrefix.Info,
+                    rtbLog);
+
+                // Initialize header
+                for (int i = 0x4; i <= 0x7; i++)
+                    storeBytes[i] = 0xFF;
+
+                // VSS also needs these bytes erasing
+                if (store.StoreType == NvramStoreType.VSS)
+                {
+                    storeBytes[0x9] = 0xFF;
+                    storeBytes[0xA] = 0xFF;
+                }
+
+                Logger.WriteLogTextToRtb(
+                    "Erasing store body (0xFF)",
+                    RtbLogPrefix.Info,
+                    rtbLog);
+
+                // Erase store body
+                byte[] erasedBody =
                     BinaryUtils.GetBytesBaseLength(
-                        storeData.PrimaryStoreBytes,
+                        storeBytes,
                         headerLen,
-                        primBodyEnd);
+                        bodyEnd);
 
+                BinaryUtils.EraseByteArray(erasedBody, 0xFF);
+
+                BinaryUtils.OverwriteBytesAtBase(
+                    storeBytes,
+                    headerLen,
+                    erasedBody);
+
+                // Write store back to firmware
                 Logger.WriteLogTextToRtb(
-                    $"Overwriting {storeData.StoreType} buffer (0xFF)",
-                    RtbLogPrefix.Info,
-                    rtbLog);
-
-                BinaryUtils.EraseByteArray(primaryData, 0xFF);
-
-                Logger.WriteLogTextToRtb(
-                    $"Writing clean {storeData.StoreType} store to file buffer",
+                    "Writing to firmware",
                     RtbLogPrefix.Info,
                     rtbLog);
 
                 BinaryUtils.OverwriteBytesAtBase(
                     _bytesNewBinary,
-                    primBodyStart,
-                    primaryData);
+                    baseAddress,
+                    storeBytes);
 
                 NvramStore newStore =
                     AppleEFI.GetNvramStoreData(
                         _bytesNewBinary,
-                        storeData.StoreType);
+                        store.StoreType);
 
-                if (newStore.IsPrimaryStoreEmpty)
-                {
-                    Logger.WriteLogTextToRtb(
-                        $"Clean {storeData.StoreType} store written successfully",
-                        RtbLogPrefix.Complete,
-                        rtbLog);
-                }
-                else
-                {
-                    HandleBuildFailure(
-                        $"Clean {storeData.StoreType} store was not written successfully");
+                return isStoreEmpty(newStore);
+            }
 
+            if (!store.IsPrimaryStoreEmpty)
+            {
+                if (!EraseAndWriteStore(store.PrimaryStoreBase, store.PrimaryStoreSize, store.PrimaryStoreBytes, s => s.IsPrimaryStoreEmpty))
+                {
+                    HandleBuildFailure("Primary store write unsuccessful");
                     return false;
                 }
+                Logger.WriteLogTextToRtb("Primary store written successfully", RtbLogPrefix.Complete, rtbLog);
             }
             else
+                Logger.WriteLogTextToRtb($"Primary {store.StoreType} store already empty", RtbLogPrefix.Info, rtbLog);
+
+            if (!store.IsBackupStoreEmpty)
             {
-                Logger.WriteLogTextToRtb(
-                    $"Primary {storeData.StoreType} store is already empty (0xFF)",
-                    RtbLogPrefix.Info,
-                    rtbLog);
-            }
-
-            if (clearBackup && !storeData.IsBackupStoreEmpty)
-            {
-                Logger.WriteLogTextToRtb(
-                    $"Backup {storeData.StoreType} is not empty",
-                    RtbLogPrefix.Info,
-                    rtbLog);
-
-                byte[] backupData =
-                    BinaryUtils.GetBytesBaseLength(
-                        storeData.BackupStoreBytes,
-                        headerLen,
-                        backBodyEnd);
-
-                Logger.WriteLogTextToRtb(
-                    $"Overwriting backup {storeData.StoreType} buffer (0xFF)",
-                    RtbLogPrefix.Info,
-                    rtbLog);
-
-                BinaryUtils.EraseByteArray(backupData, 0xFF);
-
-                Logger.WriteLogTextToRtb(
-                    $"Writing clean {storeData.StoreType} store to file buffer",
-                    RtbLogPrefix.Info,
-                    rtbLog);
-
-                BinaryUtils.OverwriteBytesAtBase(
-                    _bytesNewBinary,
-                    backBodyStart,
-                    backupData);
-
-                NvramStore newStore =
-                    AppleEFI.GetNvramStoreData(
-                        _bytesNewBinary,
-                        storeData.StoreType);
-
-                if (newStore.IsBackupStoreEmpty)
+                if (!EraseAndWriteStore(store.BackupStoreBase, store.BackupStoreSize, store.BackupStoreBytes, s => s.IsBackupStoreEmpty))
                 {
-                    Logger.WriteLogTextToRtb(
-                        $"Clean {storeData.StoreType} store written successfully",
-                        RtbLogPrefix.Complete,
-                        rtbLog);
-                }
-                else
-                {
-                    HandleBuildFailure(
-                        $"Clean {storeData.StoreType} store was not written successfully");
-
+                    HandleBuildFailure("Backup store write unsuccessful");
                     return false;
                 }
+                Logger.WriteLogTextToRtb("Backup store written successfully", RtbLogPrefix.Complete, rtbLog);
             }
             else
-            {
-                if (clearBackup)
-                {
-                    Logger.WriteLogTextToRtb(
-                        $"Backup {storeData.StoreType} store is already empty (0xFF)",
-                        RtbLogPrefix.Info,
-                        rtbLog);
-                }
-            }
+                Logger.WriteLogTextToRtb($"Backup {store.StoreType} store already empty", RtbLogPrefix.Info, rtbLog);
 
             return true;
         }

@@ -34,24 +34,11 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpOptions = new System.Windows.Forms.TableLayoutPanel();
             this.lblNvramText = new System.Windows.Forms.Label();
-            this.tlpNss = new System.Windows.Forms.TableLayoutPanel();
-            this.lblNssChevRight = new System.Windows.Forms.Label();
-            this.cbxClearNssStore = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.cbxClearNssBackup = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.tlpSvs = new System.Windows.Forms.TableLayoutPanel();
-            this.cbxClearSvsStore = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.cbxClearSvsBackup = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.lblSvsChevRight = new System.Windows.Forms.Label();
             this.tlpVss = new System.Windows.Forms.TableLayoutPanel();
-            this.lblVssChevRight = new System.Windows.Forms.Label();
-            this.cbxClearVssBackup = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.cbxClearVssStore = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.tlpFsys = new System.Windows.Forms.TableLayoutPanel();
             this.cmdFsysPath = new System.Windows.Forms.Button();
-            this.swReplaceFsysStore = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblReplaceFsysStore = new System.Windows.Forms.Label();
             this.tlpSerialA = new System.Windows.Forms.TableLayoutPanel();
-            this.swReplaceSerialNumber = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblReplaceSerialNumber = new System.Windows.Forms.Label();
             this.tlpSerialB = new System.Windows.Forms.TableLayoutPanel();
             this.lblHwcText = new System.Windows.Forms.Label();
@@ -61,9 +48,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.label1 = new System.Windows.Forms.Label();
             this.tlpMeRegion = new System.Windows.Forms.TableLayoutPanel();
             this.cmdMePath = new System.Windows.Forms.Button();
-            this.swReplaceMeRegion = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblReplaceMeRegion = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.tlpSvs = new System.Windows.Forms.TableLayoutPanel();
             this.tlpLog = new System.Windows.Forms.TableLayoutPanel();
             this.pnlLog = new System.Windows.Forms.Panel();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
@@ -81,16 +68,20 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdReset = new System.Windows.Forms.Button();
             this.cmdBuildsFolder = new System.Windows.Forms.Button();
             this.cmdShowLastBuild = new System.Windows.Forms.Button();
+            this.cbxClearVssStore = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.swReplaceFsysStore = new Mac_EFI_Toolkit.UI.METSwitch();
+            this.swReplaceSerialNumber = new Mac_EFI_Toolkit.UI.METSwitch();
+            this.swReplaceMeRegion = new Mac_EFI_Toolkit.UI.METSwitch();
+            this.cbxClearSvsStore = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.pnlMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpOptions.SuspendLayout();
-            this.tlpNss.SuspendLayout();
-            this.tlpSvs.SuspendLayout();
             this.tlpVss.SuspendLayout();
             this.tlpFsys.SuspendLayout();
             this.tlpSerialA.SuspendLayout();
             this.tlpSerialB.SuspendLayout();
             this.tlpMeRegion.SuspendLayout();
+            this.tlpSvs.SuspendLayout();
             this.tlpLog.SuspendLayout();
             this.pnlLog.SuspendLayout();
             this.tlpOutput.SuspendLayout();
@@ -134,20 +125,19 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOptions.ColumnCount = 1;
             this.tlpOptions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpOptions.Controls.Add(this.lblNvramText, 0, 7);
-            this.tlpOptions.Controls.Add(this.tlpNss, 0, 13);
-            this.tlpOptions.Controls.Add(this.tlpSvs, 0, 11);
             this.tlpOptions.Controls.Add(this.tlpVss, 0, 9);
             this.tlpOptions.Controls.Add(this.tlpFsys, 0, 2);
             this.tlpOptions.Controls.Add(this.tlpSerialA, 0, 4);
             this.tlpOptions.Controls.Add(this.tlpSerialB, 0, 5);
             this.tlpOptions.Controls.Add(this.label1, 0, 0);
-            this.tlpOptions.Controls.Add(this.tlpMeRegion, 0, 17);
-            this.tlpOptions.Controls.Add(this.label2, 0, 15);
+            this.tlpOptions.Controls.Add(this.tlpMeRegion, 0, 15);
+            this.tlpOptions.Controls.Add(this.label2, 0, 13);
+            this.tlpOptions.Controls.Add(this.tlpSvs, 0, 11);
             this.tlpOptions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpOptions.Location = new System.Drawing.Point(0, 0);
             this.tlpOptions.Margin = new System.Windows.Forms.Padding(0);
             this.tlpOptions.Name = "tlpOptions";
-            this.tlpOptions.RowCount = 19;
+            this.tlpOptions.RowCount = 17;
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
@@ -165,8 +155,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
             this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpOptions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpOptions.Size = new System.Drawing.Size(400, 385);
             this.tlpOptions.TabIndex = 0;
             // 
@@ -185,157 +175,13 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblNvramText.Text = "NVRAM";
             this.lblNvramText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tlpNss
-            // 
-            this.tlpNss.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.tlpNss.ColumnCount = 3;
-            this.tlpNss.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-            this.tlpNss.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpNss.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpNss.Controls.Add(this.lblNssChevRight, 0, 0);
-            this.tlpNss.Controls.Add(this.cbxClearNssStore, 0, 0);
-            this.tlpNss.Controls.Add(this.cbxClearNssBackup, 2, 0);
-            this.tlpNss.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpNss.Location = new System.Drawing.Point(0, 244);
-            this.tlpNss.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpNss.Name = "tlpNss";
-            this.tlpNss.RowCount = 1;
-            this.tlpNss.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpNss.Size = new System.Drawing.Size(400, 34);
-            this.tlpNss.TabIndex = 5;
-            // 
-            // lblNssChevRight
-            // 
-            this.lblNssChevRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblNssChevRight.AutoSize = true;
-            this.lblNssChevRight.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNssChevRight.ForeColor = System.Drawing.Color.White;
-            this.lblNssChevRight.Location = new System.Drawing.Point(160, 5);
-            this.lblNssChevRight.Margin = new System.Windows.Forms.Padding(0);
-            this.lblNssChevRight.Name = "lblNssChevRight";
-            this.lblNssChevRight.Size = new System.Drawing.Size(14, 23);
-            this.lblNssChevRight.TabIndex = 28;
-            this.lblNssChevRight.Text = ".";
-            this.lblNssChevRight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cbxClearNssStore
-            // 
-            this.cbxClearNssStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxClearNssStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.cbxClearNssStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxClearNssStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxClearNssStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxClearNssStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxClearNssStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxClearNssStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxClearNssStore.ForeColor = System.Drawing.Color.White;
-            this.cbxClearNssStore.Location = new System.Drawing.Point(11, 6);
-            this.cbxClearNssStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.cbxClearNssStore.Name = "cbxClearNssStore";
-            this.cbxClearNssStore.Size = new System.Drawing.Size(140, 21);
-            this.cbxClearNssStore.TabIndex = 0;
-            this.cbxClearNssStore.Text = "Clear NSS Store";
-            this.cbxClearNssStore.CheckedChanged += new System.EventHandler(this.cbxClearNssStore_CheckedChanged);
-            // 
-            // cbxClearNssBackup
-            // 
-            this.cbxClearNssBackup.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxClearNssBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.cbxClearNssBackup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxClearNssBackup.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxClearNssBackup.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxClearNssBackup.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxClearNssBackup.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxClearNssBackup.Enabled = false;
-            this.cbxClearNssBackup.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxClearNssBackup.ForeColor = System.Drawing.Color.White;
-            this.cbxClearNssBackup.Location = new System.Drawing.Point(190, 6);
-            this.cbxClearNssBackup.Margin = new System.Windows.Forms.Padding(0);
-            this.cbxClearNssBackup.Name = "cbxClearNssBackup";
-            this.cbxClearNssBackup.Size = new System.Drawing.Size(190, 21);
-            this.cbxClearNssBackup.TabIndex = 1;
-            this.cbxClearNssBackup.Text = "Clear NSS Backup Store";
-            // 
-            // tlpSvs
-            // 
-            this.tlpSvs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.tlpSvs.ColumnCount = 3;
-            this.tlpSvs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-            this.tlpSvs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpSvs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSvs.Controls.Add(this.cbxClearSvsStore, 0, 0);
-            this.tlpSvs.Controls.Add(this.cbxClearSvsBackup, 2, 0);
-            this.tlpSvs.Controls.Add(this.lblSvsChevRight, 1, 0);
-            this.tlpSvs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSvs.Location = new System.Drawing.Point(0, 209);
-            this.tlpSvs.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpSvs.Name = "tlpSvs";
-            this.tlpSvs.RowCount = 1;
-            this.tlpSvs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSvs.Size = new System.Drawing.Size(400, 34);
-            this.tlpSvs.TabIndex = 4;
-            // 
-            // cbxClearSvsStore
-            // 
-            this.cbxClearSvsStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxClearSvsStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.cbxClearSvsStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxClearSvsStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxClearSvsStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxClearSvsStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxClearSvsStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxClearSvsStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxClearSvsStore.ForeColor = System.Drawing.Color.White;
-            this.cbxClearSvsStore.Location = new System.Drawing.Point(11, 6);
-            this.cbxClearSvsStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.cbxClearSvsStore.Name = "cbxClearSvsStore";
-            this.cbxClearSvsStore.Size = new System.Drawing.Size(140, 21);
-            this.cbxClearSvsStore.TabIndex = 0;
-            this.cbxClearSvsStore.Text = "Clear SVS Store";
-            this.cbxClearSvsStore.CheckedChanged += new System.EventHandler(this.cbxClearSvsStore_CheckedChanged);
-            // 
-            // cbxClearSvsBackup
-            // 
-            this.cbxClearSvsBackup.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxClearSvsBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.cbxClearSvsBackup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxClearSvsBackup.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxClearSvsBackup.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxClearSvsBackup.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxClearSvsBackup.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxClearSvsBackup.Enabled = false;
-            this.cbxClearSvsBackup.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxClearSvsBackup.ForeColor = System.Drawing.Color.White;
-            this.cbxClearSvsBackup.Location = new System.Drawing.Point(190, 6);
-            this.cbxClearSvsBackup.Margin = new System.Windows.Forms.Padding(0);
-            this.cbxClearSvsBackup.Name = "cbxClearSvsBackup";
-            this.cbxClearSvsBackup.Size = new System.Drawing.Size(190, 21);
-            this.cbxClearSvsBackup.TabIndex = 1;
-            this.cbxClearSvsBackup.Text = "Clear SVS Backup Store";
-            // 
-            // lblSvsChevRight
-            // 
-            this.lblSvsChevRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblSvsChevRight.AutoSize = true;
-            this.lblSvsChevRight.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSvsChevRight.ForeColor = System.Drawing.Color.White;
-            this.lblSvsChevRight.Location = new System.Drawing.Point(160, 5);
-            this.lblSvsChevRight.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSvsChevRight.Name = "lblSvsChevRight";
-            this.lblSvsChevRight.Size = new System.Drawing.Size(14, 23);
-            this.lblSvsChevRight.TabIndex = 27;
-            this.lblSvsChevRight.Text = ".";
-            this.lblSvsChevRight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // tlpVss
             // 
             this.tlpVss.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.tlpVss.ColumnCount = 3;
-            this.tlpVss.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-            this.tlpVss.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tlpVss.ColumnCount = 1;
             this.tlpVss.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpVss.Controls.Add(this.lblVssChevRight, 0, 0);
-            this.tlpVss.Controls.Add(this.cbxClearVssBackup, 2, 0);
+            this.tlpVss.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpVss.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpVss.Controls.Add(this.cbxClearVssStore, 0, 0);
             this.tlpVss.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpVss.Location = new System.Drawing.Point(0, 174);
@@ -345,58 +191,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpVss.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpVss.Size = new System.Drawing.Size(400, 34);
             this.tlpVss.TabIndex = 3;
-            // 
-            // lblVssChevRight
-            // 
-            this.lblVssChevRight.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblVssChevRight.AutoSize = true;
-            this.lblVssChevRight.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVssChevRight.ForeColor = System.Drawing.Color.White;
-            this.lblVssChevRight.Location = new System.Drawing.Point(160, 5);
-            this.lblVssChevRight.Margin = new System.Windows.Forms.Padding(0);
-            this.lblVssChevRight.Name = "lblVssChevRight";
-            this.lblVssChevRight.Size = new System.Drawing.Size(14, 23);
-            this.lblVssChevRight.TabIndex = 28;
-            this.lblVssChevRight.Text = ".";
-            this.lblVssChevRight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cbxClearVssBackup
-            // 
-            this.cbxClearVssBackup.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxClearVssBackup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.cbxClearVssBackup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxClearVssBackup.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxClearVssBackup.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxClearVssBackup.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxClearVssBackup.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxClearVssBackup.Enabled = false;
-            this.cbxClearVssBackup.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxClearVssBackup.ForeColor = System.Drawing.Color.White;
-            this.cbxClearVssBackup.Location = new System.Drawing.Point(190, 6);
-            this.cbxClearVssBackup.Margin = new System.Windows.Forms.Padding(0);
-            this.cbxClearVssBackup.Name = "cbxClearVssBackup";
-            this.cbxClearVssBackup.Size = new System.Drawing.Size(190, 21);
-            this.cbxClearVssBackup.TabIndex = 1;
-            this.cbxClearVssBackup.Text = "Clear VSS Backup Store";
-            // 
-            // cbxClearVssStore
-            // 
-            this.cbxClearVssStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxClearVssStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.cbxClearVssStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxClearVssStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxClearVssStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxClearVssStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxClearVssStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxClearVssStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxClearVssStore.ForeColor = System.Drawing.Color.White;
-            this.cbxClearVssStore.Location = new System.Drawing.Point(11, 6);
-            this.cbxClearVssStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.cbxClearVssStore.Name = "cbxClearVssStore";
-            this.cbxClearVssStore.Size = new System.Drawing.Size(140, 21);
-            this.cbxClearVssStore.TabIndex = 0;
-            this.cbxClearVssStore.Text = "Clear VSS Store";
-            this.cbxClearVssStore.CheckedChanged += new System.EventHandler(this.cbxClearVssStore_CheckedChanged);
             // 
             // tlpFsys
             // 
@@ -437,22 +231,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdFsysPath.UseVisualStyleBackColor = false;
             this.cmdFsysPath.Click += new System.EventHandler(this.cmdFsysPath_Click);
             // 
-            // swReplaceFsysStore
-            // 
-            this.swReplaceFsysStore.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.swReplaceFsysStore.BackColor = System.Drawing.Color.Black;
-            this.swReplaceFsysStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.swReplaceFsysStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swReplaceFsysStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceFsysStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.swReplaceFsysStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swReplaceFsysStore.Location = new System.Drawing.Point(8, 8);
-            this.swReplaceFsysStore.Name = "swReplaceFsysStore";
-            this.swReplaceFsysStore.Size = new System.Drawing.Size(32, 18);
-            this.swReplaceFsysStore.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.swReplaceFsysStore.TabIndex = 0;
-            this.swReplaceFsysStore.CheckedChanged += new System.EventHandler(this.swReplaceFsysStore_CheckedChanged);
-            // 
             // lblReplaceFsysStore
             // 
             this.lblReplaceFsysStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
@@ -483,22 +261,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpSerialA.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSerialA.Size = new System.Drawing.Size(400, 34);
             this.tlpSerialA.TabIndex = 1;
-            // 
-            // swReplaceSerialNumber
-            // 
-            this.swReplaceSerialNumber.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.swReplaceSerialNumber.BackColor = System.Drawing.Color.Black;
-            this.swReplaceSerialNumber.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.swReplaceSerialNumber.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swReplaceSerialNumber.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceSerialNumber.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.swReplaceSerialNumber.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swReplaceSerialNumber.Location = new System.Drawing.Point(8, 8);
-            this.swReplaceSerialNumber.Name = "swReplaceSerialNumber";
-            this.swReplaceSerialNumber.Size = new System.Drawing.Size(32, 18);
-            this.swReplaceSerialNumber.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.swReplaceSerialNumber.TabIndex = 0;
-            this.swReplaceSerialNumber.CheckedChanged += new System.EventHandler(this.swReplaceSerialNumber_CheckedChanged);
             // 
             // lblReplaceSerialNumber
             // 
@@ -621,7 +383,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMeRegion.Controls.Add(this.swReplaceMeRegion, 0, 0);
             this.tlpMeRegion.Controls.Add(this.lblReplaceMeRegion, 1, 0);
             this.tlpMeRegion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpMeRegion.Location = new System.Drawing.Point(0, 314);
+            this.tlpMeRegion.Location = new System.Drawing.Point(0, 279);
             this.tlpMeRegion.Margin = new System.Windows.Forms.Padding(0);
             this.tlpMeRegion.Name = "tlpMeRegion";
             this.tlpMeRegion.RowCount = 1;
@@ -649,22 +411,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdMePath.UseVisualStyleBackColor = false;
             this.cmdMePath.Click += new System.EventHandler(this.cmdMePath_Click);
             // 
-            // swReplaceMeRegion
-            // 
-            this.swReplaceMeRegion.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.swReplaceMeRegion.BackColor = System.Drawing.Color.Black;
-            this.swReplaceMeRegion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.swReplaceMeRegion.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swReplaceMeRegion.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceMeRegion.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.swReplaceMeRegion.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swReplaceMeRegion.Location = new System.Drawing.Point(8, 8);
-            this.swReplaceMeRegion.Name = "swReplaceMeRegion";
-            this.swReplaceMeRegion.Size = new System.Drawing.Size(32, 18);
-            this.swReplaceMeRegion.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.swReplaceMeRegion.TabIndex = 0;
-            this.swReplaceMeRegion.CheckedChanged += new System.EventHandler(this.swReplaceMeRegion_CheckedChanged);
-            // 
             // lblReplaceMeRegion
             // 
             this.lblReplaceMeRegion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
@@ -685,7 +431,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.label2.Location = new System.Drawing.Point(0, 279);
+            this.label2.Location = new System.Drawing.Point(0, 244);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.label2.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
@@ -693,6 +439,23 @@ namespace Mac_EFI_Toolkit.WinForms
             this.label2.TabIndex = 101;
             this.label2.Text = "INTEL ME";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlpSvs
+            // 
+            this.tlpSvs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            this.tlpSvs.ColumnCount = 1;
+            this.tlpSvs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSvs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSvs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSvs.Controls.Add(this.cbxClearSvsStore, 0, 0);
+            this.tlpSvs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSvs.Location = new System.Drawing.Point(0, 209);
+            this.tlpSvs.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSvs.Name = "tlpSvs";
+            this.tlpSvs.RowCount = 1;
+            this.tlpSvs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSvs.Size = new System.Drawing.Size(400, 34);
+            this.tlpSvs.TabIndex = 4;
             // 
             // tlpLog
             // 
@@ -1003,6 +766,90 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdShowLastBuild.UseVisualStyleBackColor = false;
             this.cmdShowLastBuild.Click += new System.EventHandler(this.cmdShowLastBuild_Click);
             // 
+            // cbxClearVssStore
+            // 
+            this.cbxClearVssStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.cbxClearVssStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.cbxClearVssStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxClearVssStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxClearVssStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxClearVssStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxClearVssStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxClearVssStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxClearVssStore.ForeColor = System.Drawing.Color.White;
+            this.cbxClearVssStore.Location = new System.Drawing.Point(11, 6);
+            this.cbxClearVssStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
+            this.cbxClearVssStore.Name = "cbxClearVssStore";
+            this.cbxClearVssStore.Size = new System.Drawing.Size(169, 21);
+            this.cbxClearVssStore.TabIndex = 0;
+            this.cbxClearVssStore.Text = "Reset NVRAM (VSS)";
+            // 
+            // swReplaceFsysStore
+            // 
+            this.swReplaceFsysStore.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.swReplaceFsysStore.BackColor = System.Drawing.Color.Black;
+            this.swReplaceFsysStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.swReplaceFsysStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.swReplaceFsysStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceFsysStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swReplaceFsysStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.swReplaceFsysStore.Location = new System.Drawing.Point(8, 8);
+            this.swReplaceFsysStore.Name = "swReplaceFsysStore";
+            this.swReplaceFsysStore.Size = new System.Drawing.Size(32, 18);
+            this.swReplaceFsysStore.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swReplaceFsysStore.TabIndex = 0;
+            this.swReplaceFsysStore.CheckedChanged += new System.EventHandler(this.swReplaceFsysStore_CheckedChanged);
+            // 
+            // swReplaceSerialNumber
+            // 
+            this.swReplaceSerialNumber.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.swReplaceSerialNumber.BackColor = System.Drawing.Color.Black;
+            this.swReplaceSerialNumber.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.swReplaceSerialNumber.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.swReplaceSerialNumber.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceSerialNumber.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swReplaceSerialNumber.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.swReplaceSerialNumber.Location = new System.Drawing.Point(8, 8);
+            this.swReplaceSerialNumber.Name = "swReplaceSerialNumber";
+            this.swReplaceSerialNumber.Size = new System.Drawing.Size(32, 18);
+            this.swReplaceSerialNumber.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swReplaceSerialNumber.TabIndex = 0;
+            this.swReplaceSerialNumber.CheckedChanged += new System.EventHandler(this.swReplaceSerialNumber_CheckedChanged);
+            // 
+            // swReplaceMeRegion
+            // 
+            this.swReplaceMeRegion.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.swReplaceMeRegion.BackColor = System.Drawing.Color.Black;
+            this.swReplaceMeRegion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.swReplaceMeRegion.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.swReplaceMeRegion.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceMeRegion.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swReplaceMeRegion.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.swReplaceMeRegion.Location = new System.Drawing.Point(8, 8);
+            this.swReplaceMeRegion.Name = "swReplaceMeRegion";
+            this.swReplaceMeRegion.Size = new System.Drawing.Size(32, 18);
+            this.swReplaceMeRegion.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swReplaceMeRegion.TabIndex = 0;
+            this.swReplaceMeRegion.CheckedChanged += new System.EventHandler(this.swReplaceMeRegion_CheckedChanged);
+            // 
+            // cbxClearSvsStore
+            // 
+            this.cbxClearSvsStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.cbxClearSvsStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            this.cbxClearSvsStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxClearSvsStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxClearSvsStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxClearSvsStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxClearSvsStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxClearSvsStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxClearSvsStore.ForeColor = System.Drawing.Color.White;
+            this.cbxClearSvsStore.Location = new System.Drawing.Point(11, 6);
+            this.cbxClearSvsStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
+            this.cbxClearSvsStore.Name = "cbxClearSvsStore";
+            this.cbxClearSvsStore.Size = new System.Drawing.Size(313, 21);
+            this.cbxClearSvsStore.TabIndex = 1;
+            this.cbxClearSvsStore.Text = "Reset NVRAM (SVS) (Not Recommended)";
+            // 
             // patcherWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -1029,17 +876,13 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.ResumeLayout(false);
             this.tlpMain.ResumeLayout(false);
             this.tlpOptions.ResumeLayout(false);
-            this.tlpNss.ResumeLayout(false);
-            this.tlpNss.PerformLayout();
-            this.tlpSvs.ResumeLayout(false);
-            this.tlpSvs.PerformLayout();
             this.tlpVss.ResumeLayout(false);
-            this.tlpVss.PerformLayout();
             this.tlpFsys.ResumeLayout(false);
             this.tlpSerialA.ResumeLayout(false);
             this.tlpSerialB.ResumeLayout(false);
             this.tlpSerialB.PerformLayout();
             this.tlpMeRegion.ResumeLayout(false);
+            this.tlpSvs.ResumeLayout(false);
             this.tlpLog.ResumeLayout(false);
             this.pnlLog.ResumeLayout(false);
             this.tlpOutput.ResumeLayout(false);
@@ -1059,11 +902,8 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Panel pnlSeperator;
         private System.Windows.Forms.TextBox tbxHwc;
         private UI.METCheckbox cbxClearVssStore;
-        private UI.METCheckbox cbxClearSvsStore;
         private System.Windows.Forms.TextBox tbxSerialNumber;
         private System.Windows.Forms.TableLayoutPanel tlpButtons;
-        private UI.METCheckbox cbxClearVssBackup;
-        private UI.METCheckbox cbxClearSvsBackup;
         private System.Windows.Forms.Label lblSsnText;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.RichTextBox rtbLog;
@@ -1073,17 +913,10 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Label lblHwcText;
         private System.Windows.Forms.Label lblNvramText;
         private System.Windows.Forms.TableLayoutPanel tlpVss;
-        private System.Windows.Forms.TableLayoutPanel tlpSvs;
-        private System.Windows.Forms.Label lblSvsChevRight;
-        private System.Windows.Forms.Label lblVssChevRight;
         private System.Windows.Forms.TableLayoutPanel tlpLog;
         private System.Windows.Forms.Label lblOutputText;
         private System.Windows.Forms.Panel pnlLog;
         private System.Windows.Forms.TableLayoutPanel tlpOutput;
-        private System.Windows.Forms.TableLayoutPanel tlpNss;
-        private System.Windows.Forms.Label lblNssChevRight;
-        private UI.METCheckbox cbxClearNssBackup;
-        private UI.METCheckbox cbxClearNssStore;
         private System.Windows.Forms.Button cmdBuild;
         private System.Windows.Forms.Button cmdSaveLog;
         private System.Windows.Forms.Button cmdBuildsFolder;
@@ -1103,5 +936,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button cmdShowLastBuild;
+        private System.Windows.Forms.TableLayoutPanel tlpSvs;
+        private UI.METCheckbox cbxClearSvsStore;
     }
 }

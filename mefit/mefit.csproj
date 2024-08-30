@@ -116,6 +116,9 @@
     <Compile Include="AppUpdate.cs" />
     <Compile Include="Chars.cs" />
     <Compile Include="Strings.cs" />
+    <Compile Include="T2\Structs\ScfgData.cs" />
+    <Compile Include="T2\T2ROM.cs" />
+    <Compile Include="T2\ROMSigs.cs" />
     <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
     <Compile Include="UI\METMessageBox\Enums.cs" />
@@ -257,5 +260,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

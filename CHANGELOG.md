@@ -19,19 +19,21 @@
 - Added a button in the main window that permits the output of firmware information to a text file (ALT + T).
 
 #### Enhancements:
+- User Interface improvements.
+- Improved the NVRAM reset functionality to emulate the state of uninitialised factory firmware. Following this enhancement, the option to clear backup stores has been removed from the editor, and all "clear" options have been renamed to "reset".
 - Improved the management of control enabled states in the main window.
 - Improved the validation process for serial numbers.
 - EveryMac button is now disabled when an invalid serial number is detected.
-- Internal database updated.
-- User Interface improvements.
-- Modified default file name when exporting information in the ROM Information window.
+- The internal database was updated.
+- Modified the default file name when exporting information in the ROM Information window.
 
 #### Bugs:
+- Fixed a bug introduced in v1.1.4 where the NVRAM store type was not set when parsing store data, this could lead to a 'no post' scenario.
 - Fixed rare occurrences of malformed Intel ME version numbers.
 - Fixed a UI bug related to the METLabel, where the ForeColor property could be overridden even when the control was disabled.
 
 #### Misc:
-- Due to the seemingly permanent removal of back-end data from Apple's support-sp website, the loading of Config Code data from the server has been indefinitely disabled as a precaution, however, the application will continue to utilize the internal database to display this data.
+- Removed NSS store details and internal code.
 
 ## Version 1.1.4
 

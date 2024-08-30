@@ -31,13 +31,14 @@ namespace Mac_EFI_Toolkit
         internal static readonly string DebugLog = Path.Combine(CurrentDirectory, "debug.log");
         internal static readonly string UnhandledLog = Path.Combine(CurrentDirectory, "unhandled.log");
         internal static readonly string ApplicationLog = Path.Combine(CurrentDirectory, "mefit.log");
+        internal static readonly string DatabaseLog = Path.Combine(CurrentDirectory, "database.log");
     }
 
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "240327.0344";
-        internal const string Channel = "Stable";
+        internal const string Build = "240830.1930";
+        internal const string Channel = "DEV";
     }
 
     internal readonly struct METUrl

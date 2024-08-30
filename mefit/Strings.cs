@@ -14,6 +14,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string AS_ERROR =
             "Error";
+
+        internal const string AS_UNKNOWN =
+            "Unknown";
         #endregion
     }
 
@@ -82,17 +85,41 @@ namespace Mac_EFI_Toolkit
 
         internal const string DS_ME_EXPORT_SUCCESS =
             "Intel ME export successful.";
+
+        internal const string DS_DIR_NOT_CREATED =
+            "The directory has not been created yet.";
+
+        internal const string DS_LOG_NOT_CREATED =
+            "The log file has not been created yet.";
+
+        internal const string DS_LOG_CREATION_SUCCESS =
+            "Log file created successfully.";
         #endregion
     }
 
     internal class MainWinStrings
     {
         #region Strings
+        internal const string MW_VSS =
+            "VSS";
+
+        internal const string MW_SVS =
+            "SVS";
+
+        internal const string MW_FILE =
+            "FILE";
+
         internal const string MW_FSYS =
             "FSYS";
 
         internal const string MW_ME_REGION =
             "ME_REGION";
+
+        internal const string MW_CRC32 =
+            "CRC32";
+
+        internal const string MW_NA =
+            "N/A";
 
         internal const string MW_CRC_FIXED =
             "CRC_FIXED";
@@ -115,6 +142,21 @@ namespace Mac_EFI_Toolkit
         internal const string MW_UNLOCKED =
             "Unlocked";
 
+        internal const string MW_LOCKED =
+            "Locked";
+
+        internal const string MW_UNKNOWN =
+            "Unknown";
+
+        internal const string MW_BYTES =
+            "bytes";
+
+        internal const string MW_APFS_DRIVER_FOUND =
+            "YES (DRIVER FOUND)";
+
+        internal const string MW_APFS_DRIVER_NOT_FOUND =
+            "NO (DRIVER NOT FOUND)";
+
         internal const string MW_LOG_BU_MAKEFSYSPB_NULL =
             "BinaryUtils.MakeFsysCrcPatchedBinary returned null data";
 
@@ -126,6 +168,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string MW_LOG_BS_BUFFER_MISMATCH =
             "Patched backup store does not match buffer";
+
+        internal const string MW_CONTACT_SERVER =
+            "Contacting Apple server...";
         #endregion
 
     }

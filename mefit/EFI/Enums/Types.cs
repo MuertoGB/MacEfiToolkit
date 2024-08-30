@@ -1,10 +1,9 @@
 ﻿namespace Mac_EFI_Toolkit.EFI.Enums
 {
-    internal enum ApfsType
+    internal enum ApfsCapable
     {
-        Guid,
-        Lzma,
-        None,
+        Yes,
+        No,
         Unknown
     }
 
@@ -18,7 +17,6 @@
     internal enum NvramStoreType
     {
         VSS,
-        SVS,
-        NSS
+        SVS
     }
 }

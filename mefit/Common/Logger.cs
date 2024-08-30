@@ -16,6 +16,7 @@ namespace Mac_EFI_Toolkit
     #region Enums
     public enum RtbLogPrefix
     {
+        Start,
         Complete,
         Info,
         Warning,
@@ -28,10 +29,13 @@ namespace Mac_EFI_Toolkit
         internal static void WriteToAppLog(string logMessage)
         {
             using (StreamWriter writer = new StreamWriter(METPath.ApplicationLog, true))
-            {
-                writer.WriteLine(
-                    $"{DateTime.Now} : {logMessage}");
-            }
+                writer.WriteLine($"{DateTime.Now} : {logMessage}");
+        }
+
+        internal static void WriteToDbLog(string logMessage)
+        {
+            using (StreamWriter writer = new StreamWriter(METPath.DatabaseLog, true))
+                writer.WriteLine($"{DateTime.Now} : {logMessage}");
         }
 
         internal static void WriteExceptionToAppLog(Exception e)
@@ -63,6 +67,9 @@ namespace Mac_EFI_Toolkit
 
             switch (logPrefix)
             {
+                case RtbLogPrefix.Start:
+                    prefixColor = Color.FromArgb(193, 0, 255);
+                    break;
                 case RtbLogPrefix.Complete:
                     prefixColor = Color.FromArgb(0, 200, 0);
                     break;

@@ -9,6 +9,7 @@ using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.EFI;
 using Mac_EFI_Toolkit.EFI.Enums;
 using Mac_EFI_Toolkit.EFI.Structs;
+using Mac_EFI_Toolkit.T2;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
@@ -1083,8 +1084,8 @@ namespace Mac_EFI_Toolkit
 
             METMessageBox.Show(
                 this,
-                "MET",
-                "The backups folder has not been created yet.",
+                AppStrings.AS_INFO,
+                DialogStrings.DS_DIR_NOT_CREATED,
                 METMessageBoxType.Information,
                 METMessageBoxButtons.Okay);
         }
@@ -1102,8 +1103,8 @@ namespace Mac_EFI_Toolkit
 
             METMessageBox.Show(
                 this,
-                "MET",
-                "The builds folder has not been created yet.",
+                AppStrings.AS_INFO,
+                DialogStrings.DS_DIR_NOT_CREATED,
                 METMessageBoxType.Information,
                 METMessageBoxButtons.Okay);
         }
@@ -1121,8 +1122,8 @@ namespace Mac_EFI_Toolkit
 
             METMessageBox.Show(
                 this,
-                "MET",
-                "The Fsys folder has not been created yet.",
+                AppStrings.AS_INFO,
+                DialogStrings.DS_DIR_NOT_CREATED,
                 METMessageBoxType.Information,
                 METMessageBoxButtons.Okay);
         }
@@ -1140,8 +1141,8 @@ namespace Mac_EFI_Toolkit
 
             METMessageBox.Show(
                 this,
-                "MET",
-                "The ME folder has not been created yet.",
+                AppStrings.AS_INFO,
+                DialogStrings.DS_DIR_NOT_CREATED,
                 METMessageBoxType.Information,
                 METMessageBoxButtons.Okay);
         }
@@ -1157,8 +1158,8 @@ namespace Mac_EFI_Toolkit
 
             METMessageBox.Show(
                 this,
-                "File Information",
-                "The log file has not been created yet.",
+                AppStrings.AS_INFO,
+                DialogStrings.DS_LOG_NOT_CREATED,
                 METMessageBoxType.Information,
                 METMessageBoxButtons.Okay);
         }
@@ -1172,7 +1173,7 @@ namespace Mac_EFI_Toolkit
             if (File.Exists(METPath.DebugLog))
                 InterfaceUtils.ShowExplorerNavigationPrompt(
                     this,
-                    "Debug log created successfully.",
+                    DialogStrings.DS_LOG_CREATION_SUCCESS,
                     METPath.DebugLog);
         }
 
@@ -1338,15 +1339,11 @@ namespace Mac_EFI_Toolkit
             UpdateNvramLabel(
                 lblVssStore,
                 AppleEFI.VssStoreData,
-                "VSS");
+                MainWinStrings.MW_VSS);
             UpdateNvramLabel(
                 lblSvsStore,
                 AppleEFI.SvsStoreData,
-                "SVS");
-            UpdateNvramLabel(
-                lblNssStore,
-                AppleEFI.NssStoreData,
-                "NSS");
+                MainWinStrings.MW_SVS);
 
             UpdateEfiLockControls();
             UpdateBoardIdControls();
@@ -1375,7 +1372,7 @@ namespace Mac_EFI_Toolkit
         }
 
         private void UpdateFileNameControls() =>
-            lblFilename.Text = $"FILE: '{AppleEFI.FileInfoData.FileNameExt}'";
+            lblFilename.Text = $"{MainWinStrings.MW_FILE}: '{AppleEFI.FileInfoData.FileNameExt}'";
 
         private void UpdateFileSizeControls()
         {
@@ -1387,7 +1384,7 @@ namespace Mac_EFI_Toolkit
                     fileSizeDecimal);
 
             lblFilesize.Text =
-                $"{FileUtils.FormatFileSize(fileSizeDecimal)} bytes ({fileSizeDecimal:X}h)";
+                $"{FileUtils.FormatFileSize(fileSizeDecimal)} {MainWinStrings.MW_BYTES} ({fileSizeDecimal:X}h)";
 
             if (!isValidSize)
             {
@@ -1423,7 +1420,7 @@ namespace Mac_EFI_Toolkit
 
                 lblModel.Text =
                     $"{model} ({identifier})"
-                    ?? "N/A";
+                    ?? MainWinStrings.MW_NA;
 
                 modelToolStripMenuItem.Enabled = true;
 
@@ -1433,32 +1430,54 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            lblModel.Text = "N/A";
+            lblModel.Text = MainWinStrings.MW_NA;
             modelToolStripMenuItem.Enabled = false;
             lblModel.Cursor = Cursors.Default;
         }
 
         private void UpdateConfigCodeControls()
         {
-            string configCode =
-                AppleEFI.ConfigCode;
-
-            lblConfigCode.Text =
-                configCode
-                ?? "N/A";
-
-            if (!string.IsNullOrEmpty(configCode))
+            if (!string.IsNullOrEmpty(AppleEFI.ConfigCode))
             {
-                configCodeToolStripMenuItem.Enabled = true;
+                lblConfigCode.Text = AppleEFI.ConfigCode;
                 lblConfigCode.Click += lblConfigCode_Click;
                 lblConfigCode.Cursor = Cursors.Hand;
+
+                configCodeToolStripMenuItem.Enabled = true;
 
                 return;
             }
 
-            configCodeToolStripMenuItem.Enabled = false;
-            lblConfigCode.Text = "N/A";
+            lblConfigCode.Text = MainWinStrings.MW_CONTACT_SERVER;
+            lblConfigCode.ForeColor = Colours.INFO_BOX;
+
+            AppendConfigCodeAsync(AppleEFI.FsysStoreData.HWC);
+        }
+
+        internal async void AppendConfigCodeAsync(string hwc)
+        {
+            string configCode =
+                await MacUtils.GetDeviceConfigCodeSupportRemote(hwc);
+
+            if (!string.IsNullOrEmpty(configCode))
+            {
+                AppleEFI.ConfigCode = configCode;
+
+                lblConfigCode.Text = configCode;
+                lblConfigCode.ForeColor = Color.White;
+                lblConfigCode.Click += lblConfigCode_Click;
+                lblConfigCode.Cursor = Cursors.Hand;
+
+                configCodeToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            lblConfigCode.Text = MainWinStrings.MW_NA;
+            lblConfigCode.ForeColor = Colours.CONTROL_DISABLED_TEXT;
             lblConfigCode.Cursor = Cursors.Default;
+
+            configCodeToolStripMenuItem.Enabled = false;
         }
 
         private void UpdateFsysControls()
@@ -1469,7 +1488,7 @@ namespace Mac_EFI_Toolkit
             if (!string.IsNullOrEmpty(fsysCrc32))
             {
                 lblFsysCrc32.Text =
-                    $"CRC: {fsysCrc32}h{(AppleEFI.ForceFoundFsys ? " [F]" : string.Empty)}";
+                    $"{MainWinStrings.MW_CRC32}: {fsysCrc32}h{(AppleEFI.ForceFoundFsys ? " [F]" : string.Empty)}";
 
                 lblFsysCrc32.ForeColor = string.Equals(
                     fsysCrc32,
@@ -1485,7 +1504,7 @@ namespace Mac_EFI_Toolkit
             }
 
             fsysCRC32ToolStripMenuItem.Enabled = false;
-            lblFsysCrc32.Text = "N/A";
+            lblFsysCrc32.Text = MainWinStrings.MW_NA;
             lblFsysCrc32.Cursor = Cursors.Default;
         }
 
@@ -1496,7 +1515,7 @@ namespace Mac_EFI_Toolkit
 
             lblSerialNumber.Text =
                 serialNumber
-                ?? "N/A";
+                ?? MainWinStrings.MW_NA;
 
             if (!string.IsNullOrEmpty(serialNumber))
             {
@@ -1523,7 +1542,7 @@ namespace Mac_EFI_Toolkit
 
             lblHwc.Text =
                  hwc
-                 ?? "N/A";
+                 ?? MainWinStrings.MW_NA;
 
             if (!string.IsNullOrEmpty(hwc))
             {
@@ -1545,7 +1564,7 @@ namespace Mac_EFI_Toolkit
 
             lblOrderNumber.Text =
                 orderNumber
-                ?? "N/A";
+                ?? MainWinStrings.MW_NA;
 
             if (!string.IsNullOrEmpty(orderNumber))
             {
@@ -1567,7 +1586,7 @@ namespace Mac_EFI_Toolkit
 
             lblEfiVersion.Text =
                 efiVersion
-                ?? "N/A";
+                ?? MainWinStrings.MW_NA;
 
             if (!string.IsNullOrEmpty(efiVersion))
             {
@@ -1591,7 +1610,7 @@ namespace Mac_EFI_Toolkit
                 storeData.PrimaryStoreBase == -1
                 ? AppColours.DISABLED_TEXT
                 : !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
-                ? Color.White
+                ? AppColours.WARNING
                 : AppColours.COMPLETE;
 
             nvramLabel.ForeColor = foreColor;
@@ -1602,15 +1621,16 @@ namespace Mac_EFI_Toolkit
             switch (AppleEFI.EfiPrimaryLockData.LockType)
             {
                 case EfiLockType.Locked:
-                    lblEfiLock.Text = "LOCKED";
+                    lblEfiLock.Text = MainWinStrings.MW_LOCKED.ToUpper();
                     lblEfiLock.ForeColor = AppColours.ERROR;
                     break;
                 case EfiLockType.Unlocked:
-                    lblEfiLock.Text = "UNLOCKED";
+                    lblEfiLock.Text = MainWinStrings.MW_UNLOCKED.ToUpper();
+                    lblEfiLock.ForeColor = AppColours.COMPLETE;
                     break;
                 case EfiLockType.Unknown:
                 default:
-                    lblEfiLock.Text = "UNKNOWN";
+                    lblEfiLock.Text = MainWinStrings.MW_UNKNOWN.ToUpper();
                     lblEfiLock.ForeColor = AppColours.WARNING;
                     break;
             }
@@ -1623,7 +1643,7 @@ namespace Mac_EFI_Toolkit
 
             lblBoardId.Text =
                 boardId
-                ?? "N/A";
+                ?? MainWinStrings.MW_NA;
 
             if (!string.IsNullOrEmpty(boardId))
             {
@@ -1642,18 +1662,16 @@ namespace Mac_EFI_Toolkit
         {
             switch (AppleEFI.IsApfsCapable)
             {
-                case ApfsType.Guid:
-                    lblApfsCapable.Text = "YES (DXE)";
+                case ApfsCapable.Yes:
+                    lblApfsCapable.Text = MainWinStrings.MW_APFS_DRIVER_FOUND;
+                    lblApfsCapable.ForeColor = AppColours.COMPLETE;
                     break;
-                case ApfsType.Lzma:
-                    lblApfsCapable.Text = "YES (LZMA DXE)";
-                    break;
-                case ApfsType.None:
-                    lblApfsCapable.Text = "DRIVER NOT FOUND";
+                case ApfsCapable.No:
+                    lblApfsCapable.Text = MainWinStrings.MW_APFS_DRIVER_NOT_FOUND;
                     lblApfsCapable.ForeColor = AppColours.WARNING;
                     break;
-                case ApfsType.Unknown:
-                    lblApfsCapable.Text = "UNKNOWN";
+                case ApfsCapable.Unknown:
+                    lblApfsCapable.Text = MainWinStrings.MW_UNKNOWN.ToUpper();
                     lblApfsCapable.ForeColor = AppColours.ERROR;
                     break;
             }
@@ -1672,7 +1690,7 @@ namespace Mac_EFI_Toolkit
 
             lblMeVersion.Text =
                 meVersion
-                ?? "N/A";
+                ?? MainWinStrings.MW_NA;
 
             if (!string.IsNullOrEmpty(meVersion))
             {
@@ -1872,7 +1890,6 @@ namespace Mac_EFI_Toolkit
             {
                 lblVssStore,
                 lblSvsStore,
-                lblNssStore,
                 lblAppVersion
             };
 
@@ -1913,9 +1930,8 @@ namespace Mac_EFI_Toolkit
                     { cmdAppleRomInfo, "Open the ROM Information Window (ALT + I)" },
                     { cmdInvalidateEfiLock, "Remove EFI Lock (ALT + L)" },
                     { cmdExportMe, "Export ME Region (ALT + M)" },
-                    { lblVssStore, SetNvramStoreTip(AppleEFI.VssStoreData, "VSS") },
-                    { lblSvsStore, SetNvramStoreTip(AppleEFI.SvsStoreData, "SVS") },
-                    { lblNssStore, SetNvramStoreTip(AppleEFI.NssStoreData, "NSS") },
+                    { lblVssStore, SetNvramStoreTip(AppleEFI.VssStoreData, MainWinStrings.MW_VSS) },
+                    { lblSvsStore, SetNvramStoreTip(AppleEFI.SvsStoreData, MainWinStrings.MW_SVS) },
                     { lblAppVersion, "Go to latest release (CTRL + G)" },
                 };
 
@@ -1957,7 +1973,7 @@ namespace Mac_EFI_Toolkit
         {
             foreach (Control control in tableLayoutPanel.Controls)
             {
-                if (control is Label label && label.Text == "N/A")
+                if (control is Label label && label.Text == MainWinStrings.MW_NA)
                 {
                     label.ForeColor = color;
                 }
@@ -2037,8 +2053,8 @@ namespace Mac_EFI_Toolkit
             {
                 METMessageBox.Show(
                     this,
-                    "Error",
-                    "The selected file is not a valid firmware image.",
+                    AppStrings.AS_ERROR,
+                    "The selected file is not a valid firmware.",
                     METMessageBoxType.Error,
                     METMessageBoxButtons.Okay);
 
@@ -2088,7 +2104,7 @@ namespace Mac_EFI_Toolkit
                 // Show an error message if the file is too small.
                 METMessageBox.Show(
                     this,
-                    "Error",
+                    AppStrings.AS_ERROR,
                     $"The selected file does not meet the minimum size requirement of {AppleEFI.MIN_IMAGE_SIZE:X}h.",
                     METMessageBoxType.Error,
                     METMessageBoxButtons.Okay);
@@ -2102,7 +2118,7 @@ namespace Mac_EFI_Toolkit
                 // Show an error message if the file is too large.
                 METMessageBox.Show(
                     this,
-                    "Error",
+                    AppStrings.AS_ERROR,
                     $"The selected file exceeds the maximum size limit of {AppleEFI.MAX_IMAGE_SIZE:X}h.",
                     METMessageBoxType.Error,
                     METMessageBoxButtons.Okay);
@@ -2133,7 +2149,6 @@ namespace Mac_EFI_Toolkit
                 lblEfiVersion,
                 lblVssStore,
                 lblSvsStore,
-                lblNssStore,
                 lblEfiLock,
                 lblBoardId,
                 lblApfsCapable,

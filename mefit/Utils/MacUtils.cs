@@ -10,22 +10,23 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace Mac_EFI_Toolkit.Utils
 {
     class MacUtils
     {
         /// <summary>
-        /// Retrieves the configuration model string for a given HWC identifier. 
-        /// Prioritizes retrieving data from the embedded XML db. 
-        /// Falls back to retrieving data from the Apple server if not found in the XML resource.
+        /// Retrieves the configuration model string for a given HWC identifier from the internal db. 
         /// </summary>
         /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static string GetDeviceConfigCode(string hwc)
+        internal static string GetDeviceConfigCodeLocalLocal(string hwc)
         {
             try
             {
@@ -50,6 +51,46 @@ namespace Mac_EFI_Toolkit.Utils
                 }
 
                 return null;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteExceptionToAppLog(e);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the configuration model string for a given HWC identifier from Apple's support-sp server.
+        /// </summary>
+        /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
+        /// <returns>The model string.</returns>
+        internal static async Task<string> GetDeviceConfigCodeSupportRemote(string hwc)
+        {
+            try
+            {
+                // Retrieve data from Apple's server
+                string url = $"http://support-sp.apple.com/sp/product?cc={hwc}&lang=en_GB";
+
+                if (!NetUtils.GetIsWebsiteAvailable(url))
+                    return null;
+
+                string xml = await new WebClient().DownloadStringTaskAsync(url);
+
+                XDocument doc =
+                    XDocument.Parse(
+                        xml);
+
+                string data =
+                    doc.XPathSelectElement(
+                        "/root/configCode")?.Value;
+
+                if (!string.IsNullOrEmpty(data))
+                    Logger.WriteToDbLog(
+                        $"'{hwc}' not present in local db > support-sp server returned: '{data}'");
+
+                return string.IsNullOrEmpty(data)
+                    ? null
+                    : data;
             }
             catch (Exception e)
             {
