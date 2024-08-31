@@ -4,8 +4,8 @@
 // FileUtils.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.EFI;
+using Mac_EFI_Toolkit.Utils.Structs;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -251,5 +251,43 @@ namespace Mac_EFI_Toolkit.Utils
                 Logger.WriteExceptionToAppLog(e);
             }
         }
+
+        /// <summary>
+        /// Retrieves file information and calculates the CRC32 checksum of a specified file.
+        /// </summary>
+        /// <param name="fileName">The full path to the file to be analyzed.</param>
+        /// <returns>
+        /// A Binary object containing the file's name, name without extension, creation time, last write time, file length, and CRC32 checksum.
+        /// </returns>
+        internal static Binary GetBinaryFileInfo(string fileName)
+        {
+            FileInfo fileInfo =
+                new FileInfo(
+                    fileName);
+
+            byte[] fileBytes =
+                File.ReadAllBytes(
+                    fileInfo.FullName);
+
+            return new Binary
+            {
+                FileNameExt =
+                fileInfo.Name,
+
+                FileName = Path.GetFileNameWithoutExtension(
+                    fileName),
+
+                CreationTime = fileInfo.CreationTime.ToString(),
+
+                LastWriteTime = fileInfo.LastWriteTime.ToString(),
+
+                Length = (int)fileInfo.Length,
+
+                CRC32 = FileUtils.GetCrc32Digest(
+                    fileBytes)
+            };
+        }
+
+
     }
 }

@@ -7,6 +7,7 @@
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.EFI.Enums;
 using Mac_EFI_Toolkit.EFI.Structs;
+using Mac_EFI_Toolkit.Utils.Structs;
 using Mac_EFI_Toolkit.Utils;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,7 @@ namespace Mac_EFI_Toolkit.EFI
         {
             // Parse file info.
             FileInfoData =
-                GetBinaryFileInfo(
+                FileUtils.GetBinaryFileInfo(
                     fileName);
 
             // Parse Platform Data Region.
@@ -227,34 +228,6 @@ namespace Mac_EFI_Toolkit.EFI
                     return false;
 
             return true;
-        }
-        #endregion
-
-        #region File Information
-        private static Binary GetBinaryFileInfo(string fileName)
-        {
-            FileInfo fileInfo =
-                new FileInfo(
-                    fileName);
-
-            return new Binary
-            {
-                FileNameExt = fileInfo.Name,
-
-                FileName =
-                    Path.GetFileNameWithoutExtension(
-                        fileName),
-
-                CreationTime = fileInfo.CreationTime.ToString(),
-
-                LastWriteTime = fileInfo.LastWriteTime.ToString(),
-
-                Length = (int)fileInfo.Length,
-
-                CRC32 =
-                    FileUtils.GetCrc32Digest(
-                        LoadedBinaryBytes)
-            };
         }
         #endregion 
 

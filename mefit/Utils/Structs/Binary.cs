@@ -1,4 +1,4 @@
-﻿namespace Mac_EFI_Toolkit.EFI.Structs
+﻿namespace Mac_EFI_Toolkit.Utils.Structs
 {
     internal struct Binary
     {

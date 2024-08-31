@@ -92,7 +92,7 @@
     <Compile Include="EFI\IntelME.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="EFI\Enums\Types.cs" />
-    <Compile Include="EFI\Structs\Binary.cs" />
+    <Compile Include="Utils\Structs\Binary.cs" />
     <Compile Include="EFI\Structs\EFILock.cs" />
     <Compile Include="EFI\Structs\Sections.cs" />
     <Compile Include="EFI\Structs\Stores.cs" />
