@@ -192,6 +192,7 @@ namespace Mac_EFI_Toolkit.T2
                 StoreBytes = scfgBytes,
                 SerialText = serial,
                 SonText = son,
+                MdlC = null,
                 RegNumText = regno
             };
         }
@@ -204,7 +205,9 @@ namespace Mac_EFI_Toolkit.T2
                 StoreSize = 0,
                 StoreBytes = null,
                 SerialText = null,
-                SonText = null
+                SonText = null,
+                MdlC = null,
+                RegNumText = null
             };
         }
         #endregion
