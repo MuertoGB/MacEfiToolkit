@@ -17,6 +17,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string AS_UNKNOWN =
             "Unknown";
+
+        internal const string AS_NA =
+            "NA";
         #endregion
     }
 

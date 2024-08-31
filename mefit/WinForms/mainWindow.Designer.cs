@@ -1510,7 +1510,6 @@ namespace Mac_EFI_Toolkit
             // 
             this.cmdT2Rom.BackColor = System.Drawing.Color.Transparent;
             this.cmdT2Rom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdT2Rom.Enabled = false;
             this.cmdT2Rom.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.cmdT2Rom.FlatAppearance.BorderSize = 0;
             this.cmdT2Rom.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));

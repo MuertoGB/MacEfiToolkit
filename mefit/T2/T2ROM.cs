@@ -19,6 +19,8 @@ namespace Mac_EFI_Toolkit.T2
         #endregion
 
         #region Private Members
+        const int _serialLength = 12;
+        private static readonly byte[] _limitChars = new byte[] { 0x00, 0x00, 0x00 };
         private static readonly Encoding _utf8 = Encoding.UTF8;
         #endregion
 
@@ -61,7 +63,7 @@ namespace Mac_EFI_Toolkit.T2
                 byte[] lByte =
                     BinaryUtils.GetBytesBaseLength(
                     source,
-                    ibootSig + 0x5,
+                    ibootSig + ROMSigs.IBOOT_VER_SIG.Length + 1,
                     1);
 
                 // Convert data length to unsigned int8
@@ -84,6 +86,10 @@ namespace Mac_EFI_Toolkit.T2
         #region SCfg
         internal static SCfgData GetSCfgData(byte[] source)
         {
+            string serial = string.Empty;
+            string son = string.Empty;
+            string regno = string.Empty;
+
             int scfgBase =
                 BinaryUtils.GetBaseAddress(
                     source,
@@ -96,7 +102,7 @@ namespace Mac_EFI_Toolkit.T2
             byte[] lByte =
                 BinaryUtils.GetBytesBaseLength(
                     source,
-                    scfgBase + 0x4,
+                    scfgBase + ROMSigs.SCFG_HEADER_SIG.Length,
                     1);
 
             // Convert data length to unsigned int8
@@ -112,13 +118,81 @@ namespace Mac_EFI_Toolkit.T2
                     scfgBase,
                     dataSize);
 
-            //* Left off here *//
+            // Get the serial number
+            int serialBase = BinaryUtils.GetBaseAddress(scfgBytes, ROMSigs.SCFG_SSN_SIG);
+
+            if (serialBase == -1)
+            {
+                serial = null;
+            }
+            else
+            {
+                byte[] serialBytes = BinaryUtils.GetBytesBaseLength(scfgBytes, serialBase + ROMSigs.SCFG_SSN_SIG.Length, _serialLength);
+
+                if (serialBytes?.Length == _serialLength)
+                {
+                    serial = _utf8.GetString(serialBytes);
+                }
+                else
+                {
+                    serial = null;
+                }
+            }
+
+            // Get the system order number
+            int sonBase = BinaryUtils.GetBaseAddress(scfgBytes, ROMSigs.SCFG_SON_SIG);
+
+            if (sonBase == -1)
+            {
+                son = null;
+            }
+            else
+            {
+                sonBase += ROMSigs.SCFG_SON_SIG.Length;
+                int sonLimit = BinaryUtils.GetBaseAddress(scfgBytes, _limitChars, sonBase);
+
+                if (sonLimit == -1)
+                {
+                    son = null;
+                }
+                else
+                {
+                    byte[] sonBytes = BinaryUtils.GetBytesBaseLimit(scfgBytes, sonBase, sonLimit);
+                    son = _utf8.GetString(sonBytes);
+                }
+            }
+
+            // Get the registration? number
+            int regnBase = BinaryUtils.GetBaseAddress(scfgBytes, ROMSigs.SCFG_SON_REGN);
+
+            if (regnBase == -1)
+            {
+                regno = null;
+            }
+            else
+            {
+                regnBase += ROMSigs.SCFG_SON_REGN.Length;
+                int regnLimit = BinaryUtils.GetBaseAddress(scfgBytes, _limitChars, regnBase);
+
+                if (regnLimit == -1)
+                {
+                    son = null;
+                }
+                else
+                {
+                    byte[] regnBytes = BinaryUtils.GetBytesBaseLimit(scfgBytes, regnBase, regnLimit);
+                    regno = _utf8.GetString(regnBytes);
+                }
+            }
 
             return new SCfgData
             {
                 StoreBase = scfgBase,
                 StoreSize = dataSize,
-                StoreBytes = scfgBytes
+                StoreBytes = scfgBytes,
+                SerialText = serial,
+                SonText = son,
+                RegNumText = regno
             };
         }
 
@@ -128,7 +202,9 @@ namespace Mac_EFI_Toolkit.T2
             {
                 StoreBase = -1,
                 StoreSize = 0,
-                StoreBytes = null
+                StoreBytes = null,
+                SerialText = null,
+                SonText = null
             };
         }
         #endregion
