@@ -1,4 +1,10 @@
-﻿namespace Mac_EFI_Toolkit.EFI.Structs
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// Sections.cs - Handles parsing of firmware data
+// Released under the GNU GLP v3.0
+
+namespace Mac_EFI_Toolkit.EFI.Structs
 {
     internal struct PdrSection
     {

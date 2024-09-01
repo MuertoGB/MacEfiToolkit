@@ -14,7 +14,7 @@ namespace Mac_EFI_Toolkit.T2
         };
 
         internal static readonly byte[] SCFG_HEADER_SIG = // Header
-        {   
+        {
             0x67, 0x66, 0x43, 0x53
         };
 

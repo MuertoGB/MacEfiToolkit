@@ -7,14 +7,12 @@
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.EFI.Enums;
 using Mac_EFI_Toolkit.EFI.Structs;
-using Mac_EFI_Toolkit.Utils.Structs;
 using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Utils.Structs;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.EFI
 {

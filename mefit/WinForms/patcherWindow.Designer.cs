@@ -35,10 +35,13 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpOptions = new System.Windows.Forms.TableLayoutPanel();
             this.lblNvramText = new System.Windows.Forms.Label();
             this.tlpVss = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxClearVssStore = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.tlpFsys = new System.Windows.Forms.TableLayoutPanel();
             this.cmdFsysPath = new System.Windows.Forms.Button();
+            this.swReplaceFsysStore = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblReplaceFsysStore = new System.Windows.Forms.Label();
             this.tlpSerialA = new System.Windows.Forms.TableLayoutPanel();
+            this.swReplaceSerialNumber = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblReplaceSerialNumber = new System.Windows.Forms.Label();
             this.tlpSerialB = new System.Windows.Forms.TableLayoutPanel();
             this.lblHwcText = new System.Windows.Forms.Label();
@@ -48,19 +51,17 @@ namespace Mac_EFI_Toolkit.WinForms
             this.label1 = new System.Windows.Forms.Label();
             this.tlpMeRegion = new System.Windows.Forms.TableLayoutPanel();
             this.cmdMePath = new System.Windows.Forms.Button();
+            this.swReplaceMeRegion = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblReplaceMeRegion = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tlpSvs = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxClearSvsStore = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.tlpLog = new System.Windows.Forms.TableLayoutPanel();
             this.pnlLog = new System.Windows.Forms.Panel();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
             this.tlpOutput = new System.Windows.Forms.TableLayoutPanel();
             this.lblOutputText = new System.Windows.Forms.Label();
             this.cmdSaveLog = new System.Windows.Forms.Button();
-            this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.cmdClose = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.cmdBuild = new System.Windows.Forms.Button();
@@ -68,11 +69,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdReset = new System.Windows.Forms.Button();
             this.cmdBuildsFolder = new System.Windows.Forms.Button();
             this.cmdShowLastBuild = new System.Windows.Forms.Button();
-            this.cbxClearVssStore = new Mac_EFI_Toolkit.UI.METCheckbox();
-            this.swReplaceFsysStore = new Mac_EFI_Toolkit.UI.METSwitch();
-            this.swReplaceSerialNumber = new Mac_EFI_Toolkit.UI.METSwitch();
-            this.swReplaceMeRegion = new Mac_EFI_Toolkit.UI.METSwitch();
-            this.cbxClearSvsStore = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.cmdClose = new System.Windows.Forms.Button();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
+            this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.pnlMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpOptions.SuspendLayout();
@@ -85,9 +85,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpLog.SuspendLayout();
             this.pnlLog.SuspendLayout();
             this.tlpOutput.SuspendLayout();
-            this.tlpTitle.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpButtons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
+            this.tlpTitle.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlMain
@@ -192,6 +192,24 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpVss.Size = new System.Drawing.Size(400, 34);
             this.tlpVss.TabIndex = 3;
             // 
+            // cbxClearVssStore
+            // 
+            this.cbxClearVssStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.cbxClearVssStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.cbxClearVssStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxClearVssStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxClearVssStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxClearVssStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxClearVssStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxClearVssStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxClearVssStore.ForeColor = System.Drawing.Color.White;
+            this.cbxClearVssStore.Location = new System.Drawing.Point(11, 6);
+            this.cbxClearVssStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
+            this.cbxClearVssStore.Name = "cbxClearVssStore";
+            this.cbxClearVssStore.Size = new System.Drawing.Size(169, 21);
+            this.cbxClearVssStore.TabIndex = 0;
+            this.cbxClearVssStore.Text = "Reset NVRAM (VSS)";
+            // 
             // tlpFsys
             // 
             this.tlpFsys.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -231,6 +249,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdFsysPath.UseVisualStyleBackColor = false;
             this.cmdFsysPath.Click += new System.EventHandler(this.cmdFsysPath_Click);
             // 
+            // swReplaceFsysStore
+            // 
+            this.swReplaceFsysStore.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.swReplaceFsysStore.BackColor = System.Drawing.Color.Black;
+            this.swReplaceFsysStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.swReplaceFsysStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.swReplaceFsysStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceFsysStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swReplaceFsysStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.swReplaceFsysStore.Location = new System.Drawing.Point(8, 8);
+            this.swReplaceFsysStore.Name = "swReplaceFsysStore";
+            this.swReplaceFsysStore.Size = new System.Drawing.Size(32, 18);
+            this.swReplaceFsysStore.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swReplaceFsysStore.TabIndex = 0;
+            this.swReplaceFsysStore.CheckedChanged += new System.EventHandler(this.swReplaceFsysStore_CheckedChanged);
+            // 
             // lblReplaceFsysStore
             // 
             this.lblReplaceFsysStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
@@ -261,6 +295,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpSerialA.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSerialA.Size = new System.Drawing.Size(400, 34);
             this.tlpSerialA.TabIndex = 1;
+            // 
+            // swReplaceSerialNumber
+            // 
+            this.swReplaceSerialNumber.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.swReplaceSerialNumber.BackColor = System.Drawing.Color.Black;
+            this.swReplaceSerialNumber.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.swReplaceSerialNumber.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.swReplaceSerialNumber.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceSerialNumber.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swReplaceSerialNumber.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.swReplaceSerialNumber.Location = new System.Drawing.Point(8, 8);
+            this.swReplaceSerialNumber.Name = "swReplaceSerialNumber";
+            this.swReplaceSerialNumber.Size = new System.Drawing.Size(32, 18);
+            this.swReplaceSerialNumber.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swReplaceSerialNumber.TabIndex = 0;
+            this.swReplaceSerialNumber.CheckedChanged += new System.EventHandler(this.swReplaceSerialNumber_CheckedChanged);
             // 
             // lblReplaceSerialNumber
             // 
@@ -411,6 +461,22 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdMePath.UseVisualStyleBackColor = false;
             this.cmdMePath.Click += new System.EventHandler(this.cmdMePath_Click);
             // 
+            // swReplaceMeRegion
+            // 
+            this.swReplaceMeRegion.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.swReplaceMeRegion.BackColor = System.Drawing.Color.Black;
+            this.swReplaceMeRegion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.swReplaceMeRegion.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.swReplaceMeRegion.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swReplaceMeRegion.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swReplaceMeRegion.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.swReplaceMeRegion.Location = new System.Drawing.Point(8, 8);
+            this.swReplaceMeRegion.Name = "swReplaceMeRegion";
+            this.swReplaceMeRegion.Size = new System.Drawing.Size(32, 18);
+            this.swReplaceMeRegion.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.swReplaceMeRegion.TabIndex = 0;
+            this.swReplaceMeRegion.CheckedChanged += new System.EventHandler(this.swReplaceMeRegion_CheckedChanged);
+            // 
             // lblReplaceMeRegion
             // 
             this.lblReplaceMeRegion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
@@ -456,6 +522,24 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpSvs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSvs.Size = new System.Drawing.Size(400, 34);
             this.tlpSvs.TabIndex = 4;
+            // 
+            // cbxClearSvsStore
+            // 
+            this.cbxClearSvsStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.cbxClearSvsStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
+            this.cbxClearSvsStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.cbxClearSvsStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxClearSvsStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.cbxClearSvsStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxClearSvsStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cbxClearSvsStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxClearSvsStore.ForeColor = System.Drawing.Color.White;
+            this.cbxClearSvsStore.Location = new System.Drawing.Point(11, 6);
+            this.cbxClearSvsStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
+            this.cbxClearSvsStore.Name = "cbxClearSvsStore";
+            this.cbxClearSvsStore.Size = new System.Drawing.Size(313, 21);
+            this.cbxClearSvsStore.TabIndex = 1;
+            this.cbxClearSvsStore.Text = "Reset NVRAM (SVS) (Not Recommended)";
             // 
             // tlpLog
             // 
@@ -557,79 +641,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdSaveLog.Text = "Save Log";
             this.cmdSaveLog.UseVisualStyleBackColor = false;
             this.cmdSaveLog.Click += new System.EventHandler(this.cmdSaveLog_Click);
-            // 
-            // tlpTitle
-            // 
-            this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpTitle.ColumnCount = 3;
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
-            this.tlpTitle.Controls.Add(this.lblTitle, 1, 0);
-            this.tlpTitle.Controls.Add(this.cmdClose, 2, 0);
-            this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tlpTitle.Location = new System.Drawing.Point(1, 1);
-            this.tlpTitle.Margin = new System.Windows.Forms.Padding(2);
-            this.tlpTitle.Name = "tlpTitle";
-            this.tlpTitle.RowCount = 1;
-            this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.Size = new System.Drawing.Size(838, 40);
-            this.tlpTitle.TabIndex = 99;
-            // 
-            // pbxLogo
-            // 
-            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
-            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pbxLogo.Location = new System.Drawing.Point(8, 8);
-            this.pbxLogo.Margin = new System.Windows.Forms.Padding(2);
-            this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(24, 24);
-            this.pbxLogo.TabIndex = 100;
-            this.pbxLogo.TabStop = false;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(40, 0);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(758, 40);
-            this.lblTitle.TabIndex = 99;
-            this.lblTitle.Text = "Firmware Patcher";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // cmdClose
-            // 
-            this.cmdClose.BackColor = System.Drawing.Color.Transparent;
-            this.cmdClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.cmdClose.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdClose.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.cmdClose.FlatAppearance.BorderSize = 0;
-            this.cmdClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cmdClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdClose.ForeColor = System.Drawing.Color.White;
-            this.cmdClose.Location = new System.Drawing.Point(798, 0);
-            this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdClose.MaximumSize = new System.Drawing.Size(40, 40);
-            this.cmdClose.MinimumSize = new System.Drawing.Size(40, 40);
-            this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 2, 0, 1);
-            this.cmdClose.Size = new System.Drawing.Size(40, 40);
-            this.cmdClose.TabIndex = 99;
-            this.cmdClose.TabStop = false;
-            this.cmdClose.Text = "X";
-            this.cmdClose.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.cmdClose.UseVisualStyleBackColor = false;
-            this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
             // pnlSeperator
             // 
@@ -766,89 +777,78 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdShowLastBuild.UseVisualStyleBackColor = false;
             this.cmdShowLastBuild.Click += new System.EventHandler(this.cmdShowLastBuild_Click);
             // 
-            // cbxClearVssStore
+            // cmdClose
             // 
-            this.cbxClearVssStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxClearVssStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.cbxClearVssStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxClearVssStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxClearVssStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxClearVssStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxClearVssStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxClearVssStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxClearVssStore.ForeColor = System.Drawing.Color.White;
-            this.cbxClearVssStore.Location = new System.Drawing.Point(11, 6);
-            this.cbxClearVssStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.cbxClearVssStore.Name = "cbxClearVssStore";
-            this.cbxClearVssStore.Size = new System.Drawing.Size(169, 21);
-            this.cbxClearVssStore.TabIndex = 0;
-            this.cbxClearVssStore.Text = "Reset NVRAM (VSS)";
+            this.cmdClose.BackColor = System.Drawing.Color.Transparent;
+            this.cmdClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.cmdClose.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdClose.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdClose.FlatAppearance.BorderSize = 0;
+            this.cmdClose.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cmdClose.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdClose.ForeColor = System.Drawing.Color.White;
+            this.cmdClose.Location = new System.Drawing.Point(798, 0);
+            this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdClose.MaximumSize = new System.Drawing.Size(40, 40);
+            this.cmdClose.MinimumSize = new System.Drawing.Size(40, 40);
+            this.cmdClose.Name = "cmdClose";
+            this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 2, 0, 1);
+            this.cmdClose.Size = new System.Drawing.Size(40, 40);
+            this.cmdClose.TabIndex = 99;
+            this.cmdClose.TabStop = false;
+            this.cmdClose.Text = "X";
+            this.cmdClose.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.cmdClose.UseVisualStyleBackColor = false;
+            this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // swReplaceFsysStore
+            // lblTitle
             // 
-            this.swReplaceFsysStore.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.swReplaceFsysStore.BackColor = System.Drawing.Color.Black;
-            this.swReplaceFsysStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.swReplaceFsysStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swReplaceFsysStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceFsysStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.swReplaceFsysStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swReplaceFsysStore.Location = new System.Drawing.Point(8, 8);
-            this.swReplaceFsysStore.Name = "swReplaceFsysStore";
-            this.swReplaceFsysStore.Size = new System.Drawing.Size(32, 18);
-            this.swReplaceFsysStore.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.swReplaceFsysStore.TabIndex = 0;
-            this.swReplaceFsysStore.CheckedChanged += new System.EventHandler(this.swReplaceFsysStore_CheckedChanged);
+            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(40, 0);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(758, 40);
+            this.lblTitle.TabIndex = 99;
+            this.lblTitle.Text = "Firmware Patcher";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // swReplaceSerialNumber
+            // pbxLogo
             // 
-            this.swReplaceSerialNumber.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.swReplaceSerialNumber.BackColor = System.Drawing.Color.Black;
-            this.swReplaceSerialNumber.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.swReplaceSerialNumber.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swReplaceSerialNumber.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceSerialNumber.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.swReplaceSerialNumber.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swReplaceSerialNumber.Location = new System.Drawing.Point(8, 8);
-            this.swReplaceSerialNumber.Name = "swReplaceSerialNumber";
-            this.swReplaceSerialNumber.Size = new System.Drawing.Size(32, 18);
-            this.swReplaceSerialNumber.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.swReplaceSerialNumber.TabIndex = 0;
-            this.swReplaceSerialNumber.CheckedChanged += new System.EventHandler(this.swReplaceSerialNumber_CheckedChanged);
+            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.logo24px;
+            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pbxLogo.Location = new System.Drawing.Point(8, 8);
+            this.pbxLogo.Margin = new System.Windows.Forms.Padding(2);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(24, 24);
+            this.pbxLogo.TabIndex = 100;
+            this.pbxLogo.TabStop = false;
             // 
-            // swReplaceMeRegion
+            // tlpTitle
             // 
-            this.swReplaceMeRegion.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.swReplaceMeRegion.BackColor = System.Drawing.Color.Black;
-            this.swReplaceMeRegion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.swReplaceMeRegion.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swReplaceMeRegion.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swReplaceMeRegion.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.swReplaceMeRegion.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swReplaceMeRegion.Location = new System.Drawing.Point(8, 8);
-            this.swReplaceMeRegion.Name = "swReplaceMeRegion";
-            this.swReplaceMeRegion.Size = new System.Drawing.Size(32, 18);
-            this.swReplaceMeRegion.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.swReplaceMeRegion.TabIndex = 0;
-            this.swReplaceMeRegion.CheckedChanged += new System.EventHandler(this.swReplaceMeRegion_CheckedChanged);
-            // 
-            // cbxClearSvsStore
-            // 
-            this.cbxClearSvsStore.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.cbxClearSvsStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(65)))), ((int)(((byte)(65)))));
-            this.cbxClearSvsStore.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.cbxClearSvsStore.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxClearSvsStore.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.cbxClearSvsStore.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxClearSvsStore.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.cbxClearSvsStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxClearSvsStore.ForeColor = System.Drawing.Color.White;
-            this.cbxClearSvsStore.Location = new System.Drawing.Point(11, 6);
-            this.cbxClearSvsStore.Margin = new System.Windows.Forms.Padding(11, 0, 0, 0);
-            this.cbxClearSvsStore.Name = "cbxClearSvsStore";
-            this.cbxClearSvsStore.Size = new System.Drawing.Size(313, 21);
-            this.cbxClearSvsStore.TabIndex = 1;
-            this.cbxClearSvsStore.Text = "Reset NVRAM (SVS) (Not Recommended)";
+            this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
+            this.tlpTitle.ColumnCount = 3;
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
+            this.tlpTitle.Controls.Add(this.lblTitle, 1, 0);
+            this.tlpTitle.Controls.Add(this.cmdClose, 2, 0);
+            this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlpTitle.Location = new System.Drawing.Point(1, 1);
+            this.tlpTitle.Margin = new System.Windows.Forms.Padding(2);
+            this.tlpTitle.Name = "tlpTitle";
+            this.tlpTitle.RowCount = 1;
+            this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTitle.Size = new System.Drawing.Size(838, 40);
+            this.tlpTitle.TabIndex = 99;
             // 
             // patcherWindow
             // 
@@ -886,9 +886,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpLog.ResumeLayout(false);
             this.pnlLog.ResumeLayout(false);
             this.tlpOutput.ResumeLayout(false);
-            this.tlpTitle.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpButtons.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
+            this.tlpTitle.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -896,9 +896,6 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         internal System.Windows.Forms.Panel pnlMain;
-        internal System.Windows.Forms.TableLayoutPanel tlpTitle;
-        internal System.Windows.Forms.Label lblTitle;
-        internal System.Windows.Forms.Button cmdClose;
         private System.Windows.Forms.Panel pnlSeperator;
         private System.Windows.Forms.TextBox tbxHwc;
         private UI.METCheckbox cbxClearVssStore;
@@ -924,7 +921,6 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Button cmdReset;
         private System.Windows.Forms.TableLayoutPanel tlpMeRegion;
         private System.Windows.Forms.Button cmdMePath;
-        private System.Windows.Forms.PictureBox pbxLogo;
         private UI.METSwitch swReplaceMeRegion;
         private System.Windows.Forms.Label lblReplaceMeRegion;
         private System.Windows.Forms.Label lblReplaceSerialNumber;
@@ -938,5 +934,9 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Button cmdShowLastBuild;
         private System.Windows.Forms.TableLayoutPanel tlpSvs;
         private UI.METCheckbox cbxClearSvsStore;
+        internal System.Windows.Forms.Button cmdClose;
+        internal System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.PictureBox pbxLogo;
+        internal System.Windows.Forms.TableLayoutPanel tlpTitle;
     }
 }

@@ -1405,7 +1405,7 @@ namespace Mac_EFI_Toolkit
             lblFileCreatedDate.Text = AppleEFI.FileInfoData.CreationTime;
 
         private void UpdateFileModifiedDateControls() =>
-            lblFileModifiedData.Text = AppleEFI.FileInfoData.LastWriteTime;
+            lblFileModifiedDate.Text = AppleEFI.FileInfoData.LastWriteTime;
 
         private void UpdateModelControls()
         {
@@ -1420,7 +1420,7 @@ namespace Mac_EFI_Toolkit
 
                 lblModel.Text =
                     $"{model} ({identifier})"
-                    ?? MainWinStrings.MW_NA;
+                    ?? AppStrings.AS_NA;
 
                 modelToolStripMenuItem.Enabled = true;
 
@@ -1430,7 +1430,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            lblModel.Text = MainWinStrings.MW_NA;
+            lblModel.Text = AppStrings.AS_NA;
             modelToolStripMenuItem.Enabled = false;
             lblModel.Cursor = Cursors.Default;
         }
@@ -1448,7 +1448,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            lblConfigCode.Text = MainWinStrings.MW_CONTACT_SERVER;
+            lblConfigCode.Text = AppStrings.AS_CONTACT_SERVER;
             lblConfigCode.ForeColor = Colours.INFO_BOX;
 
             AppendConfigCodeAsync(AppleEFI.FsysStoreData.HWC);
@@ -1473,7 +1473,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            lblConfigCode.Text = MainWinStrings.MW_NA;
+            lblConfigCode.Text = AppStrings.AS_NA;
             lblConfigCode.ForeColor = Colours.CONTROL_DISABLED_TEXT;
             lblConfigCode.Cursor = Cursors.Default;
 
@@ -1504,7 +1504,7 @@ namespace Mac_EFI_Toolkit
             }
 
             fsysCRC32ToolStripMenuItem.Enabled = false;
-            lblFsysCrc32.Text = MainWinStrings.MW_NA;
+            lblFsysCrc32.Text = AppStrings.AS_NA;
             lblFsysCrc32.Cursor = Cursors.Default;
         }
 
@@ -1515,7 +1515,7 @@ namespace Mac_EFI_Toolkit
 
             lblSerialNumber.Text =
                 serialNumber
-                ?? MainWinStrings.MW_NA;
+                ?? AppStrings.AS_NA;
 
             if (!string.IsNullOrEmpty(serialNumber))
             {
@@ -1542,7 +1542,7 @@ namespace Mac_EFI_Toolkit
 
             lblHwc.Text =
                  hwc
-                 ?? MainWinStrings.MW_NA;
+                 ?? AppStrings.AS_NA;
 
             if (!string.IsNullOrEmpty(hwc))
             {
@@ -1564,7 +1564,7 @@ namespace Mac_EFI_Toolkit
 
             lblOrderNumber.Text =
                 orderNumber
-                ?? MainWinStrings.MW_NA;
+                ?? AppStrings.AS_NA;
 
             if (!string.IsNullOrEmpty(orderNumber))
             {
@@ -1586,7 +1586,7 @@ namespace Mac_EFI_Toolkit
 
             lblEfiVersion.Text =
                 efiVersion
-                ?? MainWinStrings.MW_NA;
+                ?? AppStrings.AS_NA;
 
             if (!string.IsNullOrEmpty(efiVersion))
             {
@@ -1643,7 +1643,7 @@ namespace Mac_EFI_Toolkit
 
             lblBoardId.Text =
                 boardId
-                ?? MainWinStrings.MW_NA;
+                ?? AppStrings.AS_NA;
 
             if (!string.IsNullOrEmpty(boardId))
             {
@@ -1690,7 +1690,7 @@ namespace Mac_EFI_Toolkit
 
             lblMeVersion.Text =
                 meVersion
-                ?? MainWinStrings.MW_NA;
+                ?? AppStrings.AS_NA;
 
             if (!string.IsNullOrEmpty(meVersion))
             {
@@ -1973,7 +1973,7 @@ namespace Mac_EFI_Toolkit
         {
             foreach (Control control in tableLayoutPanel.Controls)
             {
-                if (control is Label label && label.Text == MainWinStrings.MW_NA)
+                if (control is Label label && label.Text == AppStrings.AS_NA)
                 {
                     label.ForeColor = color;
                 }
@@ -2139,7 +2139,7 @@ namespace Mac_EFI_Toolkit
                 lblFilesize,
                 lblFileCrc32,
                 lblFileCreatedDate,
-                lblFileModifiedData,
+                lblFileModifiedDate,
                 lblModel,
                 lblConfigCode,
                 lblSerialNumber,
@@ -2266,5 +2266,15 @@ namespace Mac_EFI_Toolkit
             $"Size: 0x{IntelFD.BIOS_REGION_SIZE:X}h");
         #endregion
 
+        private void cmdT2Rom_Click(object sender, EventArgs e)
+        {
+            SetHalfOpacity();
+
+            using (Form formWindow = new t2Window())
+            {
+                formWindow.FormClosed += ChildWindowClosed;
+                formWindow.ShowDialog();
+            }
+        }
     }
 }

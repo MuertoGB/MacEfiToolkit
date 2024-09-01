@@ -6,6 +6,7 @@
 
 using Mac_EFI_Toolkit.T2.Structs;
 using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Utils.Structs;
 using System.Text;
 
 namespace Mac_EFI_Toolkit.T2
@@ -14,7 +15,12 @@ namespace Mac_EFI_Toolkit.T2
     {
 
         #region Internal Members
+        internal static string LoadedBinaryPath = null;
+        internal static byte[] LoadedBinaryBytes = null;
+
         internal static string iBootVersion = null;
+        internal static string ConfigCode = null;
+        internal static Binary FileInfoData;
         internal static SCfgData ScfgSectionData;
         #endregion
 
@@ -25,15 +31,30 @@ namespace Mac_EFI_Toolkit.T2
         #endregion
 
         #region Parse Fimware
-        internal static void LoadFirmwareBaseData(byte[] sourceBytes)
+        internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
+            // Parse file info
+            FileInfoData =
+                FileUtils.GetBinaryFileInfo
+                (fileName);
+
+            // Parse iBoot version
             iBootVersion = GetIbootVersion(sourceBytes);
+
+            // Parse Scfg Store data
             ScfgSectionData = GetSCfgData(sourceBytes);
+
+            // Fetch the Config Code
+            ConfigCode = ScfgSectionData.HWC != null
+                ? MacUtils.GetDeviceConfigCodeLocalLocal(ScfgSectionData.HWC)
+                : null;
         }
 
         internal static void ResetFirmwareBaseData()
         {
+            FileInfoData = default;
             iBootVersion = null;
+            ConfigCode = null;
             ScfgSectionData = default;
         }
 
@@ -87,6 +108,7 @@ namespace Mac_EFI_Toolkit.T2
         internal static SCfgData GetSCfgData(byte[] source)
         {
             string serial = string.Empty;
+            string hwc = string.Empty;
             string son = string.Empty;
             string regno = string.Empty;
 
@@ -132,6 +154,7 @@ namespace Mac_EFI_Toolkit.T2
                 if (serialBytes?.Length == _serialLength)
                 {
                     serial = _utf8.GetString(serialBytes);
+                    hwc = serial.Length >= 4 ? serial.Substring(serial.Length - 4, 4) : null;
                 }
                 else
                 {
@@ -191,6 +214,7 @@ namespace Mac_EFI_Toolkit.T2
                 StoreSize = dataSize,
                 StoreBytes = scfgBytes,
                 SerialText = serial,
+                HWC = hwc,
                 SonText = son,
                 MdlC = null,
                 RegNumText = regno
@@ -205,6 +229,7 @@ namespace Mac_EFI_Toolkit.T2
                 StoreSize = 0,
                 StoreBytes = null,
                 SerialText = null,
+                HWC = null,
                 SonText = null,
                 MdlC = null,
                 RegNumText = null

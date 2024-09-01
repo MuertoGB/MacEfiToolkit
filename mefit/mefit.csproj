@@ -71,6 +71,7 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml.Linq" />
@@ -185,6 +186,12 @@
     <Compile Include="WinForms\settingsWindow.Designer.cs">
       <DependentUpon>settingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinForms\t2Window.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\t2Window.Designer.cs">
+      <DependentUpon>t2Window.cs</DependentUpon>
+    </Compile>
     <Compile Include="WinForms\termsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -219,6 +226,9 @@
     </Compile>
     <EmbeddedResource Include="WinForms\settingsWindow.resx">
       <DependentUpon>settingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\t2Window.resx">
+      <DependentUpon>t2Window.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\termsWindow.resx">
       <DependentUpon>termsWindow.cs</DependentUpon>

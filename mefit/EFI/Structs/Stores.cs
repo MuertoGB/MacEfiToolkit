@@ -1,4 +1,10 @@
-﻿using Mac_EFI_Toolkit.EFI.Enums;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// Stores.cs - Handles parsing of firmware data
+// Released under the GNU GLP v3.0
+
+using Mac_EFI_Toolkit.EFI.Enums;
 using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.EFI.Structs

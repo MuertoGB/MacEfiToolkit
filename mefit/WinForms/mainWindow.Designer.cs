@@ -45,7 +45,7 @@ namespace Mac_EFI_Toolkit
             this.lblConfigCodeText = new System.Windows.Forms.Label();
             this.lblModel = new System.Windows.Forms.Label();
             this.lblModelText = new System.Windows.Forms.Label();
-            this.lblFileModifiedData = new System.Windows.Forms.Label();
+            this.lblFileModifiedDate = new System.Windows.Forms.Label();
             this.lblNvramText = new System.Windows.Forms.Label();
             this.lblFileModifiedDataText = new System.Windows.Forms.Label();
             this.lblEfiVersionText = new System.Windows.Forms.Label();
@@ -373,7 +373,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFirmware.Controls.Add(this.lblConfigCodeText, 4, 4);
             this.tlpFirmware.Controls.Add(this.lblModel, 2, 4);
             this.tlpFirmware.Controls.Add(this.lblModelText, 0, 4);
-            this.tlpFirmware.Controls.Add(this.lblFileModifiedData, 6, 2);
+            this.tlpFirmware.Controls.Add(this.lblFileModifiedDate, 6, 2);
             this.tlpFirmware.Controls.Add(this.lblNvramText, 4, 10);
             this.tlpFirmware.Controls.Add(this.lblFileModifiedDataText, 4, 2);
             this.tlpFirmware.Controls.Add(this.lblEfiVersionText, 0, 10);
@@ -472,23 +472,23 @@ namespace Mac_EFI_Toolkit
             this.lblModelText.Text = "Model:";
             this.lblModelText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblFileModifiedData
+            // lblFileModifiedDate
             // 
-            this.lblFileModifiedData.AutoEllipsis = true;
-            this.lblFileModifiedData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.lblFileModifiedData.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblFileModifiedData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFileModifiedData.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFileModifiedData.ForeColor = System.Drawing.Color.White;
-            this.lblFileModifiedData.Location = new System.Drawing.Point(512, 37);
-            this.lblFileModifiedData.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFileModifiedData.Name = "lblFileModifiedData";
-            this.lblFileModifiedData.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFileModifiedData.Size = new System.Drawing.Size(249, 36);
-            this.lblFileModifiedData.TabIndex = 99;
-            this.lblFileModifiedData.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblFileModifiedData.UseMnemonic = false;
-            this.lblFileModifiedData.Click += new System.EventHandler(this.lblFileModifiedDate_Click);
+            this.lblFileModifiedDate.AutoEllipsis = true;
+            this.lblFileModifiedDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.lblFileModifiedDate.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblFileModifiedDate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFileModifiedDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFileModifiedDate.ForeColor = System.Drawing.Color.White;
+            this.lblFileModifiedDate.Location = new System.Drawing.Point(512, 37);
+            this.lblFileModifiedDate.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFileModifiedDate.Name = "lblFileModifiedDate";
+            this.lblFileModifiedDate.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblFileModifiedDate.Size = new System.Drawing.Size(249, 36);
+            this.lblFileModifiedDate.TabIndex = 99;
+            this.lblFileModifiedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFileModifiedDate.UseMnemonic = false;
+            this.lblFileModifiedDate.Click += new System.EventHandler(this.lblFileModifiedDate_Click);
             // 
             // lblNvramText
             // 
@@ -1524,6 +1524,7 @@ namespace Mac_EFI_Toolkit
             this.cmdT2Rom.TabIndex = 11;
             this.cmdT2Rom.Text = "T2 ROM";
             this.cmdT2Rom.UseVisualStyleBackColor = false;
+            this.cmdT2Rom.Click += new System.EventHandler(this.cmdT2Rom_Click);
             // 
             // panel1
             // 
@@ -2111,7 +2112,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblHwc;
         private System.Windows.Forms.Label lblHwcText;
         private System.Windows.Forms.Label lblFileCreatedDateText;
-        private System.Windows.Forms.Label lblFileModifiedData;
+        private System.Windows.Forms.Label lblFileModifiedDate;
         private System.Windows.Forms.Label lblFileModifiedDataText;
         private System.Windows.Forms.Label lblFileCreatedDate;
         private System.Windows.Forms.Label lblOrderNumber;

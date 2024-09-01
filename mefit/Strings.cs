@@ -1,7 +1,4 @@
-﻿using Mac_EFI_Toolkit.Utils;
-using System.Drawing;
-
-namespace Mac_EFI_Toolkit
+﻿namespace Mac_EFI_Toolkit
 {
     internal class AppStrings
     {
@@ -19,7 +16,10 @@ namespace Mac_EFI_Toolkit
             "Unknown";
 
         internal const string AS_NA =
-            "NA";
+            "N/A";
+
+        internal const string AS_CONTACT_SERVER =
+            "Contacting Apple server...";
         #endregion
     }
 
@@ -121,9 +121,6 @@ namespace Mac_EFI_Toolkit
         internal const string MW_CRC32 =
             "CRC32";
 
-        internal const string MW_NA =
-            "N/A";
-
         internal const string MW_CRC_FIXED =
             "CRC_FIXED";
 
@@ -171,9 +168,6 @@ namespace Mac_EFI_Toolkit
 
         internal const string MW_LOG_BS_BUFFER_MISMATCH =
             "Patched backup store does not match buffer";
-
-        internal const string MW_CONTACT_SERVER =
-            "Contacting Apple server...";
         #endregion
 
     }

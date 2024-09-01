@@ -52,7 +52,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            MessageBox.Show(         
+            MessageBox.Show(
                 "The application log has not been created.",
                 "Error",
                 MessageBoxButtons.OK,
