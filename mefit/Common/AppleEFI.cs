@@ -467,6 +467,7 @@ namespace Mac_EFI_Toolkit.Common
 
             return new NvramStore
             {
+                StoreType = storeType,
                 PrimaryStoreSize = primaryStoreSize,
                 PrimaryStoreBase = primaryStoreBase,
                 PrimaryStoreBytes = primaryStoreData,

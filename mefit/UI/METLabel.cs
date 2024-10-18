@@ -2,7 +2,7 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // UI Components
-// METLabel.cs - Because fuck Auto Ellipsis.
+// METLabel.cs
 // Released under the GNU GLP v3.0
 
 using System;
@@ -11,21 +11,31 @@ using System.Windows.Forms;
 
 public class METLabel : Label
 {
+
+    #region Private Members
     private ToolTip toolTip;
+    private TextFormatFlags flags =
+            TextFormatFlags.Left |
+            TextFormatFlags.VerticalCenter |
+            TextFormatFlags.EndEllipsis;
+    #endregion
 
-    public METLabel()
+    #region Constructor
+    public METLabel() =>
+        toolTip = new ToolTip { AutoPopDelay = 15000 };
+    #endregion
+
+    #region Paint Methods
+    protected override void OnPaint(PaintEventArgs e) =>
+        DrawText(e.Graphics, flags, ForeColor);
+
+    protected virtual void OnPaintForeground(PaintEventArgs e) =>
+        DrawText(e.Graphics, flags, ForeColor);
+    #endregion
+
+    #region Custom Methods
+    private void DrawText(Graphics graphics, TextFormatFlags flags, Color textColor)
     {
-        toolTip =
-            new ToolTip { AutoPopDelay = 10000 };
-    }
-
-    protected override void OnPaint(PaintEventArgs e)
-    {
-        TextFormatFlags flags =
-            TextFormatFlags.Left
-            | TextFormatFlags.VerticalCenter
-            | TextFormatFlags.EndEllipsis;
-
         Rectangle textRect =
             new Rectangle(
                 ClientRectangle.Left + Padding.Left,
@@ -33,12 +43,17 @@ public class METLabel : Label
                 ClientRectangle.Width - Padding.Horizontal,
                 ClientRectangle.Height - Padding.Vertical);
 
+        // Override text color when the control is !enabled.
+        textColor = !Enabled
+            ? Color.FromArgb(14, 14, 14)
+            : ForeColor;
+
         TextRenderer.DrawText(
-            e.Graphics,
+            graphics,
             Text,
             Font,
             textRect,
-            ForeColor,
+            textColor,
             flags);
     }
 
@@ -46,18 +61,13 @@ public class METLabel : Label
     {
         base.OnMouseEnter(e);
 
-        if (IsTextEllipsized()
-            && Text != toolTip.GetToolTip(this))
+        if (IsTextEllipsized() && Text != toolTip.GetToolTip(this))
         {
-            toolTip.SetToolTip(
-                this,
-                Text);
+            toolTip.SetToolTip(this, Text);
         }
         else if (!IsTextEllipsized())
         {
-            toolTip.SetToolTip(
-                this,
-                string.Empty);
+            toolTip.SetToolTip(this, string.Empty);
         }
     }
 
@@ -65,13 +75,24 @@ public class METLabel : Label
     {
         using (Graphics g = CreateGraphics())
         {
-            Size textSize =
-                TextRenderer.MeasureText(
-                    Text,
-                    Font);
-
+            Size textSize = TextRenderer.MeasureText(Text, Font);
             return textSize.Width > ClientSize.Width;
         }
     }
+    #endregion
+
+    #region Overriden Methods
+    protected override void OnEnabledChanged(EventArgs e)
+    {
+        base.OnEnabledChanged(e);
+        Invalidate();
+    }
+
+    protected override void OnParentEnabledChanged(EventArgs e)
+    {
+        base.OnParentEnabledChanged(e);
+        Invalidate();
+    }
+    #endregion
 
 }
