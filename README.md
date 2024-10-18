@@ -29,6 +29,21 @@ In terms of editing, the application allows users to replace the System Serial N
 
 I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
 
+#### One Year Since the Last Release: What’s Going On? (18.10.2024)
+
+It’s been just over a year since my last release, so you might be wondering: why only a small bugfix this time?
+
+Some time ago, I began working on version 1.2.0, which was set to introduce new features, including:
+
+- A new startup window
+- Intel SOCROM support
+- Multi-window support for having multiple firmwares open simultaneously
+- The removal of the editor window, with all editing features integrated into the EFI window (once the 'main window')
+
+However, progress on this update has been slower and more challenging than expected. As a result, I've made the decision to temporarily pull the development branch. In the meantime, I’m releasing some bug fixes to improve the current version, which were slated for version 1.2.0.
+
+Thank you for your understanding.
+
 ## Features
 
 **General:**
