@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit
     internal struct METVersion
     {
         internal static readonly string SDK = "23.01";
-        internal static readonly string Build = "231010.2332";
+        internal static readonly string Build = "241018.1450";
         internal static readonly string Channel = "Stable";
     }
 

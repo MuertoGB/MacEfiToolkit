@@ -1,7 +1,7 @@
 <h1 align="center">
 <img width="200" src="files/images/img128px.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit V1.1.4
+Mac EFI Toolkit V1.1.5
 </h1>
 
 <h4 align="center">A tool for analysis of Mac BIOS/UEFI, with limited editing capabilities.</h4>
@@ -28,6 +28,21 @@ In terms of editing, the application allows users to replace the System Serial N
 <img width="550" src="files/images/met.png" alt="MET">
 
 I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
+
+#### One Year Since the Last Release: What’s Going On? (18.10.2024)
+
+It’s been just over a year since my last release, so you might be wondering: why only a small bugfix this time?
+
+Some time ago, I began working on version 1.2.0, which was set to introduce new features, including:
+
+- A new startup window
+- Intel SOCROM support
+- Multi-window support for having multiple firmwares open simultaneously
+- The removal of the editor window, with all editing features integrated into the EFI window (once the 'main window')
+
+However, progress on this update has been slower and more challenging than expected. As a result, I've made the decision to temporarily pull the development branch. In the meantime, I’m releasing some bug fixes to improve the current version, which were slated for version 1.2.0.
+
+Thank you for your understanding.
 
 ## Features
 
@@ -83,8 +98,8 @@ I continue to perform extensive testing on hundreds of firmwares to ensure compa
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.1.4](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 11th October, 2023 | Yes | Stable |
-|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/113)| 28th September, 2023 | No | Stable |
+|[1.1.5](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 10th October, 2024 | Yes | Stable |
+|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/113)| 11th October, 2023 | No | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 

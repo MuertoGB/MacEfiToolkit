@@ -8,8 +8,16 @@
   <a href="#version-111">V1.1.1</a> •
   <a href="#version-112">V1.1.2</a> •
   <a href="#version-113">V1.1.3</a> •
-  <a href="#version-114">V1.1.4</a>
+  <a href="#version-114">V1.1.4</a> •
+  <a href="#version-115">V1.1.5</a>
 </p>
+
+## Version 1.1.5
+
+#### Bugs:
+- Fixed a bug introduced in the previous version where the NVRAM store type was not set when parsing store data, this could lead to a 'no post' scenario.
+- Mitigated rare occurrences of malformed Intel ME version numbers.
+- Fixed a UI bug related to the METLabel, where the ForeColor property could be overridden even when the control was disabled.
 
 ## Version 1.1.4
 
