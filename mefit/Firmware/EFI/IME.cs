@@ -8,7 +8,7 @@ using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Utils;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.EFI
+namespace Mac_EFI_Toolkit.Firmware.EFI
 {
 
     #region Structs
@@ -51,7 +51,7 @@ namespace Mac_EFI_Toolkit.EFI
     }
     #endregion
 
-    class IntelME
+    class IME
     {
         private static string _default = "0.0.0.0";
 
@@ -67,8 +67,8 @@ namespace Mac_EFI_Toolkit.EFI
                     headerPos = BinaryUtils.GetBaseAddress(
                         sourceBytes,
                         FPT_SIGNATURE,
-                        (int)IntelFD.ME_REGION_BASE,
-                        (int)IntelFD.ME_REGION_SIZE);
+                        (int)IFD.ME_REGION_BASE,
+                        (int)IFD.ME_REGION_SIZE);
                     dataLength = 0x20;
                     break;
 
@@ -76,8 +76,8 @@ namespace Mac_EFI_Toolkit.EFI
                     headerPos = BinaryUtils.GetBaseAddress(
                         sourceBytes,
                         MN2_SIGNATURE,
-                        (int)IntelFD.ME_REGION_BASE,
-                        (int)IntelFD.ME_REGION_SIZE);
+                        (int)IFD.ME_REGION_BASE,
+                        (int)IFD.ME_REGION_SIZE);
                     dataLength = 0x10;
                     break;
             }

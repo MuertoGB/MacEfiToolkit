@@ -4,12 +4,11 @@
 // T2ROM.cs - Handles parsing of T2 SOCROM data
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.T2.Structs;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.Utils.Structs;
 using System.Text;
 
-namespace Mac_EFI_Toolkit.T2
+namespace Mac_EFI_Toolkit.Firmware.T2
 {
     internal class T2ROM
     {
@@ -17,6 +16,7 @@ namespace Mac_EFI_Toolkit.T2
         #region Internal Members
         internal static string LoadedBinaryPath = null;
         internal static byte[] LoadedBinaryBytes = null;
+        internal static bool FirmwareLoaded = false;
 
         internal static string iBootVersion = null;
         internal static string ConfigCode = null;
@@ -52,6 +52,9 @@ namespace Mac_EFI_Toolkit.T2
 
         internal static void ResetFirmwareBaseData()
         {
+            LoadedBinaryPath = null;
+            LoadedBinaryBytes = null;
+            FirmwareLoaded = false;
             FileInfoData = default;
             iBootVersion = null;
             ConfigCode = null;
@@ -107,11 +110,6 @@ namespace Mac_EFI_Toolkit.T2
         #region SCfg
         internal static SCfgData GetSCfgData(byte[] source)
         {
-            string serial = string.Empty;
-            string hwc = string.Empty;
-            string son = string.Empty;
-            string regno = string.Empty;
-
             int scfgBase =
                 BinaryUtils.GetBaseAddress(
                     source,
@@ -120,99 +118,51 @@ namespace Mac_EFI_Toolkit.T2
             if (scfgBase == -1)
                 return DefaultScfgData();
 
-            // Get byte containing scfg store length
-            byte[] lByte =
+            byte dataSize =
                 BinaryUtils.GetBytesBaseLength(
                     source,
-                    scfgBase + ROMSigs.SCFG_HEADER_SIG.Length,
-                    1);
-
-            // Convert data length to unsigned int8
-            byte dataSize = (byte)lByte[0];
+                    scfgBase + ROMSigs.SCFG_HEADER_SIG.Length, 1)[0];
 
             if (dataSize == 0)
                 return DefaultScfgData();
 
-            // Extract Scfg store into buffer
             byte[] scfgBytes =
                 BinaryUtils.GetBytesBaseLength(
                     source,
                     scfgBase,
                     dataSize);
 
-            // Get the serial number
-            int serialBase = BinaryUtils.GetBaseAddress(scfgBytes, ROMSigs.SCFG_SSN_SIG);
+            if (scfgBytes == null)
+                return DefaultScfgData();
 
-            if (serialBase == -1)
-            {
-                serial = null;
-            }
-            else
-            {
-                byte[] serialBytes = BinaryUtils.GetBytesBaseLength(scfgBytes, serialBase + ROMSigs.SCFG_SSN_SIG.Length, _serialLength);
+            string crc =
+                $"{FileUtils.GetCrc32Digest(scfgBytes):X8}";
 
-                if (serialBytes?.Length == _serialLength)
-                {
-                    serial = _utf8.GetString(serialBytes);
-                    hwc = serial.Length >= 4 ? serial.Substring(serial.Length - 4, 4) : null;
-                }
-                else
-                {
-                    serial = null;
-                }
-            }
+            string serial =
+                GetStringFromSig(
+                    scfgBytes,
+                    ROMSigs.SCFG_SSN_SIG,
+                    _serialLength,
+                    out string hwc);
 
-            // Get the system order number
-            int sonBase = BinaryUtils.GetBaseAddress(scfgBytes, ROMSigs.SCFG_SON_SIG);
+            string son =
+                GetStringFromSigWithLimit(
+                    scfgBytes,
+                    ROMSigs.SCFG_SON_SIG,
+                    _limitChars);
 
-            if (sonBase == -1)
-            {
-                son = null;
-            }
-            else
-            {
-                sonBase += ROMSigs.SCFG_SON_SIG.Length;
-                int sonLimit = BinaryUtils.GetBaseAddress(scfgBytes, _limitChars, sonBase);
-
-                if (sonLimit == -1)
-                {
-                    son = null;
-                }
-                else
-                {
-                    byte[] sonBytes = BinaryUtils.GetBytesBaseLimit(scfgBytes, sonBase, sonLimit);
-                    son = _utf8.GetString(sonBytes);
-                }
-            }
-
-            // Get the registration? number
-            int regnBase = BinaryUtils.GetBaseAddress(scfgBytes, ROMSigs.SCFG_SON_REGN);
-
-            if (regnBase == -1)
-            {
-                regno = null;
-            }
-            else
-            {
-                regnBase += ROMSigs.SCFG_SON_REGN.Length;
-                int regnLimit = BinaryUtils.GetBaseAddress(scfgBytes, _limitChars, regnBase);
-
-                if (regnLimit == -1)
-                {
-                    son = null;
-                }
-                else
-                {
-                    byte[] regnBytes = BinaryUtils.GetBytesBaseLimit(scfgBytes, regnBase, regnLimit);
-                    regno = _utf8.GetString(regnBytes);
-                }
-            }
+            string regno =
+                GetStringFromSigWithLimit(
+                    scfgBytes,
+                    ROMSigs.SCFG_SON_REGN,
+                    _limitChars);
 
             return new SCfgData
             {
                 StoreBase = scfgBase,
                 StoreSize = dataSize,
-                StoreBytes = scfgBytes,
+                ScfgBytes = scfgBytes,
+                ScfgCrc = crc,
                 SerialText = serial,
                 HWC = hwc,
                 SonText = son,
@@ -221,13 +171,76 @@ namespace Mac_EFI_Toolkit.T2
             };
         }
 
+        private static string GetStringFromSig(byte[] scfgBytes, byte[] sig, int expectedLength, out string hwc)
+        {
+            hwc = null;
+
+            int baseAddress =
+                BinaryUtils.GetBaseAddress(
+                    scfgBytes,
+                    sig);
+
+            if (baseAddress == -1)
+                return null;
+
+            byte[] bytes =
+                BinaryUtils.GetBytesBaseLength(
+                    scfgBytes,
+                    baseAddress + sig.Length,
+                    expectedLength);
+
+            if (bytes?.Length != expectedLength)
+                return null;
+
+            string serial =
+                _utf8.GetString(bytes);
+
+            hwc =
+                serial.Length >= 4 ?
+                serial.Substring(serial.Length - 4, 4)
+                : null;
+
+            return serial;
+        }
+
+        private static string GetStringFromSigWithLimit(byte[] scfgBytes, byte[] sig, byte[] limitChars)
+        {
+            int baseAddress =
+                BinaryUtils.GetBaseAddress(
+                    scfgBytes,
+                    sig);
+
+            if (baseAddress == -1)
+                return null;
+
+            baseAddress += sig.Length;
+
+            int limit =
+                BinaryUtils.GetBaseAddress
+                (scfgBytes,
+                limitChars,
+                baseAddress);
+
+            if (limit == -1)
+                return null;
+
+            byte[] bytes =
+                BinaryUtils.GetBytesBaseLimit(
+                    scfgBytes,
+                    baseAddress,
+                    limit);
+
+            return _utf8.GetString(bytes);
+        }
+
         private static SCfgData DefaultScfgData()
         {
             return new SCfgData
             {
                 StoreBase = -1,
                 StoreSize = 0,
-                StoreBytes = null,
+                ScfgBytes = null,
+                ScfgCrc = null,
                 SerialText = null,
                 HWC = null,
                 SonText = null,

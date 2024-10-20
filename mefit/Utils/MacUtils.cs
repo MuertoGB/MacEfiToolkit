@@ -5,7 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.EFI;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -150,18 +150,18 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>The calculated Fsys CRC32 uint</returns>
         internal static uint GetUintFsysCrc32(byte[] fsysStore)
         {
-            if (fsysStore.Length < AppleEFI.FSYS_RGN_SIZE)
+            if (fsysStore.Length < EFIROM.FSYS_RGN_SIZE)
                 throw new ArgumentException(
                     nameof(fsysStore),
                     "Given bytes are too small.");
 
-            if (fsysStore.Length > AppleEFI.FSYS_RGN_SIZE)
+            if (fsysStore.Length > EFIROM.FSYS_RGN_SIZE)
                 throw new ArgumentException(
                     nameof(fsysStore),
                     "Given bytes are too large.");
 
             // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes.
-            byte[] bytesTempFsys = new byte[AppleEFI.FSYS_RGN_SIZE - AppleEFI.CRC32_SIZE];
+            byte[] bytesTempFsys = new byte[EFIROM.FSYS_RGN_SIZE - EFIROM.CRC32_SIZE];
 
             if (fsysStore != null)
             {
@@ -231,14 +231,14 @@ namespace Mac_EFI_Toolkit.Utils
 
         internal static string GetFirmwareVersion()
         {
-            if (AppleEFI.AppleRomInfoSectionData.EfiVersion != null)
-                return AppleEFI.AppleRomInfoSectionData.EfiVersion;
+            if (EFIROM.AppleRomInfoSectionData.EfiVersion != null)
+                return EFIROM.AppleRomInfoSectionData.EfiVersion;
 
-            string modelPart = AppleEFI.EfiBiosIdSectionData.ModelPart;
-            string majorPart = AppleEFI.EfiBiosIdSectionData.MajorPart;
-            string minorPart = AppleEFI.EfiBiosIdSectionData.MinorPart;
+            string modelPart = EFIROM.EfiBiosIdSectionData.ModelPart;
+            string majorPart = EFIROM.EfiBiosIdSectionData.MajorPart;
+            string minorPart = EFIROM.EfiBiosIdSectionData.MinorPart;
 
-            string romVersion = AppleEFI.AppleRomInfoSectionData.RomVersion;
+            string romVersion = EFIROM.AppleRomInfoSectionData.RomVersion;
 
             string[] ignoredVersions = { "F000_B00", "Official Build" };
 
@@ -246,7 +246,7 @@ namespace Mac_EFI_Toolkit.Utils
                 !ignoredVersions.Contains(romVersion, StringComparer.OrdinalIgnoreCase))
                 return $"{modelPart}.{romVersion.Replace("_", ".")}";
 
-            string biosId = AppleEFI.AppleRomInfoSectionData.BiosId;
+            string biosId = EFIROM.AppleRomInfoSectionData.BiosId;
 
             string notSet = "F000.B00";
 

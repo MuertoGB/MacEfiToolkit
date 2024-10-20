@@ -5,8 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.EFI.Enums;
-using Mac_EFI_Toolkit.EFI.Structs;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.Utils.Structs;
 using System;
@@ -14,9 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Mac_EFI_Toolkit.EFI
+namespace Mac_EFI_Toolkit.Firmware.EFI
 {
-    class AppleEFI
+    class EFIROM
     {
 
         #region Internal Members
@@ -45,9 +44,7 @@ namespace Mac_EFI_Toolkit.EFI
         internal static int NVRAM_BASE = -1;
         internal static int NVRAM_SIZE = -1;
 
-        internal const int MIN_IMAGE_SIZE = 1048576;  // 100000h
-        internal const int MAX_IMAGE_SIZE = 33554432; // 2000000h
-        internal const int CRC32_SIZE = 4;            // 4h
+        internal const int CRC32_SIZE = 4; // 4h
         #endregion
 
         #region Private Members
@@ -75,8 +72,8 @@ namespace Mac_EFI_Toolkit.EFI
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     Guids.NVRAM_SECTION_GUID,
-                    (int)IntelFD.BIOS_REGION_BASE,
-                    (int)IntelFD.BIOS_REGION_LIMIT)
+                    (int)IFD.BIOS_REGION_BASE,
+                    (int)IFD.BIOS_REGION_LIMIT)
                 - ZERO_VECTOR_SIZE;
 
             if (NVRAM_BASE < 0 || NVRAM_BASE > FileInfoData.Length)
@@ -154,13 +151,13 @@ namespace Mac_EFI_Toolkit.EFI
 
             // Get the Intel ME Flash Image Tool version.
             FitVersion =
-                IntelME.GetVersionData(
+                IME.GetVersionData(
                     LoadedBinaryBytes,
                     VersionType.FlashImageTool);
 
             // Get the Intel ME version.
             MeVersion =
-                IntelME.GetVersionData(
+                IME.GetVersionData(
                     LoadedBinaryBytes,
                     VersionType.ManagementEngine);
 
@@ -221,7 +218,7 @@ namespace Mac_EFI_Toolkit.EFI
                     16,
                     16);
 
-            if (!IntelFD.IsDescriptorMode)
+            if (!IFD.IsDescriptorMode)
                 if (dxeCore == -1)
                     return false;
 
@@ -233,11 +230,11 @@ namespace Mac_EFI_Toolkit.EFI
         internal static PdrSection GetPdrData(byte[] sourceBytes)
         {
             // Descriptor mode not set.
-            if (!IntelFD.IsDescriptorMode)
+            if (!IFD.IsDescriptorMode)
                 return DefaultPdrSection();
 
             // Platform data region is not present.
-            if (IntelFD.PDR_REGION_BASE == 0)
+            if (IFD.PDR_REGION_BASE == 0)
                 return DefaultPdrSection();
 
             // Look for the board id signature bytes.
@@ -245,8 +242,8 @@ namespace Mac_EFI_Toolkit.EFI
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     PDR_BOARD_ID_SIGNATURE,
-                    (int)IntelFD.PDR_REGION_BASE,
-                    (int)IntelFD.PDR_REGION_SIZE);
+                    (int)IFD.PDR_REGION_BASE,
+                    (int)IFD.PDR_REGION_SIZE);
 
             // Board id signature not found.
             if (baseAddress == -1)
@@ -621,8 +618,8 @@ namespace Mac_EFI_Toolkit.EFI
                 return BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     FSYS_SIG,
-                    (int)IntelFD.BIOS_REGION_BASE,
-                    (int)IntelFD.BIOS_REGION_LIMIT);
+                    (int)IFD.BIOS_REGION_BASE,
+                    (int)IFD.BIOS_REGION_LIMIT);
 
             if (NVRAM_BASE == -1)
                 return -1;
@@ -800,8 +797,8 @@ namespace Mac_EFI_Toolkit.EFI
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     Guids.APPLE_ROM_INFO_GUID,
-                    (int)IntelFD.BIOS_REGION_BASE,
-                    (int)IntelFD.BIOS_REGION_LIMIT);
+                    (int)IFD.BIOS_REGION_BASE,
+                    (int)IFD.BIOS_REGION_LIMIT);
 
             // Seach all GUIDs.
             while (guidBaseAddress != -1)
@@ -815,7 +812,7 @@ namespace Mac_EFI_Toolkit.EFI
                         sourceBytes,
                         Guids.APPLE_ROM_INFO_GUID,
                         guidBaseAddress + 1,
-                        (int)IntelFD.BIOS_REGION_LIMIT);
+                        (int)IFD.BIOS_REGION_LIMIT);
             }
 
             // AppleRomInformation GUID was not found, so return default data.
@@ -1010,8 +1007,8 @@ namespace Mac_EFI_Toolkit.EFI
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     Guids.EFI_BIOS_ID_GUID,
-                    (int)IntelFD.BIOS_REGION_BASE,
-                    (int)IntelFD.BIOS_REGION_LIMIT);
+                    (int)IFD.BIOS_REGION_BASE,
+                    (int)IFD.BIOS_REGION_LIMIT);
 
             if (guidBaseAddress == -1)
                 return DefaultEfiBiosIdSection();
@@ -1085,8 +1082,8 @@ namespace Mac_EFI_Toolkit.EFI
             if (BinaryUtils.GetBaseAddress(
                 sourceBytes,
                 Guids.APFS_DXE_GUID,
-                (int)IntelFD.BIOS_REGION_BASE,
-                (int)IntelFD.BIOS_REGION_LIMIT) != -1)
+                (int)IFD.BIOS_REGION_BASE,
+                (int)IFD.BIOS_REGION_LIMIT) != -1)
                 return ApfsCapable.Yes;
 
             // Disable compressed DXE searching is enabled (Maybe I should get rid of this?).
@@ -1098,16 +1095,16 @@ namespace Mac_EFI_Toolkit.EFI
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
                     Guids.LZMA_DXE_VOLUME_IMAGE_GUID,
-                    (int)IntelFD.BIOS_REGION_BASE,
-                    (int)IntelFD.BIOS_REGION_LIMIT);
+                    (int)IFD.BIOS_REGION_BASE,
+                    (int)IFD.BIOS_REGION_LIMIT);
 
             if (lzmaDxeBaseAddress == -1)
                 lzmaDxeBaseAddress =
                     BinaryUtils.GetBaseAddress(
                         sourceBytes,
                         Guids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID,
-                        (int)IntelFD.BIOS_REGION_BASE,
-                        (int)IntelFD.BIOS_REGION_LIMIT);
+                        (int)IFD.BIOS_REGION_BASE,
+                        (int)IFD.BIOS_REGION_LIMIT);
 
             // No compressed DXE volume was found.
             if (lzmaDxeBaseAddress == -1)

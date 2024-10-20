@@ -104,5 +104,11 @@ namespace Mac_EFI_Toolkit.UI
                 || (showOnLeftClick && mouseEventArgs.Button == MouseButtons.Left)))
                 menu.Show(Cursor.Position);
         }
+
+        internal static void SetHalfOpacity(Form f) =>
+            f.Opacity = 0.5;
+
+        internal static void SetNormalOpacity(Form f) =>
+            f.Opacity = 1.0;
     }
 }

@@ -6,9 +6,7 @@
 // developed by Donald Knuth, Vaughan Pratt, and James Morris.
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.EFI;
-using Mac_EFI_Toolkit.EFI.Structs;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using System;
 using System.IO;
 using System.Linq;
@@ -344,12 +342,12 @@ namespace Mac_EFI_Toolkit.Utils
         internal static byte[] PatchFsysCrc(byte[] fsysStore, uint newCrc)
         {
             // Check if the size of the byte array is valid
-            if (fsysStore.Length < AppleEFI.FSYS_RGN_SIZE)
+            if (fsysStore.Length < EFIROM.FSYS_RGN_SIZE)
                 throw new ArgumentException(
                     nameof(fsysStore),
                     "Given bytes are too small.");
 
-            if (fsysStore.Length > AppleEFI.FSYS_RGN_SIZE)
+            if (fsysStore.Length > EFIROM.FSYS_RGN_SIZE)
                 throw new ArgumentException(
                     nameof(fsysStore),
                     "Given bytes are too large.");
@@ -362,7 +360,7 @@ namespace Mac_EFI_Toolkit.Utils
             // Write the new bytes back to the Fsys store at the appropriate base
             OverwriteBytesAtBase(
                 fsysStore,
-                AppleEFI.FSYS_RGN_SIZE - AppleEFI.CRC32_SIZE,
+                EFIROM.FSYS_RGN_SIZE - EFIROM.CRC32_SIZE,
                 newCrcBytes);
 
             // Return the patched data
@@ -401,7 +399,7 @@ namespace Mac_EFI_Toolkit.Utils
 
             // Load the Fsys store from the new binary
             FsysStore newBinaryFsys =
-                AppleEFI.GetFsysStoreData(
+                EFIROM.GetFsysStoreData(
                     patchedBytes,
                     false);
 

@@ -4,7 +4,7 @@
 Mac EFI Toolkit V1.2.0
 </h1>
 
-<h4 align="center">A tool for analysis of Mac BIOS/UEFI, with limited editing capabilities.</h4>
+<h4 align="center">A tool for analysis of Mac BIOS/UEFI and Intel T2 SOCROM, with limited editing capabilities.</h4>
 <p align="center">
   <a href="#about">About</a> •
   <a href="#features">Features</a> •
@@ -17,17 +17,11 @@ Mac EFI Toolkit V1.2.0
 
 ## About
 
-Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in repairing Mac BIOS/UEFI. Designed to be compact, mefit provides information gathering capabilities and limited editing functionality.
-
-Key features of the information gathering capabilities include detecting EFI lock in the NVRAM, identifying if the APFS DXE driver is present; even if located in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
-
-In terms of editing, the application allows users to replace the System Serial Number (SSN) with automatic Hardware Configuration (HWC) matching. It also supports transplanting of exported Fsys stores, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password. When editing, Mac EFI Toolkit will automatically check, calculate, and mask the Fsys CRC32 if the checksum is invalid.
+Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in analysing and repairing Mac EFI and Intel T2 SOCROM firmwares. Designed to be compact, this application provides information gathering capabilities and limited editing functionality.
 
 >🛈 **Access to some features requires accepting the editing terms.**
 
 <img width="550" src="files/images/met.png" alt="MET">
-
-I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
 
 ## Features
 
@@ -72,19 +66,11 @@ I continue to perform extensive testing on hundreds of firmwares to ensure compa
 - Drag and drop functionality.
 - Notification when a newer version is available.
 
-| SUGGESTED FEATURES                         | Status                |
-|--------------------------------------------|-----------------------|
-| Batch process files for information        |🟢 Addition planned    |
-| Build clean firmware from FD               |🟢 Addition planned    |
-| Detect email address in the NVRAM          |🟠 Researching         |
-| Detect MDM status                          |🔴 Undecided           |
-
 ## Download
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.2.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set, 2023 | Yes | Stable |
-|[1.1.4](https://github.com/MuertoGB/MacEfiToolkit/releases/114)| 11th October, 2023 | No | Stable |
+|[1.2.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set, 2024 | Yes | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 

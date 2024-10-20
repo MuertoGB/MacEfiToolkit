@@ -82,21 +82,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppColours.cs" />
-    <Compile Include="EFI\IntelFD.cs" />
+    <Compile Include="Common\FWVars.cs" />
+    <Compile Include="Firmware\FsysStoreWriter.cs" />
+    <Compile Include="Firmware\EFI\IFD.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Common\KeyboardHookManager.cs" />
     <Compile Include="Common\ToInt24.cs" />
-    <Compile Include="EFI\Guids.cs" />
-    <Compile Include="EFI\AppleEFI.cs" />
+    <Compile Include="Firmware\EFI\Guids.cs" />
+    <Compile Include="Firmware\EFI\EFIROM.cs" />
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
-    <Compile Include="EFI\IntelME.cs" />
-    <Compile Include="Debug.cs" />
-    <Compile Include="EFI\Enums\Types.cs" />
+    <Compile Include="Firmware\EFI\IME.cs" />
+    <Compile Include="UI\Interfaces\ILogger.cs" />
+    <Compile Include="UI\Interfaces\RichTextBoxLogger.cs" />
+    <Compile Include="Unhandled.cs" />
+    <Compile Include="Firmware\EFI\Enums\Types.cs" />
+    <Compile Include="UI\Controls\METTableLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Utils\Structs\Binary.cs" />
-    <Compile Include="EFI\Structs\EFILock.cs" />
-    <Compile Include="EFI\Structs\Sections.cs" />
-    <Compile Include="EFI\Structs\Stores.cs" />
+    <Compile Include="Firmware\EFI\Structs\EFILock.cs" />
+    <Compile Include="Firmware\EFI\Structs\Sections.cs" />
+    <Compile Include="Firmware\EFI\Structs\Stores.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />
     <Compile Include="Common\SevenZip\Common\CRC.cs" />
@@ -117,9 +124,9 @@
     <Compile Include="AppUpdate.cs" />
     <Compile Include="Chars.cs" />
     <Compile Include="Strings.cs" />
-    <Compile Include="T2\Structs\ScfgData.cs" />
-    <Compile Include="T2\T2ROM.cs" />
-    <Compile Include="T2\ROMSigs.cs" />
+    <Compile Include="Firmware\T2\Structs\ScfgData.cs" />
+    <Compile Include="Firmware\T2\T2ROM.cs" />
+    <Compile Include="Firmware\T2\ROMSigs.cs" />
     <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
     <Compile Include="UI\METMessageBox\Enums.cs" />
@@ -161,11 +168,11 @@
     <Compile Include="WinForms\infoWindow.Designer.cs">
       <DependentUpon>infoWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\mainWindow.cs">
+    <Compile Include="WinForms\efiWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\mainWindow.Designer.cs">
-      <DependentUpon>mainWindow.cs</DependentUpon>
+    <Compile Include="WinForms\efiWindow.Designer.cs">
+      <DependentUpon>efiWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="WIN32\NativeMethods.cs" />
     <Compile Include="Program.cs" />
@@ -185,6 +192,12 @@
     </Compile>
     <Compile Include="WinForms\settingsWindow.Designer.cs">
       <DependentUpon>settingsWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\startupWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\startupWindow.Designer.cs">
+      <DependentUpon>startupWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="WinForms\t2Window.cs">
       <SubType>Form</SubType>
@@ -211,8 +224,8 @@
     <EmbeddedResource Include="WinForms\infoWindow.resx">
       <DependentUpon>infoWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\mainWindow.resx">
-      <DependentUpon>mainWindow.cs</DependentUpon>
+    <EmbeddedResource Include="WinForms\efiWindow.resx">
+      <DependentUpon>efiWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -226,6 +239,9 @@
     </Compile>
     <EmbeddedResource Include="WinForms\settingsWindow.resx">
       <DependentUpon>settingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\startupWindow.resx">
+      <DependentUpon>startupWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\t2Window.resx">
       <DependentUpon>t2Window.cs</DependentUpon>

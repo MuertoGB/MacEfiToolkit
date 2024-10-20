@@ -22,6 +22,7 @@ namespace Mac_EFI_Toolkit
         internal const string EXPORT = "\uEDE1";
         internal const string RENAME = "\uE8AC";
         internal const string FLOW = "\uEF90";
+        internal const string DOWN = "\uE74B";
 
         // Non line-breaking space
         internal const string NB_SPACE = "\u00A0";

@@ -1,11 +1,11 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Debug.cs - Debug string builder
+// Unhandled.cs - Unhandled exception debug builder.
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.EFI;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Utils;
 using System;
 using System.Diagnostics;
@@ -17,7 +17,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    internal class Debug
+    internal class Unhandled
     {
 
         #region Functions
@@ -45,7 +45,7 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        internal static string GenerateDebugReport(Exception e)
+        internal static string GenerateUnhandledReport(Exception e)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -119,37 +119,37 @@ namespace Mac_EFI_Toolkit
 
         private static string GetFirmwareData()
         {
-            if (!AppleEFI.FirmwareLoaded)
+            if (!EFIROM.FirmwareLoaded)
                 return "There is no UEFI/BIOS loaded.\r\n";
 
             StringBuilder builder = new StringBuilder();
 
             try
             {
-                if (IntelFD.IsDescriptorMode)
+                if (IFD.IsDescriptorMode)
                 {
                     builder.AppendLine($"  Descriptor ->\r\n");
-                    builder.AppendLine($"Descriptor Mode: {IntelFD.IsDescriptorMode}\r\n");
-                    builder.AppendLine($"PDR Base:  0x{IntelFD.PDR_REGION_BASE:X}h, PDR Limit: 0x{IntelFD.PDR_REGION_LIMIT:X}h");
-                    builder.AppendLine($"ME Base:   0x{IntelFD.ME_REGION_BASE:X}h, ME Limit: 0x{IntelFD.ME_REGION_LIMIT:X}h");
-                    builder.AppendLine($"BIOS Base: 0x{IntelFD.BIOS_REGION_BASE:X}h, BIOS Limit: 0x{IntelFD.BIOS_REGION_LIMIT:X}h\r\n");
+                    builder.AppendLine($"Descriptor Mode: {IFD.IsDescriptorMode}\r\n");
+                    builder.AppendLine($"PDR Base:  0x{IFD.PDR_REGION_BASE:X}h, PDR Limit: 0x{IFD.PDR_REGION_LIMIT:X}h");
+                    builder.AppendLine($"ME Base:   0x{IFD.ME_REGION_BASE:X}h, ME Limit: 0x{IFD.ME_REGION_LIMIT:X}h");
+                    builder.AppendLine($"BIOS Base: 0x{IFD.BIOS_REGION_BASE:X}h, BIOS Limit: 0x{IFD.BIOS_REGION_LIMIT:X}h\r\n");
                 }
 
                 builder.AppendLine($"  File ->\r\n");
-                builder.AppendLine($"File Size: {AppleEFI.FileInfoData.Length:X}h\r\n");
+                builder.AppendLine($"File Size: {EFIROM.FileInfoData.Length:X}h\r\n");
 
                 builder.AppendLine($"  Fsys Store  ->\r\n");
-                builder.AppendLine($"Fsys Base:    0x{AppleEFI.FsysStoreData.FsysBase:X}h");
-                builder.AppendLine($"Fsys Size:    {AppleEFI.FSYS_RGN_SIZE:X}h");
-                builder.AppendLine($"Serial Base:  0x{AppleEFI.FsysStoreData.SerialBase:X}h");
-                builder.AppendLine($"HWC Base:     0x{AppleEFI.FsysStoreData.HWCBase:X}h\r\n");
+                builder.AppendLine($"Fsys Base:    0x{EFIROM.FsysStoreData.FsysBase:X}h");
+                builder.AppendLine($"Fsys Size:    {EFIROM.FSYS_RGN_SIZE:X}h");
+                builder.AppendLine($"Serial Base:  0x{EFIROM.FsysStoreData.SerialBase:X}h");
+                builder.AppendLine($"HWC Base:     0x{EFIROM.FsysStoreData.HWCBase:X}h\r\n");
 
                 builder.AppendLine($"  NVRAM  ->\r\n");
-                builder.AppendLine($"NVRAM Region:  Base 0x{AppleEFI.NVRAM_BASE:X}h, Size {AppleEFI.NVRAM_SIZE:X}h");
-                builder.AppendLine($"VSS Primary:   Base 0x{AppleEFI.VssStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.VssStoreData.PrimaryStoreSize:X}h");
-                builder.AppendLine($"VSS Backup:    Base 0x{AppleEFI.VssStoreData.BackupStoreBase:X}h, Size {AppleEFI.VssStoreData.BackupStoreSize:X}h");
-                builder.AppendLine($"SVS Primary:   Base 0x{AppleEFI.SvsStoreData.PrimaryStoreBase:X}h, Size {AppleEFI.SvsStoreData.PrimaryStoreSize:X}h");
-                builder.AppendLine($"SVS Backup:    Base 0x{AppleEFI.SvsStoreData.BackupStoreBase:X}h, Size {AppleEFI.SvsStoreData.BackupStoreSize:X}h");
+                builder.AppendLine($"NVRAM Region:  Base 0x{EFIROM.NVRAM_BASE:X}h, Size {EFIROM.NVRAM_SIZE:X}h");
+                builder.AppendLine($"VSS Primary:   Base 0x{EFIROM.VssStoreData.PrimaryStoreBase:X}h, Size {EFIROM.VssStoreData.PrimaryStoreSize:X}h");
+                builder.AppendLine($"VSS Backup:    Base 0x{EFIROM.VssStoreData.BackupStoreBase:X}h, Size {EFIROM.VssStoreData.BackupStoreSize:X}h");
+                builder.AppendLine($"SVS Primary:   Base 0x{EFIROM.SvsStoreData.PrimaryStoreBase:X}h, Size {EFIROM.SvsStoreData.PrimaryStoreSize:X}h");
+                builder.AppendLine($"SVS Backup:    Base 0x{EFIROM.SvsStoreData.BackupStoreBase:X}h, Size {EFIROM.SvsStoreData.BackupStoreSize:X}h");
 
                 return builder.ToString();
             }

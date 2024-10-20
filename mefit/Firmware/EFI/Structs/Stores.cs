@@ -1,13 +1,12 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Stores.cs - Handles parsing of firmware data
+// Stores.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.EFI.Enums;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.EFI.Structs
+namespace Mac_EFI_Toolkit.Firmware.EFI
 {
     internal struct NvramStore
     {

@@ -5,9 +5,7 @@
 // editorWindow.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.EFI;
-using Mac_EFI_Toolkit.EFI.Enums;
-using Mac_EFI_Toolkit.EFI.Structs;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
@@ -28,7 +26,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private byte[] _bytesNewBinary = null;
         private byte[] _bytesNewFsysStore = null;
         private byte[] _bytesNewMeRegion = null;
-        private bool _maskCrc = false;
+        //private bool _maskCrc = false;
         private string _fullBuildPath = string.Empty;
         #endregion
 
@@ -70,13 +68,13 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void editorWindow_Load(object sender, EventArgs e)
         {
-            if (AppleEFI.FsysStoreData.Serial == null)
+            if (EFIROM.FsysStoreData.Serial == null)
             {
                 swReplaceSerialNumber.Enabled = false;
             }
             else
             {
-                tbxSerialNumber.MaxLength = AppleEFI.FsysStoreData.Serial.Length;
+                tbxSerialNumber.MaxLength = EFIROM.FsysStoreData.Serial.Length;
             }
 
             GetRtbInitialData();
@@ -240,80 +238,80 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdBuild_Click(object sender, EventArgs e)
         {
-            try
-            {
-                ToggleControlEnable(false);
+            //try
+            //{
+            //    ToggleControlEnable(false);
 
-                _bytesNewBinary = AppleEFI.LoadedBinaryBytes;
+            //    _bytesNewBinary = EFIROM.LoadedBinaryBytes;
 
-                if (swReplaceFsysStore.Checked)
-                {
-                    Logger.WriteLogTextToRtb(
-                        "Replacing Fsys Store:",
-                        RtbLogPrefix.Start,
-                        rtbLog);
+            //    if (swReplaceFsysStore.Checked)
+            //    {
+            //        Logger.WriteLogTextToRtb(
+            //            "Replacing Fsys Store:",
+            //            RtbLogPrefix.Start,
+            //            rtbLog);
 
-                    if (!WriteNewFsysStore())
-                        return;
-                }
+            //        if (!WriteNewFsysStore())
+            //            return;
+            //    }
 
-                if (swReplaceSerialNumber.Checked)
-                {
-                    Logger.WriteLogTextToRtb(
-                        $"Replacing Serial Number data:",
-                        RtbLogPrefix.Start,
-                        rtbLog);
+            //    if (swReplaceSerialNumber.Checked)
+            //    {
+            //        Logger.WriteLogTextToRtb(
+            //            $"Replacing Serial Number data:",
+            //            RtbLogPrefix.Start,
+            //            rtbLog);
 
-                    if (!WriteNewSerialData())
-                        return;
-                }
+            //        if (!WriteNewSerialData())
+            //            return;
+            //    }
 
-                if (cbxClearVssStore.Checked)
-                {
-                    Logger.WriteLogTextToRtb(
-                        "Clearing VSS NVRAM data:",
-                        RtbLogPrefix.Start,
-                        rtbLog);
+            //    if (cbxClearVssStore.Checked)
+            //    {
+            //        Logger.WriteLogTextToRtb(
+            //            "Clearing VSS NVRAM data:",
+            //            RtbLogPrefix.Start,
+            //            rtbLog);
 
-                    EraseNvramStore(AppleEFI.VssStoreData);
-                }
+            //        EraseNvramStore(EFIROM.VssStoreData);
+            //    }
 
-                if (cbxClearSvsStore.Checked)
-                {
-                    Logger.WriteLogTextToRtb(
-                        "Clearing SVS NVRAM data:",
-                        RtbLogPrefix.Start,
-                        rtbLog);
+            //    if (cbxClearSvsStore.Checked)
+            //    {
+            //        Logger.WriteLogTextToRtb(
+            //            "Clearing SVS NVRAM data:",
+            //            RtbLogPrefix.Start,
+            //            rtbLog);
 
-                    EraseNvramStore(AppleEFI.SvsStoreData);
-                }
+            //        EraseNvramStore(EFIROM.SvsStoreData);
+            //    }
 
-                if (swReplaceMeRegion.Checked)
-                {
-                    Logger.WriteLogTextToRtb(
-                        "Writing new ME Region:",
-                        RtbLogPrefix.Start,
-                        rtbLog);
+            //    if (swReplaceMeRegion.Checked)
+            //    {
+            //        Logger.WriteLogTextToRtb(
+            //            "Writing new ME Region:",
+            //            RtbLogPrefix.Start,
+            //            rtbLog);
 
-                    if (!WriteNewMeRegion())
-                        return;
-                }
+            //        if (!WriteNewMeRegion())
+            //            return;
+            //    }
 
-                if (!SaveBuild())
-                    return;
+            //    if (!SaveBuild())
+            //        return;
 
-                Logger.WriteLogTextToRtb(
-                    $"Firmware patching completed",
-                    RtbLogPrefix.Complete,
-                    rtbLog);
+            //    Logger.WriteLogTextToRtb(
+            //        $"Firmware patching completed",
+            //        RtbLogPrefix.Complete,
+            //        rtbLog);
 
-                cmdShowLastBuild.Enabled = true;
-                cmdLoadLastBuild.Enabled = true;
-            }
-            finally
-            {
-                ToggleControlEnable(true);
-            }
+            //    cmdShowLastBuild.Enabled = true;
+            //    cmdLoadLastBuild.Enabled = true;
+            //}
+            //finally
+            //{
+            //    ToggleControlEnable(true);
+            //}
         }
 
         private bool SaveBuild()
@@ -345,7 +343,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 return false;
             }
 
-            FsysStore fsysStore = AppleEFI.GetFsysStoreData(
+            FsysStore fsysStore = EFIROM.GetFsysStoreData(
                 _bytesNewBinary, false);
 
             string serialNumber = string.IsNullOrEmpty(fsysStore.Serial)
@@ -438,7 +436,7 @@ namespace Mac_EFI_Toolkit.WinForms
             _bytesNewFsysStore = null;
             _bytesNewBinary = null;
             _bytesNewMeRegion = null;
-            _maskCrc = false;
+            //_maskCrc = false;
             _fullBuildPath = string.Empty;
 
             swReplaceFsysStore.Checked = false;
@@ -534,7 +532,7 @@ namespace Mac_EFI_Toolkit.WinForms
             int textLength =
                 tb.Text.Length;
 
-            if (textLength == AppleEFI.FsysStoreData.Serial.Length)
+            if (textLength == EFIROM.FsysStoreData.Serial.Length)
             {
                 if (MacUtils.IsValidSerialChars(tb.Text))
                 {
@@ -547,12 +545,12 @@ namespace Mac_EFI_Toolkit.WinForms
                         RtbLogPrefix.Complete,
                         rtbLog);
 
-                    if (AppleEFI.FsysStoreData.Serial.Length == 11)
+                    if (EFIROM.FsysStoreData.Serial.Length == 11)
                     {
                         UpdateHwcTextBoxText(
                             tb.Text.Substring(textLength - 3));
                     }
-                    if (AppleEFI.FsysStoreData.Serial.Length == 12)
+                    if (EFIROM.FsysStoreData.Serial.Length == 12)
                     {
                         UpdateHwcTextBoxText(
                             tb.Text.Substring(textLength - 4));
@@ -603,7 +601,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             LogFsysData();
 
-            if (AppleEFI.VssStoreData.PrimaryStoreBase == -1)
+            if (EFIROM.VssStoreData.PrimaryStoreBase == -1)
             {
                 cbxClearVssStore.Enabled = false;
 
@@ -613,7 +611,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     rtbLog);
             }
 
-            if (AppleEFI.SvsStoreData.PrimaryStoreBase == -1)
+            if (EFIROM.SvsStoreData.PrimaryStoreBase == -1)
             {
                 cbxClearSvsStore.Enabled = false;
 
@@ -631,10 +629,10 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void LogBinarySize()
         {
-            if (!FileUtils.GetIsValidBinSize(AppleEFI.FileInfoData.Length))
+            if (!FileUtils.GetIsValidBinSize(EFIROM.FileInfoData.Length))
             {
                 Logger.WriteLogTextToRtb(
-                    $"Loaded binary size {AppleEFI.FileInfoData.Length:X2}h is invalid.",
+                    $"Loaded binary size {EFIROM.FileInfoData.Length:X2}h is invalid.",
                     RtbLogPrefix.Error,
                     rtbLog);
 
@@ -642,23 +640,23 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             Logger.WriteLogTextToRtb(
-                $"Loaded binary size {AppleEFI.FileInfoData.Length:X2}h is valid",
+                $"Loaded binary size {EFIROM.FileInfoData.Length:X2}h is valid",
                 RtbLogPrefix.Info,
                 rtbLog);
         }
 
         private void LogDescriptorData()
         {
-            if (IntelFD.PDR_REGION_BASE != 0 && IntelFD.PDR_REGION_LIMIT != 0)
+            if (IFD.PDR_REGION_BASE != 0 && IFD.PDR_REGION_LIMIT != 0)
                 Logger.WriteLogTextToRtb(
-                    $"PDR Region: Base {IntelFD.PDR_REGION_BASE:X2}h, Limit {IntelFD.PDR_REGION_LIMIT:X2}h",
+                    $"PDR Region: Base {IFD.PDR_REGION_BASE:X2}h, Limit {IFD.PDR_REGION_LIMIT:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
 
-            if (IntelFD.ME_REGION_BASE != 0 && IntelFD.ME_REGION_LIMIT != 0)
+            if (IFD.ME_REGION_BASE != 0 && IFD.ME_REGION_LIMIT != 0)
             {
                 Logger.WriteLogTextToRtb(
-                    $"ME Region: Base {IntelFD.ME_REGION_BASE:X2}h, Limit {IntelFD.ME_REGION_LIMIT:X2}h",
+                    $"ME Region: Base {IFD.ME_REGION_BASE:X2}h, Limit {IFD.ME_REGION_LIMIT:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
             }
@@ -672,31 +670,31 @@ namespace Mac_EFI_Toolkit.WinForms
                     rtbLog);
             }
 
-            if (IntelFD.BIOS_REGION_BASE != 0 && IntelFD.BIOS_REGION_LIMIT != 0)
+            if (IFD.BIOS_REGION_BASE != 0 && IFD.BIOS_REGION_LIMIT != 0)
                 Logger.WriteLogTextToRtb(
-                    $"BIOS Region: Base {IntelFD.BIOS_REGION_BASE:X2}h, Limit {IntelFD.BIOS_REGION_LIMIT:X2}h",
+                    $"BIOS Region: Base {IFD.BIOS_REGION_BASE:X2}h, Limit {IFD.BIOS_REGION_LIMIT:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
         }
 
         private void LogFsysData()
         {
-            if (AppleEFI.FsysStoreData.FsysBase != 0)
+            if (EFIROM.FsysStoreData.FsysBase != 0)
             {
                 Logger.WriteLogTextToRtb(
-                    $"Fsys: Base {AppleEFI.FsysStoreData.FsysBase:X2}h, Size {AppleEFI.FSYS_RGN_SIZE:X2}h",
+                    $"Fsys: Base {EFIROM.FsysStoreData.FsysBase:X2}h, Size {EFIROM.FSYS_RGN_SIZE:X2}h",
                     RtbLogPrefix.Info,
                     rtbLog);
 
-                if (AppleEFI.FsysStoreData.SerialBase != -1)
+                if (EFIROM.FsysStoreData.SerialBase != -1)
                     Logger.WriteLogTextToRtb(
-                        $"Serial: Base {AppleEFI.FsysStoreData.SerialBase:X2}h",
+                        $"Serial: Base {EFIROM.FsysStoreData.SerialBase:X2}h",
                         RtbLogPrefix.Info,
                         rtbLog);
 
-                if (AppleEFI.FsysStoreData.HWCBase != -1)
+                if (EFIROM.FsysStoreData.HWCBase != -1)
                     Logger.WriteLogTextToRtb(
-                        $"HWC: Base {AppleEFI.FsysStoreData.HWCBase:X2}h",
+                        $"HWC: Base {EFIROM.FsysStoreData.HWCBase:X2}h",
                         RtbLogPrefix.Info,
                         rtbLog);
             }
@@ -724,96 +722,97 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Validation
         private bool ValidateNewFsysStore(byte[] sourceBytes)
         {
-            Logger.WriteLogTextToRtb(
-                "Validating donor Fsys store:",
-                RtbLogPrefix.Info,
-                rtbLog);
+            //Logger.WriteLogTextToRtb(
+            //    "Validating donor Fsys store:",
+            //    RtbLogPrefix.Info,
+            //    rtbLog);
 
-            int fsysSigPos =
-                BinaryUtils.GetBaseAddress(
-                sourceBytes,
-                AppleEFI.FSYS_SIG);
+            //int fsysSigPos =
+            //    BinaryUtils.GetBaseAddress(
+            //    sourceBytes,
+            //    EFIROM.FSYS_SIG);
 
-            if (fsysSigPos == -1)
-            {
-                Logger.WriteLogTextToRtb(
-                    "Fsys signature not found",
-                    RtbLogPrefix.Error,
-                    rtbLog);
+            //if (fsysSigPos == -1)
+            //{
+            //    Logger.WriteLogTextToRtb(
+            //        "Fsys signature not found",
+            //        RtbLogPrefix.Error,
+            //        rtbLog);
 
-                return false;
-            }
+            //    return false;
+            //}
 
-            if (fsysSigPos != 0)
-            {
-                Logger.WriteLogTextToRtb(
-                    $"Fsys signature misaligned: {fsysSigPos:X2}h",
-                    RtbLogPrefix.Error,
-                    rtbLog);
+            //if (fsysSigPos != 0)
+            //{
+            //    Logger.WriteLogTextToRtb(
+            //        $"Fsys signature misaligned: {fsysSigPos:X2}h",
+            //        RtbLogPrefix.Error,
+            //        rtbLog);
 
-                return false;
-            }
+            //    return false;
+            //}
 
-            if (sourceBytes.Length != AppleEFI.FSYS_RGN_SIZE)
-            {
-                Logger.WriteLogTextToRtb(
-                    $"Filesize: {sourceBytes.Length:X2}h, expected 800h",
-                    RtbLogPrefix.Error,
-                    rtbLog);
+            //if (sourceBytes.Length != EFIROM.FSYS_RGN_SIZE)
+            //{
+            //    Logger.WriteLogTextToRtb(
+            //        $"Filesize: {sourceBytes.Length:X2}h, expected 800h",
+            //        RtbLogPrefix.Error,
+            //        rtbLog);
 
-                return false;
-            }
+            //    return false;
+            //}
 
-            // We have validated the Fsys store, now we can load it.
-            FsysStore fsysStore =
-                AppleEFI.GetFsysStoreData(
-                sourceBytes,
-                true);
+            //// We have validated the Fsys store, now we can load it.
+            //FsysStore fsysStore =
+            //    EFIROM.GetFsysStoreData(
+            //    sourceBytes,
+            //    true);
 
-            Logger.WriteLogTextToRtb(
-                $"Filesize: {sourceBytes.Length:X2}h",
-                RtbLogPrefix.Info,
-                rtbLog);
+            //Logger.WriteLogTextToRtb(
+            //    $"Filesize: {sourceBytes.Length:X2}h",
+            //    RtbLogPrefix.Info,
+            //    rtbLog);
 
-            Logger.WriteLogTextToRtb(
-                $"Fsys signature found at {fsysSigPos:X2}h",
-                RtbLogPrefix.Info,
-                rtbLog);
+            //Logger.WriteLogTextToRtb(
+            //    $"Fsys signature found at {fsysSigPos:X2}h",
+            //    RtbLogPrefix.Info,
+            //    rtbLog);
 
-            Logger.WriteLogTextToRtb(
-                $"Serial: {fsysStore.Serial} ({fsysStore.Serial.Length}char)",
-                RtbLogPrefix.Info,
-                rtbLog);
+            //Logger.WriteLogTextToRtb(
+            //    $"Serial: {fsysStore.Serial} ({fsysStore.Serial.Length}char)",
+            //    RtbLogPrefix.Info,
+            //    rtbLog);
 
-            Logger.WriteLogTextToRtb(
-                $"HWC: {fsysStore.HWC}",
-                RtbLogPrefix.Info,
-                rtbLog);
+            //Logger.WriteLogTextToRtb(
+            //    $"HWC: {fsysStore.HWC}",
+            //    RtbLogPrefix.Info,
+            //    rtbLog);
 
-            if (!string.Equals(fsysStore.CrcString, fsysStore.CrcCalcString))
-            {
-                Logger.WriteLogTextToRtb(
-                    "Donor Fsys Store CRC32 is invalid, 'Mask CRC32' flag set!",
-                    RtbLogPrefix.Warning,
-                    rtbLog);
+            //if (!string.Equals(fsysStore.CrcString, fsysStore.CrcCalcString))
+            //{
+            //    Logger.WriteLogTextToRtb(
+            //        "Donor Fsys Store CRC32 is invalid, 'Mask CRC32' flag set!",
+            //        RtbLogPrefix.Warning,
+            //        rtbLog);
 
-                _maskCrc = true;
-            }
-            else
-            {
-                _maskCrc = false;
-            }
+            //    _maskCrc = true;
+            //}
+            //else
+            //{
+            //    _maskCrc = false;
+            //}
 
-            Logger.WriteLogTextToRtb(
-                $"File: {fsysStore.CrcString}h > Calc: {fsysStore.CrcCalcString}h",
-                RtbLogPrefix.Info,
-                rtbLog);
+            //Logger.WriteLogTextToRtb(
+            //    $"File: {fsysStore.CrcString}h > Calc: {fsysStore.CrcCalcString}h",
+            //    RtbLogPrefix.Info,
+            //    rtbLog);
 
-            Logger.WriteLogTextToRtb(
-                "Validation completed",
-                RtbLogPrefix.Complete,
-                rtbLog);
+            //Logger.WriteLogTextToRtb(
+            //    "Validation completed",
+            //    RtbLogPrefix.Complete,
+            //    rtbLog);
 
+            //return true;
             return true;
         }
 
@@ -827,7 +826,7 @@ namespace Mac_EFI_Toolkit.WinForms
             int fptSignature =
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
-                    IntelME.FPT_SIGNATURE);
+                    IME.FPT_SIGNATURE);
 
             if (fptSignature == -1)
             {
@@ -839,24 +838,24 @@ namespace Mac_EFI_Toolkit.WinForms
                 return false;
             }
 
-            if (sourceBytes.Length > IntelFD.ME_REGION_SIZE)
+            if (sourceBytes.Length > IFD.ME_REGION_SIZE)
             {
                 Logger.WriteLogTextToRtb(
-                    $"ME will not fit: {sourceBytes.Length:X2}h > {IntelFD.ME_REGION_SIZE:X2}h",
+                    $"ME will not fit: {sourceBytes.Length:X2}h > {IFD.ME_REGION_SIZE:X2}h",
                     RtbLogPrefix.Error,
                     rtbLog);
 
                 return false;
             }
 
-            if (sourceBytes.Length < IntelFD.ME_REGION_SIZE)
+            if (sourceBytes.Length < IFD.ME_REGION_SIZE)
                 Logger.WriteLogTextToRtb(
                     $"ME is smaller ({sourceBytes.Length:X2}h) and will be adjusted at build time",
                     RtbLogPrefix.Warning,
                     rtbLog);
 
             string meVersion =
-                IntelME.GetVersionData(
+                IME.GetVersionData(
                     _bytesNewMeRegion,
                     VersionType.ManagementEngine);
 
@@ -875,86 +874,86 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Editing
-        private bool WriteNewFsysStore()
-        {
-            // Mask Fsys CRC
-            if (_maskCrc)
-            {
-                Logger.WriteLogTextToRtb(
-                    "Masking Fsys store CRC",
-                    RtbLogPrefix.Info, rtbLog);
+        //private bool WriteNewFsysStore()
+        //{
+        //    // Mask Fsys CRC
+        //    if (_maskCrc)
+        //    {
+        //        Logger.WriteLogTextToRtb(
+        //            "Masking Fsys store CRC",
+        //            RtbLogPrefix.Info, rtbLog);
 
-                // Load the new Fsys store
-                FsysStore fsysNew =
-                    AppleEFI.GetFsysStoreData(
-                        _bytesNewFsysStore,
-                        true);
+        //        // Load the new Fsys store
+        //        FsysStore fsysNew =
+        //            EFIROM.GetFsysStoreData(
+        //                _bytesNewFsysStore,
+        //                true);
 
-                // Load the new Fsys store bytes and patch the crc
-                _bytesNewFsysStore =
-                    BinaryUtils.PatchFsysCrc(
-                        fsysNew.FsysBytes,
-                        fsysNew.CRC32CalcInt);
+        //        // Load the new Fsys store bytes and patch the crc
+        //        _bytesNewFsysStore =
+        //            BinaryUtils.PatchFsysCrc(
+        //                fsysNew.FsysBytes,
+        //                fsysNew.CRC32CalcInt);
 
-                // Load the patched store
-                fsysNew =
-                    AppleEFI.GetFsysStoreData(
-                        _bytesNewFsysStore,
-                        true);
+        //        // Load the patched store
+        //        fsysNew =
+        //            EFIROM.GetFsysStoreData(
+        //                _bytesNewFsysStore,
+        //                true);
 
-                // Check CRC32 masking was successful
-                if (!string.Equals(fsysNew.CrcString, fsysNew.CrcCalcString))
-                {
-                    HandleBuildFailure(
-                        "CRC masking failed");
+        //        // Check CRC32 masking was successful
+        //        if (!string.Equals(fsysNew.CrcString, fsysNew.CrcCalcString))
+        //        {
+        //            HandleBuildFailure(
+        //                "CRC masking failed");
 
-                    return false;
-                }
+        //            return false;
+        //        }
 
-                Logger.WriteLogTextToRtb(
-                    "CRC masking successful",
-                    RtbLogPrefix.Info,
-                    rtbLog);
-            }
+        //        Logger.WriteLogTextToRtb(
+        //            "CRC masking successful",
+        //            RtbLogPrefix.Info,
+        //            rtbLog);
+        //    }
 
-            // Write new Fsys to the output file
-            BinaryUtils.OverwriteBytesAtBase(
-                _bytesNewBinary,
-                AppleEFI.FsysStoreData.FsysBase,
-                _bytesNewFsysStore);
+        //    // Write new Fsys to the output file
+        //    BinaryUtils.OverwriteBytesAtBase(
+        //        _bytesNewBinary,
+        //        EFIROM.FsysStoreData.FsysBase,
+        //        _bytesNewFsysStore);
 
-            // Load the Fsys from the new binary
-            FsysStore fsysNewBinary
-                = AppleEFI.GetFsysStoreData(
-                    _bytesNewBinary,
-                    false);
+        //    // Load the Fsys from the new binary
+        //    FsysStore fsysNewBinary
+        //        = EFIROM.GetFsysStoreData(
+        //            _bytesNewBinary,
+        //            false);
 
-            // Validate new Fsys was written
-            if (!BinaryUtils.ByteArraysMatch(fsysNewBinary.FsysBytes, _bytesNewFsysStore))
-            {
-                HandleBuildFailure(
-                    "ByteArraysMatch: Fsys comparison check failed");
+        //    // Validate new Fsys was written
+        //    if (!BinaryUtils.ByteArraysMatch(fsysNewBinary.FsysBytes, _bytesNewFsysStore))
+        //    {
+        //        HandleBuildFailure(
+        //            "ByteArraysMatch: Fsys comparison check failed");
 
-                return false;
-            }
+        //        return false;
+        //    }
 
-            Logger.WriteLogTextToRtb(
-                "Fsys comparison check passed",
-                RtbLogPrefix.Info,
-                rtbLog);
+        //    Logger.WriteLogTextToRtb(
+        //        "Fsys comparison check passed",
+        //        RtbLogPrefix.Info,
+        //        rtbLog);
 
-            Logger.WriteLogTextToRtb(
-                "Data written successfully",
-                RtbLogPrefix.Complete,
-                rtbLog);
+        //    Logger.WriteLogTextToRtb(
+        //        "Data written successfully",
+        //        RtbLogPrefix.Complete,
+        //        rtbLog);
 
-            return true;
-        }
+        //    return true;
+        //}
 
         private bool WriteNewMeRegion()
         {
             // Create a blank array
-            byte[] meData = new byte[IntelFD.ME_REGION_SIZE];
+            byte[] meData = new byte[IFD.ME_REGION_SIZE];
 
             // 0xFF the blank array
             BinaryUtils.EraseByteArray(meData, 0xFF);
@@ -972,15 +971,15 @@ namespace Mac_EFI_Toolkit.WinForms
                 meData,
                 0,
                 _bytesNewBinary,
-                IntelFD.ME_REGION_BASE,
+                IFD.ME_REGION_BASE,
                 meData.Length);
 
             // Validate write
             byte[] meNewBinary =
                 BinaryUtils.GetBytesBaseLimit(
                     _bytesNewBinary,
-                    (int)IntelFD.ME_REGION_BASE,
-                    (int)IntelFD.ME_REGION_LIMIT);
+                    (int)IFD.ME_REGION_BASE,
+                    (int)IFD.ME_REGION_LIMIT);
 
             if (!BinaryUtils.ByteArraysMatch(meNewBinary, meData))
             {
@@ -1006,7 +1005,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool WriteNewSerialData()
         {
             // Given serial is too short
-            if (tbxSerialNumber.Text.Length != AppleEFI.FsysStoreData.Serial.Length)
+            if (tbxSerialNumber.Text.Length != EFIROM.FsysStoreData.Serial.Length)
             {
                 HandleBuildFailure(
                     "The given serial number was too short");
@@ -1015,7 +1014,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Fsys postition was not found
-            if (AppleEFI.FsysStoreData.SerialBase == -1)
+            if (EFIROM.FsysStoreData.SerialBase == -1)
             {
                 HandleBuildFailure(
                     "FsysSectionData store base is -1");
@@ -1024,7 +1023,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Fsys store bytes are empty
-            if (AppleEFI.FsysStoreData.FsysBytes == null)
+            if (EFIROM.FsysStoreData.FsysBytes == null)
             {
                 HandleBuildFailure(
                     "FsysSectionData store bytes are empty");
@@ -1037,18 +1036,18 @@ namespace Mac_EFI_Toolkit.WinForms
 
             BinaryUtils.OverwriteBytesAtBase(
                 _bytesNewBinary,
-                AppleEFI.FsysStoreData.SerialBase,
+                EFIROM.FsysStoreData.SerialBase,
                 newSerialBytes);
 
             // Write new HWC bytes
 
-            if (AppleEFI.FsysStoreData.HWCBase != -1)
+            if (EFIROM.FsysStoreData.HWCBase != -1)
             {
                 byte[] newHwcBytes = Encoding.UTF8.GetBytes(tbxHwc.Text);
 
                 BinaryUtils.OverwriteBytesAtBase(
                     _bytesNewBinary,
-                    AppleEFI.FsysStoreData.HWCBase,
+                    EFIROM.FsysStoreData.HWCBase,
                     newHwcBytes);
             }
             else
@@ -1061,7 +1060,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             // Load new Fsys store
             FsysStore newFsys =
-                AppleEFI.GetFsysStoreData(
+                EFIROM.GetFsysStoreData(
                     _bytesNewBinary,
                     false);
 
@@ -1075,7 +1074,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Check HWC's match
-            if (AppleEFI.FsysStoreData.HWCBase != -1)
+            if (EFIROM.FsysStoreData.HWCBase != -1)
                 if (!string.Equals(tbxHwc.Text, newFsys.HWC))
                 {
                     HandleBuildFailure(
@@ -1108,7 +1107,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             // Load Fsys store from the new binary again
             newFsys =
-                AppleEFI.GetFsysStoreData(
+                EFIROM.GetFsysStoreData(
                     _bytesNewBinary,
                     false);
 
@@ -1190,7 +1189,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     storeBytes);
 
                 NvramStore newStore =
-                    AppleEFI.GetNvramStoreData(
+                    EFIROM.GetNvramStoreData(
                         _bytesNewBinary,
                         store.StoreType);
 
@@ -1237,7 +1236,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 rtbLog);
 
             // Reload _bytesNewBinary
-            _bytesNewBinary = AppleEFI.LoadedBinaryBytes;
+            _bytesNewBinary = EFIROM.LoadedBinaryBytes;
         }
         #endregion
 

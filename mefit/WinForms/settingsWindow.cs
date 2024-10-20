@@ -6,7 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.EFI;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
@@ -161,9 +161,6 @@ namespace Mac_EFI_Toolkit.WinForms
             Settings.SetBool(
                 SettingsBoolType.DisableLzmaFsSearch,
                 swDisableLzmaDecompression.Checked);
-
-            if (!AppleEFI.FirmwareLoaded)
-                Program.MAIN_WINDOW.SetPrimaryInitialDirectory();
 
             if (_updateUI)
             {

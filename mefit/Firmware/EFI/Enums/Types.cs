@@ -1,10 +1,10 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Types.cs - Handles parsing of firmware data
+// Types.cs
 // Released under the GNU GLP v3.0
 
-namespace Mac_EFI_Toolkit.EFI.Enums
+namespace Mac_EFI_Toolkit.Firmware.EFI
 {
     internal enum ApfsCapable
     {

@@ -6,7 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.EFI;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
@@ -57,39 +57,39 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void infoWindow_Load(object sender, EventArgs e)
         {
-            lblBiosId.Text = AppleEFI.AppleRomInfoSectionData.BiosId
+            lblBiosId.Text = EFIROM.AppleRomInfoSectionData.BiosId
                 ?? "N/A";
-            lblModel.Text = AppleEFI.AppleRomInfoSectionData.Model != null
-                ? $"{AppleEFI.AppleRomInfoSectionData.Model} " +
-                $"({MacUtils.ConvertEfiModelCode(AppleEFI.AppleRomInfoSectionData.Model)})"
+            lblModel.Text = EFIROM.AppleRomInfoSectionData.Model != null
+                ? $"{EFIROM.AppleRomInfoSectionData.Model} " +
+                $"({MacUtils.ConvertEfiModelCode(EFIROM.AppleRomInfoSectionData.Model)})"
                 : "N/A";
             lblEfiVersion.Text =
-                AppleEFI.AppleRomInfoSectionData.EfiVersion
+                EFIROM.AppleRomInfoSectionData.EfiVersion
                 ?? "N/A";
             lblBuiltBy.Text =
-                AppleEFI.AppleRomInfoSectionData.BuiltBy
+                EFIROM.AppleRomInfoSectionData.BuiltBy
                 ?? "N/A";
             lblDateStamp.Text =
-                AppleEFI.AppleRomInfoSectionData.DateStamp
+                EFIROM.AppleRomInfoSectionData.DateStamp
                 ?? "N/A";
             lblRevision.Text =
-                AppleEFI.AppleRomInfoSectionData.Revision
+                EFIROM.AppleRomInfoSectionData.Revision
                 ?? "N/A";
             lblBootRom.Text =
-                AppleEFI.AppleRomInfoSectionData.RomVersion
+                EFIROM.AppleRomInfoSectionData.RomVersion
                 ?? "N/A";
             lblBuildcaveId.Text =
-                AppleEFI.AppleRomInfoSectionData.BuildcaveId
+                EFIROM.AppleRomInfoSectionData.BuildcaveId
                 ?? "N/A";
             lblBuildType.Text =
-                AppleEFI.AppleRomInfoSectionData.BuildType
+                EFIROM.AppleRomInfoSectionData.BuildType
                 ?? "N/A";
             lblCompiler.Text =
-                AppleEFI.AppleRomInfoSectionData.Compiler
+                EFIROM.AppleRomInfoSectionData.Compiler
                 ?? "N/A";
             lblSectionData.Text =
-                $"Base: 0x{AppleEFI.AppleRomInfoSectionData.SectionBase:X}h, " +
-                $"Size: {AppleEFI.AppleRomInfoSectionData.SectionBytes.Length:X}h"
+                $"Base: 0x{EFIROM.AppleRomInfoSectionData.SectionBase:X}h, " +
+                $"Size: {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h"
                 ?? string.Empty;
 
             foreach (Label label in tlpInfo.Controls)
@@ -129,7 +129,7 @@ namespace Mac_EFI_Toolkit.WinForms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Text Files (*.txt)|*.txt",
-                FileName = $"AppleRomSectionInformation_{AppleEFI.FileInfoData.FileName}",
+                FileName = $"AppleRomSectionInformation_{EFIROM.FileInfoData.FileName}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.CurrentDirectory
             })
@@ -140,16 +140,16 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 StringBuilder builder = new StringBuilder();
 
-                builder.AppendLine($"Bios ID:       {AppleEFI.AppleRomInfoSectionData.BiosId ?? "N/A"}");
-                builder.AppendLine($"Model:         {AppleEFI.AppleRomInfoSectionData.Model ?? "N/A"}");
-                builder.AppendLine($"EFI Version:   {AppleEFI.AppleRomInfoSectionData.EfiVersion ?? "N/A"}");
-                builder.AppendLine($"Built By:      {AppleEFI.AppleRomInfoSectionData.BuiltBy ?? "N/A"}");
-                builder.AppendLine($"Date Stamp:    {AppleEFI.AppleRomInfoSectionData.DateStamp ?? "N/A"}");
-                builder.AppendLine($"Revision:      {AppleEFI.AppleRomInfoSectionData.Revision ?? "N/A"}");
-                builder.AppendLine($"Boot ROM:      {AppleEFI.AppleRomInfoSectionData.RomVersion ?? "N/A"}");
-                builder.AppendLine($"Buildcave ID:  {AppleEFI.AppleRomInfoSectionData.BuildcaveId ?? "N/A"}");
-                builder.AppendLine($"Built Type:    {AppleEFI.AppleRomInfoSectionData.BuildType ?? "N/A"}");
-                builder.AppendLine($"Compiler:      {AppleEFI.AppleRomInfoSectionData.Compiler ?? "N/A"}");
+                builder.AppendLine($"Bios ID:       {EFIROM.AppleRomInfoSectionData.BiosId ?? "N/A"}");
+                builder.AppendLine($"Model:         {EFIROM.AppleRomInfoSectionData.Model ?? "N/A"}");
+                builder.AppendLine($"EFI Version:   {EFIROM.AppleRomInfoSectionData.EfiVersion ?? "N/A"}");
+                builder.AppendLine($"Built By:      {EFIROM.AppleRomInfoSectionData.BuiltBy ?? "N/A"}");
+                builder.AppendLine($"Date Stamp:    {EFIROM.AppleRomInfoSectionData.DateStamp ?? "N/A"}");
+                builder.AppendLine($"Revision:      {EFIROM.AppleRomInfoSectionData.Revision ?? "N/A"}");
+                builder.AppendLine($"Boot ROM:      {EFIROM.AppleRomInfoSectionData.RomVersion ?? "N/A"}");
+                builder.AppendLine($"Buildcave ID:  {EFIROM.AppleRomInfoSectionData.BuildcaveId ?? "N/A"}");
+                builder.AppendLine($"Built Type:    {EFIROM.AppleRomInfoSectionData.BuildType ?? "N/A"}");
+                builder.AppendLine($"Compiler:      {EFIROM.AppleRomInfoSectionData.Compiler ?? "N/A"}");
 
                 File.WriteAllText(
                     dialog.FileName,

@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.EFI
+namespace Mac_EFI_Toolkit.Firmware.EFI
 {
 
     #region Structs
@@ -77,7 +77,7 @@ namespace Mac_EFI_Toolkit.EFI
     }
     #endregion
 
-    class IntelFD
+    class IFD
     {
 
         #region Internal Members

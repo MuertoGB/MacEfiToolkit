@@ -20,6 +20,9 @@
 
         internal const string AS_CONTACT_SERVER =
             "Contacting Apple server...";
+
+        internal const string AS_NOT_FOUND =
+            "Not Found";
         #endregion
     }
 
@@ -65,6 +68,9 @@
         internal const string DS_FSYS_DIR_FAIL =
             "Failed to create the Fsys Stores directory.";
 
+        internal const string DS_SCFG_DIR_FAIL =
+            "Failed to create the Scfg Stores directory.";
+
         internal const string DS_FSYS_EXPORT_FAIL =
             "Fsys Store export failed.";
 
@@ -97,6 +103,15 @@
 
         internal const string DS_LOG_CREATION_SUCCESS =
             "Log file created successfully.";
+
+        internal const string DS_NOT_VALID_FW =
+            "The selected file is not a valid firmware.";
+
+        internal const string DS_SCFG_EXPORT_SUCCESS =
+            "Scfg Store export successful";
+
+        internal const string DS_SCFG_EXPORT_FAIL =
+            "Scfg Store export failed.";
         #endregion
     }
 
@@ -171,4 +186,10 @@
         #endregion
 
     }
+    internal class ScfgWinStrings
+    {
+        internal const string SW_SCFG =
+            "SCFG";
+    }
+
 }

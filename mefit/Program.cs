@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.WinForms;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -27,6 +28,7 @@ namespace Mac_EFI_Toolkit
         internal static readonly string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
         internal static readonly string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
         internal static readonly string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
+        internal static readonly string ScfgDirectory = Path.Combine(CurrentDirectory, "scfg_stores");
         internal static readonly string SettingsFile = Path.Combine(CurrentDirectory, "Settings.ini");
         internal static readonly string DebugLog = Path.Combine(CurrentDirectory, "debug.log");
         internal static readonly string UnhandledLog = Path.Combine(CurrentDirectory, "unhandled.log");
@@ -37,7 +39,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "240901.0243";
+        internal const string Build = "240914.1240";
         internal const string Channel = "DEV";
     }
 
@@ -67,8 +69,7 @@ namespace Mac_EFI_Toolkit
         internal static string draggedFilePath = string.Empty;
         internal static string lastBuildPath = string.Empty;
         internal static bool openLastBuild = false;
-        internal static System.Threading.Timer memoryTimer;
-        internal static mainWindow MAIN_WINDOW;
+        internal static startupWindow MAIN_WINDOW;
 
         internal static Font FONT_MDL2_REG_9;
         internal static Font FONT_MDL2_REG_10;
@@ -154,7 +155,7 @@ namespace Mac_EFI_Toolkit
             KeyboardHookManager.Hook();
 
             // Create main window instance.
-            MAIN_WINDOW = new mainWindow();
+            MAIN_WINDOW = new startupWindow();
 
             // Run mWindow instance.
             Application.Run(MAIN_WINDOW);
@@ -182,9 +183,6 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_12?.Dispose();
             FONT_MDL2_REG_20?.Dispose();
 
-            // Dispose of memory stats timer.
-            memoryTimer?.Dispose();
-
             // Unhook the low level keyboard hook.
             KeyboardHookManager.Unhook();
         }
@@ -211,7 +209,7 @@ namespace Mac_EFI_Toolkit
 
             File.WriteAllText(
                 METPath.UnhandledLog,
-                Debug.GenerateDebugReport(e));
+                Unhandled.GenerateUnhandledReport(e));
 
             if (File.Exists(METPath.UnhandledLog))
             {

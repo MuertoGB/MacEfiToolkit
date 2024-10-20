@@ -4,13 +4,16 @@
 // FileUtils.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.EFI;
+using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.Firmware.EFI;
+using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils.Structs;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
+using System.Windows.Forms;
 
 #region Enum
 enum Status
@@ -91,8 +94,8 @@ namespace Mac_EFI_Toolkit.Utils
         /// <returns>True if the size is valid, otherwise false.</returns>
         internal static bool GetIsValidBinSize(long size)
         {
-            int expectedSize = AppleEFI.MIN_IMAGE_SIZE;
-            int maxSize = AppleEFI.MAX_IMAGE_SIZE;
+            int expectedSize = FWVars.MIN_IMAGE_SIZE;
+            int maxSize = FWVars.MAX_IMAGE_SIZE;
 
             while (expectedSize <= maxSize)
             {
@@ -116,7 +119,7 @@ namespace Mac_EFI_Toolkit.Utils
         internal static string GetSizeDifference(long size)
         {
             // Initialize the closest size with the minimum image size
-            long closestSize = AppleEFI.MIN_IMAGE_SIZE;
+            long closestSize = FWVars.MIN_IMAGE_SIZE;
 
             // Calculate the initial difference between the input size and the closest size
             long difference =
@@ -124,7 +127,7 @@ namespace Mac_EFI_Toolkit.Utils
                     size - closestSize);
 
             // Iterate through the valid sizes to find the closest size
-            while (closestSize <= AppleEFI.MAX_IMAGE_SIZE)
+            while (closestSize <= FWVars.MAX_IMAGE_SIZE)
             {
                 // Calculate the doubled size and its difference from the input size
                 long doubledSize = closestSize * 2;
@@ -288,6 +291,22 @@ namespace Mac_EFI_Toolkit.Utils
             };
         }
 
+        internal static bool IsValidMinMaxSize(string filePath, Form owner)
+        {
+            long fileSize = new FileInfo(filePath).Length;
+
+            if (fileSize < FWVars.MIN_IMAGE_SIZE || fileSize > FWVars.MAX_IMAGE_SIZE)
+            {
+                string message = fileSize < FWVars.MIN_IMAGE_SIZE
+                    ? $"The selected file does not meet the minimum size requirement of {FWVars.MIN_IMAGE_SIZE:X}h."
+                    : $"The selected file exceeds the maximum size limit of {FWVars.MAX_IMAGE_SIZE:X}h.";
+
+                METMessageBox.Show(owner, AppStrings.AS_ERROR, message, METMessageBoxType.Error, METMessageBoxButtons.Okay);
+                return false;
+            }
+
+            return true;
+        }
 
     }
 }
