@@ -83,7 +83,6 @@
   <ItemGroup>
     <Compile Include="AppColours.cs" />
     <Compile Include="Common\FWVars.cs" />
-    <Compile Include="Firmware\FsysStoreWriter.cs" />
     <Compile Include="Firmware\EFI\IFD.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Common\KeyboardHookManager.cs" />

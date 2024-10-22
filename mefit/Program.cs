@@ -39,7 +39,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "240914.1240";
+        internal const string Build = "241020.0150";
         internal const string Channel = "DEV";
     }
 
@@ -69,6 +69,7 @@ namespace Mac_EFI_Toolkit
         internal static string draggedFilePath = string.Empty;
         internal static string lastBuildPath = string.Empty;
         internal static bool openLastBuild = false;
+        internal static System.Threading.Timer memoryTimer;
         internal static startupWindow MAIN_WINDOW;
 
         internal static Font FONT_MDL2_REG_9;
@@ -182,6 +183,9 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_10?.Dispose();
             FONT_MDL2_REG_12?.Dispose();
             FONT_MDL2_REG_20?.Dispose();
+
+            // Dispose of memory stats timer
+            memoryTimer.Dispose();
 
             // Unhook the low level keyboard hook.
             KeyboardHookManager.Unhook();

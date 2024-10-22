@@ -34,7 +34,6 @@
             this.cmdClose = new System.Windows.Forms.Button();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.cmdMin = new System.Windows.Forms.Button();
-            this.tlpTitleVersion = new System.Windows.Forms.TableLayoutPanel();
             this.lblVersion = new System.Windows.Forms.Label();
             this.pnlSeperator = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
@@ -42,6 +41,8 @@
             this.cmdSettings = new System.Windows.Forms.Button();
             this.cmdAbout = new System.Windows.Forms.Button();
             this.cmdMore = new System.Windows.Forms.Button();
+            this.tlpStatusbar = new System.Windows.Forms.TableLayoutPanel();
+            this.lblPrivateMemoryUsage = new System.Windows.Forms.Label();
             this.tlpDrop = new METTableLayout();
             this.lblDrag = new System.Windows.Forms.Label();
             this.lblGlyph = new System.Windows.Forms.Label();
@@ -56,9 +57,9 @@
             this.restartApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
-            this.tlpTitleVersion.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpMainButtons.SuspendLayout();
+            this.tlpStatusbar.SuspendLayout();
             this.tlpDrop.SuspendLayout();
             this.cmsMore.SuspendLayout();
             this.SuspendLayout();
@@ -77,7 +78,6 @@
             this.tlpTitle.Controls.Add(this.cmdClose, 4, 0);
             this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTitle.Controls.Add(this.cmdMin, 3, 0);
-            this.tlpTitle.Controls.Add(this.tlpTitleVersion, 2, 0);
             this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpTitle.Location = new System.Drawing.Point(1, 1);
             this.tlpTitle.Margin = new System.Windows.Forms.Padding(0);
@@ -159,34 +159,18 @@
             this.cmdMin.UseVisualStyleBackColor = false;
             this.cmdMin.Click += new System.EventHandler(this.cmdMin_Click);
             // 
-            // tlpTitleVersion
-            // 
-            this.tlpTitleVersion.BackColor = System.Drawing.Color.Transparent;
-            this.tlpTitleVersion.ColumnCount = 1;
-            this.tlpTitleVersion.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpTitleVersion.Controls.Add(this.lblVersion, 0, 0);
-            this.tlpTitleVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpTitleVersion.Location = new System.Drawing.Point(233, 0);
-            this.tlpTitleVersion.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpTitleVersion.Name = "tlpTitleVersion";
-            this.tlpTitleVersion.RowCount = 1;
-            this.tlpTitleVersion.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpTitleVersion.Size = new System.Drawing.Size(100, 50);
-            this.tlpTitleVersion.TabIndex = 100;
-            // 
             // lblVersion
             // 
-            this.lblVersion.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblVersion.AutoSize = true;
-            this.lblVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.lblVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.lblVersion.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblVersion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblVersion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.ForeColor = System.Drawing.Color.White;
-            this.lblVersion.Location = new System.Drawing.Point(72, 14);
-            this.lblVersion.Margin = new System.Windows.Forms.Padding(0, 0, 5, 0);
+            this.lblVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.lblVersion.Location = new System.Drawing.Point(0, 0);
+            this.lblVersion.Margin = new System.Windows.Forms.Padding(0);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(23, 22);
+            this.lblVersion.Size = new System.Drawing.Size(216, 35);
             this.lblVersion.TabIndex = 100;
             this.lblVersion.Text = "...";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -300,6 +284,38 @@
             this.cmdMore.UseVisualStyleBackColor = false;
             this.cmdMore.Click += new System.EventHandler(this.cmdMore_Click);
             // 
+            // tlpStatusbar
+            // 
+            this.tlpStatusbar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.tlpStatusbar.ColumnCount = 3;
+            this.tlpStatusbar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatusbar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpStatusbar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatusbar.Controls.Add(this.lblVersion, 0, 0);
+            this.tlpStatusbar.Controls.Add(this.lblPrivateMemoryUsage, 2, 0);
+            this.tlpStatusbar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tlpStatusbar.Location = new System.Drawing.Point(1, 89);
+            this.tlpStatusbar.Name = "tlpStatusbar";
+            this.tlpStatusbar.RowCount = 2;
+            this.tlpStatusbar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStatusbar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpStatusbar.Size = new System.Drawing.Size(433, 36);
+            this.tlpStatusbar.TabIndex = 100;
+            // 
+            // lblPrivateMemoryUsage
+            // 
+            this.lblPrivateMemoryUsage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.lblPrivateMemoryUsage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPrivateMemoryUsage.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPrivateMemoryUsage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.lblPrivateMemoryUsage.Location = new System.Drawing.Point(217, 0);
+            this.lblPrivateMemoryUsage.Margin = new System.Windows.Forms.Padding(0);
+            this.lblPrivateMemoryUsage.Name = "lblPrivateMemoryUsage";
+            this.lblPrivateMemoryUsage.Size = new System.Drawing.Size(216, 35);
+            this.lblPrivateMemoryUsage.TabIndex = 1;
+            this.lblPrivateMemoryUsage.Text = "...";
+            this.lblPrivateMemoryUsage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // tlpDrop
             // 
             this.tlpDrop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -311,13 +327,13 @@
             this.tlpDrop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpDrop.GradientEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tlpDrop.GradientStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this.tlpDrop.Location = new System.Drawing.Point(1, 89);
+            this.tlpDrop.Location = new System.Drawing.Point(1, 125);
             this.tlpDrop.Name = "tlpDrop";
             this.tlpDrop.RowCount = 3;
             this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpDrop.Size = new System.Drawing.Size(433, 180);
+            this.tlpDrop.Size = new System.Drawing.Size(433, 164);
             this.tlpDrop.TabIndex = 0;
             // 
             // lblDrag
@@ -326,11 +342,11 @@
             this.lblDrag.AutoSize = true;
             this.lblDrag.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDrag.ForeColor = System.Drawing.Color.White;
-            this.lblDrag.Location = new System.Drawing.Point(121, 69);
+            this.lblDrag.Location = new System.Drawing.Point(110, 71);
             this.lblDrag.Name = "lblDrag";
-            this.lblDrag.Size = new System.Drawing.Size(191, 40);
+            this.lblDrag.Size = new System.Drawing.Size(212, 20);
             this.lblDrag.TabIndex = 1;
-            this.lblDrag.Text = "Drop a file into the window\r\nor";
+            this.lblDrag.Text = "Drop a file into the window, or";
             this.lblDrag.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblGlyph
@@ -338,7 +354,7 @@
             this.lblGlyph.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lblGlyph.AutoSize = true;
             this.lblGlyph.ForeColor = System.Drawing.Color.White;
-            this.lblGlyph.Location = new System.Drawing.Point(208, 43);
+            this.lblGlyph.Location = new System.Drawing.Point(208, 35);
             this.lblGlyph.Name = "lblGlyph";
             this.lblGlyph.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
             this.lblGlyph.Size = new System.Drawing.Size(17, 24);
@@ -353,7 +369,7 @@
             this.cmdOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOpen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdOpen.ForeColor = System.Drawing.Color.White;
-            this.cmdOpen.Location = new System.Drawing.Point(179, 115);
+            this.cmdOpen.Location = new System.Drawing.Point(179, 107);
             this.cmdOpen.Name = "cmdOpen";
             this.cmdOpen.Size = new System.Drawing.Size(75, 36);
             this.cmdOpen.TabIndex = 2;
@@ -376,7 +392,7 @@
             this.restartApplicationToolStripMenuItem});
             this.cmsMore.Name = "cmsMore";
             this.cmsMore.ShowImageMargin = false;
-            this.cmsMore.Size = new System.Drawing.Size(216, 184);
+            this.cmsMore.Size = new System.Drawing.Size(216, 156);
             // 
             // changelogToolStripMenuItem
             // 
@@ -441,25 +457,26 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.ClientSize = new System.Drawing.Size(435, 270);
+            this.ClientSize = new System.Drawing.Size(435, 290);
             this.Controls.Add(this.tlpDrop);
+            this.Controls.Add(this.tlpStatusbar);
             this.Controls.Add(this.pnlSeperator);
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.tlpTitle);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(435, 270);
+            this.MinimumSize = new System.Drawing.Size(435, 290);
             this.Name = "startupWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "startupWindow";
             this.tlpTitle.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
-            this.tlpTitleVersion.ResumeLayout(false);
-            this.tlpTitleVersion.PerformLayout();
             this.tlpMain.ResumeLayout(false);
             this.tlpMainButtons.ResumeLayout(false);
+            this.tlpStatusbar.ResumeLayout(false);
+            this.tlpStatusbar.PerformLayout();
             this.tlpDrop.ResumeLayout(false);
             this.tlpDrop.PerformLayout();
             this.cmsMore.ResumeLayout(false);
@@ -474,7 +491,6 @@
         internal System.Windows.Forms.Button cmdClose;
         internal System.Windows.Forms.PictureBox pbxLogo;
         internal System.Windows.Forms.Button cmdMin;
-        private System.Windows.Forms.TableLayoutPanel tlpTitleVersion;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Panel pnlSeperator;
         private System.Windows.Forms.Label lblGlyph;
@@ -494,5 +510,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem restartApplicationToolStripMenuItem;
         private UI.METContextMenuStrip cmsMore;
+        private System.Windows.Forms.TableLayoutPanel tlpStatusbar;
+        private System.Windows.Forms.Label lblPrivateMemoryUsage;
     }
 }

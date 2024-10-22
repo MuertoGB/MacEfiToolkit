@@ -5,6 +5,7 @@
 // startupWindow.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.T2;
 using Mac_EFI_Toolkit.UI;
@@ -15,6 +16,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
@@ -23,6 +25,10 @@ namespace Mac_EFI_Toolkit.WinForms
     {
         #region Public Members
         public string loadedFile = string.Empty;
+        #endregion
+
+        #region Private Members
+        private static readonly object _lockObject = new object();
         #endregion
 
         #region Overriden Properties
@@ -70,8 +76,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void startupWindow_Load(object sender, EventArgs e)
         {
             // Set version text.
-            lblVersion.Text =
-                Application.ProductVersion;
+            lblVersion.Text = $"Version {Application.ProductVersion}";
 
             // Open dragged file is the arg path is ! null or ! empty.
             if (!string.IsNullOrEmpty(Program.draggedFilePath))
@@ -84,6 +89,11 @@ namespace Mac_EFI_Toolkit.WinForms
             // Check for a new application version
             if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
                 StartupVersionCheck();
+
+            TimerCallback callback = new TimerCallback(
+                GetPrivateMemoryUsage);
+
+            Program.memoryTimer = new System.Threading.Timer(callback, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
 
         private void startupWindow_DragEnter(object sender, DragEventArgs e)
@@ -150,7 +160,7 @@ namespace Mac_EFI_Toolkit.WinForms
             Control[] controls = {
                 tlpTitle,
                 lblWindowTitle,
-                tlpTitleVersion };
+                tlpMainButtons };
 
             foreach (Control control in controls)
                 control.MouseMove += mainWindow_MouseMove;
@@ -259,6 +269,18 @@ namespace Mac_EFI_Toolkit.WinForms
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e) =>
             Program.PerformExitAction(this, ExitAction.Restart);
         #endregion
+
+        private void GetPrivateMemoryUsage(object state)
+        {
+            lock (_lockObject)
+            {
+                using (Process currentProcess = Process.GetCurrentProcess())
+                {
+                    lblPrivateMemoryUsage.Invoke((Action)(() => lblPrivateMemoryUsage.Text =
+                        $"{Helper.GetBytesReadableSize(currentProcess.PrivateMemorySize64)}"));
+                }
+            }
+        }
 
         internal async void StartupVersionCheck()
         {
