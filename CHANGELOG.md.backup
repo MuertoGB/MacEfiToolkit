@@ -17,7 +17,7 @@
 
 #### New:
 - User Interface redesigned.
-- The application now supports Intel T2 SOCROM firmware.
+- The application now supports Intel T2 SOCROM firmware, where the user can view the firmware information, export and migrate the Scfg store, and more.
 - The application now supports opening multiple firmwares simultaneously.
 - Added a new startup window where the user can drag and drop, or browse for a compatible EFIROM, or T2 SOCROM. Following this change, the main window has now become the EFIROM window, and certain functions have moved to the startup window.
 - The firmware patcher window has been removed, and all patching features have been moved to the EFI window.

@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{65F08BB6-5BE1-4159-A1C6-61A82297756A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Mac_EFI_Toolkit</RootNamespace>
+    <AssemblyName>mefit</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mac_EFI_Toolkit.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Assets\met.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Assets\met.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppColours.cs" />
+    <Compile Include="Common\FWVars.cs" />
+    <Compile Include="Firmware\EFI\IFD.cs" />
+    <Compile Include="Common\FontResolver.cs" />
+    <Compile Include="Common\KeyboardHookManager.cs" />
+    <Compile Include="Common\ToInt24.cs" />
+    <Compile Include="Firmware\EFI\Guids.cs" />
+    <Compile Include="Firmware\EFI\EFIROM.cs" />
+    <Compile Include="Common\Helper.cs" />
+    <Compile Include="Common\IniFile.cs" />
+    <Compile Include="Firmware\EFI\IME.cs" />
+    <Compile Include="Unhandled.cs" />
+    <Compile Include="Firmware\EFI\Enums\Types.cs" />
+    <Compile Include="UI\Controls\METTableLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\Structs\Binary.cs" />
+    <Compile Include="Firmware\EFI\Structs\EFILock.cs" />
+    <Compile Include="Firmware\EFI\Structs\Sections.cs" />
+    <Compile Include="Firmware\EFI\Structs\Stores.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />
+    <Compile Include="Common\SevenZip\Common\CRC.cs" />
+    <Compile Include="Common\SevenZip\Common\InBuffer.cs" />
+    <Compile Include="Common\SevenZip\Common\OutBuffer.cs" />
+    <Compile Include="Common\SevenZip\Compress\LZMA\LzmaBase.cs" />
+    <Compile Include="Common\SevenZip\Compress\LZMA\LzmaDecoder.cs" />
+    <Compile Include="Common\SevenZip\Compress\LZ\IMatchFinder.cs" />
+    <Compile Include="Common\SevenZip\Compress\LZ\LzBinTree.cs" />
+    <Compile Include="Common\SevenZip\Compress\LZ\LzInWindow.cs" />
+    <Compile Include="Common\SevenZip\Compress\LZ\LzOutWindow.cs" />
+    <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoder.cs" />
+    <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBit.cs" />
+    <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBitTree.cs" />
+    <Compile Include="Common\SevenZip\ICoder.cs" />
+    <Compile Include="Common\LzmaCoder.cs" />
+    <Compile Include="Common\Logger.cs" />
+    <Compile Include="AppUpdate.cs" />
+    <Compile Include="Chars.cs" />
+    <Compile Include="Strings.cs" />
+    <Compile Include="Firmware\T2\Structs\ScfgData.cs" />
+    <Compile Include="Firmware\T2\T2ROM.cs" />
+    <Compile Include="Firmware\T2\ROMSigs.cs" />
+    <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
+    <Compile Include="UI\Design\METSwitchDesigner.cs" />
+    <Compile Include="UI\METMessageBox\Enums.cs" />
+    <Compile Include="UI\UITools.cs" />
+    <Compile Include="UI\Controls\METContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\METLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\METMessageBox\METMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\METMessageBox\METMessageBox.Designer.cs">
+      <DependentUpon>METMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\METRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\METSwitch.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\OSUtils.cs" />
+    <Compile Include="WinForms\aboutWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\aboutWindow.Designer.cs">
+      <DependentUpon>aboutWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\patcherWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\patcherWindow.Designer.cs">
+      <DependentUpon>patcherWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\infoWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\infoWindow.Designer.cs">
+      <DependentUpon>infoWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\efiWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\efiWindow.Designer.cs">
+      <DependentUpon>efiWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WIN32\NativeMethods.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Colours.cs" />
+    <Compile Include="UI\Design\METCheckboxDesigner.cs" />
+    <Compile Include="UI\Controls\METCheckbox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Renderers\METMenuRenderer.cs" />
+    <Compile Include="Utils\BinaryUtils.cs" />
+    <Compile Include="Utils\MacUtils.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
+    <Compile Include="Utils\NetUtils.cs" />
+    <Compile Include="WinForms\settingsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\settingsWindow.Designer.cs">
+      <DependentUpon>settingsWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\startupWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\startupWindow.Designer.cs">
+      <DependentUpon>startupWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\t2Window.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\t2Window.Designer.cs">
+      <DependentUpon>t2Window.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\termsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\termsWindow.Designer.cs">
+      <DependentUpon>termsWindow.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="UI\METMessageBox\METMessageBox.resx">
+      <DependentUpon>METMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\aboutWindow.resx">
+      <DependentUpon>aboutWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\patcherWindow.resx">
+      <DependentUpon>patcherWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\infoWindow.resx">
+      <DependentUpon>infoWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\efiWindow.resx">
+      <DependentUpon>efiWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="WinForms\settingsWindow.resx">
+      <DependentUpon>settingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\startupWindow.resx">
+      <DependentUpon>startupWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\t2Window.resx">
+      <DependentUpon>t2Window.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\termsWindow.resx">
+      <DependentUpon>termsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
+    <None Include="Assets\met.pfx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="Resources\segmdl2.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\imgSprite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo24px.png" />
+    <None Include="Resources\changelog.png" />
+    <None Include="Resources\loading.gif" />
+    <None Include="Assets\editorterms.txt" />
+    <Content Include="Assets\met.ico" />
+    <None Include="Resources\modeldb.xml" />
+    <None Include="Resources\imgmuerto64px.png" />
+    <None Include="Resources\logo32px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
