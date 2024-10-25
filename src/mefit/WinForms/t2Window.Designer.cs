@@ -37,29 +37,18 @@
             this.cmdCopyMenu = new System.Windows.Forms.Button();
             this.cmdOpen = new System.Windows.Forms.Button();
             this.cmdReset = new System.Windows.Forms.Button();
-            this.cmdTargetFw = new System.Windows.Forms.Button();
             this.tlpFirmware = new System.Windows.Forms.TableLayoutPanel();
             this.lblFilesizeText = new System.Windows.Forms.Label();
             this.lblFilenameText = new System.Windows.Forms.Label();
-            this.lblFilename = new METLabel();
             this.lblFilesize = new System.Windows.Forms.Label();
             this.lblCrcText = new System.Windows.Forms.Label();
-            this.lblCrc = new METLabel();
             this.lblCreatedText = new System.Windows.Forms.Label();
             this.lblCreated = new System.Windows.Forms.Label();
             this.lblModifiedText = new System.Windows.Forms.Label();
-            this.lblModified = new METLabel();
             this.lblScfgText = new System.Windows.Forms.Label();
             this.lblSerialText = new System.Windows.Forms.Label();
-            this.lblSerial = new METLabel();
             this.lblConfigText = new System.Windows.Forms.Label();
-            this.lblConfigCode = new METLabel();
             this.lblSonText = new System.Windows.Forms.Label();
-            this.lblSon = new METLabel();
-            this.tlpScfgStore = new System.Windows.Forms.TableLayoutPanel();
-            this.lblScfg = new System.Windows.Forms.Label();
-            this.cmdExportScfg = new System.Windows.Forms.Button();
-            this.cmdTransferScfg = new System.Windows.Forms.Button();
             this.lblIbootText = new System.Windows.Forms.Label();
             this.lbliBoot = new System.Windows.Forms.Label();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
@@ -67,12 +56,21 @@
             this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLoad = new System.Windows.Forms.PictureBox();
             this.lblStatusBarTip = new System.Windows.Forms.Label();
-            this.pnlSeperator = new System.Windows.Forms.Panel();
+            this.pnlSeperatorTop = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.cmdPatch = new System.Windows.Forms.Button();
+            this.cmdExport = new System.Windows.Forms.Button();
+            this.lblScfg = new System.Windows.Forms.Label();
+            this.lblFilename = new METLabel();
+            this.lblCrc = new METLabel();
+            this.lblModified = new METLabel();
+            this.lblSerial = new METLabel();
+            this.lblConfigCode = new METLabel();
+            this.lblSon = new METLabel();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
             this.tlpFirmware.SuspendLayout();
-            this.tlpScfgStore.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpStatusBar.SuspendLayout();
             this.tlpStatusBarImage.SuspendLayout();
@@ -82,7 +80,6 @@
             // tlpTitle
             // 
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
             this.tlpTitle.ColumnCount = 3;
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -96,7 +93,7 @@
             this.tlpTitle.Name = "tlpTitle";
             this.tlpTitle.RowCount = 1;
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.Size = new System.Drawing.Size(548, 40);
+            this.tlpTitle.Size = new System.Drawing.Size(483, 40);
             this.tlpTitle.TabIndex = 100;
             // 
             // pbxLogo
@@ -114,14 +111,14 @@
             // 
             // lblTitle
             // 
-            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Location = new System.Drawing.Point(40, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(468, 40);
+            this.lblTitle.Size = new System.Drawing.Size(403, 40);
             this.lblTitle.TabIndex = 100;
             this.lblTitle.Text = "T2 SOCROM";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -138,7 +135,7 @@
             this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdClose.ForeColor = System.Drawing.Color.White;
-            this.cmdClose.Location = new System.Drawing.Point(508, 0);
+            this.cmdClose.Location = new System.Drawing.Point(443, 0);
             this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
             this.cmdClose.MaximumSize = new System.Drawing.Size(40, 40);
             this.cmdClose.MinimumSize = new System.Drawing.Size(40, 40);
@@ -155,63 +152,65 @@
             // tlpMenu
             // 
             this.tlpMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.tlpMenu.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpMenu.ColumnCount = 7;
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMenu.ColumnCount = 9;
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tlpMenu.Controls.Add(this.cmdCopyMenu, 4, 0);
             this.tlpMenu.Controls.Add(this.cmdOpen, 0, 0);
             this.tlpMenu.Controls.Add(this.cmdReset, 2, 0);
-            this.tlpMenu.Controls.Add(this.cmdTargetFw, 5, 0);
+            this.tlpMenu.Controls.Add(this.cmdPatch, 8, 0);
+            this.tlpMenu.Controls.Add(this.cmdExport, 6, 0);
             this.tlpMenu.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tlpMenu.Location = new System.Drawing.Point(1, 41);
+            this.tlpMenu.Location = new System.Drawing.Point(1, 42);
             this.tlpMenu.Margin = new System.Windows.Forms.Padding(2);
             this.tlpMenu.Name = "tlpMenu";
             this.tlpMenu.RowCount = 1;
             this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMenu.Size = new System.Drawing.Size(548, 38);
+            this.tlpMenu.Size = new System.Drawing.Size(483, 32);
             this.tlpMenu.TabIndex = 0;
             // 
             // cmdCopyMenu
             // 
-            this.cmdCopyMenu.BackColor = System.Drawing.Color.Transparent;
+            this.cmdCopyMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdCopyMenu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdCopyMenu.Enabled = false;
-            this.cmdCopyMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdCopyMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdCopyMenu.FlatAppearance.BorderSize = 0;
-            this.cmdCopyMenu.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cmdCopyMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.cmdCopyMenu.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdCopyMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdCopyMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCopyMenu.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdCopyMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdCopyMenu.Location = new System.Drawing.Point(139, 1);
-            this.cmdCopyMenu.Margin = new System.Windows.Forms.Padding(1);
+            this.cmdCopyMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.cmdCopyMenu.Location = new System.Drawing.Point(194, 0);
+            this.cmdCopyMenu.Margin = new System.Windows.Forms.Padding(0);
             this.cmdCopyMenu.Name = "cmdCopyMenu";
-            this.cmdCopyMenu.Size = new System.Drawing.Size(66, 36);
+            this.cmdCopyMenu.Size = new System.Drawing.Size(95, 32);
             this.cmdCopyMenu.TabIndex = 2;
             this.cmdCopyMenu.Text = "COPY";
             this.cmdCopyMenu.UseVisualStyleBackColor = false;
             // 
             // cmdOpen
             // 
-            this.cmdOpen.BackColor = System.Drawing.Color.Transparent;
+            this.cmdOpen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdOpen.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdOpen.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdOpen.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdOpen.FlatAppearance.BorderSize = 0;
-            this.cmdOpen.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cmdOpen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.cmdOpen.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdOpen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOpen.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdOpen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdOpen.Location = new System.Drawing.Point(1, 1);
-            this.cmdOpen.Margin = new System.Windows.Forms.Padding(1);
+            this.cmdOpen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.cmdOpen.Location = new System.Drawing.Point(0, 0);
+            this.cmdOpen.Margin = new System.Windows.Forms.Padding(0);
             this.cmdOpen.Name = "cmdOpen";
-            this.cmdOpen.Size = new System.Drawing.Size(66, 36);
+            this.cmdOpen.Size = new System.Drawing.Size(95, 32);
             this.cmdOpen.TabIndex = 0;
             this.cmdOpen.Text = "OPEN";
             this.cmdOpen.UseVisualStyleBackColor = false;
@@ -219,44 +218,24 @@
             // 
             // cmdReset
             // 
-            this.cmdReset.BackColor = System.Drawing.Color.Transparent;
+            this.cmdReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmdReset.Enabled = false;
-            this.cmdReset.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.cmdReset.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
             this.cmdReset.FlatAppearance.BorderSize = 0;
-            this.cmdReset.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cmdReset.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.cmdReset.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdReset.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdReset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdReset.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdReset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdReset.Location = new System.Drawing.Point(70, 1);
-            this.cmdReset.Margin = new System.Windows.Forms.Padding(1);
+            this.cmdReset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.cmdReset.Location = new System.Drawing.Point(97, 0);
+            this.cmdReset.Margin = new System.Windows.Forms.Padding(0);
             this.cmdReset.Name = "cmdReset";
-            this.cmdReset.Size = new System.Drawing.Size(66, 36);
+            this.cmdReset.Size = new System.Drawing.Size(95, 32);
             this.cmdReset.TabIndex = 1;
             this.cmdReset.Text = "RESET";
             this.cmdReset.UseVisualStyleBackColor = false;
             this.cmdReset.Click += new System.EventHandler(this.cmdReset_Click);
-            // 
-            // cmdTargetFw
-            // 
-            this.cmdTargetFw.BackColor = System.Drawing.Color.Transparent;
-            this.cmdTargetFw.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdTargetFw.Enabled = false;
-            this.cmdTargetFw.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.cmdTargetFw.FlatAppearance.BorderSize = 0;
-            this.cmdTargetFw.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cmdTargetFw.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.cmdTargetFw.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdTargetFw.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdTargetFw.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdTargetFw.Location = new System.Drawing.Point(207, 1);
-            this.cmdTargetFw.Margin = new System.Windows.Forms.Padding(1);
-            this.cmdTargetFw.Name = "cmdTargetFw";
-            this.cmdTargetFw.Size = new System.Drawing.Size(108, 36);
-            this.cmdTargetFw.TabIndex = 3;
-            this.cmdTargetFw.Text = "TARGET FW";
-            this.cmdTargetFw.UseVisualStyleBackColor = false;
             // 
             // tlpFirmware
             // 
@@ -282,9 +261,9 @@
             this.tlpFirmware.Controls.Add(this.lblConfigCode, 2, 17);
             this.tlpFirmware.Controls.Add(this.lblSonText, 0, 19);
             this.tlpFirmware.Controls.Add(this.lblSon, 2, 19);
-            this.tlpFirmware.Controls.Add(this.tlpScfgStore, 2, 13);
             this.tlpFirmware.Controls.Add(this.lblIbootText, 0, 11);
             this.tlpFirmware.Controls.Add(this.lbliBoot, 2, 11);
+            this.tlpFirmware.Controls.Add(this.lblScfg, 2, 13);
             this.tlpFirmware.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFirmware.Enabled = false;
             this.tlpFirmware.Location = new System.Drawing.Point(0, 0);
@@ -311,7 +290,7 @@
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tlpFirmware.Size = new System.Drawing.Size(548, 370);
+            this.tlpFirmware.Size = new System.Drawing.Size(483, 360);
             this.tlpFirmware.TabIndex = 1;
             // 
             // lblFilesizeText
@@ -321,11 +300,11 @@
             this.lblFilesizeText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFilesizeText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFilesizeText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblFilesizeText.Location = new System.Drawing.Point(0, 38);
+            this.lblFilesizeText.Location = new System.Drawing.Point(0, 37);
             this.lblFilesizeText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFilesizeText.Name = "lblFilesizeText";
             this.lblFilesizeText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblFilesizeText.Size = new System.Drawing.Size(130, 36);
+            this.lblFilesizeText.Size = new System.Drawing.Size(130, 35);
             this.lblFilesizeText.TabIndex = 100;
             this.lblFilesizeText.Text = "Size:";
             this.lblFilesizeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -341,27 +320,10 @@
             this.lblFilenameText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFilenameText.Name = "lblFilenameText";
             this.lblFilenameText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblFilenameText.Size = new System.Drawing.Size(130, 36);
+            this.lblFilenameText.Size = new System.Drawing.Size(130, 35);
             this.lblFilenameText.TabIndex = 100;
             this.lblFilenameText.Text = "Filename:";
             this.lblFilenameText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblFilename
-            // 
-            this.lblFilename.AutoEllipsis = true;
-            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblFilename.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFilename.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFilename.ForeColor = System.Drawing.Color.White;
-            this.lblFilename.Location = new System.Drawing.Point(131, 1);
-            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFilename.Size = new System.Drawing.Size(417, 36);
-            this.lblFilename.TabIndex = 100;
-            this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblFilename.UseMnemonic = false;
             // 
             // lblFilesize
             // 
@@ -371,11 +333,11 @@
             this.lblFilesize.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFilesize.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFilesize.ForeColor = System.Drawing.Color.White;
-            this.lblFilesize.Location = new System.Drawing.Point(131, 38);
+            this.lblFilesize.Location = new System.Drawing.Point(131, 37);
             this.lblFilesize.Margin = new System.Windows.Forms.Padding(0);
             this.lblFilesize.Name = "lblFilesize";
             this.lblFilesize.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFilesize.Size = new System.Drawing.Size(417, 36);
+            this.lblFilesize.Size = new System.Drawing.Size(352, 35);
             this.lblFilesize.TabIndex = 100;
             this.lblFilesize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -386,31 +348,14 @@
             this.lblCrcText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCrcText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCrcText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblCrcText.Location = new System.Drawing.Point(0, 75);
+            this.lblCrcText.Location = new System.Drawing.Point(0, 73);
             this.lblCrcText.Margin = new System.Windows.Forms.Padding(0);
             this.lblCrcText.Name = "lblCrcText";
             this.lblCrcText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblCrcText.Size = new System.Drawing.Size(130, 36);
+            this.lblCrcText.Size = new System.Drawing.Size(130, 35);
             this.lblCrcText.TabIndex = 100;
             this.lblCrcText.Text = "CRC32:";
             this.lblCrcText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblCrc
-            // 
-            this.lblCrc.AutoEllipsis = true;
-            this.lblCrc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblCrc.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblCrc.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCrc.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCrc.ForeColor = System.Drawing.Color.White;
-            this.lblCrc.Location = new System.Drawing.Point(131, 75);
-            this.lblCrc.Margin = new System.Windows.Forms.Padding(0);
-            this.lblCrc.Name = "lblCrc";
-            this.lblCrc.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblCrc.Size = new System.Drawing.Size(417, 36);
-            this.lblCrc.TabIndex = 100;
-            this.lblCrc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblCrc.UseMnemonic = false;
             // 
             // lblCreatedText
             // 
@@ -419,11 +364,11 @@
             this.lblCreatedText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCreatedText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCreatedText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblCreatedText.Location = new System.Drawing.Point(0, 112);
+            this.lblCreatedText.Location = new System.Drawing.Point(0, 109);
             this.lblCreatedText.Margin = new System.Windows.Forms.Padding(0);
             this.lblCreatedText.Name = "lblCreatedText";
             this.lblCreatedText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblCreatedText.Size = new System.Drawing.Size(130, 36);
+            this.lblCreatedText.Size = new System.Drawing.Size(130, 35);
             this.lblCreatedText.TabIndex = 100;
             this.lblCreatedText.Text = "Created:";
             this.lblCreatedText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -436,11 +381,11 @@
             this.lblCreated.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCreated.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCreated.ForeColor = System.Drawing.Color.White;
-            this.lblCreated.Location = new System.Drawing.Point(131, 112);
+            this.lblCreated.Location = new System.Drawing.Point(131, 109);
             this.lblCreated.Margin = new System.Windows.Forms.Padding(0);
             this.lblCreated.Name = "lblCreated";
             this.lblCreated.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblCreated.Size = new System.Drawing.Size(417, 36);
+            this.lblCreated.Size = new System.Drawing.Size(352, 35);
             this.lblCreated.TabIndex = 100;
             this.lblCreated.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -451,31 +396,14 @@
             this.lblModifiedText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblModifiedText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblModifiedText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblModifiedText.Location = new System.Drawing.Point(0, 149);
+            this.lblModifiedText.Location = new System.Drawing.Point(0, 145);
             this.lblModifiedText.Margin = new System.Windows.Forms.Padding(0);
             this.lblModifiedText.Name = "lblModifiedText";
             this.lblModifiedText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblModifiedText.Size = new System.Drawing.Size(130, 36);
+            this.lblModifiedText.Size = new System.Drawing.Size(130, 35);
             this.lblModifiedText.TabIndex = 100;
             this.lblModifiedText.Text = "Modified:";
             this.lblModifiedText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblModified
-            // 
-            this.lblModified.AutoEllipsis = true;
-            this.lblModified.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblModified.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblModified.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblModified.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblModified.ForeColor = System.Drawing.Color.White;
-            this.lblModified.Location = new System.Drawing.Point(131, 149);
-            this.lblModified.Margin = new System.Windows.Forms.Padding(0);
-            this.lblModified.Name = "lblModified";
-            this.lblModified.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblModified.Size = new System.Drawing.Size(417, 36);
-            this.lblModified.TabIndex = 100;
-            this.lblModified.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblModified.UseMnemonic = false;
             // 
             // lblScfgText
             // 
@@ -484,11 +412,11 @@
             this.lblScfgText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblScfgText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblScfgText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblScfgText.Location = new System.Drawing.Point(0, 223);
+            this.lblScfgText.Location = new System.Drawing.Point(0, 217);
             this.lblScfgText.Margin = new System.Windows.Forms.Padding(0);
             this.lblScfgText.Name = "lblScfgText";
             this.lblScfgText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblScfgText.Size = new System.Drawing.Size(130, 36);
+            this.lblScfgText.Size = new System.Drawing.Size(130, 35);
             this.lblScfgText.TabIndex = 100;
             this.lblScfgText.Text = "SCFG Store:";
             this.lblScfgText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -500,31 +428,14 @@
             this.lblSerialText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSerialText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSerialText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblSerialText.Location = new System.Drawing.Point(0, 260);
+            this.lblSerialText.Location = new System.Drawing.Point(0, 253);
             this.lblSerialText.Margin = new System.Windows.Forms.Padding(0);
             this.lblSerialText.Name = "lblSerialText";
             this.lblSerialText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblSerialText.Size = new System.Drawing.Size(130, 36);
+            this.lblSerialText.Size = new System.Drawing.Size(130, 35);
             this.lblSerialText.TabIndex = 100;
             this.lblSerialText.Text = "Serial:";
             this.lblSerialText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblSerial
-            // 
-            this.lblSerial.AutoEllipsis = true;
-            this.lblSerial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.lblSerial.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblSerial.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSerial.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSerial.ForeColor = System.Drawing.Color.White;
-            this.lblSerial.Location = new System.Drawing.Point(131, 260);
-            this.lblSerial.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSerial.Name = "lblSerial";
-            this.lblSerial.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblSerial.Size = new System.Drawing.Size(417, 36);
-            this.lblSerial.TabIndex = 100;
-            this.lblSerial.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblSerial.UseMnemonic = false;
             // 
             // lblConfigText
             // 
@@ -533,30 +444,14 @@
             this.lblConfigText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblConfigText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblConfigText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblConfigText.Location = new System.Drawing.Point(0, 297);
+            this.lblConfigText.Location = new System.Drawing.Point(0, 289);
             this.lblConfigText.Margin = new System.Windows.Forms.Padding(0);
             this.lblConfigText.Name = "lblConfigText";
             this.lblConfigText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblConfigText.Size = new System.Drawing.Size(130, 36);
+            this.lblConfigText.Size = new System.Drawing.Size(130, 35);
             this.lblConfigText.TabIndex = 100;
             this.lblConfigText.Text = "Config Code:";
             this.lblConfigText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblConfigCode
-            // 
-            this.lblConfigCode.AutoEllipsis = true;
-            this.lblConfigCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblConfigCode.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblConfigCode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblConfigCode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblConfigCode.ForeColor = System.Drawing.Color.White;
-            this.lblConfigCode.Location = new System.Drawing.Point(131, 297);
-            this.lblConfigCode.Margin = new System.Windows.Forms.Padding(0);
-            this.lblConfigCode.Name = "lblConfigCode";
-            this.lblConfigCode.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblConfigCode.Size = new System.Drawing.Size(417, 36);
-            this.lblConfigCode.TabIndex = 100;
-            this.lblConfigCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblSonText
             // 
@@ -565,109 +460,14 @@
             this.lblSonText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSonText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSonText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblSonText.Location = new System.Drawing.Point(0, 334);
+            this.lblSonText.Location = new System.Drawing.Point(0, 325);
             this.lblSonText.Margin = new System.Windows.Forms.Padding(0);
             this.lblSonText.Name = "lblSonText";
             this.lblSonText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblSonText.Size = new System.Drawing.Size(130, 36);
+            this.lblSonText.Size = new System.Drawing.Size(130, 35);
             this.lblSonText.TabIndex = 100;
             this.lblSonText.Text = "Order No:";
             this.lblSonText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblSon
-            // 
-            this.lblSon.AutoEllipsis = true;
-            this.lblSon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.lblSon.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblSon.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSon.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSon.ForeColor = System.Drawing.Color.White;
-            this.lblSon.Location = new System.Drawing.Point(131, 334);
-            this.lblSon.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSon.Name = "lblSon";
-            this.lblSon.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblSon.Size = new System.Drawing.Size(417, 36);
-            this.lblSon.TabIndex = 100;
-            this.lblSon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblSon.UseMnemonic = false;
-            // 
-            // tlpScfgStore
-            // 
-            this.tlpScfgStore.ColumnCount = 5;
-            this.tlpScfgStore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpScfgStore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpScfgStore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpScfgStore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpScfgStore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpScfgStore.Controls.Add(this.lblScfg, 0, 0);
-            this.tlpScfgStore.Controls.Add(this.cmdExportScfg, 4, 0);
-            this.tlpScfgStore.Controls.Add(this.cmdTransferScfg, 2, 0);
-            this.tlpScfgStore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpScfgStore.Location = new System.Drawing.Point(131, 223);
-            this.tlpScfgStore.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpScfgStore.Name = "tlpScfgStore";
-            this.tlpScfgStore.RowCount = 1;
-            this.tlpScfgStore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpScfgStore.Size = new System.Drawing.Size(417, 36);
-            this.tlpScfgStore.TabIndex = 0;
-            // 
-            // lblScfg
-            // 
-            this.lblScfg.AutoEllipsis = true;
-            this.lblScfg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblScfg.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblScfg.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblScfg.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblScfg.ForeColor = System.Drawing.Color.White;
-            this.lblScfg.Location = new System.Drawing.Point(0, 0);
-            this.lblScfg.Margin = new System.Windows.Forms.Padding(0);
-            this.lblScfg.Name = "lblScfg";
-            this.lblScfg.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblScfg.Size = new System.Drawing.Size(343, 36);
-            this.lblScfg.TabIndex = 100;
-            this.lblScfg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblScfg.UseMnemonic = false;
-            // 
-            // cmdExportScfg
-            // 
-            this.cmdExportScfg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdExportScfg.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdExportScfg.Enabled = false;
-            this.cmdExportScfg.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdExportScfg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdExportScfg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
-            this.cmdExportScfg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdExportScfg.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdExportScfg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-            this.cmdExportScfg.Location = new System.Drawing.Point(381, 0);
-            this.cmdExportScfg.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdExportScfg.Name = "cmdExportScfg";
-            this.cmdExportScfg.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.cmdExportScfg.Size = new System.Drawing.Size(36, 36);
-            this.cmdExportScfg.TabIndex = 1;
-            this.cmdExportScfg.Text = "E";
-            this.cmdExportScfg.UseVisualStyleBackColor = false;
-            this.cmdExportScfg.Click += new System.EventHandler(this.cmdExportScfg_Click);
-            // 
-            // cmdTransferScfg
-            // 
-            this.cmdTransferScfg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdTransferScfg.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdTransferScfg.Enabled = false;
-            this.cmdTransferScfg.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdTransferScfg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdTransferScfg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
-            this.cmdTransferScfg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdTransferScfg.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdTransferScfg.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
-            this.cmdTransferScfg.Location = new System.Drawing.Point(344, 0);
-            this.cmdTransferScfg.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdTransferScfg.Name = "cmdTransferScfg";
-            this.cmdTransferScfg.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.cmdTransferScfg.Size = new System.Drawing.Size(36, 36);
-            this.cmdTransferScfg.TabIndex = 0;
-            this.cmdTransferScfg.Text = "T";
-            this.cmdTransferScfg.UseVisualStyleBackColor = false;
             // 
             // lblIbootText
             // 
@@ -676,11 +476,11 @@
             this.lblIbootText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblIbootText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblIbootText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblIbootText.Location = new System.Drawing.Point(0, 186);
+            this.lblIbootText.Location = new System.Drawing.Point(0, 181);
             this.lblIbootText.Margin = new System.Windows.Forms.Padding(0);
             this.lblIbootText.Name = "lblIbootText";
             this.lblIbootText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblIbootText.Size = new System.Drawing.Size(130, 36);
+            this.lblIbootText.Size = new System.Drawing.Size(130, 35);
             this.lblIbootText.TabIndex = 101;
             this.lblIbootText.Text = "iBoot:";
             this.lblIbootText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -693,11 +493,11 @@
             this.lbliBoot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbliBoot.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbliBoot.ForeColor = System.Drawing.Color.White;
-            this.lbliBoot.Location = new System.Drawing.Point(131, 186);
+            this.lbliBoot.Location = new System.Drawing.Point(131, 181);
             this.lbliBoot.Margin = new System.Windows.Forms.Padding(0);
             this.lbliBoot.Name = "lbliBoot";
             this.lbliBoot.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lbliBoot.Size = new System.Drawing.Size(417, 36);
+            this.lbliBoot.Size = new System.Drawing.Size(352, 35);
             this.lbliBoot.TabIndex = 102;
             this.lbliBoot.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -709,13 +509,13 @@
             this.tlpMain.Controls.Add(this.tlpFirmware, 0, 0);
             this.tlpMain.Controls.Add(this.tlpStatusBar, 0, 2);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpMain.Location = new System.Drawing.Point(1, 79);
+            this.tlpMain.Location = new System.Drawing.Point(1, 75);
             this.tlpMain.Name = "tlpMain";
             this.tlpMain.RowCount = 3;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 370F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 360F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Size = new System.Drawing.Size(548, 410);
+            this.tlpMain.Size = new System.Drawing.Size(483, 397);
             this.tlpMain.TabIndex = 101;
             // 
             // tlpStatusBar
@@ -729,12 +529,12 @@
             this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 1, 0);
             this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 0, 0);
             this.tlpStatusBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatusBar.Location = new System.Drawing.Point(0, 371);
+            this.tlpStatusBar.Location = new System.Drawing.Point(0, 361);
             this.tlpStatusBar.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatusBar.Name = "tlpStatusBar";
             this.tlpStatusBar.RowCount = 1;
             this.tlpStatusBar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatusBar.Size = new System.Drawing.Size(548, 39);
+            this.tlpStatusBar.Size = new System.Drawing.Size(483, 36);
             this.tlpStatusBar.TabIndex = 100;
             // 
             // tlpStatusBarImage
@@ -745,12 +545,12 @@
             this.tlpStatusBarImage.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpStatusBarImage.Controls.Add(this.pbxLoad, 0, 0);
             this.tlpStatusBarImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatusBarImage.Location = new System.Drawing.Point(512, 0);
+            this.tlpStatusBarImage.Location = new System.Drawing.Point(447, 0);
             this.tlpStatusBarImage.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatusBarImage.Name = "tlpStatusBarImage";
             this.tlpStatusBarImage.RowCount = 1;
             this.tlpStatusBarImage.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpStatusBarImage.Size = new System.Drawing.Size(36, 39);
+            this.tlpStatusBarImage.Size = new System.Drawing.Size(36, 36);
             this.tlpStatusBarImage.TabIndex = 99;
             // 
             // pbxLoad
@@ -758,7 +558,7 @@
             this.pbxLoad.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pbxLoad.BackColor = System.Drawing.Color.Transparent;
             this.pbxLoad.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pbxLoad.Location = new System.Drawing.Point(6, 7);
+            this.pbxLoad.Location = new System.Drawing.Point(6, 6);
             this.pbxLoad.Margin = new System.Windows.Forms.Padding(0);
             this.pbxLoad.Name = "pbxLoad";
             this.pbxLoad.Size = new System.Drawing.Size(24, 24);
@@ -776,19 +576,187 @@
             this.lblStatusBarTip.Margin = new System.Windows.Forms.Padding(0);
             this.lblStatusBarTip.Name = "lblStatusBarTip";
             this.lblStatusBarTip.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblStatusBarTip.Size = new System.Drawing.Size(512, 39);
+            this.lblStatusBarTip.Size = new System.Drawing.Size(447, 36);
             this.lblStatusBarTip.TabIndex = 99;
             this.lblStatusBarTip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pnlSeperator
+            // pnlSeperatorTop
             // 
-            this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.pnlSeperator.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlSeperator.Location = new System.Drawing.Point(1, 79);
-            this.pnlSeperator.Margin = new System.Windows.Forms.Padding(2);
-            this.pnlSeperator.Name = "pnlSeperator";
-            this.pnlSeperator.Size = new System.Drawing.Size(548, 2);
-            this.pnlSeperator.TabIndex = 102;
+            this.pnlSeperatorTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.pnlSeperatorTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeperatorTop.Location = new System.Drawing.Point(1, 41);
+            this.pnlSeperatorTop.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlSeperatorTop.Name = "pnlSeperatorTop";
+            this.pnlSeperatorTop.Size = new System.Drawing.Size(483, 1);
+            this.pnlSeperatorTop.TabIndex = 102;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(1, 74);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(483, 1);
+            this.panel1.TabIndex = 103;
+            // 
+            // cmdPatch
+            // 
+            this.cmdPatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdPatch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdPatch.Enabled = false;
+            this.cmdPatch.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdPatch.FlatAppearance.BorderSize = 0;
+            this.cmdPatch.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdPatch.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdPatch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdPatch.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdPatch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.cmdPatch.Location = new System.Drawing.Point(388, 0);
+            this.cmdPatch.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdPatch.Name = "cmdPatch";
+            this.cmdPatch.Size = new System.Drawing.Size(95, 32);
+            this.cmdPatch.TabIndex = 3;
+            this.cmdPatch.Text = "PATCH";
+            this.cmdPatch.UseVisualStyleBackColor = false;
+            // 
+            // cmdExport
+            // 
+            this.cmdExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdExport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdExport.Enabled = false;
+            this.cmdExport.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdExport.FlatAppearance.BorderSize = 0;
+            this.cmdExport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdExport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdExport.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdExport.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.cmdExport.Location = new System.Drawing.Point(291, 0);
+            this.cmdExport.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdExport.Name = "cmdExport";
+            this.cmdExport.Size = new System.Drawing.Size(95, 32);
+            this.cmdExport.TabIndex = 4;
+            this.cmdExport.Text = "EXPORT";
+            this.cmdExport.UseVisualStyleBackColor = false;
+            // 
+            // lblScfg
+            // 
+            this.lblScfg.AutoEllipsis = true;
+            this.lblScfg.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblScfg.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblScfg.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblScfg.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblScfg.ForeColor = System.Drawing.Color.White;
+            this.lblScfg.Location = new System.Drawing.Point(131, 217);
+            this.lblScfg.Margin = new System.Windows.Forms.Padding(0);
+            this.lblScfg.Name = "lblScfg";
+            this.lblScfg.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblScfg.Size = new System.Drawing.Size(352, 35);
+            this.lblScfg.TabIndex = 103;
+            this.lblScfg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblScfg.UseMnemonic = false;
+            // 
+            // lblFilename
+            // 
+            this.lblFilename.AutoEllipsis = true;
+            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblFilename.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFilename.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFilename.ForeColor = System.Drawing.Color.White;
+            this.lblFilename.Location = new System.Drawing.Point(131, 1);
+            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFilename.Name = "lblFilename";
+            this.lblFilename.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblFilename.Size = new System.Drawing.Size(352, 35);
+            this.lblFilename.TabIndex = 100;
+            this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFilename.UseMnemonic = false;
+            // 
+            // lblCrc
+            // 
+            this.lblCrc.AutoEllipsis = true;
+            this.lblCrc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblCrc.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblCrc.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCrc.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCrc.ForeColor = System.Drawing.Color.White;
+            this.lblCrc.Location = new System.Drawing.Point(131, 73);
+            this.lblCrc.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCrc.Name = "lblCrc";
+            this.lblCrc.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblCrc.Size = new System.Drawing.Size(352, 35);
+            this.lblCrc.TabIndex = 100;
+            this.lblCrc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblCrc.UseMnemonic = false;
+            // 
+            // lblModified
+            // 
+            this.lblModified.AutoEllipsis = true;
+            this.lblModified.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblModified.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblModified.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblModified.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblModified.ForeColor = System.Drawing.Color.White;
+            this.lblModified.Location = new System.Drawing.Point(131, 145);
+            this.lblModified.Margin = new System.Windows.Forms.Padding(0);
+            this.lblModified.Name = "lblModified";
+            this.lblModified.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblModified.Size = new System.Drawing.Size(352, 35);
+            this.lblModified.TabIndex = 100;
+            this.lblModified.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblModified.UseMnemonic = false;
+            // 
+            // lblSerial
+            // 
+            this.lblSerial.AutoEllipsis = true;
+            this.lblSerial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.lblSerial.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblSerial.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSerial.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSerial.ForeColor = System.Drawing.Color.White;
+            this.lblSerial.Location = new System.Drawing.Point(131, 253);
+            this.lblSerial.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSerial.Name = "lblSerial";
+            this.lblSerial.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblSerial.Size = new System.Drawing.Size(352, 35);
+            this.lblSerial.TabIndex = 100;
+            this.lblSerial.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSerial.UseMnemonic = false;
+            // 
+            // lblConfigCode
+            // 
+            this.lblConfigCode.AutoEllipsis = true;
+            this.lblConfigCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblConfigCode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblConfigCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblConfigCode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblConfigCode.ForeColor = System.Drawing.Color.White;
+            this.lblConfigCode.Location = new System.Drawing.Point(131, 289);
+            this.lblConfigCode.Margin = new System.Windows.Forms.Padding(0);
+            this.lblConfigCode.Name = "lblConfigCode";
+            this.lblConfigCode.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblConfigCode.Size = new System.Drawing.Size(352, 35);
+            this.lblConfigCode.TabIndex = 100;
+            this.lblConfigCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblSon
+            // 
+            this.lblSon.AutoEllipsis = true;
+            this.lblSon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.lblSon.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblSon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSon.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSon.ForeColor = System.Drawing.Color.White;
+            this.lblSon.Location = new System.Drawing.Point(131, 325);
+            this.lblSon.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSon.Name = "lblSon";
+            this.lblSon.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblSon.Size = new System.Drawing.Size(352, 35);
+            this.lblSon.TabIndex = 100;
+            this.lblSon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSon.UseMnemonic = false;
             // 
             // t2Window
             // 
@@ -796,18 +764,19 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.ClientSize = new System.Drawing.Size(550, 490);
-            this.Controls.Add(this.pnlSeperator);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
+            this.ClientSize = new System.Drawing.Size(485, 473);
             this.Controls.Add(this.tlpMain);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.tlpMenu);
+            this.Controls.Add(this.pnlSeperatorTop);
             this.Controls.Add(this.tlpTitle);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(550, 490);
+            this.MinimumSize = new System.Drawing.Size(485, 473);
             this.Name = "t2Window";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -816,7 +785,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpMenu.ResumeLayout(false);
             this.tlpFirmware.ResumeLayout(false);
-            this.tlpScfgStore.ResumeLayout(false);
             this.tlpMain.ResumeLayout(false);
             this.tlpStatusBar.ResumeLayout(false);
             this.tlpStatusBar.PerformLayout();
@@ -851,21 +819,20 @@
         private System.Windows.Forms.Label lblConfigText;
         private System.Windows.Forms.Label lblSonText;
         private METLabel lblSon;
-        private System.Windows.Forms.TableLayoutPanel tlpScfgStore;
-        private System.Windows.Forms.Button cmdExportScfg;
         private METLabel lblConfigCode;
-        private System.Windows.Forms.Button cmdTransferScfg;
         private System.Windows.Forms.Label lblFilesize;
-        private System.Windows.Forms.Label lblScfg;
         private System.Windows.Forms.Label lblCreated;
         private System.Windows.Forms.Label lblIbootText;
         private System.Windows.Forms.Label lbliBoot;
-        private System.Windows.Forms.Button cmdTargetFw;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.TableLayoutPanel tlpStatusBar;
         private System.Windows.Forms.TableLayoutPanel tlpStatusBarImage;
         private System.Windows.Forms.PictureBox pbxLoad;
         private System.Windows.Forms.Label lblStatusBarTip;
-        private System.Windows.Forms.Panel pnlSeperator;
+        private System.Windows.Forms.Panel pnlSeperatorTop;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button cmdPatch;
+        private System.Windows.Forms.Button cmdExport;
+        private System.Windows.Forms.Label lblScfg;
     }
 }

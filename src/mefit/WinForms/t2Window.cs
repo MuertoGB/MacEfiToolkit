@@ -402,9 +402,6 @@ namespace Mac_EFI_Toolkit.WinForms
                 cmdOpen,
                 cmdReset,
                 cmdCopyMenu,
-                cmdTargetFw,
-                cmdTransferScfg,
-                cmdExportScfg
             };
 
             foreach (Button button in buttons)
@@ -423,9 +420,6 @@ namespace Mac_EFI_Toolkit.WinForms
                     { cmdOpen, "Open a T2ROM (CTRL + O)" },
                     { cmdReset, "Reset Window Data (CTRL + R)"},
                     { cmdCopyMenu, "Open the Clipboard Copy Menu (CTRL + C)" },
-                    { cmdTargetFw, "Specify a Target Donor Firmware (CTRL + T)" },
-                    { cmdTransferScfg, "Transfer Scfg Store to Target Firmware (ALT + T)" },
-                    { cmdExportScfg, "Export Scfg Store (CTRL + E)" }
                 };
 
                 if (tooltips.ContainsKey(sender))
@@ -441,8 +435,6 @@ namespace Mac_EFI_Toolkit.WinForms
             var buttons = new[]
             {
                 new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS},
-                new { Button = cmdTransferScfg,  Font = Program.FONT_MDL2_REG_10,  Text = Chars.FLOW },
-                new { Button = cmdExportScfg, Font = Program.FONT_MDL2_REG_10, Text = Chars.SAVE }
             };
 
             foreach (var buttonData in buttons)
@@ -485,13 +477,6 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 cmdReset,
                 cmdCopyMenu,
-                cmdTargetFw,
-            };
-
-            Button[] optionButtons =
-            {
-                cmdTransferScfg,
-                cmdExportScfg
             };
 
             void EnableButtons(params Button[] buttons)
@@ -503,16 +488,12 @@ namespace Mac_EFI_Toolkit.WinForms
             if (!enable)
             {
                 EnableButtons(standardButtons);
-                EnableButtons(optionButtons);
             }
             else
             {
                 EnableButtons(standardButtons);
 
                 bool scfgStoreExists = T2ROM.ScfgSectionData.ScfgBytes != null;
-
-                cmdTransferScfg.Enabled = scfgStoreExists;
-                cmdExportScfg.Enabled = scfgStoreExists;
             }
 
             tlpFirmware.Enabled = enable;
