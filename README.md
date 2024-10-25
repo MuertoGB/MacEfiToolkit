@@ -1,5 +1,5 @@
 <h1 align="center">
-<img width="200" src="stream/resources/images/application/img128px.png" alt="SMCFT Logo">
+<img width="200" src="stream/images/application/img128px.png" alt="SMCFT Logo">
 <br>
 Mac EFI Toolkit V1.2.0
 </h1>
