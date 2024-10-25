@@ -52,7 +52,7 @@ namespace Mac_EFI_Toolkit
         internal const string GithubIssues = "https://github.com/MuertoGB/MacEfiToolkit/issues";
         internal const string GithubLatest = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
         internal const string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
-        internal const string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/files/app/version.xml";
+        internal const string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/stream/manifests/version.xml";
     }
     #endregion
 
