@@ -75,9 +75,6 @@ namespace Mac_EFI_Toolkit
         #region Window Events
         private void mainWindow_Load(object sender, EventArgs e)
         {
-            lblAppVersion.Text = 
-                Application.ProductVersion;
-
             // Get and set the primary file dialog initial directory.
             SetPrimaryInitialDirectory();
 
