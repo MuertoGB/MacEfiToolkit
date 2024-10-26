@@ -20,10 +20,13 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
 
 >🛈 **Access to some features requires accepting the editing terms.**
 
-| Startup Window                      | EFI Window                         |
-| ----------------------------------- | ---------------------------------- |
-| ![window](stream/images/application/startup.png) | ![window](stream/images/application//efi.png)    |
+| Startup Window                                   |
+| ------------------------------------------------ |
+| ![window](stream/images/application/startup.png) |
 
+| EFI Window                                       | ROM Information Window |
+| ------------------------------------------------ |-----------------------
+| ![window](stream/images/application/efi.png)     | ![window](stream/images/application/rominfo.png) |
 
 ## Features
 
