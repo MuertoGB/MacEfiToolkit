@@ -57,10 +57,12 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
+        #region Window Events
         private void t2Window_Load(object sender, EventArgs e)
         {
             OpenBinary(Program.MAIN_WINDOW.loadedFile);
         }
+        #endregion
 
         #region Mouse Events
         private void t2Window_MouseMove(object sender, MouseEventArgs e)
@@ -98,6 +100,9 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e) =>
             Close();
+
+        private void cmdMinimize_Click(object sender, EventArgs e) =>
+            WindowState = FormWindowState.Minimized;
 
         private void cmdOpen_Click(object sender, EventArgs e)
         {

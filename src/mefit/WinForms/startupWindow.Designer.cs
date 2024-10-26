@@ -40,6 +40,7 @@
             this.cmdSettings = new System.Windows.Forms.Button();
             this.cmdAbout = new System.Windows.Forms.Button();
             this.cmdMore = new System.Windows.Forms.Button();
+            this.cmdMenuFolders = new System.Windows.Forms.Button();
             this.pnlSeperatorBottom = new System.Windows.Forms.Panel();
             this.tlpDrop = new METTableLayout();
             this.lblDrag = new System.Windows.Forms.Label();
@@ -48,20 +49,28 @@
             this.cmsMore = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.githubIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.emailMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.githubIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.updateAvailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewApplicationLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.restartApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.updateAvailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsFolders = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.openBackupsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openBuildsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFsysStoresFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openIntelMEFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.openWorkingDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
             this.tlpDrop.SuspendLayout();
             this.cmsMore.SuspendLayout();
+            this.cmsFolders.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpTitle
@@ -70,7 +79,7 @@
             this.tlpTitle.ColumnCount = 5;
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 102F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 67F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.Controls.Add(this.lblAppVersion, 2, 0);
@@ -113,7 +122,7 @@
             this.lblWindowTitle.Location = new System.Drawing.Point(50, 0);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(181, 50);
+            this.lblWindowTitle.Size = new System.Drawing.Size(216, 50);
             this.lblWindowTitle.TabIndex = 0;
             this.lblWindowTitle.Text = "Mac EFI Toolkit";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -189,17 +198,18 @@
             // tlpMenu
             // 
             this.tlpMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.tlpMenu.ColumnCount = 5;
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpMenu.ColumnCount = 7;
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tlpMenu.Controls.Add(this.cmdSettings, 0, 0);
             this.tlpMenu.Controls.Add(this.cmdAbout, 2, 0);
-            this.tlpMenu.Controls.Add(this.cmdMore, 4, 0);
+            this.tlpMenu.Controls.Add(this.cmdMore, 6, 0);
+            this.tlpMenu.Controls.Add(this.cmdMenuFolders, 4, 0);
             this.tlpMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpMenu.Location = new System.Drawing.Point(1, 52);
             this.tlpMenu.Margin = new System.Windows.Forms.Padding(0);
@@ -223,7 +233,7 @@
             this.cmdSettings.Location = new System.Drawing.Point(1, 0);
             this.cmdSettings.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.cmdSettings.Name = "cmdSettings";
-            this.cmdSettings.Size = new System.Drawing.Size(142, 32);
+            this.cmdSettings.Size = new System.Drawing.Size(105, 32);
             this.cmdSettings.TabIndex = 6;
             this.cmdSettings.Text = "SETTINGS";
             this.cmdSettings.UseVisualStyleBackColor = false;
@@ -240,10 +250,10 @@
             this.cmdAbout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdAbout.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdAbout.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
-            this.cmdAbout.Location = new System.Drawing.Point(145, 0);
+            this.cmdAbout.Location = new System.Drawing.Point(108, 0);
             this.cmdAbout.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAbout.Name = "cmdAbout";
-            this.cmdAbout.Size = new System.Drawing.Size(143, 32);
+            this.cmdAbout.Size = new System.Drawing.Size(106, 32);
             this.cmdAbout.TabIndex = 7;
             this.cmdAbout.Text = "ABOUT";
             this.cmdAbout.UseVisualStyleBackColor = false;
@@ -260,14 +270,34 @@
             this.cmdMore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdMore.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
             this.cmdMore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
-            this.cmdMore.Location = new System.Drawing.Point(290, 0);
+            this.cmdMore.Location = new System.Drawing.Point(324, 0);
             this.cmdMore.Margin = new System.Windows.Forms.Padding(0);
             this.cmdMore.Name = "cmdMore";
-            this.cmdMore.Size = new System.Drawing.Size(143, 32);
+            this.cmdMore.Size = new System.Drawing.Size(109, 32);
             this.cmdMore.TabIndex = 8;
             this.cmdMore.Text = "MORE";
             this.cmdMore.UseVisualStyleBackColor = false;
             this.cmdMore.Click += new System.EventHandler(this.cmdMore_Click);
+            // 
+            // cmdMenuFolders
+            // 
+            this.cmdMenuFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdMenuFolders.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdMenuFolders.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdMenuFolders.FlatAppearance.BorderSize = 0;
+            this.cmdMenuFolders.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdMenuFolders.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdMenuFolders.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdMenuFolders.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.cmdMenuFolders.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdMenuFolders.Location = new System.Drawing.Point(216, 0);
+            this.cmdMenuFolders.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdMenuFolders.Name = "cmdMenuFolders";
+            this.cmdMenuFolders.Size = new System.Drawing.Size(106, 32);
+            this.cmdMenuFolders.TabIndex = 9;
+            this.cmdMenuFolders.Text = "FOLDERS";
+            this.cmdMenuFolders.UseVisualStyleBackColor = false;
+            this.cmdMenuFolders.Click += new System.EventHandler(this.cmdMenuFolders_Click);
             // 
             // pnlSeperatorBottom
             // 
@@ -362,7 +392,7 @@
             this.restartApplicationToolStripMenuItem});
             this.cmsMore.Name = "cmsMore";
             this.cmsMore.ShowImageMargin = false;
-            this.cmsMore.Size = new System.Drawing.Size(216, 296);
+            this.cmsMore.Size = new System.Drawing.Size(216, 268);
             // 
             // changelogToolStripMenuItem
             // 
@@ -380,19 +410,19 @@
             this.donateToolStripMenuItem.Text = "Donate";
             this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
             // 
-            // githubIssuesToolStripMenuItem
-            // 
-            this.githubIssuesToolStripMenuItem.Name = "githubIssuesToolStripMenuItem";
-            this.githubIssuesToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
-            this.githubIssuesToolStripMenuItem.Text = "Github Issues";
-            this.githubIssuesToolStripMenuItem.Click += new System.EventHandler(this.githubIssuesToolStripMenuItem_Click);
-            // 
             // emailMeToolStripMenuItem
             // 
             this.emailMeToolStripMenuItem.Name = "emailMeToolStripMenuItem";
             this.emailMeToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
             this.emailMeToolStripMenuItem.Text = "Email Me";
             this.emailMeToolStripMenuItem.Click += new System.EventHandler(this.emailMeToolStripMenuItem_Click);
+            // 
+            // githubIssuesToolStripMenuItem
+            // 
+            this.githubIssuesToolStripMenuItem.Name = "githubIssuesToolStripMenuItem";
+            this.githubIssuesToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.githubIssuesToolStripMenuItem.Text = "Github Issues";
+            this.githubIssuesToolStripMenuItem.Click += new System.EventHandler(this.githubIssuesToolStripMenuItem_Click);
             // 
             // homepageToolStripMenuItem
             // 
@@ -417,6 +447,15 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(212, 6);
             // 
+            // updateAvailableToolStripMenuItem
+            // 
+            this.updateAvailableToolStripMenuItem.ForeColor = System.Drawing.Color.SpringGreen;
+            this.updateAvailableToolStripMenuItem.Name = "updateAvailableToolStripMenuItem";
+            this.updateAvailableToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.updateAvailableToolStripMenuItem.Text = "Update Available (1)";
+            this.updateAvailableToolStripMenuItem.Visible = false;
+            this.updateAvailableToolStripMenuItem.Click += new System.EventHandler(this.updateAvailableToolStripMenuItem_Click);
+            // 
             // viewApplicationLogToolStripMenuItem
             // 
             this.viewApplicationLogToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -440,14 +479,62 @@
             this.restartApplicationToolStripMenuItem.Text = "Restart Application";
             this.restartApplicationToolStripMenuItem.Click += new System.EventHandler(this.restartApplicationToolStripMenuItem_Click);
             // 
-            // updateAvailableToolStripMenuItem
+            // cmsFolders
             // 
-            this.updateAvailableToolStripMenuItem.ForeColor = System.Drawing.Color.SpringGreen;
-            this.updateAvailableToolStripMenuItem.Name = "updateAvailableToolStripMenuItem";
-            this.updateAvailableToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
-            this.updateAvailableToolStripMenuItem.Text = "Update Available (1)";
-            this.updateAvailableToolStripMenuItem.Visible = false;
-            this.updateAvailableToolStripMenuItem.Click += new System.EventHandler(this.updateAvailableToolStripMenuItem_Click);
+            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.cmsFolders.Font = new System.Drawing.Font("Segoe UI", 10.2F);
+            this.cmsFolders.ForeColor = System.Drawing.Color.White;
+            this.cmsFolders.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsFolders.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openBackupsFolderToolStripMenuItem,
+            this.openBuildsFolderToolStripMenuItem,
+            this.openFsysStoresFolderToolStripMenuItem,
+            this.openIntelMEFolderToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.openWorkingDirectoryToolStripMenuItem});
+            this.cmsFolders.Name = "cmsFolders";
+            this.cmsFolders.ShowImageMargin = false;
+            this.cmsFolders.Size = new System.Drawing.Size(240, 150);
+            // 
+            // openBackupsFolderToolStripMenuItem
+            // 
+            this.openBackupsFolderToolStripMenuItem.Name = "openBackupsFolderToolStripMenuItem";
+            this.openBackupsFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openBackupsFolderToolStripMenuItem.Text = "Open Backups Folder";
+            this.openBackupsFolderToolStripMenuItem.Click += new System.EventHandler(this.openBackupsFolderToolStripMenuItem_Click);
+            // 
+            // openBuildsFolderToolStripMenuItem
+            // 
+            this.openBuildsFolderToolStripMenuItem.Name = "openBuildsFolderToolStripMenuItem";
+            this.openBuildsFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openBuildsFolderToolStripMenuItem.Text = "Open Builds Folder";
+            this.openBuildsFolderToolStripMenuItem.Click += new System.EventHandler(this.openBuildsFolderToolStripMenuItem_Click);
+            // 
+            // openFsysStoresFolderToolStripMenuItem
+            // 
+            this.openFsysStoresFolderToolStripMenuItem.Name = "openFsysStoresFolderToolStripMenuItem";
+            this.openFsysStoresFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openFsysStoresFolderToolStripMenuItem.Text = "Open Fsys Stores Folder";
+            this.openFsysStoresFolderToolStripMenuItem.Click += new System.EventHandler(this.openFsysStoresFolderToolStripMenuItem_Click);
+            // 
+            // openIntelMEFolderToolStripMenuItem
+            // 
+            this.openIntelMEFolderToolStripMenuItem.Name = "openIntelMEFolderToolStripMenuItem";
+            this.openIntelMEFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openIntelMEFolderToolStripMenuItem.Text = "Open Intel ME Folder";
+            this.openIntelMEFolderToolStripMenuItem.Click += new System.EventHandler(this.openIntelMEFolderToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(236, 6);
+            // 
+            // openWorkingDirectoryToolStripMenuItem
+            // 
+            this.openWorkingDirectoryToolStripMenuItem.Name = "openWorkingDirectoryToolStripMenuItem";
+            this.openWorkingDirectoryToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openWorkingDirectoryToolStripMenuItem.Text = "Open Working Directory";
+            this.openWorkingDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openWorkingDirectoryToolStripMenuItem_Click);
             // 
             // startupWindow
             // 
@@ -470,7 +557,7 @@
             this.Name = "startupWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "startupWindow";
+            this.Text = "Mac EFI Toolkit";
             this.tlpTitle.ResumeLayout(false);
             this.tlpTitle.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
@@ -478,6 +565,7 @@
             this.tlpDrop.ResumeLayout(false);
             this.tlpDrop.PerformLayout();
             this.cmsMore.ResumeLayout(false);
+            this.cmsFolders.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -512,5 +600,13 @@
         private System.Windows.Forms.ToolStripMenuItem githubIssuesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem emailMeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateAvailableToolStripMenuItem;
+        internal System.Windows.Forms.Button cmdMenuFolders;
+        private UI.METContextMenuStrip cmsFolders;
+        private System.Windows.Forms.ToolStripMenuItem openBackupsFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openBuildsFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openFsysStoresFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openIntelMEFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem openWorkingDirectoryToolStripMenuItem;
     }
 }

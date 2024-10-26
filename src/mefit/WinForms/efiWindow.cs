@@ -144,21 +144,12 @@ namespace Mac_EFI_Toolkit
                     case Keys.C:
                         cmdMenuCopy.PerformClick();
                         break;
-                    case Keys.M:
-                        UITools.ShowContextMenuAtControlPoint(
-                            cmdMenuFolders,
-                            cmsFolders,
-                            MenuPosition.BottomLeft);
-                        break;
                 }
             }
             else if (e.Modifiers == Keys.Alt)
             {
                 switch (e.KeyCode)
                 {
-                    case Keys.B:
-                        cmdMenuBackupToZip.PerformClick();
-                        break;
                     case Keys.N:
                         cmdOpenInExplorer.PerformClick();
                         break;
@@ -202,7 +193,7 @@ namespace Mac_EFI_Toolkit
         private void cmdClose_Click(object sender, EventArgs e) =>
             Close();
 
-        private void cmdMin_Click(object sender, EventArgs e) =>
+        private void cmdMinimize_Click(object sender, EventArgs e) =>
             WindowState = FormWindowState.Minimized;
 
         private void cmdOpen_Click(object sender, EventArgs e)
@@ -278,70 +269,20 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private void cmdBackupToZip_Click(object sender, EventArgs e)
+        private void cmdCopyMenu_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsCopy,
+                MenuPosition.BottomLeft);
+
+        private void cmdMenuExport_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+            sender,
+            cmsExport,
+            MenuPosition.BottomLeft);
+
+        private void cmdMenuPatch_Click(object sender, EventArgs e)
         {
-            if (EFIROM.LoadedBinaryBytes == null)
-            {
-                METMessageBox.Show(
-                    this,
-                    $"FWBase.LoadedBinaryBytes() {DialogStrings.DS_DATA_NULL}",
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
-
-                return;
-            }
-
-            if (!Directory.Exists(METPath.BackupsDirectory))
-                Directory.CreateDirectory(
-                    METPath.BackupsDirectory);
-
-            using (SaveFileDialog dialog = new SaveFileDialog())
-            {
-                dialog.InitialDirectory = METPath.BackupsDirectory;
-                dialog.Filter = "Zip files (*.zip)|*.zip";
-                dialog.FileName = $"{EFIROM.FileInfoData.FileName}_{MainWinStrings.MW_BACKUP.ToLower()}";
-                dialog.OverwritePrompt = true;
-
-                // Action was cancelled
-                if (dialog.ShowDialog() != DialogResult.OK)
-                    return;
-
-                FileUtils.BackupFileToZip(
-                    EFIROM.LoadedBinaryBytes,
-                    EFIROM.FileInfoData.FileNameExt,
-                    dialog.FileName);
-
-                if (File.Exists(dialog.FileName))
-                {
-                    UITools.ShowExplorerNavigationPrompt(
-                        this,
-                        DialogStrings.DS_ARCHIVE_SUCCESS,
-                        dialog.FileName);
-
-                    return;
-                }
-
-                METMessageBox.Show(
-                    this,
-                    DialogStrings.DS_ARCHIVE_FAIL,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
-            }
-        }
-
-        private void cmdPatch_Click(object sender, EventArgs e)
-        {
-            if (EFIROM.LoadedBinaryBytes == null)
-            {
-                METMessageBox.Show(
-                    this,
-                    $"FWBase.LoadedBinaryBytes() {DialogStrings.DS_DATA_NULL}",
-                    METMessageBoxType.Warning,
-                    METMessageBoxButtons.Okay);
-
-                return;
-            }
-
             bool bOpenEditor =
                 Settings.ReadBool
                     (SettingsBoolType.AcceptedEditingTerms);
@@ -359,34 +300,12 @@ namespace Mac_EFI_Toolkit
             }
 
             if (bOpenEditor)
-            {
-                UITools.SetHalfOpacity(this);
-
-                using (Form frm = new patcherWindow())
-                {
-                    frm.FormClosed += ChildWindowClosed;
-                    frm.ShowDialog();
-                }
-            }
+                UITools.ShowContextMenuAtControlPoint(
+                    sender,
+                    cmsPatch,
+                    MenuPosition.BottomLeft);
         }
 
-        private void cmdCopyMenu_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
-                sender,
-                cmsCopy,
-                MenuPosition.BottomLeft);
-
-        private void cmdMenuExport_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
-            sender,
-            cmsExport,
-            MenuPosition.BottomLeft);
-
-        private void cmdMenuPatch_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
-            sender,
-            cmsPatch,
-            MenuPosition.BottomLeft);
 
         private void cmdMenuOptions_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
@@ -394,11 +313,6 @@ namespace Mac_EFI_Toolkit
             cmsOptions,
             MenuPosition.BottomLeft);
 
-        private void cmdMenuFolders_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
-            sender,
-            cmsFolders,
-            MenuPosition.BottomLeft);
 
         private void cmdNavigate_Click(object sender, EventArgs e)
         {
@@ -421,82 +335,7 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Toolstrip Events
-        private void openLocalFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start("explorer.exe", METPath.CurrentDirectory);
-
-        private void backupsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(METPath.BackupsDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.BackupsDirectory);
-
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.DS_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
-        }
-
-        private void openBuildsDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(METPath.BuildsDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.BuildsDirectory);
-
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.DS_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
-        }
-
-        private void openFsysDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(METPath.FsysDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.FsysDirectory);
-
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.DS_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
-        }
-
-        private void openMeRegionDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(METPath.MeDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.MeDirectory);
-
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.DS_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
-        }
-
+        #region Copy Toolstrip Events
         // File Clipboard Menu.
         private void filenameToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFilename(true);
@@ -554,864 +393,191 @@ namespace Mac_EFI_Toolkit
             ClipboardSetBiosRegionOffsets();
         #endregion
 
-        #region Label Events
-        private void lblAppVersion_MouseClick(object sender, MouseEventArgs e)
+        #region Export Toolstrip Events
+        private void exportFsysStoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-                Process.Start(
-                    METUrl.GithubLatest);
-        }
-
-        private void lblFilename_Click(object sender, EventArgs e) =>
-            ClipboardSetFilename(true);
-
-        private void lblFileSize_Click(object sender, EventArgs e) =>
-            ClipboardSetFileSize();
-
-        private void lblFileCrc32_Click(object sender, EventArgs e) =>
-            ClipboardSetFileCrc32();
-
-        private void lblFileCreatedDate_Click(object sender, EventArgs e) =>
-            ClipboardSetFileCreationTime();
-
-        private void lblFileModifiedDate_Click(object sender, EventArgs e) =>
-            ClipboardSetFileModifiedTime();
-
-        private void lblModel_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareFullModel();
-
-        private void lblConfigCode_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareConfigCode();
-
-        private void lblFsysCrc32_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareFsysCrc32();
-
-        private void lblSerialNumber_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareSerial();
-
-        private void lblHwc_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareHwc();
-
-        private void lblOrderNumber_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareOrderNumber();
-
-        private void lblEfiVersion_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareVersion();
-
-        private void lblBoardId_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareBoardId();
-
-        private void lblMeVersion_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareMeVersion();
-        #endregion
-
-        #region Update Main Window
-        internal void UpdateUI()
-        {
-            // File information.
-            UpdateFileNameControls();
-            UpdateFileSizeControls();
-            UpdateFileCrc32Controls();
-            UpdateFileCreationDateControls();
-            UpdateFileModifiedDateControls();
-
-            // Firmware Data.
-            UpdateModelControls();
-            UpdateConfigCodeControls();
-            UpdateFsysControls();
-            UpdateSerialNumberControls();
-            UpdateHardwareConfigControls();
-            UpdateOrderNumberControls();
-            UpdateEfiVersionControls();
-
-            UpdateNvramLabel(
-                lblVssStore,
-                EFIROM.VssStoreData,
-                MainWinStrings.MW_VSS);
-            UpdateNvramLabel(
-                lblSvsStore,
-                EFIROM.SvsStoreData,
-                MainWinStrings.MW_SVS);
-
-            UpdateEfiLockControls();
-            UpdateBoardIdControls();
-            UpdateApfsCapableControls();
-            UpdateIntelFitControls();
-            UpdateIntelMeControls();
-
-            // Apply DISABLED_TEXT color to N/A text labels.
-            ApplyNestedPanelLabelForeColor(
-                tlpFirmware,
-                AppColours.DISABLED_TEXT);
-
-            // Check which descriptor copy menu items should be enabled.
-            pdrBaseToolStripMenuItem.Enabled =
-                IFD.PDR_REGION_BASE != 0;
-            meBaseToolStripMenuItem.Enabled =
-                IFD.ME_REGION_BASE != 0;
-            biosBaseToolStripMenuItem.Enabled =
-                IFD.BIOS_REGION_BASE != 0;
-
-            // Hide loading image.
-            pbxLoad.Image = null;
-
-            // Check and set control enable.
-            ToggleControlEnable(true);
-        }
-
-        private void UpdateFileNameControls() =>
-            lblFilename.Text = $"{MainWinStrings.MW_FILE}: '{EFIROM.FileInfoData.FileNameExt}'";
-
-        private void UpdateFileSizeControls()
-        {
-            int fileSizeDecimal =
-                EFIROM.FileInfoData.Length;
-
-            bool isValidSize =
-                FileUtils.GetIsValidBinSize(
-                    fileSizeDecimal);
-
-            lblFilesize.Text =
-                $"{FileUtils.FormatFileSize(fileSizeDecimal)} {MainWinStrings.MW_BYTES} ({fileSizeDecimal:X}h)";
-
-            if (!isValidSize)
-            {
-                lblFilesize.ForeColor =
-                    AppColours.ERROR;
-
-                lblFilesize.Text +=
-                    isValidSize
-                    ? string.Empty
-                    : $" ({FileUtils.GetSizeDifference(fileSizeDecimal)})";
-            }
-        }
-
-        private void UpdateFileCrc32Controls() =>
-            lblFileCrc32.Text = $"{EFIROM.FileInfoData.CRC32:X8}";
-
-        private void UpdateFileCreationDateControls() =>
-            lblFileCreatedDate.Text = EFIROM.FileInfoData.CreationTime;
-
-        private void UpdateFileModifiedDateControls() =>
-            lblFileModifiedDate.Text = EFIROM.FileInfoData.LastWriteTime;
-
-        private void UpdateModelControls()
-        {
-            string identifier =
-                EFIROM.EfiBiosIdSectionData.ModelPart;
-
-            if (!string.IsNullOrEmpty(identifier))
-            {
-                string model =
-                    MacUtils.ConvertEfiModelCode(
-                        EFIROM.EfiBiosIdSectionData.ModelPart);
-
-                lblModel.Text =
-                    $"{model} ({identifier})"
-                    ?? AppStrings.AS_NA;
-
-                modelToolStripMenuItem.Enabled = true;
-
-                lblModel.Click += lblModel_Click;
-                lblModel.Cursor = Cursors.Hand;
-
-                return;
-            }
-
-            lblModel.Text = AppStrings.AS_NA;
-            modelToolStripMenuItem.Enabled = false;
-            lblModel.Cursor = Cursors.Default;
-        }
-
-        private void UpdateConfigCodeControls()
-        {
-            if (!string.IsNullOrEmpty(EFIROM.ConfigCode))
-            {
-                lblConfigCode.Text = EFIROM.ConfigCode;
-                lblConfigCode.Click += lblConfigCode_Click;
-                lblConfigCode.Cursor = Cursors.Hand;
-
-                configCodeToolStripMenuItem.Enabled = true;
-
-                return;
-            }
-
-            lblConfigCode.Text = AppStrings.AS_CONTACT_SERVER;
-            lblConfigCode.ForeColor = Colours.INFO_BOX;
-
-            AppendConfigCodeAsync(EFIROM.FsysStoreData.HWC);
-        }
-
-        internal async void AppendConfigCodeAsync(string hwc)
-        {
-            string configCode =
-                await MacUtils.GetDeviceConfigCodeSupportRemote(hwc);
-
-            if (!string.IsNullOrEmpty(configCode))
-            {
-                EFIROM.ConfigCode = configCode;
-
-                lblConfigCode.Text = configCode;
-                lblConfigCode.ForeColor = Color.White;
-                lblConfigCode.Click += lblConfigCode_Click;
-                lblConfigCode.Cursor = Cursors.Hand;
-
-                configCodeToolStripMenuItem.Enabled = true;
-
-                return;
-            }
-
-            lblConfigCode.Text = AppStrings.AS_NA;
-            lblConfigCode.ForeColor = Colours.CONTROL_DISABLED_TEXT;
-            lblConfigCode.Cursor = Cursors.Default;
-
-            configCodeToolStripMenuItem.Enabled = false;
-        }
-
-        private void UpdateFsysControls()
-        {
-            string fsysCrc32 =
-                EFIROM.FsysStoreData.CrcString;
-
-            if (!string.IsNullOrEmpty(fsysCrc32))
-            {
-                lblFsysCrc32.Text =
-                    $"{fsysCrc32}h{(EFIROM.ForceFoundFsys ? " [F]" : string.Empty)}";
-
-                lblFsysCrc32.ForeColor = string.Equals(
-                    fsysCrc32,
-                    EFIROM.FsysStoreData.CrcCalcString)
-                    ? AppColours.COMPLETE
-                    : AppColours.ERROR;
-
-                fsysCRC32ToolStripMenuItem.Enabled = true;
-                lblFsysCrc32.Click += lblFsysCrc32_Click;
-                lblFsysCrc32.Cursor = Cursors.Hand;
-
-                return;
-            }
-
-            fsysCRC32ToolStripMenuItem.Enabled = false;
-            lblFsysCrc32.Text = AppStrings.AS_NA;
-            lblFsysCrc32.Cursor = Cursors.Default;
-        }
-
-        private void UpdateSerialNumberControls()
-        {
-            string serialNumber =
-                EFIROM.FsysStoreData.Serial;
-
-            lblSerialNumber.Text =
-                serialNumber
-                ?? AppStrings.AS_NA;
-
-            if (!string.IsNullOrEmpty(serialNumber))
-            {
-                lblSerialNumber.Text +=
-                    (serialNumber.Length == 11 || serialNumber.Length == 12)
-                    ? $" ({serialNumber.Length})"
-                    : string.Empty;
-
-                serialToolStripMenuItem.Enabled = true;
-                lblSerialNumber.Click += lblSerialNumber_Click;
-                lblSerialNumber.Cursor = Cursors.Hand;
-
-                return;
-            }
-
-            serialToolStripMenuItem.Enabled = false;
-            lblSerialNumber.Cursor = Cursors.Default;
-        }
-
-        private void UpdateHardwareConfigControls()
-        {
-            string hwc =
-                EFIROM.FsysStoreData.HWC;
-
-            lblHwc.Text =
-                 hwc
-                 ?? AppStrings.AS_NA;
-
-            if (!string.IsNullOrEmpty(hwc))
-            {
-                hwcToolStripMenuItem.Enabled = true;
-                lblHwc.Click += lblHwc_Click;
-                lblHwc.Cursor = Cursors.Hand;
-
-                return;
-            }
-
-            hwcToolStripMenuItem.Enabled = false;
-            lblHwc.Cursor = Cursors.Default;
-        }
-
-        private void UpdateOrderNumberControls()
-        {
-            string orderNumber =
-                EFIROM.FsysStoreData.SON;
-
-            lblOrderNumber.Text =
-                orderNumber
-                ?? AppStrings.AS_NA;
-
-            if (!string.IsNullOrEmpty(orderNumber))
-            {
-                orderNoToolStripMenuItem.Enabled = true;
-                lblOrderNumber.Click += lblOrderNumber_Click;
-                lblOrderNumber.Cursor = Cursors.Hand;
-
-                return;
-            }
-
-            orderNoToolStripMenuItem.Enabled = false;
-            lblOrderNumber.Cursor = Cursors.Default;
-        }
-
-        private void UpdateEfiVersionControls()
-        {
-            string efiVersion =
-                EFIROM.FirmwareVersion;
-
-            lblEfiVersion.Text =
-                efiVersion
-                ?? AppStrings.AS_NA;
-
-            if (!string.IsNullOrEmpty(efiVersion))
-            {
-                efiVersionToolStripMenuItem.Enabled = true;
-                lblEfiVersion.Click += lblEfiVersion_Click;
-                lblEfiVersion.Cursor = Cursors.Hand;
-
-                return;
-            }
-
-            efiVersionToolStripMenuItem.Enabled = false;
-            lblEfiVersion.Cursor = Cursors.Default;
-        }
-
-        private void UpdateNvramLabel(
-            Label nvramLabel, NvramStore storeData, string text)
-        {
-            nvramLabel.Text = text;
-
-            Color foreColor =
-                storeData.PrimaryStoreBase == -1
-                ? AppColours.DISABLED_TEXT
-                : !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
-                ? AppColours.WARNING
-                : AppColours.COMPLETE;
-
-            nvramLabel.ForeColor = foreColor;
-        }
-
-        private void UpdateEfiLockControls()
-        {
-            switch (EFIROM.EfiPrimaryLockData.LockType)
-            {
-                case EfiLockType.Locked:
-                    lblEfiLock.Text = MainWinStrings.MW_LOCKED.ToUpper();
-                    lblEfiLock.ForeColor = AppColours.ERROR;
-                    break;
-                case EfiLockType.Unlocked:
-                    lblEfiLock.Text = MainWinStrings.MW_UNLOCKED.ToUpper();
-                    lblEfiLock.ForeColor = AppColours.COMPLETE;
-                    break;
-                case EfiLockType.Unknown:
-                default:
-                    lblEfiLock.Text = MainWinStrings.MW_UNKNOWN.ToUpper();
-                    lblEfiLock.ForeColor = AppColours.WARNING;
-                    break;
-            }
-        }
-
-        private void UpdateBoardIdControls()
-        {
-            string boardId =
-                EFIROM.PdrSectionData.BoardId;
-
-            lblBoardId.Text =
-                boardId
-                ?? AppStrings.AS_NA;
-
-            if (!string.IsNullOrEmpty(boardId))
-            {
-                boardIDToolStripMenuItem.Enabled = true;
-                lblBoardId.Click += lblBoardId_Click;
-                lblBoardId.Cursor = Cursors.Hand;
-
-                return;
-            }
-
-            boardIDToolStripMenuItem.Enabled = false;
-            lblBoardId.Cursor = Cursors.Default;
-        }
-
-        private void UpdateApfsCapableControls()
-        {
-            switch (EFIROM.IsApfsCapable)
-            {
-                case ApfsCapable.Yes:
-                    lblApfsCapable.Text = MainWinStrings.MW_APFS_DRIVER_FOUND;
-                    lblApfsCapable.ForeColor = AppColours.COMPLETE;
-                    break;
-                case ApfsCapable.No:
-                    lblApfsCapable.Text = MainWinStrings.MW_APFS_DRIVER_NOT_FOUND;
-                    lblApfsCapable.ForeColor = AppColours.WARNING;
-                    break;
-                case ApfsCapable.Unknown:
-                    lblApfsCapable.Text = MainWinStrings.MW_UNKNOWN.ToUpper();
-                    lblApfsCapable.ForeColor = AppColours.ERROR;
-                    break;
-            }
-        }
-
-        private void UpdateIntelFitControls() =>
-            fitVersionToolStripMenuItem.Enabled =
-            !string.IsNullOrEmpty(EFIROM.FitVersion)
-            ? true
-            : false;
-
-        private void UpdateIntelMeControls()
-        {
-            string meVersion =
-                EFIROM.MeVersion;
-
-            lblMeVersion.Text =
-                meVersion
-                ?? AppStrings.AS_NA;
-
-            if (!string.IsNullOrEmpty(meVersion))
-            {
-                if (IFD.ME_REGION_BASE != 0)
-                    if (!string.IsNullOrEmpty(meVersion))
-                        lblMeVersion.Text += $" (0x{IFD.ME_REGION_BASE:X}h)";
-
-                meVersionToolStripMenuItem.Enabled = true;
-                lblMeVersion.Click += lblMeVersion_Click;
-                lblMeVersion.Cursor = Cursors.Hand;
-
-                return;
-            }
-
-            meVersionToolStripMenuItem.Enabled = false;
-            lblMeVersion.Cursor = Cursors.Default;
-        }
-        #endregion
-
-        #region UI Events
-        private void ChildWindowClosed(object sender, EventArgs e)
-        {
-            Opacity = 1.0;
-
-            if (Program.openLastBuild)
-            {
-                if (File.Exists(Program.lastBuildPath))
-                    OpenBinary(Program.lastBuildPath);
-
-                Program.openLastBuild = false;
-                Program.lastBuildPath = string.Empty;
-            }
-        }
-
-        private void ToggleControlEnable(bool enable)
-        {
-            Button[] standardButtons =
-            {
-                cmdMenuReset,
-                cmdMenuCopy,
-                cmdMenuBackupToZip,
-                cmdOpenInExplorer,
-                cmdMenuReload,
-                };
-
-            void EnableButtons(params Button[] buttons)
-            {
-                foreach (Button button in buttons)
-                    button.Enabled = enable;
-            }
-
-            if (!enable)
-            {
-                EnableButtons(standardButtons);
-            }
-            else
-            {
-                EnableButtons(standardButtons);
-
-                bool modelPartExists =
-                    EFIROM.EfiBiosIdSectionData.ModelPart
-                    != null;
-
-                bool fsysBytesExist =
-                    EFIROM.FsysStoreData.FsysBytes
-                    != null;
-
-                bool fsysCrcMismatch = fsysBytesExist &&
-                    !string.Equals(EFIROM.FsysStoreData.CrcCalcString,
-                        EFIROM.FsysStoreData.CrcString);
-
-                //cmdFixFsysCrc.Enabled = fsysCrcMismatch;
-
-                //cmdExportFsys.Enabled = fsysBytesExist;
-
-                //cmdPatch.Enabled =
-                //    modelPartExists
-                //    && fsysBytesExist
-                //    || fsysCrcMismatch;
-
-                //cmdAppleRomInfo.Enabled =
-                //    EFIROM.AppleRomInfoSectionData.SectionExists;
-
-                //cmdInvalidateEfiLock.Enabled =
-                //    EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
-
-                //cmdEveryMacSearch.Enabled =
-                    //!string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial)
-                    //&& !MacUtils.IsBannedSerial(EFIROM.FsysStoreData.Serial);
-
-                //cmdExportMe.Enabled =
-                //    IFD.IsDescriptorMode
-                //    && IFD.ME_REGION_BASE != 0
-                //    && IFD.ME_REGION_LIMIT != 0;
-            }
-
-            tlpFilename.Enabled = enable;
-            tlpFirmware.Enabled = enable;
-        }
-
-        private void SetButtonProperties()
-        {
-            var buttons = new[]
-            {
-                new { Button = cmdClose,
-                    Font = Program.FONT_MDL2_REG_12,
-                    Text = Chars.EXIT_CROSS },
-                new { Button = cmdOpenInExplorer,
-                    Font = Program.FONT_MDL2_REG_10,
-                    Text = Chars.FILE_EXPLORER },
-            };
-
-            foreach (var buttonData in buttons)
-            {
-                buttonData.Button.Font = buttonData.Font;
-                buttonData.Button.Text = buttonData.Text;
-            }
-        }
-
-        private void SetTipHandlers()
-        {
-            Button[] buttons =
-            {
-                cmdMenuFolders,
-                cmdMenuOpen,
-                cmdMenuReset,
-                cmdOpenInExplorer,
-                cmdMenuReload,
-                cmdMenuBackupToZip,
-                cmdMenuCopy,
-            };
-
-            Label[] labels =
-            {
-                lblVssStore,
-                lblSvsStore,
-            };
-
-            foreach (Button button in buttons)
-            {
-                button.MouseEnter += HandleMouseEnterTip;
-                button.MouseLeave += HandleMouseLeaveTip;
-            }
-
-            foreach (Label label in labels)
-            {
-                label.MouseEnter += HandleMouseEnterTip;
-                label.MouseLeave += HandleMouseLeaveTip;
-            }
-        }
-
-        private void HandleMouseEnterTip(object sender, EventArgs e)
-        {
-            if (!Settings.ReadBool(SettingsBoolType.DisableTips))
-            {
-                Dictionary<object, string> tooltips = new Dictionary<object, string>
-                {
-                    { cmdMenuOpen, "Open a Mac UEFI/BIOS (CTRL + O)" },
-                    { cmdMenuReset, "Reset Window Data (CTRL + R)" },
-                    { cmdMenuCopy, "Open the Clipboard Copy Menu (CTRL + C)" },
-                    { cmdMenuFolders, "More options... (CTRL + M)" },
-                    { cmdOpenInExplorer, "Open File in Explorer (ALT + N)" },
-                    { cmdMenuReload, "Reload File from Disk (ALT + R)" },
-                    { cmdMenuBackupToZip, "Backup File to .zip (ALT + B)" },
-                    { lblVssStore, SetNvramStoreTip(EFIROM.VssStoreData, MainWinStrings.MW_VSS) },
-                    { lblSvsStore, SetNvramStoreTip(EFIROM.SvsStoreData, MainWinStrings.MW_SVS) },
-                };
-
-                if (tooltips.ContainsKey(sender))
-                    lblStatusBarTip.Text = tooltips[sender];
-            }
-        }
-
-        private void HandleMouseLeaveTip(object sender, EventArgs e) =>
-            lblStatusBarTip.Text = string.Empty;
-
-        private string SetNvramStoreTip(NvramStore storeData, string storeType)
-        {
-            if (!storeData.IsPrimaryStoreEmpty && !storeData.IsBackupStoreEmpty)
-                return $"Data present in both {storeType} stores";
-            else if (!storeData.IsPrimaryStoreEmpty && storeData.IsBackupStoreEmpty)
-                return $"Data present in the primary {storeType} store";
-            else if (storeData.IsPrimaryStoreEmpty && !storeData.IsBackupStoreEmpty)
-                return $"Data present in the backup {storeType} store";
-            else if (storeData.PrimaryStoreBase != -1)
-                return $"{storeType} NVRAM stores are empty (0xFF)";
-
-            return string.Empty;
-        }
-
-        void ApplyNestedPanelLabelForeColor(TableLayoutPanel tableLayoutPanel, Color color)
-        {
-            foreach (Control control in tableLayoutPanel.Controls)
-            {
-                if (control is Label label && label.Text == AppStrings.AS_NA)
-                {
-                    label.ForeColor = color;
-                }
-                else if (control is TableLayoutPanel nestedTableLayoutPanel)
-                {
-                    ApplyNestedPanelLabelForeColor(
-                        nestedTableLayoutPanel,
-                        color);
-                }
-            }
-        }
-
-        private void SetControlForeColor(Control parentControl, Color foreColor)
-        {
-            foreach (Control ctrl in parentControl.Controls)
-                ctrl.ForeColor = foreColor;
-        }
-        #endregion
-
-        #region Misc Events
-
-        internal void SetPrimaryInitialDirectory()
-        {
-            // Get the initial directory from settings.
-            string path = Settings.ReadString(SettingsStringType.InitialDirectory);
-
-            // If the path is not empty check if it exists and set it as the initial directory.
-            if (!string.IsNullOrEmpty(path))
-            {
-                _strInitialDirectory = Directory.Exists(path)
-                    ? path
-                    : METPath.CurrentDirectory;
-            }
-        }
-
-        private void OpenBinary(string filePath)
-        {
-            ToggleControlEnable(false);
-
-            // If a firmware is loaded, reset all data.
-            if (EFIROM.FirmwareLoaded)
-                ResetAllData();
-
-            // Check the filesize
-            if (!FileUtils.IsValidMinMaxSize(filePath, this))
-            {
-                ResetAllData();
-                return;
-            }
-
-            // Set the binary path and load the bytes.
-            EFIROM.LoadedBinaryPath = filePath;
-
-            EFIROM.LoadedBinaryBytes =
-                File.ReadAllBytes(
-                    filePath);
-
-            // Process the descriptor.
-            IFD.ParseRegionData(
-                EFIROM.LoadedBinaryBytes);
-
-            // Check if the image is what we're looking for.
-            if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBytes))
+            // Fsys store bytes were null.
+            if (EFIROM.FsysStoreData.FsysBytes == null)
             {
                 METMessageBox.Show(
                     this,
-                    DialogStrings.DS_NOT_VALID_FW,
+                    $"FsysSectionData.FsysBytes() {DialogStrings.DS_DATA_NULL}",
                     METMessageBoxType.Error,
                     METMessageBoxButtons.Okay);
 
-                ResetAllData();
+                return;
+            }
+
+            // Check the Fsys stores directory exists.
+            if (!Directory.Exists(METPath.FsysDirectory))
+            {
+                // Create the Fsys stores directory.
+                Status status =
+                    FileUtils.CreateDirectory(
+                        METPath.FsysDirectory);
+
+                // Directory creation failed.
+                if (status == Status.FAILED)
+                {
+                    METMessageBox.Show(
+                        this,
+                        DialogStrings.DS_FSYS_DIR_FAIL,
+                        METMessageBoxType.Error,
+                        METMessageBoxButtons.Okay);
+                }
+            }
+
+            using (SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                FileName = $"{MainWinStrings.MW_FSYS}_{EFIROM.FsysStoreData.Serial}_{EFIROM.EfiBiosIdSectionData.ModelPart}",
+                OverwritePrompt = true,
+                InitialDirectory = METPath.FsysDirectory
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                // Save the Fsys stores bytes to disk.
+                if (FileUtils.WriteAllBytesEx(
+                    dialog.FileName,
+                    EFIROM.FsysStoreData.FsysBytes) && File.Exists(dialog.FileName))
+                {
+                    UITools.ShowExplorerNavigationPrompt(
+                        this,
+                        DialogStrings.DS_FSYS_EXPORT_SUCCESS,
+                        dialog.FileName);
+
+                    return;
+                }
+
+                METMessageBox.Show(
+                    this,
+                    DialogStrings.DS_FSYS_EXPORT_FAIL,
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
+            }
+        }
+
+        private void exportIntelMERegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (IFD.ME_REGION_BASE == 0 || IFD.ME_REGION_LIMIT == 0)
+            {
+                METMessageBox.Show(
+                    this,
+                    DialogStrings.DS_ME_BOL_NOT_FOUND,
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
 
                 return;
             }
 
-            // Show loading resource.
-            pbxLoad.Image = Properties.Resources.loading;
-
-            // Set the current initial directory.
-            _strInitialDirectory = Path.GetDirectoryName(filePath);
-
-            // Load the firmware base in a separate thread.
-            Thread thread = new Thread(() => LoadFirmwareBase(filePath))
+            // Check the Fsys stores directory exists.
+            if (!Directory.Exists(METPath.MeDirectory))
             {
-                IsBackground = true
-            };
+                // Create the Fsys stores directory.
+                Status status =
+                    FileUtils.CreateDirectory(
+                        METPath.MeDirectory);
 
-            thread.Start();
-        }
-
-        private void LoadFirmwareBase(string filePath)
-        {
-            // Load firmware base data from loaded binary bytes.
-            EFIROM.LoadFirmwareBaseData(
-                EFIROM.LoadedBinaryBytes,
-                filePath);
-
-            // Update controls on the main UI thread using Invoke.
-            Invoke((MethodInvoker)UpdateUI);
-
-            // Set firmware loaded flag to true.
-            EFIROM.FirmwareLoaded = true;
-        }
-
-        private void ResetAllData()
-        {
-            // Clear labels.
-            Label[] labels =
-            {
-                lblFilename,
-                lblFilesize,
-                lblFileCrc32,
-                lblFileCreatedDate,
-                lblFileModifiedDate,
-                lblModel,
-                lblConfigCode,
-                lblSerialNumber,
-                lblHwc,
-                lblFsysCrc32,
-                lblOrderNumber,
-                lblEfiVersion,
-                lblVssStore,
-                lblSvsStore,
-                lblEfiLock,
-                lblBoardId,
-                lblApfsCapable,
-                lblMeVersion
-            };
-
-            foreach (Label label in labels)
-            {
-                label.Text = string.Empty;
-                label.ForeColor = Color.FromArgb(235, 235, 235);
+                // Directory creation failed.
+                if (status == Status.FAILED)
+                {
+                    METMessageBox.Show(
+                        this,
+                        DialogStrings.DS_ME_DIR_FAIL,
+                        METMessageBoxType.Error,
+                        METMessageBoxButtons.Okay);
+                }
             }
 
-            // Remove click event handlers.
-            lblModel.Click -= lblModel_Click;
-            lblConfigCode.Click -= lblConfigCode_Click;
-            lblFsysCrc32.Click -= lblFsysCrc32_Click;
-            lblSerialNumber.Click -= lblSerialNumber_Click;
-            lblHwc.Click -= lblHwc_Click;
-            lblOrderNumber.Click -= lblOrderNumber_Click;
-            lblEfiVersion.Click -= lblEfiVersion_Click;
-            lblBoardId.Click -= lblBoardId_Click;
-            lblMeVersion.Click -= lblMeVersion_Click;
+            // Set SaveFileDialog params.
+            using (SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
+                FileName = $"{MainWinStrings.MW_ME_REGION}_{EFIROM.FsysStoreData.Serial}_{EFIROM.EfiBiosIdSectionData.ModelPart}",
+                OverwritePrompt = true,
+                InitialDirectory = METPath.MeDirectory
+            })
+            {
+                // Action was cancelled.
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
 
-            // Reset initial directory.
-            SetPrimaryInitialDirectory();
+                byte[] meBytes =
+                    BinaryUtils.GetBytesBaseLength(
+                        EFIROM.LoadedBinaryBytes,
+                        (int)IFD.ME_REGION_BASE,
+                        (int)IFD.ME_REGION_SIZE);
 
-            // Reset descriptor values.
-            IFD.ClearRegionData();
+                if (FileUtils.WriteAllBytesEx(dialog.FileName, meBytes) && File.Exists(dialog.FileName))
+                {
+                    UITools.ShowExplorerNavigationPrompt(
+                        this,
+                        DialogStrings.DS_ME_EXPORT_SUCCESS,
+                        dialog.FileName);
 
-            // Reset FWBase.
-            EFIROM.ResetFirmwareBaseData();
+                    return;
+                }
+
+                METMessageBox.Show(
+                    this,
+                    DialogStrings.DS_ME_EXPORT_FAIL,
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
+            }
         }
-        #endregion
 
-        #region Clipboard
-        internal void SetClipboardText(string text)
+        private void backupFirmwareZIPToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(text))
+            if (EFIROM.LoadedBinaryBytes == null)
+            {
+                METMessageBox.Show(
+                    this,
+                    $"FWBase.LoadedBinaryBytes() {DialogStrings.DS_DATA_NULL}",
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
+
                 return;
+            }
 
-            Clipboard.SetText(text);
+            if (!Directory.Exists(METPath.BackupsDirectory))
+                Directory.CreateDirectory(
+                    METPath.BackupsDirectory);
 
-            METMessageBox.Show(
-                this,
-                $"'{text}' copied to the clipboard.",
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.InitialDirectory = METPath.BackupsDirectory;
+                dialog.Filter = "Zip files (*.zip)|*.zip";
+                dialog.FileName = $"{EFIROM.FileInfoData.FileName}_{MainWinStrings.MW_BACKUP.ToLower()}";
+                dialog.OverwritePrompt = true;
+
+                // Action was cancelled
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                FileUtils.BackupFileToZip(
+                    EFIROM.LoadedBinaryBytes,
+                    EFIROM.FileInfoData.FileNameExt,
+                    dialog.FileName);
+
+                if (File.Exists(dialog.FileName))
+                {
+                    UITools.ShowExplorerNavigationPrompt(
+                        this,
+                        DialogStrings.DS_ARCHIVE_SUCCESS,
+                        dialog.FileName);
+
+                    return;
+                }
+
+                METMessageBox.Show(
+                    this,
+                    DialogStrings.DS_ARCHIVE_FAIL,
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
+            }
         }
-
-        private void ClipboardSetFilename(bool showExtension) => SetClipboardText(
-            showExtension
-            ? EFIROM.FileInfoData.FileNameExt
-            : EFIROM.FileInfoData.FileName);
-
-        private void ClipboardSetFileSize() => SetClipboardText(
-            $"{FileUtils.FormatFileSize(EFIROM.FileInfoData.Length)} " +
-            $"bytes ({EFIROM.FileInfoData.Length:X}h)");
-
-        private void ClipboardSetFileCrc32() => SetClipboardText(
-            $"{EFIROM.FileInfoData.CRC32:X8}");
-
-        private void ClipboardSetFileCreationTime() => SetClipboardText(
-            EFIROM.FileInfoData.CreationTime);
-
-        private void ClipboardSetFileModifiedTime() => SetClipboardText(
-            EFIROM.FileInfoData.LastWriteTime);
-
-        private void ClipboardSetFirmwareModel() => SetClipboardText(
-            $"{MacUtils.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart)}");
-
-        private void ClipboardSetFirmwareFullModel() => SetClipboardText(
-            MacUtils.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart));
-
-        private void ClipboardSetFirmwareConfigCode() => SetClipboardText(
-                EFIROM.ConfigCode);
-
-        private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(
-            EFIROM.FsysStoreData.CrcString);
-
-        private void ClipboardSetFirmwareSerial() => SetClipboardText(
-                EFIROM.FsysStoreData.Serial);
-
-        private void ClipboardSetFirmwareHwc() => SetClipboardText(
-            EFIROM.FsysStoreData.HWC);
-
-        private void ClipboardSetFirmwareOrderNumber() => SetClipboardText(
-            EFIROM.FsysStoreData.SON);
-
-        private void ClipboardSetFirmwareVersion() => SetClipboardText(
-            EFIROM.FirmwareVersion);
-
-        private void ClipboardSetFirmwareBoardId() => SetClipboardText(
-            EFIROM.PdrSectionData.BoardId);
-
-        private void ClipboardSetFirmwareFitVersion() => SetClipboardText(
-            EFIROM.FitVersion);
-
-        private void ClipboardSetFirmwareMeVersion() => SetClipboardText(
-            EFIROM.MeVersion);
-
-        private void ClipboardSetPdrRegionOffsets() => SetClipboardText(
-            $"Base: 0x{IFD.PDR_REGION_BASE:X}h, " +
-            $"Limit: 0x{IFD.PDR_REGION_LIMIT:X}h, " +
-            $"Size: 0x{IFD.PDR_REGION_SIZE:X}h");
-
-        private void ClipboardSetMeRegionOffsets() => SetClipboardText(
-            $"Base: 0x{IFD.ME_REGION_BASE:X}h, " +
-            $"Limit: 0x{IFD.ME_REGION_LIMIT:X}h, " +
-            $"Size: 0x{IFD.ME_REGION_SIZE:X}h");
-
-        private void ClipboardSetBiosRegionOffsets() => SetClipboardText(
-            $"Base: 0x{IFD.BIOS_REGION_BASE:X}h, " +
-            $"Limit: 0x{IFD.BIOS_REGION_LIMIT:X}h, " +
-            $"Size: 0x{IFD.BIOS_REGION_SIZE:X}h");
-        #endregion
 
         private void exportFirmwareInformationTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1511,204 +677,9 @@ namespace Mac_EFI_Toolkit
                  dialog.FileName);
             }
         }
+        #endregion
 
-        private void automaticFilenameGenerationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string model =
-                EFIROM.EfiBiosIdSectionData.ModelPart
-                ?? MainWinStrings.MW_NOMODEL;
-
-            string serial =
-                EFIROM.FsysStoreData.Serial
-                ?? MainWinStrings.MW_NOSERIAL;
-
-            if (MacUtils.IsBannedSerial(serial))
-                serial = MainWinStrings.MW_NOSERIAL;
-
-            string efiversion =
-                EFIROM.FirmwareVersion
-                ?? MainWinStrings.MW_NOFWVER;
-
-            SetClipboardText($"{model}_{serial}_{efiversion}");
-        }
-
-        private void exportIntelMERegionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (IFD.ME_REGION_BASE == 0 || IFD.ME_REGION_LIMIT == 0)
-            {
-                METMessageBox.Show(
-                    this,
-                    DialogStrings.DS_ME_BOL_NOT_FOUND,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
-
-                return;
-            }
-
-            // Check the Fsys stores directory exists.
-            if (!Directory.Exists(METPath.MeDirectory))
-            {
-                // Create the Fsys stores directory.
-                Status status =
-                    FileUtils.CreateDirectory(
-                        METPath.MeDirectory);
-
-                // Directory creation failed.
-                if (status == Status.FAILED)
-                {
-                    METMessageBox.Show(
-                        this,
-                        DialogStrings.DS_ME_DIR_FAIL,
-                        METMessageBoxType.Error,
-                        METMessageBoxButtons.Okay);
-                }
-            }
-
-            // Set SaveFileDialog params.
-            using (SaveFileDialog dialog = new SaveFileDialog
-            {
-                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
-                FileName = $"{MainWinStrings.MW_ME_REGION}_{EFIROM.FsysStoreData.Serial}_{EFIROM.EfiBiosIdSectionData.ModelPart}",
-                OverwritePrompt = true,
-                InitialDirectory = METPath.MeDirectory
-            })
-            {
-                // Action was cancelled.
-                if (dialog.ShowDialog() != DialogResult.OK)
-                    return;
-
-                byte[] meBytes =
-                    BinaryUtils.GetBytesBaseLength(
-                        EFIROM.LoadedBinaryBytes,
-                        (int)IFD.ME_REGION_BASE,
-                        (int)IFD.ME_REGION_SIZE);
-
-                if (FileUtils.WriteAllBytesEx(dialog.FileName, meBytes) && File.Exists(dialog.FileName))
-                {
-                    UITools.ShowExplorerNavigationPrompt(
-                        this,
-                        DialogStrings.DS_ME_EXPORT_SUCCESS,
-                        dialog.FileName);
-
-                    return;
-                }
-
-                METMessageBox.Show(
-                    this,
-                    DialogStrings.DS_ME_EXPORT_FAIL,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
-            }
-        }
-
-        private void exportFsysStoreToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Fsys store bytes were null.
-            if (EFIROM.FsysStoreData.FsysBytes == null)
-            {
-                METMessageBox.Show(
-                    this,
-                    $"FsysSectionData.FsysBytes() {DialogStrings.DS_DATA_NULL}",
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
-
-                return;
-            }
-
-            // Check the Fsys stores directory exists.
-            if (!Directory.Exists(METPath.FsysDirectory))
-            {
-                // Create the Fsys stores directory.
-                Status status =
-                    FileUtils.CreateDirectory(
-                        METPath.FsysDirectory);
-
-                // Directory creation failed.
-                if (status == Status.FAILED)
-                {
-                    METMessageBox.Show(
-                        this,
-                        DialogStrings.DS_FSYS_DIR_FAIL,
-                        METMessageBoxType.Error,
-                        METMessageBoxButtons.Okay);
-                }
-            }
-
-            using (SaveFileDialog dialog = new SaveFileDialog
-            {
-                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
-                FileName = $"{MainWinStrings.MW_FSYS}_{EFIROM.FsysStoreData.Serial}_{EFIROM.EfiBiosIdSectionData.ModelPart}",
-                OverwritePrompt = true,
-                InitialDirectory = METPath.FsysDirectory
-            })
-            {
-                if (dialog.ShowDialog() != DialogResult.OK)
-                    return;
-
-                // Save the Fsys stores bytes to disk.
-                if (FileUtils.WriteAllBytesEx(
-                    dialog.FileName,
-                    EFIROM.FsysStoreData.FsysBytes) && File.Exists(dialog.FileName))
-                {
-                    UITools.ShowExplorerNavigationPrompt(
-                        this,
-                        DialogStrings.DS_FSYS_EXPORT_SUCCESS,
-                        dialog.FileName);
-
-                    return;
-                }
-
-                METMessageBox.Show(
-                    this,
-                    DialogStrings.DS_FSYS_EXPORT_FAIL,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
-            }
-        }
-
-        private void lookupSerialNumberOnEveryMacToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (EFIROM.FsysStoreData.Serial == null)
-            {
-                METMessageBox.Show(
-                    this,
-                    $"FsysSectionData.Serial() {DialogStrings.DS_DATA_NULL}",
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
-
-                return;
-            }
-
-            Process.Start(
-                $"https://everymac.com/ultimate-mac-lookup/?search_keywords={EFIROM.FsysStoreData.Serial}");
-        }
-
-        private void viewRomInformationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Check the Rom Information section exists.
-            if (EFIROM.AppleRomInfoSectionData.SectionExists == false)
-            {
-                // ROM Information section does not exist.
-                METMessageBox.Show(
-                    this,
-                    $"ROMInfoData.SectionExists() {DialogStrings.DS_RETURNED_FALSE}",
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
-
-                return;
-            }
-
-            // Set window half opacity.
-            UITools.SetHalfOpacity(this);
-
-            // Open the Rom Information Window.
-            using (Form formWindow = new infoWindow())
-            {
-                formWindow.FormClosed += ChildWindowClosed;
-                formWindow.ShowDialog();
-            }
-        }
-
+        #region Patch Toolstrip Events
         private void fixFsysChecksumCRC32ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Fsys store was not found by the firmware parser.
@@ -1945,5 +916,855 @@ namespace Mac_EFI_Toolkit
                     OpenBinary(dialog.FileName);
             }
         }
+        #endregion
+
+        #region Options Toolstrip Events
+        private void automaticFilenameGenerationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string model =
+                EFIROM.EfiBiosIdSectionData.ModelPart
+                ?? MainWinStrings.MW_NOMODEL;
+
+            string serial =
+                EFIROM.FsysStoreData.Serial
+                ?? MainWinStrings.MW_NOSERIAL;
+
+            if (MacUtils.IsBannedSerial(serial))
+                serial = MainWinStrings.MW_NOSERIAL;
+
+            string efiversion =
+                EFIROM.FirmwareVersion
+                ?? MainWinStrings.MW_NOFWVER;
+
+            SetClipboardText($"{model}_{serial}_{efiversion}");
+        }
+
+        private void viewRomInformationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Check the Rom Information section exists.
+            if (EFIROM.AppleRomInfoSectionData.SectionExists == false)
+            {
+                // ROM Information section does not exist.
+                METMessageBox.Show(
+                    this,
+                    $"ROMInfoData.SectionExists() {DialogStrings.DS_RETURNED_FALSE}",
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
+
+                return;
+            }
+
+            // Set window half opacity.
+            UITools.SetHalfOpacity(this);
+
+            // Open the Rom Information Window.
+            using (Form formWindow = new infoWindow())
+            {
+                formWindow.FormClosed += ChildWindowClosed;
+                formWindow.ShowDialog();
+            }
+        }
+
+        private void lookupSerialNumberOnEveryMacToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EFIROM.FsysStoreData.Serial == null)
+            {
+                METMessageBox.Show(
+                    this,
+                    $"FsysSectionData.Serial() {DialogStrings.DS_DATA_NULL}",
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
+
+                return;
+            }
+
+            Process.Start(
+                $"https://everymac.com/ultimate-mac-lookup/?search_keywords={EFIROM.FsysStoreData.Serial}");
+        }
+        #endregion
+
+        #region Update Main Window
+        internal void UpdateUI()
+        {
+            // File information.
+            UpdateFileNameControls();
+            UpdateFileSizeControls();
+            UpdateFileCrc32Controls();
+            UpdateFileCreationDateControls();
+            UpdateFileModifiedDateControls();
+
+            // Firmware Data.
+            UpdateModelControls();
+            UpdateConfigCodeControls();
+            UpdateFsysControls();
+            UpdateSerialNumberControls();
+            UpdateHardwareConfigControls();
+            UpdateOrderNumberControls();
+            UpdateEfiVersionControls();
+
+            UpdateNvramLabel(
+                lblVssStore,
+                EFIROM.VssStoreData,
+                MainWinStrings.MW_VSS);
+            UpdateNvramLabel(
+                lblSvsStore,
+                EFIROM.SvsStoreData,
+                MainWinStrings.MW_SVS);
+
+            UpdateEfiLockControls();
+            UpdateBoardIdControls();
+            UpdateApfsCapableControls();
+            UpdateIntelFitControls();
+            UpdateIntelMeControls();
+
+            // Apply DISABLED_TEXT color to N/A text labels.
+            ApplyNestedPanelLabelForeColor(
+                tlpFirmware,
+                AppColours.DISABLED_TEXT);
+
+            // Check which descriptor copy menu items should be enabled.
+            pdrBaseToolStripMenuItem.Enabled =
+                IFD.PDR_REGION_BASE != 0;
+            meBaseToolStripMenuItem.Enabled =
+                IFD.ME_REGION_BASE != 0;
+            biosBaseToolStripMenuItem.Enabled =
+                IFD.BIOS_REGION_BASE != 0;
+
+            // Hide loading image.
+            pbxLoad.Image = null;
+
+            // Set window text.
+            Text = EFIROM.FileInfoData.FileNameExt ?? "EFIROM";
+
+            // Check and set control enable.
+            ToggleControlEnable(true);
+        }
+
+        private void UpdateFileNameControls() =>
+            lblFilename.Text = $"{MainWinStrings.MW_FILE}: '{EFIROM.FileInfoData.FileNameExt}'";
+
+        private void UpdateFileSizeControls()
+        {
+            int fileSizeDecimal =
+                EFIROM.FileInfoData.Length;
+
+            bool isValidSize =
+                FileUtils.GetIsValidBinSize(
+                    fileSizeDecimal);
+
+            lblFilesize.Text =
+                $"{FileUtils.FormatFileSize(fileSizeDecimal)} {MainWinStrings.MW_BYTES} ({fileSizeDecimal:X}h)";
+
+            if (!isValidSize)
+            {
+                lblFilesize.ForeColor =
+                    AppColours.ERROR;
+
+                lblFilesize.Text +=
+                    isValidSize
+                    ? string.Empty
+                    : $" ({FileUtils.GetSizeDifference(fileSizeDecimal)})";
+            }
+        }
+
+        private void UpdateFileCrc32Controls() =>
+            lblFileCrc32.Text = $"{EFIROM.FileInfoData.CRC32:X8}";
+
+        private void UpdateFileCreationDateControls() =>
+            lblFileCreatedDate.Text = EFIROM.FileInfoData.CreationTime;
+
+        private void UpdateFileModifiedDateControls() =>
+            lblFileModifiedDate.Text = EFIROM.FileInfoData.LastWriteTime;
+
+        private void UpdateModelControls()
+        {
+            string identifier =
+                EFIROM.EfiBiosIdSectionData.ModelPart;
+
+            if (!string.IsNullOrEmpty(identifier))
+            {
+                string model =
+                    MacUtils.ConvertEfiModelCode(
+                        EFIROM.EfiBiosIdSectionData.ModelPart);
+
+                lblModel.Text =
+                    $"{model} ({identifier})"
+                    ?? AppStrings.AS_NA;
+
+                modelToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            lblModel.Text = AppStrings.AS_NA;
+            modelToolStripMenuItem.Enabled = false;
+        }
+
+        private void UpdateConfigCodeControls()
+        {
+            if (!string.IsNullOrEmpty(EFIROM.ConfigCode))
+            {
+                lblConfigCode.Text = EFIROM.ConfigCode;
+
+                configCodeToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            lblConfigCode.Text = AppStrings.AS_CONTACT_SERVER;
+            lblConfigCode.ForeColor = Colours.INFO_BOX;
+
+            AppendConfigCodeAsync(EFIROM.FsysStoreData.HWC);
+        }
+
+        internal async void AppendConfigCodeAsync(string hwc)
+        {
+            string configCode =
+                await MacUtils.GetDeviceConfigCodeSupportRemote(hwc);
+
+            if (!string.IsNullOrEmpty(configCode))
+            {
+                EFIROM.ConfigCode = configCode;
+
+                lblConfigCode.Text = configCode;
+                lblConfigCode.ForeColor = Color.White;
+
+                configCodeToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            lblConfigCode.Text = AppStrings.AS_NA;
+            lblConfigCode.ForeColor = Colours.CONTROL_DISABLED_TEXT;
+
+            configCodeToolStripMenuItem.Enabled = false;
+        }
+
+        private void UpdateFsysControls()
+        {
+            string fsysCrc32 =
+                EFIROM.FsysStoreData.CrcString;
+
+            if (!string.IsNullOrEmpty(fsysCrc32))
+            {
+                lblFsysCrc32.Text =
+                    $"{fsysCrc32}h{(EFIROM.ForceFoundFsys ? " [F]" : string.Empty)}";
+
+                lblFsysCrc32.ForeColor = string.Equals(
+                    fsysCrc32,
+                    EFIROM.FsysStoreData.CrcCalcString)
+                    ? AppColours.COMPLETE
+                    : AppColours.ERROR;
+
+                fsysCRC32ToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            fsysCRC32ToolStripMenuItem.Enabled = false;
+            lblFsysCrc32.Text = AppStrings.AS_NA;
+        }
+
+        private void UpdateSerialNumberControls()
+        {
+            string serialNumber =
+                EFIROM.FsysStoreData.Serial;
+
+            lblSerialNumber.Text =
+                serialNumber
+                ?? AppStrings.AS_NA;
+
+            if (!string.IsNullOrEmpty(serialNumber))
+            {
+                lblSerialNumber.Text +=
+                    (serialNumber.Length == 11 || serialNumber.Length == 12)
+                    ? $" ({serialNumber.Length})"
+                    : string.Empty;
+
+                serialToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            serialToolStripMenuItem.Enabled = false;
+        }
+
+        private void UpdateHardwareConfigControls()
+        {
+            string hwc =
+                EFIROM.FsysStoreData.HWC;
+
+            lblHwc.Text =
+                 hwc
+                 ?? AppStrings.AS_NA;
+
+            if (!string.IsNullOrEmpty(hwc))
+            {
+                hwcToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            hwcToolStripMenuItem.Enabled = false;
+        }
+
+        private void UpdateOrderNumberControls()
+        {
+            string orderNumber =
+                EFIROM.FsysStoreData.SON;
+
+            lblOrderNumber.Text =
+                orderNumber
+                ?? AppStrings.AS_NA;
+
+            if (!string.IsNullOrEmpty(orderNumber))
+            {
+                orderNoToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            orderNoToolStripMenuItem.Enabled = false;
+        }
+
+        private void UpdateEfiVersionControls()
+        {
+            string efiVersion =
+                EFIROM.FirmwareVersion;
+
+            lblEfiVersion.Text =
+                efiVersion
+                ?? AppStrings.AS_NA;
+
+            if (!string.IsNullOrEmpty(efiVersion))
+            {
+                efiVersionToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            efiVersionToolStripMenuItem.Enabled = false;
+        }
+
+        private void UpdateNvramLabel(
+            Label nvramLabel, NvramStore storeData, string text)
+        {
+            nvramLabel.Text = text;
+
+            Color foreColor =
+                storeData.PrimaryStoreBase == -1
+                ? AppColours.DISABLED_TEXT
+                : !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
+                ? AppColours.WARNING
+                : AppColours.COMPLETE;
+
+            nvramLabel.ForeColor = foreColor;
+        }
+
+        private void UpdateEfiLockControls()
+        {
+            switch (EFIROM.EfiPrimaryLockData.LockType)
+            {
+                case EfiLockType.Locked:
+                    lblEfiLock.Text = MainWinStrings.MW_LOCKED.ToUpper();
+                    lblEfiLock.ForeColor = AppColours.ERROR;
+                    break;
+                case EfiLockType.Unlocked:
+                    lblEfiLock.Text = MainWinStrings.MW_UNLOCKED.ToUpper();
+                    lblEfiLock.ForeColor = AppColours.COMPLETE;
+                    break;
+                case EfiLockType.Unknown:
+                default:
+                    lblEfiLock.Text = MainWinStrings.MW_UNKNOWN.ToUpper();
+                    lblEfiLock.ForeColor = AppColours.WARNING;
+                    break;
+            }
+        }
+
+        private void UpdateBoardIdControls()
+        {
+            string boardId =
+                EFIROM.PdrSectionData.BoardId;
+
+            lblBoardId.Text =
+                boardId
+                ?? AppStrings.AS_NA;
+
+            if (!string.IsNullOrEmpty(boardId))
+            {
+                boardIDToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            boardIDToolStripMenuItem.Enabled = false;
+        }
+
+        private void UpdateApfsCapableControls()
+        {
+            switch (EFIROM.IsApfsCapable)
+            {
+                case ApfsCapable.Yes:
+                    lblApfsCapable.Text = MainWinStrings.MW_APFS_DRIVER_FOUND;
+                    lblApfsCapable.ForeColor = AppColours.COMPLETE;
+                    break;
+                case ApfsCapable.No:
+                    lblApfsCapable.Text = MainWinStrings.MW_APFS_DRIVER_NOT_FOUND;
+                    lblApfsCapable.ForeColor = AppColours.WARNING;
+                    break;
+                case ApfsCapable.Unknown:
+                    lblApfsCapable.Text = MainWinStrings.MW_UNKNOWN.ToUpper();
+                    lblApfsCapable.ForeColor = AppColours.ERROR;
+                    break;
+            }
+        }
+
+        private void UpdateIntelFitControls() =>
+            fitVersionToolStripMenuItem.Enabled =
+            !string.IsNullOrEmpty(EFIROM.FitVersion)
+            ? true
+            : false;
+
+        private void UpdateIntelMeControls()
+        {
+            string meVersion =
+                EFIROM.MeVersion;
+
+            lblMeVersion.Text =
+                meVersion
+                ?? AppStrings.AS_NA;
+
+            if (!string.IsNullOrEmpty(meVersion))
+            {
+                if (IFD.ME_REGION_BASE != 0)
+                    if (!string.IsNullOrEmpty(meVersion))
+                        lblMeVersion.Text += $" (0x{IFD.ME_REGION_BASE:X}h)";
+
+                meVersionToolStripMenuItem.Enabled = true;
+
+                return;
+            }
+
+            meVersionToolStripMenuItem.Enabled = false;
+        }
+        #endregion
+
+        #region UI Events
+        private void ChildWindowClosed(object sender, EventArgs e)
+        {
+            Opacity = 1.0;
+
+            if (Program.openLastBuild)
+            {
+                if (File.Exists(Program.lastBuildPath))
+                    OpenBinary(Program.lastBuildPath);
+
+                Program.openLastBuild = false;
+                Program.lastBuildPath = string.Empty;
+            }
+        }
+
+        private void ToggleControlEnable(bool enable)
+        {
+            // This is all fucked up and needs recoding entirely.
+            Button[] standardButtons =
+            {
+                cmdMenuReset,
+                cmdMenuCopy,
+                cmdMenuReload,
+                cmdMenuExport,
+                cmdMenuPatch,
+                cmdMenuOptions,
+                cmdOpenInExplorer,
+                };
+
+            void EnableButtons(params Button[] buttons)
+            {
+                foreach (Button button in buttons)
+                    button.Enabled = enable;
+            }
+
+            if (!enable)
+            {
+                EnableButtons(standardButtons);
+            }
+            else
+            {
+                EnableButtons(standardButtons);
+
+                bool modelPartExists =
+                    EFIROM.EfiBiosIdSectionData.ModelPart
+                    != null;
+
+                bool fsysBytesExist =
+                    EFIROM.FsysStoreData.FsysBytes
+                    != null;
+
+                bool fsysCrcMismatch = fsysBytesExist &&
+                    !string.Equals(EFIROM.FsysStoreData.CrcCalcString,
+                        EFIROM.FsysStoreData.CrcString);
+
+                cmdMenuPatch.Enabled =
+                    modelPartExists
+                    && fsysBytesExist
+                    || fsysCrcMismatch;
+
+                // Patch Menu
+                fixFsysChecksumCRC32ToolStripMenuItem.Enabled =
+                    fsysCrcMismatch;
+
+                invalidateEFILockToolStripMenuItem.Enabled =
+                    EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
+
+                // Export Menu
+                exportFsysStoreToolStripMenuItem.Enabled =
+                    fsysBytesExist;
+
+                exportIntelMERegionToolStripMenuItem.Enabled =
+                    IFD.IsDescriptorMode &&
+                    IFD.ME_REGION_BASE != 0 &&
+                    IFD.ME_REGION_LIMIT != 0;
+
+                // Options Menu
+                viewRomInformationToolStripMenuItem.Enabled =
+                    EFIROM.AppleRomInfoSectionData.SectionExists;
+
+                lookupSerialNumberOnEveryMacToolStripMenuItem.Enabled =
+                    !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial)
+                    && !MacUtils.IsBannedSerial(EFIROM.FsysStoreData.Serial);
+            }
+
+            tlpFilename.Enabled = enable;
+            tlpFirmware.Enabled = enable;
+        }
+
+        private void SetButtonProperties()
+        {
+            var buttons = new[]
+            {
+                new { Button = cmdClose,
+                    Font = Program.FONT_MDL2_REG_12,
+                    Text = Chars.EXIT_CROSS },
+                new { Button = cmdOpenInExplorer,
+                    Font = Program.FONT_MDL2_REG_10,
+                    Text = Chars.FILE_EXPLORER },
+            };
+
+            foreach (var buttonData in buttons)
+            {
+                buttonData.Button.Font = buttonData.Font;
+                buttonData.Button.Text = buttonData.Text;
+            }
+        }
+
+        private void SetTipHandlers()
+        {
+            Button[] buttons =
+            {
+                cmdMenuOpen,
+                cmdMenuReset,
+                cmdMenuCopy,
+                cmdMenuReload,
+                cmdOpenInExplorer,
+                cmdMenuExport,
+                cmdMenuPatch,
+                cmdMenuOptions
+            };
+
+            Label[] labels =
+            {
+                lblVssStore,
+                lblSvsStore,
+            };
+
+            foreach (Button button in buttons)
+            {
+                button.MouseEnter += HandleMouseEnterTip;
+                button.MouseLeave += HandleMouseLeaveTip;
+            }
+
+            foreach (Label label in labels)
+            {
+                label.MouseEnter += HandleMouseEnterTip;
+                label.MouseLeave += HandleMouseLeaveTip;
+            }
+        }
+
+        private void HandleMouseEnterTip(object sender, EventArgs e)
+        {
+            if (!Settings.ReadBool(SettingsBoolType.DisableTips))
+            {
+                Dictionary<object, string> tooltips = new Dictionary<object, string>
+                {
+                    { cmdMenuOpen, "Open a Mac EFI/BIOS (CTRL + O)" },
+                    { cmdMenuReset, "Unload Firmware and Reset Window (CTRL + R)" },
+                    { cmdMenuCopy, "Open the Clipboard Copy Menu (CTRL + C)" },
+                    { cmdMenuReload, "Reload File from Disk (CTRL + L)" },
+                    { cmdMenuExport, "Open the data Export Menu (CTRL + E)"},
+                    { cmdMenuPatch, "Open the Firmware Patching Menu (CTRL + P)"},
+                    { cmdMenuOptions, "Open the Options Menu (CTRL + M)"},
+                    { cmdOpenInExplorer, "Open File in Explorer (ALT + N)" },
+                    { lblVssStore, SetNvramStoreTip(EFIROM.VssStoreData, MainWinStrings.MW_VSS) },
+                    { lblSvsStore, SetNvramStoreTip(EFIROM.SvsStoreData, MainWinStrings.MW_SVS) },
+                };
+
+                if (tooltips.ContainsKey(sender))
+                    lblStatusBarTip.Text = tooltips[sender];
+            }
+        }
+
+        private void HandleMouseLeaveTip(object sender, EventArgs e) =>
+            lblStatusBarTip.Text = string.Empty;
+
+        private string SetNvramStoreTip(NvramStore storeData, string storeType)
+        {
+            if (!storeData.IsPrimaryStoreEmpty && !storeData.IsBackupStoreEmpty)
+                return $"Data present in both {storeType} stores";
+            else if (!storeData.IsPrimaryStoreEmpty && storeData.IsBackupStoreEmpty)
+                return $"Data present in the primary {storeType} store";
+            else if (storeData.IsPrimaryStoreEmpty && !storeData.IsBackupStoreEmpty)
+                return $"Data present in the backup {storeType} store";
+            else if (storeData.PrimaryStoreBase != -1)
+                return $"{storeType} NVRAM stores are empty (0xFF)";
+
+            return string.Empty;
+        }
+
+        void ApplyNestedPanelLabelForeColor(TableLayoutPanel tableLayoutPanel, Color color)
+        {
+            foreach (Control control in tableLayoutPanel.Controls)
+            {
+                if (control is Label label && label.Text == AppStrings.AS_NA)
+                {
+                    label.ForeColor = color;
+                }
+                else if (control is TableLayoutPanel nestedTableLayoutPanel)
+                {
+                    ApplyNestedPanelLabelForeColor(
+                        nestedTableLayoutPanel,
+                        color);
+                }
+            }
+        }
+
+        private void SetControlForeColor(Control parentControl, Color foreColor)
+        {
+            foreach (Control ctrl in parentControl.Controls)
+                ctrl.ForeColor = foreColor;
+        }
+        #endregion
+
+        #region Misc Events
+
+        internal void SetPrimaryInitialDirectory()
+        {
+            // Get the initial directory from settings.
+            string path = Settings.ReadString(SettingsStringType.InitialDirectory);
+
+            // If the path is not empty check if it exists and set it as the initial directory.
+            if (!string.IsNullOrEmpty(path))
+            {
+                _strInitialDirectory = Directory.Exists(path)
+                    ? path
+                    : METPath.CurrentDirectory;
+            }
+        }
+
+        private void OpenBinary(string filePath)
+        {
+            ToggleControlEnable(false);
+
+            // If a firmware is loaded, reset all data.
+            if (EFIROM.FirmwareLoaded)
+                ResetAllData();
+
+            // Check the filesize
+            if (!FileUtils.IsValidMinMaxSize(filePath, this))
+            {
+                ResetAllData();
+                return;
+            }
+
+            // Set the binary path and load the bytes.
+            EFIROM.LoadedBinaryPath = filePath;
+
+            EFIROM.LoadedBinaryBytes =
+                File.ReadAllBytes(
+                    filePath);
+
+            // Process the descriptor.
+            IFD.ParseRegionData(
+                EFIROM.LoadedBinaryBytes);
+
+            // Check if the image is what we're looking for.
+            if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBytes))
+            {
+                METMessageBox.Show(
+                    this,
+                    DialogStrings.DS_NOT_VALID_FW,
+                    METMessageBoxType.Error,
+                    METMessageBoxButtons.Okay);
+
+                ResetAllData();
+
+                return;
+            }
+
+            // Show loading resource.
+            pbxLoad.Image = Properties.Resources.loading;
+
+            // Set the current initial directory.
+            _strInitialDirectory = Path.GetDirectoryName(filePath);
+
+            // Load the firmware base in a separate thread.
+            Thread thread = new Thread(() => LoadFirmwareBase(filePath))
+            {
+                IsBackground = true
+            };
+
+            thread.Start();
+        }
+
+        private void LoadFirmwareBase(string filePath)
+        {
+            // Load firmware base data from loaded binary bytes.
+            EFIROM.LoadFirmwareBaseData(
+                EFIROM.LoadedBinaryBytes,
+                filePath);
+
+            // Update controls on the main UI thread using Invoke.
+            Invoke((MethodInvoker)UpdateUI);
+
+            // Set firmware loaded flag to true.
+            EFIROM.FirmwareLoaded = true;
+        }
+
+        private void ResetAllData()
+        {
+            // Clear labels.
+            Label[] labels =
+            {
+                lblFilename,
+                lblFilesize,
+                lblFileCrc32,
+                lblFileCreatedDate,
+                lblFileModifiedDate,
+                lblModel,
+                lblConfigCode,
+                lblSerialNumber,
+                lblHwc,
+                lblFsysCrc32,
+                lblOrderNumber,
+                lblEfiVersion,
+                lblVssStore,
+                lblSvsStore,
+                lblEfiLock,
+                lblBoardId,
+                lblApfsCapable,
+                lblMeVersion
+            };
+
+            foreach (Label label in labels)
+            {
+                label.Text = string.Empty;
+                label.ForeColor = Color.FromArgb(235, 235, 235);
+            }
+
+            // Reset window text
+            Text = "EFIROM";
+
+            // Reset initial directory.
+            SetPrimaryInitialDirectory();
+
+            // Reset descriptor values.
+            IFD.ClearRegionData();
+
+            // Reset FWBase.
+            EFIROM.ResetFirmwareBaseData();
+        }
+        #endregion
+
+        #region Clipboard
+        internal void SetClipboardText(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return;
+
+            Clipboard.SetText(text);
+
+            METMessageBox.Show(
+                this,
+                $"'{text}' copied to the clipboard.",
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void ClipboardSetFilename(bool showExtension) => SetClipboardText(
+            showExtension
+            ? EFIROM.FileInfoData.FileNameExt
+            : EFIROM.FileInfoData.FileName);
+
+        private void ClipboardSetFileSize() => SetClipboardText(
+            $"{FileUtils.FormatFileSize(EFIROM.FileInfoData.Length)} " +
+            $"bytes ({EFIROM.FileInfoData.Length:X}h)");
+
+        private void ClipboardSetFileCrc32() => SetClipboardText(
+            $"{EFIROM.FileInfoData.CRC32:X8}");
+
+        private void ClipboardSetFileCreationTime() => SetClipboardText(
+            EFIROM.FileInfoData.CreationTime);
+
+        private void ClipboardSetFileModifiedTime() => SetClipboardText(
+            EFIROM.FileInfoData.LastWriteTime);
+
+        private void ClipboardSetFirmwareModel() => SetClipboardText(
+            $"{MacUtils.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart)}");
+
+        private void ClipboardSetFirmwareFullModel() => SetClipboardText(
+            MacUtils.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart));
+
+        private void ClipboardSetFirmwareConfigCode() => SetClipboardText(
+                EFIROM.ConfigCode);
+
+        private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(
+            EFIROM.FsysStoreData.CrcString);
+
+        private void ClipboardSetFirmwareSerial() => SetClipboardText(
+                EFIROM.FsysStoreData.Serial);
+
+        private void ClipboardSetFirmwareHwc() => SetClipboardText(
+            EFIROM.FsysStoreData.HWC);
+
+        private void ClipboardSetFirmwareOrderNumber() => SetClipboardText(
+            EFIROM.FsysStoreData.SON);
+
+        private void ClipboardSetFirmwareVersion() => SetClipboardText(
+            EFIROM.FirmwareVersion);
+
+        private void ClipboardSetFirmwareBoardId() => SetClipboardText(
+            EFIROM.PdrSectionData.BoardId);
+
+        private void ClipboardSetFirmwareFitVersion() => SetClipboardText(
+            EFIROM.FitVersion);
+
+        private void ClipboardSetFirmwareMeVersion() => SetClipboardText(
+            EFIROM.MeVersion);
+
+        private void ClipboardSetPdrRegionOffsets() => SetClipboardText(
+            $"Base: 0x{IFD.PDR_REGION_BASE:X}h, " +
+            $"Limit: 0x{IFD.PDR_REGION_LIMIT:X}h, " +
+            $"Size: 0x{IFD.PDR_REGION_SIZE:X}h");
+
+        private void ClipboardSetMeRegionOffsets() => SetClipboardText(
+            $"Base: 0x{IFD.ME_REGION_BASE:X}h, " +
+            $"Limit: 0x{IFD.ME_REGION_LIMIT:X}h, " +
+            $"Size: 0x{IFD.ME_REGION_SIZE:X}h");
+
+        private void ClipboardSetBiosRegionOffsets() => SetClipboardText(
+            $"Base: 0x{IFD.BIOS_REGION_BASE:X}h, " +
+            $"Limit: 0x{IFD.BIOS_REGION_LIMIT:X}h, " +
+            $"Size: 0x{IFD.BIOS_REGION_SIZE:X}h");
+        #endregion
+
     }
 }

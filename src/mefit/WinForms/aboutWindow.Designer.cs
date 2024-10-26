@@ -178,6 +178,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(290, 240);
+            this.ControlBox = false;
             this.Controls.Add(this.pnlMain);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -189,6 +190,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.MinimumSize = new System.Drawing.Size(290, 240);
             this.Name = "aboutWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.pnlMain.ResumeLayout(false);

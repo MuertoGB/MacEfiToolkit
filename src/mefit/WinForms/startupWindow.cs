@@ -385,5 +385,85 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
+        private void cmdMenuFolders_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsFolders,
+                MenuPosition.BottomLeft);
+
+        private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.BackupsDirectory))
+            {
+                Process.Start(
+                    "explorer.exe",
+                    METPath.BackupsDirectory);
+
+                return;
+            }
+
+            METMessageBox.Show(
+                this,
+                DialogStrings.DS_DIR_NOT_CREATED,
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.BuildsDirectory))
+            {
+                Process.Start(
+                    "explorer.exe",
+                    METPath.BuildsDirectory);
+
+                return;
+            }
+
+            METMessageBox.Show(
+                this,
+                DialogStrings.DS_DIR_NOT_CREATED,
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.FsysDirectory))
+            {
+                Process.Start(
+                    "explorer.exe",
+                    METPath.FsysDirectory);
+
+                return;
+            }
+
+            METMessageBox.Show(
+                this,
+                DialogStrings.DS_DIR_NOT_CREATED,
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.MeDirectory))
+            {
+                Process.Start(
+                    "explorer.exe",
+                    METPath.MeDirectory);
+
+                return;
+            }
+
+            METMessageBox.Show(
+                this,
+                DialogStrings.DS_DIR_NOT_CREATED,
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Process.Start("explorer.exe", METPath.CurrentDirectory);
     }
 }

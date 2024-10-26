@@ -39,7 +39,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "241025.0050";
+        internal const string Build = "241026.0325";
         internal const string Channel = "DEV";
     }
 

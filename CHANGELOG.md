@@ -34,8 +34,11 @@
 - Modified the default file name when exporting information in the ROM Information window.
 - Removed unnecessary confirmation dialogs from certain windows.
 
+#### Bugs:
+- Added missing icon to the ROM Information window.
+
 #### Misc:
-- Removed NSS store details and internal code.
+- Removed the ability to single click labels in the EFI window to copy data, and reset their cursors to default.
 - Removed private memory usage from the EFI window.
 - Previous versions of the software can no longer check if a new version is available due to file restructuring.
 
