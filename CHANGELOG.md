@@ -41,6 +41,7 @@
 - Removed the ability to single click labels in the EFI window to copy data, and reset their cursors to default.
 - Removed private memory usage from the EFI window.
 - Previous versions of the software can no longer check if a new version is available due to file restructuring.
+- Removed NSS store details from the EFI Window.
 
 ## Version 1.1.5
 
