@@ -45,7 +45,7 @@
             this.tlpDrop = new METTableLayout();
             this.lblDrag = new System.Windows.Forms.Label();
             this.lblGlyph = new System.Windows.Forms.Label();
-            this.cmdOpen = new System.Windows.Forms.Button();
+            this.cmdBrowse = new System.Windows.Forms.Button();
             this.cmsMore = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -317,7 +317,7 @@
             this.tlpDrop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDrop.Controls.Add(this.lblDrag, 0, 1);
             this.tlpDrop.Controls.Add(this.lblGlyph, 0, 0);
-            this.tlpDrop.Controls.Add(this.cmdOpen, 0, 2);
+            this.tlpDrop.Controls.Add(this.cmdBrowse, 0, 2);
             this.tlpDrop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpDrop.GradientEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.tlpDrop.GradientStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -355,23 +355,23 @@
             this.lblGlyph.TabIndex = 0;
             this.lblGlyph.Text = "...";
             // 
-            // cmdOpen
+            // cmdBrowse
             // 
-            this.cmdOpen.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.cmdOpen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdOpen.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
-            this.cmdOpen.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.cmdOpen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
-            this.cmdOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdOpen.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdOpen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.cmdOpen.Location = new System.Drawing.Point(179, 128);
-            this.cmdOpen.Name = "cmdOpen";
-            this.cmdOpen.Size = new System.Drawing.Size(75, 36);
-            this.cmdOpen.TabIndex = 0;
-            this.cmdOpen.Text = "Browse";
-            this.cmdOpen.UseVisualStyleBackColor = false;
-            this.cmdOpen.Click += new System.EventHandler(this.cmdOpen_Click);
+            this.cmdBrowse.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.cmdBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdBrowse.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdBrowse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdBrowse.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdBrowse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdBrowse.Location = new System.Drawing.Point(179, 128);
+            this.cmdBrowse.Name = "cmdBrowse";
+            this.cmdBrowse.Size = new System.Drawing.Size(75, 36);
+            this.cmdBrowse.TabIndex = 0;
+            this.cmdBrowse.Text = "Browse";
+            this.cmdBrowse.UseVisualStyleBackColor = false;
+            this.cmdBrowse.Click += new System.EventHandler(this.cmdBrowse_Click);
             // 
             // cmsMore
             // 
@@ -495,7 +495,7 @@
             this.openWorkingDirectoryToolStripMenuItem});
             this.cmsFolders.Name = "cmsFolders";
             this.cmsFolders.ShowImageMargin = false;
-            this.cmsFolders.Size = new System.Drawing.Size(240, 178);
+            this.cmsFolders.Size = new System.Drawing.Size(240, 150);
             // 
             // openBackupsFolderToolStripMenuItem
             // 
@@ -554,6 +554,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(435, 280);
             this.Name = "startupWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
@@ -583,7 +584,7 @@
         private System.Windows.Forms.Label lblGlyph;
         private METTableLayout tlpDrop;
         private System.Windows.Forms.Label lblDrag;
-        private System.Windows.Forms.Button cmdOpen;
+        private System.Windows.Forms.Button cmdBrowse;
         private System.Windows.Forms.TableLayoutPanel tlpMenu;
         private System.Windows.Forms.Button cmdSettings;
         private System.Windows.Forms.Button cmdAbout;

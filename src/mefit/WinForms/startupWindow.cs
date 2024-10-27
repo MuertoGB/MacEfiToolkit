@@ -60,6 +60,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             // Attach event handlers.
             Load += startupWindow_Load;
+            KeyDown += startupWindow_KeyDown;
             FormClosing += startupWindow_FormClosing;
             DragEnter += startupWindow_DragEnter;
             DragDrop += startupWindow_DragDrop;
@@ -189,6 +190,34 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
+        #region KeyDown Events
+        private void startupWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.O:
+                    case Keys.B:
+                        cmdBrowse.PerformClick();
+                        break;
+                    case Keys.S:
+                        cmdSettings.PerformClick();
+                        break;
+                    case Keys.A:
+                        cmdAbout.PerformClick();
+                        break;
+                    case Keys.E:
+                        cmdMenuFolders.PerformClick();
+                        break;
+                    case Keys.M:
+                        cmdMore.PerformClick();
+                        break;
+                }
+            }
+        }
+        #endregion
+
         #region Mouse Events
         private void mainWindow_MouseMove(object sender, MouseEventArgs e)
         {
@@ -230,7 +259,7 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             Program.Exit();
-        }        
+        }
 
         private void cmdSettings_Click(object sender, EventArgs e)
         {
@@ -267,7 +296,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 cmsMore,
                 MenuPosition.BottomLeft);
 
-        private void cmdOpen_Click(object sender, EventArgs e)
+        private void cmdBrowse_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog
             {
