@@ -33,6 +33,7 @@
 - The EveryMac button is now disabled when an invalid serial number is detected.
 - The internal database was updated with more models.
 - Modified the default file name when exporting information in the ROM Information window.
+- Enabled the 'Make New Folder' button when changing settings default directories.
 - Removed unnecessary confirmation dialogs from certain windows.
 - Modified EFI Window shortcut keys.
 
@@ -40,11 +41,14 @@
 - Added missing icon to the ROM Information window.
 
 #### Misc:
+- Changed how some settings are structured
+  - Users will need to reselect the 'EFI Window Default Directory' in settings.
 - Removed the ability to single click labels in the EFI window to copy data, and reset their cursors to default.
 - Removed private memory usage from the EFI window.
 - Previous versions of the software can no longer check if a new version is available due to file restructuring.
 - Removed NSS store details from the EFI Window.
 - Removed NVRAM store tips.
+- Removed ability to disable LZMA decompression since this is integral to detecting APFS compatibility.
 
 ## Version 1.1.5
 

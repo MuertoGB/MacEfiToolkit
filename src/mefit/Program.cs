@@ -22,24 +22,24 @@ namespace Mac_EFI_Toolkit
     #region Struct
     internal readonly struct METPath
     {
-        internal static readonly string CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        internal static readonly string WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
         internal static readonly string FriendlyName = AppDomain.CurrentDomain.FriendlyName;
-        internal static readonly string BackupsDirectory = Path.Combine(CurrentDirectory, "backups");
-        internal static readonly string BuildsDirectory = Path.Combine(CurrentDirectory, "builds");
-        internal static readonly string FsysDirectory = Path.Combine(CurrentDirectory, "fsys_stores");
-        internal static readonly string MeDirectory = Path.Combine(CurrentDirectory, "me_regions");
-        internal static readonly string ScfgDirectory = Path.Combine(CurrentDirectory, "scfg_stores");
-        internal static readonly string SettingsFile = Path.Combine(CurrentDirectory, "Settings.ini");
-        internal static readonly string DebugLog = Path.Combine(CurrentDirectory, "debug.log");
-        internal static readonly string UnhandledLog = Path.Combine(CurrentDirectory, "unhandled.log");
-        internal static readonly string ApplicationLog = Path.Combine(CurrentDirectory, "mefit.log");
-        internal static readonly string DatabaseLog = Path.Combine(CurrentDirectory, "database.log");
+        internal static readonly string BackupsDirectory = Path.Combine(WorkingDirectory, "backups");
+        internal static readonly string BuildsDirectory = Path.Combine(WorkingDirectory, "builds");
+        internal static readonly string FsysDirectory = Path.Combine(WorkingDirectory, "fsys_stores");
+        internal static readonly string MeDirectory = Path.Combine(WorkingDirectory, "me_regions");
+        internal static readonly string ScfgDirectory = Path.Combine(WorkingDirectory, "scfg_stores");
+        internal static readonly string SettingsFile = Path.Combine(WorkingDirectory, "Settings.ini");
+        internal static readonly string DebugLog = Path.Combine(WorkingDirectory, "debug.log");
+        internal static readonly string UnhandledLog = Path.Combine(WorkingDirectory, "unhandled.log");
+        internal static readonly string ApplicationLog = Path.Combine(WorkingDirectory, "mefit.log");
+        internal static readonly string DatabaseLog = Path.Combine(WorkingDirectory, "database.log");
     }
 
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "241027.2140";
+        internal const string Build = "241027.2345";
         internal const string Channel = "DEV";
     }
 

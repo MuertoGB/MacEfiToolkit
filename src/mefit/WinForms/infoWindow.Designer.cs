@@ -59,9 +59,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBootRom = new System.Windows.Forms.Label();
             this.lblBuildcaveId = new System.Windows.Forms.Label();
             this.lblBuildType = new System.Windows.Forms.Label();
-            this.lblCompiler = new METLabel();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
             this.cmdExport = new System.Windows.Forms.Button();
+            this.lblCompiler = new METLabel();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.pnlMain.SuspendLayout();
@@ -164,7 +164,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(418, 406);
-            this.pnlMain.TabIndex = 96;
+            this.pnlMain.TabIndex = 0;
             // 
             // panel1
             // 
@@ -191,7 +191,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.Size = new System.Drawing.Size(418, 374);
-            this.tlpMain.TabIndex = 2;
+            this.tlpMain.TabIndex = 0;
             // 
             // lblSectionData
             // 
@@ -555,21 +555,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuildType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblBuildType.UseMnemonic = false;
             // 
-            // lblCompiler
-            // 
-            this.lblCompiler.AutoEllipsis = true;
-            this.lblCompiler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblCompiler.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCompiler.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCompiler.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblCompiler.Location = new System.Drawing.Point(131, 306);
-            this.lblCompiler.Margin = new System.Windows.Forms.Padding(0);
-            this.lblCompiler.Name = "lblCompiler";
-            this.lblCompiler.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblCompiler.Size = new System.Drawing.Size(287, 33);
-            this.lblCompiler.TabIndex = 0;
-            this.lblCompiler.UseMnemonic = false;
-            // 
             // tlpStatusBar
             // 
             this.tlpStatusBar.ColumnCount = 1;
@@ -605,6 +590,21 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdExport.Text = "EXPORT INFORMATION TO TEXT FILE";
             this.cmdExport.UseVisualStyleBackColor = false;
             this.cmdExport.Click += new System.EventHandler(this.cmdExport_Click);
+            // 
+            // lblCompiler
+            // 
+            this.lblCompiler.AutoEllipsis = true;
+            this.lblCompiler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblCompiler.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCompiler.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCompiler.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblCompiler.Location = new System.Drawing.Point(131, 306);
+            this.lblCompiler.Margin = new System.Windows.Forms.Padding(0);
+            this.lblCompiler.Name = "lblCompiler";
+            this.lblCompiler.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblCompiler.Size = new System.Drawing.Size(287, 33);
+            this.lblCompiler.TabIndex = 0;
+            this.lblCompiler.UseMnemonic = false;
             // 
             // infoWindow
             // 

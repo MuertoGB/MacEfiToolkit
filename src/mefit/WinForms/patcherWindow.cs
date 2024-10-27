@@ -466,7 +466,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Filter = "Text Files (*.txt)|*.txt",
                 FileName = $"patcherlog_{DateTime.Now:yyMMdd_HHmmss}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.CurrentDirectory
+                InitialDirectory = METPath.WorkingDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)

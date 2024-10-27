@@ -56,6 +56,12 @@
 
         internal const string S_HAE_EXIT =
             "Are you sure you want to exit the application?";
+
+        internal const string S_SELECT_FOLDER =
+            "Select a Folder";
+
+        internal const string S_RESET_SETTINGS =
+            "This will reset all settings to default. Are you sure you want to set default settings?";
         #endregion
     }
 

@@ -1092,10 +1092,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 (int)IFD.BIOS_REGION_LIMIT) != -1)
                 return ApfsCapable.Yes;
 
-            // Disable compressed DXE searching is enabled (Maybe I should get rid of this?).
-            if (Settings.ReadBool(SettingsBoolType.DisableLzmaFsSearch))
-                return ApfsCapable.Unknown;
-
             // Look for a compressed volume GUID.
             int lzmaDxeBaseAddress =
                 BinaryUtils.GetBaseAddress(

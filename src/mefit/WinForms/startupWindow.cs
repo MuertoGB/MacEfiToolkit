@@ -32,6 +32,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Private Members
+        private string _strInitialDirectory = METPath.WorkingDirectory;
         private int _childWindowCount = 0;
         #endregion
 
@@ -85,6 +86,8 @@ namespace Mac_EFI_Toolkit.WinForms
             // Set version text.
             lblAppVersion.Text =
                 Application.ProductVersion;
+
+            SetInitialDirectory();
 
             // Open dragged file is the arg path is ! null or ! empty.
             if (!string.IsNullOrEmpty(Program.draggedFilePath))
@@ -300,8 +303,8 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             using (OpenFileDialog dialog = new OpenFileDialog
             {
-                // InitialDirectory == need set
-                Filter = "Firmware Files (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*"
+                InitialDirectory = _strInitialDirectory,
+                Filter = AppStrings.S_SUPPORTED_FW_FILTER
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -429,7 +432,7 @@ namespace Mac_EFI_Toolkit.WinForms
         }
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start("explorer.exe", METPath.CurrentDirectory);
+            Process.Start("explorer.exe", METPath.WorkingDirectory);
         #endregion
 
         #region More Context Menu Events
@@ -482,6 +485,21 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Misc Events
+        private void SetInitialDirectory()
+        {
+            // Get the initial directory from settings.
+            string directory =
+                Settings.ReadString(SettingsStringType.StartupInitialDirectory);
+
+            // If the path is not empty check if it exists and set it as the initial directory.
+            if (!string.IsNullOrEmpty(directory))
+            {
+                _strInitialDirectory = Directory.Exists(directory)
+                    ? directory
+                    : METPath.WorkingDirectory;
+            }
+        }
+
         private void OpenBinary(string filePath)
         {
             if (!FileUtils.IsValidMinMaxSize(filePath, this))
@@ -497,6 +515,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (childForm != null)
             {
+                _strInitialDirectory = Path.GetDirectoryName(filePath);
                 InitializeChildForm(childForm, filePath);
                 return;
             }

@@ -98,7 +98,7 @@
             this.tlpTitle.RowCount = 1;
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.Size = new System.Drawing.Size(483, 50);
-            this.tlpTitle.TabIndex = 100;
+            this.tlpTitle.TabIndex = 0;
             // 
             // pbxLogo
             // 
@@ -124,7 +124,7 @@
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(333, 50);
-            this.lblTitle.TabIndex = 100;
+            this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "T2 SOCROM";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -145,7 +145,7 @@
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 2, 0, 1);
             this.cmdClose.Size = new System.Drawing.Size(50, 50);
-            this.cmdClose.TabIndex = 100;
+            this.cmdClose.TabIndex = 0;
             this.cmdClose.TabStop = false;
             this.cmdClose.Text = "X";
             this.cmdClose.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -168,7 +168,7 @@
             this.cmdMinimize.Name = "cmdMinimize";
             this.cmdMinimize.Padding = new System.Windows.Forms.Padding(2, 0, 0, 1);
             this.cmdMinimize.Size = new System.Drawing.Size(50, 50);
-            this.cmdMinimize.TabIndex = 101;
+            this.cmdMinimize.TabIndex = 0;
             this.cmdMinimize.TabStop = false;
             this.cmdMinimize.Text = "—";
             this.cmdMinimize.UseVisualStyleBackColor = false;
@@ -356,7 +356,7 @@
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tlpFirmware.Size = new System.Drawing.Size(483, 360);
-            this.tlpFirmware.TabIndex = 1;
+            this.tlpFirmware.TabIndex = 0;
             // 
             // lblFilesizeText
             // 
@@ -370,7 +370,7 @@
             this.lblFilesizeText.Name = "lblFilesizeText";
             this.lblFilesizeText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblFilesizeText.Size = new System.Drawing.Size(130, 35);
-            this.lblFilesizeText.TabIndex = 100;
+            this.lblFilesizeText.TabIndex = 0;
             this.lblFilesizeText.Text = "Size:";
             this.lblFilesizeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -386,7 +386,7 @@
             this.lblFilenameText.Name = "lblFilenameText";
             this.lblFilenameText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblFilenameText.Size = new System.Drawing.Size(130, 35);
-            this.lblFilenameText.TabIndex = 100;
+            this.lblFilenameText.TabIndex = 0;
             this.lblFilenameText.Text = "Filename:";
             this.lblFilenameText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -403,7 +403,7 @@
             this.lblFilesize.Name = "lblFilesize";
             this.lblFilesize.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblFilesize.Size = new System.Drawing.Size(352, 35);
-            this.lblFilesize.TabIndex = 100;
+            this.lblFilesize.TabIndex = 0;
             this.lblFilesize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblCrcText
@@ -418,7 +418,7 @@
             this.lblCrcText.Name = "lblCrcText";
             this.lblCrcText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblCrcText.Size = new System.Drawing.Size(130, 35);
-            this.lblCrcText.TabIndex = 100;
+            this.lblCrcText.TabIndex = 0;
             this.lblCrcText.Text = "CRC32:";
             this.lblCrcText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -434,7 +434,7 @@
             this.lblCreatedText.Name = "lblCreatedText";
             this.lblCreatedText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblCreatedText.Size = new System.Drawing.Size(130, 35);
-            this.lblCreatedText.TabIndex = 100;
+            this.lblCreatedText.TabIndex = 0;
             this.lblCreatedText.Text = "Created:";
             this.lblCreatedText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -451,7 +451,7 @@
             this.lblCreated.Name = "lblCreated";
             this.lblCreated.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblCreated.Size = new System.Drawing.Size(352, 35);
-            this.lblCreated.TabIndex = 100;
+            this.lblCreated.TabIndex = 0;
             this.lblCreated.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblModifiedText
@@ -466,7 +466,7 @@
             this.lblModifiedText.Name = "lblModifiedText";
             this.lblModifiedText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblModifiedText.Size = new System.Drawing.Size(130, 35);
-            this.lblModifiedText.TabIndex = 100;
+            this.lblModifiedText.TabIndex = 0;
             this.lblModifiedText.Text = "Modified:";
             this.lblModifiedText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -482,7 +482,7 @@
             this.lblScfgText.Name = "lblScfgText";
             this.lblScfgText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblScfgText.Size = new System.Drawing.Size(130, 35);
-            this.lblScfgText.TabIndex = 100;
+            this.lblScfgText.TabIndex = 0;
             this.lblScfgText.Text = "SCFG Store:";
             this.lblScfgText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -498,7 +498,7 @@
             this.lblSerialText.Name = "lblSerialText";
             this.lblSerialText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblSerialText.Size = new System.Drawing.Size(130, 35);
-            this.lblSerialText.TabIndex = 100;
+            this.lblSerialText.TabIndex = 0;
             this.lblSerialText.Text = "Serial:";
             this.lblSerialText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -514,7 +514,7 @@
             this.lblConfigText.Name = "lblConfigText";
             this.lblConfigText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblConfigText.Size = new System.Drawing.Size(130, 35);
-            this.lblConfigText.TabIndex = 100;
+            this.lblConfigText.TabIndex = 0;
             this.lblConfigText.Text = "Config Code:";
             this.lblConfigText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -530,7 +530,7 @@
             this.lblSonText.Name = "lblSonText";
             this.lblSonText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblSonText.Size = new System.Drawing.Size(130, 35);
-            this.lblSonText.TabIndex = 100;
+            this.lblSonText.TabIndex = 0;
             this.lblSonText.Text = "Order No:";
             this.lblSonText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -546,7 +546,7 @@
             this.lblIbootText.Name = "lblIbootText";
             this.lblIbootText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblIbootText.Size = new System.Drawing.Size(130, 35);
-            this.lblIbootText.TabIndex = 101;
+            this.lblIbootText.TabIndex = 0;
             this.lblIbootText.Text = "iBoot:";
             this.lblIbootText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -563,7 +563,7 @@
             this.lbliBoot.Name = "lbliBoot";
             this.lbliBoot.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lbliBoot.Size = new System.Drawing.Size(352, 35);
-            this.lbliBoot.TabIndex = 102;
+            this.lbliBoot.TabIndex = 0;
             this.lbliBoot.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblScfg
@@ -579,7 +579,7 @@
             this.lblScfg.Name = "lblScfg";
             this.lblScfg.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblScfg.Size = new System.Drawing.Size(352, 35);
-            this.lblScfg.TabIndex = 103;
+            this.lblScfg.TabIndex = 0;
             this.lblScfg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblScfg.UseMnemonic = false;
             // 
@@ -695,7 +695,7 @@
             this.lblFilename.Name = "lblFilename";
             this.lblFilename.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblFilename.Size = new System.Drawing.Size(352, 35);
-            this.lblFilename.TabIndex = 100;
+            this.lblFilename.TabIndex = 0;
             this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblFilename.UseMnemonic = false;
             // 
@@ -712,7 +712,7 @@
             this.lblCrc.Name = "lblCrc";
             this.lblCrc.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblCrc.Size = new System.Drawing.Size(352, 35);
-            this.lblCrc.TabIndex = 100;
+            this.lblCrc.TabIndex = 0;
             this.lblCrc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblCrc.UseMnemonic = false;
             // 
@@ -729,7 +729,7 @@
             this.lblModified.Name = "lblModified";
             this.lblModified.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblModified.Size = new System.Drawing.Size(352, 35);
-            this.lblModified.TabIndex = 100;
+            this.lblModified.TabIndex = 0;
             this.lblModified.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblModified.UseMnemonic = false;
             // 
@@ -746,7 +746,7 @@
             this.lblSerial.Name = "lblSerial";
             this.lblSerial.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblSerial.Size = new System.Drawing.Size(352, 35);
-            this.lblSerial.TabIndex = 100;
+            this.lblSerial.TabIndex = 0;
             this.lblSerial.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblSerial.UseMnemonic = false;
             // 
@@ -763,7 +763,7 @@
             this.lblConfigCode.Name = "lblConfigCode";
             this.lblConfigCode.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblConfigCode.Size = new System.Drawing.Size(352, 35);
-            this.lblConfigCode.TabIndex = 100;
+            this.lblConfigCode.TabIndex = 0;
             this.lblConfigCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblSon
@@ -779,7 +779,7 @@
             this.lblSon.Name = "lblSon";
             this.lblSon.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
             this.lblSon.Size = new System.Drawing.Size(352, 35);
-            this.lblSon.TabIndex = 100;
+            this.lblSon.TabIndex = 0;
             this.lblSon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblSon.UseMnemonic = false;
             // 

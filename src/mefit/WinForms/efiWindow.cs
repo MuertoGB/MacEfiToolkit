@@ -27,7 +27,7 @@ namespace Mac_EFI_Toolkit
     {
 
         #region Private Members
-        private string _strInitialDirectory = METPath.CurrentDirectory;
+        private string _strInitialDirectory = METPath.WorkingDirectory;
         private Thread _tLoadFirmware = null;
         private CancellationTokenSource _cancellationToken;
         #endregion
@@ -78,7 +78,7 @@ namespace Mac_EFI_Toolkit
         private void efiWindow_Load(object sender, EventArgs e)
         {
             // Get and set the primary file dialog initial directory.
-            SetPrimaryInitialDirectory();
+            SetInitialDirectory();
 
             _cancellationToken =
                 new CancellationTokenSource();
@@ -1628,17 +1628,18 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Misc Events
-        internal void SetPrimaryInitialDirectory()
+        internal void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string path = Settings.ReadString(SettingsStringType.InitialDirectory);
+            string directory =
+                Settings.ReadString(SettingsStringType.EfiInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
-            if (!string.IsNullOrEmpty(path))
+            if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(path)
-                    ? path
-                    : METPath.CurrentDirectory;
+                _strInitialDirectory = Directory.Exists(directory)
+                    ? directory
+                    : METPath.WorkingDirectory;
             }
         }
 
@@ -1765,7 +1766,7 @@ namespace Mac_EFI_Toolkit
             Text = AppStrings.S_EFIROM;
 
             // Reset initial directory.
-            SetPrimaryInitialDirectory();
+            SetInitialDirectory();
 
             // Reset descriptor values.
             IFD.ClearRegionData();
@@ -1809,9 +1810,6 @@ namespace Mac_EFI_Toolkit
             EFIROM.FileInfoData.LastWriteTime);
 
         private void ClipboardSetFirmwareModel() => SetClipboardText(
-            $"{MacUtils.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart)}");
-
-        private void ClipboardSetFirmwareFullModel() => SetClipboardText(
             MacUtils.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart));
 
         private void ClipboardSetFirmwareConfigCode() => SetClipboardText(

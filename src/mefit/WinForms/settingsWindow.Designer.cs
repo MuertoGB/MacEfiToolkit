@@ -35,13 +35,12 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblSettingsSaved = new System.Windows.Forms.Label();
             this.cmdOkay = new System.Windows.Forms.Button();
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
-            this.lblFirmware = new System.Windows.Forms.Label();
             this.tlpDisableConfirmationDialogs = new System.Windows.Forms.TableLayoutPanel();
             this.swDisableConfirmationDialogs = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblDisableConfirmationDialogs = new System.Windows.Forms.Label();
-            this.tlpCustomInitialFolderPath = new System.Windows.Forms.TableLayoutPanel();
-            this.cmdEditCustomPath = new System.Windows.Forms.Button();
-            this.lblCustomInitialFolderPath = new System.Windows.Forms.Label();
+            this.tlpEfiDir = new System.Windows.Forms.TableLayoutPanel();
+            this.cmdEditEfiDir = new System.Windows.Forms.Button();
+            this.lblEfiDefaultDir = new System.Windows.Forms.Label();
             this.tlpDisableVersionCheck = new System.Windows.Forms.TableLayoutPanel();
             this.lblDisableVersionCheck = new System.Windows.Forms.Label();
             this.swDisableVersionCheck = new Mac_EFI_Toolkit.UI.METSwitch();
@@ -50,36 +49,42 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpDisableFlashingUiElements = new System.Windows.Forms.TableLayoutPanel();
             this.swDisableFlashingUiElements = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblDisableFlashingUiElements = new System.Windows.Forms.Label();
-            this.tlpDisableLzmaDecompression = new System.Windows.Forms.TableLayoutPanel();
-            this.swDisableLzmaDecompression = new Mac_EFI_Toolkit.UI.METSwitch();
-            this.lblDisableLzmaDecompression = new System.Windows.Forms.Label();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpStatus = new System.Windows.Forms.TableLayoutPanel();
             this.tlpDisableStatusBarTips = new System.Windows.Forms.TableLayoutPanel();
             this.swDisableStatusBarTips = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblDisableStatusBarTips = new System.Windows.Forms.Label();
             this.tlpDisableMessageWindowSounds = new System.Windows.Forms.TableLayoutPanel();
             this.swDisableMessageWindowSounds = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblDisableMessageWindowSounds = new System.Windows.Forms.Label();
-            this.lblPath = new METLabel();
+            this.lblEfiDirectory = new METLabel();
+            this.tlpStartupDir = new System.Windows.Forms.TableLayoutPanel();
+            this.cmdEditStartupDir = new System.Windows.Forms.Button();
+            this.lblStartupDefaultDir = new System.Windows.Forms.Label();
+            this.lblStartupDirectory = new METLabel();
+            this.tlpSocDir = new System.Windows.Forms.TableLayoutPanel();
+            this.cmdEditSocDir = new System.Windows.Forms.Button();
+            this.lblSocDefaultDir = new System.Windows.Forms.Label();
+            this.lblSocDirectory = new METLabel();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.cmdClose = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tlpStatus = new System.Windows.Forms.TableLayoutPanel();
             this.tlpDisableConfirmationDialogs.SuspendLayout();
-            this.tlpCustomInitialFolderPath.SuspendLayout();
+            this.tlpEfiDir.SuspendLayout();
             this.tlpDisableVersionCheck.SuspendLayout();
             this.tlpDisableFlashingUiElements.SuspendLayout();
-            this.tlpDisableLzmaDecompression.SuspendLayout();
             this.tlpMain.SuspendLayout();
+            this.tlpStatus.SuspendLayout();
             this.tlpDisableStatusBarTips.SuspendLayout();
             this.tlpDisableMessageWindowSounds.SuspendLayout();
+            this.tlpStartupDir.SuspendLayout();
+            this.tlpSocDir.SuspendLayout();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
-            this.tlpStatus.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdDefaults
@@ -166,31 +171,16 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlSeperatorTop.Size = new System.Drawing.Size(433, 1);
             this.pnlSeperatorTop.TabIndex = 92;
             // 
-            // lblFirmware
-            // 
-            this.lblFirmware.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.lblFirmware.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFirmware.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFirmware.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblFirmware.Location = new System.Drawing.Point(0, 314);
-            this.lblFirmware.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFirmware.Name = "lblFirmware";
-            this.lblFirmware.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblFirmware.Size = new System.Drawing.Size(433, 34);
-            this.lblFirmware.TabIndex = 0;
-            this.lblFirmware.Text = "Firmware";
-            this.lblFirmware.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // tlpDisableConfirmationDialogs
             // 
-            this.tlpDisableConfirmationDialogs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.tlpDisableConfirmationDialogs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tlpDisableConfirmationDialogs.ColumnCount = 2;
             this.tlpDisableConfirmationDialogs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDisableConfirmationDialogs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tlpDisableConfirmationDialogs.Controls.Add(this.swDisableConfirmationDialogs, 0, 0);
             this.tlpDisableConfirmationDialogs.Controls.Add(this.lblDisableConfirmationDialogs, 0, 0);
             this.tlpDisableConfirmationDialogs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDisableConfirmationDialogs.Location = new System.Drawing.Point(0, 210);
+            this.tlpDisableConfirmationDialogs.Location = new System.Drawing.Point(0, 198);
             this.tlpDisableConfirmationDialogs.Margin = new System.Windows.Forms.Padding(0);
             this.tlpDisableConfirmationDialogs.Name = "tlpDisableConfirmationDialogs";
             this.tlpDisableConfirmationDialogs.RowCount = 1;
@@ -227,72 +217,72 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableConfirmationDialogs.TabIndex = 0;
             this.lblDisableConfirmationDialogs.Text = "Disable Confirmation Dialogs";
             // 
-            // tlpCustomInitialFolderPath
+            // tlpEfiDir
             // 
-            this.tlpCustomInitialFolderPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.tlpCustomInitialFolderPath.ColumnCount = 2;
-            this.tlpCustomInitialFolderPath.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpCustomInitialFolderPath.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tlpCustomInitialFolderPath.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpCustomInitialFolderPath.Controls.Add(this.cmdEditCustomPath, 1, 0);
-            this.tlpCustomInitialFolderPath.Controls.Add(this.lblCustomInitialFolderPath, 0, 0);
-            this.tlpCustomInitialFolderPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpCustomInitialFolderPath.Location = new System.Drawing.Point(0, 245);
-            this.tlpCustomInitialFolderPath.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpCustomInitialFolderPath.Name = "tlpCustomInitialFolderPath";
-            this.tlpCustomInitialFolderPath.RowCount = 1;
-            this.tlpCustomInitialFolderPath.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpCustomInitialFolderPath.Size = new System.Drawing.Size(433, 34);
-            this.tlpCustomInitialFolderPath.TabIndex = 5;
+            this.tlpEfiDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpEfiDir.ColumnCount = 2;
+            this.tlpEfiDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpEfiDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpEfiDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpEfiDir.Controls.Add(this.cmdEditEfiDir, 1, 0);
+            this.tlpEfiDir.Controls.Add(this.lblEfiDefaultDir, 0, 0);
+            this.tlpEfiDir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpEfiDir.Location = new System.Drawing.Point(0, 294);
+            this.tlpEfiDir.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpEfiDir.Name = "tlpEfiDir";
+            this.tlpEfiDir.RowCount = 1;
+            this.tlpEfiDir.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpEfiDir.Size = new System.Drawing.Size(433, 32);
+            this.tlpEfiDir.TabIndex = 6;
             // 
-            // cmdEditCustomPath
+            // cmdEditEfiDir
             // 
-            this.cmdEditCustomPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdEditCustomPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdEditCustomPath.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
-            this.cmdEditCustomPath.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.cmdEditCustomPath.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
-            this.cmdEditCustomPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdEditCustomPath.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdEditCustomPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.cmdEditCustomPath.Location = new System.Drawing.Point(379, 0);
-            this.cmdEditCustomPath.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdEditCustomPath.Name = "cmdEditCustomPath";
-            this.cmdEditCustomPath.Size = new System.Drawing.Size(54, 34);
-            this.cmdEditCustomPath.TabIndex = 0;
-            this.cmdEditCustomPath.Text = "EDIT";
-            this.cmdEditCustomPath.UseVisualStyleBackColor = false;
-            this.cmdEditCustomPath.Click += new System.EventHandler(this.cmdEditCustomPath_Click);
+            this.cmdEditEfiDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdEditEfiDir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdEditEfiDir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdEditEfiDir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdEditEfiDir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdEditEfiDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdEditEfiDir.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdEditEfiDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdEditEfiDir.Location = new System.Drawing.Point(379, 0);
+            this.cmdEditEfiDir.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdEditEfiDir.Name = "cmdEditEfiDir";
+            this.cmdEditEfiDir.Size = new System.Drawing.Size(54, 32);
+            this.cmdEditEfiDir.TabIndex = 0;
+            this.cmdEditEfiDir.Text = "EDIT";
+            this.cmdEditEfiDir.UseVisualStyleBackColor = false;
+            this.cmdEditEfiDir.Click += new System.EventHandler(this.cmdEditEfiDir_Click);
             // 
-            // lblCustomInitialFolderPath
+            // lblEfiDefaultDir
             // 
-            this.lblCustomInitialFolderPath.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblCustomInitialFolderPath.AutoSize = true;
-            this.lblCustomInitialFolderPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCustomInitialFolderPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblCustomInitialFolderPath.Location = new System.Drawing.Point(2, 7);
-            this.lblCustomInitialFolderPath.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblCustomInitialFolderPath.Name = "lblCustomInitialFolderPath";
-            this.lblCustomInitialFolderPath.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblCustomInitialFolderPath.Size = new System.Drawing.Size(186, 20);
-            this.lblCustomInitialFolderPath.TabIndex = 0;
-            this.lblCustomInitialFolderPath.Text = "Custom Initial Folder Path";
+            this.lblEfiDefaultDir.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblEfiDefaultDir.AutoSize = true;
+            this.lblEfiDefaultDir.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEfiDefaultDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblEfiDefaultDir.Location = new System.Drawing.Point(2, 6);
+            this.lblEfiDefaultDir.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblEfiDefaultDir.Name = "lblEfiDefaultDir";
+            this.lblEfiDefaultDir.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblEfiDefaultDir.Size = new System.Drawing.Size(213, 20);
+            this.lblEfiDefaultDir.TabIndex = 0;
+            this.lblEfiDefaultDir.Text = "EFI Window Default Directory";
             // 
             // tlpDisableVersionCheck
             // 
-            this.tlpDisableVersionCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.tlpDisableVersionCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tlpDisableVersionCheck.ColumnCount = 2;
             this.tlpDisableVersionCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDisableVersionCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tlpDisableVersionCheck.Controls.Add(this.lblDisableVersionCheck, 0, 0);
             this.tlpDisableVersionCheck.Controls.Add(this.swDisableVersionCheck, 1, 0);
             this.tlpDisableVersionCheck.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDisableVersionCheck.Location = new System.Drawing.Point(0, 35);
+            this.tlpDisableVersionCheck.Location = new System.Drawing.Point(0, 33);
             this.tlpDisableVersionCheck.Margin = new System.Windows.Forms.Padding(0);
             this.tlpDisableVersionCheck.Name = "tlpDisableVersionCheck";
             this.tlpDisableVersionCheck.RowCount = 1;
             this.tlpDisableVersionCheck.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDisableVersionCheck.Size = new System.Drawing.Size(433, 34);
+            this.tlpDisableVersionCheck.Size = new System.Drawing.Size(433, 32);
             this.tlpDisableVersionCheck.TabIndex = 0;
             // 
             // lblDisableVersionCheck
@@ -301,7 +291,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableVersionCheck.AutoSize = true;
             this.lblDisableVersionCheck.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableVersionCheck.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblDisableVersionCheck.Location = new System.Drawing.Point(2, 7);
+            this.lblDisableVersionCheck.Location = new System.Drawing.Point(2, 6);
             this.lblDisableVersionCheck.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableVersionCheck.Name = "lblDisableVersionCheck";
             this.lblDisableVersionCheck.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
@@ -318,7 +308,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableVersionCheck.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swDisableVersionCheck.Location = new System.Drawing.Point(390, 8);
+            this.swDisableVersionCheck.Location = new System.Drawing.Point(390, 7);
             this.swDisableVersionCheck.Name = "swDisableVersionCheck";
             this.swDisableVersionCheck.Size = new System.Drawing.Size(32, 18);
             this.swDisableVersionCheck.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
@@ -334,7 +324,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblStartup.Margin = new System.Windows.Forms.Padding(0);
             this.lblStartup.Name = "lblStartup";
             this.lblStartup.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblStartup.Size = new System.Drawing.Size(433, 34);
+            this.lblStartup.Size = new System.Drawing.Size(433, 32);
             this.lblStartup.TabIndex = 0;
             this.lblStartup.Text = "Startup";
             this.lblStartup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -345,30 +335,30 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblApplication.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblApplication.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblApplication.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblApplication.Location = new System.Drawing.Point(0, 70);
+            this.lblApplication.Location = new System.Drawing.Point(0, 66);
             this.lblApplication.Margin = new System.Windows.Forms.Padding(0);
             this.lblApplication.Name = "lblApplication";
             this.lblApplication.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblApplication.Size = new System.Drawing.Size(433, 34);
+            this.lblApplication.Size = new System.Drawing.Size(433, 32);
             this.lblApplication.TabIndex = 0;
             this.lblApplication.Text = "Application";
             this.lblApplication.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpDisableFlashingUiElements
             // 
-            this.tlpDisableFlashingUiElements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.tlpDisableFlashingUiElements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tlpDisableFlashingUiElements.ColumnCount = 2;
             this.tlpDisableFlashingUiElements.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDisableFlashingUiElements.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tlpDisableFlashingUiElements.Controls.Add(this.swDisableFlashingUiElements, 0, 0);
             this.tlpDisableFlashingUiElements.Controls.Add(this.lblDisableFlashingUiElements, 0, 0);
             this.tlpDisableFlashingUiElements.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDisableFlashingUiElements.Location = new System.Drawing.Point(0, 105);
+            this.tlpDisableFlashingUiElements.Location = new System.Drawing.Point(0, 99);
             this.tlpDisableFlashingUiElements.Margin = new System.Windows.Forms.Padding(0);
             this.tlpDisableFlashingUiElements.Name = "tlpDisableFlashingUiElements";
             this.tlpDisableFlashingUiElements.RowCount = 1;
             this.tlpDisableFlashingUiElements.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpDisableFlashingUiElements.Size = new System.Drawing.Size(433, 34);
+            this.tlpDisableFlashingUiElements.Size = new System.Drawing.Size(433, 32);
             this.tlpDisableFlashingUiElements.TabIndex = 1;
             // 
             // swDisableFlashingUiElements
@@ -380,7 +370,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableFlashingUiElements.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableFlashingUiElements.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableFlashingUiElements.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swDisableFlashingUiElements.Location = new System.Drawing.Point(390, 8);
+            this.swDisableFlashingUiElements.Location = new System.Drawing.Point(390, 7);
             this.swDisableFlashingUiElements.Name = "swDisableFlashingUiElements";
             this.swDisableFlashingUiElements.Size = new System.Drawing.Size(32, 18);
             this.swDisableFlashingUiElements.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
@@ -392,7 +382,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableFlashingUiElements.AutoSize = true;
             this.lblDisableFlashingUiElements.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableFlashingUiElements.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblDisableFlashingUiElements.Location = new System.Drawing.Point(2, 7);
+            this.lblDisableFlashingUiElements.Location = new System.Drawing.Point(2, 6);
             this.lblDisableFlashingUiElements.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableFlashingUiElements.Name = "lblDisableFlashingUiElements";
             this.lblDisableFlashingUiElements.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
@@ -400,115 +390,87 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableFlashingUiElements.TabIndex = 0;
             this.lblDisableFlashingUiElements.Text = "Disable Flashing UI Elements";
             // 
-            // tlpDisableLzmaDecompression
-            // 
-            this.tlpDisableLzmaDecompression.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.tlpDisableLzmaDecompression.ColumnCount = 2;
-            this.tlpDisableLzmaDecompression.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDisableLzmaDecompression.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tlpDisableLzmaDecompression.Controls.Add(this.swDisableLzmaDecompression, 0, 0);
-            this.tlpDisableLzmaDecompression.Controls.Add(this.lblDisableLzmaDecompression, 0, 0);
-            this.tlpDisableLzmaDecompression.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDisableLzmaDecompression.Location = new System.Drawing.Point(0, 349);
-            this.tlpDisableLzmaDecompression.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpDisableLzmaDecompression.Name = "tlpDisableLzmaDecompression";
-            this.tlpDisableLzmaDecompression.RowCount = 1;
-            this.tlpDisableLzmaDecompression.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDisableLzmaDecompression.Size = new System.Drawing.Size(433, 34);
-            this.tlpDisableLzmaDecompression.TabIndex = 6;
-            // 
-            // swDisableLzmaDecompression
-            // 
-            this.swDisableLzmaDecompression.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.swDisableLzmaDecompression.BackColor = System.Drawing.Color.Black;
-            this.swDisableLzmaDecompression.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.swDisableLzmaDecompression.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableLzmaDecompression.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
-            this.swDisableLzmaDecompression.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.swDisableLzmaDecompression.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swDisableLzmaDecompression.Location = new System.Drawing.Point(390, 8);
-            this.swDisableLzmaDecompression.Name = "swDisableLzmaDecompression";
-            this.swDisableLzmaDecompression.Size = new System.Drawing.Size(32, 18);
-            this.swDisableLzmaDecompression.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableLzmaDecompression.TabIndex = 0;
-            // 
-            // lblDisableLzmaDecompression
-            // 
-            this.lblDisableLzmaDecompression.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblDisableLzmaDecompression.AutoSize = true;
-            this.lblDisableLzmaDecompression.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDisableLzmaDecompression.ForeColor = System.Drawing.Color.White;
-            this.lblDisableLzmaDecompression.Location = new System.Drawing.Point(2, 7);
-            this.lblDisableLzmaDecompression.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblDisableLzmaDecompression.Name = "lblDisableLzmaDecompression";
-            this.lblDisableLzmaDecompression.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblDisableLzmaDecompression.Size = new System.Drawing.Size(217, 20);
-            this.lblDisableLzmaDecompression.TabIndex = 99;
-            this.lblDisableLzmaDecompression.Text = "Disable LZMA Decompression";
-            // 
             // tlpMain
             // 
             this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpMain.Controls.Add(this.tlpDisableLzmaDecompression, 0, 19);
             this.tlpMain.Controls.Add(this.lblApplication, 0, 4);
+            this.tlpMain.Controls.Add(this.tlpStatus, 0, 23);
             this.tlpMain.Controls.Add(this.lblStartup, 0, 0);
             this.tlpMain.Controls.Add(this.tlpDisableVersionCheck, 0, 2);
-            this.tlpMain.Controls.Add(this.tlpCustomInitialFolderPath, 0, 14);
             this.tlpMain.Controls.Add(this.tlpDisableConfirmationDialogs, 0, 12);
-            this.tlpMain.Controls.Add(this.lblFirmware, 0, 17);
             this.tlpMain.Controls.Add(this.tlpDisableFlashingUiElements, 0, 6);
             this.tlpMain.Controls.Add(this.tlpDisableStatusBarTips, 0, 10);
             this.tlpMain.Controls.Add(this.tlpDisableMessageWindowSounds, 0, 8);
-            this.tlpMain.Controls.Add(this.lblPath, 0, 15);
+            this.tlpMain.Controls.Add(this.lblEfiDirectory, 0, 18);
+            this.tlpMain.Controls.Add(this.tlpEfiDir, 0, 17);
+            this.tlpMain.Controls.Add(this.tlpStartupDir, 0, 14);
+            this.tlpMain.Controls.Add(this.lblStartupDirectory, 0, 15);
+            this.tlpMain.Controls.Add(this.tlpSocDir, 0, 20);
+            this.tlpMain.Controls.Add(this.lblSocDirectory, 0, 21);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMain.Location = new System.Drawing.Point(1, 75);
             this.tlpMain.Margin = new System.Windows.Forms.Padding(0);
             this.tlpMain.Name = "tlpMain";
-            this.tlpMain.RowCount = 22;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tlpMain.RowCount = 24;
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Size = new System.Drawing.Size(433, 387);
+            this.tlpMain.Size = new System.Drawing.Size(433, 448);
             this.tlpMain.TabIndex = 0;
+            // 
+            // tlpStatus
+            // 
+            this.tlpStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.tlpStatus.ColumnCount = 1;
+            this.tlpStatus.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatus.Controls.Add(this.lblSettingsSaved, 0, 0);
+            this.tlpStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStatus.Location = new System.Drawing.Point(0, 416);
+            this.tlpStatus.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStatus.Name = "tlpStatus";
+            this.tlpStatus.RowCount = 1;
+            this.tlpStatus.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpStatus.Size = new System.Drawing.Size(433, 32);
+            this.tlpStatus.TabIndex = 0;
             // 
             // tlpDisableStatusBarTips
             // 
-            this.tlpDisableStatusBarTips.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.tlpDisableStatusBarTips.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tlpDisableStatusBarTips.ColumnCount = 2;
             this.tlpDisableStatusBarTips.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDisableStatusBarTips.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tlpDisableStatusBarTips.Controls.Add(this.swDisableStatusBarTips, 0, 0);
             this.tlpDisableStatusBarTips.Controls.Add(this.lblDisableStatusBarTips, 0, 0);
             this.tlpDisableStatusBarTips.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDisableStatusBarTips.Location = new System.Drawing.Point(0, 175);
+            this.tlpDisableStatusBarTips.Location = new System.Drawing.Point(0, 165);
             this.tlpDisableStatusBarTips.Margin = new System.Windows.Forms.Padding(0);
             this.tlpDisableStatusBarTips.Name = "tlpDisableStatusBarTips";
             this.tlpDisableStatusBarTips.RowCount = 1;
             this.tlpDisableStatusBarTips.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDisableStatusBarTips.Size = new System.Drawing.Size(433, 34);
+            this.tlpDisableStatusBarTips.Size = new System.Drawing.Size(433, 32);
             this.tlpDisableStatusBarTips.TabIndex = 3;
             // 
             // swDisableStatusBarTips
@@ -520,7 +482,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableStatusBarTips.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableStatusBarTips.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableStatusBarTips.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swDisableStatusBarTips.Location = new System.Drawing.Point(390, 8);
+            this.swDisableStatusBarTips.Location = new System.Drawing.Point(390, 7);
             this.swDisableStatusBarTips.Name = "swDisableStatusBarTips";
             this.swDisableStatusBarTips.Size = new System.Drawing.Size(32, 18);
             this.swDisableStatusBarTips.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
@@ -532,7 +494,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableStatusBarTips.AutoSize = true;
             this.lblDisableStatusBarTips.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableStatusBarTips.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblDisableStatusBarTips.Location = new System.Drawing.Point(2, 7);
+            this.lblDisableStatusBarTips.Location = new System.Drawing.Point(2, 6);
             this.lblDisableStatusBarTips.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableStatusBarTips.Name = "lblDisableStatusBarTips";
             this.lblDisableStatusBarTips.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
@@ -542,19 +504,19 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpDisableMessageWindowSounds
             // 
-            this.tlpDisableMessageWindowSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.tlpDisableMessageWindowSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.tlpDisableMessageWindowSounds.ColumnCount = 2;
             this.tlpDisableMessageWindowSounds.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDisableMessageWindowSounds.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
             this.tlpDisableMessageWindowSounds.Controls.Add(this.swDisableMessageWindowSounds, 0, 0);
             this.tlpDisableMessageWindowSounds.Controls.Add(this.lblDisableMessageWindowSounds, 0, 0);
             this.tlpDisableMessageWindowSounds.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDisableMessageWindowSounds.Location = new System.Drawing.Point(0, 140);
+            this.tlpDisableMessageWindowSounds.Location = new System.Drawing.Point(0, 132);
             this.tlpDisableMessageWindowSounds.Margin = new System.Windows.Forms.Padding(0);
             this.tlpDisableMessageWindowSounds.Name = "tlpDisableMessageWindowSounds";
             this.tlpDisableMessageWindowSounds.RowCount = 1;
             this.tlpDisableMessageWindowSounds.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpDisableMessageWindowSounds.Size = new System.Drawing.Size(433, 34);
+            this.tlpDisableMessageWindowSounds.Size = new System.Drawing.Size(433, 32);
             this.tlpDisableMessageWindowSounds.TabIndex = 2;
             // 
             // swDisableMessageWindowSounds
@@ -566,7 +528,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.swDisableMessageWindowSounds.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
             this.swDisableMessageWindowSounds.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableMessageWindowSounds.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swDisableMessageWindowSounds.Location = new System.Drawing.Point(390, 8);
+            this.swDisableMessageWindowSounds.Location = new System.Drawing.Point(390, 7);
             this.swDisableMessageWindowSounds.Name = "swDisableMessageWindowSounds";
             this.swDisableMessageWindowSounds.Size = new System.Drawing.Size(32, 18);
             this.swDisableMessageWindowSounds.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
@@ -578,7 +540,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableMessageWindowSounds.AutoSize = true;
             this.lblDisableMessageWindowSounds.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDisableMessageWindowSounds.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblDisableMessageWindowSounds.Location = new System.Drawing.Point(2, 7);
+            this.lblDisableMessageWindowSounds.Location = new System.Drawing.Point(2, 6);
             this.lblDisableMessageWindowSounds.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDisableMessageWindowSounds.Name = "lblDisableMessageWindowSounds";
             this.lblDisableMessageWindowSounds.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
@@ -586,19 +548,149 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblDisableMessageWindowSounds.TabIndex = 0;
             this.lblDisableMessageWindowSounds.Text = "Disable Message Window Sounds";
             // 
-            // lblPath
+            // lblEfiDirectory
             // 
-            this.lblPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.lblPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPath.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lblPath.Location = new System.Drawing.Point(0, 279);
-            this.lblPath.Margin = new System.Windows.Forms.Padding(0);
-            this.lblPath.Name = "lblPath";
-            this.lblPath.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
-            this.lblPath.Size = new System.Drawing.Size(433, 34);
-            this.lblPath.TabIndex = 100;
-            this.lblPath.Text = "...";
+            this.lblEfiDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblEfiDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEfiDirectory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEfiDirectory.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lblEfiDirectory.Location = new System.Drawing.Point(0, 326);
+            this.lblEfiDirectory.Margin = new System.Windows.Forms.Padding(0);
+            this.lblEfiDirectory.Name = "lblEfiDirectory";
+            this.lblEfiDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+            this.lblEfiDirectory.Size = new System.Drawing.Size(433, 28);
+            this.lblEfiDirectory.TabIndex = 0;
+            this.lblEfiDirectory.Text = "...";
+            // 
+            // tlpStartupDir
+            // 
+            this.tlpStartupDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpStartupDir.ColumnCount = 2;
+            this.tlpStartupDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStartupDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpStartupDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStartupDir.Controls.Add(this.cmdEditStartupDir, 1, 0);
+            this.tlpStartupDir.Controls.Add(this.lblStartupDefaultDir, 0, 0);
+            this.tlpStartupDir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpStartupDir.Location = new System.Drawing.Point(0, 233);
+            this.tlpStartupDir.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpStartupDir.Name = "tlpStartupDir";
+            this.tlpStartupDir.RowCount = 1;
+            this.tlpStartupDir.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpStartupDir.Size = new System.Drawing.Size(433, 32);
+            this.tlpStartupDir.TabIndex = 5;
+            // 
+            // cmdEditStartupDir
+            // 
+            this.cmdEditStartupDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdEditStartupDir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdEditStartupDir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdEditStartupDir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdEditStartupDir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdEditStartupDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdEditStartupDir.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdEditStartupDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdEditStartupDir.Location = new System.Drawing.Point(379, 0);
+            this.cmdEditStartupDir.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdEditStartupDir.Name = "cmdEditStartupDir";
+            this.cmdEditStartupDir.Size = new System.Drawing.Size(54, 32);
+            this.cmdEditStartupDir.TabIndex = 0;
+            this.cmdEditStartupDir.Text = "EDIT";
+            this.cmdEditStartupDir.UseVisualStyleBackColor = false;
+            this.cmdEditStartupDir.Click += new System.EventHandler(this.cmdEditStartupDir_Click);
+            // 
+            // lblStartupDefaultDir
+            // 
+            this.lblStartupDefaultDir.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblStartupDefaultDir.AutoSize = true;
+            this.lblStartupDefaultDir.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStartupDefaultDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblStartupDefaultDir.Location = new System.Drawing.Point(2, 6);
+            this.lblStartupDefaultDir.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblStartupDefaultDir.Name = "lblStartupDefaultDir";
+            this.lblStartupDefaultDir.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblStartupDefaultDir.Size = new System.Drawing.Size(242, 20);
+            this.lblStartupDefaultDir.TabIndex = 0;
+            this.lblStartupDefaultDir.Text = "Startup Window Default Directory";
+            // 
+            // lblStartupDirectory
+            // 
+            this.lblStartupDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblStartupDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblStartupDirectory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStartupDirectory.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lblStartupDirectory.Location = new System.Drawing.Point(0, 265);
+            this.lblStartupDirectory.Margin = new System.Windows.Forms.Padding(0);
+            this.lblStartupDirectory.Name = "lblStartupDirectory";
+            this.lblStartupDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+            this.lblStartupDirectory.Size = new System.Drawing.Size(433, 28);
+            this.lblStartupDirectory.TabIndex = 102;
+            this.lblStartupDirectory.Text = "...";
+            // 
+            // tlpSocDir
+            // 
+            this.tlpSocDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpSocDir.ColumnCount = 2;
+            this.tlpSocDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSocDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpSocDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSocDir.Controls.Add(this.cmdEditSocDir, 1, 0);
+            this.tlpSocDir.Controls.Add(this.lblSocDefaultDir, 0, 0);
+            this.tlpSocDir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSocDir.Location = new System.Drawing.Point(0, 355);
+            this.tlpSocDir.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSocDir.Name = "tlpSocDir";
+            this.tlpSocDir.RowCount = 1;
+            this.tlpSocDir.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSocDir.Size = new System.Drawing.Size(433, 32);
+            this.tlpSocDir.TabIndex = 7;
+            // 
+            // cmdEditSocDir
+            // 
+            this.cmdEditSocDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdEditSocDir.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdEditSocDir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
+            this.cmdEditSocDir.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdEditSocDir.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdEditSocDir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdEditSocDir.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdEditSocDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdEditSocDir.Location = new System.Drawing.Point(379, 0);
+            this.cmdEditSocDir.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdEditSocDir.Name = "cmdEditSocDir";
+            this.cmdEditSocDir.Size = new System.Drawing.Size(54, 32);
+            this.cmdEditSocDir.TabIndex = 0;
+            this.cmdEditSocDir.Text = "EDIT";
+            this.cmdEditSocDir.UseVisualStyleBackColor = false;
+            this.cmdEditSocDir.Click += new System.EventHandler(this.cmdEditSocDir_Click);
+            // 
+            // lblSocDefaultDir
+            // 
+            this.lblSocDefaultDir.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblSocDefaultDir.AutoSize = true;
+            this.lblSocDefaultDir.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSocDefaultDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblSocDefaultDir.Location = new System.Drawing.Point(2, 6);
+            this.lblSocDefaultDir.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSocDefaultDir.Name = "lblSocDefaultDir";
+            this.lblSocDefaultDir.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblSocDefaultDir.Size = new System.Drawing.Size(275, 20);
+            this.lblSocDefaultDir.TabIndex = 0;
+            this.lblSocDefaultDir.Text = "T2 SOCROM Window Default Directory";
+            // 
+            // lblSocDirectory
+            // 
+            this.lblSocDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblSocDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSocDirectory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSocDirectory.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lblSocDirectory.Location = new System.Drawing.Point(0, 387);
+            this.lblSocDirectory.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSocDirectory.Name = "lblSocDirectory";
+            this.lblSocDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+            this.lblSocDirectory.Size = new System.Drawing.Size(433, 28);
+            this.lblSocDirectory.TabIndex = 0;
+            this.lblSocDirectory.Text = "...";
             // 
             // tlpTitle
             // 
@@ -703,20 +795,6 @@ namespace Mac_EFI_Toolkit.WinForms
             this.panel1.Size = new System.Drawing.Size(433, 1);
             this.panel1.TabIndex = 101;
             // 
-            // tlpStatus
-            // 
-            this.tlpStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.tlpStatus.ColumnCount = 1;
-            this.tlpStatus.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpStatus.Controls.Add(this.lblSettingsSaved, 0, 0);
-            this.tlpStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpStatus.Location = new System.Drawing.Point(1, 462);
-            this.tlpStatus.Name = "tlpStatus";
-            this.tlpStatus.RowCount = 1;
-            this.tlpStatus.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpStatus.Size = new System.Drawing.Size(433, 32);
-            this.tlpStatus.TabIndex = 0;
-            // 
             // settingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -724,9 +802,8 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
-            this.ClientSize = new System.Drawing.Size(435, 495);
+            this.ClientSize = new System.Drawing.Size(435, 524);
             this.Controls.Add(this.tlpMain);
-            this.Controls.Add(this.tlpStatus);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tlpMenu);
             this.Controls.Add(this.pnlSeperatorTop);
@@ -738,30 +815,32 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(435, 495);
+            this.MinimumSize = new System.Drawing.Size(435, 524);
             this.Name = "settingsWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             this.tlpDisableConfirmationDialogs.ResumeLayout(false);
             this.tlpDisableConfirmationDialogs.PerformLayout();
-            this.tlpCustomInitialFolderPath.ResumeLayout(false);
-            this.tlpCustomInitialFolderPath.PerformLayout();
+            this.tlpEfiDir.ResumeLayout(false);
+            this.tlpEfiDir.PerformLayout();
             this.tlpDisableVersionCheck.ResumeLayout(false);
             this.tlpDisableVersionCheck.PerformLayout();
             this.tlpDisableFlashingUiElements.ResumeLayout(false);
             this.tlpDisableFlashingUiElements.PerformLayout();
-            this.tlpDisableLzmaDecompression.ResumeLayout(false);
-            this.tlpDisableLzmaDecompression.PerformLayout();
             this.tlpMain.ResumeLayout(false);
+            this.tlpStatus.ResumeLayout(false);
             this.tlpDisableStatusBarTips.ResumeLayout(false);
             this.tlpDisableStatusBarTips.PerformLayout();
             this.tlpDisableMessageWindowSounds.ResumeLayout(false);
             this.tlpDisableMessageWindowSounds.PerformLayout();
+            this.tlpStartupDir.ResumeLayout(false);
+            this.tlpStartupDir.PerformLayout();
+            this.tlpSocDir.ResumeLayout(false);
+            this.tlpSocDir.PerformLayout();
             this.tlpTitle.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpMenu.ResumeLayout(false);
-            this.tlpStatus.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -771,20 +850,17 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.Button cmdApply;
         private System.Windows.Forms.Button cmdOkay;
         internal System.Windows.Forms.Panel pnlSeperatorTop;
-        private System.Windows.Forms.Label lblFirmware;
         private System.Windows.Forms.TableLayoutPanel tlpDisableConfirmationDialogs;
         private System.Windows.Forms.Label lblDisableConfirmationDialogs;
-        private System.Windows.Forms.TableLayoutPanel tlpCustomInitialFolderPath;
-        private System.Windows.Forms.Label lblCustomInitialFolderPath;
-        private System.Windows.Forms.Button cmdEditCustomPath;
+        private System.Windows.Forms.TableLayoutPanel tlpEfiDir;
+        private System.Windows.Forms.Label lblEfiDefaultDir;
+        private System.Windows.Forms.Button cmdEditEfiDir;
         private System.Windows.Forms.TableLayoutPanel tlpDisableVersionCheck;
         private System.Windows.Forms.Label lblDisableVersionCheck;
         private System.Windows.Forms.Label lblStartup;
         private System.Windows.Forms.Label lblApplication;
         private System.Windows.Forms.TableLayoutPanel tlpDisableFlashingUiElements;
         private System.Windows.Forms.Label lblDisableFlashingUiElements;
-        private System.Windows.Forms.TableLayoutPanel tlpDisableLzmaDecompression;
-        private System.Windows.Forms.Label lblDisableLzmaDecompression;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.Label lblSettingsSaved;
         internal System.Windows.Forms.TableLayoutPanel tlpTitle;
@@ -794,16 +870,23 @@ namespace Mac_EFI_Toolkit.WinForms
         private System.Windows.Forms.TableLayoutPanel tlpDisableStatusBarTips;
         private System.Windows.Forms.TableLayoutPanel tlpDisableMessageWindowSounds;
         private System.Windows.Forms.Label lblDisableMessageWindowSounds;
-        private METLabel lblPath;
+        private METLabel lblEfiDirectory;
         private System.Windows.Forms.PictureBox pbxLogo;
         private UI.METSwitch swDisableVersionCheck;
         private UI.METSwitch swDisableFlashingUiElements;
         private UI.METSwitch swDisableMessageWindowSounds;
         private UI.METSwitch swDisableStatusBarTips;
         private UI.METSwitch swDisableConfirmationDialogs;
-        private UI.METSwitch swDisableLzmaDecompression;
         private System.Windows.Forms.TableLayoutPanel tlpMenu;
         internal System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tlpStatus;
+        private System.Windows.Forms.TableLayoutPanel tlpStartupDir;
+        private System.Windows.Forms.Button cmdEditStartupDir;
+        private System.Windows.Forms.Label lblStartupDefaultDir;
+        private METLabel lblStartupDirectory;
+        private System.Windows.Forms.TableLayoutPanel tlpSocDir;
+        private System.Windows.Forms.Button cmdEditSocDir;
+        private System.Windows.Forms.Label lblSocDefaultDir;
+        private METLabel lblSocDirectory;
     }
 }

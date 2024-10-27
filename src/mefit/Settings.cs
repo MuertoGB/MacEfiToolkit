@@ -19,13 +19,14 @@ namespace Mac_EFI_Toolkit
         DisableMessageSounds,
         DisableTips,
         DisableConfDiag,
-        DisableLzmaFsSearch,
         AcceptedEditingTerms
     }
 
     public enum SettingsStringType
     {
-        InitialDirectory
+        StartupInitialDirectory,
+        EfiInitialDirectory,
+        SocInitialDirectory
     }
     #endregion
 
@@ -71,14 +72,19 @@ namespace Mac_EFI_Toolkit
                 ini.Write("Application", "DisableConfDiag", "False");
             }
 
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "InitialOfdPath"))
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "StartupInitialPath"))
             {
-                ini.Write("Application", "InitialOfdPath", METPath.CurrentDirectory);
+                ini.Write("Application", "StartupInitialPath", METPath.WorkingDirectory);
             }
 
-            if (!ini.SectionExists("Firmware") || !ini.KeyExists("Firmware", "DisableLzmaFsSearch"))
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "EfiInitialPath"))
             {
-                ini.Write("Firmware", "DisableLzmaFsSearch", "False");
+                ini.Write("Application", "EfiInitialPath", METPath.WorkingDirectory);
+            }
+
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "SocInitialPath"))
+            {
+                ini.Write("Application", "SocInitialPath", METPath.WorkingDirectory);
             }
 
             if (!ini.SectionExists("Firmware") || !ini.KeyExists("Firmware", "AcceptedEditingTerms"))
@@ -136,9 +142,6 @@ namespace Mac_EFI_Toolkit
                 case SettingsBoolType.DisableConfDiag:
                     section = "Application"; key = "DisableConfDiag";
                     break;
-                case SettingsBoolType.DisableLzmaFsSearch:
-                    section = "Firmware"; key = "DisableLzmaFsSearch";
-                    break;
                 case SettingsBoolType.AcceptedEditingTerms:
                     section = "Firmware"; key = "AcceptedEditingTerms";
                     break;
@@ -170,7 +173,7 @@ namespace Mac_EFI_Toolkit
             if (!settingsIni.KeyExists(section, key))
             {
                 Logger.WriteToAppLog(
-                    $"SettingsGetBool: Key '{key}' was missing and created automatically.");
+                    $"ReadBool (Settings): Key '{key}' was missing and created automatically.");
 
                 settingsIni.Write(
                     section,
@@ -192,8 +195,14 @@ namespace Mac_EFI_Toolkit
 
             switch (settingType)
             {
-                case SettingsStringType.InitialDirectory:
-                    section = "Application"; key = "InitialOfdPath";
+                case SettingsStringType.StartupInitialDirectory:
+                    section = "Application"; key = "StartupInitialPath";
+                    break;
+                case SettingsStringType.EfiInitialDirectory:
+                    section = "Application"; key = "EfiInitialPath";
+                    break;
+                case SettingsStringType.SocInitialDirectory:
+                    section = "Application"; key = "SocInitialPath";
                     break;
                 default:
                     return string.Empty;
@@ -206,7 +215,7 @@ namespace Mac_EFI_Toolkit
             if (!settingsIni.SectionExists(section))
             {
                 Logger.WriteToAppLog(
-                    $"SettingsGetString: Section '{section}' was missing and created automatically.");
+                    $"ReadString (Settings): Section '{section}' was missing and created automatically.");
 
                 using (StreamWriter writer = new StreamWriter(METPath.SettingsFile, true))
                 {
@@ -225,7 +234,7 @@ namespace Mac_EFI_Toolkit
             if (!settingsIni.KeyExists(section, key))
             {
                 Logger.WriteToAppLog(
-                    $"SettingsGetString: Key '{key}' was missing and created automatically.");
+                    $"ReadString (Settings): Key '{key}' was missing and created automatically.");
 
                 settingsIni.Write(
                     section,
@@ -264,9 +273,6 @@ namespace Mac_EFI_Toolkit
                 case SettingsBoolType.DisableConfDiag:
                     section = "Application"; key = "DisableConfDiag";
                     break;
-                case SettingsBoolType.DisableLzmaFsSearch:
-                    section = "Firmware"; key = "DisableLzmaFsSearch";
-                    break;
                 case SettingsBoolType.AcceptedEditingTerms:
                     section = "Firmware"; key = "AcceptedEditingTerms";
                     break;
@@ -290,7 +296,7 @@ namespace Mac_EFI_Toolkit
                 else
                 {
                     Logger.WriteToAppLog(
-                        $"{section} > {key} > Key not found, setting was not written.");
+                        $" SetBool (Settings): {section} > {key} > Key not found, setting was not written.");
                 }
             }
         }
@@ -304,8 +310,14 @@ namespace Mac_EFI_Toolkit
 
             switch (settingType)
             {
-                case SettingsStringType.InitialDirectory:
-                    section = "Application"; key = "InitialOfdPath";
+                case SettingsStringType.StartupInitialDirectory:
+                    section = "Application"; key = "StartupInitialPath";
+                    break;
+                case SettingsStringType.EfiInitialDirectory:
+                    section = "Application"; key = "EfiInitialPath";
+                    break;
+                case SettingsStringType.SocInitialDirectory:
+                    section = "Application"; key = "SocInitialPath";
                     break;
                 default:
                     return;
@@ -331,7 +343,7 @@ namespace Mac_EFI_Toolkit
             else
             {
                 Logger.WriteToAppLog(
-                    $"{section} > {key} > Key not found, setting was not written.");
+                    $"SetString (Settings): {section} > {key} > Key not found, setting was not written.");
             }
 
         }

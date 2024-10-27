@@ -130,7 +130,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Filter = "Text Files (*.txt)|*.txt",
                 FileName = $"AppleRomSectionInformation_{EFIROM.FileInfoData.FileName}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.CurrentDirectory
+                InitialDirectory = METPath.WorkingDirectory
             })
             {
                 // Action was cancelled

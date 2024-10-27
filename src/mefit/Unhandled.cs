@@ -51,7 +51,7 @@ namespace Mac_EFI_Toolkit
 
             string exePath =
                 Path.Combine(
-                    METPath.CurrentDirectory,
+                    METPath.WorkingDirectory,
                     METPath.FriendlyName);
 
             try

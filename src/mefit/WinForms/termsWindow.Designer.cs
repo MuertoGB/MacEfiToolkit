@@ -93,7 +93,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTitle.RowCount = 1;
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.Size = new System.Drawing.Size(578, 40);
-            this.tlpTitle.TabIndex = 96;
+            this.tlpTitle.TabIndex = 0;
             // 
             // pbxLogo
             // 
@@ -124,7 +124,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 2, 0, 1);
             this.cmdClose.Size = new System.Drawing.Size(40, 40);
-            this.cmdClose.TabIndex = 13;
+            this.cmdClose.TabIndex = 0;
             this.cmdClose.TabStop = false;
             this.cmdClose.Text = "X";
             this.cmdClose.UseVisualStyleBackColor = false;
@@ -140,7 +140,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(498, 40);
-            this.lblTitle.TabIndex = 12;
+            this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Terms of Use";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -170,7 +170,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.RowCount = 1;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpButtons.Size = new System.Drawing.Size(578, 42);
-            this.tlpButtons.TabIndex = 1;
+            this.tlpButtons.TabIndex = 0;
             // 
             // cmdAccept
             // 

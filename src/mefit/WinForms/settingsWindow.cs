@@ -8,6 +8,7 @@
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -18,7 +19,9 @@ namespace Mac_EFI_Toolkit.WinForms
     {
 
         #region Private Members
-        private static string _strNewOfdInitialPath = string.Empty;
+        private static string _strStartupInitialPath = string.Empty;
+        private static string _strEfiInitialPath = string.Empty;
+        private static string _strSocInitialPath = string.Empty;
         private Timer _timer;
         private bool _updateUI = true;
         #endregion
@@ -66,15 +69,16 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void UpdatePathLabel()
         {
-            string path =
-                Settings.ReadString(SettingsStringType.InitialDirectory);
+            UpdateLabel(lblStartupDirectory, SettingsStringType.StartupInitialDirectory);
+            UpdateLabel(lblEfiDirectory, SettingsStringType.EfiInitialDirectory);
+            UpdateLabel(lblSocDirectory, SettingsStringType.SocInitialDirectory);
+        }
 
-            lblPath.Text =
-              path;
-
-            lblPath.ForeColor = Directory.Exists(path)
-                ? AppColours.DIMMED_TEXT
-                : AppColours.WARNING;
+        private void UpdateLabel(Label label, SettingsStringType settingsType)
+        {
+            string path = Settings.ReadString(settingsType);
+            label.Text = path;
+            label.ForeColor = Directory.Exists(path) ? AppColours.SETTINGS_PATH_OKAY : AppColours.WARNING;
         }
         #endregion
 
@@ -107,18 +111,40 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdClose_Click(object sender, EventArgs e) =>
             Close();
 
-        private void cmdEditCustomPath_Click(object sender, EventArgs e)
+        private void cmdEditStartupDir_Click(object sender, EventArgs e)
+        {
+            OpenFolderDialog(
+                SettingsStringType.StartupInitialDirectory,
+                ref _strStartupInitialPath);
+        }
+
+        private void cmdEditEfiDir_Click(object sender, EventArgs e)
+        {
+            OpenFolderDialog(
+                SettingsStringType.EfiInitialDirectory,
+                ref _strEfiInitialPath);
+        }
+
+        private void cmdEditSocDir_Click(object sender, EventArgs e)
+        {
+            OpenFolderDialog(
+                SettingsStringType.SocInitialDirectory,
+                ref _strSocInitialPath);
+        }
+
+        private void OpenFolderDialog(SettingsStringType settingsType, ref string pathVariable)
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                dialog.SelectedPath = (Settings.ReadString(SettingsStringType.InitialDirectory) == string.Empty)
-                    ? METPath.CurrentDirectory
-                    : Settings.ReadString(SettingsStringType.InitialDirectory);
-                dialog.Description = "Select a folder";
-                dialog.ShowNewFolderButton = false;
+                dialog.SelectedPath = string.IsNullOrEmpty(Settings.ReadString(settingsType))
+                    ? METPath.WorkingDirectory
+                    : Settings.ReadString(settingsType);
+
+                dialog.Description = AppStrings.S_SELECT_FOLDER;
+                dialog.ShowNewFolderButton = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
-                    _strNewOfdInitialPath = dialog.SelectedPath;
+                    pathVariable = dialog.SelectedPath;
             }
         }
 
@@ -151,14 +177,20 @@ namespace Mac_EFI_Toolkit.WinForms
                 SettingsBoolType.DisableConfDiag,
                 swDisableConfirmationDialogs.Checked);
 
-            if (_strNewOfdInitialPath != string.Empty)
+            if (_strStartupInitialPath != string.Empty)
                 Settings.SetString(
-                    SettingsStringType.InitialDirectory,
-                    _strNewOfdInitialPath);
+                    SettingsStringType.StartupInitialDirectory,
+                    _strStartupInitialPath);
 
-            Settings.SetBool(
-                SettingsBoolType.DisableLzmaFsSearch,
-                swDisableLzmaDecompression.Checked);
+            if (_strEfiInitialPath != string.Empty)
+                Settings.SetString(
+                    SettingsStringType.EfiInitialDirectory,
+                    _strEfiInitialPath);
+
+            if (_strSocInitialPath != string.Empty)
+                Settings.SetString(
+                    SettingsStringType.SocInitialDirectory,
+                    _strSocInitialPath);
 
             if (_updateUI)
             {
@@ -172,7 +204,7 @@ namespace Mac_EFI_Toolkit.WinForms
             DialogResult result =
                 METMessageBox.Show(
                     this,
-                    "This will revert all settings to default, are you sure you want to set default settings?",
+                    AppStrings.S_RESET_SETTINGS,
                     METMessageBoxType.Warning,
                     METMessageBoxButtons.YesNo);
 
@@ -200,12 +232,16 @@ namespace Mac_EFI_Toolkit.WinForms
                 false);
 
             Settings.SetString(
-                SettingsStringType.InitialDirectory,
-                METPath.CurrentDirectory);
+                SettingsStringType.StartupInitialDirectory,
+                METPath.WorkingDirectory);
 
-            Settings.SetBool(
-                SettingsBoolType.DisableLzmaFsSearch,
-                false);
+            Settings.SetString(
+                SettingsStringType.EfiInitialDirectory,
+                METPath.WorkingDirectory);
+
+            Settings.SetString(
+                SettingsStringType.SocInitialDirectory,
+                METPath.WorkingDirectory);
 
             UpdateCheckBoxControls();
             UpdatePathLabel();
@@ -266,11 +302,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
             swDisableConfirmationDialogs.Checked = Settings.ReadBool(
                 SettingsBoolType.DisableConfDiag)
-                ? true :
-                false;
-
-            swDisableLzmaDecompression.Checked = Settings.ReadBool(
-                SettingsBoolType.DisableLzmaFsSearch)
                 ? true :
                 false;
         }
