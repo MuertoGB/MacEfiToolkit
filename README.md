@@ -30,7 +30,32 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
 
 ## Features
 
-TODO
+- Application
+  - All files are edited in memory, preserving the original.
+  - Knuth–Morris–Pratt algorithm for binary data searching.
+  - Backup firmwares to a .zip archive for long term storage.
+  - Automatic handling of uncaught exceptions.
+  - DPI scaling support.
+  - Drag and drop support.
+  - New version notifications.
+  - No installation required.
+  - Works with Wine.
+- Firmware (EFIROM)
+  - View the firmware checksum, created and modified date.
+  - View the model, config code, system serial, hardware configuration code and system order number.
+  - Check the system serial on EveryMac.
+  - View the EFI version and ROM section information.
+  - View the Intel Management Engine version and base address.
+  - View the Platform Data Region Board-ID (UEFI 2013+).
+  - View if the firmware is APFS capable
+  - Export and replace the Intel Management Engine firmware region.
+  - Export and replace the Fsys store section.
+  - Detect and repair invalid Fsys CRC32 checksums.
+  - View and validate binary size.
+  - Reset NVRAM stores with proper header configuration.
+  - Detect and remove EFI passwords (EFI lock).
+- T2 SOCROM
+  - TODO
 
 ## Download
 
@@ -42,7 +67,7 @@ TODO
 
 ## Manual
 
-TODO
+TODO - The original manual is outdated, and being rewritten.
 
 ## Requirements
 
@@ -50,11 +75,11 @@ TODO
 - Microsoft [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 - Windows 7, 8, 8.1, 10 and 11. 32, or 64-bit
 - Internet connectivity required for:-
-> - Version Checking (Can be disabled in settings).
-> - Fetching config code from the server when not present in the database.
+  - Version checking, which can be disabled in the settings.
+  - Retrieving configuration codes from the server they're not present in the database.
 
 **Build requirements:**
-- [Visual Studio 2022](https:/visualstudio.microsoft.com/vs/), targeting .NET Framework 4.8.
+- [Visual Studio 2022](https://visualstudio.microsoft.com/vs/), targeting .NET Framework 4.8.
 
 ## Acknowledgements
 
@@ -67,6 +92,6 @@ Application icon by [Creatype](https://www.flaticon.com/free-icon/toolkit_645709
 
 ## Donate
 
-All donations go back into improving my software and workspace.
+All donations go back into improving my software and workspace:
 
 <a href="https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ"><img width="160" src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal Logo" vspace="5" hspace="5"></a>
