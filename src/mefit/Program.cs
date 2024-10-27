@@ -39,7 +39,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "241027.0345";
+        internal const string Build = "241027.2110";
         internal const string Channel = "DEV";
     }
 
@@ -250,49 +250,37 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Exit Action
-        internal static void PerformExitAction(Form owner, ExitAction action)
+        internal static void HandleApplicationExit(Form owner, ExitAction action)
         {
+            // Check if confirmation dialogs are disabled
             if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
             {
-                if (action == ExitAction.Restart)
-                {
-                    Restart();
-                }
-                else if (action == ExitAction.Exit)
-                {
-                    Application.Exit();
-                }
-
+                ExecuteExitAction(action);
                 return;
             }
 
-            string title, message;
-
-            if (action == ExitAction.Restart)
-            {
-                title = "Restart";
-                message = "Are you sure you want to restart the application?";
-            }
-            else if (action == ExitAction.Exit)
-            {
-                title = "Quit";
-                message = "Are you sure you want to quit the application?";
-            }
-            else
-            {
-                return;
-            }
+            string title = action == ExitAction.Restart ? "Restart" : "Quit";
+            string message = action == ExitAction.Restart
+                ? $"{AppStrings.S_FW_WIN_OPEN} {AppStrings.S_HAE_RESTART}"
+                : $"{AppStrings.S_FW_WIN_OPEN} {AppStrings.S_HAE_EXIT}";
 
             if (ShowConfirmationDialog(owner, title, message))
             {
-                if (action == ExitAction.Restart)
-                {
+                ExecuteExitAction(action);
+            }
+        }
+
+        // Execute the exit action based on the given type
+        private static void ExecuteExitAction(ExitAction action)
+        {
+            switch (action)
+            {
+                case ExitAction.Restart:
                     Restart();
-                }
-                else if (action == ExitAction.Exit)
-                {
-                    Application.Exit();
-                }
+                    break;
+                case ExitAction.Exit:
+                    Program.Exit();
+                    break;
             }
         }
 
@@ -308,15 +296,26 @@ namespace Mac_EFI_Toolkit
             return result == DialogResult.Yes;
         }
 
-        private static void Restart()
+        internal static void Restart()
         {
             try
             {
+                // Start a new instance of the application
                 Process.Start(Application.ExecutablePath);
-                Application.Exit();
             }
-            catch (Win32Exception) { return; }
+            catch (Win32Exception e)
+            {
+                Logger.WriteToAppLog(e.Message);
+                return;
+            }
+            finally
+            {
+                // Ensure the current instance exits
+                Exit();
+            }
         }
+
+        internal static void Exit() => Application.Exit();
         #endregion
 
     }

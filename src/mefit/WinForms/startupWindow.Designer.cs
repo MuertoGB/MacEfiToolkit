@@ -495,7 +495,7 @@
             this.openWorkingDirectoryToolStripMenuItem});
             this.cmsFolders.Name = "cmsFolders";
             this.cmsFolders.ShowImageMargin = false;
-            this.cmsFolders.Size = new System.Drawing.Size(240, 150);
+            this.cmsFolders.Size = new System.Drawing.Size(240, 178);
             // 
             // openBackupsFolderToolStripMenuItem
             // 

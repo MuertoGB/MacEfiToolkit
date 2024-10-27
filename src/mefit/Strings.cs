@@ -47,6 +47,15 @@
 
         internal const string S_TXT_FILTER =
             "Text Files (*.txt)|*.txt";
+
+        internal const string S_FW_WIN_OPEN =
+            "There are firmware windows open.";
+
+        internal const string S_HAE_RESTART =
+            "Are you sure you want to restart the application?";
+
+        internal const string S_HAE_EXIT =
+            "Are you sure you want to exit the application?";
         #endregion
     }
 

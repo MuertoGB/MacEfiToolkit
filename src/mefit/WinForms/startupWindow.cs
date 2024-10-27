@@ -60,6 +60,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             // Attach event handlers.
             Load += startupWindow_Load;
+            FormClosing += startupWindow_FormClosing;
             DragEnter += startupWindow_DragEnter;
             DragDrop += startupWindow_DragDrop;
             DragLeave += startupWindow_DragLeave;
@@ -95,6 +96,27 @@ namespace Mac_EFI_Toolkit.WinForms
             // Check for a new application version
             if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
                 StartupVersionCheck();
+        }
+
+        private void startupWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Intercept ALT+F4
+            if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
+            {
+                // We need to cancel the original request to close if confirmation dialogs are not disabled
+                if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+                {
+                    if (_childWindowCount != 0)
+                    {
+                        e.Cancel = true;
+                        Program.HandleApplicationExit(this, ExitAction.Exit);
+                    }
+                    else
+                    {
+                        Program.Exit();
+                    }
+                }
+            }
         }
 
         private void startupWindow_DragEnter(object sender, DragEventArgs e)
@@ -199,8 +221,16 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdMinimize_Click(object sender, EventArgs e) =>
             WindowState = FormWindowState.Minimized;
 
-        private void cmdClose_Click(object sender, EventArgs e) =>
-            Application.Exit();
+        private void cmdClose_Click(object sender, EventArgs e)
+        {
+            if (_childWindowCount != 0)
+            {
+                Program.HandleApplicationExit(this, ExitAction.Exit);
+                return;
+            }
+
+            Program.Exit();
+        }        
 
         private void cmdSettings_Click(object sender, EventArgs e)
         {
@@ -410,8 +440,16 @@ namespace Mac_EFI_Toolkit.WinForms
                 METMessageBoxButtons.Okay);
         }
 
-        private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Program.PerformExitAction(this, ExitAction.Restart);
+        private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_childWindowCount != 0)
+            {
+                Program.HandleApplicationExit(this, ExitAction.Restart);
+                return;
+            }
+
+            Program.Restart();
+        }
         #endregion
 
         #region Misc Events
