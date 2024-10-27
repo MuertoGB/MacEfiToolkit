@@ -35,6 +35,7 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
   - Knuth–Morris–Pratt algorithm for binary data searching.
   - Backup firmwares to a .zip archive for long term storage.
   - Automatic handling of uncaught exceptions.
+  - Automatic background logging for errors and key actions.
   - DPI scaling support.
   - Drag and drop support.
   - New version notifications.
@@ -44,18 +45,18 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
   - View the firmware checksum, created and modified date.
   - View the model, config code, system serial, hardware configuration code and system order number.
   - Check the system serial on EveryMac.
-  - View the EFI version and ROM section information.
+  - View the firmware version and ROM section information.
   - View the Intel Management Engine version and base address.
   - View the Platform Data Region Board-ID (UEFI 2013+).
-  - View if the firmware is APFS capable
+  - View if the firmware is APFS capable.
   - Export and replace the Intel Management Engine firmware region.
   - Export and replace the Fsys store section.
   - Detect and repair invalid Fsys CRC32 checksums.
   - View and validate binary size.
   - Reset NVRAM stores with proper header configuration.
   - Detect and remove EFI passwords (EFI lock).
-- T2 SOCROM
-  - TODO
+- Firmware (T2 SOCROM)
+  - Placeholder for upcoming features related to T2 chip handling and SOCROM analysis.
 
 ## Download
 
