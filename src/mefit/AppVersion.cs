@@ -23,7 +23,7 @@ namespace Mac_EFI_Toolkit
     }
     #endregion
 
-    class AppUpdate
+    class AppVersion
     {
         internal static async Task<VersionResult> CheckForNewVersion(string versionUrl)
         {

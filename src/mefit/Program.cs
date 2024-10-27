@@ -39,7 +39,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "241026.0325";
+        internal const string Build = "241027.0345";
         internal const string Channel = "DEV";
     }
 
@@ -53,6 +53,7 @@ namespace Mac_EFI_Toolkit
         internal const string GithubLatest = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
         internal const string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
         internal const string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/stream/manifests/version.xml";
+
     }
     #endregion
 

@@ -46,7 +46,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // pnlMain
             // 
-            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.pnlMain.Controls.Add(this.lblInfo);
             this.pnlMain.Controls.Add(this.tlpTopLabels);
             this.pnlMain.Controls.Add(this.tlpTop);

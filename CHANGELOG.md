@@ -26,6 +26,7 @@
 - Added an option in the EFI window to export NVRAM stores.
 
 #### Enhancements:
+- Disallowed opening of non-apple extensible firmware interface files.
 - Improved the NVRAM reset functionality to emulate the state of uninitialised factory firmware.
 - Improved the management of control enabled states in the EFI window.
 - Improved the validation process for serial numbers.
@@ -33,6 +34,7 @@
 - The internal database was updated with more models.
 - Modified the default file name when exporting information in the ROM Information window.
 - Removed unnecessary confirmation dialogs from certain windows.
+- Modified EFI Window shortcut keys.
 
 #### Bugs:
 - Added missing icon to the ROM Information window.
@@ -42,6 +44,7 @@
 - Removed private memory usage from the EFI window.
 - Previous versions of the software can no longer check if a new version is available due to file restructuring.
 - Removed NSS store details from the EFI Window.
+- Removed NVRAM store tips.
 
 ## Version 1.1.5
 

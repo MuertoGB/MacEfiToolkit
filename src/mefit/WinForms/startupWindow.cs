@@ -63,6 +63,8 @@ namespace Mac_EFI_Toolkit.WinForms
             DragEnter += startupWindow_DragEnter;
             DragDrop += startupWindow_DragDrop;
             DragLeave += startupWindow_DragLeave;
+            Deactivate += startupWindow_Deactivate;
+            Activated += startupWindow_Activated;
 
             // Set mouse event handlers.
             SetMouseMoveEventHandlers();
@@ -85,7 +87,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // Open dragged file is the arg path is ! null or ! empty.
             if (!string.IsNullOrEmpty(Program.draggedFilePath))
             {
-                LoadBinary(Program.draggedFilePath);
+                OpenBinary(Program.draggedFilePath);
                 // Clear the path so restarting does not cause the initially dragged file to be loaded.
                 Program.draggedFilePath = string.Empty;
             }
@@ -131,7 +133,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             ApplyDragLeaveColours();
 
-            LoadBinary(draggedFilename);
+            OpenBinary(draggedFilename);
         }
 
         private void startupWindow_DragLeave(object sender, EventArgs e) =>
@@ -141,16 +143,27 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             // Check for a new version using the specified URL.
             VersionResult result =
-                await AppUpdate.CheckForNewVersion(
+                await AppVersion.CheckForNewVersion(
                     METUrl.VersionXml);
 
             // If a new version is available and update the UI.
-            if (result == VersionResult.NewVersionAvailable)
+            if (result == VersionResult.UpToDate)
             {
                 cmdMore.Text += " (1)";
                 updateAvailableToolStripMenuItem.Visible = true;
             }
+        }
 
+        private void startupWindow_Deactivate(object sender, EventArgs e) =>
+            SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
+
+        private void startupWindow_Activated(object sender, EventArgs e) =>
+            SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
+
+        private void SetControlForeColor(Control parentControl, Color foreColor)
+        {
+            foreach (Control control in parentControl.Controls)
+                control.ForeColor = foreColor;
         }
         #endregion
 
@@ -183,7 +196,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Button Events
-        private void cmdMin_Click(object sender, EventArgs e) =>
+        private void cmdMinimize_Click(object sender, EventArgs e) =>
             WindowState = FormWindowState.Minimized;
 
         private void cmdClose_Click(object sender, EventArgs e) =>
@@ -212,11 +225,17 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
 
+        private void cmdMenuFolders_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsFolders,
+                MenuPosition.BottomLeft);
+
         private void cmdMore_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
-            sender,
-            cmsMore,
-            MenuPosition.BottomLeft);
+                sender,
+                cmsMore,
+                MenuPosition.BottomLeft);
 
         private void cmdOpen_Click(object sender, EventArgs e)
         {
@@ -227,7 +246,7 @@ namespace Mac_EFI_Toolkit.WinForms
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
-                    LoadBinary(dialog.FileName);
+                    OpenBinary(dialog.FileName);
             }
         }
         #endregion
@@ -277,7 +296,84 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
-        #region Context Menu Events
+        #region Folders Context Menu Events
+        private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.BackupsDirectory))
+            {
+                Process.Start(
+                    "explorer.exe",
+                    METPath.BackupsDirectory);
+
+                return;
+            }
+
+            METMessageBox.Show(
+                this,
+                DialogStrings.S_DIR_NOT_CREATED,
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.BuildsDirectory))
+            {
+                Process.Start(
+                    "explorer.exe",
+                    METPath.BuildsDirectory);
+
+                return;
+            }
+
+            METMessageBox.Show(
+                this,
+                DialogStrings.S_DIR_NOT_CREATED,
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.FsysDirectory))
+            {
+                Process.Start(
+                    "explorer.exe",
+                    METPath.FsysDirectory);
+
+                return;
+            }
+
+            METMessageBox.Show(
+                this,
+                DialogStrings.S_DIR_NOT_CREATED,
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(METPath.MeDirectory))
+            {
+                Process.Start(
+                    "explorer.exe",
+                    METPath.MeDirectory);
+
+                return;
+            }
+
+            METMessageBox.Show(
+                this,
+                DialogStrings.S_DIR_NOT_CREATED,
+                METMessageBoxType.Information,
+                METMessageBoxButtons.Okay);
+        }
+
+        private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Process.Start("explorer.exe", METPath.CurrentDirectory);
+        #endregion
+
+        #region More Context Menu Events
         private void changelogToolStripMenuItem_Click(object sender, EventArgs e) =>
             Process.Start(METUrl.Changelog);
 
@@ -309,7 +405,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             METMessageBox.Show(
                 this,
-                DialogStrings.DS_LOG_NOT_CREATED,
+                DialogStrings.S_LOG_NOT_CREATED,
                 METMessageBoxType.Information,
                 METMessageBoxButtons.Okay);
         }
@@ -319,151 +415,75 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Misc Events
-        private void LoadBinary(string filePath)
+        private void OpenBinary(string filePath)
         {
-            // Check the filesize
             if (!FileUtils.IsValidMinMaxSize(filePath, this))
                 return;
 
-            byte[] file = File.ReadAllBytes(filePath);
+            byte[] fileBytes = File.ReadAllBytes(filePath);
 
-            // Try process flash descriptor, this is required.
-            IFD.ParseRegionData(file);
+            // Try processing flash descriptor
+            IFD.ParseRegionData(fileBytes);
 
-            Form child = null;
+            // Identify and open the correct window based on the image type
+            Form childForm = GetChildFormForImage(fileBytes);
 
-            // Check for valid image types
-            if (EFIROM.IsValidImage(file))
+            if (childForm != null)
             {
-                loadedFile = filePath;
-                child = new efiWindow();
-            }
-            else if (T2ROM.IsValidImage(file))
-            {
-                loadedFile = filePath;
-                child = new t2Window();
+                InitializeChildForm(childForm, filePath);
+                return;
             }
 
-            if (child != null)
-            {
-                child.Tag = FormTag.Firmware;
-
-                // Increment the child window counter
-                _childWindowCount++;
-
-                // Update window title
-                UpdateWindowTitle();
-
-                // Attach the FormClosed event to handle when the form is closed
-                child.FormClosed += ChildWindowClosed;
-
-                // Set the location of the child window relative to the main window
-                child.Location = new Point(
-                    this.Location.X + (this.Width - child.Width) / 2,
-                    this.Location.Y + (this.Height - child.Height) / 2);
-
-                // Set the owner of the child form
-                child.Owner = this;
-
-                // Show the child form
-                child.Show();
-            }
-
-            loadedFile = string.Empty;
+            METMessageBox.Show(
+                this,
+                "The provided file was not a supported firmware.",
+                METMessageBoxType.Error,
+                METMessageBoxButtons.Okay);
         }
+
+        private Form GetChildFormForImage(byte[] fileBytes)
+        {
+            if (EFIROM.IsValidImage(fileBytes))
+                return new efiWindow();
+            else if (T2ROM.IsValidImage(fileBytes))
+                return new t2Window();
+
+            return null;
+        }
+
+        private void InitializeChildForm(Form childForm, string filePath)
+        {
+            this.loadedFile = filePath;
+            childForm.Tag = FormTag.Firmware;
+
+            _childWindowCount++;
+            UpdateWindowTitle();
+
+            // Attach event handler for child form closure
+            childForm.FormClosed += ChildWindowClosed;
+
+            // Center child form relative to the main window
+            childForm.Location = new Point(
+                this.Location.X + (this.Width - childForm.Width) / 2,
+                this.Location.Y + (this.Height - childForm.Height) / 2);
+
+            childForm.Owner = this;
+            childForm.Show();
+        }
+
 
         private void UpdateWindowTitle()
         {
             if (_childWindowCount == 0)
             {
-                lblWindowTitle.Text = AppStrings.AS_NAME;
+                lblWindowTitle.Text = AppStrings.S_NAME;
                 return;
             }
 
             lblWindowTitle.Text =
-                $"{AppStrings.AS_NAME} ({_childWindowCount})";
+                $"{AppStrings.S_NAME} ({_childWindowCount})";
         }
         #endregion
 
-        private void cmdMenuFolders_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
-                sender,
-                cmsFolders,
-                MenuPosition.BottomLeft);
-
-        private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(METPath.BackupsDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.BackupsDirectory);
-
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.DS_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
-        }
-
-        private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(METPath.BuildsDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.BuildsDirectory);
-
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.DS_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
-        }
-
-        private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(METPath.FsysDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.FsysDirectory);
-
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.DS_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
-        }
-
-        private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Directory.Exists(METPath.MeDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.MeDirectory);
-
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.DS_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
-        }
-
-        private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start("explorer.exe", METPath.CurrentDirectory);
     }
 }

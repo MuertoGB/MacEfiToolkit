@@ -222,6 +222,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 if (dxeCore == -1)
                     return false;
 
+            AppleRomInformationSection romSectionData =
+                GetRomInformationData(sourceBytes);
+
+            if (!romSectionData.SectionExists)
+                return false;
+
             return true;
         }
         #endregion 

@@ -76,6 +76,7 @@
             // tlpTitle
             // 
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
             this.tlpTitle.ColumnCount = 5;
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -115,7 +116,7 @@
             // 
             // lblWindowTitle
             // 
-            this.lblWindowTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.lblWindowTitle.BackColor = System.Drawing.Color.Transparent;
             this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWindowTitle.ForeColor = System.Drawing.Color.White;
@@ -183,7 +184,7 @@
             this.cmdMin.TabStop = false;
             this.cmdMin.Text = "—";
             this.cmdMin.UseVisualStyleBackColor = false;
-            this.cmdMin.Click += new System.EventHandler(this.cmdMin_Click);
+            this.cmdMin.Click += new System.EventHandler(this.cmdMinimize_Click);
             // 
             // pnlSeperatorTop
             // 
@@ -324,7 +325,7 @@
             this.tlpDrop.Name = "tlpDrop";
             this.tlpDrop.RowCount = 3;
             this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
+            this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56F));
             this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDrop.Size = new System.Drawing.Size(433, 195);
             this.tlpDrop.TabIndex = 1;
@@ -333,11 +334,11 @@
             // 
             this.lblDrag.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblDrag.AutoSize = true;
-            this.lblDrag.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDrag.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDrag.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblDrag.Location = new System.Drawing.Point(121, 77);
+            this.lblDrag.Location = new System.Drawing.Point(108, 74);
             this.lblDrag.Name = "lblDrag";
-            this.lblDrag.Size = new System.Drawing.Size(191, 40);
+            this.lblDrag.Size = new System.Drawing.Size(217, 46);
             this.lblDrag.TabIndex = 0;
             this.lblDrag.Text = "Drop a file into the window\r\nor";
             this.lblDrag.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -347,7 +348,7 @@
             this.lblGlyph.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lblGlyph.AutoSize = true;
             this.lblGlyph.ForeColor = System.Drawing.Color.White;
-            this.lblGlyph.Location = new System.Drawing.Point(208, 49);
+            this.lblGlyph.Location = new System.Drawing.Point(208, 45);
             this.lblGlyph.Name = "lblGlyph";
             this.lblGlyph.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
             this.lblGlyph.Size = new System.Drawing.Size(17, 24);
@@ -362,9 +363,9 @@
             this.cmdOpen.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdOpen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdOpen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdOpen.ForeColor = System.Drawing.Color.White;
-            this.cmdOpen.Location = new System.Drawing.Point(179, 124);
+            this.cmdOpen.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdOpen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdOpen.Location = new System.Drawing.Point(179, 128);
             this.cmdOpen.Name = "cmdOpen";
             this.cmdOpen.Size = new System.Drawing.Size(75, 36);
             this.cmdOpen.TabIndex = 0;

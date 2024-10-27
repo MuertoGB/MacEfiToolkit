@@ -103,7 +103,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
                 return _utf8.GetString(stringData);
             }
 
-            return AppStrings.AS_UNKNOWN;
+            return AppStrings.S_UNKNOWN;
         }
         #endregion
 
