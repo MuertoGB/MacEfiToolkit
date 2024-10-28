@@ -8,7 +8,6 @@
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
-using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;

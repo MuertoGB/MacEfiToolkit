@@ -39,7 +39,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "241027.2345";
+        internal const string Build = "241028.0055";
         internal const string Channel = "DEV";
     }
 
@@ -157,6 +157,9 @@ namespace Mac_EFI_Toolkit
             // Register low level keyboard hook that disables Win+Up.
             KeyboardHookManager.Hook();
 
+            // Ensure program directories exist.
+            EnsureDirectoriesExist();
+
             // Create main window instance.
             MAIN_WINDOW = new startupWindow();
 
@@ -171,6 +174,37 @@ namespace Mac_EFI_Toolkit
 
             return string.Empty;
         }
+
+        internal static void EnsureDirectoriesExist()
+        {
+            CreateDirectoryIfNotExists(METPath.BackupsDirectory);
+            CreateDirectoryIfNotExists(METPath.BuildsDirectory);
+            CreateDirectoryIfNotExists(METPath.FsysDirectory);
+            CreateDirectoryIfNotExists(METPath.MeDirectory);
+            CreateDirectoryIfNotExists(METPath.ScfgDirectory);
+        }
+
+        private static void CreateDirectoryIfNotExists(string directoryPath)
+        {
+            try
+            {
+                if (!Directory.Exists(directoryPath))
+                    Directory.CreateDirectory(directoryPath);
+            }
+            catch (UnauthorizedAccessException ex) // Permission error
+            {
+                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}'. Access is denied. Exception: {ex.Message}");
+            }
+            catch (IOException ex) // IO error
+            {
+                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}' due to an I/O error. Exception: {ex.Message}");
+            }
+            catch (Exception ex) // Misc error
+            {
+                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}'. Exception: {ex.Message}");
+            }
+        }
+
         #endregion
 
         #region OnExit

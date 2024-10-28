@@ -422,24 +422,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            // Check the Fsys stores directory exists.
-            if (!Directory.Exists(METPath.FsysDirectory))
-            {
-                // Create the Fsys stores directory.
-                Status status =
-                    FileUtils.CreateDirectory(
-                        METPath.FsysDirectory);
-
-                // Directory creation failed.
-                if (status == Status.FAILED)
-                {
-                    METMessageBox.Show(
-                        this,
-                        DialogStrings.S_FSYS_DIR_FAIL,
-                        METMessageBoxType.Error,
-                        METMessageBoxButtons.Okay);
-                }
-            }
+            Program.EnsureDirectoriesExist();
 
             using (SaveFileDialog dialog = new SaveFileDialog
             {
@@ -486,24 +469,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            // Check the Fsys stores directory exists.
-            if (!Directory.Exists(METPath.MeDirectory))
-            {
-                // Create the Fsys stores directory.
-                Status status =
-                    FileUtils.CreateDirectory(
-                        METPath.MeDirectory);
-
-                // Directory creation failed.
-                if (status == Status.FAILED)
-                {
-                    METMessageBox.Show(
-                        this,
-                        DialogStrings.S_ME_DIR_FAIL,
-                        METMessageBoxType.Error,
-                        METMessageBoxButtons.Okay);
-                }
-            }
+            Program.EnsureDirectoriesExist();
 
             // Set SaveFileDialog params.
             using (SaveFileDialog dialog = new SaveFileDialog
@@ -555,9 +521,7 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            if (!Directory.Exists(METPath.BackupsDirectory))
-                Directory.CreateDirectory(
-                    METPath.BackupsDirectory);
+            Program.EnsureDirectoriesExist();
 
             using (SaveFileDialog dialog = new SaveFileDialog
             {
@@ -734,9 +698,6 @@ namespace Mac_EFI_Toolkit
 
                 if (!ValidateCrc(fsysStore, ref newFsysStore))
                     return;
-
-                Logger.WriteToAppLog(
-                    LogStrings.S_CS_MASK_SUCCESS);
 
                 byte[] newImage =
                     EFIROM.LoadedBinaryBytes;
@@ -1691,7 +1652,7 @@ namespace Mac_EFI_Toolkit
 
             // Load the firmware base in a separate thread.
             _tLoadFirmware = new Thread(() => LoadFirmwareBase(filePath, _cancellationToken.Token))
-            { 
+            {
                 IsBackground = true
             };
 
@@ -1954,6 +1915,10 @@ namespace Mac_EFI_Toolkit
                     return false;
                 }
             }
+
+            Logger.WriteToAppLog(
+                LogStrings.S_CS_MASK_SUCCESS);
+
             return true;
         }
 
@@ -1984,6 +1949,8 @@ namespace Mac_EFI_Toolkit
 
         private SaveFileDialog CreateSaveFileDialog()
         {
+            Program.EnsureDirectoriesExist();
+
             return new SaveFileDialog
             {
                 Filter = AppStrings.S_BIN_FILTER,

@@ -361,74 +361,38 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Folders Context Menu Events
         private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(METPath.BackupsDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.BackupsDirectory);
+            Program.EnsureDirectoriesExist();
 
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.S_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
+            Process.Start(
+                "explorer.exe",
+                METPath.BackupsDirectory);
         }
 
         private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(METPath.BuildsDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.BuildsDirectory);
+            Program.EnsureDirectoriesExist();
 
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.S_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
+            Process.Start(
+                "explorer.exe",
+                METPath.BuildsDirectory);
         }
 
         private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(METPath.FsysDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.FsysDirectory);
+            Program.EnsureDirectoriesExist();
 
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.S_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
+            Process.Start(
+                "explorer.exe",
+                METPath.FsysDirectory);
         }
 
         private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(METPath.MeDirectory))
-            {
-                Process.Start(
-                    "explorer.exe",
-                    METPath.MeDirectory);
+            Program.EnsureDirectoriesExist();
 
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.S_DIR_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
+            Process.Start(
+                 "explorer.exe",
+                 METPath.MeDirectory);
         }
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>

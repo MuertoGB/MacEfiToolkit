@@ -152,24 +152,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 return;
             }
 
-            // Check the Scfg stores directory exists.
-            if (!Directory.Exists(METPath.ScfgDirectory))
-            {
-                // Create the Scfg stores directory.
-                Status status =
-                    FileUtils.CreateDirectory(
-                        METPath.ScfgDirectory);
-
-                // Directory creation failed.
-                if (status == Status.FAILED)
-                {
-                    METMessageBox.Show(
-                        this,
-                        DialogStrings.S_SCFG_DIR_FAIL,
-                        METMessageBoxType.Error,
-                        METMessageBoxButtons.Okay);
-                }
-            }
+            Program.EnsureDirectoriesExist();
 
             using (SaveFileDialog dialog = new SaveFileDialog
             {

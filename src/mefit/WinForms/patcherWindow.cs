@@ -148,16 +148,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdBuildsFolder_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(METPath.BuildsDirectory))
-            {
-                METMessageBox.Show(
-                    this,
-                    "The builds directory has not been created yet.",
-                    METMessageBoxType.Information,
-                    METMessageBoxButtons.Okay);
-
-                return;
-            }
+            Program.EnsureDirectoriesExist();
 
             Process.Start(
                 "explorer.exe",
