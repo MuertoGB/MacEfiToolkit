@@ -4,7 +4,6 @@
 // MacUtils.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Firmware.EFI;
 using System;
 using System.Collections.Generic;
@@ -141,6 +140,67 @@ namespace Mac_EFI_Toolkit.Utils
                 return true;
 
             return false;
+        }
+
+        // Prototype Serial Validation
+        internal static bool IsValidAppleSerial(string serialNumber)
+        {
+            // Step 1: Check for valid length (11 or 12 characters)
+            if (serialNumber.Length != 11 && serialNumber.Length != 12)
+                return false;
+
+            // Step 2: Validate factory code, year and week code
+            return IsValidFactoryCode(serialNumber.Substring(0, 2)) &&
+                   IsValidCode(serialNumber.Substring(2, 1), yearAndWeekCodes) &&
+                   IsValidCode(serialNumber.Substring(3, 1), yearAndWeekCodes);
+        }
+
+        static bool IsValidFactoryCode(string factoryCode)
+        {
+            // Most comprehensive known Apple factory codes
+            HashSet<string> factoryCodes = new HashSet<string>
+            {
+                "16", "17", "1B", "1C", "1E", "1G", "1L", "1M", "1O", "1P",
+                "1X", "2A", "2C", "2D", "2O", "2Z", "32", "3B", "3K", "41",
+                "44", "4H", "4J", "4R", "4X", "5K", "5P", "5U", "6C", "6F",
+                "6U", "7J", "7K", "7L", "7T", "8B", "8H", "8K", "8L", "9C",
+                "9E", "9G", "AH", "AK", "AL", "AM", "AP", "B0", "B3", "B4",
+                "BP", "BX", "BY", "C0", "C1", "C2", "C3", "C4", "C5", "C6",
+                "C7", "C8", "C9", "CA", "CC", "CD", "CE", "CF", "CK", "CN",
+                "CQ", "CS", "CX", "CY", "D0", "D1", "D2", "D3", "D8", "DC",
+                "DG", "DK", "DL", "DM", "DN", "DQ", "DT", "DV", "DX", "DY",
+                "DZ", "EC", "EE", "EQ", "EW", "F1", "F2", "F3", "F4", "F5",
+                "F6", "F7", "F9", "FC", "FF", "FG", "FH", "FK", "FM", "FS",
+                "FV", "FY", "G2", "G6", "G8", "G9", "GA", "GB", "GJ", "GV",
+                "GY", "H0", "H1", "H2", "H3", "H4", "H6", "H8", "HC", "HG",
+                "HQ", "HS", "HT", "HX", "HY", "IB", "IH", "IJ", "IV", "IX",
+                "IZ", "J5", "JE", "JN", "JQ", "JY", "KA", "KH", "KY", "KZ",
+                "L0", "L1", "L4", "LA", "LI", "LR", "LS", "LT", "LW", "M0",
+                "M1", "M2", "M5", "M6", "M7", "MA", "MB", "MF", "MI", "MJ",
+                "MK", "ML", "MN", "MQ", "MV", "MW", "N1", "N5", "NC", "NH",
+                "NK", "NL", "NN", "P1", "PA", "PG", "PH", "PJ", "PK", "PT",
+                "PW", "Q0", "Q5", "QE", "QF", "QP", "QT", "R8", "RM", "RN",
+                "RR", "RU", "S1", "S2", "S4", "SA", "SF", "SG", "SI", "SO",
+                "SQ", "SR", "SS", "T1", "TF", "TG", "TJ", "TL", "TM", "TN",
+                "TS", "TY", "U2", "UC", "UM", "UV", "V2", "V4", "V5", "V6",
+                "V7", "VA", "VM", "W0", "W8", "W9", "WC", "WD", "WI", "WL",
+                "WQ", "WR", "WV", "XA", "XB", "XC", "Y5", "Y9", "YD", "YH",
+                "YM", "YW", "ZC", "ZH", "ZU", "ZX", "ZZ"
+            };
+
+            return factoryCodes.Contains(factoryCode);
+        }
+
+        static HashSet<string> yearAndWeekCodes = new HashSet<string>
+        {
+            "1", "2", "3", "4", "5", "6", "7", "8",
+            "9", "C", "D", "F", "G", "H", "J", "K",
+            "L", "M", "N", "P", "Q", "R", "S", "T"
+        };
+
+        static bool IsValidCode(string code, HashSet<string> knownCodes)
+        {
+            return knownCodes.Contains(code);
         }
 
         /// <summary>

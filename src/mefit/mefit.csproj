@@ -190,6 +190,12 @@
     <Compile Include="WinForms\settingsWindow.Designer.cs">
       <DependentUpon>settingsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinForms\ssnWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\ssnWindow.Designer.cs">
+      <DependentUpon>ssnWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="WinForms\startupWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -236,6 +242,9 @@
     </Compile>
     <EmbeddedResource Include="WinForms\settingsWindow.resx">
       <DependentUpon>settingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\ssnWindow.resx">
+      <DependentUpon>ssnWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\startupWindow.resx">
       <DependentUpon>startupWindow.cs</DependentUpon>

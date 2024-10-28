@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit
         internal static void WriteExceptionToAppLog(Exception e)
         {
             WriteToAppLog(
-                $"{e.GetType().Name}:- {e.Message}\r\n\r\n{e}\r\n\r\n -------------------");
+                $"{e.GetType().Name}:- {e.Message}\r\n{e}\r\n");
         }
 
         internal static void ViewLogFile()

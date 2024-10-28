@@ -25,7 +25,6 @@ namespace Mac_EFI_Toolkit
 {
     public partial class efiWindow : Form
     {
-
         #region Private Members
         private string _strInitialDirectory = METPath.WorkingDirectory;
         private Thread _tLoadFirmware = null;
@@ -1914,10 +1913,12 @@ namespace Mac_EFI_Toolkit
                     NotifyPatchingFailure();
                     return false;
                 }
+                else
+                {
+                    Logger.WriteToAppLog(
+                        LogStrings.S_CS_MASK_SUCCESS);
+                }
             }
-
-            Logger.WriteToAppLog(
-                LogStrings.S_CS_MASK_SUCCESS);
 
             return true;
         }
@@ -2004,5 +2005,21 @@ namespace Mac_EFI_Toolkit
         }
 
         #endregion
+
+        private void changeSerialNumberToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UITools.SetHalfOpacity(this);
+
+            using (ssnWindow child = new ssnWindow())
+            {
+                child.FormClosed += ChildWindowClosed;
+                child.ShowDialog();
+
+                if (child.DialogResult == DialogResult.Yes)
+                {
+
+                }
+            }
+        }
     }
 }
