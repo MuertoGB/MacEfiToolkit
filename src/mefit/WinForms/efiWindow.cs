@@ -967,22 +967,22 @@ namespace Mac_EFI_Toolkit
         #region Options Toolstrip Events
         private void automaticFilenameGenerationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string model =
+            string efiModel =
                 EFIROM.EfiBiosIdSectionData.ModelPart
                 ?? EfiWinStrings.S_NOMODEL;
 
-            string serial =
+            string systemSerial =
                 EFIROM.FsysStoreData.Serial
                 ?? EfiWinStrings.S_NOSERIAL;
 
-            if (MacUtils.IsBannedSerial(serial))
-                serial = EfiWinStrings.S_NOSERIAL;
+            if (MacUtils.IsValidAppleSerial(systemSerial))
+                systemSerial = EfiWinStrings.S_NOSERIAL;
 
             string efiversion =
                 EFIROM.FirmwareVersion
                 ?? EfiWinStrings.S_NOFWVER;
 
-            SetClipboardText($"{model}_{serial}_{efiversion}");
+            SetClipboardText($"{efiModel}_{systemSerial}_{efiversion}");
         }
 
         private void viewRomInformationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1488,7 +1488,7 @@ namespace Mac_EFI_Toolkit
 
                 lookupSerialNumberOnEveryMacToolStripMenuItem.Enabled =
                     !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial)
-                    && !MacUtils.IsBannedSerial(EFIROM.FsysStoreData.Serial);
+                    && !MacUtils.IsValidAppleSerial(EFIROM.FsysStoreData.Serial);
             }
 
             tlpFilename.Enabled = enable;

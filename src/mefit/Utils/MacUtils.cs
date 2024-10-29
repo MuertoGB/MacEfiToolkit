@@ -316,7 +316,6 @@ namespace Mac_EFI_Toolkit.Utils
         // These hashsets were built on information from:
         // https://forums.macrumors.com/threads/decoding-apple-serials-where-when-hardware-was-assembled-1983-2021-and-apple-model-numbers-1977-present.2310423/
         // All credit for the hashsets goes to the author (B S Magnet)
-
         private static readonly HashSet<string> factoryCodes = new HashSet<string>
         {
             "16", "17", "1B", "1C", "1E", "1G", "1L", "1M", "1O", "1P", "1X", "2A", "2C", "2D", "2O", "2Z",
@@ -364,37 +363,5 @@ namespace Mac_EFI_Toolkit.Utils
         };
         #endregion
 
-        // This is soon to die a horrible death.
-        public static bool IsBannedSerial(string serial)
-        {
-            List<string> ignoredSerials = new List<string>
-            {
-                "serialnumbe",
-                "serialnumber",
-                "serial-numbe",
-                "serial-number",
-                "modelnumbe",
-                "modelnumber",
-                "model-numbe",
-                "model-number",
-                "12345678901",
-                "123456789012",
-                "abcdefghilj",
-                "abcdefghiljk"
-            };
-
-            if (!IsValidSerialChars(serial))
-                return true;
-
-            if (ignoredSerials.Any(
-                ignoredSerial => serial.IndexOf(
-                    ignoredSerial, StringComparison.OrdinalIgnoreCase) >= 0))
-                return true;
-
-            if (serial.All(c => c == serial[0]))
-                return true;
-
-            return false;
-        }
     }
 }

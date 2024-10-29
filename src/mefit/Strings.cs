@@ -274,7 +274,7 @@
             "NOMODEL";
 
         internal const string S_NOSERIAL =
-            "NOSERIAL";
+            "SERIALNUMBER";
 
         internal const string S_NOFWVER =
             "NOFWVER";
