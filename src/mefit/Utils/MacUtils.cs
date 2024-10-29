@@ -284,6 +284,10 @@ namespace Mac_EFI_Toolkit.Utils
             if (!IsValidCode(serialNumber.Substring(0, 2), factoryCodes))
                 return false;
 
+            // Validate accepted chars
+            if (!IsValidSerialChars(serialNumber))
+                return false;
+
             // Determine and validate the year and week codes based on serial length
             return serialNumber.Length == 11
                 ? IsValid11CharSerial(serialNumber)
