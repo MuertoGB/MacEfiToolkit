@@ -61,14 +61,14 @@
             // 
             this.lblWindowTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWindowTitle.ForeColor = System.Drawing.Color.White;
             this.lblWindowTitle.Location = new System.Drawing.Point(0, 0);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
             this.lblWindowTitle.Size = new System.Drawing.Size(308, 32);
             this.lblWindowTitle.TabIndex = 0;
-            this.lblWindowTitle.Text = "Enter new serial number (SSN)";
+            this.lblWindowTitle.Text = "Enter new Serial Number";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tbSsn

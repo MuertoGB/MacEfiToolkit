@@ -423,17 +423,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (File.Exists(METPath.ApplicationLog))
-            {
-                Logger.ViewLogFile();
-                return;
-            }
-
-            METMessageBox.Show(
-                this,
-                DialogStrings.S_LOG_NOT_CREATED,
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
+            Logger.ViewLogFile(this);
         }
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)

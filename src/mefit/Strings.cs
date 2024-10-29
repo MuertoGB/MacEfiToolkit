@@ -90,7 +90,7 @@
             "Checksum masking successful";
 
         internal const string S_FSYS_W_SUCCESS =
-            "Fsys store write successful";
+            "Fsys store written successfully";
 
         internal const string S_ERR_LOADING_FSYS =
             "Error loading Fsys store:";
@@ -136,6 +136,18 @@
 
         internal const string S_SSN_BASE_NOT_FOUND =
             "Serial number base address was not found.";
+
+        internal const string S_SSN_NOT_WRITTEN =
+            "New serial could not be written.";
+
+        internal const string S_HWC_NOT_WRITTEN =
+            "New hardware configuration (HWC) could not be written.";
+
+        internal const string S_CRC_MASK_FAIL =
+            "Fsys CRC32 checksum masking failed.";
+
+        internal const string S_SSN_W_SUCCESS =
+            "Serial number written successfully.";
         #endregion
     }
 
@@ -208,11 +220,11 @@
         internal const string S_ME_EXPORT_SUCCESS =
             "Intel ME export successful.";
 
-        internal const string S_DIR_NOT_CREATED =
-            "The directory has not been created yet.";
+        internal const string S_DIR_NOT_EXIST =
+            "The directory does not exist.";
 
-        internal const string S_LOG_NOT_CREATED =
-            "The log file has not been created yet.";
+        internal const string S_LOG_NOT_EXIST =
+            "The log file does not exist.";
 
         internal const string S_LOG_CREATION_SUCCESS =
             "Log file created successfully.";

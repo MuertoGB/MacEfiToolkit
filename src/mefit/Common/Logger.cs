@@ -4,6 +4,7 @@
 // Logger.cs - Handles logging of data and text
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -44,19 +45,26 @@ namespace Mac_EFI_Toolkit
                 $"{e.GetType().Name}:- {e.Message}\r\n{e}\r\n");
         }
 
-        internal static void ViewLogFile()
+        internal static void ViewLogFile(Form owner)
         {
-            if (File.Exists(METPath.ApplicationLog))
+            var logPath = METPath.ApplicationLog;
+
+            if (!File.Exists(logPath))
             {
-                Process.Start(METPath.ApplicationLog);
+                ShowLogFileNotFoundError(owner);
                 return;
             }
 
-            MessageBox.Show(
-                "The application log has not been created.",
-                "Error",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+            Process.Start(logPath);
+        }
+
+        private static void ShowLogFileNotFoundError(Form owner)
+        {
+            METMessageBox.Show(
+                owner,
+                DialogStrings.S_LOG_NOT_EXIST,
+                METMessageBoxType.Error,
+                METMessageBoxButtons.Okay);
         }
 
         internal static void WriteLogTextToRtb(string messageString, RtbLogPrefix logPrefix, RichTextBox richTextBox)
