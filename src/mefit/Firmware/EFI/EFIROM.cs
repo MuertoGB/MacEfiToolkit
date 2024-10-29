@@ -5,7 +5,6 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.Utils.Structs;
 using System;
@@ -214,24 +213,43 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
+            // Updated 28.10.24
+            // We don't care about IFD, this is handled when needed.
+            // We need to check for the DXE core, or valids Apple GUIDs.
             int dxeCore =
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
-                    Guids.DXE_CORE,
+                    Guids.DXE_CORE_GUID,
                     16,
                     16);
 
-            if (!IFD.IsDescriptorMode)
-                if (dxeCore == -1)
+            // Check for the DXE core
+            if (dxeCore == -1)
+            {
+                // Check for valid GUIDs
+                if (!IsAppleFirmware(sourceBytes))
                     return false;
-
-            AppleRomInformationSection romSectionData =
-                GetRomInformationData(sourceBytes);
-
-            if (!romSectionData.SectionExists)
-                return false;
+            }
 
             return true;
+        }
+
+        internal static bool IsAppleFirmware(byte[] sourceBytes)
+        {
+            var appleGuids = new[]
+            {
+                Guids.APPLE_IMMUTABLE_FV_GUID,
+                Guids.APPLE_AUTH_FV_GUID,
+                Guids.APPLE_IMC_GUID
+            };
+
+            // Check if any of the Apple GUIDs are found within the BIOS region
+            return appleGuids.Any(guid =>
+                BinaryUtils.GetBaseAddress(
+                    sourceBytes,
+                    guid,
+                    (int)IFD.BIOS_REGION_BASE,
+                    (int)IFD.BIOS_REGION_SIZE) != -1);
         }
         #endregion 
 

@@ -68,7 +68,7 @@
             this.lblWindowTitle.Name = "lblWindowTitle";
             this.lblWindowTitle.Size = new System.Drawing.Size(308, 32);
             this.lblWindowTitle.TabIndex = 0;
-            this.lblWindowTitle.Text = "Enter new System Serial Number";
+            this.lblWindowTitle.Text = "Enter new serial number (SSN)";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tbSsn

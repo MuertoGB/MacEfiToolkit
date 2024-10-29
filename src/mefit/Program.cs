@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WinForms;
 using System;
 using System.ComponentModel;
@@ -39,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "241028.0410";
+        internal const string Build = "241020.0025";
         internal const string Channel = "DEV";
     }
 
@@ -92,117 +93,58 @@ namespace Mac_EFI_Toolkit
         [STAThread]
         static void Main(string[] args)
         {
-            // Register exception handler events early.
-            Application.SetUnhandledExceptionMode(
-                UnhandledExceptionMode.CatchException);
+            // Check if the OS is supported (Windows 7 or later is required)
+            if (!IsSupportedOS())
+                return;
 
+            // Register application-wide exception handlers
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+
+            // Catch exceptions on the main thread
             Application.ThreadException +=
                 new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
 
+            // Catch exceptions from non-UI threads
             AppDomain.CurrentDomain.UnhandledException +=
                 new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
-            // Register application exit event.
+            // Register application exit handler
             Application.ApplicationExit += OnExiting;
 
-            // Set Web Security Protocol.
-            ServicePointManager.SecurityProtocol =
-                (SecurityProtocolType)3072;
+            // Set the security protocol to TLS 1.2
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
-            // Default framework stuff.
+            // Standard winforms setup
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Load fonts into memory.
-            byte[] fontData = Properties.Resources.segmdl2;
+            // Load custom fonts into memory
+            if (!TryLoadCustomFont(Properties.Resources.segmdl2, out Font[] fonts))
+                return;
 
-            if (fontData != null)
-            {
-                FONT_MDL2_REG_9 =
-                    new Font(
-                        FontResolver.LoadFontFromResource(fontData),
-                        9.0F,
-                        FontStyle.Regular);
-                FONT_MDL2_REG_10 =
-                    new Font(
-                        FontResolver.LoadFontFromResource(fontData),
-                        10.0F,
-                        FontStyle.Regular);
-                FONT_MDL2_REG_12 =
-                    new Font(
-                        FontResolver.LoadFontFromResource(fontData),
-                        12.0F,
-                        FontStyle.Regular);
-                FONT_MDL2_REG_20 =
-                    new Font(
-                        FontResolver.LoadFontFromResource(fontData),
-                        20.0F,
-                        FontStyle.Regular);
-            }
-            else
-            {
-                MessageBox.Show(
-                    "Segoe MDL2 Assets font failed to load, see ./mefit.log for more details.",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            // Assign loaded fonts to corresponding variables
+            FONT_MDL2_REG_9 = fonts[0];
+            FONT_MDL2_REG_10 = fonts[1];
+            FONT_MDL2_REG_12 = fonts[2];
+            FONT_MDL2_REG_20 = fonts[3];
 
-            // Initialize settings.
+            // Initialize application settings
             Settings.Initialize();
 
-            // Get dragged filepath.
+            // Retrieve a file path from command-line
             draggedFilePath = GetDraggedFilePath(args);
 
-            // Register low level keyboard hook that disables Win+Up.
+            // Register a low-level keyboard hook to disable Win+Up
             KeyboardHookManager.Hook();
 
-            // Ensure program directories exist.
+            // Ensure that required application directories exist; create them if they don't
             EnsureDirectoriesExist();
 
-            // Create main window instance.
+            // Create the main window instance
             MAIN_WINDOW = new startupWindow();
 
-            // Run mWindow instance.
+            // Start the application message loop
             Application.Run(MAIN_WINDOW);
-        }
-
-        private static string GetDraggedFilePath(string[] args)
-        {
-            if (args.Length > 0 && File.Exists(args[0]))
-                return args[0];
-
-            return string.Empty;
-        }
-
-        internal static void EnsureDirectoriesExist()
-        {
-            CreateDirectoryIfNotExists(METPath.BackupsDirectory);
-            CreateDirectoryIfNotExists(METPath.BuildsDirectory);
-            CreateDirectoryIfNotExists(METPath.FsysDirectory);
-            CreateDirectoryIfNotExists(METPath.MeDirectory);
-            CreateDirectoryIfNotExists(METPath.ScfgDirectory);
-        }
-
-        private static void CreateDirectoryIfNotExists(string directoryPath)
-        {
-            try
-            {
-                if (!Directory.Exists(directoryPath))
-                    Directory.CreateDirectory(directoryPath);
-            }
-            catch (UnauthorizedAccessException ex) // Permission error
-            {
-                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}'. Access is denied. Exception: {ex.Message}");
-            }
-            catch (IOException ex) // IO error
-            {
-                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}' due to an I/O error. Exception: {ex.Message}");
-            }
-            catch (Exception ex) // Misc error
-            {
-                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}'. Exception: {ex.Message}");
-            }
         }
 
         #endregion
@@ -350,6 +292,93 @@ namespace Mac_EFI_Toolkit
         }
 
         internal static void Exit() => Application.Exit();
+        #endregion
+
+        #region Functions
+        private static string GetDraggedFilePath(string[] args)
+        {
+            if (args.Length > 0 && File.Exists(args[0]))
+                return args[0];
+
+            return string.Empty;
+        }
+
+        internal static void EnsureDirectoriesExist()
+        {
+            CreateDirectoryIfNotExists(METPath.BackupsDirectory);
+            CreateDirectoryIfNotExists(METPath.BuildsDirectory);
+            CreateDirectoryIfNotExists(METPath.FsysDirectory);
+            CreateDirectoryIfNotExists(METPath.MeDirectory);
+            CreateDirectoryIfNotExists(METPath.ScfgDirectory);
+        }
+
+        private static void CreateDirectoryIfNotExists(string directoryPath)
+        {
+            try
+            {
+                if (!Directory.Exists(directoryPath))
+                    Directory.CreateDirectory(directoryPath);
+            }
+            catch (UnauthorizedAccessException ex) // Permission error
+            {
+                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}'. Access is denied. Exception: {ex.Message}");
+            }
+            catch (IOException ex) // IO error
+            {
+                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}' due to an I/O error. Exception: {ex.Message}");
+            }
+            catch (Exception ex) // Misc error
+            {
+                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}'. Exception: {ex.Message}");
+            }
+        }
+
+        private static bool IsSupportedOS()
+        {
+            FileVersionInfo version =
+                OSUtils.GetKernelVersion;
+
+            // Check for Windows 7 (6.1) or later (Windows 8, 8.1, 10, and 11)
+            if (version.ProductMajorPart > 6 || (version.ProductMajorPart == 6 && version.ProductMinorPart >= 1))
+                return true;
+
+            MessageBox.Show("This application requires Windows 7 or later to run.",
+                            "Unsupported OS", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
+        private static bool TryLoadCustomFont(byte[] fontData, out Font[] fonts)
+        {
+            fonts = null;
+
+            if (fontData == null)
+                return false;
+
+            try
+            {
+                var loadedFont =
+                    FontResolver.LoadFontFromResource(fontData);
+
+                fonts = new[]
+                {
+                    new Font(loadedFont, 9.0F, FontStyle.Regular),
+                    new Font(loadedFont, 10.0F, FontStyle.Regular),
+                    new Font(loadedFont, 12.0F, FontStyle.Regular),
+                    new Font(loadedFont, 20.0F, FontStyle.Regular)
+                };
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                Logger.WriteToAppLog($"{nameof(TryLoadCustomFont)} failed: {ex.Message}");
+
+                // Display an error message to the user
+                MessageBox.Show("Segoe MDL2 Assets font failed to load. See the log for more details.",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
         #endregion
 
     }

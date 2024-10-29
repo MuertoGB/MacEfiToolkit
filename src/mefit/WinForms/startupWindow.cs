@@ -491,11 +491,11 @@ namespace Mac_EFI_Toolkit.WinForms
                 METMessageBoxButtons.Okay);
         }
 
-        private Form GetChildFormForImage(byte[] fileBytes)
+        private Form GetChildFormForImage(byte[] sourceBytes)
         {
-            if (EFIROM.IsValidImage(fileBytes))
+            if (EFIROM.IsValidImage(sourceBytes))
                 return new efiWindow();
-            else if (T2ROM.IsValidImage(fileBytes))
+            else if (T2ROM.IsValidImage(sourceBytes))
                 return new t2Window();
 
             return null;

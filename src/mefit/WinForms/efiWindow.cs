@@ -1222,6 +1222,10 @@ namespace Mac_EFI_Toolkit
 
             if (!string.IsNullOrEmpty(serialNumber))
             {
+                // Prototype in testing
+                if (!MacUtils.IsValidAppleSerial(serialNumber))
+                    lblSerialNumber.ForeColor = AppColours.ERROR;
+
                 lblSerialNumber.Text +=
                     (serialNumber.Length == 11 || serialNumber.Length == 12)
                     ? $" ({serialNumber.Length})"
@@ -1744,11 +1748,14 @@ namespace Mac_EFI_Toolkit
 
             Clipboard.SetText(text);
 
-            METMessageBox.Show(
-                this,
-                $"'{text}' {EfiWinStrings.S_COPIED_TO_CB}",
-                METMessageBoxType.Information,
-                METMessageBoxButtons.Okay);
+            if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            {
+                METMessageBox.Show(
+                    this,
+                    $"'{text}' {EfiWinStrings.S_COPIED_TO_CB}",
+                    METMessageBoxType.Information,
+                    METMessageBoxButtons.Okay);
+            }
         }
 
         private void ClipboardSetFilename(bool showExtension) => SetClipboardText(

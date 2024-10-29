@@ -36,6 +36,7 @@
 - Enabled the 'Make New Folder' button when changing settings default directories.
 - Removed unnecessary confirmation dialogs from certain windows.
 - Modified EFI Window shortcut keys.
+- The EFI Window will no longer display a 'copied to clipboard' message when 'Disable Confirmation Dialogs' is enabled in the settings.
 
 #### Bugs:
 - Added missing icon to the ROM Information window.
@@ -43,6 +44,7 @@
 #### Misc:
 - Changed how some settings are structured
   - Users will need to reselect the 'EFI Window Default Directory' in settings.
+- Support for Windows Vista and earlier operating systems has been discontinued. Consequently, the application will no longer launch on unsupported operating systems.
 - Removed the ability to single click labels in the EFI window to copy data, and reset their cursors to default.
 - Removed private memory usage from the EFI window.
 - Removed NSS store details from the EFI Window.
