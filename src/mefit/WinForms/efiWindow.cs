@@ -1487,8 +1487,8 @@ namespace Mac_EFI_Toolkit
                     EFIROM.AppleRomInfoSectionData.SectionExists;
 
                 lookupSerialNumberOnEveryMacToolStripMenuItem.Enabled =
-                    !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial)
-                    && !MacUtils.IsValidAppleSerial(EFIROM.FsysStoreData.Serial);
+                    !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial) &&
+                    MacUtils.IsValidAppleSerial(EFIROM.FsysStoreData.Serial);
             }
 
             tlpFilename.Enabled = enable;
