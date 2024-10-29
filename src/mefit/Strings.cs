@@ -130,6 +130,12 @@
 
         internal const string S_SAVE_SUCCESS =
             "File saved successully:";
+
+        internal const string S_REPLACE_SSN =
+            "Replace system serial number.";
+
+        internal const string S_SSN_BASE_NOT_FOUND =
+            "Serial number base address was not found.";
         #endregion
     }
 

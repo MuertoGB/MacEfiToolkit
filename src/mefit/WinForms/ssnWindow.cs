@@ -21,7 +21,15 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
+            Load += ssnWindow_Load;
             KeyDown += ssnWindow_KeyDown;
+        }
+        #endregion
+
+        #region Window Events
+        private void ssnWindow_Load(object sender, EventArgs e)
+        {
+            tbSsn.MaxLength = EFIROM.FsysStoreData.Serial.Length;
         }
         #endregion
 

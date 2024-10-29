@@ -254,7 +254,26 @@ namespace Mac_EFI_Toolkit.Utils
                 "^[0-9A-Z]+$");
         }
 
-        // Prototype
+        // Serial Number Structure:
+        //
+        // 1. 11-Digit Serial Number Format (AABCCDDDEEE):
+        //    - AA   = Factory Code           (2 characters): Identifies the manufacturing facility. 
+        //                              Valid codes are stored in the 'factoryCodes' HashSet.
+        //    - B    = Year of Manufacture    (1 character): Represents the last digit of the year (0-9).
+        //    - CC   = Week of Manufacture    (2 characters): Represents the week number within the year (01-53).
+        //    - DDD  = Unique Device Identifier (3 characters): Typically, a unique identifier for the device model.
+        //    - EEE  = Hardware Configuration (3 characters): Denotes the hardware configuration or variant.
+        //
+        // 2. 12-Digit Serial Number Format (AABCDEEEFFFF):
+        //    - AA   = Factory Code           (2 characters): Identifies the manufacturing facility. 
+        //                              Valid codes are stored in the 'factoryCodes' HashSet.
+        //    - B    = Plant-Specific Code    (1 character): Represents a unique code specific to the plant or assembly line.
+        //    - C    = Year Code              (1 character): Denotes the manufacturing year using a broader set of codes. 
+        //                              Valid codes are stored in the 'yearAndWeekCodes12' HashSet.
+        //    - D    = Week Code              (1 character): Indicates the week of manufacture using a broader set of codes.
+        //                              Valid codes are stored in the 'yearAndWeekCodes12' HashSet.
+        //    - EEE  = Unique Device Identifier (3 characters): Typically, a unique identifier for the device model.
+        //    - FFFF = Hardware Configuration (4 characters): Represents the hardware configuration or variant.
         internal static bool IsValidAppleSerial(string serialNumber)
         {
             // Check for valid length (11 or 12 characters)

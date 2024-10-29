@@ -1458,8 +1458,12 @@ namespace Mac_EFI_Toolkit
                     && fsysBytesExist;
 
                 // Patch Menu
-                /// If there's no Fsys store, we cannot replace SN, or Fsys? Fsys-wise, we should look at injecting it into a new firmware in the NVRAM.
-                /// The issue is, I'm not currently sure how to determine whether Fsys sits at 20000h, or 22000h.
+                changeSerialNumberToolStripMenuItem.Enabled =
+                    EFIROM.FsysStoreData.FsysBase != -1 &&
+                    EFIROM.FsysStoreData.SerialBase != -1;
+
+                replaceFsysStoreToolStripMenuItem.Enabled =
+                    EFIROM.FsysStoreData.FsysBase != -1;
 
                 fixFsysChecksumCRC32ToolStripMenuItem.Enabled =
                     fsysCrcMismatch;
@@ -2022,11 +2026,110 @@ namespace Mac_EFI_Toolkit
                 child.FormClosed += ChildWindowClosed;
                 child.ShowDialog();
 
-                if (child.DialogResult == DialogResult.Yes)
+                if (child.DialogResult == DialogResult.OK)
                 {
-
+                    PatchSSN(EFIROM.NewSSN);
                 }
             }
         }
+
+        private void PatchSSN(string newSerial)
+        {
+            Logger.WriteToAppLog(
+                $"{LogStrings.S_PATCH_STARTED} " +
+                $"{LogStrings.S_REPLACE_SSN}");
+
+            // Check whether the serial base is present
+            if (EFIROM.FsysStoreData.SerialBase == -1)
+            {
+                Logger.WriteToAppLog(
+                    $"{LogStrings.S_PATCH_ENDED} " +
+                    $"{LogStrings.S_SSN_BASE_NOT_FOUND}");
+
+                return;
+            }
+
+            // Check if the HWC Base is present (if not don't write the new one)
+            bool isHwcBasePresent = EFIROM.FsysStoreData.HWCBase != -1;
+            string newHwc = null;
+
+            // Clone EFIROM.LoadedBinary
+            byte[] clonedBinary = EFIROM.LoadedBinaryBytes;
+
+            // Convert string to byte
+            byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
+
+            // Overwrite ssn in bin clone
+            BinaryUtils.OverwriteBytesAtBase(
+                clonedBinary,
+                EFIROM.FsysStoreData.SerialBase,
+                newSerialBytes);
+
+            // Check if we need to write hwc
+            if (isHwcBasePresent)
+            {
+                newHwc = EFIROM.FsysStoreData.Serial.Length == 11
+                    ? newSerial.Substring(8, 3)
+                    : newSerial.Substring(8, 4);
+
+                byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
+
+                // Write new hwc
+                BinaryUtils.OverwriteBytesAtBase(
+                    clonedBinary,
+                    EFIROM.FsysStoreData.HWCBase,
+                    newHwcBytes);
+            }
+
+            // Load patched fsys from cloned bin
+            FsysStore fsys =
+                EFIROM.GetFsysStoreData(
+                    clonedBinary,
+                    false);
+
+            // Check serial was written properly
+            if (!string.Equals(newSerial, fsys.Serial))
+            {
+                Logger.WriteToAppLog("Patching ended: New serial was not written.");
+
+                return;
+            }
+
+            // Check the hwc was written properly
+            if (fsys.HWCBase != 0)
+            {
+                if (!string.Equals(newHwc, fsys.HWC))
+                {
+                    Logger.WriteToAppLog("Patching ended: New HWC was not written.");
+
+                    return;
+                }
+            }
+
+            // Reuse clonedBinary to patch the fsys crc32
+            clonedBinary =
+                BinaryUtils.MakeFsysCrcPatchedBinary(
+                    clonedBinary,
+                    fsys.FsysBase,
+                    fsys.FsysBytes,
+                    fsys.CRC32CalcInt);
+
+            // Reuse fsys to reload store from the crc patched binary
+            fsys =
+                EFIROM.GetFsysStoreData(
+                    clonedBinary,
+                    false);
+
+            // Check fsys to determine whether the new crc was masked successfully
+            if (!string.Equals(fsys.CrcString, fsys.CrcCalcString))
+            {
+                Logger.WriteToAppLog("Patching ended: CRC32 masking failed.");
+
+                return;
+            }
+
+            // Now we can output the image
+        }
+
     }
 }
