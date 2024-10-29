@@ -106,8 +106,5 @@ namespace Mac_EFI_Toolkit.WIN32
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         internal static extern IntPtr GetModuleHandleA(
             string lpModuleName);
-
-        [DllImport("dwmapi.dll", EntryPoint = "DwmGetColorizationColor", SetLastError = true)]
-        public static extern int DwmGetColorizationColor(out uint color, out bool opaque);
     }
 }

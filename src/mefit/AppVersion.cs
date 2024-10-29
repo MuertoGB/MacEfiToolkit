@@ -14,7 +14,7 @@ using System.Xml;
 namespace Mac_EFI_Toolkit
 {
 
-    #region Enums
+    #region Enum
     public enum VersionResult
     {
         UpToDate,

@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "241029.2025";
+        internal const string Build = "241029.2215";
         internal const string Channel = "DEV";
     }
 
@@ -149,7 +149,7 @@ namespace Mac_EFI_Toolkit
 
         #endregion
 
-        #region OnExit
+        #region OnExiting
         private static void OnExiting(object sender, EventArgs e) =>
             HandleOnExitingCleanup();
 

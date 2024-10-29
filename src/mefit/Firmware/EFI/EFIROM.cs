@@ -1117,7 +1117,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             int lzmaDxeBaseAddress =
                 BinaryUtils.GetBaseAddress(
                     sourceBytes,
-                    Guids.LZMA_DXE_VOLUME_IMAGE_GUID,
+                    Guids.LZMA_DXE_VOLUME_IMAGE_1_GUID,
                     (int)IFD.BIOS_REGION_BASE,
                     (int)IFD.BIOS_REGION_LIMIT);
 
@@ -1125,7 +1125,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 lzmaDxeBaseAddress =
                     BinaryUtils.GetBaseAddress(
                         sourceBytes,
-                        Guids.LZMA_DXE_VOLUME_IMAGE_OLD_GUID,
+                        Guids.LZMA_DXE_VOLUME_IMAGE_0_GUID,
                         (int)IFD.BIOS_REGION_BASE,
                         (int)IFD.BIOS_REGION_LIMIT);
 

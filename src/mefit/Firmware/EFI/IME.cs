@@ -131,7 +131,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static readonly byte[] MN2_SIGNATURE =
         {
-            0x00, 0x00, 0x24, 0x4D, 0x4E, 0x32
+            0x00, 0x00, 0x24,
+            0x4D, 0x4E, 0x32
         };
     }
 }

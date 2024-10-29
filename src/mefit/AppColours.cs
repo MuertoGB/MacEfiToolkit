@@ -1,4 +1,10 @@
-﻿using System.Drawing;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// AppColours.cs
+// Released under the GNU GLP v3.0
+
+using System.Drawing;
 
 namespace Mac_EFI_Toolkit
 {

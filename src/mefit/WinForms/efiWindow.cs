@@ -884,9 +884,9 @@ namespace Mac_EFI_Toolkit
                 bool buildFailed = false;
 
                 // Clone the loaded binary.
-                byte[] patchedBinary = EFIROM.LoadedBinaryBytes;
+                byte[] binaryBuffer = EFIROM.LoadedBinaryBytes;
 
-                // Create empty stores
+                // Create store buffers.
                 byte[] unlockedPrimaryStore = null;
                 byte[] unlockedBackupStore = null;
 
@@ -896,9 +896,9 @@ namespace Mac_EFI_Toolkit
                         EFIROM.SvsStoreData.PrimaryStoreBytes,
                         EFIROM.EfiPrimaryLockData.LockCrcBase);
 
-                // Write patched primary store to the cloned binary.
+                // Write patched primary store the buffer
                 BinaryUtils.OverwriteBytesAtBase(
-                    patchedBinary,
+                    binaryBuffer,
                     EFIROM.SvsStoreData.PrimaryStoreBase,
                     unlockedPrimaryStore);
 
@@ -911,17 +911,17 @@ namespace Mac_EFI_Toolkit
                             EFIROM.SvsStoreData.BackupStoreBytes,
                             EFIROM.EfiBackupLockData.LockCrcBase);
 
-                    // Write patched backup store to the cloned binary.
+                    // Write patched backup store to the buffer.
                     BinaryUtils.OverwriteBytesAtBase(
-                        patchedBinary,
+                        binaryBuffer,
                         EFIROM.SvsStoreData.BackupStoreBase,
                         unlockedBackupStore);
                 }
 
-                // Load SVS NVRAM stores from the patched binary.
+                // Load SVS NVRAM stores from the buffer.
                 NvramStore svsStore =
                     EFIROM.GetNvramStoreData(
-                        patchedBinary,
+                        binaryBuffer,
                         NvramStoreType.SVS);
 
                 // Check patched primary store matches the patched buffer.
@@ -946,7 +946,7 @@ namespace Mac_EFI_Toolkit
                 }
 
                 // Check binary was written without error.
-                if (!FileUtils.WriteAllBytesEx(dialog.FileName, patchedBinary))
+                if (!FileUtils.WriteAllBytesEx(dialog.FileName, binaryBuffer))
                 {
                     Logger.WriteToAppLog(
                         $"{EfiWinStrings.S_LOG_FU_WRITEALL_RETURNED_FALSE}");
@@ -1064,15 +1064,7 @@ namespace Mac_EFI_Toolkit
             UpdateOrderNumberControls();
             UpdateEfiVersionControls();
 
-            UpdateNvramLabel(
-                lblVssStore,
-                EFIROM.VssStoreData,
-                EfiWinStrings.S_VSS);
-            UpdateNvramLabel(
-                lblSvsStore,
-                EFIROM.SvsStoreData,
-                EfiWinStrings.S_SVS);
-
+            UpdateNvramControls();
             UpdateEfiLockControls();
             UpdateBoardIdControls();
             UpdateApfsCapableControls();
@@ -1312,19 +1304,25 @@ namespace Mac_EFI_Toolkit
             efiVersionToolStripMenuItem.Enabled = false;
         }
 
-        private void UpdateNvramLabel(
-            Label nvramLabel, NvramStore storeData, string text)
+        private void UpdateNvramControls()
         {
-            nvramLabel.Text = text;
+            int vssBase =
+                EFIROM.VssStoreData.PrimaryStoreBase;
+            int svsBase =
+                EFIROM.SvsStoreData.PrimaryStoreBase;
 
-            Color foreColor =
-                storeData.PrimaryStoreBase == -1
-                ? AppColours.DISABLED_TEXT
-                : !storeData.IsPrimaryStoreEmpty || !storeData.IsBackupStoreEmpty
-                ? AppColours.WARNING
-                : AppColours.COMPLETE;
+            string stringVss =
+                (vssBase != -1) ?
+                $"VS: 0x{vssBase:X2}h" :
+                AppStrings.S_NA;
 
-            nvramLabel.ForeColor = foreColor;
+            string stringSvs =
+                (svsBase != -1) ?
+                $"SV: 0x{svsBase:X2}h" :
+                AppStrings.S_NA;
+
+            lblVssStore.Text = stringVss;
+            lblSvsStore.Text = stringSvs;
         }
 
         private void UpdateEfiLockControls()
@@ -1997,14 +1995,14 @@ namespace Mac_EFI_Toolkit
             string newHwc = null;
 
             // Clone EFIROM.LoadedBinary
-            byte[] clonedBinary = EFIROM.LoadedBinaryBytes;
+            byte[] binaryBuffer = EFIROM.LoadedBinaryBytes;
 
             // Convert string to byte
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(newSerial);
 
-            // Overwrite serial in cloned binary
+            // Overwrite serial in binary buffer
             BinaryUtils.OverwriteBytesAtBase(
-                clonedBinary,
+                binaryBuffer,
                 EFIROM.FsysStoreData.SerialBase,
                 newSerialBytes);
 
@@ -2020,15 +2018,15 @@ namespace Mac_EFI_Toolkit
 
                 // Write new hwc
                 BinaryUtils.OverwriteBytesAtBase(
-                    clonedBinary,
+                    binaryBuffer,
                     EFIROM.FsysStoreData.HWCBase,
                     newHwcBytes);
             }
 
-            // Load patched fsys from cloned binary
+            // Load patched fsys from binary buffer
             FsysStore fsys =
                 EFIROM.GetFsysStoreData(
-                    clonedBinary,
+                    binaryBuffer,
                     false);
 
             // Check serial was written properly
@@ -2056,18 +2054,18 @@ namespace Mac_EFI_Toolkit
                 }
             }
 
-            // Reuse clonedBinary to patch the fsys crc32
-            clonedBinary =
+            // Patch fsys checksum in the binary buffer
+            binaryBuffer =
                 BinaryUtils.MakeFsysCrcPatchedBinary(
-                    clonedBinary,
+                    binaryBuffer,
                     fsys.FsysBase,
                     fsys.FsysBytes,
                     fsys.CRC32CalcInt);
 
-            // Reuse fsys to reload store from the crc patched cloned binary
+            // Reload fsys store from the binary buffer
             fsys =
                 EFIROM.GetFsysStoreData(
-                    clonedBinary,
+                    binaryBuffer,
                     false);
 
             // Check fsys to determine whether the new crc was masked successfully
@@ -2085,7 +2083,7 @@ namespace Mac_EFI_Toolkit
                 $"{LogStrings.S_PATCH_ENDED} " +
                 $"{LogStrings.S_SSN_W_SUCCESS}");
 
-            SaveOutputFirmware(clonedBinary);
+            SaveOutputFirmware(binaryBuffer);
         }
 
         private SaveFileDialog CreateSaveFileDialog()

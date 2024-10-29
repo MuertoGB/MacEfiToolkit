@@ -37,6 +37,7 @@
 - Removed unnecessary confirmation dialogs from certain windows.
 - Modified EFI Window shortcut keys.
 - The EFI Window will no longer display a 'copied to clipboard' message when 'Disable Confirmation Dialogs' is enabled in the settings.
+- The EFI Window NVRAM data will now show base addresses of primary stores.
 
 #### Bugs:
 - Added missing icon to the ROM Information window.
