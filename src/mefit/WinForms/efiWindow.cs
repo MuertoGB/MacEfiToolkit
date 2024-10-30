@@ -11,6 +11,7 @@ using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using Mac_EFI_Toolkit.WinForms;
+using SevenZip.Buffer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -676,27 +677,24 @@ namespace Mac_EFI_Toolkit
 
         private void replaceFsysStoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            byte[] newFsysStore;
-
             Logger.WriteToAppLog(
-                $"{LogStrings.S_PATCH_STARTED} {LogStrings.S_REPLACE_FSYS}");
+                $"{LogStrings.S_PATCH_STARTED} " +
+                $"{LogStrings.S_FSYS_REPLACE}");
 
             using (OpenFileDialog openFileDialog = CreateFsysOpenFileDialog())
             {
                 if (openFileDialog.ShowDialog() != DialogResult.OK)
                 {
                     Logger.WriteToAppLog(
-                        $"{LogStrings.S_PATCH_ENDED} {LogStrings.S_FSYS_NOT_PROV}");
+                        $"{LogStrings.S_PATCH_ENDED} " +
+                        $"{LogStrings.S_FSYS_IMPORT_CANCELLED}");
 
                     return;
                 }
 
-                newFsysStore =
-                    LoadFsysStore(
+                byte[] newFsysStore =
+                    LoadFileBytes(
                         openFileDialog.FileName);
-
-                if (newFsysStore == null)
-                    return; // Error already logged
 
                 if (!ValidateFsysStore(newFsysStore))
                     return;
@@ -721,7 +719,7 @@ namespace Mac_EFI_Toolkit
                     return;
 
                 Logger.WriteToAppLog(
-                    LogStrings.S_FSYS_W_SUCCESS);
+                    LogStrings.S_FSYS_WRITE_SUCCESS);
 
                 // Prompt the user to save changes
                 DialogResult result =
@@ -738,7 +736,74 @@ namespace Mac_EFI_Toolkit
                 }
 
                 Logger.WriteToAppLog(
-                   $"{LogStrings.S_PATCH_ENDED} {LogStrings.S_EXPORT_CANCEL}");
+                   $"{LogStrings.S_PATCH_ENDED} " +
+                   $"{LogStrings.S_EXPORT_CANCEL}");
+            }
+        }
+
+        private void replaceIntelMERegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            Logger.WriteToAppLog(
+                $"{LogStrings.S_PATCH_STARTED} " +
+                $"{LogStrings.S_IME_REPLACE}");
+
+            using (OpenFileDialog openFileDialog = CreateImeOpenFileDialog())
+            {
+                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    Logger.WriteToAppLog(
+                        $"{LogStrings.S_PATCH_ENDED} " +
+                        $"{LogStrings.S_IME_IMPORT_CANCELLED}");
+
+                    return;
+                }
+
+                byte[] imeBuffer =
+                    LoadFileBytes(
+                        openFileDialog.FileName);
+
+                if (!ValidateMeRegion(imeBuffer))
+                    return;
+
+                Logger.WriteToAppLog(
+                    LogStrings.S_VAL_PASSED);
+
+                string imeVersion =
+                    IME.GetVersionData(
+                    imeBuffer,
+                    VersionType.ManagementEngine);
+
+                Logger.WriteToAppLog(
+                    $"{LogStrings.S_IME_VERSION} " +
+                    $"{imeVersion}" ??
+                    AppStrings.S_NOT_FOUND);
+
+                byte[] binaryBuffer =
+                    EFIROM.LoadedBinaryBytes;
+
+                if (!WriteNewMeRegion(imeBuffer, binaryBuffer))
+                    return;
+
+                Logger.WriteToAppLog(
+                    LogStrings.S_IME_WRITE_SUCCESS);
+
+                DialogResult result =
+                    METMessageBox.Show(
+                        this,
+                        DialogStrings.S_IME_PATCH_SUCCESS_SAVE,
+                        METMessageBoxType.Question,
+                        METMessageBoxButtons.YesNo);
+
+                if (result == DialogResult.Yes)
+                {
+                    SaveOutputFirmware(binaryBuffer);
+                    return;
+                }
+
+                Logger.WriteToAppLog(
+                   $"{LogStrings.S_PATCH_ENDED} " +
+                   $"{LogStrings.S_EXPORT_CANCEL}");
             }
         }
 
@@ -1850,24 +1915,6 @@ namespace Mac_EFI_Toolkit
             };
         }
 
-        private byte[] LoadFsysStore(string fileName)
-        {
-            try
-            {
-                return File.ReadAllBytes(fileName);
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteToAppLog(
-                    $"{LogStrings.S_PATCH_ENDED} " +
-                    $"{LogStrings.S_ERR_LOADING_FSYS} " +
-                    $"{ex.Message}");
-
-                NotifyPatchingFailure();
-                return null;
-            }
-        }
-
         private bool ValidateFsysStore(byte[] fsysStore)
         {
             int sigBase =
@@ -1879,7 +1926,7 @@ namespace Mac_EFI_Toolkit
             {
                 Logger.WriteToAppLog(
                     $"{LogStrings.S_PATCH_ENDED} " +
-                    $"{LogStrings.S_EXPECTED_SIZE} " +
+                    $"{LogStrings.S_EXPECTED_STORE_SIZE} " +
                     $"{EFIROM.FSYS_RGN_SIZE:X2}h ({fsysStore.Length:X2}h)");
 
                 NotifyPatchingFailure();
@@ -1894,6 +1941,7 @@ namespace Mac_EFI_Toolkit
                 NotifyPatchingFailure();
                 return false;
             }
+
             return true;
         }
 
@@ -1901,11 +1949,15 @@ namespace Mac_EFI_Toolkit
         {
             Logger.WriteToAppLog(
                 $"{LogStrings.S_NEW_SERIAL} " +
-                $"{fsysStore.Serial} | {LogStrings.S_LENGTH} {fsysStore.Serial.Length}");
+                $"{fsysStore.Serial} | " +
+                $"{LogStrings.S_LENGTH} " +
+                $"{fsysStore.Serial.Length}");
 
             Logger.WriteToAppLog(
                 $"{LogStrings.S_NEW_HWC} " +
-                $"{fsysStore.HWC} | {LogStrings.S_LENGTH} {fsysStore.HWC.Length}");
+                $"{fsysStore.HWC} | " +
+                $"{LogStrings.S_LENGTH} " +
+                $"{fsysStore.HWC.Length}");
         }
 
         private bool ValidateFsysCrc(FsysStore fsysStore, ref byte[] newFsysStore)
@@ -1913,11 +1965,12 @@ namespace Mac_EFI_Toolkit
             if (!string.Equals(fsysStore.CrcString, fsysStore.CrcCalcString))
             {
                 Logger.WriteToAppLog(
-                    $"{LogStrings.S_STORE_SUM_INVALID} " +
+                    $"{LogStrings.S_FSYS_CS_INVALID} " +
                     $"({LogStrings.S_FOUND} {fsysStore.CrcString}, " +
                     $"{LogStrings.S_CALCULATED} {fsysStore.CrcCalcString})");
 
-                Logger.WriteToAppLog(LogStrings.S_MASKING_CSUM);
+                Logger.WriteToAppLog(
+                    LogStrings.S_MASKING_CSUM);
 
                 newFsysStore =
                     BinaryUtils.PatchFsysCrc(
@@ -1941,7 +1994,7 @@ namespace Mac_EFI_Toolkit
                 else
                 {
                     Logger.WriteToAppLog(
-                        LogStrings.S_CS_MASK_SUCCESS);
+                        LogStrings.S_FSYS_CS_MASK_SUCCESS);
                 }
             }
 
@@ -1973,11 +2026,88 @@ namespace Mac_EFI_Toolkit
             return true;
         }
 
+        private OpenFileDialog CreateImeOpenFileDialog()
+        {
+            return new OpenFileDialog
+            {
+                InitialDirectory = METPath.MeDirectory,
+                Filter = AppStrings.S_BIN_FILTER
+            };
+        }
+
+        private bool ValidateMeRegion(byte[] meRegion)
+        {
+            int fptBase =
+                BinaryUtils.GetBaseAddress(
+                    meRegion,
+                    IME.FPT_SIGNATURE);
+
+            if (fptBase == -1)
+            {
+                Logger.WriteToAppLog(
+                    $"{LogStrings.S_PATCH_ENDED} " +
+                    $"{LogStrings.S_IME_FPT_NOT_FOUND}");
+
+                NotifyPatchingFailure();
+                return false;
+            }
+
+            if (meRegion.Length > IFD.ME_REGION_SIZE)
+            {
+                Logger.WriteToAppLog(
+                    $"{LogStrings.S_PATCH_ENDED} " +
+                    $"{LogStrings.S_IME_TOO_LARGE} " +
+                    $"{meRegion.Length:X2}h > {IFD.ME_REGION_SIZE}h");
+
+                NotifyPatchingFailure();
+                return false;
+            }
+
+            if (meRegion.Length < IFD.ME_REGION_SIZE)
+            {
+                Logger.WriteToAppLog(
+                    $"{LogStrings.S_IME_TOO_SMALL} " +
+                    $"{meRegion.Length:X2}h > {IFD.ME_REGION_SIZE}h");
+            }
+
+            return true;
+        }
+
+        private bool WriteNewMeRegion(byte[] imeBuffer, byte[] binaryBuffer)
+        {
+            byte[] ffBuffer =
+                new byte[IFD.ME_REGION_SIZE];
+
+            BinaryUtils.EraseByteArray(ffBuffer, 0xFF);
+
+            Array.Copy(imeBuffer, 0, ffBuffer, 0, imeBuffer.Length);
+
+            Array.Copy(ffBuffer, 0, binaryBuffer, IFD.ME_REGION_BASE, ffBuffer.Length);
+
+            byte[] patchedMeBuffer =
+                BinaryUtils.GetBytesBaseLimit(
+                    binaryBuffer,
+                    (int)IFD.ME_REGION_BASE,
+                    (int)IFD.ME_REGION_LIMIT);
+
+            if (!BinaryUtils.ByteArraysMatch(patchedMeBuffer, ffBuffer))
+            {
+                Logger.WriteToAppLog(
+                    $"{LogStrings.S_PATCH_ENDED} " +
+                    $"{LogStrings.S_IME_BUFFER_MISMATCH}");
+
+                NotifyPatchingFailure();
+                return false;
+            }
+
+            return true;
+        }
+
         private void PatchSSN(string newSerial)
         {
             Logger.WriteToAppLog(
                 $"{LogStrings.S_PATCH_STARTED} " +
-                $"{LogStrings.S_REPLACE_SSN}");
+                $"{LogStrings.S_SSN_REPLACE}");
 
             // Check whether the serial base is present
             if (EFIROM.FsysStoreData.SerialBase == -1)
@@ -2093,7 +2223,7 @@ namespace Mac_EFI_Toolkit
             return new SaveFileDialog
             {
                 Filter = AppStrings.S_BIN_FILTER,
-                FileName = "outimage.bin",
+                FileName = EFIROM.FileInfoData.FileName + "_outimage.bin",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.BuildsDirectory
             };
@@ -2127,6 +2257,24 @@ namespace Mac_EFI_Toolkit
                     if (result == DialogResult.Yes)
                         OpenBinary(saveFileDialog.FileName);
                 }
+            }
+        }
+
+        private byte[] LoadFileBytes(string fileName)
+        {
+            try
+            {
+                return File.ReadAllBytes(fileName);
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteToAppLog(
+                    $"{LogStrings.S_PATCH_ENDED} " +
+                    $"{LogStrings.S_ERROR_FILE_BYTES} " +
+                    $"{ex.Message}");
+
+                NotifyPatchingFailure();
+                return null;
             }
         }
 

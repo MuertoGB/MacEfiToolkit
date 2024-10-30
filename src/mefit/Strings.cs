@@ -1,4 +1,7 @@
-﻿namespace Mac_EFI_Toolkit
+﻿using Mac_EFI_Toolkit.Firmware.EFI;
+using System.Dynamic;
+
+namespace Mac_EFI_Toolkit
 {
     internal class AppStrings
     {
@@ -74,29 +77,14 @@
         internal const string S_PATCH_ENDED =
             "Patching ended:";
 
-        internal const string S_REPLACE_FSYS =
-            "Replace Fsys store";
-
-        internal const string S_FSYS_NOT_PROV =
-            "An Fsys store was not provided";
-
         internal const string S_EXPORT_CANCEL =
             "The file export was cancelled";
 
         internal const string S_VAL_PASSED =
             "Validation passed";
 
-        internal const string S_CS_MASK_SUCCESS =
-            "Checksum masking successful";
-
-        internal const string S_FSYS_W_SUCCESS =
-            "Fsys store written successfully";
-
-        internal const string S_ERR_LOADING_FSYS =
-            "Error loading Fsys store:";
-
-        internal const string S_EXPECTED_SIZE =
-            "Expected size is not";
+        internal const string S_EXPECTED_STORE_SIZE =
+            "Expected store size is not";
 
         internal const string S_STORE_SIG_MISALIGN =
             "Store signature misaligned";
@@ -110,8 +98,23 @@
         internal const string S_LENGTH =
             "Length";
 
-        internal const string S_STORE_SUM_INVALID =
-            "Store checksum is invalid";
+        internal const string S_ERROR_FILE_BYTES =
+            "Error loading file bytes:";
+
+        internal const string S_FSYS_REPLACE =
+            "Replace Fsys store";
+
+        internal const string S_FSYS_IMPORT_CANCELLED =
+            "An Fsys store was not provided";
+
+        internal const string S_FSYS_CS_MASK_SUCCESS =
+            "Fsys checksum masking successful.";
+
+        internal const string S_FSYS_WRITE_SUCCESS =
+            "Fsys store written successfully";
+
+        internal const string S_FSYS_CS_INVALID =
+            "Fsys checksum is invalid";
 
         internal const string S_FOUND =
             "Found:";
@@ -131,23 +134,47 @@
         internal const string S_SAVE_SUCCESS =
             "File saved successully:";
 
-        internal const string S_REPLACE_SSN =
-            "Replace system serial number.";
+        internal const string S_SSN_REPLACE =
+            "Replace system serial number";
 
         internal const string S_SSN_BASE_NOT_FOUND =
-            "Serial number base address was not found.";
+            "Serial number base address was not found";
 
         internal const string S_SSN_NOT_WRITTEN =
-            "New serial could not be written.";
+            "New serial could not be written";
 
         internal const string S_HWC_NOT_WRITTEN =
-            "New hardware configuration (HWC) could not be written.";
+            "New hardware configuration (HWC) could not be written";
 
         internal const string S_CRC_MASK_FAIL =
-            "Fsys CRC32 checksum masking failed.";
+            "Fsys CRC32 checksum masking failed";
 
         internal const string S_SSN_W_SUCCESS =
-            "Serial number written successfully.";
+            "Serial number written successfully";
+
+        internal const string S_IME_REPLACE =
+            "Replace Intel Management Engine";
+
+        internal const string S_IME_IMPORT_CANCELLED =
+            "An Intel ME region was not provided";
+
+        internal const string S_IME_FPT_NOT_FOUND =
+            "FPT signature not found";
+
+        internal const string S_IME_TOO_LARGE =
+            "New IME is too large:";
+
+        internal const string S_IME_TOO_SMALL =
+            "New IME is smaller and will be adjusted automatically:";
+
+        internal const string S_IME_VERSION =
+            "IME Version:";
+
+        internal const string S_IME_BUFFER_MISMATCH =
+            "IME buffers do not match";
+
+        internal const string S_IME_WRITE_SUCCESS =
+            "IME written successfully";
         #endregion
     }
 
@@ -246,6 +273,9 @@
 
         internal const string S_PATCH_FAIL_APP_LOG =
             "Patching failed. Would you like to open the application log?";
+
+        internal const string S_IME_PATCH_SUCCESS_SAVE =
+            "IME patching was successful. Do you want to save the output?";
         #endregion
     }
 

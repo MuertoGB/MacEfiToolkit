@@ -98,8 +98,8 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Check for a new application version
-            if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
-                StartupVersionCheck();
+            //if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
+            //    StartupVersionCheck();
         }
 
         private void startupWindow_FormClosing(object sender, FormClosingEventArgs e)
