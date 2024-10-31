@@ -47,17 +47,19 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
-            // Attach event handlers.
+            // Attach event handlers
             Load += t2Window_Load;
+            FormClosing += t2Window_FormClosing;
+            FormClosed += t2Window_FormClosed;
             KeyDown += t2Window_KeyDown;
             pbxLogo.MouseMove += t2Window_MouseMove;
             pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
             lblTitle.MouseMove += t2Window_MouseMove;
 
-            // Set tip handlers for controls.
+            // Set tip handlers for controls
             SetTipHandlers();
 
-            // Set button properties (font and text).
+            // Set button properties (font and text)
             SetButtonProperties();
         }
         #endregion
@@ -65,10 +67,20 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void t2Window_Load(object sender, EventArgs e)
         {
-            _cancellationToken = new CancellationTokenSource();
+            _cancellationToken =
+                new CancellationTokenSource();
 
             OpenBinary(Program.MAIN_WINDOW.loadedFile);
         }
+
+        private void t2Window_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_cancellationToken != null && !_cancellationToken.IsCancellationRequested)
+                _cancellationToken.Cancel();
+        }
+
+        private void t2Window_FormClosed(object sender, FormClosedEventArgs e) =>
+            _cancellationToken?.Dispose();
         #endregion
 
         #region Mouse Events
@@ -273,24 +285,24 @@ namespace Mac_EFI_Toolkit.WinForms
         #region UI Events
         internal void UpdateUI()
         {
-            // File information.
+            // File information
             UpdateFilenameControls();
             UpdateFileSizeControls();
             UpdateFileCrc32Controls();
             UpdateFileCreationDateControls();
             UpdateFileModifiedDateControls();
 
-            // Firmware data.
+            // Firmware data
             UpdateIbootControls();
             UpdateScfgControls();
             UpdateSerialControls();
             UpdateConfigCodeControls();
             UpdateModelControls();
 
-            // Unload image.
+            // Unload image
             pbxLoad.Image = null;
 
-            // Check and set control enable.
+            // Check and set control enable
             ToggleControlEnable(true);
         }
 

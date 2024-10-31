@@ -56,6 +56,8 @@ namespace Mac_EFI_Toolkit
 
             // Attach event handlers.
             Load += efiWindow_Load;
+            FormClosing += efiWindow_FormClosing;
+            FormClosed += efiWindow_FormClosed;
             KeyDown += efiWindow_KeyDown;
             DragEnter += efiWindow_DragEnter;
             DragDrop += efiWindow_DragDrop;
@@ -87,6 +89,15 @@ namespace Mac_EFI_Toolkit
 
             OpenBinary(Program.MAIN_WINDOW.loadedFile);
         }
+
+        private void efiWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_cancellationToken != null && !_cancellationToken.IsCancellationRequested)
+                _cancellationToken.Cancel();
+        }
+
+        private void efiWindow_FormClosed(object sender, FormClosedEventArgs e) =>
+            _cancellationToken?.Dispose();
 
         private void efiWindow_DragEnter(object sender, DragEventArgs e)
         {
@@ -2343,34 +2354,10 @@ namespace Mac_EFI_Toolkit
                 Logger.ViewLogFile(this);
         }
         #endregion
-
         private void ResetNVRAM(bool resetVss, bool resetSvs)
         {
-
+            // TODO
         }
-
-        #region Disco Time?
-        private void DiscoModeTime(Control parent, Random random)
-        {
-            foreach (Control control in parent.Controls)
-            {
-                control.BackColor = GenerateRandomColor(random);
-                control.ForeColor = GenerateRandomColor(random);
-
-                if (control.HasChildren)
-                    DiscoModeTime(control, random);
-            }
-        }
-
-        private Color GenerateRandomColor(Random random)
-        {
-            int red = random.Next(0, 256);
-            int green = random.Next(0, 256);
-            int blue = random.Next(0, 256);
-
-            return Color.FromArgb(red, green, blue);
-        }
-        #endregion
 
     }
 }
