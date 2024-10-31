@@ -21,6 +21,11 @@ namespace Mac_EFI_Toolkit.WinForms
     public partial class t2Window : Form
     {
 
+        #region Private Members
+        private Thread _tLoadFirmware = null;
+        private CancellationTokenSource _cancellationToken;
+        #endregion
+
         #region Overriden Properties
         protected override CreateParams CreateParams
         {
@@ -60,7 +65,9 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void t2Window_Load(object sender, EventArgs e)
         {
-            //OpenBinary(Program.MAIN_WINDOW.loadedFile);
+            _cancellationToken = new CancellationTokenSource();
+
+            OpenBinary(Program.MAIN_WINDOW.loadedFile);
         }
         #endregion
 
@@ -106,13 +113,13 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdOpen_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog ofd = new OpenFileDialog
+            using (OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "T2 SOCROM Files (*.bin, *.rom)|*.bin;*.rom|All Files (*.*)|*.*"
             })
             {
-                if (ofd.ShowDialog() == DialogResult.OK)
-                    OpenBinary(ofd.FileName);
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    OpenBinary(openFileDialog.FileName);
             }
         }
 
@@ -121,7 +128,7 @@ namespace Mac_EFI_Toolkit.WinForms
             if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
             {
                 ToggleControlEnable(false);
-                Reset();
+                ResetWindow();
                 return;
             }
 
@@ -135,7 +142,7 @@ namespace Mac_EFI_Toolkit.WinForms
             if (result == DialogResult.Yes)
             {
                 ToggleControlEnable(false);
-                Reset();
+                ResetWindow();
             }
         }
 
@@ -193,14 +200,14 @@ namespace Mac_EFI_Toolkit.WinForms
             ToggleControlEnable(false);
 
             if (T2ROM.FirmwareLoaded)
+                ResetWindow();
 
-
-                // Check filesize
-                if (!FileUtils.IsValidMinMaxSize(filePath, this))
-                {
-                    // reset all data
-                    return;
-                }
+            // Check filesize
+            if (!FileUtils.IsValidMinMaxSize(filePath, this))
+            {
+                // reset all data
+                return;
+            }
 
             // Set the binary path and load the bytes.
             T2ROM.LoadedBinaryPath = filePath;
@@ -223,25 +230,43 @@ namespace Mac_EFI_Toolkit.WinForms
 
             pbxLoad.Image = Properties.Resources.loading;
 
-            // Load the firmware base in a separate thread.
-            Thread thread = new Thread(() => LoadFirmwareBase(filePath))
+            _tLoadFirmware = new Thread(() => LoadFirmwareBase(filePath, _cancellationToken.Token))
             {
                 IsBackground = true
             };
 
-            thread.Start();
+            _tLoadFirmware.Start();
         }
 
-        private void LoadFirmwareBase(string filePath)
+        private void LoadFirmwareBase(string filePath, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
             T2ROM.LoadFirmwareBaseData(
                 T2ROM.LoadedBinaryBytes,
                 filePath);
 
-            // Update the User Interface.
-            Invoke((MethodInvoker)UpdateUI);
+            if (cancellationToken.IsCancellationRequested)
+                return;
 
-            T2ROM.FirmwareLoaded = true;
+            if (IsHandleCreated && !cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        UpdateUI();
+                    });
+                }
+                catch (ObjectDisposedException)
+                {
+                    return;
+                }
+            }
+
+            if (!cancellationToken.IsCancellationRequested)
+                T2ROM.FirmwareLoaded = true;
         }
         #endregion
 
@@ -434,7 +459,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Misc
-        private void Reset()
+        private void ResetWindow()
         {
             Label[] labels =
             {

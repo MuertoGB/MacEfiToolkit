@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string SDK = "23.01";
-        internal const string Build = "241031.0155";
+        internal const string Build = "241031.0255";
         internal const string Channel = "DEV";
     }
 
@@ -73,7 +73,7 @@ namespace Mac_EFI_Toolkit
         internal static string draggedFilePath = string.Empty;
         internal static string lastBuildPath = string.Empty;
         internal static bool openLastBuild = false;
-        internal static efiWindow MAIN_WINDOW;
+        internal static startupWindow MAIN_WINDOW;
 
         internal static Font FONT_MDL2_REG_9;
         internal static Font FONT_MDL2_REG_10;
@@ -141,12 +141,11 @@ namespace Mac_EFI_Toolkit
             EnsureDirectoriesExist();
 
             // Create the main window instance
-            MAIN_WINDOW = new efiWindow();
+            MAIN_WINDOW = new startupWindow();
 
             // Start the application message loop
             Application.Run(MAIN_WINDOW);
         }
-
         #endregion
 
         #region OnExiting
