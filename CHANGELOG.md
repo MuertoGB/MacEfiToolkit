@@ -42,6 +42,7 @@
 #### Bugs:
 - Added missing icon to the ROM Information window.
 - Fixed broken FIT version strings.
+- Fixed a logical error that caused the internal database to be skipped when the Fsys Store was force found. This resulted in writing a misleading "not present value" message to the database.log, even when the value was present.
 
 #### Misc:
 - Changed how some settings are structured

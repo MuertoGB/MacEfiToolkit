@@ -63,7 +63,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.lblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.lblInfo.Location = new System.Drawing.Point(0, 158);
             this.lblInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblInfo.Name = "lblInfo";
@@ -99,7 +99,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.lblBuild.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuild.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.lblBuild.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.lblBuild.Location = new System.Drawing.Point(133, 2);
             this.lblBuild.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
             this.lblBuild.Name = "lblBuild";
@@ -116,7 +116,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblChannel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.lblChannel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblChannel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblChannel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.lblChannel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.lblChannel.Location = new System.Drawing.Point(133, 28);
             this.lblChannel.Margin = new System.Windows.Forms.Padding(2, 0, 0, 0);
             this.lblChannel.Name = "lblChannel";

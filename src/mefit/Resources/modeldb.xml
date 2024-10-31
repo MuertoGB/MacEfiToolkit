@@ -33869,6 +33869,14 @@
 		<configCode>iPad mini (5th generation)</configCode>
 	</section>
 	<section>
+		<hwc>LVDD</hwc>
+		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
+	</section>
+	<section>
+		<hwc>LVDH</hwc>
+		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
+	</section>
+	<section>
 		<hwc>LVDL</hwc>
 		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
 	</section>
@@ -33895,6 +33903,10 @@
 	<section>
 		<hwc>LYWR</hwc>
 		<configCode>MacBook Air (Retina, 13-inch, 2019)</configCode>
+	</section>
+	<section>
+		<hwc>MD6P</hwc>
+		<configCode>MacBook Pro (16-inch, 2019)</configCode>
 	</section>
 	<section>
 		<hwc>MJLT</hwc>

@@ -130,10 +130,27 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                     sourceBytes,
                     false);
 
+            // Try to force find the Fsys store if it wasn't found in the first pass.
+            if (FsysStoreData.FsysBytes == null)
+            {
+                FsysStoreData = GetFsysStoreData(sourceBytes, false, true);
+
+                if (FsysStoreData.FsysBytes != null)
+                {
+                    ForceFoundFsys = true;
+
+                    Logger.WriteToAppLog(
+                        $"Force found Fsys Store at {FsysStoreData.FsysBase:X}h. " +
+                        $"The image may be misaligned or corrupt ({FileInfoData.FileNameExt})."
+                    );
+                }
+            }
+
             // Fetch the Config Code
-            ConfigCode = FsysStoreData.HWC != null
-                ? MacUtils.GetDeviceConfigCodeLocalLocal(FsysStoreData.HWC)
-                : null;
+            ConfigCode =
+                FsysStoreData.HWC != null
+                    ? MacUtils.GetDeviceConfigCodeLocalLocal(FsysStoreData.HWC)
+                    : null;
 
             // Parse AppleRomSectionInformation region data.
             AppleRomInfoSectionData =
@@ -164,26 +181,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 IME.GetVersionData(
                     LoadedBinaryBytes,
                     VersionType.ManagementEngine);
-
-            // Try and force find the Fsys store if it wasn't found in the first pass.
-            if (FsysStoreData.FsysBytes == null)
-            {
-                FsysStoreData =
-                    GetFsysStoreData(
-                        sourceBytes,
-                        false,
-                        true);
-
-                // Fsys store was found in the forced pass.
-                if (FsysStoreData.FsysBytes != null)
-                {
-                    ForceFoundFsys = true;
-
-                    Logger.WriteToAppLog(
-                        $"Force found Fsys Store at {FsysStoreData.FsysBase:X}h. " +
-                        $"The image may be misaligned or corrupt ({FileInfoData.FileNameExt}).");
-                }
-            }
         }
 
         internal static void ResetFirmwareBaseData()
