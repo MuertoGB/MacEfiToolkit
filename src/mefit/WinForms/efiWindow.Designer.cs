@@ -53,7 +53,7 @@ namespace Mac_EFI_Toolkit
             this.tlpEfiVer = new System.Windows.Forms.TableLayoutPanel();
             this.lblEfiVersion = new System.Windows.Forms.Label();
             this.tlpFsys = new System.Windows.Forms.TableLayoutPanel();
-            this.lblFsysCrc32 = new System.Windows.Forms.Label();
+            this.lblFsysStore = new System.Windows.Forms.Label();
             this.tlpNvram = new System.Windows.Forms.TableLayoutPanel();
             this.lblSvsStore = new System.Windows.Forms.Label();
             this.lblVssStore = new System.Windows.Forms.Label();
@@ -108,7 +108,7 @@ namespace Mac_EFI_Toolkit
             this.modifiedDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.modelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.configCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fsysCRC32ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hwcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,6 +118,9 @@ namespace Mac_EFI_Toolkit
             this.fitVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.meVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.fsysBaseAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vSSBaseAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sVSBaseAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pdrBaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.meBaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.biosBaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -129,8 +132,8 @@ namespace Mac_EFI_Toolkit
             this.cmsExport = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.exportFsysStoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportIntelMERegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportNVRAMSVSStoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportNVRAMVSSStoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportNVRAMSVSStoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.backupFirmwareZIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportFirmwareInformationTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -336,7 +339,7 @@ namespace Mac_EFI_Toolkit
             this.lblConfigCodeText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblConfigCodeText.Size = new System.Drawing.Size(130, 35);
             this.lblConfigCodeText.TabIndex = 0;
-            this.lblConfigCodeText.Text = "Config Code:";
+            this.lblConfigCodeText.Text = "Configuration:";
             this.lblConfigCodeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblModel
@@ -549,7 +552,7 @@ namespace Mac_EFI_Toolkit
             this.tlpFsys.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFsys.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFsys.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpFsys.Controls.Add(this.lblFsysCrc32, 0, 0);
+            this.tlpFsys.Controls.Add(this.lblFsysStore, 0, 0);
             this.tlpFsys.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFsys.Location = new System.Drawing.Point(131, 108);
             this.tlpFsys.Margin = new System.Windows.Forms.Padding(0);
@@ -559,22 +562,22 @@ namespace Mac_EFI_Toolkit
             this.tlpFsys.Size = new System.Drawing.Size(249, 35);
             this.tlpFsys.TabIndex = 0;
             // 
-            // lblFsysCrc32
+            // lblFsysStore
             // 
-            this.lblFsysCrc32.AutoEllipsis = true;
-            this.lblFsysCrc32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.lblFsysCrc32.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblFsysCrc32.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFsysCrc32.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFsysCrc32.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblFsysCrc32.Location = new System.Drawing.Point(0, 0);
-            this.lblFsysCrc32.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFsysCrc32.Name = "lblFsysCrc32";
-            this.lblFsysCrc32.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFsysCrc32.Size = new System.Drawing.Size(249, 35);
-            this.lblFsysCrc32.TabIndex = 0;
-            this.lblFsysCrc32.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblFsysCrc32.UseMnemonic = false;
+            this.lblFsysStore.AutoEllipsis = true;
+            this.lblFsysStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblFsysStore.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblFsysStore.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFsysStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFsysStore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblFsysStore.Location = new System.Drawing.Point(0, 0);
+            this.lblFsysStore.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFsysStore.Name = "lblFsysStore";
+            this.lblFsysStore.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblFsysStore.Size = new System.Drawing.Size(249, 35);
+            this.lblFsysStore.TabIndex = 0;
+            this.lblFsysStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFsysStore.UseMnemonic = false;
             // 
             // tlpNvram
             // 
@@ -674,7 +677,7 @@ namespace Mac_EFI_Toolkit
             this.lblMeVersionText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblMeVersionText.Size = new System.Drawing.Size(130, 35);
             this.lblMeVersionText.TabIndex = 0;
-            this.lblMeVersionText.Text = "IME Version:";
+            this.lblMeVersionText.Text = "ME Version:";
             this.lblMeVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpIntelMe
@@ -1346,7 +1349,7 @@ namespace Mac_EFI_Toolkit
             // 
             // cmsCopy
             // 
-            this.cmsCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.cmsCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.cmsCopy.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmsCopy.ForeColor = System.Drawing.Color.White;
             this.cmsCopy.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1358,7 +1361,7 @@ namespace Mac_EFI_Toolkit
             this.modifiedDateToolStripMenuItem,
             this.toolStripSeparator6,
             this.modelToolStripMenuItem,
-            this.configCodeToolStripMenuItem,
+            this.configurationToolStripMenuItem,
             this.fsysCRC32ToolStripMenuItem,
             this.serialToolStripMenuItem,
             this.hwcToolStripMenuItem,
@@ -1368,16 +1371,19 @@ namespace Mac_EFI_Toolkit
             this.fitVersionToolStripMenuItem,
             this.meVersionToolStripMenuItem,
             this.toolStripSeparator5,
+            this.fsysBaseAddressToolStripMenuItem,
+            this.vSSBaseAddressToolStripMenuItem,
+            this.sVSBaseAddressToolStripMenuItem,
             this.pdrBaseToolStripMenuItem,
             this.meBaseToolStripMenuItem,
             this.biosBaseToolStripMenuItem});
             this.cmsCopy.Name = "cmsCopy";
             this.cmsCopy.ShowImageMargin = false;
-            this.cmsCopy.Size = new System.Drawing.Size(208, 520);
+            this.cmsCopy.Size = new System.Drawing.Size(208, 604);
             // 
             // filenameToolStripMenuItem
             // 
-            this.filenameToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.filenameToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.filenameToolStripMenuItem.Name = "filenameToolStripMenuItem";
             this.filenameToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.filenameToolStripMenuItem.Text = "Filename";
@@ -1385,7 +1391,7 @@ namespace Mac_EFI_Toolkit
             // 
             // sizeBytesToolStripMenuItem
             // 
-            this.sizeBytesToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.sizeBytesToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.sizeBytesToolStripMenuItem.Name = "sizeBytesToolStripMenuItem";
             this.sizeBytesToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.sizeBytesToolStripMenuItem.Text = "Size";
@@ -1393,7 +1399,7 @@ namespace Mac_EFI_Toolkit
             // 
             // crc32ToolStripMenuItem
             // 
-            this.crc32ToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.crc32ToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.crc32ToolStripMenuItem.Name = "crc32ToolStripMenuItem";
             this.crc32ToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.crc32ToolStripMenuItem.Text = "CRC32";
@@ -1401,7 +1407,7 @@ namespace Mac_EFI_Toolkit
             // 
             // createdDateToolStripMenuItem
             // 
-            this.createdDateToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.createdDateToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.createdDateToolStripMenuItem.Name = "createdDateToolStripMenuItem";
             this.createdDateToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.createdDateToolStripMenuItem.Text = "Creation Date";
@@ -1409,7 +1415,7 @@ namespace Mac_EFI_Toolkit
             // 
             // modifiedDateToolStripMenuItem
             // 
-            this.modifiedDateToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.modifiedDateToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.modifiedDateToolStripMenuItem.Name = "modifiedDateToolStripMenuItem";
             this.modifiedDateToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.modifiedDateToolStripMenuItem.Text = "Modified Date";
@@ -1422,23 +1428,23 @@ namespace Mac_EFI_Toolkit
             // 
             // modelToolStripMenuItem
             // 
-            this.modelToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.modelToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.modelToolStripMenuItem.Name = "modelToolStripMenuItem";
             this.modelToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.modelToolStripMenuItem.Text = "Model";
             this.modelToolStripMenuItem.Click += new System.EventHandler(this.modelToolStripMenuItem_Click);
             // 
-            // configCodeToolStripMenuItem
+            // configurationToolStripMenuItem
             // 
-            this.configCodeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.configCodeToolStripMenuItem.Name = "configCodeToolStripMenuItem";
-            this.configCodeToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
-            this.configCodeToolStripMenuItem.Text = "Config Code";
-            this.configCodeToolStripMenuItem.Click += new System.EventHandler(this.configCodeToolStripMenuItem_Click);
+            this.configurationToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
+            this.configurationToolStripMenuItem.Text = "Configuration";
+            this.configurationToolStripMenuItem.Click += new System.EventHandler(this.configurationToolStripMenuItem_Click);
             // 
             // fsysCRC32ToolStripMenuItem
             // 
-            this.fsysCRC32ToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.fsysCRC32ToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.fsysCRC32ToolStripMenuItem.Name = "fsysCRC32ToolStripMenuItem";
             this.fsysCRC32ToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.fsysCRC32ToolStripMenuItem.Text = "Fsys CRC32";
@@ -1446,7 +1452,7 @@ namespace Mac_EFI_Toolkit
             // 
             // serialToolStripMenuItem
             // 
-            this.serialToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.serialToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.serialToolStripMenuItem.Name = "serialToolStripMenuItem";
             this.serialToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.serialToolStripMenuItem.Text = "Serial";
@@ -1454,7 +1460,7 @@ namespace Mac_EFI_Toolkit
             // 
             // hwcToolStripMenuItem
             // 
-            this.hwcToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.hwcToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.hwcToolStripMenuItem.Name = "hwcToolStripMenuItem";
             this.hwcToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.hwcToolStripMenuItem.Text = "HWC";
@@ -1462,7 +1468,7 @@ namespace Mac_EFI_Toolkit
             // 
             // orderNoToolStripMenuItem
             // 
-            this.orderNoToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.orderNoToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.orderNoToolStripMenuItem.Name = "orderNoToolStripMenuItem";
             this.orderNoToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.orderNoToolStripMenuItem.Text = "Order No";
@@ -1470,7 +1476,7 @@ namespace Mac_EFI_Toolkit
             // 
             // efiVersionToolStripMenuItem
             // 
-            this.efiVersionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.efiVersionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.efiVersionToolStripMenuItem.Name = "efiVersionToolStripMenuItem";
             this.efiVersionToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.efiVersionToolStripMenuItem.Text = "EFI Version";
@@ -1478,7 +1484,7 @@ namespace Mac_EFI_Toolkit
             // 
             // boardIDToolStripMenuItem
             // 
-            this.boardIDToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.boardIDToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.boardIDToolStripMenuItem.Name = "boardIDToolStripMenuItem";
             this.boardIDToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.boardIDToolStripMenuItem.Text = "Board ID";
@@ -1486,18 +1492,18 @@ namespace Mac_EFI_Toolkit
             // 
             // fitVersionToolStripMenuItem
             // 
-            this.fitVersionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.fitVersionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.fitVersionToolStripMenuItem.Name = "fitVersionToolStripMenuItem";
             this.fitVersionToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
-            this.fitVersionToolStripMenuItem.Text = "FIT Version";
+            this.fitVersionToolStripMenuItem.Text = "Intel FIT Version";
             this.fitVersionToolStripMenuItem.Click += new System.EventHandler(this.fitVersionToolStripMenuItem_Click);
             // 
             // meVersionToolStripMenuItem
             // 
-            this.meVersionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.meVersionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.meVersionToolStripMenuItem.Name = "meVersionToolStripMenuItem";
             this.meVersionToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
-            this.meVersionToolStripMenuItem.Text = "ME Version";
+            this.meVersionToolStripMenuItem.Text = "Intel ME Version";
             this.meVersionToolStripMenuItem.Click += new System.EventHandler(this.meVersionToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
@@ -1505,9 +1511,33 @@ namespace Mac_EFI_Toolkit
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(204, 6);
             // 
+            // fsysBaseAddressToolStripMenuItem
+            // 
+            this.fsysBaseAddressToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.fsysBaseAddressToolStripMenuItem.Name = "fsysBaseAddressToolStripMenuItem";
+            this.fsysBaseAddressToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
+            this.fsysBaseAddressToolStripMenuItem.Text = "Fsys Base Address";
+            this.fsysBaseAddressToolStripMenuItem.Click += new System.EventHandler(this.fsysBaseAddressToolStripMenuItem_Click);
+            // 
+            // vSSBaseAddressToolStripMenuItem
+            // 
+            this.vSSBaseAddressToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.vSSBaseAddressToolStripMenuItem.Name = "vSSBaseAddressToolStripMenuItem";
+            this.vSSBaseAddressToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
+            this.vSSBaseAddressToolStripMenuItem.Text = "VSS Base Address";
+            this.vSSBaseAddressToolStripMenuItem.Click += new System.EventHandler(this.vSSBaseAddressToolStripMenuItem_Click);
+            // 
+            // sVSBaseAddressToolStripMenuItem
+            // 
+            this.sVSBaseAddressToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.sVSBaseAddressToolStripMenuItem.Name = "sVSBaseAddressToolStripMenuItem";
+            this.sVSBaseAddressToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
+            this.sVSBaseAddressToolStripMenuItem.Text = "SVS Base Address";
+            this.sVSBaseAddressToolStripMenuItem.Click += new System.EventHandler(this.sVSBaseAddressToolStripMenuItem_Click);
+            // 
             // pdrBaseToolStripMenuItem
             // 
-            this.pdrBaseToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.pdrBaseToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.pdrBaseToolStripMenuItem.Name = "pdrBaseToolStripMenuItem";
             this.pdrBaseToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.pdrBaseToolStripMenuItem.Text = "PDR Region Offsets";
@@ -1515,7 +1545,7 @@ namespace Mac_EFI_Toolkit
             // 
             // meBaseToolStripMenuItem
             // 
-            this.meBaseToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.meBaseToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.meBaseToolStripMenuItem.Name = "meBaseToolStripMenuItem";
             this.meBaseToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.meBaseToolStripMenuItem.Text = "ME Region Offsets";
@@ -1523,7 +1553,7 @@ namespace Mac_EFI_Toolkit
             // 
             // biosBaseToolStripMenuItem
             // 
-            this.biosBaseToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.biosBaseToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.biosBaseToolStripMenuItem.Name = "biosBaseToolStripMenuItem";
             this.biosBaseToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
             this.biosBaseToolStripMenuItem.Text = "BIOS Region Offsets";
@@ -1531,7 +1561,7 @@ namespace Mac_EFI_Toolkit
             // 
             // cmsOptions
             // 
-            this.cmsOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.cmsOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.cmsOptions.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsOptions.ForeColor = System.Drawing.Color.White;
             this.cmsOptions.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1546,6 +1576,7 @@ namespace Mac_EFI_Toolkit
             // 
             // automaticFilenameGenerationToolStripMenuItem
             // 
+            this.automaticFilenameGenerationToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.automaticFilenameGenerationToolStripMenuItem.Name = "automaticFilenameGenerationToolStripMenuItem";
             this.automaticFilenameGenerationToolStripMenuItem.Size = new System.Drawing.Size(312, 28);
             this.automaticFilenameGenerationToolStripMenuItem.Text = "Automatic Filename Generation";
@@ -1553,6 +1584,7 @@ namespace Mac_EFI_Toolkit
             // 
             // viewRomInformationToolStripMenuItem
             // 
+            this.viewRomInformationToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.viewRomInformationToolStripMenuItem.Name = "viewRomInformationToolStripMenuItem";
             this.viewRomInformationToolStripMenuItem.Size = new System.Drawing.Size(312, 28);
             this.viewRomInformationToolStripMenuItem.Text = "View ROM Information";
@@ -1565,6 +1597,7 @@ namespace Mac_EFI_Toolkit
             // 
             // lookupSerialNumberOnEveryMacToolStripMenuItem
             // 
+            this.lookupSerialNumberOnEveryMacToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.lookupSerialNumberOnEveryMacToolStripMenuItem.Name = "lookupSerialNumberOnEveryMacToolStripMenuItem";
             this.lookupSerialNumberOnEveryMacToolStripMenuItem.Size = new System.Drawing.Size(312, 28);
             this.lookupSerialNumberOnEveryMacToolStripMenuItem.Text = "Lookup Serial Number (EveryMac)";
@@ -1572,15 +1605,15 @@ namespace Mac_EFI_Toolkit
             // 
             // cmsExport
             // 
-            this.cmsExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.cmsExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.cmsExport.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsExport.ForeColor = System.Drawing.Color.White;
             this.cmsExport.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsExport.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportFsysStoreToolStripMenuItem,
             this.exportIntelMERegionToolStripMenuItem,
-            this.exportNVRAMSVSStoresToolStripMenuItem,
             this.exportNVRAMVSSStoresToolStripMenuItem,
+            this.exportNVRAMSVSStoresToolStripMenuItem,
             this.toolStripSeparator3,
             this.backupFirmwareZIPToolStripMenuItem,
             this.exportFirmwareInformationTextToolStripMenuItem});
@@ -1590,6 +1623,7 @@ namespace Mac_EFI_Toolkit
             // 
             // exportFsysStoreToolStripMenuItem
             // 
+            this.exportFsysStoreToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.exportFsysStoreToolStripMenuItem.Name = "exportFsysStoreToolStripMenuItem";
             this.exportFsysStoreToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
             this.exportFsysStoreToolStripMenuItem.Text = "Export Fsys Store";
@@ -1597,22 +1631,25 @@ namespace Mac_EFI_Toolkit
             // 
             // exportIntelMERegionToolStripMenuItem
             // 
+            this.exportIntelMERegionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.exportIntelMERegionToolStripMenuItem.Name = "exportIntelMERegionToolStripMenuItem";
             this.exportIntelMERegionToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
             this.exportIntelMERegionToolStripMenuItem.Text = "Export Intel ME Region";
             this.exportIntelMERegionToolStripMenuItem.Click += new System.EventHandler(this.exportIntelMERegionToolStripMenuItem_Click);
             // 
-            // exportNVRAMSVSStoresToolStripMenuItem
-            // 
-            this.exportNVRAMSVSStoresToolStripMenuItem.Name = "exportNVRAMSVSStoresToolStripMenuItem";
-            this.exportNVRAMSVSStoresToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
-            this.exportNVRAMSVSStoresToolStripMenuItem.Text = "Export NVRAM SVS Stores";
-            // 
             // exportNVRAMVSSStoresToolStripMenuItem
             // 
+            this.exportNVRAMVSSStoresToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.exportNVRAMVSSStoresToolStripMenuItem.Name = "exportNVRAMVSSStoresToolStripMenuItem";
             this.exportNVRAMVSSStoresToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
             this.exportNVRAMVSSStoresToolStripMenuItem.Text = "Export NVRAM VSS Stores";
+            // 
+            // exportNVRAMSVSStoresToolStripMenuItem
+            // 
+            this.exportNVRAMSVSStoresToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.exportNVRAMSVSStoresToolStripMenuItem.Name = "exportNVRAMSVSStoresToolStripMenuItem";
+            this.exportNVRAMSVSStoresToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
+            this.exportNVRAMSVSStoresToolStripMenuItem.Text = "Export NVRAM SVS Stores";
             // 
             // toolStripSeparator3
             // 
@@ -1621,6 +1658,7 @@ namespace Mac_EFI_Toolkit
             // 
             // backupFirmwareZIPToolStripMenuItem
             // 
+            this.backupFirmwareZIPToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.backupFirmwareZIPToolStripMenuItem.Name = "backupFirmwareZIPToolStripMenuItem";
             this.backupFirmwareZIPToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
             this.backupFirmwareZIPToolStripMenuItem.Text = "Backup Firmware (ZIP)";
@@ -1628,6 +1666,7 @@ namespace Mac_EFI_Toolkit
             // 
             // exportFirmwareInformationTextToolStripMenuItem
             // 
+            this.exportFirmwareInformationTextToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.exportFirmwareInformationTextToolStripMenuItem.Name = "exportFirmwareInformationTextToolStripMenuItem";
             this.exportFirmwareInformationTextToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
             this.exportFirmwareInformationTextToolStripMenuItem.Text = "Export Firmware Information (Text)";
@@ -1635,7 +1674,7 @@ namespace Mac_EFI_Toolkit
             // 
             // cmsPatch
             // 
-            this.cmsPatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.cmsPatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.cmsPatch.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsPatch.ForeColor = System.Drawing.Color.White;
             this.cmsPatch.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1653,6 +1692,7 @@ namespace Mac_EFI_Toolkit
             // 
             // changeSerialNumberToolStripMenuItem
             // 
+            this.changeSerialNumberToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.changeSerialNumberToolStripMenuItem.Name = "changeSerialNumberToolStripMenuItem";
             this.changeSerialNumberToolStripMenuItem.Size = new System.Drawing.Size(258, 28);
             this.changeSerialNumberToolStripMenuItem.Text = "Change Serial Number";
@@ -1660,6 +1700,7 @@ namespace Mac_EFI_Toolkit
             // 
             // replaceFsysStoreToolStripMenuItem
             // 
+            this.replaceFsysStoreToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.replaceFsysStoreToolStripMenuItem.Name = "replaceFsysStoreToolStripMenuItem";
             this.replaceFsysStoreToolStripMenuItem.Size = new System.Drawing.Size(258, 28);
             this.replaceFsysStoreToolStripMenuItem.Text = "Replace Fsys Store";
@@ -1667,6 +1708,7 @@ namespace Mac_EFI_Toolkit
             // 
             // replaceIntelMERegionToolStripMenuItem
             // 
+            this.replaceIntelMERegionToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.replaceIntelMERegionToolStripMenuItem.Name = "replaceIntelMERegionToolStripMenuItem";
             this.replaceIntelMERegionToolStripMenuItem.Size = new System.Drawing.Size(258, 28);
             this.replaceIntelMERegionToolStripMenuItem.Text = "Replace Intel ME Region";
@@ -1674,9 +1716,11 @@ namespace Mac_EFI_Toolkit
             // 
             // resetNVRAMToolStripMenuItem
             // 
+            this.resetNVRAMToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.resetNVRAMToolStripMenuItem.Name = "resetNVRAMToolStripMenuItem";
             this.resetNVRAMToolStripMenuItem.Size = new System.Drawing.Size(258, 28);
             this.resetNVRAMToolStripMenuItem.Text = "Reset NVRAM";
+            this.resetNVRAMToolStripMenuItem.Click += new System.EventHandler(this.resetNVRAMToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -1685,6 +1729,7 @@ namespace Mac_EFI_Toolkit
             // 
             // fixFsysChecksumCRC32ToolStripMenuItem
             // 
+            this.fixFsysChecksumCRC32ToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.fixFsysChecksumCRC32ToolStripMenuItem.Name = "fixFsysChecksumCRC32ToolStripMenuItem";
             this.fixFsysChecksumCRC32ToolStripMenuItem.Size = new System.Drawing.Size(258, 28);
             this.fixFsysChecksumCRC32ToolStripMenuItem.Text = "Fix Fsys Checksum (CRC32)";
@@ -1692,6 +1737,7 @@ namespace Mac_EFI_Toolkit
             // 
             // invalidateEFILockToolStripMenuItem
             // 
+            this.invalidateEFILockToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.invalidateEFILockToolStripMenuItem.Name = "invalidateEFILockToolStripMenuItem";
             this.invalidateEFILockToolStripMenuItem.Size = new System.Drawing.Size(258, 28);
             this.invalidateEFILockToolStripMenuItem.Text = "Invalidate EFI Lock";
@@ -1760,7 +1806,7 @@ namespace Mac_EFI_Toolkit
         internal System.Windows.Forms.Label lblWindowTitle;
         private System.Windows.Forms.Label lblFsysStoreText;
         private System.Windows.Forms.Label lblOrderNumberText;
-        private System.Windows.Forms.Label lblFsysCrc32;
+        private System.Windows.Forms.Label lblFsysStore;
         private System.Windows.Forms.Label lblApfsCapable;
         private System.Windows.Forms.Label lblApfsCapableText;
         private System.Windows.Forms.TableLayoutPanel tlpSerial;
@@ -1809,7 +1855,7 @@ namespace Mac_EFI_Toolkit
         internal System.Windows.Forms.Button cmdMinimize;
         private METContextMenuStrip cmsCopy;
         private System.Windows.Forms.ToolStripMenuItem modelToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem configCodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem configurationToolStripMenuItem;
         private System.Windows.Forms.Label lblEfiLockText;
         private System.Windows.Forms.TableLayoutPanel tlpEfiLock;
         private System.Windows.Forms.Label lblEfiLock;
@@ -1856,5 +1902,8 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.ToolStripMenuItem exportFirmwareInformationTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem backupFirmwareZIPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem replaceIntelMERegionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem fsysBaseAddressToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem vSSBaseAddressToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sVSBaseAddressToolStripMenuItem;
     }
 }

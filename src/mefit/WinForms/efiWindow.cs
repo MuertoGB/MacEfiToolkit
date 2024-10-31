@@ -11,7 +11,6 @@ using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using Mac_EFI_Toolkit.WinForms;
-using SevenZip.Buffer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -71,6 +70,9 @@ namespace Mac_EFI_Toolkit
 
             // Set button properties (font and text).
             SetButtonProperties();
+
+            if (this.Owner == null && this.Parent == null)
+                StartPosition = FormStartPosition.CenterScreen;
         }
         #endregion
 
@@ -83,7 +85,7 @@ namespace Mac_EFI_Toolkit
             _cancellationToken =
                 new CancellationTokenSource();
 
-            OpenBinary(Program.MAIN_WINDOW.loadedFile);
+            //OpenBinary(Program.MAIN_WINDOW.loadedFile);
         }
 
         private void efiWindow_DragEnter(object sender, DragEventArgs e)
@@ -370,8 +372,11 @@ namespace Mac_EFI_Toolkit
         private void modelToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareModel();
 
-        private void configCodeToolStripMenuItem_Click(object sender, EventArgs e) =>
+        private void configurationToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareConfigCode();
+
+        private void fsysBaseAddressToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetFsysBaseAddress();
 
         private void fsysCRC32ToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareFsysCrc32();
@@ -387,6 +392,12 @@ namespace Mac_EFI_Toolkit
 
         private void efiVersionToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareVersion();
+
+        private void vSSBaseAddressToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetVssBaseAddress();
+
+        private void sVSBaseAddressToolStripMenuItem_Click(object sender, EventArgs e) =>
+            ClipboardSetSvsBaseAddress();
 
         private void boardIDToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareBoardId();
@@ -804,6 +815,22 @@ namespace Mac_EFI_Toolkit
                 Logger.WriteToAppLog(
                    $"{LogStrings.S_PATCH_ENDED} " +
                    $"{LogStrings.S_EXPORT_CANCEL}");
+            }
+        }
+
+        private void resetNVRAMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UITools.SetHalfOpacity(this);
+
+            using (nvramWindow child = new nvramWindow())
+            {
+                child.FormClosed += ChildWindowClosed;
+                child.ShowDialog();
+
+                if (child.DialogResult == DialogResult.OK)
+                {
+                    ResetNVRAM(EFIROM.bResetVss, EFIROM.bResetSvs);
+                }
             }
         }
 
@@ -1225,7 +1252,7 @@ namespace Mac_EFI_Toolkit
             {
                 lblConfigCode.Text = EFIROM.ConfigCode;
 
-                configCodeToolStripMenuItem.Enabled = true;
+                configurationToolStripMenuItem.Enabled = true;
 
                 return;
             }
@@ -1248,7 +1275,7 @@ namespace Mac_EFI_Toolkit
                 lblConfigCode.Text = configCode;
                 lblConfigCode.ForeColor = Color.White;
 
-                configCodeToolStripMenuItem.Enabled = true;
+                configurationToolStripMenuItem.Enabled = true;
 
                 return;
             }
@@ -1256,32 +1283,46 @@ namespace Mac_EFI_Toolkit
             lblConfigCode.Text = AppStrings.S_NA;
             lblConfigCode.ForeColor = Colours.CONTROL_DISABLED_TEXT;
 
-            configCodeToolStripMenuItem.Enabled = false;
+            configurationToolStripMenuItem.Enabled = false;
         }
 
         private void UpdateFsysControls()
         {
-            string fsysCrc32 =
-                EFIROM.FsysStoreData.CrcString;
-
-            if (!string.IsNullOrEmpty(fsysCrc32))
+            if (EFIROM.FsysStoreData.FsysBase != -1)
             {
-                lblFsysCrc32.Text =
-                    $"{fsysCrc32}h{(EFIROM.ForceFoundFsys ? " [F]" : string.Empty)}";
+                lblFsysStore.Text =
+                    $"0x{EFIROM.FsysStoreData.FsysBase}h";
 
-                lblFsysCrc32.ForeColor = string.Equals(
-                    fsysCrc32,
-                    EFIROM.FsysStoreData.CrcCalcString)
-                    ? AppColours.COMPLETE
-                    : AppColours.ERROR;
+                bool crcMatch =
+                    string.Equals(
+                        EFIROM.FsysStoreData.CrcString,
+                        EFIROM.FsysStoreData.CrcCalcString);
 
+                if (!string.IsNullOrEmpty(EFIROM.FsysStoreData.CrcString))
+                {
+                    lblFsysStore.Text +=
+                        crcMatch ?
+                        " (GOOD CRC)" :
+                        " (BAD CRC)";
+                    lblFsysStore.ForeColor =
+                        crcMatch ?
+                        lblFsysStore.ForeColor :
+                        AppColours.WARNING;
+                }
+
+                if (EFIROM.ForceFoundFsys)
+                    lblFsysStore.Text += " [F]";
+
+
+                fsysBaseAddressToolStripMenuItem.Enabled = true;
                 fsysCRC32ToolStripMenuItem.Enabled = true;
 
                 return;
             }
 
+            fsysBaseAddressToolStripMenuItem.Enabled = false;
             fsysCRC32ToolStripMenuItem.Enabled = false;
-            lblFsysCrc32.Text = AppStrings.S_NA;
+            lblFsysStore.Text = AppStrings.S_NA;
         }
 
         private void UpdateSerialNumberControls()
@@ -1297,7 +1338,7 @@ namespace Mac_EFI_Toolkit
             {
                 // Prototype in testing
                 if (!MacUtils.IsValidAppleSerial(serialNumber))
-                    lblSerialNumber.ForeColor = AppColours.ERROR;
+                    lblSerialNumber.ForeColor = AppColours.WARNING;
 
                 lblSerialNumber.Text +=
                     (serialNumber.Length == 11 || serialNumber.Length == 12)
@@ -1376,18 +1417,21 @@ namespace Mac_EFI_Toolkit
             int svsBase =
                 EFIROM.SvsStoreData.PrimaryStoreBase;
 
-            string stringVss =
+            lblVssStore.Text =
                 (vssBase != -1) ?
-                $"VS: 0x{vssBase:X2}h" :
-                AppStrings.S_NA;
+                $"VS: 0x{vssBase:X2}h"
+                : AppStrings.S_NA;
 
-            string stringSvs =
+            vSSBaseAddressToolStripMenuItem.Enabled =
+                (vssBase != -1);
+
+            lblSvsStore.Text =
                 (svsBase != -1) ?
                 $"SV: 0x{svsBase:X2}h" :
                 AppStrings.S_NA;
 
-            lblVssStore.Text = stringVss;
-            lblSvsStore.Text = stringSvs;
+            sVSBaseAddressToolStripMenuItem.Enabled =
+                (svsBase != -1);
         }
 
         private void UpdateEfiLockControls()
@@ -1396,11 +1440,10 @@ namespace Mac_EFI_Toolkit
             {
                 case EfiLockType.Locked:
                     lblEfiLock.Text = EfiWinStrings.S_LOCKED.ToUpper();
-                    lblEfiLock.ForeColor = AppColours.ERROR;
+                    lblEfiLock.ForeColor = AppColours.WARNING;
                     break;
                 case EfiLockType.Unlocked:
                     lblEfiLock.Text = EfiWinStrings.S_UNLOCKED.ToUpper();
-                    lblEfiLock.ForeColor = AppColours.COMPLETE;
                     break;
                 case EfiLockType.Unknown:
                 default:
@@ -1435,7 +1478,6 @@ namespace Mac_EFI_Toolkit
             {
                 case ApfsCapable.Yes:
                     lblApfsCapable.Text = EfiWinStrings.S_APFS_DRIVER_FOUND;
-                    lblApfsCapable.ForeColor = AppColours.COMPLETE;
                     break;
                 case ApfsCapable.No:
                     lblApfsCapable.Text = EfiWinStrings.S_APFS_DRIVER_NOT_FOUND;
@@ -1443,7 +1485,7 @@ namespace Mac_EFI_Toolkit
                     break;
                 case ApfsCapable.Unknown:
                     lblApfsCapable.Text = EfiWinStrings.S_UNKNOWN.ToUpper();
-                    lblApfsCapable.ForeColor = AppColours.ERROR;
+                    lblApfsCapable.ForeColor = AppColours.WARNING;
                     break;
             }
         }
@@ -1544,6 +1586,10 @@ namespace Mac_EFI_Toolkit
                 replaceFsysStoreToolStripMenuItem.Enabled =
                     EFIROM.FsysStoreData.FsysBase != -1;
 
+                resetNVRAMToolStripMenuItem.Enabled =
+                    !EFIROM.VssStoreData.IsPrimaryStoreEmpty &&
+                    !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
+
                 fixFsysChecksumCRC32ToolStripMenuItem.Enabled =
                     fsysCrcMismatch;
 
@@ -1551,6 +1597,7 @@ namespace Mac_EFI_Toolkit
                     EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
 
                 // Export Menu
+
                 exportFsysStoreToolStripMenuItem.Enabled =
                     fsysBytesExist;
 
@@ -1558,8 +1605,6 @@ namespace Mac_EFI_Toolkit
                     IFD.IsDescriptorMode &&
                     IFD.ME_REGION_BASE != 0 &&
                     IFD.ME_REGION_LIMIT != 0;
-
-                /// NVRAM stores detect/disable
 
                 // Options Menu
                 viewRomInformationToolStripMenuItem.Enabled =
@@ -1792,7 +1837,7 @@ namespace Mac_EFI_Toolkit
                 lblConfigCode,
                 lblSerialNumber,
                 lblHwc,
-                lblFsysCrc32,
+                lblFsysStore,
                 lblOrderNumber,
                 lblEfiVersion,
                 lblVssStore,
@@ -1863,13 +1908,16 @@ namespace Mac_EFI_Toolkit
             MacUtils.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart));
 
         private void ClipboardSetFirmwareConfigCode() => SetClipboardText(
-                EFIROM.ConfigCode);
+            EFIROM.ConfigCode);
+
+        private void ClipboardSetFsysBaseAddress() => SetClipboardText(
+            $"0x{EFIROM.FsysStoreData.FsysBase:X2}h");
 
         private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(
             EFIROM.FsysStoreData.CrcString);
 
         private void ClipboardSetFirmwareSerial() => SetClipboardText(
-                EFIROM.FsysStoreData.Serial);
+            EFIROM.FsysStoreData.Serial);
 
         private void ClipboardSetFirmwareHwc() => SetClipboardText(
             EFIROM.FsysStoreData.HWC);
@@ -1879,6 +1927,12 @@ namespace Mac_EFI_Toolkit
 
         private void ClipboardSetFirmwareVersion() => SetClipboardText(
             EFIROM.FirmwareVersion);
+
+        private void ClipboardSetVssBaseAddress() => SetClipboardText(
+            $"0x{EFIROM.VssStoreData.PrimaryStoreBase:X2}h");
+
+        private void ClipboardSetSvsBaseAddress() => SetClipboardText(
+            $"0x{EFIROM.SvsStoreData.PrimaryStoreBase:X2}h");
 
         private void ClipboardSetFirmwareBoardId() => SetClipboardText(
             EFIROM.PdrSectionData.BoardId);
@@ -2289,6 +2343,34 @@ namespace Mac_EFI_Toolkit
 
             if (result == DialogResult.Yes)
                 Logger.ViewLogFile(this);
+        }
+        #endregion
+
+        private void ResetNVRAM(bool resetVss, bool resetSvs)
+        {
+
+        }
+
+        #region Disco Time?
+        private void DiscoModeTime(Control parent, Random random)
+        {
+            foreach (Control control in parent.Controls)
+            {
+                control.BackColor = GenerateRandomColor(random);
+                control.ForeColor = GenerateRandomColor(random);
+
+                if (control.HasChildren)
+                    DiscoModeTime(control, random);
+            }
+        }
+
+        private Color GenerateRandomColor(Random random)
+        {
+            int red = random.Next(0, 256);
+            int green = random.Next(0, 256);
+            int blue = random.Next(0, 256);
+
+            return Color.FromArgb(red, green, blue);
         }
         #endregion
 

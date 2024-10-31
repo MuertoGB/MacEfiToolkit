@@ -27,8 +27,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static string FitVersion = null;
         internal static string MeVersion = null;
 
-        // Internally accessible for SSN patching
+        // Internally accessible for patching
         internal static string NewSSN = null;
+        internal static bool bResetVss = false;
+        internal static bool bResetSvs = false;
 
         internal static Binary FileInfoData;
         internal static PdrSection PdrSectionData;

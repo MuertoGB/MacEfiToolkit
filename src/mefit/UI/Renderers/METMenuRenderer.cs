@@ -13,7 +13,8 @@ namespace Mac_EFI_Toolkit.UI.Renderers
     class METMenuRenderer : ToolStripRenderer
     {
         private readonly Color BorderColor = Color.FromArgb(80, 80, 80);
-        private readonly Color ItemHoverColor = Color.FromArgb(60, 60, 60);
+        private readonly Color ItemHoverBorderColor = Color.FromArgb(50, 60, 70);
+        private readonly Color ItemHoverColor = Color.FromArgb(40, 50, 60);
 
         protected override void OnRenderToolStripBorder(
             ToolStripRenderEventArgs e)
@@ -52,7 +53,7 @@ namespace Mac_EFI_Toolkit.UI.Renderers
                 e.Item.Selected
                 ? ItemHoverColor
                 : Color.Transparent))
-            using (Pen pen = new Pen(BorderColor))
+            using (Pen pen = new Pen(ItemHoverBorderColor))
             {
                 if (e.Item.Selected)
                 {

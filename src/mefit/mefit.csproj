@@ -178,6 +178,12 @@
     <Compile Include="Utils\MacUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\NetUtils.cs" />
+    <Compile Include="WinForms\nvramWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\nvramWindow.Designer.cs">
+      <DependentUpon>nvramWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="WinForms\settingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,6 +237,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="WinForms\nvramWindow.resx">
+      <DependentUpon>nvramWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WinForms\settingsWindow.resx">
       <DependentUpon>settingsWindow.cs</DependentUpon>
     </EmbeddedResource>

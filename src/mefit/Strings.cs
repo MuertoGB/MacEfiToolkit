@@ -379,7 +379,7 @@ namespace Mac_EFI_Toolkit
             "Open File Location";
 
         internal const string S_COPIED_TO_CB =
-            "copied to clipboard";
+            "copied to clipboard.";
         #endregion
     }
 

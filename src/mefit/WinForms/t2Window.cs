@@ -60,7 +60,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Window Events
         private void t2Window_Load(object sender, EventArgs e)
         {
-            OpenBinary(Program.MAIN_WINDOW.loadedFile);
+            //OpenBinary(Program.MAIN_WINDOW.loadedFile);
         }
         #endregion
 

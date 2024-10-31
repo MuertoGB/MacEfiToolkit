@@ -84,9 +84,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             if (headerPos != -1)
             {
+                if (versionType == VersionType.ManagementEngine)
+                    headerPos += 2;
+
                 byte[] headerBytes = BinaryUtils.GetBytesBaseLength(
                     sourceBytes,
-                    headerPos + 2,
+                    headerPos,
                     dataLength);
 
                 if (headerBytes != null)

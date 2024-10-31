@@ -24,6 +24,8 @@
 - Added an option in the EFI window that can automatically generate a structured file name for the loaded firmware and copy it to the clipboard.
 - Added an option in the EFI window that permits the output of firmware information to a text file.
 - Added an option in the EFI window to export NVRAM stores.
+- Added an option in the EFI window to copy the Fsys store base address.
+- Added an option in the EFI window to copy the NVRAM VSS and SVS base addresses.
 
 #### Enhancements:
 - Disallowed opening of non-apple extensible firmware interface files.
@@ -41,6 +43,7 @@
 
 #### Bugs:
 - Added missing icon to the ROM Information window.
+- Fixed broken FIT version strings.
 
 #### Misc:
 - Changed how some settings are structured
