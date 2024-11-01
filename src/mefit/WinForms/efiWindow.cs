@@ -1166,6 +1166,7 @@ namespace Mac_EFI_Toolkit
             UpdateHardwareConfigControls();
             UpdateOrderNumberControls();
             UpdateEfiVersionControls();
+            UpdateDescriptorModeControls();
 
             UpdateNvramControls();
             UpdateEfiLockControls();
@@ -1302,7 +1303,7 @@ namespace Mac_EFI_Toolkit
             if (EFIROM.FsysStoreData.FsysBase != -1)
             {
                 lblFsysStore.Text =
-                    $"0x{EFIROM.FsysStoreData.FsysBase}h";
+                    $"0x{EFIROM.FsysStoreData.FsysBase:X2}h";
 
                 bool crcMatch =
                     string.Equals(
@@ -1313,8 +1314,8 @@ namespace Mac_EFI_Toolkit
                 {
                     lblFsysStore.Text +=
                         crcMatch ?
-                        " (GOOD CRC)" :
-                        " (BAD CRC)";
+                        " (VALID CRC)" :
+                        " (INVALID CRC)";
                     lblFsysStore.ForeColor =
                         crcMatch ?
                         lblFsysStore.ForeColor :
@@ -1421,29 +1422,37 @@ namespace Mac_EFI_Toolkit
             efiVersionToolStripMenuItem.Enabled = false;
         }
 
+        private void UpdateDescriptorModeControls() =>
+            lblDescriptorMode.Text = $"{IFD.IsDescriptorMode}";
+
         private void UpdateNvramControls()
         {
-            int vssBase =
-                EFIROM.VssStoreData.PrimaryStoreBase;
-            int svsBase =
-                EFIROM.SvsStoreData.PrimaryStoreBase;
+            // Retrieve base addresses and empty states
+            int vssBase = EFIROM.VssStoreData.PrimaryStoreBase;
+            int svsBase = EFIROM.SvsStoreData.PrimaryStoreBase;
+            bool isVssEmpty = EFIROM.VssStoreData.IsPrimaryStoreEmpty;
+            bool isSvsEmpty = EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
 
-            lblVssStore.Text =
-                (vssBase != -1) ?
-                $"VS: 0x{vssBase:X2}h"
-                : AppStrings.S_NA;
-
-            vSSBaseAddressToolStripMenuItem.Enabled =
-                (vssBase != -1);
-
-            lblSvsStore.Text =
-                (svsBase != -1) ?
-                $"SV: 0x{svsBase:X2}h" :
-                AppStrings.S_NA;
-
-            sVSBaseAddressToolStripMenuItem.Enabled =
-                (svsBase != -1);
+            // Update labels and menu items
+            UpdateStoreDisplay(lblVss, vSSBaseAddressToolStripMenuItem, vssBase, isVssEmpty);
+            UpdateStoreDisplay(lblSvs, sVSBaseAddressToolStripMenuItem, svsBase, isSvsEmpty);
         }
+
+        // Helper method to update label text and menu item enabled state
+        private void UpdateStoreDisplay(Label label, ToolStripMenuItem menuItem, int baseAddress, bool isEmpty)
+        {
+            if (baseAddress != -1)
+            {
+                label.Text = $"0x{baseAddress:X2}h {(isEmpty ? "[Empty]" : string.Empty)}";
+                menuItem.Enabled = true;
+            }
+            else
+            {
+                label.Text = AppStrings.S_NA;
+                menuItem.Enabled = false;
+            }
+        }
+
 
         private void UpdateEfiLockControls()
         {
@@ -1589,6 +1598,23 @@ namespace Mac_EFI_Toolkit
                     modelPartExists
                     && fsysBytesExist;
 
+                // Export Menu
+                exportFsysStoreToolStripMenuItem.Enabled =
+                    fsysBytesExist;
+
+                exportIntelMERegionToolStripMenuItem.Enabled =
+                    IFD.IsDescriptorMode &&
+                    IFD.ME_REGION_BASE != 0 &&
+                    IFD.ME_REGION_LIMIT != 0;
+
+                exportNVRAMVSSStoresToolStripMenuItem.Enabled =
+                    EFIROM.VssStoreData.PrimaryStoreBase != -1 &&
+                    !EFIROM.VssStoreData.IsPrimaryStoreEmpty;
+
+                exportNVRAMSVSStoresToolStripMenuItem.Enabled =
+                    EFIROM.SvsStoreData.PrimaryStoreBase != -1 &&
+                    !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
+
                 // Patch Menu
                 changeSerialNumberToolStripMenuItem.Enabled =
                     EFIROM.FsysStoreData.FsysBase != -1 &&
@@ -1598,7 +1624,7 @@ namespace Mac_EFI_Toolkit
                     EFIROM.FsysStoreData.FsysBase != -1;
 
                 resetNVRAMToolStripMenuItem.Enabled =
-                    !EFIROM.VssStoreData.IsPrimaryStoreEmpty &&
+                    !EFIROM.VssStoreData.IsPrimaryStoreEmpty ||
                     !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
 
                 fixFsysChecksumCRC32ToolStripMenuItem.Enabled =
@@ -1606,16 +1632,6 @@ namespace Mac_EFI_Toolkit
 
                 invalidateEFILockToolStripMenuItem.Enabled =
                     EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
-
-                // Export Menu
-
-                exportFsysStoreToolStripMenuItem.Enabled =
-                    fsysBytesExist;
-
-                exportIntelMERegionToolStripMenuItem.Enabled =
-                    IFD.IsDescriptorMode &&
-                    IFD.ME_REGION_BASE != 0 &&
-                    IFD.ME_REGION_LIMIT != 0;
 
                 // Options Menu
                 viewRomInformationToolStripMenuItem.Enabled =
@@ -1665,8 +1681,8 @@ namespace Mac_EFI_Toolkit
 
             Label[] labels =
             {
-                lblVssStore,
-                lblSvsStore,
+                lblVss,
+                lblSvs,
             };
 
             foreach (Button button in buttons)
@@ -1847,10 +1863,11 @@ namespace Mac_EFI_Toolkit
                 lblSerialNumber,
                 lblHwc,
                 lblFsysStore,
+                lblDescriptorMode,
                 lblOrderNumber,
                 lblEfiVersion,
-                lblVssStore,
-                lblSvsStore,
+                lblVss,
+                lblSvs,
                 lblEfiLock,
                 lblBoardId,
                 lblApfsCapable,

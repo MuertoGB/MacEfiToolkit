@@ -30,79 +30,52 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ssnWindow));
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.lblWindowTitle = new System.Windows.Forms.Label();
-            this.tbSsn = new System.Windows.Forms.TextBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.cmdOkay = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
+            this.tlpSsn = new System.Windows.Forms.TableLayoutPanel();
+            this.tbSsn = new System.Windows.Forms.TextBox();
+            this.lblWindowTitle = new System.Windows.Forms.Label();
+            this.pnlSeperator = new System.Windows.Forms.Panel();
             this.tlpMain.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tlpButtons.SuspendLayout();
+            this.tlpSsn.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpMain
             // 
-            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Controls.Add(this.lblWindowTitle, 0, 0);
-            this.tlpMain.Controls.Add(this.tbSsn, 0, 1);
-            this.tlpMain.Controls.Add(this.tableLayoutPanel1, 0, 2);
+            this.tlpMain.Controls.Add(this.tlpButtons, 0, 2);
+            this.tlpMain.Controls.Add(this.tlpSsn, 0, 0);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpMain.Location = new System.Drawing.Point(1, 1);
+            this.tlpMain.Location = new System.Drawing.Point(1, 34);
             this.tlpMain.Name = "tlpMain";
             this.tlpMain.RowCount = 3;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tlpMain.Size = new System.Drawing.Size(308, 143);
+            this.tlpMain.Size = new System.Drawing.Size(308, 110);
             this.tlpMain.TabIndex = 0;
             // 
-            // lblWindowTitle
+            // tlpButtons
             // 
-            this.lblWindowTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWindowTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblWindowTitle.Location = new System.Drawing.Point(0, 0);
-            this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
-            this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(308, 32);
-            this.lblWindowTitle.TabIndex = 0;
-            this.lblWindowTitle.Text = "Enter New Serial Number";
-            this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tbSsn
-            // 
-            this.tbSsn.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.tbSsn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.tbSsn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tbSsn.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.tbSsn.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSsn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.tbSsn.Location = new System.Drawing.Point(44, 56);
-            this.tbSsn.MaxLength = 12;
-            this.tbSsn.Name = "tbSsn";
-            this.tbSsn.Size = new System.Drawing.Size(220, 31);
-            this.tbSsn.TabIndex = 0;
-            this.tbSsn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbSsn.TextChanged += new System.EventHandler(this.tbSsn_TextChanged);
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.cmdOkay, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.cmdCancel, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 111);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(308, 32);
-            this.tableLayoutPanel1.TabIndex = 1;
+            this.tlpButtons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tlpButtons.ColumnCount = 3;
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButtons.Controls.Add(this.cmdOkay, 2, 0);
+            this.tlpButtons.Controls.Add(this.cmdCancel, 0, 0);
+            this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpButtons.Location = new System.Drawing.Point(0, 78);
+            this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpButtons.Name = "tlpButtons";
+            this.tlpButtons.RowCount = 1;
+            this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpButtons.Size = new System.Drawing.Size(308, 32);
+            this.tlpButtons.TabIndex = 1;
             // 
             // cmdOkay
             // 
@@ -116,10 +89,10 @@
             this.cmdOkay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOkay.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdOkay.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
-            this.cmdOkay.Location = new System.Drawing.Point(154, 0);
+            this.cmdOkay.Location = new System.Drawing.Point(155, 0);
             this.cmdOkay.Margin = new System.Windows.Forms.Padding(0);
             this.cmdOkay.Name = "cmdOkay";
-            this.cmdOkay.Size = new System.Drawing.Size(154, 32);
+            this.cmdOkay.Size = new System.Drawing.Size(153, 32);
             this.cmdOkay.TabIndex = 1;
             this.cmdOkay.Text = "OKAY";
             this.cmdOkay.UseVisualStyleBackColor = false;
@@ -145,6 +118,60 @@
             this.cmdCancel.UseVisualStyleBackColor = false;
             this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
+            // tlpSsn
+            // 
+            this.tlpSsn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tlpSsn.ColumnCount = 1;
+            this.tlpSsn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpSsn.Controls.Add(this.tbSsn, 0, 0);
+            this.tlpSsn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSsn.Location = new System.Drawing.Point(0, 0);
+            this.tlpSsn.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSsn.Name = "tlpSsn";
+            this.tlpSsn.RowCount = 1;
+            this.tlpSsn.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpSsn.Size = new System.Drawing.Size(308, 77);
+            this.tlpSsn.TabIndex = 2;
+            // 
+            // tbSsn
+            // 
+            this.tbSsn.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tbSsn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.tbSsn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbSsn.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.tbSsn.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbSsn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.tbSsn.Location = new System.Drawing.Point(44, 23);
+            this.tbSsn.MaxLength = 12;
+            this.tbSsn.Name = "tbSsn";
+            this.tbSsn.Size = new System.Drawing.Size(220, 31);
+            this.tbSsn.TabIndex = 0;
+            this.tbSsn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tbSsn.TextChanged += new System.EventHandler(this.tbSsn_TextChanged);
+            // 
+            // lblWindowTitle
+            // 
+            this.lblWindowTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWindowTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblWindowTitle.Location = new System.Drawing.Point(1, 1);
+            this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
+            this.lblWindowTitle.Name = "lblWindowTitle";
+            this.lblWindowTitle.Size = new System.Drawing.Size(308, 32);
+            this.lblWindowTitle.TabIndex = 0;
+            this.lblWindowTitle.Text = "Enter New Serial Number:";
+            this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pnlSeperator
+            // 
+            this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.pnlSeperator.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeperator.Location = new System.Drawing.Point(1, 33);
+            this.pnlSeperator.Name = "pnlSeperator";
+            this.pnlSeperator.Size = new System.Drawing.Size(308, 1);
+            this.pnlSeperator.TabIndex = 1;
+            // 
             // ssnWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -154,7 +181,9 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(310, 145);
             this.Controls.Add(this.tlpMain);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Controls.Add(this.pnlSeperator);
+            this.Controls.Add(this.lblWindowTitle);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
@@ -167,8 +196,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter Serial Number";
             this.tlpMain.ResumeLayout(false);
-            this.tlpMain.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tlpButtons.ResumeLayout(false);
+            this.tlpSsn.ResumeLayout(false);
+            this.tlpSsn.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -178,8 +208,10 @@
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.TextBox tbSsn;
         internal System.Windows.Forms.Label lblWindowTitle;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tlpButtons;
         private System.Windows.Forms.Button cmdOkay;
         private System.Windows.Forms.Button cmdCancel;
+        private System.Windows.Forms.Panel pnlSeperator;
+        private System.Windows.Forms.TableLayoutPanel tlpSsn;
     }
 }

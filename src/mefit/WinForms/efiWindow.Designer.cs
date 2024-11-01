@@ -35,28 +35,23 @@ namespace Mac_EFI_Toolkit
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
-            this.lblFilename = new METLabel();
             this.cmdOpenInExplorer = new System.Windows.Forms.Button();
             this.tlpFirmware = new System.Windows.Forms.TableLayoutPanel();
+            this.lblEfiVersion = new System.Windows.Forms.Label();
             this.lblConfigCodeText = new System.Windows.Forms.Label();
             this.lblModel = new System.Windows.Forms.Label();
             this.lblModelText = new System.Windows.Forms.Label();
             this.lblFileModifiedDate = new System.Windows.Forms.Label();
-            this.lblNvramText = new System.Windows.Forms.Label();
             this.lblFileModifiedDataText = new System.Windows.Forms.Label();
-            this.lblEfiVersionText = new System.Windows.Forms.Label();
             this.lblFileCreatedDateText = new System.Windows.Forms.Label();
             this.lblFileCrc32 = new System.Windows.Forms.Label();
             this.lblSerialNumberText = new System.Windows.Forms.Label();
             this.lblHwcText = new System.Windows.Forms.Label();
             this.lblFileCrc32Text = new System.Windows.Forms.Label();
             this.tlpEfiVer = new System.Windows.Forms.TableLayoutPanel();
-            this.lblEfiVersion = new System.Windows.Forms.Label();
+            this.lblVss = new System.Windows.Forms.Label();
             this.tlpFsys = new System.Windows.Forms.TableLayoutPanel();
             this.lblFsysStore = new System.Windows.Forms.Label();
-            this.tlpNvram = new System.Windows.Forms.TableLayoutPanel();
-            this.lblSvsStore = new System.Windows.Forms.Label();
-            this.lblVssStore = new System.Windows.Forms.Label();
             this.lblOrderNumberText = new System.Windows.Forms.Label();
             this.lblOrderNumber = new System.Windows.Forms.Label();
             this.lblMeVersionText = new System.Windows.Forms.Label();
@@ -75,8 +70,12 @@ namespace Mac_EFI_Toolkit
             this.lblSerialNumber = new System.Windows.Forms.Label();
             this.lblFilesizeText = new System.Windows.Forms.Label();
             this.lblFileCreatedDate = new System.Windows.Forms.Label();
-            this.lblConfigCode = new METLabel();
-            this.lblFilesize = new METLabel();
+            this.lblEfiVersionText = new System.Windows.Forms.Label();
+            this.lblDescriptorModeText = new System.Windows.Forms.Label();
+            this.lblDescriptorMode = new System.Windows.Forms.Label();
+            this.lblVssText = new System.Windows.Forms.Label();
+            this.lblSvs = new System.Windows.Forms.Label();
+            this.lblSvsText = new System.Windows.Forms.Label();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
             this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLoad = new System.Windows.Forms.PictureBox();
@@ -100,6 +99,9 @@ namespace Mac_EFI_Toolkit
             this.rESETToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helloToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.testringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblFilename = new METLabel();
+            this.lblConfigCode = new METLabel();
+            this.lblFilesize = new METLabel();
             this.cmsCopy = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.filenameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sizeBytesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -151,7 +153,6 @@ namespace Mac_EFI_Toolkit
             this.tlpFirmware.SuspendLayout();
             this.tlpEfiVer.SuspendLayout();
             this.tlpFsys.SuspendLayout();
-            this.tlpNvram.SuspendLayout();
             this.tlpIntelMe.SuspendLayout();
             this.tlpEfiLock.SuspendLayout();
             this.tlpSerial.SuspendLayout();
@@ -178,7 +179,7 @@ namespace Mac_EFI_Toolkit
             this.pnlMain.Location = new System.Drawing.Point(1, 51);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(761, 395);
+            this.pnlMain.Size = new System.Drawing.Size(761, 440);
             this.pnlMain.TabIndex = 2;
             // 
             // tlpMain
@@ -198,7 +199,7 @@ namespace Mac_EFI_Toolkit
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpMain.Size = new System.Drawing.Size(761, 361);
+            this.tlpMain.Size = new System.Drawing.Size(761, 406);
             this.tlpMain.TabIndex = 1;
             // 
             // tlpFilename
@@ -223,21 +224,6 @@ namespace Mac_EFI_Toolkit
             this.tlpFilename.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilename.Size = new System.Drawing.Size(761, 36);
             this.tlpFilename.TabIndex = 0;
-            // 
-            // lblFilename
-            // 
-            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.lblFilename.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblFilename.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblFilename.Location = new System.Drawing.Point(0, 0);
-            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.lblFilename.Size = new System.Drawing.Size(724, 36);
-            this.lblFilename.TabIndex = 0;
-            this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdOpenInExplorer
             // 
@@ -271,31 +257,29 @@ namespace Mac_EFI_Toolkit
             this.tlpFirmware.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
             this.tlpFirmware.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpFirmware.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpFirmware.Controls.Add(this.lblEfiVersion, 2, 10);
             this.tlpFirmware.Controls.Add(this.lblConfigCodeText, 4, 4);
             this.tlpFirmware.Controls.Add(this.lblModel, 2, 4);
             this.tlpFirmware.Controls.Add(this.lblModelText, 0, 4);
             this.tlpFirmware.Controls.Add(this.lblFileModifiedDate, 6, 2);
-            this.tlpFirmware.Controls.Add(this.lblNvramText, 4, 10);
             this.tlpFirmware.Controls.Add(this.lblFileModifiedDataText, 4, 2);
-            this.tlpFirmware.Controls.Add(this.lblEfiVersionText, 0, 10);
             this.tlpFirmware.Controls.Add(this.lblFileCreatedDateText, 0, 2);
             this.tlpFirmware.Controls.Add(this.lblFileCrc32, 6, 0);
             this.tlpFirmware.Controls.Add(this.lblSerialNumberText, 4, 6);
             this.tlpFirmware.Controls.Add(this.lblHwcText, 0, 8);
             this.tlpFirmware.Controls.Add(this.lblFileCrc32Text, 4, 0);
-            this.tlpFirmware.Controls.Add(this.tlpEfiVer, 2, 10);
+            this.tlpFirmware.Controls.Add(this.tlpEfiVer, 2, 12);
             this.tlpFirmware.Controls.Add(this.tlpFsys, 2, 6);
-            this.tlpFirmware.Controls.Add(this.tlpNvram, 6, 10);
             this.tlpFirmware.Controls.Add(this.lblOrderNumberText, 4, 8);
             this.tlpFirmware.Controls.Add(this.lblOrderNumber, 6, 8);
-            this.tlpFirmware.Controls.Add(this.lblMeVersionText, 4, 14);
-            this.tlpFirmware.Controls.Add(this.tlpIntelMe, 6, 14);
-            this.tlpFirmware.Controls.Add(this.lblBoardId, 6, 12);
-            this.tlpFirmware.Controls.Add(this.lblBoardIdText, 4, 12);
-            this.tlpFirmware.Controls.Add(this.lblEfiLockText, 0, 12);
-            this.tlpFirmware.Controls.Add(this.lblApfsCapable, 2, 14);
-            this.tlpFirmware.Controls.Add(this.lblApfsCapableText, 0, 14);
-            this.tlpFirmware.Controls.Add(this.tlpEfiLock, 2, 12);
+            this.tlpFirmware.Controls.Add(this.lblMeVersionText, 4, 16);
+            this.tlpFirmware.Controls.Add(this.tlpIntelMe, 6, 16);
+            this.tlpFirmware.Controls.Add(this.lblBoardId, 6, 14);
+            this.tlpFirmware.Controls.Add(this.lblBoardIdText, 4, 14);
+            this.tlpFirmware.Controls.Add(this.lblEfiLockText, 0, 14);
+            this.tlpFirmware.Controls.Add(this.lblApfsCapable, 2, 16);
+            this.tlpFirmware.Controls.Add(this.lblApfsCapableText, 0, 16);
+            this.tlpFirmware.Controls.Add(this.tlpEfiLock, 2, 14);
             this.tlpFirmware.Controls.Add(this.lblHwc, 2, 8);
             this.tlpFirmware.Controls.Add(this.lblFsysStoreText, 0, 6);
             this.tlpFirmware.Controls.Add(this.tlpSerial, 6, 6);
@@ -303,29 +287,54 @@ namespace Mac_EFI_Toolkit
             this.tlpFirmware.Controls.Add(this.lblFileCreatedDate, 2, 2);
             this.tlpFirmware.Controls.Add(this.lblConfigCode, 6, 4);
             this.tlpFirmware.Controls.Add(this.lblFilesize, 2, 0);
+            this.tlpFirmware.Controls.Add(this.lblEfiVersionText, 0, 10);
+            this.tlpFirmware.Controls.Add(this.lblDescriptorModeText, 4, 10);
+            this.tlpFirmware.Controls.Add(this.lblDescriptorMode, 6, 10);
+            this.tlpFirmware.Controls.Add(this.lblVssText, 0, 12);
+            this.tlpFirmware.Controls.Add(this.lblSvs, 6, 12);
+            this.tlpFirmware.Controls.Add(this.lblSvsText, 4, 12);
             this.tlpFirmware.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFirmware.Enabled = false;
             this.tlpFirmware.Location = new System.Drawing.Point(0, 37);
             this.tlpFirmware.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFirmware.Name = "tlpFirmware";
-            this.tlpFirmware.RowCount = 15;
-            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.tlpFirmware.RowCount = 17;
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tlpFirmware.Size = new System.Drawing.Size(761, 287);
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tlpFirmware.Size = new System.Drawing.Size(761, 332);
             this.tlpFirmware.TabIndex = 2;
+            // 
+            // lblEfiVersion
+            // 
+            this.lblEfiVersion.AutoEllipsis = true;
+            this.lblEfiVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblEfiVersion.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblEfiVersion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEfiVersion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEfiVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblEfiVersion.Location = new System.Drawing.Point(131, 185);
+            this.lblEfiVersion.Margin = new System.Windows.Forms.Padding(0);
+            this.lblEfiVersion.Name = "lblEfiVersion";
+            this.lblEfiVersion.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblEfiVersion.Size = new System.Drawing.Size(249, 36);
+            this.lblEfiVersion.TabIndex = 0;
+            this.lblEfiVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblEfiVersion.UseMnemonic = false;
             // 
             // lblConfigCodeText
             // 
@@ -333,11 +342,11 @@ namespace Mac_EFI_Toolkit
             this.lblConfigCodeText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblConfigCodeText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblConfigCodeText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblConfigCodeText.Location = new System.Drawing.Point(381, 72);
+            this.lblConfigCodeText.Location = new System.Drawing.Point(381, 74);
             this.lblConfigCodeText.Margin = new System.Windows.Forms.Padding(0);
             this.lblConfigCodeText.Name = "lblConfigCodeText";
             this.lblConfigCodeText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblConfigCodeText.Size = new System.Drawing.Size(130, 35);
+            this.lblConfigCodeText.Size = new System.Drawing.Size(130, 36);
             this.lblConfigCodeText.TabIndex = 0;
             this.lblConfigCodeText.Text = "Configuration:";
             this.lblConfigCodeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -350,11 +359,11 @@ namespace Mac_EFI_Toolkit
             this.lblModel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblModel.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblModel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblModel.Location = new System.Drawing.Point(131, 72);
+            this.lblModel.Location = new System.Drawing.Point(131, 74);
             this.lblModel.Margin = new System.Windows.Forms.Padding(0);
             this.lblModel.Name = "lblModel";
             this.lblModel.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblModel.Size = new System.Drawing.Size(249, 35);
+            this.lblModel.Size = new System.Drawing.Size(249, 36);
             this.lblModel.TabIndex = 0;
             this.lblModel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -364,11 +373,11 @@ namespace Mac_EFI_Toolkit
             this.lblModelText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblModelText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblModelText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblModelText.Location = new System.Drawing.Point(0, 72);
+            this.lblModelText.Location = new System.Drawing.Point(0, 74);
             this.lblModelText.Margin = new System.Windows.Forms.Padding(0);
             this.lblModelText.Name = "lblModelText";
             this.lblModelText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblModelText.Size = new System.Drawing.Size(130, 35);
+            this.lblModelText.Size = new System.Drawing.Size(130, 36);
             this.lblModelText.TabIndex = 0;
             this.lblModelText.Text = "Model:";
             this.lblModelText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -381,29 +390,14 @@ namespace Mac_EFI_Toolkit
             this.lblFileModifiedDate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFileModifiedDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFileModifiedDate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblFileModifiedDate.Location = new System.Drawing.Point(512, 36);
+            this.lblFileModifiedDate.Location = new System.Drawing.Point(512, 37);
             this.lblFileModifiedDate.Margin = new System.Windows.Forms.Padding(0);
             this.lblFileModifiedDate.Name = "lblFileModifiedDate";
             this.lblFileModifiedDate.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFileModifiedDate.Size = new System.Drawing.Size(249, 35);
+            this.lblFileModifiedDate.Size = new System.Drawing.Size(249, 36);
             this.lblFileModifiedDate.TabIndex = 0;
             this.lblFileModifiedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblFileModifiedDate.UseMnemonic = false;
-            // 
-            // lblNvramText
-            // 
-            this.lblNvramText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.lblNvramText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblNvramText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNvramText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblNvramText.Location = new System.Drawing.Point(381, 180);
-            this.lblNvramText.Margin = new System.Windows.Forms.Padding(0);
-            this.lblNvramText.Name = "lblNvramText";
-            this.lblNvramText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblNvramText.Size = new System.Drawing.Size(130, 35);
-            this.lblNvramText.TabIndex = 0;
-            this.lblNvramText.Text = "NVRAM:";
-            this.lblNvramText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblFileModifiedDataText
             // 
@@ -411,29 +405,14 @@ namespace Mac_EFI_Toolkit
             this.lblFileModifiedDataText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFileModifiedDataText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFileModifiedDataText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblFileModifiedDataText.Location = new System.Drawing.Point(381, 36);
+            this.lblFileModifiedDataText.Location = new System.Drawing.Point(381, 37);
             this.lblFileModifiedDataText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFileModifiedDataText.Name = "lblFileModifiedDataText";
             this.lblFileModifiedDataText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblFileModifiedDataText.Size = new System.Drawing.Size(130, 35);
+            this.lblFileModifiedDataText.Size = new System.Drawing.Size(130, 36);
             this.lblFileModifiedDataText.TabIndex = 0;
             this.lblFileModifiedDataText.Text = "Modified:";
             this.lblFileModifiedDataText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // lblEfiVersionText
-            // 
-            this.lblEfiVersionText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
-            this.lblEfiVersionText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEfiVersionText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEfiVersionText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblEfiVersionText.Location = new System.Drawing.Point(0, 180);
-            this.lblEfiVersionText.Margin = new System.Windows.Forms.Padding(0);
-            this.lblEfiVersionText.Name = "lblEfiVersionText";
-            this.lblEfiVersionText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblEfiVersionText.Size = new System.Drawing.Size(130, 35);
-            this.lblEfiVersionText.TabIndex = 0;
-            this.lblEfiVersionText.Text = "EFI Version:";
-            this.lblEfiVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblFileCreatedDateText
             // 
@@ -441,11 +420,11 @@ namespace Mac_EFI_Toolkit
             this.lblFileCreatedDateText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFileCreatedDateText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFileCreatedDateText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblFileCreatedDateText.Location = new System.Drawing.Point(0, 36);
+            this.lblFileCreatedDateText.Location = new System.Drawing.Point(0, 37);
             this.lblFileCreatedDateText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFileCreatedDateText.Name = "lblFileCreatedDateText";
             this.lblFileCreatedDateText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblFileCreatedDateText.Size = new System.Drawing.Size(130, 35);
+            this.lblFileCreatedDateText.Size = new System.Drawing.Size(130, 36);
             this.lblFileCreatedDateText.TabIndex = 0;
             this.lblFileCreatedDateText.Text = "Created:";
             this.lblFileCreatedDateText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -462,7 +441,7 @@ namespace Mac_EFI_Toolkit
             this.lblFileCrc32.Margin = new System.Windows.Forms.Padding(0);
             this.lblFileCrc32.Name = "lblFileCrc32";
             this.lblFileCrc32.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFileCrc32.Size = new System.Drawing.Size(249, 35);
+            this.lblFileCrc32.Size = new System.Drawing.Size(249, 36);
             this.lblFileCrc32.TabIndex = 0;
             this.lblFileCrc32.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblFileCrc32.UseMnemonic = false;
@@ -473,11 +452,11 @@ namespace Mac_EFI_Toolkit
             this.lblSerialNumberText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSerialNumberText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSerialNumberText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblSerialNumberText.Location = new System.Drawing.Point(381, 108);
+            this.lblSerialNumberText.Location = new System.Drawing.Point(381, 111);
             this.lblSerialNumberText.Margin = new System.Windows.Forms.Padding(0);
             this.lblSerialNumberText.Name = "lblSerialNumberText";
             this.lblSerialNumberText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblSerialNumberText.Size = new System.Drawing.Size(130, 35);
+            this.lblSerialNumberText.Size = new System.Drawing.Size(130, 36);
             this.lblSerialNumberText.TabIndex = 0;
             this.lblSerialNumberText.Text = "Serial:";
             this.lblSerialNumberText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -488,11 +467,11 @@ namespace Mac_EFI_Toolkit
             this.lblHwcText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblHwcText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHwcText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblHwcText.Location = new System.Drawing.Point(0, 144);
+            this.lblHwcText.Location = new System.Drawing.Point(0, 148);
             this.lblHwcText.Margin = new System.Windows.Forms.Padding(0);
             this.lblHwcText.Name = "lblHwcText";
             this.lblHwcText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblHwcText.Size = new System.Drawing.Size(130, 35);
+            this.lblHwcText.Size = new System.Drawing.Size(130, 36);
             this.lblHwcText.TabIndex = 0;
             this.lblHwcText.Text = "HWC:";
             this.lblHwcText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -507,7 +486,7 @@ namespace Mac_EFI_Toolkit
             this.lblFileCrc32Text.Margin = new System.Windows.Forms.Padding(0);
             this.lblFileCrc32Text.Name = "lblFileCrc32Text";
             this.lblFileCrc32Text.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblFileCrc32Text.Size = new System.Drawing.Size(130, 35);
+            this.lblFileCrc32Text.Size = new System.Drawing.Size(130, 36);
             this.lblFileCrc32Text.TabIndex = 0;
             this.lblFileCrc32Text.Text = "CRC32:";
             this.lblFileCrc32Text.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -518,32 +497,32 @@ namespace Mac_EFI_Toolkit
             this.tlpEfiVer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpEfiVer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpEfiVer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpEfiVer.Controls.Add(this.lblEfiVersion, 0, 0);
+            this.tlpEfiVer.Controls.Add(this.lblVss, 0, 0);
             this.tlpEfiVer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpEfiVer.Location = new System.Drawing.Point(131, 180);
+            this.tlpEfiVer.Location = new System.Drawing.Point(131, 222);
             this.tlpEfiVer.Margin = new System.Windows.Forms.Padding(0);
             this.tlpEfiVer.Name = "tlpEfiVer";
             this.tlpEfiVer.RowCount = 1;
             this.tlpEfiVer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpEfiVer.Size = new System.Drawing.Size(249, 35);
+            this.tlpEfiVer.Size = new System.Drawing.Size(249, 36);
             this.tlpEfiVer.TabIndex = 1;
             // 
-            // lblEfiVersion
+            // lblVss
             // 
-            this.lblEfiVersion.AutoEllipsis = true;
-            this.lblEfiVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.lblEfiVersion.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblEfiVersion.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEfiVersion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEfiVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblEfiVersion.Location = new System.Drawing.Point(0, 0);
-            this.lblEfiVersion.Margin = new System.Windows.Forms.Padding(0);
-            this.lblEfiVersion.Name = "lblEfiVersion";
-            this.lblEfiVersion.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblEfiVersion.Size = new System.Drawing.Size(249, 35);
-            this.lblEfiVersion.TabIndex = 0;
-            this.lblEfiVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblEfiVersion.UseMnemonic = false;
+            this.lblVss.AutoEllipsis = true;
+            this.lblVss.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblVss.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblVss.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblVss.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVss.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblVss.Location = new System.Drawing.Point(0, 0);
+            this.lblVss.Margin = new System.Windows.Forms.Padding(0);
+            this.lblVss.Name = "lblVss";
+            this.lblVss.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblVss.Size = new System.Drawing.Size(249, 36);
+            this.lblVss.TabIndex = 0;
+            this.lblVss.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblVss.UseMnemonic = false;
             // 
             // tlpFsys
             // 
@@ -554,12 +533,12 @@ namespace Mac_EFI_Toolkit
             this.tlpFsys.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFsys.Controls.Add(this.lblFsysStore, 0, 0);
             this.tlpFsys.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpFsys.Location = new System.Drawing.Point(131, 108);
+            this.tlpFsys.Location = new System.Drawing.Point(131, 111);
             this.tlpFsys.Margin = new System.Windows.Forms.Padding(0);
             this.tlpFsys.Name = "tlpFsys";
             this.tlpFsys.RowCount = 1;
             this.tlpFsys.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFsys.Size = new System.Drawing.Size(249, 35);
+            this.tlpFsys.Size = new System.Drawing.Size(249, 36);
             this.tlpFsys.TabIndex = 0;
             // 
             // lblFsysStore
@@ -574,64 +553,10 @@ namespace Mac_EFI_Toolkit
             this.lblFsysStore.Margin = new System.Windows.Forms.Padding(0);
             this.lblFsysStore.Name = "lblFsysStore";
             this.lblFsysStore.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFsysStore.Size = new System.Drawing.Size(249, 35);
+            this.lblFsysStore.Size = new System.Drawing.Size(249, 36);
             this.lblFsysStore.TabIndex = 0;
             this.lblFsysStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblFsysStore.UseMnemonic = false;
-            // 
-            // tlpNvram
-            // 
-            this.tlpNvram.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.tlpNvram.ColumnCount = 3;
-            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpNvram.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpNvram.Controls.Add(this.lblSvsStore, 2, 0);
-            this.tlpNvram.Controls.Add(this.lblVssStore, 0, 0);
-            this.tlpNvram.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpNvram.Location = new System.Drawing.Point(512, 180);
-            this.tlpNvram.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpNvram.Name = "tlpNvram";
-            this.tlpNvram.RowCount = 1;
-            this.tlpNvram.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpNvram.Size = new System.Drawing.Size(249, 35);
-            this.tlpNvram.TabIndex = 3;
-            // 
-            // lblSvsStore
-            // 
-            this.lblSvsStore.AutoEllipsis = true;
-            this.lblSvsStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.lblSvsStore.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblSvsStore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSvsStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSvsStore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblSvsStore.Location = new System.Drawing.Point(125, 0);
-            this.lblSvsStore.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSvsStore.Name = "lblSvsStore";
-            this.lblSvsStore.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblSvsStore.Size = new System.Drawing.Size(124, 35);
-            this.lblSvsStore.TabIndex = 0;
-            this.lblSvsStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblSvsStore.UseMnemonic = false;
-            // 
-            // lblVssStore
-            // 
-            this.lblVssStore.AutoEllipsis = true;
-            this.lblVssStore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.lblVssStore.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblVssStore.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblVssStore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVssStore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblVssStore.Location = new System.Drawing.Point(0, 0);
-            this.lblVssStore.Margin = new System.Windows.Forms.Padding(0);
-            this.lblVssStore.Name = "lblVssStore";
-            this.lblVssStore.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblVssStore.Size = new System.Drawing.Size(124, 35);
-            this.lblVssStore.TabIndex = 0;
-            this.lblVssStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblVssStore.UseMnemonic = false;
             // 
             // lblOrderNumberText
             // 
@@ -639,11 +564,11 @@ namespace Mac_EFI_Toolkit
             this.lblOrderNumberText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblOrderNumberText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblOrderNumberText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblOrderNumberText.Location = new System.Drawing.Point(381, 144);
+            this.lblOrderNumberText.Location = new System.Drawing.Point(381, 148);
             this.lblOrderNumberText.Margin = new System.Windows.Forms.Padding(0);
             this.lblOrderNumberText.Name = "lblOrderNumberText";
             this.lblOrderNumberText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblOrderNumberText.Size = new System.Drawing.Size(130, 35);
+            this.lblOrderNumberText.Size = new System.Drawing.Size(130, 36);
             this.lblOrderNumberText.TabIndex = 0;
             this.lblOrderNumberText.Text = "Order No:";
             this.lblOrderNumberText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -656,11 +581,11 @@ namespace Mac_EFI_Toolkit
             this.lblOrderNumber.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblOrderNumber.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblOrderNumber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblOrderNumber.Location = new System.Drawing.Point(512, 144);
+            this.lblOrderNumber.Location = new System.Drawing.Point(512, 148);
             this.lblOrderNumber.Margin = new System.Windows.Forms.Padding(0);
             this.lblOrderNumber.Name = "lblOrderNumber";
             this.lblOrderNumber.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblOrderNumber.Size = new System.Drawing.Size(249, 35);
+            this.lblOrderNumber.Size = new System.Drawing.Size(249, 36);
             this.lblOrderNumber.TabIndex = 0;
             this.lblOrderNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblOrderNumber.UseMnemonic = false;
@@ -671,11 +596,11 @@ namespace Mac_EFI_Toolkit
             this.lblMeVersionText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblMeVersionText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMeVersionText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblMeVersionText.Location = new System.Drawing.Point(381, 252);
+            this.lblMeVersionText.Location = new System.Drawing.Point(381, 296);
             this.lblMeVersionText.Margin = new System.Windows.Forms.Padding(0);
             this.lblMeVersionText.Name = "lblMeVersionText";
             this.lblMeVersionText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblMeVersionText.Size = new System.Drawing.Size(130, 35);
+            this.lblMeVersionText.Size = new System.Drawing.Size(130, 36);
             this.lblMeVersionText.TabIndex = 0;
             this.lblMeVersionText.Text = "ME Version:";
             this.lblMeVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -688,18 +613,18 @@ namespace Mac_EFI_Toolkit
             this.tlpIntelMe.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpIntelMe.Controls.Add(this.lblMeVersion, 0, 0);
             this.tlpIntelMe.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpIntelMe.Location = new System.Drawing.Point(512, 252);
+            this.tlpIntelMe.Location = new System.Drawing.Point(512, 296);
             this.tlpIntelMe.Margin = new System.Windows.Forms.Padding(0);
             this.tlpIntelMe.Name = "tlpIntelMe";
             this.tlpIntelMe.RowCount = 1;
             this.tlpIntelMe.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpIntelMe.Size = new System.Drawing.Size(249, 35);
+            this.tlpIntelMe.Size = new System.Drawing.Size(249, 36);
             this.tlpIntelMe.TabIndex = 5;
             // 
             // lblMeVersion
             // 
             this.lblMeVersion.AutoEllipsis = true;
-            this.lblMeVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblMeVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.lblMeVersion.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblMeVersion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblMeVersion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -708,7 +633,7 @@ namespace Mac_EFI_Toolkit
             this.lblMeVersion.Margin = new System.Windows.Forms.Padding(0);
             this.lblMeVersion.Name = "lblMeVersion";
             this.lblMeVersion.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblMeVersion.Size = new System.Drawing.Size(249, 35);
+            this.lblMeVersion.Size = new System.Drawing.Size(249, 36);
             this.lblMeVersion.TabIndex = 0;
             this.lblMeVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblMeVersion.UseMnemonic = false;
@@ -716,16 +641,16 @@ namespace Mac_EFI_Toolkit
             // lblBoardId
             // 
             this.lblBoardId.AutoEllipsis = true;
-            this.lblBoardId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblBoardId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.lblBoardId.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblBoardId.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBoardId.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBoardId.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblBoardId.Location = new System.Drawing.Point(512, 216);
+            this.lblBoardId.Location = new System.Drawing.Point(512, 259);
             this.lblBoardId.Margin = new System.Windows.Forms.Padding(0);
             this.lblBoardId.Name = "lblBoardId";
             this.lblBoardId.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblBoardId.Size = new System.Drawing.Size(249, 35);
+            this.lblBoardId.Size = new System.Drawing.Size(249, 36);
             this.lblBoardId.TabIndex = 0;
             this.lblBoardId.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblBoardId.UseMnemonic = false;
@@ -736,11 +661,11 @@ namespace Mac_EFI_Toolkit
             this.lblBoardIdText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBoardIdText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBoardIdText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblBoardIdText.Location = new System.Drawing.Point(381, 216);
+            this.lblBoardIdText.Location = new System.Drawing.Point(381, 259);
             this.lblBoardIdText.Margin = new System.Windows.Forms.Padding(0);
             this.lblBoardIdText.Name = "lblBoardIdText";
             this.lblBoardIdText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblBoardIdText.Size = new System.Drawing.Size(130, 35);
+            this.lblBoardIdText.Size = new System.Drawing.Size(130, 36);
             this.lblBoardIdText.TabIndex = 0;
             this.lblBoardIdText.Text = "Board ID:";
             this.lblBoardIdText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -752,11 +677,11 @@ namespace Mac_EFI_Toolkit
             this.lblEfiLockText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEfiLockText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEfiLockText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblEfiLockText.Location = new System.Drawing.Point(0, 216);
+            this.lblEfiLockText.Location = new System.Drawing.Point(0, 259);
             this.lblEfiLockText.Margin = new System.Windows.Forms.Padding(0);
             this.lblEfiLockText.Name = "lblEfiLockText";
             this.lblEfiLockText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblEfiLockText.Size = new System.Drawing.Size(130, 35);
+            this.lblEfiLockText.Size = new System.Drawing.Size(130, 36);
             this.lblEfiLockText.TabIndex = 0;
             this.lblEfiLockText.Text = "EFI Lock:";
             this.lblEfiLockText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -764,16 +689,16 @@ namespace Mac_EFI_Toolkit
             // lblApfsCapable
             // 
             this.lblApfsCapable.AutoEllipsis = true;
-            this.lblApfsCapable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblApfsCapable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.lblApfsCapable.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblApfsCapable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblApfsCapable.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblApfsCapable.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblApfsCapable.Location = new System.Drawing.Point(131, 252);
+            this.lblApfsCapable.Location = new System.Drawing.Point(131, 296);
             this.lblApfsCapable.Margin = new System.Windows.Forms.Padding(0);
             this.lblApfsCapable.Name = "lblApfsCapable";
             this.lblApfsCapable.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblApfsCapable.Size = new System.Drawing.Size(249, 35);
+            this.lblApfsCapable.Size = new System.Drawing.Size(249, 36);
             this.lblApfsCapable.TabIndex = 0;
             this.lblApfsCapable.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblApfsCapable.UseMnemonic = false;
@@ -785,11 +710,11 @@ namespace Mac_EFI_Toolkit
             this.lblApfsCapableText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblApfsCapableText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblApfsCapableText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblApfsCapableText.Location = new System.Drawing.Point(0, 252);
+            this.lblApfsCapableText.Location = new System.Drawing.Point(0, 296);
             this.lblApfsCapableText.Margin = new System.Windows.Forms.Padding(0);
             this.lblApfsCapableText.Name = "lblApfsCapableText";
             this.lblApfsCapableText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblApfsCapableText.Size = new System.Drawing.Size(130, 35);
+            this.lblApfsCapableText.Size = new System.Drawing.Size(130, 36);
             this.lblApfsCapableText.TabIndex = 0;
             this.lblApfsCapableText.Text = "APFS Capable:";
             this.lblApfsCapableText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -802,18 +727,18 @@ namespace Mac_EFI_Toolkit
             this.tlpEfiLock.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpEfiLock.Controls.Add(this.lblEfiLock, 0, 0);
             this.tlpEfiLock.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpEfiLock.Location = new System.Drawing.Point(131, 216);
+            this.tlpEfiLock.Location = new System.Drawing.Point(131, 259);
             this.tlpEfiLock.Margin = new System.Windows.Forms.Padding(0);
             this.tlpEfiLock.Name = "tlpEfiLock";
             this.tlpEfiLock.RowCount = 1;
             this.tlpEfiLock.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpEfiLock.Size = new System.Drawing.Size(249, 35);
+            this.tlpEfiLock.Size = new System.Drawing.Size(249, 36);
             this.tlpEfiLock.TabIndex = 3;
             // 
             // lblEfiLock
             // 
             this.lblEfiLock.AutoEllipsis = true;
-            this.lblEfiLock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblEfiLock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.lblEfiLock.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblEfiLock.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEfiLock.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -822,7 +747,7 @@ namespace Mac_EFI_Toolkit
             this.lblEfiLock.Margin = new System.Windows.Forms.Padding(0);
             this.lblEfiLock.Name = "lblEfiLock";
             this.lblEfiLock.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblEfiLock.Size = new System.Drawing.Size(249, 35);
+            this.lblEfiLock.Size = new System.Drawing.Size(249, 36);
             this.lblEfiLock.TabIndex = 0;
             this.lblEfiLock.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblEfiLock.UseMnemonic = false;
@@ -835,11 +760,11 @@ namespace Mac_EFI_Toolkit
             this.lblHwc.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblHwc.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHwc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblHwc.Location = new System.Drawing.Point(131, 144);
+            this.lblHwc.Location = new System.Drawing.Point(131, 148);
             this.lblHwc.Margin = new System.Windows.Forms.Padding(0);
             this.lblHwc.Name = "lblHwc";
             this.lblHwc.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblHwc.Size = new System.Drawing.Size(249, 35);
+            this.lblHwc.Size = new System.Drawing.Size(249, 36);
             this.lblHwc.TabIndex = 0;
             this.lblHwc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblHwc.UseMnemonic = false;
@@ -850,11 +775,11 @@ namespace Mac_EFI_Toolkit
             this.lblFsysStoreText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFsysStoreText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFsysStoreText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
-            this.lblFsysStoreText.Location = new System.Drawing.Point(0, 108);
+            this.lblFsysStoreText.Location = new System.Drawing.Point(0, 111);
             this.lblFsysStoreText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFsysStoreText.Name = "lblFsysStoreText";
             this.lblFsysStoreText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblFsysStoreText.Size = new System.Drawing.Size(130, 35);
+            this.lblFsysStoreText.Size = new System.Drawing.Size(130, 36);
             this.lblFsysStoreText.TabIndex = 0;
             this.lblFsysStoreText.Text = "Fsys Store:";
             this.lblFsysStoreText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -868,12 +793,12 @@ namespace Mac_EFI_Toolkit
             this.tlpSerial.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpSerial.Controls.Add(this.lblSerialNumber, 0, 0);
             this.tlpSerial.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSerial.Location = new System.Drawing.Point(512, 108);
+            this.tlpSerial.Location = new System.Drawing.Point(512, 111);
             this.tlpSerial.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSerial.Name = "tlpSerial";
             this.tlpSerial.RowCount = 1;
             this.tlpSerial.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSerial.Size = new System.Drawing.Size(249, 35);
+            this.tlpSerial.Size = new System.Drawing.Size(249, 36);
             this.tlpSerial.TabIndex = 4;
             // 
             // lblSerialNumber
@@ -888,7 +813,7 @@ namespace Mac_EFI_Toolkit
             this.lblSerialNumber.Margin = new System.Windows.Forms.Padding(0);
             this.lblSerialNumber.Name = "lblSerialNumber";
             this.lblSerialNumber.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblSerialNumber.Size = new System.Drawing.Size(249, 35);
+            this.lblSerialNumber.Size = new System.Drawing.Size(249, 36);
             this.lblSerialNumber.TabIndex = 0;
             this.lblSerialNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblSerialNumber.UseMnemonic = false;
@@ -903,7 +828,7 @@ namespace Mac_EFI_Toolkit
             this.lblFilesizeText.Margin = new System.Windows.Forms.Padding(0);
             this.lblFilesizeText.Name = "lblFilesizeText";
             this.lblFilesizeText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblFilesizeText.Size = new System.Drawing.Size(130, 35);
+            this.lblFilesizeText.Size = new System.Drawing.Size(130, 36);
             this.lblFilesizeText.TabIndex = 0;
             this.lblFilesizeText.Text = "Size:";
             this.lblFilesizeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -916,46 +841,107 @@ namespace Mac_EFI_Toolkit
             this.lblFileCreatedDate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFileCreatedDate.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFileCreatedDate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblFileCreatedDate.Location = new System.Drawing.Point(131, 36);
+            this.lblFileCreatedDate.Location = new System.Drawing.Point(131, 37);
             this.lblFileCreatedDate.Margin = new System.Windows.Forms.Padding(0);
             this.lblFileCreatedDate.Name = "lblFileCreatedDate";
             this.lblFileCreatedDate.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFileCreatedDate.Size = new System.Drawing.Size(249, 35);
+            this.lblFileCreatedDate.Size = new System.Drawing.Size(249, 36);
             this.lblFileCreatedDate.TabIndex = 0;
             this.lblFileCreatedDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblConfigCode
+            // lblEfiVersionText
             // 
-            this.lblConfigCode.AutoEllipsis = true;
-            this.lblConfigCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblConfigCode.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblConfigCode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblConfigCode.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblConfigCode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblConfigCode.Location = new System.Drawing.Point(512, 72);
-            this.lblConfigCode.Margin = new System.Windows.Forms.Padding(0);
-            this.lblConfigCode.Name = "lblConfigCode";
-            this.lblConfigCode.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblConfigCode.Size = new System.Drawing.Size(249, 35);
-            this.lblConfigCode.TabIndex = 0;
-            this.lblConfigCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblEfiVersionText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.lblEfiVersionText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEfiVersionText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEfiVersionText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblEfiVersionText.Location = new System.Drawing.Point(0, 185);
+            this.lblEfiVersionText.Margin = new System.Windows.Forms.Padding(0);
+            this.lblEfiVersionText.Name = "lblEfiVersionText";
+            this.lblEfiVersionText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblEfiVersionText.Size = new System.Drawing.Size(130, 36);
+            this.lblEfiVersionText.TabIndex = 0;
+            this.lblEfiVersionText.Text = "EFI Version:";
+            this.lblEfiVersionText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblFilesize
+            // lblDescriptorModeText
             // 
-            this.lblFilesize.AutoEllipsis = true;
-            this.lblFilesize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.lblFilesize.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblFilesize.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFilesize.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFilesize.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblFilesize.Location = new System.Drawing.Point(131, 0);
-            this.lblFilesize.Margin = new System.Windows.Forms.Padding(0);
-            this.lblFilesize.Name = "lblFilesize";
-            this.lblFilesize.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblFilesize.Size = new System.Drawing.Size(249, 35);
-            this.lblFilesize.TabIndex = 0;
-            this.lblFilesize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblFilesize.UseMnemonic = false;
+            this.lblDescriptorModeText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.lblDescriptorModeText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDescriptorModeText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDescriptorModeText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblDescriptorModeText.Location = new System.Drawing.Point(381, 185);
+            this.lblDescriptorModeText.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDescriptorModeText.Name = "lblDescriptorModeText";
+            this.lblDescriptorModeText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblDescriptorModeText.Size = new System.Drawing.Size(130, 36);
+            this.lblDescriptorModeText.TabIndex = 6;
+            this.lblDescriptorModeText.Text = "Descriptor:";
+            this.lblDescriptorModeText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblDescriptorMode
+            // 
+            this.lblDescriptorMode.AutoEllipsis = true;
+            this.lblDescriptorMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblDescriptorMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblDescriptorMode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDescriptorMode.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDescriptorMode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblDescriptorMode.Location = new System.Drawing.Point(512, 185);
+            this.lblDescriptorMode.Margin = new System.Windows.Forms.Padding(0);
+            this.lblDescriptorMode.Name = "lblDescriptorMode";
+            this.lblDescriptorMode.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblDescriptorMode.Size = new System.Drawing.Size(249, 36);
+            this.lblDescriptorMode.TabIndex = 7;
+            this.lblDescriptorMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDescriptorMode.UseMnemonic = false;
+            // 
+            // lblVssText
+            // 
+            this.lblVssText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.lblVssText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblVssText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVssText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblVssText.Location = new System.Drawing.Point(0, 222);
+            this.lblVssText.Margin = new System.Windows.Forms.Padding(0);
+            this.lblVssText.Name = "lblVssText";
+            this.lblVssText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblVssText.Size = new System.Drawing.Size(130, 36);
+            this.lblVssText.TabIndex = 0;
+            this.lblVssText.Text = "VSS NVRAM:";
+            this.lblVssText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblSvs
+            // 
+            this.lblSvs.AutoEllipsis = true;
+            this.lblSvs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblSvs.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblSvs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSvs.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSvs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblSvs.Location = new System.Drawing.Point(512, 222);
+            this.lblSvs.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSvs.Name = "lblSvs";
+            this.lblSvs.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblSvs.Size = new System.Drawing.Size(249, 36);
+            this.lblSvs.TabIndex = 0;
+            this.lblSvs.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSvs.UseMnemonic = false;
+            // 
+            // lblSvsText
+            // 
+            this.lblSvsText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.lblSvsText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSvsText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSvsText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblSvsText.Location = new System.Drawing.Point(381, 222);
+            this.lblSvsText.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSvsText.Name = "lblSvsText";
+            this.lblSvsText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblSvsText.Size = new System.Drawing.Size(130, 36);
+            this.lblSvsText.TabIndex = 8;
+            this.lblSvsText.Text = "SVS NVRAM:";
+            this.lblSvsText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpStatusBar
             // 
@@ -968,7 +954,7 @@ namespace Mac_EFI_Toolkit
             this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 1, 0);
             this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 0, 0);
             this.tlpStatusBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpStatusBar.Location = new System.Drawing.Point(0, 325);
+            this.tlpStatusBar.Location = new System.Drawing.Point(0, 370);
             this.tlpStatusBar.Margin = new System.Windows.Forms.Padding(0);
             this.tlpStatusBar.Name = "tlpStatusBar";
             this.tlpStatusBar.RowCount = 1;
@@ -1347,6 +1333,54 @@ namespace Mac_EFI_Toolkit
             this.testringToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.testringToolStripMenuItem.Text = "Testring";
             // 
+            // lblFilename
+            // 
+            this.lblFilename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(35)))), ((int)(((byte)(35)))));
+            this.lblFilename.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblFilename.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFilename.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblFilename.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblFilename.Location = new System.Drawing.Point(0, 0);
+            this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFilename.Name = "lblFilename";
+            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblFilename.Size = new System.Drawing.Size(724, 36);
+            this.lblFilename.TabIndex = 0;
+            this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblConfigCode
+            // 
+            this.lblConfigCode.AutoEllipsis = true;
+            this.lblConfigCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblConfigCode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblConfigCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblConfigCode.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lblConfigCode.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblConfigCode.Location = new System.Drawing.Point(512, 74);
+            this.lblConfigCode.Margin = new System.Windows.Forms.Padding(0);
+            this.lblConfigCode.Name = "lblConfigCode";
+            this.lblConfigCode.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblConfigCode.Size = new System.Drawing.Size(249, 36);
+            this.lblConfigCode.TabIndex = 0;
+            this.lblConfigCode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblFilesize
+            // 
+            this.lblFilesize.AutoEllipsis = true;
+            this.lblFilesize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.lblFilesize.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblFilesize.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblFilesize.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFilesize.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblFilesize.Location = new System.Drawing.Point(131, 0);
+            this.lblFilesize.Margin = new System.Windows.Forms.Padding(0);
+            this.lblFilesize.Name = "lblFilesize";
+            this.lblFilesize.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblFilesize.Size = new System.Drawing.Size(249, 36);
+            this.lblFilesize.TabIndex = 0;
+            this.lblFilesize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblFilesize.UseMnemonic = false;
+            // 
             // cmsCopy
             // 
             this.cmsCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
@@ -1688,7 +1722,7 @@ namespace Mac_EFI_Toolkit
             this.invalidateEFILockToolStripMenuItem});
             this.cmsPatch.Name = "cmsPatch";
             this.cmsPatch.ShowImageMargin = false;
-            this.cmsPatch.Size = new System.Drawing.Size(259, 206);
+            this.cmsPatch.Size = new System.Drawing.Size(259, 178);
             // 
             // changeSerialNumberToolStripMenuItem
             // 
@@ -1751,7 +1785,7 @@ namespace Mac_EFI_Toolkit
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
-            this.ClientSize = new System.Drawing.Size(763, 447);
+            this.ClientSize = new System.Drawing.Size(763, 492);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tlpTitle);
             this.DoubleBuffered = true;
@@ -1761,7 +1795,7 @@ namespace Mac_EFI_Toolkit
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(763, 447);
+            this.MinimumSize = new System.Drawing.Size(763, 492);
             this.Name = "efiWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -1772,7 +1806,6 @@ namespace Mac_EFI_Toolkit
             this.tlpFirmware.ResumeLayout(false);
             this.tlpEfiVer.ResumeLayout(false);
             this.tlpFsys.ResumeLayout(false);
-            this.tlpNvram.ResumeLayout(false);
             this.tlpIntelMe.ResumeLayout(false);
             this.tlpEfiLock.ResumeLayout(false);
             this.tlpSerial.ResumeLayout(false);
@@ -1810,8 +1843,8 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.Label lblApfsCapable;
         private System.Windows.Forms.Label lblApfsCapableText;
         private System.Windows.Forms.TableLayoutPanel tlpSerial;
-        private System.Windows.Forms.Label lblVssStore;
-        private System.Windows.Forms.Label lblNvramText;
+        private System.Windows.Forms.Label lblVss;
+        private System.Windows.Forms.Label lblVssText;
         private System.Windows.Forms.Label lblEfiVersionText;
         private System.Windows.Forms.Button cmdMenuReset;
         private System.Windows.Forms.TableLayoutPanel tlpStatusBarImage;
@@ -1839,8 +1872,7 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.PictureBox pbxLoad;
         private METLabel lblFilename;
         private System.Windows.Forms.Label lblMeVersion;
-        private System.Windows.Forms.TableLayoutPanel tlpNvram;
-        private System.Windows.Forms.Label lblSvsStore;
+        private System.Windows.Forms.Label lblSvs;
         private System.Windows.Forms.ToolStripMenuItem serialToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hwcToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fsysCRC32ToolStripMenuItem;
@@ -1905,5 +1937,8 @@ namespace Mac_EFI_Toolkit
         private System.Windows.Forms.ToolStripMenuItem fsysBaseAddressToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem vSSBaseAddressToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sVSBaseAddressToolStripMenuItem;
+        private System.Windows.Forms.Label lblDescriptorModeText;
+        private System.Windows.Forms.Label lblDescriptorMode;
+        private System.Windows.Forms.Label lblSvsText;
     }
 }

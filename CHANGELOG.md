@@ -13,46 +13,44 @@
   <a href="#version-120">V1.2.0</a>
 </p>
 
-## Version 1.2.0
-
-#### New:
-- User Interface redesigned.
+#### New
+- User Interface redesigned for improved usability.
 - The application now supports Intel T2 SOCROM firmware.
-- The application now supports opening multiple firmwares simultaneously.
-- Added a new startup window where the user can drag and drop, or browse for a compatible EFIROM, or T2 SOCROM. Following this change, the main window has now become the EFIROM window, and certain functions have moved to the startup window.
-- The firmware patcher window has been removed, and all patching features have been moved to the EFI window.
-- Added an option in the EFI window that can automatically generate a structured file name for the loaded firmware and copy it to the clipboard.
-- Added an option in the EFI window that permits the output of firmware information to a text file.
-- Added an option in the EFI window to export NVRAM stores.
-- Added an option in the EFI window to copy the Fsys store base address.
-- Added an option in the EFI window to copy the NVRAM VSS and SVS base addresses.
-- The EFI Window NVRAM data will now show base addresses of primary stores.
+- Added capability to open multiple firmwares simultaneously.
+- Startup Window: Introduced a new startup window where users can drag and drop or browse for a compatible EFIROM or T2 SOCROM. The main window is now dedicated to EFIROM, with some functions moved to the startup window.
+- EFI Window Updates:
+  - Patcher Relocation: Removed the firmware patcher window; all patching features are now consolidated in the EFI window.
+  - Structured File Naming: Added an option to automatically generate a structured file name for the loaded firmware and copy it to the clipboard.
+  - Firmware Export Options: Users can now export firmware information to a text file, as well as export NVRAM stores.
+  - Address Copying: Added options to copy the Fsys store base address and NVRAM VSS and SVS base addresses.
+  - NVRAM Data: The window now displays base addresses of primary stores and whether they are empty.
+  - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
+  - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
 
-#### Enhancements:
-- Disallowed opening of non-apple extensible firmware interface files.
-- Improved the NVRAM reset functionality to emulate the state of uninitialised factory firmware.
-- Improved the validation process for serial numbers.
-- The internal database was updated with more models.
-- Modified the default file name when exporting information in the ROM Information window.
-- Enabled the 'Make New Folder' button in directory selection dialogs.
-- Removed unnecessary confirmation dialogs from certain windows.
-- Modified EFI Window shortcut keys.
-- The EFI Window will no longer display a 'copied to clipboard' message when 'Disable Confirmation Dialogs' is enabled in settings.
+#### Enhancements
+- Restricted non-Apple EFI files from being opened.
+- Enhanced NVRAM reset functionality to simulate an uninitialized factory firmware state.
+- Improved validation process for serial numbers.
+- Updated the internal database with more models.
+- Modified default file name for exporting information in the ROM Information window.
+- Enabled "Make New Folder" in directory selection dialogs.
+- Removed unnecessary confirmation dialogs in various windows.
+- Modified shortcut keys in the EFI window for improved accessibility.
+- When 'Disable Confirmation Dialogs' is enabled, the EFI window will no longer display a "copied to clipboard" message.
 
-#### Bugs:
-- Added missing icon to the ROM Information window.
+#### Bugs
+- Added missing icon in the ROM Information window.
 - Fixed broken FIT version strings.
-- Fixed a logical error that caused the internal database to be skipped when the Fsys Store was force found. This resulted in writing a misleading "not present value" message to the database.log, even when the value was present.
+- Corrected a logic error causing the internal database to be skipped when the Fsys Store was force-found, which led to misleading "not present" messages in the database log.
 
-#### Misc:
-- Changed how some settings are structured
-  - Users will need to reselect the 'EFI Window Default Directory' in settings.
-- Support for Windows Vista and earlier operating systems has been discontinued. Consequently, the application will no longer launch on unsupported operating systems.
-- Removed the ability to single click labels in the EFI window to copy data, and reset their cursors to default.
-- Removed private memory usage from the EFI window.
-- Removed NSS store details from the EFI Window.
-- Removed NVRAM store tips.
-- Removed ability to disable LZMA decompression since this is integral to detecting APFS compatibility.
+#### Miscellaneous
+- Some settings have been restructured; users will need to reselect the 'EFI Window Default Directory' in settings.
+- Discontinued support for Windows Vista and earlier operating systems. The application will no longer launch on unsupported operating systems.
+- EFI Window Adjustments:
+  - Removed single-click copy functionality for labels and reset their cursors to default to better align with UI design best practices.
+  - Removed display of private memory usage to improve compatibility with Wine.
+  - Removed NSS store details and NVRAM store tips.
+  - Disabled option to turn off LZMA decompression, as it is required for APFS compatibility detection.
 
 ## Version 1.1.5
 
