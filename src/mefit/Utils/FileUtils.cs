@@ -172,39 +172,43 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="path">The path of the file to write.</param>
         /// <param name="sourceBytes">The byte array containing the data to be written.</param>
+        /// <returns>True if the data was written successfully and integrity is verified; otherwise, false.</returns>
         internal static bool WriteAllBytesEx(string path, byte[] sourceBytes)
         {
             try
             {
-                using (FileStream fileStream = new FileStream(path, FileMode.Create))
-                {
-                    fileStream.Write(
-                        sourceBytes,
-                        0,
-                        sourceBytes.Length);
-                }
+                File.WriteAllBytes(
+                    path,
+                    sourceBytes);
 
-                using (FileStream fileStream = new FileStream(path, FileMode.Open))
-                {
-                    byte[] fileBytes = new byte[fileStream.Length];
+                byte[] fileBytes =
+                    File.ReadAllBytes(
+                        path);
 
-                    fileStream.Read(
-                        fileBytes,
-                        0,
-                        fileBytes.Length);
-
-                    if (!BinaryUtils.ByteArraysMatch(sourceBytes, fileBytes))
-                        return false; // Integrity check failed
-                }
+                return BinaryUtils.ByteArraysMatch(
+                    sourceBytes,
+                    fileBytes);
             }
-            catch (Exception e)
+            catch (IOException ioEx)
             {
-                Logger.WriteExceptionToAppLog(e);
-                return false; // An error occured
+                Logger.WriteToAppLog(
+                    $"{nameof(WriteAllBytesEx)}: IO exception occurred - {ioEx.Message}");
+                return false;
             }
-
-            return true; // Data was written successfully and integrity is verified
+            catch (UnauthorizedAccessException authEx)
+            {
+                Logger.WriteToAppLog(
+                    $"{nameof(WriteAllBytesEx)}: Access denied - {authEx.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Logger.WriteToAppLog(
+                    $"{nameof(WriteAllBytesEx)}: Unexpected error - {ex.Message}");
+                return false;
+            }
         }
+
 
         /// <summary>
         /// Creates a directory at the specified path.
@@ -300,11 +304,11 @@ namespace Mac_EFI_Toolkit.Utils
                     ? $"The selected file does not meet the minimum size requirement of {FWVars.MIN_IMAGE_SIZE:X}h."
                     : $"The selected file exceeds the maximum size limit of {FWVars.MAX_IMAGE_SIZE:X}h.";
 
-                METMessageBox.Show(
+                METPrompt.Show(
                     owner,
                     message,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
 
                 return false;
             }

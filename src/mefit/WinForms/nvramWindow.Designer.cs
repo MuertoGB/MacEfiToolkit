@@ -30,14 +30,14 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(nvramWindow));
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.lblWindowTitle = new System.Windows.Forms.Label();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.cmdOkay = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
-            this.pnlSeperator = new System.Windows.Forms.Panel();
             this.tlpStores = new System.Windows.Forms.TableLayoutPanel();
             this.cbxResetVss = new Mac_EFI_Toolkit.UI.METCheckbox();
             this.cbxResetSvs = new Mac_EFI_Toolkit.UI.METCheckbox();
+            this.lblWindowTitle = new System.Windows.Forms.Label();
+            this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.tlpMain.SuspendLayout();
             this.tlpButtons.SuspendLayout();
             this.tlpStores.SuspendLayout();
@@ -45,7 +45,7 @@
             // 
             // tlpMain
             // 
-            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.Controls.Add(this.tlpButtons, 0, 2);
@@ -59,20 +59,6 @@
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpMain.Size = new System.Drawing.Size(308, 111);
             this.tlpMain.TabIndex = 0;
-            // 
-            // lblWindowTitle
-            // 
-            this.lblWindowTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
-            this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWindowTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblWindowTitle.Location = new System.Drawing.Point(1, 1);
-            this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
-            this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(308, 32);
-            this.lblWindowTitle.TabIndex = 1;
-            this.lblWindowTitle.Text = "Select NVRAM Stores:";
-            this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tlpButtons
             // 
@@ -133,15 +119,6 @@
             this.cmdCancel.UseVisualStyleBackColor = false;
             this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
-            // pnlSeperator
-            // 
-            this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.pnlSeperator.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlSeperator.Location = new System.Drawing.Point(1, 33);
-            this.pnlSeperator.Name = "pnlSeperator";
-            this.pnlSeperator.Size = new System.Drawing.Size(308, 1);
-            this.pnlSeperator.TabIndex = 2;
-            // 
             // tlpStores
             // 
             this.tlpStores.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -199,6 +176,29 @@
             this.cbxResetSvs.Text = "SVS (Not Recommended)";
             this.cbxResetSvs.CheckedChanged += new System.EventHandler(this.cbxResetSvs_CheckedChanged);
             // 
+            // lblWindowTitle
+            // 
+            this.lblWindowTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWindowTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblWindowTitle.Location = new System.Drawing.Point(1, 1);
+            this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
+            this.lblWindowTitle.Name = "lblWindowTitle";
+            this.lblWindowTitle.Size = new System.Drawing.Size(308, 32);
+            this.lblWindowTitle.TabIndex = 1;
+            this.lblWindowTitle.Text = "Select NVRAM Stores:";
+            this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pnlSeperatorTop
+            // 
+            this.pnlSeperatorTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
+            this.pnlSeperatorTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeperatorTop.Location = new System.Drawing.Point(1, 33);
+            this.pnlSeperatorTop.Name = "pnlSeperatorTop";
+            this.pnlSeperatorTop.Size = new System.Drawing.Size(308, 1);
+            this.pnlSeperatorTop.TabIndex = 2;
+            // 
             // nvramWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -207,7 +207,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(310, 145);
-            this.Controls.Add(this.pnlSeperator);
+            this.Controls.Add(this.pnlSeperatorTop);
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.lblWindowTitle);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -238,6 +238,6 @@
         private UI.METCheckbox cbxResetVss;
         private UI.METCheckbox cbxResetSvs;
         private System.Windows.Forms.TableLayoutPanel tlpStores;
-        private System.Windows.Forms.Panel pnlSeperator;
+        private System.Windows.Forms.Panel pnlSeperatorTop;
     }
 }

@@ -15,7 +15,6 @@ namespace Mac_EFI_Toolkit.WinForms
 {
     public partial class ssnWindow : Form
     {
-
         #region Constructor
         public ssnWindow()
         {
@@ -30,6 +29,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void ssnWindow_Load(object sender, EventArgs e)
         {
             tbSsn.MaxLength = EFIROM.FsysStoreData.Serial.Length;
+            tbSsn.Select();
         }
         #endregion
 
@@ -53,6 +53,7 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
+        #region TextBox Events
         private void tbSsn_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -70,16 +71,18 @@ namespace Mac_EFI_Toolkit.WinForms
                     UpdateTextBoxColour(textBox, AppColours.ERROR);
                     cmdOkay.Enabled = false;
                 }
-            } 
+            }
             else
             {
                 UpdateTextBoxColour(textBox, Color.FromArgb(235, 235, 235));
                 cmdOkay.Enabled = false;
             }
         }
+        #endregion
 
+        #region UI Events
         private void UpdateTextBoxColour(TextBox control, Color color) =>
             control.ForeColor = color;
-
+        #endregion
     }
 }

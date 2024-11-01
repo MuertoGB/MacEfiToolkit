@@ -156,11 +156,11 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 if (!File.Exists(dialog.FileName))
                 {
-                    METMessageBox.Show(
+                    METPrompt.Show(
                         this,
                         "Data export failed.",
-                        METMessageBoxType.Error,
-                        METMessageBoxButtons.Okay);
+                        METPromptType.Error,
+                        METPromptButtons.Okay);
 
                     return;
                 }

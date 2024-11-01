@@ -201,11 +201,11 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
             DialogResult result =
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     APPSTRINGS.RESET_SETTINGS_DEFAULT,
-                    METMessageBoxType.Warning,
-                    METMessageBoxButtons.YesNo);
+                    METPromptType.Warning,
+                    METPromptButtons.YesNo);
 
             if (result != DialogResult.Yes)
                 return;

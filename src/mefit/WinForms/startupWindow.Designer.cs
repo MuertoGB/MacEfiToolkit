@@ -41,7 +41,7 @@
             this.cmdAbout = new System.Windows.Forms.Button();
             this.cmdMore = new System.Windows.Forms.Button();
             this.cmdMenuFolders = new System.Windows.Forms.Button();
-            this.pnlSeperatorBottom = new System.Windows.Forms.Panel();
+            this.pnlSeperatorBtm = new System.Windows.Forms.Panel();
             this.tlpDrop = new METTableLayout();
             this.lblDrag = new System.Windows.Forms.Label();
             this.lblGlyph = new System.Windows.Forms.Label();
@@ -188,7 +188,7 @@
             // 
             // pnlSeperatorTop
             // 
-            this.pnlSeperatorTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.pnlSeperatorTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
             this.pnlSeperatorTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlSeperatorTop.Location = new System.Drawing.Point(1, 51);
             this.pnlSeperatorTop.Margin = new System.Windows.Forms.Padding(2);
@@ -300,15 +300,15 @@
             this.cmdMenuFolders.UseVisualStyleBackColor = false;
             this.cmdMenuFolders.Click += new System.EventHandler(this.cmdMenuFolders_Click);
             // 
-            // pnlSeperatorBottom
+            // pnlSeperatorBtm
             // 
-            this.pnlSeperatorBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.pnlSeperatorBottom.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlSeperatorBottom.Location = new System.Drawing.Point(1, 84);
-            this.pnlSeperatorBottom.Margin = new System.Windows.Forms.Padding(2);
-            this.pnlSeperatorBottom.Name = "pnlSeperatorBottom";
-            this.pnlSeperatorBottom.Size = new System.Drawing.Size(433, 1);
-            this.pnlSeperatorBottom.TabIndex = 104;
+            this.pnlSeperatorBtm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
+            this.pnlSeperatorBtm.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeperatorBtm.Location = new System.Drawing.Point(1, 84);
+            this.pnlSeperatorBtm.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlSeperatorBtm.Name = "pnlSeperatorBtm";
+            this.pnlSeperatorBtm.Size = new System.Drawing.Size(433, 1);
+            this.pnlSeperatorBtm.TabIndex = 104;
             // 
             // tlpDrop
             // 
@@ -335,7 +335,7 @@
             this.lblDrag.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblDrag.AutoSize = true;
             this.lblDrag.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDrag.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblDrag.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
             this.lblDrag.Location = new System.Drawing.Point(108, 74);
             this.lblDrag.Name = "lblDrag";
             this.lblDrag.Size = new System.Drawing.Size(217, 46);
@@ -365,11 +365,11 @@
             this.cmdBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdBrowse.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdBrowse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.cmdBrowse.Location = new System.Drawing.Point(179, 128);
+            this.cmdBrowse.Location = new System.Drawing.Point(171, 128);
             this.cmdBrowse.Name = "cmdBrowse";
-            this.cmdBrowse.Size = new System.Drawing.Size(75, 36);
+            this.cmdBrowse.Size = new System.Drawing.Size(90, 36);
             this.cmdBrowse.TabIndex = 0;
-            this.cmdBrowse.Text = "Browse";
+            this.cmdBrowse.Text = "BROWSE";
             this.cmdBrowse.UseVisualStyleBackColor = false;
             this.cmdBrowse.Click += new System.EventHandler(this.cmdBrowse_Click);
             // 
@@ -393,7 +393,7 @@
             this.restartApplicationToolStripMenuItem});
             this.cmsMore.Name = "cmsMore";
             this.cmsMore.ShowImageMargin = false;
-            this.cmsMore.Size = new System.Drawing.Size(216, 296);
+            this.cmsMore.Size = new System.Drawing.Size(216, 268);
             // 
             // changelogToolStripMenuItem
             // 
@@ -554,7 +554,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(435, 280);
-            this.Controls.Add(this.pnlSeperatorBottom);
+            this.Controls.Add(this.pnlSeperatorBtm);
             this.Controls.Add(this.tlpDrop);
             this.Controls.Add(this.tlpMenu);
             this.Controls.Add(this.pnlSeperatorTop);
@@ -605,7 +605,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem restartApplicationToolStripMenuItem;
         private UI.METContextMenuStrip cmsMore;
-        private System.Windows.Forms.Panel pnlSeperatorBottom;
+        private System.Windows.Forms.Panel pnlSeperatorBtm;
         private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem githubIssuesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem emailMeToolStripMenuItem;

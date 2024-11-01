@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241101.0445";
+        internal const string APP_BUILD = "241101.1945";
         internal const string APP_CHANNEL = "DEV";
     }
 
@@ -263,11 +263,11 @@ namespace Mac_EFI_Toolkit
         private static bool ShowConfirmationDialog(Form owner, string title, string message)
         {
             DialogResult result =
-                METMessageBox.Show(
+                METPrompt.Show(
                     owner,
                     message,
-                    METMessageBoxType.Question,
-                    METMessageBoxButtons.YesNo);
+                    METPromptType.Question,
+                    METPromptButtons.YesNo);
 
             return result == DialogResult.Yes;
         }

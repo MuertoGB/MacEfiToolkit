@@ -53,11 +53,11 @@ namespace Mac_EFI_Toolkit.UI
         internal static void ShowExplorerFileHighlight(Form owner, string path)
         {
             DialogResult result =
-                METMessageBox.Show(
+                METPrompt.Show(
                         owner,
                         $"{APPSTRINGS.FILE_SAVE_SUCCESS_NAV}",
-                        METMessageBoxType.Information,
-                        METMessageBoxButtons.YesNo);
+                        METPromptType.Information,
+                        METPromptButtons.YesNo);
 
             if (result == DialogResult.Yes)
                 FileUtils.HighlightPathInExplorer(path);
@@ -66,11 +66,11 @@ namespace Mac_EFI_Toolkit.UI
         internal static void ShowExplorerDirectory(Form owner, string path)
         {
             DialogResult result =
-                METMessageBox.Show(
+                METPrompt.Show(
                         owner,
                         $"{APPSTRINGS.FILES_SAVE_SUCCESS_NAV}",
-                        METMessageBoxType.Information,
-                        METMessageBoxButtons.YesNo);
+                        METPromptType.Information,
+                        METPromptButtons.YesNo);
 
             if (result == DialogResult.Yes)
                 Process.Start("explorer.exe", path);

@@ -27,7 +27,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static string FitVersion = null;
         internal static string MeVersion = null;
 
-        // Internally accessible for patching
         internal static string NewSSN = null;
         internal static bool bResetVss = false;
         internal static bool bResetSvs = false;
@@ -193,6 +192,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             ForceFoundFsys = false;
             FitVersion = null;
             MeVersion = null;
+
+            NewSSN = null;
+            bResetVss = false;
+            bResetSvs = false;
 
             FileInfoData = default;
             PdrSectionData = default;
@@ -1176,6 +1179,107 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             return ApfsCapable.Yes;
         }
         #endregion
+
+        /// <summary>
+        /// Patches the given Fsys store byte array with a new CRC value.
+        /// </summary>
+        /// <param name="fsysStore">The byte array representing the Fsys store.</param>
+        /// <param name="newCrc">The new CRC value to be patched.</param>
+        /// <returns>The patched Fsys store byte array.</returns>
+        internal static byte[] PatchFsysCrc(byte[] fsysStore, uint newCrc)
+        {
+            int storeLength =
+                fsysStore.Length;
+
+            // Check if the size of the byte array is valid
+            if (storeLength < EFIROM.FSYS_RGN_SIZE)
+                throw new ArgumentException(
+                    nameof(PatchFsysCrc),
+                    $"Given byes are too small: {storeLength:X2}h");
+
+            if (storeLength > EFIROM.FSYS_RGN_SIZE)
+                throw new ArgumentException(
+                    nameof(PatchFsysCrc),
+                    $"Given bytes are too large: {storeLength:X2}h");
+
+            // Convert the new CRC value to bytes
+            byte[] newCrcBytes =
+                BitConverter.GetBytes
+                (newCrc);
+
+            // Write the new bytes back to the Fsys store at the appropriate base
+            BinaryUtils.OverwriteBytesAtBase(
+                fsysStore,
+                EFIROM.FSYS_RGN_SIZE - EFIROM.CRC32_SIZE,
+                newCrcBytes);
+
+            // Return the patched data
+            return fsysStore;
+        }
+
+        /// <summary>
+        /// Patches a binaries Fsys store with the correct crc value.
+        /// </summary>
+        /// <param name="sourceBytes">The byte array representing the source binary file.</param>
+        /// <param name="fsysBase">The base of the Fsys store within the binary file.</param>
+        /// <param name="fsysStore">The byte array representing the Fsys store.</param>
+        /// <param name="uiNewCrc">The new CRC value to be patched in the Fsys store.</param>
+        /// <returns>The patched file byte array, or null if the new calculated crc does not match the crc in the Fsys store.</returns>
+        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes, int fsysBase, byte[] fsysStore, uint uiNewCrc)
+        {
+            // Create a new byte array to hold the patched binary
+            byte[] patchedBytes = new byte[sourceBytes.Length];
+
+            Array.Copy(
+                sourceBytes,
+                patchedBytes,
+                sourceBytes.Length);
+
+            // Patch the Fsys store crc
+            byte[] patchedStore =
+                PatchFsysCrc(
+                    fsysStore,
+                    uiNewCrc);
+
+            // Overwrite the loaded Fsys crc32 with the newly calculated crc32
+            BinaryUtils.OverwriteBytesAtBase(
+                patchedBytes,
+                fsysBase,
+                patchedStore);
+
+            // Load the Fsys store from the new binary
+            FsysStore newBinaryFsys =
+                EFIROM.GetFsysStoreData(
+                    patchedBytes,
+                    false);
+
+            // Compare the new checksums
+            if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)
+                return null;
+
+            return patchedBytes;
+        }
+
+        /// <summary>
+        /// Invalidates an SVS store Message Authentication Code, removing EFI Lock.
+        /// </summary>
+        /// <param name="storeData">The SVS store to unlock.</param>
+        /// <param name="lockCrcbase">The Message Authentication Code CRC base</param>
+        internal static byte[] PatchSvsStoreMac(byte[] storeData, int lockCrcbase)
+        {
+            // Some sanity checks
+            if (storeData == null || storeData.Length < 16)
+                return null;
+
+            // Write 0xFh length zeros over the MAC CRC from lockBase
+            BinaryUtils.OverwriteBytesAtBase(
+                storeData,
+                lockCrcbase,
+                new byte[0x0F]);
+
+            // Returned the unlocked store
+            return storeData;
+        }
 
     }
 }

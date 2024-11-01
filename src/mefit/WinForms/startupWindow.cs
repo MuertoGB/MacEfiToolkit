@@ -474,11 +474,11 @@ namespace Mac_EFI_Toolkit.WinForms
                 return;
             }
 
-            METMessageBox.Show(
+            METPrompt.Show(
                 this,
                 "The provided file was not a supported firmware.",
-                METMessageBoxType.Error,
-                METMessageBoxButtons.Okay);
+                METPromptType.Error,
+                METPromptButtons.Okay);
         }
 
         private Form GetChildFormForImage(byte[] sourceBytes)

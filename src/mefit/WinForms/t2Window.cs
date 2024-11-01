@@ -4,6 +4,7 @@
 // t2Window.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.T2;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
@@ -145,11 +146,11 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             DialogResult result =
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.UNLOAD_FIRMWARE_RESET,
-                    METMessageBoxType.Warning,
-                    METMessageBoxButtons.YesNo);
+                    METPromptType.Warning,
+                    METPromptButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {
@@ -185,11 +186,11 @@ namespace Mac_EFI_Toolkit.WinForms
                     return;
                 }
 
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.SCFG_EXPORT_FAIL,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
             }
         }
         #endregion
@@ -219,11 +220,11 @@ namespace Mac_EFI_Toolkit.WinForms
             // Check if the image is what we're looking for.
             if (!T2ROM.IsValidImage(T2ROM.LoadedBinaryBytes))
             {
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.FILE_NOT_VALID,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
 
                 return; // Break out of code
             }
@@ -372,11 +373,17 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void UpdateConfigCodeControls()
         {
-            if (string.IsNullOrEmpty(T2ROM.ConfigCode))
+
+            if (!string.IsNullOrEmpty(T2ROM.ConfigCode))
             {
-                lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
-                GetConfigCodeAsync(T2ROM.ScfgSectionData.HWC);
+                lblConfigCode.Text = T2ROM.ConfigCode;
+                return;
             }
+
+            lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
+            lblConfigCode.ForeColor = Colours.INFO_BOX;
+
+            GetConfigCodeAsync(T2ROM.ConfigCode);
         }
 
         internal async void GetConfigCodeAsync(string hwc)
@@ -384,14 +391,17 @@ namespace Mac_EFI_Toolkit.WinForms
             string configcode =
                 await MacUtils.GetDeviceConfigCodeSupportRemote(hwc);
 
-            if (string.IsNullOrEmpty(configcode))
+            if (!string.IsNullOrEmpty(configcode))
             {
-                lblConfigCode.Text = APPSTRINGS.NA;
+                T2ROM.ConfigCode = configcode;
+
+                lblConfigCode.Text = configcode;
+                lblConfigCode.ForeColor = AppColours.NORMAL_INFO_TEXT;
                 return;
             }
 
-            T2ROM.ConfigCode = configcode;
-            lblConfigCode.Text = configcode;
+            lblConfigCode.Text = APPSTRINGS.NA;
+            lblConfigCode.ForeColor = Colours.CONTROL_DISABLED_TEXT;
         }
 
         private void UpdateModelControls()

@@ -36,7 +36,7 @@
             this.tlpSsn = new System.Windows.Forms.TableLayoutPanel();
             this.tbSsn = new System.Windows.Forms.TextBox();
             this.lblWindowTitle = new System.Windows.Forms.Label();
-            this.pnlSeperator = new System.Windows.Forms.Panel();
+            this.pnlSeperatorTip = new System.Windows.Forms.Panel();
             this.tlpMain.SuspendLayout();
             this.tlpButtons.SuspendLayout();
             this.tlpSsn.SuspendLayout();
@@ -44,7 +44,7 @@
             // 
             // tlpMain
             // 
-            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.Controls.Add(this.tlpButtons, 0, 2);
@@ -163,14 +163,14 @@
             this.lblWindowTitle.Text = "Enter New Serial Number:";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // pnlSeperator
+            // pnlSeperatorTip
             // 
-            this.pnlSeperator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.pnlSeperator.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlSeperator.Location = new System.Drawing.Point(1, 33);
-            this.pnlSeperator.Name = "pnlSeperator";
-            this.pnlSeperator.Size = new System.Drawing.Size(308, 1);
-            this.pnlSeperator.TabIndex = 1;
+            this.pnlSeperatorTip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
+            this.pnlSeperatorTip.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeperatorTip.Location = new System.Drawing.Point(1, 33);
+            this.pnlSeperatorTip.Name = "pnlSeperatorTip";
+            this.pnlSeperatorTip.Size = new System.Drawing.Size(308, 1);
+            this.pnlSeperatorTip.TabIndex = 1;
             // 
             // ssnWindow
             // 
@@ -181,7 +181,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(310, 145);
             this.Controls.Add(this.tlpMain);
-            this.Controls.Add(this.pnlSeperator);
+            this.Controls.Add(this.pnlSeperatorTip);
             this.Controls.Add(this.lblWindowTitle);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -211,7 +211,7 @@
         private System.Windows.Forms.TableLayoutPanel tlpButtons;
         private System.Windows.Forms.Button cmdOkay;
         private System.Windows.Forms.Button cmdCancel;
-        private System.Windows.Forms.Panel pnlSeperator;
+        private System.Windows.Forms.Panel pnlSeperatorTip;
         private System.Windows.Forms.TableLayoutPanel tlpSsn;
     }
 }

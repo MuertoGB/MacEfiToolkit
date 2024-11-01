@@ -60,11 +60,11 @@ namespace Mac_EFI_Toolkit
 
         private static void ShowLogFileNotFoundError(Form owner)
         {
-            METMessageBox.Show(
+            METPrompt.Show(
                 owner,
                 DIALOGSTRINGS.LOG_NOT_FOUND,
-                METMessageBoxType.Error,
-                METMessageBoxButtons.Okay);
+                METPromptType.Error,
+                METPromptButtons.Okay);
         }
 
         internal static void WriteLogTextToRtb(string messageString, RtbLogPrefix logPrefix, RichTextBox richTextBox)

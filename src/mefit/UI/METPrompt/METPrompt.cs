@@ -2,26 +2,33 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // UI Components
-// METMessageBox.cs
+// METPrompt.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
 {
-    public partial class METMessageBox : Form
+    public partial class METPrompt : Form
     {
-
         #region Static Members
         static System.Media.SystemSound MB_SOUND;
         static string MB_MESSAGE;
 
-        static METMessageBoxType MB_TYPE;
-        static METMessageBoxButtons MB_BUTTONS;
+        static METPromptType MB_TYPE;
+        static METPromptButtons MB_BUTTONS;
         static DialogResult MB_RESULT;
+        #endregion
+
+        #region Constants
+        private const int MaxWidth = 350;
+        private const int MaxHeight = 800;
+        private const int PaddingWidth = 20;
+        private const int PaddingHeight = 60;
         #endregion
 
         #region Overrides
@@ -30,23 +37,20 @@ namespace Mac_EFI_Toolkit.UI
             get
             {
                 CreateParams crParams = base.CreateParams;
-
                 crParams.ClassStyle = crParams.ClassStyle
                     | Program.CS_DBLCLKS
                     | Program.CS_DROP;
-
                 return crParams;
             }
         }
         #endregion
 
-        #region Contructor
-        public METMessageBox()
+        #region Constructor
+        public METPrompt()
         {
             InitializeComponent();
 
             lblTitle.MouseMove += metMessage_MouseMove;
-
             Load += new EventHandler(METMessageBox_Load);
             Shown += new EventHandler(METMessageBox_Shown);
             KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
@@ -56,24 +60,25 @@ namespace Mac_EFI_Toolkit.UI
         #region Window Events
         private void METMessageBox_Load(object sender, EventArgs e)
         {
+            // Set title and color based on the message type
             switch (MB_TYPE)
             {
-                case METMessageBoxType.Error:
+                case METPromptType.Error:
                     lblTitle.ForeColor = Colours.ERROR_BOX;
                     lblTitle.Text = APPSTRINGS.ERROR;
                     MB_SOUND = System.Media.SystemSounds.Hand;
                     break;
-                case METMessageBoxType.Warning:
+                case METPromptType.Warning:
                     lblTitle.ForeColor = Colours.WARNING_BOX;
                     lblTitle.Text = APPSTRINGS.WARNING;
                     MB_SOUND = System.Media.SystemSounds.Exclamation;
                     break;
-                case METMessageBoxType.Information:
+                case METPromptType.Information:
                     lblTitle.ForeColor = Colours.INFO_BOX;
                     lblTitle.Text = APPSTRINGS.INFORMATION;
                     MB_SOUND = System.Media.SystemSounds.Beep;
                     break;
-                case METMessageBoxType.Question:
+                case METPromptType.Question:
                     lblTitle.ForeColor = Colours.INFO_BOX;
                     lblTitle.Text = APPSTRINGS.INFORMATION;
                     MB_SOUND = System.Media.SystemSounds.Beep;
@@ -82,17 +87,19 @@ namespace Mac_EFI_Toolkit.UI
 
             lblMessage.Text = MB_MESSAGE;
 
-            if (MB_BUTTONS == METMessageBoxButtons.Okay)
+            if (MB_BUTTONS == METPromptButtons.Okay)
             {
                 cmdYes.Hide();
                 cmdNo.Text = "OKAY";
             }
-            if (MB_BUTTONS != METMessageBoxButtons.Okay)
+            else
             {
                 cmdYes.Show();
                 cmdNo.Show();
                 cmdNo.Text = "NO";
             }
+
+            AdjustFormSize();
         }
 
         private void METMessageBox_Shown(object sender, EventArgs e)
@@ -101,6 +108,37 @@ namespace Mac_EFI_Toolkit.UI
                 MB_SOUND.Play();
 
             UITools.FlashForecolor(lblTitle);
+        }
+        #endregion
+
+        #region Dynamic Resizing
+        private void AdjustFormSize()
+        {
+            lblMessage.MaximumSize = new Size(MaxWidth, MaxHeight);
+
+            Size preferredSize = lblMessage.PreferredSize;
+
+            int idealWidth = Math.Min(preferredSize.Width, MaxWidth);
+            int idealHeight = Math.Min(preferredSize.Height, MaxHeight);
+
+            lblMessage.Width = idealWidth;
+            lblMessage.Height = idealHeight;
+
+            tlpLabel.Width = idealWidth;
+            tlpLabel.Height = idealHeight;
+
+            this.ClientSize = new Size(
+                idealWidth + PaddingWidth,
+                idealHeight + PaddingHeight
+            );
+
+            if (this.Owner != null)
+            {
+                this.Location = new Point(
+                    this.Owner.Location.X + (this.Owner.Width - this.Width) / 2,
+                    this.Owner.Location.Y + (this.Owner.Height - this.Height) / 2
+                );
+            }
         }
         #endregion
 
@@ -136,14 +174,14 @@ namespace Mac_EFI_Toolkit.UI
         public static DialogResult Show(
             Form owner,
             string message,
-            METMessageBoxType type,
-            METMessageBoxButtons buttons = METMessageBoxButtons.Okay)
+            METPromptType type,
+            METPromptButtons buttons = METPromptButtons.Okay)
         {
             MB_MESSAGE = message;
             MB_TYPE = type;
             MB_BUTTONS = buttons;
 
-            using (METMessageBox messageBox = new METMessageBox())
+            using (METPrompt messageBox = new METPrompt())
             {
                 if (owner == null)
                 {
@@ -164,36 +202,21 @@ namespace Mac_EFI_Toolkit.UI
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e)
         {
-            MB_RESULT =
-                DialogResult.Cancel;
-
+            MB_RESULT = DialogResult.Cancel;
             Close();
         }
 
         private void cmdYes_Click(object sender, EventArgs e)
         {
-            MB_RESULT =
-                DialogResult.Yes;
-
+            MB_RESULT = DialogResult.Yes;
             Close();
         }
 
         private void cmdNo_Click(object sender, EventArgs e)
         {
-            if (MB_BUTTONS == METMessageBoxButtons.Okay)
-            {
-                MB_RESULT =
-                    DialogResult.OK;
-            }
-            else
-            {
-                MB_RESULT =
-                    DialogResult.Cancel;
-            }
-
+            MB_RESULT = MB_BUTTONS == METPromptButtons.Okay ? DialogResult.OK : DialogResult.Cancel;
             Close();
         }
         #endregion
-
     }
 }

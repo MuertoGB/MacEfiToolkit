@@ -247,11 +247,11 @@ namespace Mac_EFI_Toolkit
             if (BinaryUtils.ByteArraysMatch(fileBytes, EFIROM.LoadedBinaryBytes))
             {
                 // Loaded binaries match.
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.WARN_DATA_MATCHES_BUFF,
-                    METMessageBoxType.Warning,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Warning,
+                    METPromptButtons.Okay);
 
                 return;
             }
@@ -270,11 +270,11 @@ namespace Mac_EFI_Toolkit
             }
 
             DialogResult result =
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.UNLOAD_FIRMWARE_RESET,
-                    METMessageBoxType.Warning,
-                    METMessageBoxButtons.YesNo);
+                    METPromptType.Warning,
+                    METPromptButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {
@@ -431,11 +431,11 @@ namespace Mac_EFI_Toolkit
                     return;
                 }
 
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.FSYS_EXPORT_FAIL,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
             }
         }
 
@@ -443,11 +443,11 @@ namespace Mac_EFI_Toolkit
         {
             if (IFD.ME_REGION_BASE == 0 || IFD.ME_REGION_LIMIT == 0)
             {
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.IME_BASE_LIM_NOT_FOUND,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
 
                 return;
             }
@@ -482,11 +482,11 @@ namespace Mac_EFI_Toolkit
                     return;
                 }
 
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.IME_EXPORT_FAIL,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
             }
         }
 
@@ -624,11 +624,11 @@ namespace Mac_EFI_Toolkit
                     return;
                 }
 
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.ARCHIVE_CREATE_FAILED,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
             }
         }
 
@@ -715,11 +715,11 @@ namespace Mac_EFI_Toolkit
 
                 if (!File.Exists(saveFileDialog.FileName))
                 {
-                    METMessageBox.Show(
+                    METPrompt.Show(
                         this,
                         DIALOGSTRINGS.DATA_EXPORT_FAILED,
-                        METMessageBoxType.Error,
-                        METMessageBoxButtons.Okay);
+                        METPromptType.Error,
+                        METPromptButtons.Okay);
 
                     return;
                 }
@@ -796,11 +796,11 @@ namespace Mac_EFI_Toolkit
 
                 // Prompt the user to save changes
                 DialogResult result =
-                    METMessageBox.Show(
+                    METPrompt.Show(
                         this,
                         DIALOGSTRINGS.FSYS_PATCH_SUCCESS_SAVE,
-                        METMessageBoxType.Question,
-                        METMessageBoxButtons.YesNo);
+                        METPromptType.Question,
+                        METPromptButtons.YesNo);
 
                 if (result == DialogResult.Yes)
                 {
@@ -862,11 +862,11 @@ namespace Mac_EFI_Toolkit
                     LOGSTRINGS.IME_WRITE_SUCCESS);
 
                 DialogResult result =
-                    METMessageBox.Show(
+                    METPrompt.Show(
                         this,
                         DIALOGSTRINGS.IME_PATCH_SUCCESS_SAVE,
-                        METMessageBoxType.Question,
-                        METMessageBoxButtons.YesNo);
+                        METPromptType.Question,
+                        METPromptButtons.YesNo);
 
                 if (result == DialogResult.Yes)
                 {
@@ -908,26 +908,41 @@ namespace Mac_EFI_Toolkit
             {
                 // Action was cancelled.
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
                     return;
+                }
 
                 // Make binary with patched Fsys crc.
-                byte[] patchedBinary =
-                    BinaryUtils.MakeFsysCrcPatchedBinary(
+                byte[] binaryBuffer =
+                    EFIROM.MakeFsysCrcPatchedBinary(
                         EFIROM.LoadedBinaryBytes,
                         EFIROM.FsysStoreData.FsysBase,
                         EFIROM.FsysStoreData.FsysBytes,
                         EFIROM.FsysStoreData.CRC32CalcInt);
 
+                if (!FileUtils.WriteAllBytesEx(saveFileDialog.FileName, binaryBuffer))
+                {
+                        METPrompt.Show(
+                            this,
+                            DIALOGSTRINGS.FSYS_SUM_MASK_FAIL,
+                            METPromptType.Error,
+                            METPromptButtons.YesNo);
+
+                        return;
+                }
+
                 // Ask if user wants to open the repaired file.
                 DialogResult result =
-                    METMessageBox.Show(
+                    METPrompt.Show(
                         this,
                         DIALOGSTRINGS.FSYS_SUM_PATCH_SUCCESS,
-                        METMessageBoxType.Information,
-                        METMessageBoxButtons.YesNo);
+                        METPromptType.Information,
+                        METPromptButtons.YesNo);
 
                 if (result == DialogResult.Yes)
+                {
                     OpenBinary(saveFileDialog.FileName);
+                }
             }
         }
 
@@ -978,7 +993,7 @@ namespace Mac_EFI_Toolkit
 
                 // Create a patched primary store.
                 unlockedPrimaryStore =
-                    BinaryUtils.PatchSvsStoreMac(
+                    EFIROM.PatchSvsStoreMac(
                         EFIROM.SvsStoreData.PrimaryStoreBytes,
                         EFIROM.EfiPrimaryLockData.LockCrcBase);
 
@@ -993,7 +1008,7 @@ namespace Mac_EFI_Toolkit
                 {
                     // A MAC CRC base was found in the backup store so we need to patch it.
                     unlockedBackupStore =
-                        BinaryUtils.PatchSvsStoreMac(
+                        EFIROM.PatchSvsStoreMac(
                             EFIROM.SvsStoreData.BackupStoreBytes,
                             EFIROM.EfiBackupLockData.LockCrcBase);
 
@@ -1031,28 +1046,35 @@ namespace Mac_EFI_Toolkit
                     }
                 }
 
+                if (!FileUtils.WriteAllBytesEx(saveFileDialog.FileName, binaryBuffer))
+                {
+                    buildFailed = true;
+                }
+
                 // The build failed flag was set.
                 if (buildFailed)
                 {
-                    METMessageBox.Show(
+                    METPrompt.Show(
                         this,
                         DIALOGSTRINGS.EFI_LOCK_FAIL,
-                        METMessageBoxType.Error,
-                        METMessageBoxButtons.YesNo);
+                        METPromptType.Error,
+                        METPromptButtons.YesNo);
 
                     return;
                 }
 
                 // Ask if user wants to open the patched file.
                 DialogResult result =
-                    METMessageBox.Show(
+                    METPrompt.Show(
                         this,
                         DIALOGSTRINGS.EFI_LOCK_SUCCESS,
-                        METMessageBoxType.Information,
-                        METMessageBoxButtons.YesNo);
+                        METPromptType.Information,
+                        METPromptButtons.YesNo);
 
                 if (result == DialogResult.Yes)
+                {
                     OpenBinary(saveFileDialog.FileName);
+                }
             }
         }
         #endregion
@@ -1220,10 +1242,10 @@ namespace Mac_EFI_Toolkit
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
             lblConfigCode.ForeColor = Colours.INFO_BOX;
 
-            AppendConfigCodeAsync(EFIROM.FsysStoreData.HWC);
+            GetConfigCodeAsync(EFIROM.FsysStoreData.HWC);
         }
 
-        internal async void AppendConfigCodeAsync(string hwc)
+        internal async void GetConfigCodeAsync(string hwc)
         {
             string configCode =
                 await MacUtils.GetDeviceConfigCodeSupportRemote(hwc);
@@ -1233,7 +1255,7 @@ namespace Mac_EFI_Toolkit
                 EFIROM.ConfigCode = configCode;
 
                 lblConfigCode.Text = configCode;
-                lblConfigCode.ForeColor = Color.White;
+                lblConfigCode.ForeColor = AppColours.NORMAL_INFO_TEXT;
 
                 configurationToolStripMenuItem.Enabled = true;
 
@@ -1739,11 +1761,11 @@ namespace Mac_EFI_Toolkit
             // Check if the image is what we're looking for.
             if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBytes))
             {
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.FILE_NOT_VALID,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
 
                 ResetWindow();
 
@@ -1852,11 +1874,11 @@ namespace Mac_EFI_Toolkit
 
             if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
             {
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     $"'{text}' {EFISTRINGS.COPIED_TO_CB_LC}",
-                    METMessageBoxType.Information,
-                    METMessageBoxButtons.Okay);
+                    METPromptType.Information,
+                    METPromptButtons.Okay);
             }
         }
 
@@ -2001,7 +2023,7 @@ namespace Mac_EFI_Toolkit
                     LOGSTRINGS.MASKING_SUM);
 
                 newFsysStore =
-                    BinaryUtils.PatchFsysCrc(
+                    EFIROM.PatchFsysCrc(
                         fsysStore.FsysBytes,
                         fsysStore.CRC32CalcInt);
 
@@ -2214,7 +2236,7 @@ namespace Mac_EFI_Toolkit
 
             // Patch fsys checksum in the binary buffer
             binaryBuffer =
-                BinaryUtils.MakeFsysCrcPatchedBinary(
+                EFIROM.MakeFsysCrcPatchedBinary(
                     binaryBuffer,
                     fsys.FsysBase,
                     fsys.FsysBytes,
@@ -2276,11 +2298,11 @@ namespace Mac_EFI_Toolkit
                         $"{LOGSTRINGS.FILE_SAVE_SUCCESS} {saveFileDialog.FileName}");
 
                     DialogResult result =
-                        METMessageBox.Show(
+                        METPrompt.Show(
                             this,
                             DIALOGSTRINGS.FW_SAVED_SUCCESS_LOAD,
-                            METMessageBoxType.Question,
-                            METMessageBoxButtons.YesNo);
+                            METPromptType.Question,
+                            METPromptButtons.YesNo);
 
                     if (result == DialogResult.Yes)
                         OpenBinary(saveFileDialog.FileName);
@@ -2309,11 +2331,11 @@ namespace Mac_EFI_Toolkit
         private void NotifyPatchingFailure()
         {
             DialogResult result =
-                METMessageBox.Show(
+                METPrompt.Show(
                     this,
                     DIALOGSTRINGS.PATCH_FAIL_APP_LOG,
-                    METMessageBoxType.Error,
-                    METMessageBoxButtons.YesNo);
+                    METPromptType.Error,
+                    METPromptButtons.YesNo);
 
             if (result == DialogResult.Yes)
                 Logger.ViewLogFile(this);

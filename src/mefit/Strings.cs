@@ -205,11 +205,14 @@
         internal const string FSYS_EXPORT_FAIL =
             "Fsys Store export failed.";
 
+        internal const string FSYS_SUM_MASK_FAIL =
+            "Checksum masking failed.";
+
         internal const string EFI_LOCK_FAIL =
             "Invalidating EFI lock failed.";
 
         internal const string EFI_LOCK_SUCCESS =
-            "Invalidating EFI lock successful.\r\nMake sure to perform an NVRAM reset on first boot.\r\nWould you like to load the new file?";
+            "Invalidating EFI lock successful. Make sure to perform an NVRAM reset on first boot.\r\nWould you like to load the new file?";
 
         internal const string IME_BASE_LIM_NOT_FOUND =
             "Management Engine base or limit not found.";

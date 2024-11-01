@@ -126,7 +126,7 @@
     <Compile Include="Firmware\T2\ROMSigs.cs" />
     <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
-    <Compile Include="UI\METMessageBox\Enums.cs" />
+    <Compile Include="UI\METPrompt\Enums.cs" />
     <Compile Include="UI\UITools.cs" />
     <Compile Include="UI\Controls\METContextMenuStrip.cs">
       <SubType>Component</SubType>
@@ -134,11 +134,11 @@
     <Compile Include="UI\Controls\METLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\METMessageBox\METMessageBox.cs">
+    <Compile Include="UI\METPrompt\METPrompt.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\METMessageBox\METMessageBox.Designer.cs">
-      <DependentUpon>METMessageBox.cs</DependentUpon>
+    <Compile Include="UI\METPrompt\METPrompt.Designer.cs">
+      <DependentUpon>METPrompt.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\METRadioButton.cs">
       <SubType>Component</SubType>
@@ -214,8 +214,8 @@
     <Compile Include="WinForms\termsWindow.Designer.cs">
       <DependentUpon>termsWindow.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\METMessageBox\METMessageBox.resx">
-      <DependentUpon>METMessageBox.cs</DependentUpon>
+    <EmbeddedResource Include="UI\METPrompt\METPrompt.resx">
+      <DependentUpon>METPrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\aboutWindow.resx">
       <DependentUpon>aboutWindow.cs</DependentUpon>
