@@ -5,10 +5,8 @@
 // METPrompt.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
@@ -36,7 +34,15 @@ namespace Mac_EFI_Toolkit.UI
         {
             InitializeComponent();
 
-            lblTitle.MouseMove += metMessage_MouseMove;
+            // Attach event handlers.
+            WireEventHandlers();
+
+            // Enable drag.
+            UITools.EnableFormDrag(this, lblTitle);
+        }
+
+        private void WireEventHandlers()
+        {
             Load += new EventHandler(METMessageBox_Load);
             Shown += new EventHandler(METMessageBox_Shown);
             KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
@@ -46,7 +52,7 @@ namespace Mac_EFI_Toolkit.UI
         #region Window Events
         private void METMessageBox_Load(object sender, EventArgs e)
         {
-            // Set title and color based on the message type
+            // Set title and color based on the message type.
             switch (MB_TYPE)
             {
                 case METPromptType.Error:
@@ -139,48 +145,28 @@ namespace Mac_EFI_Toolkit.UI
         }
         #endregion
 
-        #region Mouse Events
-        private void metMessage_MouseMove(object sender, MouseEventArgs e)
+        #region Overriden Events
+        public static DialogResult Show(Form owner, string message, METPromptType type, METPromptButtons buttons = METPromptButtons.Okay)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                NativeMethods.ReleaseCapture();
+            SetMessageBoxParameters(message, type, buttons);
 
-                NativeMethods.SendMessage(
-                    new HandleRef(this, Handle),
-                    Program.WM_NCLBUTTONDOWN,
-                    (IntPtr)Program.HT_CAPTION,
-                    (IntPtr)0);
+            using (METPrompt messageBox = new METPrompt())
+            {
+                messageBox.StartPosition = owner == null
+                    ? FormStartPosition.CenterScreen
+                    : FormStartPosition.CenterParent;
+
+                DialogResult result = messageBox.ShowDialog(owner);
+
+                return MB_RESULT;
             }
         }
-        #endregion
 
-        #region Overriden Events
-        public static DialogResult Show(
-            Form owner,
-            string message,
-            METPromptType type,
-            METPromptButtons buttons = METPromptButtons.Okay)
+        private static void SetMessageBoxParameters(string message, METPromptType type, METPromptButtons buttons)
         {
             MB_MESSAGE = message;
             MB_TYPE = type;
             MB_BUTTONS = buttons;
-
-            using (METPrompt messageBox = new METPrompt())
-            {
-                if (owner == null)
-                {
-                    messageBox.StartPosition = FormStartPosition.CenterScreen;
-                }
-                else
-                {
-                    messageBox.StartPosition = FormStartPosition.CenterParent;
-                }
-
-                messageBox.ShowDialog(owner);
-            }
-
-            return MB_RESULT;
         }
         #endregion
 

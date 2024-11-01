@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241101.2320";
+        internal const string APP_BUILD = "241101.2332";
         internal const string APP_CHANNEL = "DEV";
     }
 
