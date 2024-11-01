@@ -60,12 +60,12 @@ namespace Mac_EFI_Toolkit.WinForms
         private void aboutWindow_Load(object sender, EventArgs e)
         {
             lblBuild.Text =
-                $"{AppStrings.S_VERSION.ToUpper()} " +
-                $"{Application.ProductVersion}.{METVersion.Build}";
+                $"{APPSTRINGS.VERSION.ToUpper()} " +
+                $"{Application.ProductVersion}.{METVersion.APP_BUILD}";
 
             lblChannel.Text =
-                $"{AppStrings.S_LZMA_SDK} " +
-                $"{METVersion.SDK}";
+                $"{APPSTRINGS.LZMA_SDK} " +
+                $"{METVersion.LZMA_SDK}";
         }
         #endregion
 

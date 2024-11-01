@@ -29,13 +29,13 @@ namespace Mac_EFI_Toolkit
     {
         internal static void WriteToAppLog(string logMessage)
         {
-            using (StreamWriter writer = new StreamWriter(METPath.ApplicationLog, true))
+            using (StreamWriter writer = new StreamWriter(METPath.APP_LOG, true))
                 writer.WriteLine($"{DateTime.Now} : {logMessage}");
         }
 
         internal static void WriteToDbLog(string logMessage)
         {
-            using (StreamWriter writer = new StreamWriter(METPath.DatabaseLog, true))
+            using (StreamWriter writer = new StreamWriter(METPath.DATABASE_LOG, true))
                 writer.WriteLine($"{DateTime.Now} : {logMessage}");
         }
 
@@ -47,7 +47,7 @@ namespace Mac_EFI_Toolkit
 
         internal static void ViewLogFile(Form owner)
         {
-            var logPath = METPath.ApplicationLog;
+            var logPath = METPath.APP_LOG;
 
             if (!File.Exists(logPath))
             {
@@ -62,7 +62,7 @@ namespace Mac_EFI_Toolkit
         {
             METMessageBox.Show(
                 owner,
-                DialogStrings.S_LOG_NOT_EXIST,
+                DIALOGSTRINGS.LOG_NOT_FOUND,
                 METMessageBoxType.Error,
                 METMessageBoxButtons.Okay);
         }

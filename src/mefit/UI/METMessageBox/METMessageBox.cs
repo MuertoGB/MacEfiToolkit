@@ -60,22 +60,22 @@ namespace Mac_EFI_Toolkit.UI
             {
                 case METMessageBoxType.Error:
                     lblTitle.ForeColor = Colours.ERROR_BOX;
-                    lblTitle.Text = AppStrings.S_ERROR;
+                    lblTitle.Text = APPSTRINGS.ERROR;
                     MB_SOUND = System.Media.SystemSounds.Hand;
                     break;
                 case METMessageBoxType.Warning:
                     lblTitle.ForeColor = Colours.WARNING_BOX;
-                    lblTitle.Text = AppStrings.S_WARNING;
+                    lblTitle.Text = APPSTRINGS.WARNING;
                     MB_SOUND = System.Media.SystemSounds.Exclamation;
                     break;
                 case METMessageBoxType.Information:
                     lblTitle.ForeColor = Colours.INFO_BOX;
-                    lblTitle.Text = AppStrings.S_INFO;
+                    lblTitle.Text = APPSTRINGS.INFORMATION;
                     MB_SOUND = System.Media.SystemSounds.Beep;
                     break;
                 case METMessageBoxType.Question:
                     lblTitle.ForeColor = Colours.INFO_BOX;
-                    lblTitle.Text = AppStrings.S_INFO;
+                    lblTitle.Text = APPSTRINGS.INFORMATION;
                     MB_SOUND = System.Media.SystemSounds.Beep;
                     break;
             }

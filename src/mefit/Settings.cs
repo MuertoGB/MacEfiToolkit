@@ -46,7 +46,7 @@ namespace Mac_EFI_Toolkit
         internal static void Initialize()
         {
             IniFile ini =
-                new IniFile(METPath.SettingsFile);
+                new IniFile(METPath.SETTINGS_FILE);
 
             WriteSections(ini);
 
@@ -74,17 +74,17 @@ namespace Mac_EFI_Toolkit
 
             if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "StartupInitialPath"))
             {
-                ini.Write("Application", "StartupInitialPath", METPath.WorkingDirectory);
+                ini.Write("Application", "StartupInitialPath", METPath.WORKING_DIR);
             }
 
             if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "EfiInitialPath"))
             {
-                ini.Write("Application", "EfiInitialPath", METPath.WorkingDirectory);
+                ini.Write("Application", "EfiInitialPath", METPath.WORKING_DIR);
             }
 
             if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "SocInitialPath"))
             {
-                ini.Write("Application", "SocInitialPath", METPath.WorkingDirectory);
+                ini.Write("Application", "SocInitialPath", METPath.WORKING_DIR);
             }
 
             if (!ini.SectionExists("Firmware") || !ini.KeyExists("Firmware", "AcceptedEditingTerms"))
@@ -151,14 +151,14 @@ namespace Mac_EFI_Toolkit
 
             IniFile settingsIni =
                 new IniFile(
-                    METPath.SettingsFile);
+                    METPath.SETTINGS_FILE);
 
             if (!settingsIni.SectionExists(section))
             {
                 Logger.WriteToAppLog(
                     $"SettingsGetBool: Section '{section}' was missing and created automatically.");
 
-                using (StreamWriter writer = new StreamWriter(METPath.SettingsFile, true))
+                using (StreamWriter writer = new StreamWriter(METPath.SETTINGS_FILE, true))
                     writer.WriteLine(
                         $"[{section}]");
 
@@ -210,14 +210,14 @@ namespace Mac_EFI_Toolkit
 
             IniFile settingsIni =
                 new IniFile(
-                    METPath.SettingsFile);
+                    METPath.SETTINGS_FILE);
 
             if (!settingsIni.SectionExists(section))
             {
                 Logger.WriteToAppLog(
                     $"ReadString (Settings): Section '{section}' was missing and created automatically.");
 
-                using (StreamWriter writer = new StreamWriter(METPath.SettingsFile, true))
+                using (StreamWriter writer = new StreamWriter(METPath.SETTINGS_FILE, true))
                 {
                     writer.WriteLine(
                         $"[{section}]");
@@ -282,7 +282,7 @@ namespace Mac_EFI_Toolkit
 
             IniFile settingsIni =
                 new IniFile(
-                    METPath.SettingsFile);
+                    METPath.SETTINGS_FILE);
 
             if (settingsIni.SectionExists(section))
             {
@@ -325,7 +325,7 @@ namespace Mac_EFI_Toolkit
 
             IniFile ini =
                 new IniFile(
-                    METPath.SettingsFile);
+                    METPath.SETTINGS_FILE);
 
             if (!ini.SectionExists(section))
                 ini.Write(
@@ -352,7 +352,7 @@ namespace Mac_EFI_Toolkit
         #region Bools
         private static bool SettingsFileExists()
         {
-            return File.Exists(METPath.SettingsFile);
+            return File.Exists(METPath.SETTINGS_FILE);
         }
 
         internal static bool Delete()
@@ -360,7 +360,7 @@ namespace Mac_EFI_Toolkit
             try
             {
                 File.Delete(
-                    METPath.SettingsFile);
+                    METPath.SETTINGS_FILE);
 
                 return SettingsFileExists();
             }

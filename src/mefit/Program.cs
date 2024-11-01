@@ -23,37 +23,38 @@ namespace Mac_EFI_Toolkit
     #region Struct
     internal readonly struct METPath
     {
-        internal static readonly string WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        internal static readonly string FriendlyName = AppDomain.CurrentDomain.FriendlyName;
-        internal static readonly string BackupsDirectory = Path.Combine(WorkingDirectory, "backups");
-        internal static readonly string BuildsDirectory = Path.Combine(WorkingDirectory, "builds");
-        internal static readonly string FsysDirectory = Path.Combine(WorkingDirectory, "fsys_stores");
-        internal static readonly string MeDirectory = Path.Combine(WorkingDirectory, "me_regions");
-        internal static readonly string ScfgDirectory = Path.Combine(WorkingDirectory, "scfg_stores");
-        internal static readonly string SettingsFile = Path.Combine(WorkingDirectory, "Settings.ini");
-        internal static readonly string DebugLog = Path.Combine(WorkingDirectory, "debug.log");
-        internal static readonly string UnhandledLog = Path.Combine(WorkingDirectory, "unhandled.log");
-        internal static readonly string ApplicationLog = Path.Combine(WorkingDirectory, "mefit.log");
-        internal static readonly string DatabaseLog = Path.Combine(WorkingDirectory, "database.log");
+        internal static readonly string WORKING_DIR = AppDomain.CurrentDomain.BaseDirectory;
+        internal static readonly string FRIENDLY_NAME = AppDomain.CurrentDomain.FriendlyName;
+        internal static readonly string BACKUPS_DIR = Path.Combine(WORKING_DIR, "backups");
+        internal static readonly string BUILDS_DIR = Path.Combine(WORKING_DIR, "builds");
+        internal static readonly string FSYS_DIR = Path.Combine(WORKING_DIR, "fsys_stores");
+        internal static readonly string INTELME_DIR = Path.Combine(WORKING_DIR, "me_regions");
+        internal static readonly string NVRAM_DIR = Path.Combine(WORKING_DIR, "nvram_stores");
+        internal static readonly string SCFG_DIR = Path.Combine(WORKING_DIR, "scfg_stores");
+        internal static readonly string SETTINGS_FILE = Path.Combine(WORKING_DIR, "Settings.ini");
+        internal static readonly string DEBUG_LOG = Path.Combine(WORKING_DIR, "debug.log");
+        internal static readonly string UNHANDLED_LOG = Path.Combine(WORKING_DIR, "unhandled.log");
+        internal static readonly string APP_LOG = Path.Combine(WORKING_DIR, "mefit.log");
+        internal static readonly string DATABASE_LOG = Path.Combine(WORKING_DIR, "database.log");
     }
 
     internal readonly struct METVersion
     {
-        internal const string SDK = "23.01";
-        internal const string Build = "241101.0210";
-        internal const string Channel = "DEV";
+        internal const string LZMA_SDK = "23.01";
+        internal const string APP_BUILD = "241101.0445";
+        internal const string APP_CHANNEL = "DEV";
     }
 
     internal readonly struct METUrl
     {
-        internal const string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
-        internal const string Donate = "https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ";
-        internal const string Email = "mailto:muertogb@proton.me";
-        internal const string Homepage = "https://github.com/MuertoGB/MacEfiToolkit";
-        internal const string GithubIssues = "https://github.com/MuertoGB/MacEfiToolkit/issues";
-        internal const string GithubLatest = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
-        internal const string Manual = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
-        internal const string VersionXml = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/stream/manifests/version.xml";
+        internal const string CHANGELOG = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
+        internal const string DONATE = "https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ";
+        internal const string EMAILME = "mailto:muertogb@proton.me";
+        internal const string HOMEPAGE = "https://github.com/MuertoGB/MacEfiToolkit";
+        internal const string GH_ISSUE = "https://github.com/MuertoGB/MacEfiToolkit/issues";
+        internal const string GH_LATEST = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
+        internal const string MANUAL = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
+        internal const string VERSION_MANIFEST = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/stream/manifests/version.xml";
 
     }
     #endregion
@@ -185,14 +186,14 @@ namespace Mac_EFI_Toolkit
             DialogResult result;
 
             File.WriteAllText(
-                METPath.UnhandledLog,
+                METPath.UNHANDLED_LOG,
                 Unhandled.GenerateUnhandledReport(e));
 
-            if (File.Exists(METPath.UnhandledLog))
+            if (File.Exists(METPath.UNHANDLED_LOG))
             {
                 result =
                     MessageBox.Show(
-                        $"{e.Message}\r\n\r\nDetails were saved to {METPath.UnhandledLog.Replace(" ", Chars.NB_SPACE)}" +
+                        $"{e.Message}\r\n\r\nDetails were saved to {METPath.UNHANDLED_LOG.Replace(" ", Chars.NB_SPACE)}" +
                         $"'\r\n\r\nForce quit application?",
                         $"MET Exception Handler",
                         MessageBoxButtons.YesNo,
@@ -236,8 +237,8 @@ namespace Mac_EFI_Toolkit
 
             string title = action == ExitAction.Restart ? "Restart" : "Quit";
             string message = action == ExitAction.Restart
-                ? $"{AppStrings.S_FW_WIN_OPEN} {AppStrings.S_HAE_RESTART}"
-                : $"{AppStrings.S_FW_WIN_OPEN} {AppStrings.S_HAE_EXIT}";
+                ? $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_RESTART}"
+                : $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_EXIT}";
 
             if (ShowConfirmationDialog(owner, title, message))
             {
@@ -304,11 +305,12 @@ namespace Mac_EFI_Toolkit
 
         internal static void EnsureDirectoriesExist()
         {
-            CreateDirectoryIfNotExists(METPath.BackupsDirectory);
-            CreateDirectoryIfNotExists(METPath.BuildsDirectory);
-            CreateDirectoryIfNotExists(METPath.FsysDirectory);
-            CreateDirectoryIfNotExists(METPath.MeDirectory);
-            CreateDirectoryIfNotExists(METPath.ScfgDirectory);
+            CreateDirectoryIfNotExists(METPath.BACKUPS_DIR);
+            CreateDirectoryIfNotExists(METPath.BUILDS_DIR);
+            CreateDirectoryIfNotExists(METPath.FSYS_DIR);
+            CreateDirectoryIfNotExists(METPath.INTELME_DIR);
+            CreateDirectoryIfNotExists(METPath.NVRAM_DIR);
+            CreateDirectoryIfNotExists(METPath.SCFG_DIR);
         }
 
         private static void CreateDirectoryIfNotExists(string directoryPath)

@@ -130,7 +130,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 Filter = "Text Files (*.txt)|*.txt",
                 FileName = $"AppleRomSectionInformation_{EFIROM.FileInfoData.FileName}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.WorkingDirectory
+                InitialDirectory = METPath.WORKING_DIR
             })
             {
                 // Action was cancelled
@@ -165,9 +165,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     return;
                 }
 
-                UITools.ShowExplorerNavigationPrompt(
+                UITools.ShowExplorerFileHighlight(
                  this,
-                 "Data exported successfully.",
                  dialog.FileName);
             }
         }

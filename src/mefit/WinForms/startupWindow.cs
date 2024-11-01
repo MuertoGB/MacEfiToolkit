@@ -32,7 +32,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Private Members
-        private string _strInitialDirectory = METPath.WorkingDirectory;
+        private string _strInitialDirectory = METPath.WORKING_DIR;
         private int _childWindowCount = 0;
         #endregion
 
@@ -170,7 +170,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // Check for a new version using the specified URL.
             VersionResult result =
                 await AppVersion.CheckForNewVersion(
-                    METUrl.VersionXml);
+                    METUrl.VERSION_MANIFEST);
 
             // If a new version is available and update the UI.
             if (result == VersionResult.UpToDate)
@@ -304,7 +304,7 @@ namespace Mac_EFI_Toolkit.WinForms
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
-                Filter = AppStrings.S_SUPPORTED_FW_FILTER
+                Filter = APPSTRINGS.FILTER_SUPPORT_FIRMWARE
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -365,7 +365,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             Process.Start(
                 "explorer.exe",
-                METPath.BackupsDirectory);
+                METPath.BACKUPS_DIR);
         }
 
         private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -374,7 +374,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             Process.Start(
                 "explorer.exe",
-                METPath.BuildsDirectory);
+                METPath.BUILDS_DIR);
         }
 
         private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -383,7 +383,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             Process.Start(
                 "explorer.exe",
-                METPath.FsysDirectory);
+                METPath.FSYS_DIR);
         }
 
         private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -392,34 +392,34 @@ namespace Mac_EFI_Toolkit.WinForms
 
             Process.Start(
                  "explorer.exe",
-                 METPath.MeDirectory);
+                 METPath.INTELME_DIR);
         }
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start("explorer.exe", METPath.WorkingDirectory);
+            Process.Start("explorer.exe", METPath.WORKING_DIR);
         #endregion
 
         #region More Context Menu Events
         private void changelogToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.Changelog);
+            Process.Start(METUrl.CHANGELOG);
 
         private void donateToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.Donate);
+            Process.Start(METUrl.DONATE);
 
         private void emailMeToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.Email);
+            Process.Start(METUrl.EMAILME);
 
         private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.GithubIssues);
+            Process.Start(METUrl.GH_ISSUE);
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.Homepage);
+            Process.Start(METUrl.HOMEPAGE);
 
         private void manualToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.Manual);
+            Process.Start(METUrl.MANUAL);
 
         private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.GithubLatest);
+            Process.Start(METUrl.GH_LATEST);
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -450,7 +450,7 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 _strInitialDirectory = Directory.Exists(directory)
                     ? directory
-                    : METPath.WorkingDirectory;
+                    : METPath.WORKING_DIR;
             }
         }
 
@@ -516,12 +516,12 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (_childWindowCount == 0)
             {
-                lblWindowTitle.Text = AppStrings.S_NAME;
+                lblWindowTitle.Text = APPSTRINGS.APPNAME;
                 return;
             }
 
             lblWindowTitle.Text =
-                $"{AppStrings.S_NAME} ({_childWindowCount})";
+                $"{APPSTRINGS.APPNAME} ({_childWindowCount})";
         }
         #endregion
 

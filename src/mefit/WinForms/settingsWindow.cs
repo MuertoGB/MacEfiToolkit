@@ -136,10 +136,10 @@ namespace Mac_EFI_Toolkit.WinForms
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
                 dialog.SelectedPath = string.IsNullOrEmpty(Settings.ReadString(settingsType))
-                    ? METPath.WorkingDirectory
+                    ? METPath.WORKING_DIR
                     : Settings.ReadString(settingsType);
 
-                dialog.Description = AppStrings.S_SELECT_FOLDER;
+                dialog.Description = APPSTRINGS.SELECT_FOLDER;
                 dialog.ShowNewFolderButton = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -203,7 +203,7 @@ namespace Mac_EFI_Toolkit.WinForms
             DialogResult result =
                 METMessageBox.Show(
                     this,
-                    AppStrings.S_RESET_SETTINGS,
+                    APPSTRINGS.RESET_SETTINGS_DEFAULT,
                     METMessageBoxType.Warning,
                     METMessageBoxButtons.YesNo);
 
@@ -232,15 +232,15 @@ namespace Mac_EFI_Toolkit.WinForms
 
             Settings.SetString(
                 SettingsStringType.StartupInitialDirectory,
-                METPath.WorkingDirectory);
+                METPath.WORKING_DIR);
 
             Settings.SetString(
                 SettingsStringType.EfiInitialDirectory,
-                METPath.WorkingDirectory);
+                METPath.WORKING_DIR);
 
             Settings.SetString(
                 SettingsStringType.SocInitialDirectory,
-                METPath.WorkingDirectory);
+                METPath.WORKING_DIR);
 
             UpdateCheckBoxControls();
             UpdatePathLabel();

@@ -147,7 +147,7 @@ namespace Mac_EFI_Toolkit.WinForms
             DialogResult result =
                 METMessageBox.Show(
                     this,
-                    DialogStrings.S_UNLOAD_RESET,
+                    DIALOGSTRINGS.UNLOAD_FIRMWARE_RESET,
                     METMessageBoxType.Warning,
                     METMessageBoxButtons.YesNo);
 
@@ -160,25 +160,14 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdExportScfg_Click(object sender, EventArgs e)
         {
-            if (T2ROM.ScfgSectionData.ScfgBytes == null)
-            {
-                METMessageBox.Show(
-                this,
-                $"ScfgSectionData.ScfgBytes() {DialogStrings.S_DATA_NULL}",
-                METMessageBoxType.Error,
-                METMessageBoxButtons.Okay);
-
-                return;
-            }
-
             Program.EnsureDirectoriesExist();
 
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
-                FileName = $"{T2WinStrings.S_SCFG}_{T2ROM.ScfgSectionData.SerialText}",
+                FileName = $"{T2STRINGS.SCFG}_{T2ROM.ScfgSectionData.SerialText}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.ScfgDirectory
+                InitialDirectory = METPath.SCFG_DIR
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -189,9 +178,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     dialog.FileName,
                     T2ROM.ScfgSectionData.ScfgBytes))
                 {
-                    UITools.ShowExplorerNavigationPrompt(
+                    UITools.ShowExplorerFileHighlight(
                         this,
-                        DialogStrings.S_SCFG_EXPORT_SUCCESS,
                         dialog.FileName);
 
                     return;
@@ -199,7 +187,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
                 METMessageBox.Show(
                     this,
-                    DialogStrings.S_SCFG_EXPORT_FAIL,
+                    DIALOGSTRINGS.SCFG_EXPORT_FAIL,
                     METMessageBoxType.Error,
                     METMessageBoxButtons.Okay);
             }
@@ -233,7 +221,7 @@ namespace Mac_EFI_Toolkit.WinForms
             {
                 METMessageBox.Show(
                     this,
-                    DialogStrings.S_NOT_VALID_FW,
+                    DIALOGSTRINGS.FILE_NOT_VALID,
                     METMessageBoxType.Error,
                     METMessageBoxButtons.Okay);
 
@@ -320,7 +308,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             lblFilesize.Text =
                 $"{FileUtils.FormatFileSize(fsDecimal)} " +
-                $"{EfiWinStrings.S_BYTES} ({fsDecimal:X}h)";
+                $"{EFISTRINGS.BYTES} ({fsDecimal:X}h)";
 
             if (!isValidSize)
             {
@@ -349,14 +337,14 @@ namespace Mac_EFI_Toolkit.WinForms
                 return;
             }
 
-            lbliBoot.Text = AppStrings.S_NA;
+            lbliBoot.Text = APPSTRINGS.NA;
         }
 
         private void UpdateScfgControls()
         {
             if (T2ROM.ScfgSectionData.StoreBase == -1)
             {
-                lblScfg.Text = AppStrings.S_NOT_FOUND;
+                lblScfg.Text = APPSTRINGS.NOT_FOUND;
                 return;
             }
 
@@ -375,7 +363,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (string.IsNullOrEmpty(T2ROM.ScfgSectionData.SerialText))
             {
-                lblSerial.Text = AppStrings.S_NA;
+                lblSerial.Text = APPSTRINGS.NA;
                 return;
             }
 
@@ -386,7 +374,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (string.IsNullOrEmpty(T2ROM.ConfigCode))
             {
-                lblConfigCode.Text = AppStrings.S_CONTACT_SERVER;
+                lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
                 GetConfigCodeAsync(T2ROM.ScfgSectionData.HWC);
             }
         }
@@ -398,7 +386,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (string.IsNullOrEmpty(configcode))
             {
-                lblConfigCode.Text = AppStrings.S_NA;
+                lblConfigCode.Text = APPSTRINGS.NA;
                 return;
             }
 
@@ -410,7 +398,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             if (string.IsNullOrEmpty(T2ROM.ScfgSectionData.SonText))
             {
-                lblSon.Text = AppStrings.S_NA;
+                lblSon.Text = APPSTRINGS.NA;
                 return;
             }
 

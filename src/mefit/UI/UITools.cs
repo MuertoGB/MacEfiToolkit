@@ -8,6 +8,7 @@
 using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -49,17 +50,30 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        internal static void ShowExplorerNavigationPrompt(Form owner, string message, string path)
+        internal static void ShowExplorerFileHighlight(Form owner, string path)
         {
             DialogResult result =
                 METMessageBox.Show(
                         owner,
-                        $"{message} Navigate to file?",
+                        $"{APPSTRINGS.FILE_SAVE_SUCCESS_NAV}",
                         METMessageBoxType.Information,
                         METMessageBoxButtons.YesNo);
 
             if (result == DialogResult.Yes)
                 FileUtils.HighlightPathInExplorer(path);
+        }
+
+        internal static void ShowExplorerDirectory(Form owner, string path)
+        {
+            DialogResult result =
+                METMessageBox.Show(
+                        owner,
+                        $"{APPSTRINGS.FILES_SAVE_SUCCESS_NAV}",
+                        METMessageBoxType.Information,
+                        METMessageBoxButtons.YesNo);
+
+            if (result == DialogResult.Yes)
+                Process.Start("explorer.exe", path);
         }
 
         internal static void ShowContextMenuAtControlPoint(object sender, ContextMenuStrip menu, MenuPosition menuPosition)

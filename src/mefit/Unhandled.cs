@@ -51,8 +51,8 @@ namespace Mac_EFI_Toolkit
 
             string exePath =
                 Path.Combine(
-                    METPath.WorkingDirectory,
-                    METPath.FriendlyName);
+                    METPath.WORKING_DIR,
+                    METPath.FRIENDLY_NAME);
 
             try
             {
@@ -64,9 +64,9 @@ namespace Mac_EFI_Toolkit
 
                 builder.AppendLine("<-- Application -->\r\n");
                 builder.AppendLine($"Name:     {Application.ProductName}");
-                builder.AppendLine($"Version:  {Application.ProductVersion}.{METVersion.Build}");
-                builder.AppendLine($"LZMA SDK: {METVersion.SDK}");
-                builder.AppendLine($"Channel:  {METVersion.Channel}");
+                builder.AppendLine($"Version:  {Application.ProductVersion}.{METVersion.APP_BUILD}");
+                builder.AppendLine($"LZMA SDK: {METVersion.LZMA_SDK}");
+                builder.AppendLine($"Channel:  {METVersion.APP_CHANNEL}");
                 builder.AppendLine($"Mode:     {GetBitnessMode()}");
                 builder.AppendLine($"Debug:    {GetIsDebugMode()}");
                 builder.AppendLine($"Elevated: {IsElevated()}");

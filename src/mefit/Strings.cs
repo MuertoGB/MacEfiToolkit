@@ -1,392 +1,347 @@
-﻿using Mac_EFI_Toolkit.Firmware.EFI;
-using System.Dynamic;
-
-namespace Mac_EFI_Toolkit
+﻿namespace Mac_EFI_Toolkit
 {
-    internal class AppStrings
+    internal class APPSTRINGS
     {
         #region Strings
-        internal const string S_NAME =
+        internal const string APPNAME =
             "Mac EFI Toolkit";
 
-        internal const string S_VERSION =
+        internal const string VERSION =
             "Version";
 
-        internal const string S_LZMA_SDK =
+        internal const string LZMA_SDK =
             "LZMA SDK";
 
-        internal const string S_EFIROM =
+        internal const string EFIROM =
             "EFIROM";
 
-        internal const string S_INFO =
+        internal const string INFORMATION =
             "Information";
 
-        internal const string S_WARNING =
+        internal const string WARNING =
             "Warning";
 
-        internal const string S_ERROR =
+        internal const string ERROR =
             "Error";
 
-        internal const string S_UNKNOWN =
+        internal const string UNKNOWN =
             "Unknown";
 
-        internal const string S_NA =
+        internal const string NA =
             "N/A";
 
-        internal const string S_CONTACT_SERVER =
-            "Contacting Apple server...";
+        internal const string CONTACT_SERVER =
+            "Contacting Server...";
 
-        internal const string S_NOT_FOUND =
+        internal const string NOT_FOUND =
             "Not Found";
 
-        internal const string S_SUPPORTED_FW_FILTER =
+        internal const string FILTER_SUPPORT_FIRMWARE =
             "UEFI/BIOS Files (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*";
 
-        internal const string S_BIN_FILTER =
+        internal const string FILTER_BIN =
             "Binary Files (*.bin, *.rom, *.rgn)|*.bin;*.rom;*.rgn|All Files (*.*)|*.*";
 
-        internal const string S_ZIP_FILTER =
+        internal const string FILTER_ZIP =
             "Zip files (*.zip)|*.zip";
 
-        internal const string S_TXT_FILTER =
+        internal const string FILTER_TEXT =
             "Text Files (*.txt)|*.txt";
 
-        internal const string S_FW_WIN_OPEN =
+        internal const string FIRMWARE_WINDOWS_OPEN =
             "There are firmware windows open.";
 
-        internal const string S_HAE_RESTART =
+        internal const string QUESTION_RESTART =
             "Are you sure you want to restart the application?";
 
-        internal const string S_HAE_EXIT =
+        internal const string QUESTION_EXIT =
             "Are you sure you want to exit the application?";
 
-        internal const string S_SELECT_FOLDER =
-            "Select a Folder";
+        internal const string SELECT_FOLDER =
+            "Select a folder";
 
-        internal const string S_RESET_SETTINGS =
+        internal const string RESET_SETTINGS_DEFAULT =
             "This will reset all settings to default. Are you sure you want to set default settings?";
+
+        internal const string FILES_SAVE_SUCCESS_NAV =
+            "Files saved successfully. Would you like to navigate to the folder?";
+
+        internal const string FILE_SAVE_SUCCESS_NAV =
+            "File saved successfully. Would you like to navigate to the file?";
         #endregion
     }
 
-    internal class LogStrings
+    internal class LOGSTRINGS
     {
         #region Strings
-        internal const string S_PATCH_STARTED =
+        internal const string PATCH_START =
             "Patching started:";
 
-        internal const string S_PATCH_ENDED =
+        internal const string PATCH_END =
             "Patching ended:";
 
-        internal const string S_EXPORT_CANCEL =
+        internal const string FILE_EXPORT_CANCELLED =
             "The file export was cancelled";
 
-        internal const string S_VAL_PASSED =
+        internal const string VALIDATION_PASS =
             "Validation passed";
 
-        internal const string S_EXPECTED_STORE_SIZE =
+        internal const string EXPECTED_STORE_SIZE_NOT =
             "Expected store size is not";
 
-        internal const string S_STORE_SIG_MISALIGN =
+        internal const string STORE_SIG_MISALIGNED =
             "Store signature misaligned";
 
-        internal const string S_NEW_SERIAL =
+        internal const string NEW_SERIAL =
             "New serial:";
 
-        internal const string S_NEW_HWC =
+        internal const string NEW_HWC =
             "New HWC:";
 
-        internal const string S_LENGTH =
+        internal const string LENGTH =
             "Length";
 
-        internal const string S_ERROR_FILE_BYTES =
+        internal const string ERROR_FILE_BYTES =
             "Error loading file bytes:";
 
-        internal const string S_FSYS_REPLACE =
+        internal const string FSYS_REPLACE =
             "Replace Fsys store";
 
-        internal const string S_FSYS_IMPORT_CANCELLED =
+        internal const string FSYS_IMPORT_CANCELLED =
             "An Fsys store was not provided";
 
-        internal const string S_FSYS_CS_MASK_SUCCESS =
+        internal const string FSYS_SUM_MASK_SUCCESS =
             "Fsys checksum masking successful.";
 
-        internal const string S_FSYS_WRITE_SUCCESS =
+        internal const string FSYS_WRITE_SUCCESS =
             "Fsys store written successfully";
 
-        internal const string S_FSYS_CS_INVALID =
+        internal const string FSYS_SUM_INVALID =
             "Fsys checksum is invalid";
 
-        internal const string S_FOUND =
-            "Found:";
-
-        internal const string S_CALCULATED =
-            "Calculated:";
-
-        internal const string S_MASKING_CSUM =
-            "Masking checksum";
-
-        internal const string S_CSUM_MASKING_FAIL =
-            "Checksum masking failed";
-
-        internal const string S_STORE_COMP_FAILED =
-            "Store comparison check failed";
-
-        internal const string S_SAVE_SUCCESS =
-            "File saved successully:";
-
-        internal const string S_SSN_REPLACE =
-            "Replace system serial number";
-
-        internal const string S_SSN_BASE_NOT_FOUND =
-            "Serial number base address was not found";
-
-        internal const string S_SSN_NOT_WRITTEN =
-            "New serial could not be written";
-
-        internal const string S_HWC_NOT_WRITTEN =
-            "New hardware configuration (HWC) could not be written";
-
-        internal const string S_CRC_MASK_FAIL =
+        internal const string FSYS_SUM_MASK_FAIL =
             "Fsys CRC32 checksum masking failed";
 
-        internal const string S_SSN_W_SUCCESS =
+        internal const string FOUND =
+            "Found:";
+
+        internal const string CALCULATED =
+            "Calculated:";
+
+        internal const string MASKING_SUM =
+            "Masking checksum";
+
+        internal const string SUM_MASKING_FAIL =
+            "Checksum masking failed";
+
+        internal const string STORE_COMP_FAILED =
+            "Store comparison check failed";
+
+        internal const string SSN_REPLACE =
+            "Replace system serial number";
+
+        internal const string SSN_BASE_NOT_FOUND =
+            "Serial number base address was not found";
+
+        internal const string SSN_NOT_WRITTEN =
+            "New serial could not be written";
+
+        internal const string HWC_NOT_WRITTEN =
+            "New hardware configuration (HWC) could not be written";
+
+        internal const string SSN_WRITE_SUCCESS =
             "Serial number written successfully";
 
-        internal const string S_IME_REPLACE =
+        internal const string IME_REPLACE =
             "Replace Intel Management Engine";
 
-        internal const string S_IME_IMPORT_CANCELLED =
+        internal const string IME_IMPORT_CANCELLED =
             "An Intel ME region was not provided";
 
-        internal const string S_IME_FPT_NOT_FOUND =
+        internal const string IME_FPT_NOT_FOUND =
             "FPT signature not found";
 
-        internal const string S_IME_TOO_LARGE =
+        internal const string IME_TOO_LARGE =
             "New IME is too large:";
 
-        internal const string S_IME_TOO_SMALL =
+        internal const string IME_TOO_SMALL =
             "New IME is smaller and will be adjusted automatically:";
 
-        internal const string S_IME_VERSION =
+        internal const string IME_VERSION =
             "IME Version:";
 
-        internal const string S_IME_BUFFER_MISMATCH =
+        internal const string IME_BUFFER_MISMATCH =
             "IME buffers do not match";
 
-        internal const string S_IME_WRITE_SUCCESS =
+        internal const string IME_WRITE_SUCCESS =
             "IME written successfully";
+
+        internal const string FILE_SAVE_SUCCESS =
+            "File saved successully:";
         #endregion
     }
 
-    internal class DialogStrings
+    internal class DIALOGSTRINGS
     {
         #region Strings
-        internal const string S_UNLOAD_RESET =
+        internal const string UNLOAD_FIRMWARE_RESET =
             "This will unload the firmware and all associated data, are you sure you want to reset?";
 
-        internal const string S_DATA_NULL =
-            "data is null. Cannot continue.";
-
-        internal const string S_RETURNED_FALSE =
-            "returned false. Cannot continue.";
-
-        internal const string S_BASE_NOT_FOUND =
-            "base address not found. Cannot continue.";
-
-        internal const string S_DATA_EXPORT_FAIL =
+        internal const string DATA_EXPORT_FAILED =
             "Data export failed.";
 
-        internal const string S_DATA_EXPORT_SUCCESS =
-            "Data export successful.";
-
-        internal const string S_ARCHIVE_CREATE_FAIL =
+        internal const string ARCHIVE_CREATE_FAILED =
             "Backup archive creation failed.";
 
-        internal const string S_ARCHIVE_CREATE_SUCCESS =
-            "Backup archive created successfully.";
+        internal const string WARN_DATA_MATCHES_BUFF =
+            "File on disk matches the buffer. Data was not refreshed.";
 
-        internal const string S_FILE_NOT_FOUND =
-            "The file could not be found, it may have been moved or deleted.";
+        internal const string FSYS_SUM_PATCH_FAILED =
+            "Fsys checksum patching failed.";
 
-        internal const string S_DISK_MATCHES_BUFFER =
-            "File on disk matches the buffer, data was not refreshed.";
+        internal const string FSYS_SUM_PATCH_SUCCESS =
+            "Fsys checksum patched successfully. Would you like to load the new file?";
 
-        internal const string S_FSYS_CRC_PATCH_FAIL =
-            "Fsys CRC32 patching failed.";
-
-        internal const string S_FSYS_CRC_PATCH_SUCCESS =
-            "Fsys CRC32 patched successfully. Would you like to load the new file?";
-
-        internal const string S_FSYS_DIR_FAIL =
-            "Failed to create the Fsys Stores directory.";
-
-        internal const string S_SCFG_DIR_FAIL =
-            "Failed to create the Scfg Stores directory.";
-
-        internal const string S_FSYS_EXPORT_FAIL =
+        internal const string FSYS_EXPORT_FAIL =
             "Fsys Store export failed.";
 
-        internal const string S_FSYS_EXPORT_SUCCESS =
-            "Fsys Store export successful.";
-
-        internal const string S_INVALIDATING_LOCK_FAIL =
+        internal const string EFI_LOCK_FAIL =
             "Invalidating EFI lock failed.";
 
-        internal const string S_INVALIDATING_LOCK_SUCCESS =
+        internal const string EFI_LOCK_SUCCESS =
             "Invalidating EFI lock successful.\r\nMake sure to perform an NVRAM reset on first boot.\r\nWould you like to load the new file?";
 
-        internal const string S_ME_BOL_NOT_FOUND =
+        internal const string IME_BASE_LIM_NOT_FOUND =
             "Management Engine base or limit not found.";
 
         internal const string S_ME_DIR_FAIL =
             "Failed to create the Intel ME region directory.";
 
-        internal const string S_ME_EXPORT_FAIL =
+        internal const string IME_EXPORT_FAIL =
             "Intel ME export failed.";
 
-        internal const string S_ME_EXPORT_SUCCESS =
-            "Intel ME export successful.";
-
-        internal const string S_DIR_NOT_EXIST =
-            "The directory does not exist.";
-
-        internal const string S_LOG_NOT_EXIST =
+        internal const string LOG_NOT_FOUND =
             "The log file does not exist.";
 
-        internal const string S_LOG_CREATION_SUCCESS =
-            "Log file created successfully.";
-
-        internal const string S_NOT_VALID_FW =
+        internal const string FILE_NOT_VALID =
             "The selected file is not a valid firmware.";
 
-        internal const string S_SCFG_EXPORT_SUCCESS =
-            "Scfg Store export successful";
-
-        internal const string S_SCFG_EXPORT_FAIL =
+        internal const string SCFG_EXPORT_FAIL =
             "Scfg Store export failed.";
 
-        internal const string S_FSYS_PATCH_SUCCESS_SAVE =
+        internal const string FSYS_PATCH_SUCCESS_SAVE =
             "Fsys patching was successful. Do you want to save the output?";
 
-        internal const string S_FW_SAVED_SUCCESSFULLY =
+        internal const string FW_SAVED_SUCCESS_LOAD =
             "Firmware saved successfully. Would you like to load the new file?";
 
-        internal const string S_PATCH_FAIL_APP_LOG =
+        internal const string PATCH_FAIL_APP_LOG =
             "Patching failed. Would you like to open the application log?";
 
-        internal const string S_IME_PATCH_SUCCESS_SAVE =
+        internal const string IME_PATCH_SUCCESS_SAVE =
             "IME patching was successful. Do you want to save the output?";
         #endregion
     }
 
-    internal class StartupWinStrings
+    internal class STARTUPSTRINGS
     {
         #region Strings
         #endregion
     }
 
-    internal class EfiWinStrings
+    internal class EFISTRINGS
     {
         #region Strings
-        internal const string S_VSS =
+        internal const string VSS =
             "VSS";
 
-        internal const string S_SVS =
+        internal const string SVS =
             "SVS";
 
-        internal const string S_FILE =
+        internal const string FILE =
             "FILE";
 
-        internal const string S_FSYS =
+        internal const string FSYS =
             "FSYS";
 
-        internal const string S_ME_REGION =
+        internal const string ME_REGION =
             "ME_REGION";
 
-        internal const string S_CRC32 =
+        internal const string CRC32 =
             "CRC32";
 
-        internal const string S_CRC_FIXED =
+        internal const string CRC_FIXED =
             "CRC_FIXED";
 
-        internal const string S_BACKUP =
+        internal const string BACKUP =
             "Backup";
 
-        internal const string S_NOMODEL =
+        internal const string NOMODEL =
             "NOMODEL";
 
-        internal const string S_NOSERIAL =
+        internal const string NOSERIAL =
             "SERIALNUMBER";
 
-        internal const string S_NOFWVER =
+        internal const string NOFWVER =
             "NOFWVER";
 
-        internal const string S_FIRMWARE_INFO =
+        internal const string FIRMWARE_INFO =
             "FirmwareInfo";
 
-        internal const string S_UNLOCKED =
+        internal const string UNLOCKED =
             "Unlocked";
 
-        internal const string S_LOCKED =
+        internal const string LOCKED =
             "Locked";
 
-        internal const string S_UNKNOWN =
-            "Unknown";
-
-        internal const string S_BYTES =
+        internal const string BYTES =
             "bytes";
 
-        internal const string S_APFS_DRIVER_FOUND =
+        internal const string APFS_DRIVER_FOUND =
             "YES (DRIVER FOUND)";
 
-        internal const string S_APFS_DRIVER_NOT_FOUND =
+        internal const string APFS_DRIVER_NOT_FOUND =
             "NO (DRIVER NOT FOUND)";
 
-        internal const string S_LOG_BU_MAKEFSYSPB_NULL =
-            "BinaryUtils.MakeFsysCrcPatchedBinary returned null data";
-
-        internal const string S_LOG_FU_WRITEALL_RETURNED_FALSE =
-            "FileUtils.WriteAllBytesEx returned false";
-
-        internal const string S_LOG_PS_BUFFER_MISMATCH =
+        internal const string PRIMARY_STORE_BUFFER_MISMATCH =
             "Patched primary store bytes do not match the buffer";
 
-        internal const string S_LOG_BS_BUFFER_MISMATCH =
-            "Patched backup store does not match buffer";
+        internal const string BACKUP_STORE_BUFFER_MISMATCH =
+            "Patched backup store bytes do not match the buffer";
 
-        internal const string S_MENU_OPEN =
+        internal const string MENU_TIP_OPEN =
             "Open a Mac EFI/BIOS";
 
-        internal const string S_MENU_RESET =
+        internal const string MENU_TIP_RESET =
             "Unload Firmware and Reset Window";
 
-        internal const string S_MENU_COPY =
+        internal const string MENU_TIP_COPY =
             "Open the Copy Menu";
 
-        internal const string S_MENU_RELOAD =
+        internal const string MENU_TIP_RELOAD =
             "Reload File from Disk";
 
-        internal const string S_MENU_EXPORT =
+        internal const string MENU_TIP_EXPORT =
             "Open the Export Menu";
 
-        internal const string S_MENU_PATCH =
+        internal const string MENU_TIP_PATCH =
             "Open the Firmware Patching Menu";
 
-        internal const string S_MENU_OPTIONS =
+        internal const string MENU_TIP_OPTIONS =
             "Open the Options Menu";
 
-        internal const string S_NAV_FILE =
+        internal const string MENU_TIP_OPENFILELOCATION =
             "Open File Location";
 
-        internal const string S_COPIED_TO_CB =
+        internal const string COPIED_TO_CB_LC =
             "copied to clipboard.";
         #endregion
     }
 
-    internal class T2WinStrings
+    internal class T2STRINGS
     {
         #region Strings
-        internal const string S_SCFG =
+        internal const string SCFG =
             "SCFG";
         #endregion
     }
