@@ -276,8 +276,8 @@
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\icon64.png" />
     <None Include="Resources\logo24px.png" />
-    <None Include="Resources\changelog.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Assets\editorterms.txt" />
     <Content Include="Assets\met.ico" />

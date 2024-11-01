@@ -10,6 +10,7 @@ using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -26,6 +27,7 @@ namespace Mac_EFI_Toolkit.UI
 
     class UITools
     {
+        #region Flash ForeColor
         internal static async void FlashForecolor(Control control)
         {
             if (!Settings.ReadBool(SettingsBoolType.DisableFlashingUI))
@@ -49,7 +51,9 @@ namespace Mac_EFI_Toolkit.UI
                 }
             }
         }
+        #endregion
 
+        #region Explorer
         internal static void ShowExplorerFileHighlight(Form owner, string path)
         {
             DialogResult result =
@@ -75,7 +79,9 @@ namespace Mac_EFI_Toolkit.UI
             if (result == DialogResult.Yes)
                 Process.Start("explorer.exe", path);
         }
+        #endregion
 
+        #region Context Menu Position
         internal static void ShowContextMenuAtControlPoint(object sender, ContextMenuStrip menu, MenuPosition menuPosition)
         {
             Control control = sender as Control;
@@ -118,11 +124,71 @@ namespace Mac_EFI_Toolkit.UI
                 || (showOnLeftClick && mouseEventArgs.Button == MouseButtons.Left)))
                 menu.Show(Cursor.Position);
         }
+        #endregion
 
+        #region Form Opacity
         internal static void SetHalfOpacity(Form f) =>
             f.Opacity = 0.5;
 
         internal static void SetNormalOpacity(Form f) =>
             f.Opacity = 1.0;
+        #endregion
+
+        public static void ConfigureWindowPosition(Form form)
+        {
+            if (form.Owner == null && form.Parent == null)
+            {
+                form.StartPosition = FormStartPosition.CenterScreen;
+            }
+        }
+
+        public static void EnableFormDrag(Form form, params Control[] dragControls)
+        {
+            foreach (var control in dragControls)
+            {
+                control.MouseMove += (sender, e) =>
+                {
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        StartDrag(form);
+                    }
+                };
+            }
+        }
+
+        // Private method to handle the drag functionality
+        private static void StartDrag(Form form)
+        {
+            NativeMethods.ReleaseCapture();
+            NativeMethods.SendMessage(new HandleRef(form, form.Handle),
+                Program.WM_NCLBUTTONDOWN,
+                (IntPtr)Program.HT_CAPTION,
+                IntPtr.Zero);
+        }
+
+    }
+    public class METForm : Form
+    {
+        internal const int WS_MINIMIZEBOX = 0x20000;
+        internal const int CS_DBLCLKS = 0x8;
+        internal const int CS_DROP = 0x20000;
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams Params = base.CreateParams;
+
+                Params.Style |=
+                    WS_MINIMIZEBOX;
+
+                Params.ClassStyle =
+                    Params.ClassStyle |
+                    CS_DBLCLKS |
+                    CS_DROP;
+
+                return Params;
+            }
+        }
     }
 }

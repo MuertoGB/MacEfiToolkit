@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241101.1945";
+        internal const string APP_BUILD = "241101.2320";
         internal const string APP_CHANNEL = "DEV";
     }
 
@@ -69,7 +69,6 @@ namespace Mac_EFI_Toolkit
 
     static class Program
     {
-
         #region Internal Members
         internal static string draggedFilePath = string.Empty;
         internal static string lastBuildPath = string.Empty;
@@ -82,12 +81,9 @@ namespace Mac_EFI_Toolkit
         internal static Font FONT_MDL2_REG_20;
         #endregion
 
-        #region Const Members
+        #region Private Members
         internal const int WM_NCLBUTTONDOWN = 0xA1;
         internal const int HT_CAPTION = 0x2;
-        internal const int WS_MINIMIZEBOX = 0x20000;
-        internal const int CS_DBLCLKS = 0x8;
-        internal const int CS_DROP = 0x20000;
         #endregion
 
         #region Main Entry Point

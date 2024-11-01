@@ -9,44 +9,24 @@ using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
-using Mac_EFI_Toolkit.WIN32;
 using Mac_EFI_Toolkit.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    public partial class efiWindow : Form
+    public partial class efiWindow : METForm
     {
         #region Private Members
         private string _strInitialDirectory = METPath.WORKING_DIR;
         private Thread _tLoadFirmware = null;
         private CancellationTokenSource _cancellationToken;
-        #endregion
-
-        #region Overriden Properties
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams Params = base.CreateParams;
-
-                Params.Style |= Program.WS_MINIMIZEBOX;
-
-                Params.ClassStyle = Params.ClassStyle
-                    | Program.CS_DBLCLKS
-                    | Program.CS_DROP;
-
-                return Params;
-            }
-        }
         #endregion
 
         #region Constructor
@@ -55,6 +35,26 @@ namespace Mac_EFI_Toolkit
             InitializeComponent();
 
             // Attach event handlers.
+            WireEventHandlers();
+
+            // Enable drag.
+            UITools.EnableFormDrag(
+                this,
+                tlpTitle,
+                lblWindowTitle);
+
+            // Set tip handlers for controls.
+            SetTipHandlers();
+
+            // Set button properties.
+            SetButtonProperties();
+
+            // Check and set position.
+            UITools.ConfigureWindowPosition(this);
+        }
+
+        private void WireEventHandlers()
+        {
             Load += efiWindow_Load;
             FormClosing += efiWindow_FormClosing;
             FormClosed += efiWindow_FormClosed;
@@ -63,18 +63,6 @@ namespace Mac_EFI_Toolkit
             DragDrop += efiWindow_DragDrop;
             Deactivate += efiWindow_Deactivate;
             Activated += efiWindow_Activated;
-
-            // Set tip handlers for controls.
-            SetTipHandlers();
-
-            // Set mouse move event handlers.
-            SetMouseMoveEventHandlers();
-
-            // Set button properties (font and text).
-            SetButtonProperties();
-
-            if (this.Owner == null && this.Parent == null)
-                StartPosition = FormStartPosition.CenterScreen;
         }
         #endregion
 
@@ -185,34 +173,6 @@ namespace Mac_EFI_Toolkit
                         break;
                 }
             }
-        }
-        #endregion
-
-        #region Mouse Events
-        private void efiWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                NativeMethods.ReleaseCapture(
-                    new HandleRef(this, Handle));
-
-                NativeMethods.SendMessage(
-                    new HandleRef(this, Handle),
-                    Program.WM_NCLBUTTONDOWN,
-                    (IntPtr)Program.HT_CAPTION,
-                    (IntPtr)0);
-            }
-        }
-
-        private void SetMouseMoveEventHandlers()
-        {
-            Control[] controls = {
-                tlpTitle,
-                lblWindowTitle,
-                tlpMenu };
-
-            foreach (Control control in controls)
-                control.MouseMove += efiWindow_MouseMove;
         }
         #endregion
 
@@ -922,13 +882,13 @@ namespace Mac_EFI_Toolkit
 
                 if (!FileUtils.WriteAllBytesEx(saveFileDialog.FileName, binaryBuffer))
                 {
-                        METPrompt.Show(
-                            this,
-                            DIALOGSTRINGS.FSYS_SUM_MASK_FAIL,
-                            METPromptType.Error,
-                            METPromptButtons.YesNo);
+                    METPrompt.Show(
+                        this,
+                        DIALOGSTRINGS.FSYS_SUM_MASK_FAIL,
+                        METPromptType.Error,
+                        METPromptButtons.YesNo);
 
-                        return;
+                    return;
                 }
 
                 // Ask if user wants to open the repaired file.

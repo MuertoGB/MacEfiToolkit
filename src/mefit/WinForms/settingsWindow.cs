@@ -6,17 +6,14 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class settingsWindow : Form
+    public partial class settingsWindow : METForm
     {
-
         #region Private Members
         private static string _strStartupInitialPath = string.Empty;
         private static string _strEfiInitialPath = string.Empty;
@@ -25,36 +22,29 @@ namespace Mac_EFI_Toolkit.WinForms
         private bool _updateUI = true;
         #endregion
 
-        #region Overrides Properties
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams Params = base.CreateParams;
-
-                Params.ClassStyle = Params.ClassStyle
-                    | Program.CS_DBLCLKS
-                    | Program.CS_DROP;
-
-                return Params;
-            }
-        }
-        #endregion
-
         #region Contructor
         public settingsWindow()
         {
             InitializeComponent();
 
+            // Attach event handlers.
+            WireEventHandlers();
+
+            // Enable drag.
+            UITools.EnableFormDrag(
+                this,
+                tlpTitle,
+                lblTitle);
+
+            // Set button properties
+            SetButtonProperties();
+        }
+
+        private void WireEventHandlers()
+        {
             Load += settingsWindow_Load;
             KeyDown += aboutWindow_KeyDown;
-
             pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
-            pbxLogo.MouseMove += settingsWindow_MouseMove;
-            lblTitle.MouseMove += settingsWindow_MouseMove;
-
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Chars.EXIT_CROSS;
         }
         #endregion
 
@@ -78,23 +68,6 @@ namespace Mac_EFI_Toolkit.WinForms
             string path = Settings.ReadString(settingsType);
             label.Text = path;
             label.ForeColor = Directory.Exists(path) ? AppColours.SETTINGS_PATH_OKAY : AppColours.WARNING;
-        }
-        #endregion
-
-        #region Mouse Events
-        private void settingsWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                NativeMethods.ReleaseCapture(
-                    new HandleRef(this, Handle));
-
-                NativeMethods.SendMessage(
-                    new HandleRef(this, Handle),
-                    Program.WM_NCLBUTTONDOWN,
-                    (IntPtr)Program.HT_CAPTION,
-                    (IntPtr)0);
-            }
         }
         #endregion
 
@@ -314,5 +287,12 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
+        #region UI Events
+        private void SetButtonProperties()
+        {
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Chars.EXIT_CROSS;
+        }
+        #endregion
     }
 }

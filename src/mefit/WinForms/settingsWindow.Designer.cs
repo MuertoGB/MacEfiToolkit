@@ -163,7 +163,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // pnlSeperatorTop
             // 
-            this.pnlSeperatorTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.pnlSeperatorTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
             this.pnlSeperatorTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlSeperatorTop.Location = new System.Drawing.Point(1, 41);
             this.pnlSeperatorTop.Margin = new System.Windows.Forms.Padding(2);
@@ -173,7 +173,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpDisableConfirmationDialogs
             // 
-            this.tlpDisableConfirmationDialogs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpDisableConfirmationDialogs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
             this.tlpDisableConfirmationDialogs.ColumnCount = 2;
             this.tlpDisableConfirmationDialogs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDisableConfirmationDialogs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
@@ -219,7 +219,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpEfiDir
             // 
-            this.tlpEfiDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpEfiDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
             this.tlpEfiDir.ColumnCount = 2;
             this.tlpEfiDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpEfiDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
@@ -270,7 +270,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpDisableVersionCheck
             // 
-            this.tlpDisableVersionCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpDisableVersionCheck.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
             this.tlpDisableVersionCheck.ColumnCount = 2;
             this.tlpDisableVersionCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDisableVersionCheck.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
@@ -316,9 +316,9 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // lblStartup
             // 
-            this.lblStartup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.lblStartup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.lblStartup.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblStartup.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStartup.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStartup.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
             this.lblStartup.Location = new System.Drawing.Point(0, 0);
             this.lblStartup.Margin = new System.Windows.Forms.Padding(0);
@@ -326,14 +326,14 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblStartup.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lblStartup.Size = new System.Drawing.Size(433, 32);
             this.lblStartup.TabIndex = 0;
-            this.lblStartup.Text = "Startup";
+            this.lblStartup.Text = "STARTUP";
             this.lblStartup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblApplication
             // 
-            this.lblApplication.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.lblApplication.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
             this.lblApplication.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblApplication.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblApplication.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblApplication.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
             this.lblApplication.Location = new System.Drawing.Point(0, 66);
             this.lblApplication.Margin = new System.Windows.Forms.Padding(0);
@@ -341,12 +341,12 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblApplication.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.lblApplication.Size = new System.Drawing.Size(433, 32);
             this.lblApplication.TabIndex = 0;
-            this.lblApplication.Text = "Application";
+            this.lblApplication.Text = "APPLICATION";
             this.lblApplication.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tlpDisableFlashingUiElements
             // 
-            this.tlpDisableFlashingUiElements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpDisableFlashingUiElements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
             this.tlpDisableFlashingUiElements.ColumnCount = 2;
             this.tlpDisableFlashingUiElements.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDisableFlashingUiElements.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
@@ -392,7 +392,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpMain
             // 
-            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
+            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMain.Controls.Add(this.lblApplication, 0, 4);
@@ -458,7 +458,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpDisableStatusBarTips
             // 
-            this.tlpDisableStatusBarTips.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpDisableStatusBarTips.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
             this.tlpDisableStatusBarTips.ColumnCount = 2;
             this.tlpDisableStatusBarTips.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDisableStatusBarTips.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
@@ -504,7 +504,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpDisableMessageWindowSounds
             // 
-            this.tlpDisableMessageWindowSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpDisableMessageWindowSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
             this.tlpDisableMessageWindowSounds.ColumnCount = 2;
             this.tlpDisableMessageWindowSounds.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDisableMessageWindowSounds.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
@@ -550,7 +550,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // lblEfiDirectory
             // 
-            this.lblEfiDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblEfiDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
             this.lblEfiDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEfiDirectory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEfiDirectory.ForeColor = System.Drawing.Color.Gainsboro;
@@ -564,7 +564,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpStartupDir
             // 
-            this.tlpStartupDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpStartupDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
             this.tlpStartupDir.ColumnCount = 2;
             this.tlpStartupDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStartupDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
@@ -615,7 +615,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // lblStartupDirectory
             // 
-            this.lblStartupDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblStartupDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
             this.lblStartupDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblStartupDirectory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStartupDirectory.ForeColor = System.Drawing.Color.Gainsboro;
@@ -629,7 +629,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // tlpSocDir
             // 
-            this.tlpSocDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.tlpSocDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
             this.tlpSocDir.ColumnCount = 2;
             this.tlpSocDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSocDir.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
@@ -680,7 +680,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // lblSocDirectory
             // 
-            this.lblSocDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.lblSocDirectory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
             this.lblSocDirectory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblSocDirectory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSocDirectory.ForeColor = System.Drawing.Color.Gainsboro;
@@ -787,7 +787,7 @@ namespace Mac_EFI_Toolkit.WinForms
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(1, 74);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
@@ -818,6 +818,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.MinimumSize = new System.Drawing.Size(435, 524);
             this.Name = "settingsWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             this.tlpDisableConfirmationDialogs.ResumeLayout(false);

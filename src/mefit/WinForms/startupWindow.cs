@@ -9,17 +9,15 @@ using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.T2;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
-using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class startupWindow : Form
+    public partial class startupWindow : METForm
     {
         enum FormTag
         {
@@ -36,30 +34,29 @@ namespace Mac_EFI_Toolkit.WinForms
         private int _childWindowCount = 0;
         #endregion
 
-        #region Overriden Properties
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams Params = base.CreateParams;
-
-                Params.Style |= Program.WS_MINIMIZEBOX;
-
-                Params.ClassStyle = Params.ClassStyle
-                    | Program.CS_DBLCLKS
-                    | Program.CS_DROP;
-
-                return Params;
-            }
-        }
-        #endregion
-
         #region Constructor
         public startupWindow()
         {
             InitializeComponent();
 
             // Attach event handlers.
+            WireEventHandlers();
+
+            // Enable drag.
+            UITools.EnableFormDrag(
+                this,
+                tlpTitle,
+                lblWindowTitle);
+
+            // Set button properties.
+            SetButtonProperties();
+
+            //Set label properties.
+            SetLabelProperties();
+        }
+
+        private void WireEventHandlers()
+        {
             Load += startupWindow_Load;
             KeyDown += startupWindow_KeyDown;
             FormClosing += startupWindow_FormClosing;
@@ -68,15 +65,6 @@ namespace Mac_EFI_Toolkit.WinForms
             DragLeave += startupWindow_DragLeave;
             Deactivate += startupWindow_Deactivate;
             Activated += startupWindow_Activated;
-
-            // Set mouse event handlers.
-            SetMouseMoveEventHandlers();
-
-            // Set button properties.
-            SetButtonProperties();
-
-            //Set label properties.
-            SetLabelProperties();
         }
         #endregion
 
@@ -221,34 +209,6 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
-        #region Mouse Events
-        private void mainWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                NativeMethods.ReleaseCapture(
-                    new HandleRef(this, Handle));
-
-                NativeMethods.SendMessage(
-                    new HandleRef(this, Handle),
-                    Program.WM_NCLBUTTONDOWN,
-                    (IntPtr)Program.HT_CAPTION,
-                    (IntPtr)0);
-            }
-        }
-
-        private void SetMouseMoveEventHandlers()
-        {
-            Control[] controls = {
-                tlpTitle,
-                lblWindowTitle
-            };
-
-            foreach (Control control in controls)
-                control.MouseMove += mainWindow_MouseMove;
-        }
-        #endregion
-
         #region Button Events
         private void cmdMinimize_Click(object sender, EventArgs e) =>
             WindowState = FormWindowState.Minimized;
@@ -310,51 +270,6 @@ namespace Mac_EFI_Toolkit.WinForms
                 if (dialog.ShowDialog() == DialogResult.OK)
                     OpenBinary(dialog.FileName);
             }
-        }
-        #endregion
-
-        #region UI Events
-        private void ChildWindowClosed(object sender, EventArgs e)
-        {
-            if (sender is Form closedForm)
-            {
-                if (closedForm.Tag is FormTag formTag
-                    && formTag == FormTag.Firmware)
-                {
-                    if (_childWindowCount > 0)
-                    {
-                        _childWindowCount--;
-                        UpdateWindowTitle();
-                    }
-                }
-            }
-
-            UITools.SetNormalOpacity(this);
-        }
-
-        private void SetButtonProperties()
-        {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Chars.EXIT_CROSS;
-        }
-
-        private void SetLabelProperties()
-        {
-            lblGlyph.Font = Program.FONT_MDL2_REG_20;
-            lblGlyph.Text = Chars.DOWN;
-        }
-
-        private void ApplyDragEnterColours()
-        {
-            tlpDrop.GradientStartColor = Color.FromArgb(152, 251, 152);
-            lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
-        }
-
-        private void ApplyDragLeaveColours()
-        {
-            tlpDrop.GradientStartColor = Color.FromArgb(30, 30, 30);
-            tlpDrop.GradientEndColor = Color.FromArgb(30, 30, 30);
-            lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
         }
         #endregion
 
@@ -435,6 +350,51 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             Program.Restart();
+        }
+        #endregion
+
+        #region UI Events
+        private void ChildWindowClosed(object sender, EventArgs e)
+        {
+            if (sender is Form closedForm)
+            {
+                if (closedForm.Tag is FormTag formTag
+                    && formTag == FormTag.Firmware)
+                {
+                    if (_childWindowCount > 0)
+                    {
+                        _childWindowCount--;
+                        UpdateWindowTitle();
+                    }
+                }
+            }
+
+            UITools.SetNormalOpacity(this);
+        }
+
+        private void SetButtonProperties()
+        {
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Chars.EXIT_CROSS;
+        }
+
+        private void SetLabelProperties()
+        {
+            lblGlyph.Font = Program.FONT_MDL2_REG_20;
+            lblGlyph.Text = Chars.DOWN;
+        }
+
+        private void ApplyDragEnterColours()
+        {
+            tlpDrop.GradientStartColor = Color.FromArgb(152, 251, 152);
+            lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
+        }
+
+        private void ApplyDragLeaveColours()
+        {
+            tlpDrop.GradientStartColor = Color.FromArgb(30, 30, 30);
+            tlpDrop.GradientEndColor = Color.FromArgb(30, 30, 30);
+            lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
         }
         #endregion
 

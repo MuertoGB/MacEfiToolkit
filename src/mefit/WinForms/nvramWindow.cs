@@ -1,24 +1,31 @@
-﻿using Mac_EFI_Toolkit.Firmware.EFI;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// WinForms
+// nvramWindow.cs
+// Released under the GNU GLP v3.0
+
+using Mac_EFI_Toolkit.Firmware.EFI;
+using Mac_EFI_Toolkit.UI;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class nvramWindow : Form
+    public partial class nvramWindow : METForm
     {
+        #region Contructor
         public nvramWindow()
         {
             InitializeComponent();
 
-            KeyDown += nvramWindow_KeyDown;
+            // Attach event handlers.
+            WireEventHandlers();
         }
+
+        private void WireEventHandlers() =>
+            KeyDown += nvramWindow_KeyDown;
+        #endregion
 
         #region Window Events
         private void nvramWindow_KeyDown(object sender, KeyEventArgs e)
@@ -33,7 +40,7 @@ namespace Mac_EFI_Toolkit.WinForms
             DialogResult = DialogResult.Cancel;
 
         private void cmdOkay_Click(object sender, EventArgs e)
-        {       
+        {
             EFIROM.bResetVss = cbxResetVss.Checked;
             EFIROM.bResetSvs = cbxResetSvs.Checked;
 
@@ -41,7 +48,14 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
-        private void OkayButtonState()
+        #region CheckBox Events
+        private void cbxResetVss_CheckedChanged(object sender, EventArgs e) =>
+            SetButtonEnable();
+
+        private void cbxResetSvs_CheckedChanged(object sender, EventArgs e) =>
+            SetButtonEnable();
+
+        private void SetButtonEnable()
         {
             if (!cbxResetSvs.Checked && !cbxResetVss.Checked)
             {
@@ -51,15 +65,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
             cmdOkay.Enabled = true;
         }
-
-        private void cbxResetVss_CheckedChanged(object sender, EventArgs e)
-        {
-            OkayButtonState();
-        }
-
-        private void cbxResetSvs_CheckedChanged(object sender, EventArgs e)
-        {
-            OkayButtonState();
-        }
+        #endregion
     }
 }

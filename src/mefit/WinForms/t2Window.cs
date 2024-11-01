@@ -4,43 +4,23 @@
 // t2Window.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.T2;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
-using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class t2Window : Form
+    public partial class t2Window : METForm
     {
-
         #region Private Members
         private Thread _tLoadFirmware = null;
         private CancellationTokenSource _cancellationToken;
-        #endregion
-
-        #region Overriden Properties
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams Params = base.CreateParams;
-
-                Params.ClassStyle = Params.ClassStyle
-                    | Program.CS_DBLCLKS
-                    | Program.CS_DROP;
-
-                return Params;
-            }
-        }
         #endregion
 
         #region Constructor
@@ -48,20 +28,29 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             InitializeComponent();
 
-            // Attach event handlers
-            Load += t2Window_Load;
-            FormClosing += t2Window_FormClosing;
-            FormClosed += t2Window_FormClosed;
-            KeyDown += t2Window_KeyDown;
-            pbxLogo.MouseMove += t2Window_MouseMove;
-            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
-            lblTitle.MouseMove += t2Window_MouseMove;
+            // Attach event handlers.
+            WireEventHandlers();
+
+            // Enable drag.
+            UITools.EnableFormDrag(
+                this,
+                tlpTitle,
+                lblTitle);
 
             // Set tip handlers for controls
             SetTipHandlers();
 
             // Set button properties (font and text)
             SetButtonProperties();
+        }
+
+        private void WireEventHandlers()
+        {
+            Load += t2Window_Load;
+            FormClosing += t2Window_FormClosing;
+            FormClosed += t2Window_FormClosed;
+            KeyDown += t2Window_KeyDown;
+            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
         }
         #endregion
 
@@ -82,23 +71,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void t2Window_FormClosed(object sender, FormClosedEventArgs e) =>
             _cancellationToken?.Dispose();
-        #endregion
-
-        #region Mouse Events
-        private void t2Window_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                NativeMethods.ReleaseCapture(
-                    new HandleRef(this, Handle));
-
-                NativeMethods.SendMessage(
-                    new HandleRef(this, Handle),
-                    Program.WM_NCLBUTTONDOWN,
-                    (IntPtr)Program.HT_CAPTION,
-                    (IntPtr)0);
-            }
-        }
         #endregion
 
         #region KeyDown Events
@@ -268,6 +240,61 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (!cancellationToken.IsCancellationRequested)
                 T2ROM.FirmwareLoaded = true;
+        }
+        #endregion
+
+        #region Misc Events
+        private void ResetWindow()
+        {
+            Label[] labels =
+            {
+                lblFilename,
+                lblFilesize,
+                lblCrc,
+                lblCreated,
+                lblModified,
+                lbliBoot,
+                lblScfg,
+                lblSerial,
+                lblConfigCode,
+                lblSon
+            };
+
+            foreach (Label label in labels)
+            {
+                label.Text = string.Empty;
+                label.ForeColor = Color.White;
+            }
+
+            T2ROM.ResetFirmwareBaseData();
+        }
+
+        private void ToggleControlEnable(bool enable)
+        {
+            Button[] standardButtons =
+            {
+                cmdReset,
+                cmdCopyMenu,
+            };
+
+            void EnableButtons(params Button[] buttons)
+            {
+                foreach (var button in buttons)
+                    button.Enabled = enable;
+            }
+
+            if (!enable)
+            {
+                EnableButtons(standardButtons);
+            }
+            else
+            {
+                EnableButtons(standardButtons);
+
+                bool scfgStoreExists = T2ROM.ScfgSectionData.ScfgBytes != null;
+            }
+
+            tlpFirmware.Enabled = enable;
         }
         #endregion
 
@@ -467,61 +494,5 @@ namespace Mac_EFI_Toolkit.WinForms
             }
         }
         #endregion
-
-        #region Misc
-        private void ResetWindow()
-        {
-            Label[] labels =
-            {
-                lblFilename,
-                lblFilesize,
-                lblCrc,
-                lblCreated,
-                lblModified,
-                lbliBoot,
-                lblScfg,
-                lblSerial,
-                lblConfigCode,
-                lblSon
-            };
-
-            foreach (Label label in labels)
-            {
-                label.Text = string.Empty;
-                label.ForeColor = Color.White;
-            }
-
-            T2ROM.ResetFirmwareBaseData();
-        }
-
-        private void ToggleControlEnable(bool enable)
-        {
-            Button[] standardButtons =
-            {
-                cmdReset,
-                cmdCopyMenu,
-            };
-
-            void EnableButtons(params Button[] buttons)
-            {
-                foreach (var button in buttons)
-                    button.Enabled = enable;
-            }
-
-            if (!enable)
-            {
-                EnableButtons(standardButtons);
-            }
-            else
-            {
-                EnableButtons(standardButtons);
-
-                bool scfgStoreExists = T2ROM.ScfgSectionData.ScfgBytes != null;
-            }
-
-            tlpFirmware.Enabled = enable;
-        }
-        #endregion
-
     }
 }

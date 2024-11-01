@@ -13,18 +13,13 @@ namespace Mac_EFI_Toolkit.WIN32
 {
     class NativeMethods
     {
-        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasecapture
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        [ResourceExposure(ResourceScope.None)]
-        internal static extern bool ReleaseCapture(
-            HandleRef hWnd);
+        [DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
 
-        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
-        internal static extern IntPtr SendMessage(
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(
             HandleRef hWnd,
-            int Msg,
+            int msg,
             IntPtr wParam,
             IntPtr lParam);
 

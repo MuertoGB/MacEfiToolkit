@@ -61,16 +61,6 @@ namespace Mac_EFI_Toolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap changelog {
-            get {
-                object obj = ResourceManager.GetObject("changelog", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The terms outlined below pertain to the usage of the Mac EFI Toolkit
         ///software. Throughout these terms, &quot;The user&quot; and &quot;You&quot; refer to any
         ///individual or group utilizing the software, while &quot;The Author&quot; denotes
@@ -84,6 +74,16 @@ namespace Mac_EFI_Toolkit.Properties {
         internal static string editorterms {
             get {
                 return ResourceManager.GetString("editorterms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icon64 {
+            get {
+                object obj = ResourceManager.GetObject("icon64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -140,24 +140,26 @@ namespace Mac_EFI_Toolkit.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;data&gt;
-        ///    &lt;section&gt;
-        ///        &lt;hwc&gt;000&lt;/hwc&gt;
-        ///        &lt;configCode&gt;Power Mac G5&lt;/configCode&gt;
-        ///    &lt;/section&gt;
-        ///    &lt;section&gt;
-        ///        &lt;hwc&gt;00W&lt;/hwc&gt;
-        ///        &lt;configCode&gt;Xserve (Late 2006)&lt;/configCode&gt;
-        ///    &lt;/section&gt;
-        ///    &lt;section&gt;
-        ///        &lt;hwc&gt;01P&lt;/hwc&gt;
-        ///        &lt;configCode&gt;MacBook (13-inch, Late 2007)&lt;/configCode&gt;
-        ///    &lt;/section&gt;
-        ///    &lt;section&gt;
-        ///        &lt;hwc&gt;01V&lt;/hwc&gt;
-        ///        &lt;configCode&gt;MacBook (13-inch, Late 2007)&lt;/configCode&gt;
-        ///    &lt;/section&gt;
-        ///    &lt;section&gt;
-        ///    [rest of string was truncated]&quot;;.
+        ///	&lt;section&gt;
+        ///		&lt;hwc&gt;000&lt;/hwc&gt;
+        ///		&lt;configCode&gt;Power Mac G5&lt;/configCode&gt;
+        ///	&lt;/section&gt;
+        ///	&lt;section&gt;
+        ///		&lt;hwc&gt;00W&lt;/hwc&gt;
+        ///		&lt;configCode&gt;Xserve (Late 2006)&lt;/configCode&gt;
+        ///	&lt;/section&gt;
+        ///	&lt;section&gt;
+        ///		&lt;hwc&gt;01P&lt;/hwc&gt;
+        ///		&lt;configCode&gt;MacBook (13-inch, Late 2007)&lt;/configCode&gt;
+        ///	&lt;/section&gt;
+        ///	&lt;section&gt;
+        ///		&lt;hwc&gt;01V&lt;/hwc&gt;
+        ///		&lt;configCode&gt;MacBook (13-inch, Late 2007)&lt;/configCode&gt;
+        ///	&lt;/section&gt;
+        ///	&lt;section&gt;
+        ///		&lt;hwc&gt;01X&lt;/hwc&gt;
+        ///		&lt;configCode&gt;MacBook (13-inch, Late 2007)&lt;/configCode&gt;
+        ///	&lt;/ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string modeldb {
             get {

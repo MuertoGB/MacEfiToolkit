@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
 {
-    public partial class METPrompt : Form
+    public partial class METPrompt : METForm
     {
         #region Static Members
         static System.Media.SystemSound MB_SOUND;
@@ -29,20 +29,6 @@ namespace Mac_EFI_Toolkit.UI
         private const int MaxHeight = 800;
         private const int PaddingWidth = 20;
         private const int PaddingHeight = 60;
-        #endregion
-
-        #region Overrides
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams crParams = base.CreateParams;
-                crParams.ClassStyle = crParams.ClassStyle
-                    | Program.CS_DBLCLKS
-                    | Program.CS_DROP;
-                return crParams;
-            }
-        }
         #endregion
 
         #region Constructor
@@ -158,8 +144,7 @@ namespace Mac_EFI_Toolkit.UI
         {
             if (e.Button == MouseButtons.Left)
             {
-                NativeMethods.ReleaseCapture(
-                    new HandleRef(this, Handle));
+                NativeMethods.ReleaseCapture();
 
                 NativeMethods.SendMessage(
                     new HandleRef(this, Handle),

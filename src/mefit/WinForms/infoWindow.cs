@@ -8,48 +8,38 @@
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
-using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class infoWindow : Form
+    public partial class infoWindow : METForm
     {
-
-        #region Overriden Properties
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams Params = base.CreateParams;
-
-                Params.ClassStyle = Params.ClassStyle
-                    | Program.CS_DBLCLKS
-                    | Program.CS_DROP;
-
-                return Params;
-            }
-        }
-        #endregion
-
         #region Constructor
         public infoWindow()
         {
             InitializeComponent();
 
+            // Attach event handlers.
+            WireEventHandlers();
+
+            // Enable drag.
+            UITools.EnableFormDrag(
+                this,
+                tlpTitle,
+                lblWindowTitle);
+
+            // Set button propeties.
+            SetButtonProperties();
+        }
+
+        private void WireEventHandlers()
+        {
             Load += infoWindow_Load;
             KeyDown += infoWindow_KeyDown;
-
-            pbxLogo.MouseMove += infoWindow_MouseMove;
             pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
-            lblTitle.MouseMove += infoWindow_MouseMove;
-
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Chars.EXIT_CROSS;
         }
         #endregion
 
@@ -94,23 +84,6 @@ namespace Mac_EFI_Toolkit.WinForms
             foreach (Label label in tlpInfo.Controls)
                 if (label.Text == "N/A")
                     label.ForeColor = AppColours.DISABLED_TEXT;
-        }
-        #endregion
-
-        #region Mouse Events
-        private void infoWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                NativeMethods.ReleaseCapture(
-                    new HandleRef(this, Handle));
-
-                NativeMethods.SendMessage(
-                    new HandleRef(this, Handle),
-                    Program.WM_NCLBUTTONDOWN,
-                    (IntPtr)Program.HT_CAPTION,
-                    (IntPtr)0);
-            }
         }
         #endregion
 
@@ -183,5 +156,12 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
+        #region UI Events
+        private void SetButtonProperties()
+        {
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Chars.EXIT_CROSS;
+        }
+        #endregion
     }
 }

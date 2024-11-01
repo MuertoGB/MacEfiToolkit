@@ -6,46 +6,36 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.WIN32;
 using System;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class termsWindow : Form
+    public partial class termsWindow : METForm
     {
-
-        #region Overriden Properties
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams Params = base.CreateParams;
-
-                Params.ClassStyle = Params.ClassStyle
-                    | Program.CS_DBLCLKS
-                    | Program.CS_DROP;
-
-                return Params;
-            }
-        }
-        #endregion
-
         #region Constructor
         public termsWindow()
         {
             InitializeComponent();
 
+            // Attach event handlers.
+            WireEventHandlers();
+
+            // Enable drag.
+            UITools.EnableFormDrag(
+                this,
+                tlpTitle,
+                lblTitle);
+
+            // Set button properties.
+            SetButtonProperties();
+        }
+
+        private void WireEventHandlers()
+        {
             Load += termsWindow_Load;
             KeyDown += termsWindow_KeyDown;
-
             pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
-            pbxLogo.MouseMove += termsWindow_MouseMove;
-            lblTitle.MouseMove += termsWindow_MouseMove;
-
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Chars.EXIT_CROSS;
         }
         #endregion
 
@@ -54,28 +44,10 @@ namespace Mac_EFI_Toolkit.WinForms
             tbxTermsText.Text = Properties.Resources.editorterms;
         #endregion
 
-        #region Mouse Events
-        private void termsWindow_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                NativeMethods.ReleaseCapture(
-                    new HandleRef(this, Handle));
-
-                NativeMethods.SendMessage(
-                    new HandleRef(this, Handle),
-                    Program.WM_NCLBUTTONDOWN,
-                    (IntPtr)Program.HT_CAPTION,
-                    (IntPtr)0);
-            }
-        }
-        #endregion
-
         #region Button Events
         private void cmdDecline_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.No;
-
             Close();
         }
 
@@ -86,15 +58,19 @@ namespace Mac_EFI_Toolkit.WinForms
                 true);
 
             DialogResult = DialogResult.Yes;
-
             Close();
         }
 
         private void cmdClose_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.No;
-
             Close();
+        }
+
+        private void SetButtonProperties()
+        {
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Chars.EXIT_CROSS;
         }
         #endregion
 
@@ -116,6 +92,5 @@ namespace Mac_EFI_Toolkit.WinForms
                 CenterToParent();
         }
         #endregion
-
     }
 }

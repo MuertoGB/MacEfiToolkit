@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.EFI;
+using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Utils;
 using System;
 using System.Drawing;
@@ -13,13 +14,20 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class ssnWindow : Form
+    public partial class ssnWindow : METForm
     {
         #region Constructor
         public ssnWindow()
         {
             InitializeComponent();
 
+            // Attach event handlers.
+            WireEventHandlers();
+
+        }
+
+        private void WireEventHandlers()
+        {
             Load += ssnWindow_Load;
             KeyDown += ssnWindow_KeyDown;
         }

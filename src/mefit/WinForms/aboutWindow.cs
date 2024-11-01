@@ -11,49 +11,25 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms
 {
-    public partial class aboutWindow : Form
+    public partial class aboutWindow : METForm
     {
-
-        #region Overriden Properties
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams Params = base.CreateParams;
-
-                Params.ClassStyle = Params.ClassStyle
-                    | Program.CS_DBLCLKS
-                    | Program.CS_DROP;
-
-                return Params;
-            }
-        }
-        #endregion
-
         #region Constructor
         public aboutWindow()
         {
             InitializeComponent();
 
+            // Attach event handlers.
+            WireEventHandlers();
+
+            // Set button properties.
+            SetButtonProperties();
+        }
+
+        private void WireEventHandlers()
+        {
             Load += aboutWindow_Load;
             KeyDown += aboutWindow_KeyDown;
-
-            this.Click += CloseOnClick;
-            RegisterControlClick(this);
         }
-
-        private void RegisterControlClick(Control control)
-        {
-            foreach (Control childControl in control.Controls)
-            {
-                childControl.Click += CloseOnClick;
-
-                if (childControl.HasChildren)
-                    RegisterControlClick(childControl);
-            }
-        }
-
-        private void CloseOnClick(object sender, EventArgs e) => Close();
         #endregion
 
         #region Window Events
@@ -77,5 +53,15 @@ namespace Mac_EFI_Toolkit.WinForms
         }
         #endregion
 
+        #region Button Events
+        private void cmdClose_Click(object sender, EventArgs e) =>
+            Close();
+
+        private void SetButtonProperties()
+        {
+            cmdClose.Font = Program.FONT_MDL2_REG_10;
+            cmdClose.Text = Chars.EXIT_CROSS;
+        }
+        #endregion
     }
 }
