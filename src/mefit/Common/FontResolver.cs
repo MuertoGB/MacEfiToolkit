@@ -53,7 +53,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(LoadFontFromResource), e.GetType(), e.Message);
                 return null;
             }
             finally
@@ -74,7 +74,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(IsFontStyleAvailable), e.GetType(), e.Message);
                 return FontStatus.Unknown;
             }
 

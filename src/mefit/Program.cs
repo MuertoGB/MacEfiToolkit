@@ -33,7 +33,6 @@ namespace Mac_EFI_Toolkit
         internal static readonly string SCFG_DIR = Path.Combine(WORKING_DIR, "scfg_stores");
         internal static readonly string SETTINGS_FILE = Path.Combine(WORKING_DIR, "Settings.ini");
         internal static readonly string DEBUG_LOG = Path.Combine(WORKING_DIR, "debug.log");
-        internal static readonly string UNHANDLED_LOG = Path.Combine(WORKING_DIR, "unhandled.log");
         internal static readonly string APP_LOG = Path.Combine(WORKING_DIR, "mefit.log");
         internal static readonly string DATABASE_LOG = Path.Combine(WORKING_DIR, "database.log");
     }
@@ -41,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241101.2332";
+        internal const string APP_BUILD = "241102.0300";
         internal const string APP_CHANNEL = "DEV";
     }
 
@@ -137,6 +136,9 @@ namespace Mac_EFI_Toolkit
             // Ensure that required application directories exist; create them if they don't
             EnsureDirectoriesExist();
 
+            // Debugging
+            //Process.Start("unhandledexception.exe");
+
             // Create the main window instance
             MAIN_WINDOW = new startupWindow();
 
@@ -181,15 +183,20 @@ namespace Mac_EFI_Toolkit
         {
             DialogResult result;
 
-            File.WriteAllText(
-                METPath.UNHANDLED_LOG,
-                Unhandled.GenerateUnhandledReport(e));
+            string workingDir = METPath.WORKING_DIR;
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            string logFileName = $"unhandled_{timestamp}.log";
+            string logPath = Path.Combine(workingDir, logFileName);
 
-            if (File.Exists(METPath.UNHANDLED_LOG))
+            File.WriteAllText(
+                logPath,
+                UnhandledException.GenerateReport(e));
+
+            if (File.Exists(logPath))
             {
                 result =
                     MessageBox.Show(
-                        $"{e.Message}\r\n\r\nDetails were saved to {METPath.UNHANDLED_LOG.Replace(" ", Chars.NB_SPACE)}" +
+                        $"{e.Message}\r\n\r\nDetails were saved to {logPath.Replace(" ", Chars.NB_SPACE)}" +
                         $"'\r\n\r\nForce quit application?",
                         $"MET Exception Handler",
                         MessageBoxButtons.YesNo,
@@ -214,10 +221,7 @@ namespace Mac_EFI_Toolkit
                 Environment.Exit(-1);
             }
 
-            // Fix for mainWindow opacity getting stuck at 0.5.
-            if (MAIN_WINDOW != null)
-                if (MAIN_WINDOW.Opacity != 1.0)
-                    MAIN_WINDOW.Opacity = 1.0;
+            BlurHelper.RemoveBlur(MAIN_WINDOW);
         }
         #endregion
 
@@ -272,17 +276,15 @@ namespace Mac_EFI_Toolkit
         {
             try
             {
-                // Start a new instance of the application
                 Process.Start(Application.ExecutablePath);
             }
             catch (Win32Exception e)
             {
-                Logger.WriteToAppLog(e.Message);
+                Logger.WriteError(nameof(Restart), e.GetType(), e.Message);
                 return;
             }
             finally
             {
-                // Ensure the current instance exits
                 Exit();
             }
         }
@@ -316,17 +318,9 @@ namespace Mac_EFI_Toolkit
                 if (!Directory.Exists(directoryPath))
                     Directory.CreateDirectory(directoryPath);
             }
-            catch (UnauthorizedAccessException ex) // Permission error
+            catch (Exception e) // Permission error
             {
-                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}'. Access is denied. Exception: {ex.Message}");
-            }
-            catch (IOException ex) // IO error
-            {
-                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}' due to an I/O error. Exception: {ex.Message}");
-            }
-            catch (Exception ex) // Misc error
-            {
-                Logger.WriteToAppLog($"Warning: Could not create directory '{directoryPath}'. Exception: {ex.Message}");
+                Logger.WriteError(nameof(CreateDirectoryIfNotExists), e.GetType(), e.Message);
             }
         }
 
@@ -365,18 +359,13 @@ namespace Mac_EFI_Toolkit
                 };
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
                 // Log the error
-                Logger.WriteToAppLog($"{nameof(TryLoadCustomFont)} failed: {ex.Message}");
-
-                // Display an error message to the user
-                MessageBox.Show("Segoe MDL2 Assets font failed to load. See the log for more details.",
-                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logger.WriteError(nameof(TryLoadCustomFont), e.GetType(), e.Message);
                 return false;
             }
         }
         #endregion
-
     }
 }

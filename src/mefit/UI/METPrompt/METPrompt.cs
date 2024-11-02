@@ -22,6 +22,17 @@ namespace Mac_EFI_Toolkit.UI
         static DialogResult MB_RESULT;
         #endregion
 
+        #region Private Members
+        private const string INFO =
+            "INFORMATION";
+
+        private const string WARN =
+            "WARNING";
+
+        private const string ERROR =
+            "ERROR";
+        #endregion
+
         #region Constants
         private const int MaxWidth = 350;
         private const int MaxHeight = 800;
@@ -57,22 +68,22 @@ namespace Mac_EFI_Toolkit.UI
             {
                 case METPromptType.Error:
                     lblTitle.ForeColor = Colours.ERROR_BOX;
-                    lblTitle.Text = APPSTRINGS.ERROR;
+                    lblTitle.Text = ERROR;
                     MB_SOUND = System.Media.SystemSounds.Hand;
                     break;
                 case METPromptType.Warning:
                     lblTitle.ForeColor = Colours.WARNING_BOX;
-                    lblTitle.Text = APPSTRINGS.WARNING;
+                    lblTitle.Text = WARN;
                     MB_SOUND = System.Media.SystemSounds.Exclamation;
                     break;
                 case METPromptType.Information:
                     lblTitle.ForeColor = Colours.INFO_BOX;
-                    lblTitle.Text = APPSTRINGS.INFORMATION;
+                    lblTitle.Text = INFO;
                     MB_SOUND = System.Media.SystemSounds.Beep;
                     break;
                 case METPromptType.Question:
                     lblTitle.ForeColor = Colours.INFO_BOX;
-                    lblTitle.Text = APPSTRINGS.INFORMATION;
+                    lblTitle.Text = INFO;
                     MB_SOUND = System.Media.SystemSounds.Beep;
                     break;
             }

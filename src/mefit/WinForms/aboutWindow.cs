@@ -7,6 +7,8 @@
 
 using Mac_EFI_Toolkit.UI;
 using System;
+using System.Drawing;
+using System.Reflection.Emit;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.WinForms

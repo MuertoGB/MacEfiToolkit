@@ -15,15 +15,6 @@
         internal const string EFIROM =
             "EFIROM";
 
-        internal const string INFORMATION =
-            "Information";
-
-        internal const string WARNING =
-            "Warning";
-
-        internal const string ERROR =
-            "Error";
-
         internal const string UNKNOWN =
             "Unknown";
 

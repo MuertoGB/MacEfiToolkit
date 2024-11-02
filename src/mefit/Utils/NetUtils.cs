@@ -18,7 +18,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// </summary>
         /// <param name="url">The URL of the website to check.</param>
         /// <returns>True if the website is available, false otherwise.</returns>
-        internal static bool GetIsWebsiteAvailable(string url)
+        internal static bool IsWebsiteAvailable(string url)
         {
             WebRequest webRequest;
 
@@ -32,7 +32,7 @@ namespace Mac_EFI_Toolkit.Utils
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(IsWebsiteAvailable), e.GetType(), e.Message);
                 return false;
             }
         }
@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit.Utils
         /// Checks if a network connection is available by attempting to send a ping request to a known IP address.
         /// </summary>
         /// <returns>True if a network connection is available, false otherwise.</returns>
-        internal static bool GetIsNetworkAvailable()
+        internal static bool IsNetworkAvailable()
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
                 return false;
@@ -60,7 +60,7 @@ namespace Mac_EFI_Toolkit.Utils
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(IsNetworkAvailable), e.GetType(), e.Message);
                 return false;
             }
         }

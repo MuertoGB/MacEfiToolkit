@@ -81,7 +81,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             if (NVRAM_BASE < 0 || NVRAM_BASE > FileInfoData.Length)
             {
-                Logger.WriteToAppLog($"Invalid NVRAM base address: {NVRAM_BASE}");
+                Logger.Write($"Invalid NVRAM base address: {NVRAM_BASE}", LogType.Application);
                 NVRAM_BASE = -1;
             }
 
@@ -98,7 +98,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             if (NVRAM_SIZE < 0 || NVRAM_SIZE > FileInfoData.Length)
             {
-                Logger.WriteToAppLog($"Invalid NVRAM size: {NVRAM_SIZE}");
+                Logger.Write($"Invalid NVRAM size: {NVRAM_SIZE}", LogType.Application);
                 NVRAM_SIZE = -1;
             }
 
@@ -138,9 +138,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 {
                     ForceFoundFsys = true;
 
-                    Logger.WriteToAppLog(
+                    Logger.Write(
                         $"Force found Fsys Store at {FsysStoreData.FsysBase:X}h. " +
-                        $"The image may be misaligned or corrupt ({FileInfoData.FileNameExt})."
+                        $"The image may be misaligned or corrupt ({FileInfoData.FileNameExt}).",
+                        LogType.Application
                     );
                 }
             }
@@ -718,8 +719,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Min Fsys rgn size.
             if (FSYS_RGN_SIZE < 2048)
             {
-                Logger.WriteToAppLog(
-                    $"Fsys Store size was less than the min expected size: {FSYS_RGN_SIZE}");
+                Logger.Write(
+                    $"Fsys Store size was less than the min expected size: {FSYS_RGN_SIZE}",
+                    LogType.Application);
 
                 return null;
             }

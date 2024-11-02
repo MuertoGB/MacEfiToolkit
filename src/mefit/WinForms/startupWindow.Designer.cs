@@ -201,11 +201,11 @@
             this.tlpMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpMenu.ColumnCount = 7;
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tlpMenu.Controls.Add(this.cmdSettings, 0, 0);
             this.tlpMenu.Controls.Add(this.cmdAbout, 2, 0);
@@ -231,10 +231,10 @@
             this.cmdSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdSettings.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdSettings.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
-            this.cmdSettings.Location = new System.Drawing.Point(1, 0);
-            this.cmdSettings.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.cmdSettings.Location = new System.Drawing.Point(0, 0);
+            this.cmdSettings.Margin = new System.Windows.Forms.Padding(0);
             this.cmdSettings.Name = "cmdSettings";
-            this.cmdSettings.Size = new System.Drawing.Size(105, 32);
+            this.cmdSettings.Size = new System.Drawing.Size(107, 32);
             this.cmdSettings.TabIndex = 6;
             this.cmdSettings.Text = "SETTINGS";
             this.cmdSettings.UseVisualStyleBackColor = false;
@@ -254,7 +254,7 @@
             this.cmdAbout.Location = new System.Drawing.Point(108, 0);
             this.cmdAbout.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAbout.Name = "cmdAbout";
-            this.cmdAbout.Size = new System.Drawing.Size(106, 32);
+            this.cmdAbout.Size = new System.Drawing.Size(107, 32);
             this.cmdAbout.TabIndex = 7;
             this.cmdAbout.Text = "ABOUT";
             this.cmdAbout.UseVisualStyleBackColor = false;
@@ -294,7 +294,7 @@
             this.cmdMenuFolders.Location = new System.Drawing.Point(216, 0);
             this.cmdMenuFolders.Margin = new System.Windows.Forms.Padding(0);
             this.cmdMenuFolders.Name = "cmdMenuFolders";
-            this.cmdMenuFolders.Size = new System.Drawing.Size(106, 32);
+            this.cmdMenuFolders.Size = new System.Drawing.Size(107, 32);
             this.cmdMenuFolders.TabIndex = 9;
             this.cmdMenuFolders.Text = "FOLDERS";
             this.cmdMenuFolders.UseVisualStyleBackColor = false;
@@ -319,8 +319,8 @@
             this.tlpDrop.Controls.Add(this.lblGlyph, 0, 0);
             this.tlpDrop.Controls.Add(this.cmdBrowse, 0, 2);
             this.tlpDrop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDrop.GradientEndColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.tlpDrop.GradientStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tlpDrop.GradientEndColor = System.Drawing.Color.Transparent;
+            this.tlpDrop.GradientStartColor = System.Drawing.Color.Transparent;
             this.tlpDrop.Location = new System.Drawing.Point(1, 84);
             this.tlpDrop.Name = "tlpDrop";
             this.tlpDrop.RowCount = 3;

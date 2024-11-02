@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Windows.Forms;
 
 #region Enum
@@ -191,20 +192,17 @@ namespace Mac_EFI_Toolkit.Utils
             }
             catch (IOException ioEx)
             {
-                Logger.WriteToAppLog(
-                    $"{nameof(WriteAllBytesEx)}: IO exception occurred - {ioEx.Message}");
+                Logger.WriteError(nameof(WriteAllBytesEx), ioEx.GetType(), ioEx.Message);
                 return false;
             }
             catch (UnauthorizedAccessException authEx)
             {
-                Logger.WriteToAppLog(
-                    $"{nameof(WriteAllBytesEx)}: Access denied - {authEx.Message}");
+                Logger.WriteError(nameof(WriteAllBytesEx), authEx.GetType(), authEx.Message);
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Logger.WriteToAppLog(
-                    $"{nameof(WriteAllBytesEx)}: Unexpected error - {ex.Message}");
+                Logger.WriteError(nameof(WriteAllBytesEx), e.GetType(), e.Message);
                 return false;
             }
         }
@@ -254,7 +252,7 @@ namespace Mac_EFI_Toolkit.Utils
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(BackupFileToZip), e.GetType(), e.Message);
             }
         }
 

@@ -19,11 +19,13 @@ namespace Mac_EFI_Toolkit.WinForms
 {
     public partial class startupWindow : METForm
     {
-        enum FormTag
+        #region Enums
+        private enum FormTag
         {
             Firmware,
             Other
         }
+        #endregion
 
         #region Public Members
         public string loadedFile = string.Empty;
@@ -86,8 +88,8 @@ namespace Mac_EFI_Toolkit.WinForms
             }
 
             // Check for a new application version
-            //if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
-            //    StartupVersionCheck();
+            if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
+                StartupVersionCheck();
         }
 
         private void startupWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -226,7 +228,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdSettings_Click(object sender, EventArgs e)
         {
-            UITools.SetHalfOpacity(this);
+            BlurHelper.ApplyBlur(this);
 
             using (Form child = new settingsWindow())
             {
@@ -238,7 +240,8 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void cmdAbout_Click(object sender, System.EventArgs e)
         {
-            UITools.SetHalfOpacity(this);
+            BlurHelper.ApplyBlur(this);
+
             using (Form child = new aboutWindow())
             {
                 child.Tag = FormTag.Other;
@@ -338,7 +341,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Logger.ViewLogFile(this);
+            Logger.OpenLogFile(this);
         }
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -369,7 +372,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 }
             }
 
-            UITools.SetNormalOpacity(this);
+            BlurHelper.RemoveBlur(this);
         }
 
         private void SetButtonProperties()
@@ -484,6 +487,5 @@ namespace Mac_EFI_Toolkit.WinForms
                 $"{APPSTRINGS.APPNAME} ({_childWindowCount})";
         }
         #endregion
-
     }
 }

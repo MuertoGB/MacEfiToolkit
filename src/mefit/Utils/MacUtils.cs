@@ -10,9 +10,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -55,7 +57,7 @@ namespace Mac_EFI_Toolkit.Utils
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(GetDeviceConfigCodeLocalLocal), e.GetType(), e.Message);
                 return null;
             }
         }
@@ -72,7 +74,7 @@ namespace Mac_EFI_Toolkit.Utils
                 // Retrieve data from Apple's server
                 string url = $"http://support-sp.apple.com/sp/product?cc={hwc}&lang=en_GB";
 
-                if (!NetUtils.GetIsWebsiteAvailable(url))
+                if (!NetUtils.IsWebsiteAvailable(url))
                     return null;
 
                 string xml = await new WebClient().DownloadStringTaskAsync(url);
@@ -86,8 +88,8 @@ namespace Mac_EFI_Toolkit.Utils
                         "/root/configCode")?.Value;
 
                 if (!string.IsNullOrEmpty(data))
-                    Logger.WriteToDbLog(
-                        $"'{hwc}' not present in local db > support-sp server returned: '{data}'");
+                    Logger.Write(
+                        $"'{hwc}' not present in local db > support-sp server returned: '{data}'", LogType.Database);
 
                 return string.IsNullOrEmpty(data)
                     ? null
@@ -95,7 +97,7 @@ namespace Mac_EFI_Toolkit.Utils
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(GetDeviceConfigCodeSupportRemote), e.GetType(), e.Message);
                 return null;
             }
         }

@@ -22,5 +22,6 @@ namespace Mac_EFI_Toolkit
         internal static readonly Color WHITE_TEXT = Color.White;
         internal static readonly Color OUTDATED = Color.FromArgb(255, 128, 128);
         internal static readonly Color SETTINGS_PATH_OKAY = Color.FromArgb(200, 220, 240);
+        internal static readonly Color APP_BORDER = Color.FromArgb(0, 170, 180);
     }
 }

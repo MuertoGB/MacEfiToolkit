@@ -65,7 +65,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(CheckForNewVersion), e.GetType(), e.Message);
                 return VersionResult.Error;
             }
         }

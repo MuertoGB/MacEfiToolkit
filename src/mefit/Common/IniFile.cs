@@ -115,7 +115,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(GetSectionNames), e.GetType(), e.Message);
                 return null;
             }
             finally
@@ -166,7 +166,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteExceptionToAppLog(e);
+                Logger.WriteError(nameof(GetSectionKeys), e.GetType(), e.Message);
                 return null;
             }
             finally

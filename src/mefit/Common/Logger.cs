@@ -13,39 +13,42 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-
-    #region Enums
-    public enum RtbLogPrefix
+    public enum LogType
     {
-        Start,
-        Complete,
-        Info,
-        Warning,
-        Error
+        Application,
+        Database
     }
-    #endregion
 
     class Logger
     {
-        internal static void WriteToAppLog(string logMessage)
+        public static void Write(string logMessage, LogType logType)
         {
-            using (StreamWriter writer = new StreamWriter(METPath.APP_LOG, true))
+            string logFilePath;
+
+            switch (logType)
+            {
+                case LogType.Application:
+                    logFilePath = METPath.APP_LOG;
+                    break;
+                case LogType.Database:
+                    logFilePath = METPath.DATABASE_LOG;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
+            }
+
+            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            {
                 writer.WriteLine($"{DateTime.Now} : {logMessage}");
+            }
         }
 
-        internal static void WriteToDbLog(string logMessage)
+        internal static void WriteError(string methodName, Type exceptionType, string message)
         {
-            using (StreamWriter writer = new StreamWriter(METPath.DATABASE_LOG, true))
-                writer.WriteLine($"{DateTime.Now} : {logMessage}");
+            Logger.Write($"{methodName} - {exceptionType.Name}: {message}", LogType.Application);
         }
 
-        internal static void WriteExceptionToAppLog(Exception e)
-        {
-            WriteToAppLog(
-                $"{e.GetType().Name}:- {e.Message}\r\n{e}\r\n");
-        }
-
-        internal static void ViewLogFile(Form owner)
+        internal static void OpenLogFile(Form owner)
         {
             var logPath = METPath.APP_LOG;
 
@@ -65,48 +68,6 @@ namespace Mac_EFI_Toolkit
                 DIALOGSTRINGS.LOG_NOT_FOUND,
                 METPromptType.Error,
                 METPromptButtons.Okay);
-        }
-
-        internal static void WriteLogTextToRtb(string messageString, RtbLogPrefix logPrefix, RichTextBox richTextBox)
-        {
-            Color prefixColor;
-
-            string timestamp = $"{DateTime.Now:HH:mm:ss}: ";
-
-            switch (logPrefix)
-            {
-                case RtbLogPrefix.Start:
-                    prefixColor = Color.FromArgb(193, 0, 255);
-                    break;
-                case RtbLogPrefix.Complete:
-                    prefixColor = Color.FromArgb(0, 200, 0);
-                    break;
-                case RtbLogPrefix.Info:
-                    prefixColor = Color.FromArgb(0, 122, 204);
-                    break;
-                case RtbLogPrefix.Warning:
-                    prefixColor = Color.FromArgb(255, 165, 0);
-                    break;
-                case RtbLogPrefix.Error:
-                    prefixColor = Color.FromArgb(255, 51, 51);
-                    break;
-                default:
-                    prefixColor = Color.White;
-                    break;
-            }
-
-            richTextBox.AppendText(timestamp);
-
-            richTextBox.Select(
-                richTextBox.TextLength - timestamp.Length,
-                timestamp.Length - 1);
-
-            richTextBox.SelectionColor = prefixColor;
-
-            richTextBox.AppendText(
-                messageString + Environment.NewLine);
-
-            richTextBox.ScrollToCaret();
         }
     }
 }
