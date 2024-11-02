@@ -10,6 +10,7 @@ using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -54,7 +55,7 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Explorer
-        internal static void ShowExplorerFileHighlight(Form owner, string path)
+        internal static void ShowExplorerFileHighlightPrompt(Form owner, string path)
         {
             DialogResult result =
                 METPrompt.Show(
@@ -64,10 +65,10 @@ namespace Mac_EFI_Toolkit.UI
                         METPromptButtons.YesNo);
 
             if (result == DialogResult.Yes)
-                FileUtils.HighlightPathInExplorer(path);
+                HighlightPathInExplorer(path, owner);
         }
 
-        internal static void ShowExplorerDirectory(Form owner, string path)
+        internal static void ShowOpenFolderInExplorerPromt(Form owner, string path)
         {
             DialogResult result =
                 METPrompt.Show(
@@ -78,6 +79,57 @@ namespace Mac_EFI_Toolkit.UI
 
             if (result == DialogResult.Yes)
                 Process.Start("explorer.exe", path);
+        }
+
+        /// <summary>
+        /// Navigate to, and highlight a file in Windows Explorer.
+        /// </summary>
+        /// <param name="path">The path of the file to open and highlight in Windows Explorer.</param>
+        /// <param name="form">The form instance used to display prompts to the user.</param>
+        internal static void HighlightPathInExplorer(string path, Form form)
+        {
+            if (!File.Exists(path))
+            {
+                METPrompt.Show(
+                    form,
+                    $"File does not exist: {path}",
+                    METPromptType.Warning,
+                    METPromptButtons.Okay);
+
+                return;
+            }
+
+            Process.Start("explorer.exe", $"/select,\"{path}\"");
+        }
+
+        internal static void OpenFolderInExplorer(string path, Form form)
+        {
+            if (!Directory.Exists(path))
+            {
+                METPrompt.Show(
+                    form,
+                    $"Directory does not exist: {path}",
+                    METPromptType.Warning,
+                    METPromptButtons.Okay);
+
+                return;
+            }
+
+            DirectoryInfo directoryInfo =
+                new DirectoryInfo(path);
+
+            if (!directoryInfo.Attributes.HasFlag(FileAttributes.Directory))
+            {
+                METPrompt.Show(
+                    form,
+                    $"The path is not a directory: {path}",
+                    METPromptType.Warning,
+                    METPromptButtons.Okay);
+
+                return;
+            }
+
+            Process.Start("explorer.exe", path);
         }
         #endregion
 

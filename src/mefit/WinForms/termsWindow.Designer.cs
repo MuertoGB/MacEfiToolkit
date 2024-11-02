@@ -36,10 +36,11 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.cmdClose = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.pnlSeperatorBottom = new System.Windows.Forms.Panel();
+            this.pnlSeperatorBtm = new System.Windows.Forms.Panel();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.cmdAccept = new System.Windows.Forms.Button();
             this.cmdDecline = new System.Windows.Forms.Button();
+            this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.pnlMain.SuspendLayout();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
@@ -55,7 +56,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlMain.Size = new System.Drawing.Size(578, 261);
+            this.pnlMain.Size = new System.Drawing.Size(573, 226);
             this.pnlMain.TabIndex = 95;
             // 
             // tbxTermsText
@@ -72,13 +73,14 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tbxTermsText.Name = "tbxTermsText";
             this.tbxTermsText.ReadOnly = true;
             this.tbxTermsText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbxTermsText.Size = new System.Drawing.Size(570, 253);
+            this.tbxTermsText.Size = new System.Drawing.Size(565, 218);
             this.tbxTermsText.TabIndex = 0;
             this.tbxTermsText.TabStop = false;
             // 
             // tlpTitle
             // 
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
             this.tlpTitle.ColumnCount = 3;
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -92,7 +94,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpTitle.Name = "tlpTitle";
             this.tlpTitle.RowCount = 1;
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.Size = new System.Drawing.Size(578, 40);
+            this.tlpTitle.Size = new System.Drawing.Size(573, 40);
             this.tlpTitle.TabIndex = 0;
             // 
             // pbxLogo
@@ -119,7 +121,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdClose.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdClose.ForeColor = System.Drawing.Color.White;
-            this.cmdClose.Location = new System.Drawing.Point(538, 0);
+            this.cmdClose.Location = new System.Drawing.Point(533, 0);
             this.cmdClose.Margin = new System.Windows.Forms.Padding(0);
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Padding = new System.Windows.Forms.Padding(2, 2, 0, 1);
@@ -139,20 +141,20 @@ namespace Mac_EFI_Toolkit.WinForms
             this.lblTitle.Location = new System.Drawing.Point(40, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(498, 40);
+            this.lblTitle.Size = new System.Drawing.Size(493, 40);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Terms of Use";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pnlSeperatorBottom
+            // pnlSeperatorBtm
             // 
-            this.pnlSeperatorBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(120)))), ((int)(((byte)(120)))));
-            this.pnlSeperatorBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlSeperatorBottom.Location = new System.Drawing.Point(1, 301);
-            this.pnlSeperatorBottom.Margin = new System.Windows.Forms.Padding(2);
-            this.pnlSeperatorBottom.Name = "pnlSeperatorBottom";
-            this.pnlSeperatorBottom.Size = new System.Drawing.Size(578, 1);
-            this.pnlSeperatorBottom.TabIndex = 97;
+            this.pnlSeperatorBtm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
+            this.pnlSeperatorBtm.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlSeperatorBtm.Location = new System.Drawing.Point(1, 266);
+            this.pnlSeperatorBtm.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlSeperatorBtm.Name = "pnlSeperatorBtm";
+            this.pnlSeperatorBtm.Size = new System.Drawing.Size(573, 1);
+            this.pnlSeperatorBtm.TabIndex = 97;
             // 
             // tlpButtons
             // 
@@ -164,12 +166,12 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpButtons.Controls.Add(this.cmdAccept, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdDecline, 1, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 302);
+            this.tlpButtons.Location = new System.Drawing.Point(1, 267);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpButtons.Size = new System.Drawing.Size(578, 42);
+            this.tlpButtons.Size = new System.Drawing.Size(573, 42);
             this.tlpButtons.TabIndex = 0;
             // 
             // cmdAccept
@@ -182,7 +184,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdAccept.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdAccept.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdAccept.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.cmdAccept.Location = new System.Drawing.Point(473, 4);
+            this.cmdAccept.Location = new System.Drawing.Point(468, 4);
             this.cmdAccept.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAccept.Name = "cmdAccept";
             this.cmdAccept.Size = new System.Drawing.Size(100, 34);
@@ -201,7 +203,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdDecline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDecline.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdDecline.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.cmdDecline.Location = new System.Drawing.Point(368, 4);
+            this.cmdDecline.Location = new System.Drawing.Point(363, 4);
             this.cmdDecline.Margin = new System.Windows.Forms.Padding(0);
             this.cmdDecline.Name = "cmdDecline";
             this.cmdDecline.Size = new System.Drawing.Size(100, 34);
@@ -210,6 +212,16 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdDecline.UseVisualStyleBackColor = false;
             this.cmdDecline.Click += new System.EventHandler(this.cmdDecline_Click);
             // 
+            // pnlSeperatorTop
+            // 
+            this.pnlSeperatorTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
+            this.pnlSeperatorTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSeperatorTop.Location = new System.Drawing.Point(1, 41);
+            this.pnlSeperatorTop.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlSeperatorTop.Name = "pnlSeperatorTop";
+            this.pnlSeperatorTop.Size = new System.Drawing.Size(573, 1);
+            this.pnlSeperatorTop.TabIndex = 98;
+            // 
             // termsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -217,8 +229,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
-            this.ClientSize = new System.Drawing.Size(580, 345);
-            this.Controls.Add(this.pnlSeperatorBottom);
+            this.ClientSize = new System.Drawing.Size(575, 310);
+            this.Controls.Add(this.pnlSeperatorTop);
+            this.Controls.Add(this.pnlSeperatorBtm);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tlpTitle);
             this.Controls.Add(this.tlpButtons);
@@ -229,7 +242,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(580, 345);
+            this.MinimumSize = new System.Drawing.Size(575, 310);
             this.Name = "termsWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
@@ -249,12 +262,13 @@ namespace Mac_EFI_Toolkit.WinForms
         internal System.Windows.Forms.Panel pnlMain;
         internal System.Windows.Forms.TableLayoutPanel tlpTitle;
         internal System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Panel pnlSeperatorBottom;
+        private System.Windows.Forms.Panel pnlSeperatorBtm;
         private System.Windows.Forms.TextBox tbxTermsText;
         private System.Windows.Forms.TableLayoutPanel tlpButtons;
         private System.Windows.Forms.Button cmdAccept;
         private System.Windows.Forms.Button cmdDecline;
         internal System.Windows.Forms.Button cmdClose;
         private System.Windows.Forms.PictureBox pbxLogo;
+        private System.Windows.Forms.Panel pnlSeperatorTop;
     }
 }

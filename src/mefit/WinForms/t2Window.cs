@@ -151,7 +151,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     dialog.FileName,
                     T2ROM.ScfgSectionData.ScfgBytes))
                 {
-                    UITools.ShowExplorerFileHighlight(
+                    UITools.ShowExplorerFileHighlightPrompt(
                         this,
                         dialog.FileName);
 

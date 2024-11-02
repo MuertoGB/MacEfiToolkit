@@ -277,44 +277,26 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Folders Context Menu Events
-        private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Program.EnsureDirectoriesExist();
+        private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.BACKUPS_DIR, this);
 
-            Process.Start(
-                "explorer.exe",
-                METPath.BACKUPS_DIR);
-        }
+        private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.BUILDS_DIR, this);
 
-        private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Program.EnsureDirectoriesExist();
+        private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.FSYS_DIR, this);
 
-            Process.Start(
-                "explorer.exe",
-                METPath.BUILDS_DIR);
-        }
+        private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.INTELME_DIR, this);
 
-        private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Program.EnsureDirectoriesExist();
+        private void openNVRAMFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.NVRAM_DIR, this);
 
-            Process.Start(
-                "explorer.exe",
-                METPath.FSYS_DIR);
-        }
-
-        private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Program.EnsureDirectoriesExist();
-
-            Process.Start(
-                 "explorer.exe",
-                 METPath.INTELME_DIR);
-        }
+        private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.SCFG_DIR, this);
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start("explorer.exe", METPath.WORKING_DIR);
+            UITools.OpenFolderInExplorer(METPath.WORKING_DIR, this);
         #endregion
 
         #region More Context Menu Events

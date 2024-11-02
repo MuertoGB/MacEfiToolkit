@@ -138,7 +138,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlight(
+                UITools.ShowExplorerFileHighlightPrompt(
                  this,
                  dialog.FileName);
             }

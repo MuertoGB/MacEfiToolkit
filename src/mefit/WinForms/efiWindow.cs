@@ -195,6 +195,17 @@ namespace Mac_EFI_Toolkit
 
         private void cmdReload_Click(object sender, EventArgs e)
         {
+            if (!File.Exists(EFIROM.LoadedBinaryPath))
+            {
+                METPrompt.Show(
+                    this,
+                    DIALOGSTRINGS.COULD_NOT_RELOAD,
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
+
+                return;
+            }
+
             // Load bytes from loaded binary file.
             byte[] fileBytes =
                 File.ReadAllBytes(
@@ -213,7 +224,6 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            // File data has changed.
             OpenBinary(EFIROM.LoadedBinaryPath);
         }
 
@@ -260,6 +270,8 @@ namespace Mac_EFI_Toolkit
 
             if (!bOpenEditor)
             {
+                BlurHelper.ApplyBlur(this);
+
                 using (Form frm = new termsWindow())
                 {
                     frm.FormClosed += ChildWindowClosed;
@@ -285,9 +297,8 @@ namespace Mac_EFI_Toolkit
 
         private void cmdNavigate_Click(object sender, EventArgs e)
         {
-            // Navigate and highlight the file in explorer.
-            FileUtils.HighlightPathInExplorer(
-                EFIROM.LoadedBinaryPath);
+            UITools.HighlightPathInExplorer(
+                EFIROM.LoadedBinaryPath, this);
         }
         #endregion
 
@@ -379,7 +390,7 @@ namespace Mac_EFI_Toolkit
                     saveFileDialog.FileName,
                     EFIROM.FsysStoreData.FsysBytes) && File.Exists(saveFileDialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlight(
+                    UITools.ShowExplorerFileHighlightPrompt(
                         this,
                         saveFileDialog.FileName);
 
@@ -430,7 +441,7 @@ namespace Mac_EFI_Toolkit
 
                 if (FileUtils.WriteAllBytesEx(saveFileDialog.FileName, meBytes) && File.Exists(saveFileDialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlight(
+                    UITools.ShowExplorerFileHighlightPrompt(
                         this,
                         saveFileDialog.FileName);
 
@@ -511,7 +522,7 @@ namespace Mac_EFI_Toolkit
                             $"{storeType}_BACKUP_REGION_{EFIROM.FileInfoData.FileName}.bin"),
                        backupStore);
 
-                    UITools.ShowExplorerDirectory(
+                    UITools.ShowOpenFolderInExplorerPromt(
                         this,
                         folderPath);
                 }
@@ -539,7 +550,7 @@ namespace Mac_EFI_Toolkit
                         saveDialog.FileName,
                         fileToSave);
 
-                    UITools.ShowExplorerFileHighlight(
+                    UITools.ShowExplorerFileHighlightPrompt(
                         this,
                         saveDialog.FileName);
                 }
@@ -572,7 +583,7 @@ namespace Mac_EFI_Toolkit
 
                 if (File.Exists(saveFileDialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlight(
+                    UITools.ShowExplorerFileHighlightPrompt(
                         this,
                         saveFileDialog.FileName);
 
@@ -679,7 +690,7 @@ namespace Mac_EFI_Toolkit
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlight(
+                UITools.ShowExplorerFileHighlightPrompt(
                  this,
                  saveFileDialog.FileName);
             }
@@ -802,7 +813,7 @@ namespace Mac_EFI_Toolkit
                     return;
 
                 Logger.Write(
-                    LOGSTRINGS.VALIDATION_PASS, 
+                    LOGSTRINGS.VALIDATION_PASS,
                     LogType.Application);
 
                 string imeVersion =
@@ -1475,19 +1486,8 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region UI Events
-        private void ChildWindowClosed(object sender, EventArgs e)
-        {
+        private void ChildWindowClosed(object sender, EventArgs e) =>
             BlurHelper.RemoveBlur(this);
-
-            if (Program.openLastBuild)
-            {
-                if (File.Exists(Program.lastBuildPath))
-                    OpenBinary(Program.lastBuildPath);
-
-                Program.openLastBuild = false;
-                Program.lastBuildPath = string.Empty;
-            }
-        }
 
         private void ToggleControlEnable(bool enable)
         {

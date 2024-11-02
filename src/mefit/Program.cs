@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241102.0300";
+        internal const string APP_BUILD = "241102.0400";
         internal const string APP_CHANNEL = "DEV";
     }
 
@@ -70,8 +70,6 @@ namespace Mac_EFI_Toolkit
     {
         #region Internal Members
         internal static string draggedFilePath = string.Empty;
-        internal static string lastBuildPath = string.Empty;
-        internal static bool openLastBuild = false;
         internal static startupWindow MAIN_WINDOW;
 
         internal static Font FONT_MDL2_REG_9;

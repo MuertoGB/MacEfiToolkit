@@ -55,10 +55,10 @@
             "This will reset all settings to default. Are you sure you want to set default settings?";
 
         internal const string FILES_SAVE_SUCCESS_NAV =
-            "Files saved successfully. Would you like to navigate to the folder?";
+            "Files saved successfully. Would you like to open the folder?";
 
         internal const string FILE_SAVE_SUCCESS_NAV =
-            "File saved successfully. Would you like to navigate to the file?";
+            "File saved successfully. Would you like to open the file location?";
         #endregion
     }
 
@@ -176,7 +176,10 @@
     {
         #region Strings
         internal const string UNLOAD_FIRMWARE_RESET =
-            "This will unload the firmware and all associated data, are you sure you want to reset?";
+            "This will unload the firmware and all associated data. Are you sure you want to reset?";
+
+        internal const string COULD_NOT_RELOAD =
+            "Could not reload the file from disk as it was not found. It may have been moved or deleted.";
 
         internal const string DATA_EXPORT_FAILED =
             "Data export failed.";

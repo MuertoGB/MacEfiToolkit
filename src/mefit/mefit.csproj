@@ -124,7 +124,7 @@
     <Compile Include="Common\Logger.cs" />
     <Compile Include="AppVersion.cs" />
     <Compile Include="Chars.cs" />
-    <Compile Include="Strings.cs" />
+    <Compile Include="Language\English.cs" />
     <Compile Include="Firmware\T2\Structs\ScfgData.cs" />
     <Compile Include="Firmware\T2\T2ROM.cs" />
     <Compile Include="Firmware\T2\ROMSigs.cs" />

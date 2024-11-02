@@ -12,7 +12,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
-using System.Threading;
 using System.Windows.Forms;
 
 #region Enum
@@ -75,16 +74,6 @@ namespace Mac_EFI_Toolkit.Utils
         {
             return string.Format
                 ("{0:#,##0}", size);
-        }
-
-        /// <summary>
-        /// Navigate to, and highlight a path in Windows Explorer.
-        /// </summary>
-        /// <param name="path">The path of the file to open in Windows Explorer.</param>
-        internal static void HighlightPathInExplorer(string path)
-        {
-            Process.Start(
-                "explorer.exe", $"/select,\"{path}\"");
         }
 
         /// <summary>

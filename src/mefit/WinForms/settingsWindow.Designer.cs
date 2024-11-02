@@ -98,10 +98,10 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdDefaults.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDefaults.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdDefaults.ForeColor = System.Drawing.Color.White;
-            this.cmdDefaults.Location = new System.Drawing.Point(290, 0);
+            this.cmdDefaults.Location = new System.Drawing.Point(288, 0);
             this.cmdDefaults.Margin = new System.Windows.Forms.Padding(0);
             this.cmdDefaults.Name = "cmdDefaults";
-            this.cmdDefaults.Size = new System.Drawing.Size(143, 32);
+            this.cmdDefaults.Size = new System.Drawing.Size(145, 32);
             this.cmdDefaults.TabIndex = 2;
             this.cmdDefaults.Text = "RESET SETTINGS";
             this.cmdDefaults.UseVisualStyleBackColor = false;
@@ -118,7 +118,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.cmdApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdApply.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdApply.ForeColor = System.Drawing.Color.White;
-            this.cmdApply.Location = new System.Drawing.Point(145, 0);
+            this.cmdApply.Location = new System.Drawing.Point(144, 0);
             this.cmdApply.Margin = new System.Windows.Forms.Padding(0);
             this.cmdApply.Name = "cmdApply";
             this.cmdApply.Size = new System.Drawing.Size(143, 32);
@@ -770,9 +770,9 @@ namespace Mac_EFI_Toolkit.WinForms
             this.tlpMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpMenu.ColumnCount = 5;
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
+            this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMenu.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlpMenu.Controls.Add(this.cmdDefaults, 4, 0);
             this.tlpMenu.Controls.Add(this.cmdOkay, 0, 0);

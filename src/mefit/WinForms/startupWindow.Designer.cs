@@ -63,8 +63,10 @@
             this.openBuildsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFsysStoresFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openIntelMEFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openNVRAMFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.openWorkingDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openSCFGFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
@@ -494,11 +496,13 @@
             this.openBuildsFolderToolStripMenuItem,
             this.openFsysStoresFolderToolStripMenuItem,
             this.openIntelMEFolderToolStripMenuItem,
+            this.openNVRAMFolderToolStripMenuItem,
+            this.openSCFGFolderToolStripMenuItem,
             this.toolStripSeparator3,
             this.openWorkingDirectoryToolStripMenuItem});
             this.cmsFolders.Name = "cmsFolders";
             this.cmsFolders.ShowImageMargin = false;
-            this.cmsFolders.Size = new System.Drawing.Size(240, 150);
+            this.cmsFolders.Size = new System.Drawing.Size(240, 234);
             // 
             // openBackupsFolderToolStripMenuItem
             // 
@@ -532,6 +536,13 @@
             this.openIntelMEFolderToolStripMenuItem.Text = "Open Intel ME Folder";
             this.openIntelMEFolderToolStripMenuItem.Click += new System.EventHandler(this.openIntelMEFolderToolStripMenuItem_Click);
             // 
+            // openNVRAMFolderToolStripMenuItem
+            // 
+            this.openNVRAMFolderToolStripMenuItem.Name = "openNVRAMFolderToolStripMenuItem";
+            this.openNVRAMFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openNVRAMFolderToolStripMenuItem.Text = "Open NVRAM Folder";
+            this.openNVRAMFolderToolStripMenuItem.Click += new System.EventHandler(this.openNVRAMFolderToolStripMenuItem_Click);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -544,6 +555,13 @@
             this.openWorkingDirectoryToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openWorkingDirectoryToolStripMenuItem.Text = "Open Working Directory";
             this.openWorkingDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openWorkingDirectoryToolStripMenuItem_Click);
+            // 
+            // openSCFGFolderToolStripMenuItem
+            // 
+            this.openSCFGFolderToolStripMenuItem.Name = "openSCFGFolderToolStripMenuItem";
+            this.openSCFGFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openSCFGFolderToolStripMenuItem.Text = "Open SCFG Folder";
+            this.openSCFGFolderToolStripMenuItem.Click += new System.EventHandler(this.openSCFGFolderToolStripMenuItem_Click);
             // 
             // startupWindow
             // 
@@ -618,5 +636,7 @@
         private System.Windows.Forms.ToolStripMenuItem openIntelMEFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem openWorkingDirectoryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openNVRAMFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openSCFGFolderToolStripMenuItem;
     }
 }
