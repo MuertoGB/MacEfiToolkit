@@ -1,4 +1,6 @@
-﻿namespace Mac_EFI_Toolkit
+﻿using System;
+
+namespace Mac_EFI_Toolkit
 {
     internal class APPSTRINGS
     {
@@ -169,6 +171,27 @@
 
         internal const string FILE_SAVE_SUCCESS =
             "File saved successully:";
+
+        internal const string NVRAM_ERASE =
+            "Erase NVRAM";
+
+        internal const string NVRAM_VSS_ERASE =
+            "Erasing NVRAM VSS regions";
+
+        internal const string NVRAM_SVS_ERASE =
+            "Erasing NVRAM SVS regions";
+
+        internal const string NVRAM_INIT_HDR =
+            "Initializing header bytes 0x4h > 0x7h (0xFF)";
+
+        internal const string NVRAM_INIT_HDR_VSS =
+            "Initializing header bytes 0x9h > 0xAh (0xFF)";
+
+        internal const string NVRAM_INIT_HDR_FAIL =
+            "Initializing header failed";
+
+        internal const string NVRAM_INIT_HDR_SUCCESS =
+            "Initializing header successful";
         #endregion
     }
 

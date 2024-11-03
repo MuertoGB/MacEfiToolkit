@@ -96,10 +96,10 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdNo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdNo.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdNo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.cmdNo.Location = new System.Drawing.Point(243, 4);
+            this.cmdNo.Location = new System.Drawing.Point(243, 5);
             this.cmdNo.Margin = new System.Windows.Forms.Padding(0);
             this.cmdNo.Name = "cmdNo";
-            this.cmdNo.Size = new System.Drawing.Size(100, 34);
+            this.cmdNo.Size = new System.Drawing.Size(100, 32);
             this.cmdNo.TabIndex = 0;
             this.cmdNo.Text = "NO";
             this.cmdNo.UseVisualStyleBackColor = false;
@@ -115,10 +115,10 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdYes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdYes.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdYes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.cmdYes.Location = new System.Drawing.Point(138, 4);
+            this.cmdYes.Location = new System.Drawing.Point(138, 5);
             this.cmdYes.Margin = new System.Windows.Forms.Padding(0);
             this.cmdYes.Name = "cmdYes";
-            this.cmdYes.Size = new System.Drawing.Size(100, 34);
+            this.cmdYes.Size = new System.Drawing.Size(100, 32);
             this.cmdYes.TabIndex = 1;
             this.cmdYes.Text = "YES";
             this.cmdYes.UseVisualStyleBackColor = false;
@@ -167,7 +167,7 @@ namespace Mac_EFI_Toolkit.UI
             this.pnlSeperatorBtm.Size = new System.Drawing.Size(348, 1);
             this.pnlSeperatorBtm.TabIndex = 2;
             // 
-            // METMessageBox
+            // METPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -188,7 +188,7 @@ namespace Mac_EFI_Toolkit.UI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(350, 200);
-            this.Name = "METMessageBox";
+            this.Name = "METPrompt";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;

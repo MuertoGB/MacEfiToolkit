@@ -27,7 +27,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static string FitVersion = null;
         internal static string MeVersion = null;
 
-        internal static string NewSSN = null;
+        internal static string sNewSsn = null;
         internal static bool bResetVss = false;
         internal static bool bResetSvs = false;
 
@@ -194,7 +194,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             FitVersion = null;
             MeVersion = null;
 
-            NewSSN = null;
+            sNewSsn = null;
             bResetVss = false;
             bResetSvs = false;
 

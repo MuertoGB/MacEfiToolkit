@@ -56,7 +56,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void cmdOkay_Click(object sender, EventArgs e)
         {
             // Please ensure new SSN is validated
-            EFIROM.NewSSN = tbSsn.Text;
+            EFIROM.sNewSsn = tbSsn.Text;
             DialogResult = DialogResult.OK;
         }
         #endregion

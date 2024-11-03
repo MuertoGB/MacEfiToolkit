@@ -64,9 +64,9 @@
             this.openFsysStoresFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openIntelMEFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openNVRAMFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openSCFGFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.openWorkingDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openSCFGFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
@@ -502,7 +502,7 @@
             this.openWorkingDirectoryToolStripMenuItem});
             this.cmsFolders.Name = "cmsFolders";
             this.cmsFolders.ShowImageMargin = false;
-            this.cmsFolders.Size = new System.Drawing.Size(240, 234);
+            this.cmsFolders.Size = new System.Drawing.Size(240, 206);
             // 
             // openBackupsFolderToolStripMenuItem
             // 
@@ -543,6 +543,13 @@
             this.openNVRAMFolderToolStripMenuItem.Text = "Open NVRAM Folder";
             this.openNVRAMFolderToolStripMenuItem.Click += new System.EventHandler(this.openNVRAMFolderToolStripMenuItem_Click);
             // 
+            // openSCFGFolderToolStripMenuItem
+            // 
+            this.openSCFGFolderToolStripMenuItem.Name = "openSCFGFolderToolStripMenuItem";
+            this.openSCFGFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openSCFGFolderToolStripMenuItem.Text = "Open SCFG Folder";
+            this.openSCFGFolderToolStripMenuItem.Click += new System.EventHandler(this.openSCFGFolderToolStripMenuItem_Click);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -555,13 +562,6 @@
             this.openWorkingDirectoryToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openWorkingDirectoryToolStripMenuItem.Text = "Open Working Directory";
             this.openWorkingDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openWorkingDirectoryToolStripMenuItem_Click);
-            // 
-            // openSCFGFolderToolStripMenuItem
-            // 
-            this.openSCFGFolderToolStripMenuItem.Name = "openSCFGFolderToolStripMenuItem";
-            this.openSCFGFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
-            this.openSCFGFolderToolStripMenuItem.Text = "Open SCFG Folder";
-            this.openSCFGFolderToolStripMenuItem.Click += new System.EventHandler(this.openSCFGFolderToolStripMenuItem_Click);
             // 
             // startupWindow
             // 

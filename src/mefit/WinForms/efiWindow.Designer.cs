@@ -1471,7 +1471,7 @@ namespace Mac_EFI_Toolkit
             this.configurationToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             this.configurationToolStripMenuItem.Size = new System.Drawing.Size(207, 28);
-            this.configurationToolStripMenuItem.Text = "Configuration";
+            this.configurationToolStripMenuItem.Text = "Config";
             this.configurationToolStripMenuItem.Click += new System.EventHandler(this.configurationToolStripMenuItem_Click);
             // 
             // fsysCRC32ToolStripMenuItem
