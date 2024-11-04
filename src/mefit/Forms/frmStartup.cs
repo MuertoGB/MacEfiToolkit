@@ -497,7 +497,7 @@ namespace Mac_EFI_Toolkit.Forms
                     g.FillRectangle(backgroundBrush, labelRectangle);
                 }
 
-                string labelText = "== Debug Mode - Do not Release Tit Face ==";
+                string labelText = "== Debug Mode - Do not Release ==";
                 using (Font font = new Font("Arial", 9, FontStyle.Bold))
                 using (Brush textBrush = new SolidBrush(Color.Black))
                 {

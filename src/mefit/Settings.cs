@@ -7,17 +7,17 @@
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
 namespace Mac_EFI_Toolkit
 {
-
     #region Enum
     public enum SettingsBoolType
     {
-        UseAccentColor,
         DisableVersionCheck,
+        UseAccentColor,
         DisableFlashingUI,
         DisableMessageSounds,
         DisableTips,
@@ -36,12 +36,21 @@ namespace Mac_EFI_Toolkit
     class Settings
     {
         #region Private Members
-        private const string SECT_STARTUP = "Startup";
+        private const string SEC_STARTUP = "Startup";
         private const string KEY_DISABLE_VERSION_CHECK = "DisableVersionCheck";
 
-        private const string SECT_APPLICATION = "Application";
+        private const string SEC_APPLICATION = "Application";
+        private const string KEY_USE_ACCENT_COLOR = "UseAccentColor";
+        private const string KEY_DISABLE_FLASHING_UI = "DisableFlashingUI";
+        private const string KEY_DISABLE_MESSAGE_SOUNDS = "DisableMessageSounds";
+        private const string KEY_DISABLE_TIPS = "DisableTips";
+        private const string KEY_DISABLE_CONF_DIAG = "DisableConfDiag";
+        private const string KEY_STARTUP_INIT_DIR = "StartupInitialPath";
+        private const string KEY_EFI_INIT_DIR = "EfiInitialPath";
+        private const string KEY_SOC_INIT_DIR = "SocInitialPath";
 
-        private const string SECT_FIRMWARE = "Firmware";
+        private const string SEC_FIRMWARE = "Firmware";
+        private const string KEY_ACCEPTED_TERMS = "AcceptedEditingTerms";
         #endregion
 
         #region Initialize
@@ -51,53 +60,9 @@ namespace Mac_EFI_Toolkit
                 new IniFile(METPath.SETTINGS_FILE);
 
             WriteSections(ini);
-
             WriteStartupKeys(ini);
-
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "DisableFlashingUI"))
-            {
-                ini.Write("Application", "DisableFlashingUI", "False");
-            }
-
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "DisableMessageSounds"))
-            {
-                ini.Write("Application", "DisableMessageSounds", "False");
-            }
-
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "DisableTips"))
-            {
-                ini.Write("Application", "DisableTips", "False");
-            }
-
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "DisableConfDiag"))
-            {
-                ini.Write("Application", "DisableConfDiag", "False");
-            }
-
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "StartupInitialPath"))
-            {
-                ini.Write("Application", "StartupInitialPath", METPath.WORKING_DIR);
-            }
-
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "EfiInitialPath"))
-            {
-                ini.Write("Application", "EfiInitialPath", METPath.WORKING_DIR);
-            }
-
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "SocInitialPath"))
-            {
-                ini.Write("Application", "SocInitialPath", METPath.WORKING_DIR);
-            }
-
-            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "UseAccentColor"))
-            {
-                ini.Write("Application", "UseAccentColor", "False");
-            }
-
-            if (!ini.SectionExists("Firmware") || !ini.KeyExists("Firmware", "AcceptedEditingTerms"))
-            {
-                ini.Write("Firmware", "AcceptedEditingTerms", "False");
-            }
+            WriteApplicationKeys(ini);
+            WriteFirmwareKeys(ini);
         }
 
         #endregion
@@ -105,22 +70,58 @@ namespace Mac_EFI_Toolkit
         #region Write Sections
         private static void WriteSections(IniFile ini)
         {
-            if (!ini.SectionExists(SECT_STARTUP))
-                ini.WriteSection(SECT_STARTUP);
+            if (!ini.SectionExists(SEC_STARTUP))
+                ini.WriteSection(SEC_STARTUP);
 
-            if (!ini.SectionExists(SECT_APPLICATION))
-                ini.WriteSection(SECT_APPLICATION);
+            if (!ini.SectionExists(SEC_APPLICATION))
+                ini.WriteSection(SEC_APPLICATION);
 
-            if (!ini.SectionExists(SECT_FIRMWARE))
-                ini.WriteSection(SECT_FIRMWARE);
+            if (!ini.SectionExists(SEC_FIRMWARE))
+                ini.WriteSection(SEC_FIRMWARE);
         }
         #endregion
 
         #region Write Keys
         private static void WriteStartupKeys(IniFile ini)
         {
-            if (!ini.KeyExists(SECT_STARTUP, KEY_DISABLE_VERSION_CHECK))
-                ini.Write(SECT_STARTUP, KEY_DISABLE_VERSION_CHECK, "False");
+            if (!ini.KeyExists(SEC_STARTUP, KEY_DISABLE_VERSION_CHECK))
+                ini.Write(SEC_STARTUP, KEY_DISABLE_VERSION_CHECK, "False");
+        }
+
+        private static void WriteApplicationKeys(IniFile ini)
+        {
+            string defaultPath = METPath.WORKING_DIR;
+
+            // Define default values for application settings.
+            var applicationDefaults = new Dictionary<string, string>
+            {
+                { KEY_USE_ACCENT_COLOR, "False" },
+                { KEY_DISABLE_FLASHING_UI, "False" },
+                { KEY_DISABLE_MESSAGE_SOUNDS, "False" },
+                { KEY_DISABLE_TIPS, "False" },
+                { KEY_DISABLE_CONF_DIAG, "False" },
+                { KEY_STARTUP_INIT_DIR, defaultPath },
+                { KEY_EFI_INIT_DIR, defaultPath },
+                { KEY_SOC_INIT_DIR, defaultPath }
+            };
+
+            // Apply application defaults.
+            EnsureKeysWithDefaults(ini, SEC_APPLICATION, applicationDefaults);
+        }
+
+        private static void EnsureKeysWithDefaults(IniFile ini, string section, Dictionary<string, string> defaults)
+        {
+            foreach (var entry in defaults)
+            {
+                if (!ini.KeyExists(section, entry.Key))
+                    ini.Write(section, entry.Key, entry.Value);
+            }
+        }
+
+        private static void WriteFirmwareKeys(IniFile ini)
+        {
+            if (!ini.SectionExists(SEC_FIRMWARE) || !ini.KeyExists(SEC_FIRMWARE, KEY_ACCEPTED_TERMS))
+                ini.Write(SEC_FIRMWARE, KEY_ACCEPTED_TERMS, "False");
         }
         #endregion
 
@@ -135,25 +136,25 @@ namespace Mac_EFI_Toolkit
             switch (settingType)
             {
                 case SettingsBoolType.DisableVersionCheck:
-                    section = "Startup"; key = "DisableVersionCheck";
+                    section = SEC_STARTUP; key = KEY_DISABLE_VERSION_CHECK;
                     break;
                 case SettingsBoolType.DisableFlashingUI:
-                    section = "Application"; key = "DisableFlashingUI";
+                    section = SEC_APPLICATION; key = KEY_DISABLE_FLASHING_UI;
                     break;
                 case SettingsBoolType.DisableMessageSounds:
-                    section = "Application"; key = "DisableMessageSounds";
+                    section = SEC_APPLICATION; key = KEY_DISABLE_MESSAGE_SOUNDS;
                     break;
                 case SettingsBoolType.DisableTips:
-                    section = "Application"; key = "DisableTips";
+                    section = SEC_APPLICATION; key = KEY_DISABLE_TIPS;
                     break;
                 case SettingsBoolType.DisableConfDiag:
-                    section = "Application"; key = "DisableConfDiag";
+                    section = SEC_APPLICATION; key = KEY_DISABLE_CONF_DIAG;
                     break;
                 case SettingsBoolType.UseAccentColor:
-                    section = "Application"; key = "UseAccentColor";
+                    section = SEC_APPLICATION; key = KEY_USE_ACCENT_COLOR;
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
-                    section = "Firmware"; key = "AcceptedEditingTerms";
+                    section = SEC_FIRMWARE; key = KEY_ACCEPTED_TERMS;
                     break;
                 default:
                     return false;
@@ -208,13 +209,13 @@ namespace Mac_EFI_Toolkit
             switch (settingType)
             {
                 case SettingsStringType.StartupInitialDirectory:
-                    section = "Application"; key = "StartupInitialPath";
+                    section = SEC_APPLICATION; key = KEY_STARTUP_INIT_DIR;
                     break;
                 case SettingsStringType.EfiInitialDirectory:
-                    section = "Application"; key = "EfiInitialPath";
+                    section = SEC_APPLICATION; key = KEY_EFI_INIT_DIR;
                     break;
                 case SettingsStringType.SocInitialDirectory:
-                    section = "Application"; key = "SocInitialPath";
+                    section = SEC_APPLICATION; key = KEY_SOC_INIT_DIR;
                     break;
                 default:
                     return string.Empty;
@@ -273,25 +274,25 @@ namespace Mac_EFI_Toolkit
             switch (settingType)
             {
                 case SettingsBoolType.DisableVersionCheck:
-                    section = "Startup"; key = "DisableVersionCheck";
+                    section = SEC_STARTUP; key = KEY_DISABLE_VERSION_CHECK;
                     break;
                 case SettingsBoolType.DisableFlashingUI:
-                    section = "Application"; key = "DisableFlashingUI";
+                    section = SEC_APPLICATION; key = KEY_DISABLE_FLASHING_UI;
                     break;
                 case SettingsBoolType.DisableMessageSounds:
-                    section = "Application"; key = "DisableMessageSounds";
+                    section = SEC_APPLICATION; key = KEY_DISABLE_MESSAGE_SOUNDS;
                     break;
                 case SettingsBoolType.DisableTips:
-                    section = "Application"; key = "DisableTips";
+                    section = SEC_APPLICATION; key = KEY_DISABLE_TIPS;
                     break;
                 case SettingsBoolType.DisableConfDiag:
-                    section = "Application"; key = "DisableConfDiag";
+                    section = SEC_APPLICATION; key = KEY_DISABLE_CONF_DIAG;
                     break;
                 case SettingsBoolType.UseAccentColor:
-                    section = "Application"; key = "UseAccentColor";
+                    section = SEC_APPLICATION; key = KEY_USE_ACCENT_COLOR;
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
-                    section = "Firmware"; key = "AcceptedEditingTerms";
+                    section = SEC_FIRMWARE; key = KEY_ACCEPTED_TERMS;
                     break;
                 default:
                     return;
@@ -329,13 +330,13 @@ namespace Mac_EFI_Toolkit
             switch (settingType)
             {
                 case SettingsStringType.StartupInitialDirectory:
-                    section = "Application"; key = "StartupInitialPath";
+                    section = SEC_APPLICATION; key = KEY_STARTUP_INIT_DIR;
                     break;
                 case SettingsStringType.EfiInitialDirectory:
-                    section = "Application"; key = "EfiInitialPath";
+                    section = SEC_APPLICATION; key = KEY_EFI_INIT_DIR;
                     break;
                 case SettingsStringType.SocInitialDirectory:
-                    section = "Application"; key = "SocInitialPath";
+                    section = SEC_APPLICATION; key = KEY_SOC_INIT_DIR;
                     break;
                 default:
                     return;

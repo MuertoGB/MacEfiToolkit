@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// AppleEFI.cs - Handles parsing of firmware data
+// EFIROM.cs - Handles parsing of firmware data
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
