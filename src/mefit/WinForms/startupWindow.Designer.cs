@@ -331,6 +331,7 @@
             this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDrop.Size = new System.Drawing.Size(433, 195);
             this.tlpDrop.TabIndex = 1;
+            this.tlpDrop.Paint += new System.Windows.Forms.PaintEventHandler(this.tlpDrop_Paint);
             // 
             // lblDrag
             // 

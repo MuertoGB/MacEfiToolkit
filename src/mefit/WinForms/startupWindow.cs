@@ -7,8 +7,8 @@
 
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.T2;
-using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -67,6 +67,8 @@ namespace Mac_EFI_Toolkit.WinForms
             DragLeave += startupWindow_DragLeave;
             Deactivate += startupWindow_Deactivate;
             Activated += startupWindow_Activated;
+
+            tlpDrop.Paint += tlpDrop_Paint;
         }
         #endregion
 
@@ -467,6 +469,50 @@ namespace Mac_EFI_Toolkit.WinForms
 
             lblWindowTitle.Text =
                 $"{APPSTRINGS.APPNAME} ({_childWindowCount})";
+        }
+        #endregion
+
+        #region Debug Warn
+        private void tlpDrop_Paint(object sender, PaintEventArgs e)
+        {
+            // This is to stop some stupid dumbass releasing debug builds.
+            // No idea who that could be.
+            // Certinaly wasn't me.
+            // In would never do such a thing.
+
+            if (Program.GetIsDebugMode())
+            {
+                var g = e.Graphics;
+
+                TableLayoutPanel tlp = sender as TableLayoutPanel;
+                if (tlp == null) return;
+
+                int labelHeight = 20;
+                Rectangle labelRectangle = new Rectangle(
+                    0,
+                    tlp.Height - labelHeight,
+                    tlp.Width,
+                    labelHeight
+                );
+
+                using (Brush backgroundBrush = new SolidBrush(Color.Tomato))
+                {
+                    g.FillRectangle(backgroundBrush, labelRectangle);
+                }
+
+                string labelText = "== Debug Mode - Do not Release Tit Face ==";
+                using (Font font = new Font("Arial", 9, FontStyle.Bold))
+                using (Brush textBrush = new SolidBrush(Color.Black))
+                {
+                    SizeF textSize = g.MeasureString(labelText, font);
+                    PointF textPosition = new PointF(
+                        (labelRectangle.Width - textSize.Width) / 2,
+                        labelRectangle.Top + (labelRectangle.Height - textSize.Height) / 2
+                    );
+
+                    g.DrawString(labelText, font, textBrush, textPosition);
+                }
+            }
         }
         #endregion
     }
