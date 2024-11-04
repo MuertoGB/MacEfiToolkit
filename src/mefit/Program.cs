@@ -8,7 +8,7 @@
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.WinForms;
+using Mac_EFI_Toolkit.Forms;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -70,7 +70,7 @@ namespace Mac_EFI_Toolkit
     {
         #region Internal Members
         internal static string draggedFilePath = string.Empty;
-        internal static startupWindow MAIN_WINDOW;
+        internal static frmStartup MAIN_WINDOW;
 
         internal const string GLYPH_EXIT_CROSS = "\uE947";
         internal const string GLYPH_FILE_EXPLORER = "\uED25";
@@ -143,7 +143,7 @@ namespace Mac_EFI_Toolkit
             //Process.Start("unhandledexception.exe");
 
             // Create the main window instance
-            MAIN_WINDOW = new startupWindow();
+            MAIN_WINDOW = new frmStartup();
 
             // Start the application message loop
             Application.Run(MAIN_WINDOW);

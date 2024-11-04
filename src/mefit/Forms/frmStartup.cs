@@ -1,8 +1,8 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WinForms
-// startupWindow.cs
+// Windows Forms
+// frmStartup.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.EFI;
@@ -15,9 +15,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class startupWindow : METForm
+    public partial class frmStartup : METForm
     {
         #region Enums
         private enum FormTag
@@ -37,7 +37,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Constructor
-        public startupWindow()
+        public frmStartup()
         {
             InitializeComponent();
 
@@ -232,7 +232,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form child = new settingsWindow())
+            using (Form child = new frmSettings())
             {
                 child.Tag = FormTag.Other;
                 child.FormClosed += ChildWindowClosed;
@@ -244,7 +244,7 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form child = new aboutWindow())
+            using (Form child = new frmAbout())
             {
                 child.Tag = FormTag.Other;
                 child.FormClosed += ChildWindowClosed;
@@ -428,9 +428,9 @@ namespace Mac_EFI_Toolkit.WinForms
         private Form GetChildFormForImage(byte[] sourceBytes)
         {
             if (EFIROM.IsValidImage(sourceBytes))
-                return new efiWindow();
+                return new frmEfiRom();
             else if (T2ROM.IsValidImage(sourceBytes))
-                return new t2Window();
+                return new frmSocRom();
 
             return null;
         }

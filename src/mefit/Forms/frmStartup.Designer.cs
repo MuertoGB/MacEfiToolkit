@@ -1,6 +1,6 @@
-﻿namespace Mac_EFI_Toolkit.WinForms
+﻿namespace Mac_EFI_Toolkit.Forms
 {
-    partial class startupWindow
+    partial class frmStartup
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(startupWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmStartup));
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.lblAppVersion = new System.Windows.Forms.Label();
             this.lblWindowTitle = new System.Windows.Forms.Label();

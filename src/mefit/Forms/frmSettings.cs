@@ -1,8 +1,8 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WinForms
-// settingsWindow.cs
+// Windows Forms
+// frmSettings.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.UI;
@@ -10,9 +10,9 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class settingsWindow : METForm
+    public partial class frmSettings : METForm
     {
         #region Private Members
         private static string _strStartupInitialPath = string.Empty;
@@ -23,7 +23,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Contructor
-        public settingsWindow()
+        public frmSettings()
         {
             InitializeComponent();
 

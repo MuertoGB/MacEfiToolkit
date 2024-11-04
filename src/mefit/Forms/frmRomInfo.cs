@@ -1,24 +1,24 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WinForms
-// infoWindow.cs
+// Windows Forms
+// frmRomInfo.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.EFI;
-using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class infoWindow : METForm
+    public partial class frmRominfo : METForm
     {
         #region Constructor
-        public infoWindow()
+        public frmRominfo()
         {
             InitializeComponent();
 

@@ -1,9 +1,9 @@
 ﻿
 using Mac_EFI_Toolkit.UI;
 
-namespace Mac_EFI_Toolkit
+namespace Mac_EFI_Toolkit.Forms
 {
-    partial class efiWindow
+    partial class frmEfiRom
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@ namespace Mac_EFI_Toolkit
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(efiWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEfiRom));
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();

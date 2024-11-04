@@ -1,23 +1,22 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WinForms
-// ssnWindow.cs
+// Windows Forms
+// frmSerialSelect.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.EFI;
-using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class ssnWindow : METForm
+    public partial class frmSerialSelect : METForm
     {
         #region Constructor
-        public ssnWindow()
+        public frmSerialSelect()
         {
             InitializeComponent();
 

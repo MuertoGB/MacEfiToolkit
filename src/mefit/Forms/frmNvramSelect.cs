@@ -1,21 +1,20 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WinForms
-// nvramWindow.cs
+// Windows Forms
+// frmNvramSelect.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.EFI;
-using Mac_EFI_Toolkit.UI;
 using System;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class nvramWindow : METForm
+    public partial class frmNvramSelect : METForm
     {
         #region Contructor
-        public nvramWindow()
+        public frmNvramSelect()
         {
             InitializeComponent();
 

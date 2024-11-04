@@ -1,20 +1,20 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WinForms
-// termsWindow.cs
+// Windows Forms
+// frmTerms.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class termsWindow : METForm
+    public partial class frmTerms : METForm
     {
         #region Constructor
-        public termsWindow()
+        public frmTerms()
         {
             InitializeComponent();
 

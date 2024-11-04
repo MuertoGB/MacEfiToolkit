@@ -1,8 +1,8 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WinForms
-// aboutWindow.cs
+// Forms
+// frmAbout.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.UI;
@@ -11,12 +11,12 @@ using System.Drawing;
 using System.Reflection.Emit;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class aboutWindow : METForm
+    public partial class frmAbout : METForm
     {
         #region Constructor
-        public aboutWindow()
+        public frmAbout()
         {
             InitializeComponent();
 

@@ -1,7 +1,8 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// t2Window.cs
+// Windows Forms
+// frmSocRom.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.T2;
@@ -14,9 +15,9 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class t2Window : METForm
+    public partial class frmSocRom : METForm
     {
         #region Private Members
         private Thread _tLoadFirmware = null;
@@ -24,7 +25,7 @@ namespace Mac_EFI_Toolkit.WinForms
         #endregion
 
         #region Constructor
-        public t2Window()
+        public frmSocRom()
         {
             InitializeComponent();
 

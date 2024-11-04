@@ -1,15 +1,14 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// WinForms
-// efiWindow.cs
+// Windows Forms
+// frmEfiRom.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Firmware.EFI;
-using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Tools;
-using Mac_EFI_Toolkit.WinForms;
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,9 +18,9 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit
+namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class efiWindow : METForm
+    public partial class frmEfiRom : METForm
     {
         #region Private Members
         private string _strInitialDirectory = METPath.WORKING_DIR;
@@ -30,7 +29,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Constructor
-        public efiWindow()
+        public frmEfiRom()
         {
             InitializeComponent();
 
@@ -244,7 +243,7 @@ namespace Mac_EFI_Toolkit
             {
                 BlurHelper.ApplyBlur(this);
 
-                using (Form frm = new termsWindow())
+                using (Form frm = new frmTerms())
                 {
                     frm.FormClosed += ChildWindowClosed;
                     DialogResult result = frm.ShowDialog();
@@ -697,7 +696,7 @@ namespace Mac_EFI_Toolkit
         {
             BlurHelper.ApplyBlur(this);
 
-            using (ssnWindow child = new ssnWindow())
+            using (frmSerialSelect child = new frmSerialSelect())
             {
                 child.FormClosed += ChildWindowClosed;
                 child.ShowDialog();
@@ -713,7 +712,7 @@ namespace Mac_EFI_Toolkit
         {
             BlurHelper.ApplyBlur(this);
 
-            using (nvramWindow child = new nvramWindow())
+            using (frmNvramSelect child = new frmNvramSelect())
             {
                 child.FormClosed += ChildWindowClosed;
                 child.ShowDialog();
@@ -800,7 +799,7 @@ namespace Mac_EFI_Toolkit
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form formWindow = new infoWindow())
+            using (Form formWindow = new frmRominfo())
             {
                 formWindow.FormClosed += ChildWindowClosed;
                 formWindow.ShowDialog();
@@ -1528,7 +1527,7 @@ namespace Mac_EFI_Toolkit
 
         private void ResetWindow()
         {
-            // Clear labels.
+            // Clear label data, and reset color properties.
             Label[] labels =
             {
                 lblFilename,
@@ -1558,16 +1557,16 @@ namespace Mac_EFI_Toolkit
                 label.ForeColor = Color.FromArgb(235, 235, 235);
             }
 
-            // Reset window text
+            // Reset window text.
             Text = APPSTRINGS.EFIROM;
 
             // Reset initial directory.
             SetInitialDirectory();
 
-            // Reset descriptor values.
+            // Reset Intel FD.
             IFD.ClearRegionData();
 
-            // Reset FWBase.
+            // Reset EFIROM.
             EFIROM.ResetFirmwareBaseData();
         }
         #endregion
@@ -2308,7 +2307,7 @@ namespace Mac_EFI_Toolkit
             // Allow user to accept editing terms.
             if (!allowOperation)
             {
-                using (Form frm = new termsWindow())
+                using (Form frm = new frmTerms())
                 {
                     frm.FormClosed += ChildWindowClosed;
                     DialogResult result = frm.ShowDialog();

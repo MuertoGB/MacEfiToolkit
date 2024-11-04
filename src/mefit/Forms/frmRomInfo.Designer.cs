@@ -1,7 +1,7 @@
 ﻿
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    partial class infoWindow
+    partial class frmRominfo
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(infoWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRominfo));
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.lblWindowTitle = new System.Windows.Forms.Label();

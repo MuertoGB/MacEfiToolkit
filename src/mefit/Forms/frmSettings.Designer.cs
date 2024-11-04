@@ -1,7 +1,7 @@
 ﻿
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    partial class settingsWindow
+    partial class frmSettings
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(settingsWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSettings));
             this.cmdDefaults = new System.Windows.Forms.Button();
             this.cmdApply = new System.Windows.Forms.Button();
             this.lblSettingsSaved = new System.Windows.Forms.Label();

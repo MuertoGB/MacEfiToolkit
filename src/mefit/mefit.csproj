@@ -151,23 +151,23 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Tools\SystemTools.cs" />
-    <Compile Include="WinForms\aboutWindow.cs">
+    <Compile Include="Forms\frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\aboutWindow.Designer.cs">
-      <DependentUpon>aboutWindow.cs</DependentUpon>
+    <Compile Include="Forms\frmAbout.Designer.cs">
+      <DependentUpon>frmAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\infoWindow.cs">
+    <Compile Include="Forms\frmRomInfo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\infoWindow.Designer.cs">
-      <DependentUpon>infoWindow.cs</DependentUpon>
+    <Compile Include="Forms\frmRomInfo.Designer.cs">
+      <DependentUpon>frmRomInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\efiWindow.cs">
+    <Compile Include="Forms\frmEfiRom.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\efiWindow.Designer.cs">
-      <DependentUpon>efiWindow.cs</DependentUpon>
+    <Compile Include="Forms\frmEfiRom.Designer.cs">
+      <DependentUpon>frmEfiRom.cs</DependentUpon>
     </Compile>
     <Compile Include="WIN32\NativeMethods.cs" />
     <Compile Include="Program.cs" />
@@ -182,54 +182,54 @@
     <Compile Include="Tools\MacTools.cs" />
     <Compile Include="Tools\FileTools.cs" />
     <Compile Include="Tools\NetworkTools.cs" />
-    <Compile Include="WinForms\nvramWindow.cs">
+    <Compile Include="Forms\frmNvramSelect.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\nvramWindow.Designer.cs">
-      <DependentUpon>nvramWindow.cs</DependentUpon>
+    <Compile Include="Forms\frmNvramSelect.Designer.cs">
+      <DependentUpon>frmNvramSelect.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\settingsWindow.cs">
+    <Compile Include="Forms\frmSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\settingsWindow.Designer.cs">
-      <DependentUpon>settingsWindow.cs</DependentUpon>
+    <Compile Include="Forms\frmSettings.Designer.cs">
+      <DependentUpon>frmSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\ssnWindow.cs">
+    <Compile Include="Forms\frmSerialSelect.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\ssnWindow.Designer.cs">
-      <DependentUpon>ssnWindow.cs</DependentUpon>
+    <Compile Include="Forms\frmSerialSelect.Designer.cs">
+      <DependentUpon>frmSerialSelect.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\startupWindow.cs">
+    <Compile Include="Forms\frmStartup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\startupWindow.Designer.cs">
-      <DependentUpon>startupWindow.cs</DependentUpon>
+    <Compile Include="Forms\frmStartup.Designer.cs">
+      <DependentUpon>frmStartup.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\t2Window.cs">
+    <Compile Include="Forms\frmSocRom.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\t2Window.Designer.cs">
-      <DependentUpon>t2Window.cs</DependentUpon>
+    <Compile Include="Forms\frmSocRom.Designer.cs">
+      <DependentUpon>frmSocRom.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\termsWindow.cs">
+    <Compile Include="Forms\termsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\termsWindow.Designer.cs">
+    <Compile Include="Forms\termsWindow.Designer.cs">
       <DependentUpon>termsWindow.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="UI\METPrompt\METPrompt.resx">
       <DependentUpon>METPrompt.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\aboutWindow.resx">
-      <DependentUpon>aboutWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmAbout.resx">
+      <DependentUpon>frmAbout.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\infoWindow.resx">
-      <DependentUpon>infoWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmRomInfo.resx">
+      <DependentUpon>frmRomInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\efiWindow.resx">
-      <DependentUpon>efiWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmEfiRom.resx">
+      <DependentUpon>frmEfiRom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -241,22 +241,22 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="WinForms\nvramWindow.resx">
-      <DependentUpon>nvramWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmNvramSelect.resx">
+      <DependentUpon>frmNvramSelect.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\settingsWindow.resx">
-      <DependentUpon>settingsWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmSettings.resx">
+      <DependentUpon>frmSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\ssnWindow.resx">
-      <DependentUpon>ssnWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmSerialSelect.resx">
+      <DependentUpon>frmSerialSelect.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\startupWindow.resx">
-      <DependentUpon>startupWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmStartup.resx">
+      <DependentUpon>frmStartup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\t2Window.resx">
-      <DependentUpon>t2Window.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmSocRom.resx">
+      <DependentUpon>frmSocRom.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\termsWindow.resx">
+    <EmbeddedResource Include="Forms\termsWindow.resx">
       <DependentUpon>termsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="..\.editorconfig">

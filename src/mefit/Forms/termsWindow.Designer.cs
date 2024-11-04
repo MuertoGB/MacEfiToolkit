@@ -1,7 +1,7 @@
 ﻿
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    partial class termsWindow
+    partial class frmTerms
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(termsWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmTerms));
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tbxTermsText = new System.Windows.Forms.TextBox();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();

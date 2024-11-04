@@ -1,7 +1,7 @@
 ﻿
-namespace Mac_EFI_Toolkit.WinForms
+namespace Mac_EFI_Toolkit.Forms
 {
-    partial class aboutWindow
+    partial class frmAbout
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(aboutWindow));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAbout));
             this.pnlMain = new System.Windows.Forms.Panel();
             this.lblInfo = new System.Windows.Forms.Label();
             this.tlpTopLabels = new System.Windows.Forms.TableLayoutPanel();
