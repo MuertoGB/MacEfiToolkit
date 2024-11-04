@@ -5,7 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -127,7 +127,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         {
             // Read in the flash descriptor.
             byte[] DescriptorBytes =
-                BinaryUtils.GetBytesBaseLength(
+                BinaryTools.GetBytesBaseLength(
                     sourceBytes,
                     (int)DESCRIPTOR_BASE,
                     (int)DESCRIPTOR_LENGTH);

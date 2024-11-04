@@ -62,7 +62,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_10;
-            cmdClose.Text = Chars.EXIT_CROSS;
+            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion
     }

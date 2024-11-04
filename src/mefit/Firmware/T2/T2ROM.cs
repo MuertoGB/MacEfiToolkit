@@ -4,15 +4,14 @@
 // T2ROM.cs - Handles parsing of T2 SOCROM data
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Utils;
-using Mac_EFI_Toolkit.Utils.Structs;
+using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.Tools.Structs;
 using System.Text;
 
 namespace Mac_EFI_Toolkit.Firmware.T2
 {
     internal class T2ROM
     {
-
         #region Internal Members
         internal static string LoadedBinaryPath = null;
         internal static byte[] LoadedBinaryBytes = null;
@@ -35,7 +34,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
         {
             // Parse file info
             FileInfoData =
-                FileUtils.GetBinaryFileInfo
+                FileTools.GetBinaryFileInfo
                 (fileName);
 
             // Parse iBoot version
@@ -46,7 +45,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
 
             // Fetch the Config Code
             ConfigCode = ScfgSectionData.HWC != null
-                ? MacUtils.GetDeviceConfigCodeLocalLocal(ScfgSectionData.HWC)
+                ? MacTools.GetDeviceConfigCodeLocalLocal(ScfgSectionData.HWC)
                 : null;
         }
 
@@ -64,7 +63,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
         internal static bool IsValidImage(byte[] source)
         {
             int ibootSig =
-                BinaryUtils.GetBaseAddress(
+                BinaryTools.GetBaseAddress(
                     source,
                     ROMSigs.IBOOT_VER_SIG,
                     0);
@@ -77,7 +76,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
         internal static string GetIbootVersion(byte[] source)
         {
             int ibootSig =
-                BinaryUtils.GetBaseAddress(
+                BinaryTools.GetBaseAddress(
                     source,
                     ROMSigs.IBOOT_VER_SIG, 0);
 
@@ -85,7 +84,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             {
                 // Get byte containing data length
                 byte[] lByte =
-                    BinaryUtils.GetBytesBaseLength(
+                    BinaryTools.GetBytesBaseLength(
                     source,
                     ibootSig + ROMSigs.IBOOT_VER_SIG.Length + 1,
                     1);
@@ -95,7 +94,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
 
                 // Get iboot version data bytes
                 byte[] stringData =
-                    BinaryUtils.GetBytesBaseLength(
+                    BinaryTools.GetBytesBaseLength(
                         source,
                         ibootSig + 0x6,
                         dataSize);
@@ -111,7 +110,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
         internal static SCfgData GetSCfgData(byte[] source)
         {
             int scfgBase =
-                BinaryUtils.GetBaseAddress(
+                BinaryTools.GetBaseAddress(
                     source,
                     ROMSigs.SCFG_HEADER_SIG);
 
@@ -119,7 +118,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
                 return DefaultScfgData();
 
             byte dataSize =
-                BinaryUtils.GetBytesBaseLength(
+                BinaryTools.GetBytesBaseLength(
                     source,
                     scfgBase + ROMSigs.SCFG_HEADER_SIG.Length, 1)[0];
 
@@ -127,7 +126,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
                 return DefaultScfgData();
 
             byte[] scfgBytes =
-                BinaryUtils.GetBytesBaseLength(
+                BinaryTools.GetBytesBaseLength(
                     source,
                     scfgBase,
                     dataSize);
@@ -136,7 +135,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
                 return DefaultScfgData();
 
             string crc =
-                $"{FileUtils.GetCrc32Digest(scfgBytes):X8}";
+                $"{FileTools.GetCrc32Digest(scfgBytes):X8}";
 
             string serial =
                 GetStringFromSig(
@@ -176,7 +175,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             hwc = null;
 
             int baseAddress =
-                BinaryUtils.GetBaseAddress(
+                BinaryTools.GetBaseAddress(
                     scfgBytes,
                     sig);
 
@@ -184,7 +183,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
                 return null;
 
             byte[] bytes =
-                BinaryUtils.GetBytesBaseLength(
+                BinaryTools.GetBytesBaseLength(
                     scfgBytes,
                     baseAddress + sig.Length,
                     expectedLength);
@@ -206,7 +205,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
         private static string GetStringFromSigWithLimit(byte[] scfgBytes, byte[] sig, byte[] limitChars)
         {
             int baseAddress =
-                BinaryUtils.GetBaseAddress(
+                BinaryTools.GetBaseAddress(
                     scfgBytes,
                     sig);
 
@@ -216,7 +215,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             baseAddress += sig.Length;
 
             int limit =
-                BinaryUtils.GetBaseAddress
+                BinaryTools.GetBaseAddress
                 (scfgBytes,
                 limitChars,
                 baseAddress);
@@ -225,7 +224,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
                 return null;
 
             byte[] bytes =
-                BinaryUtils.GetBytesBaseLimit(
+                BinaryTools.GetBytesBaseLimit(
                     scfgBytes,
                     baseAddress,
                     limit);
@@ -249,6 +248,5 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             };
         }
         #endregion
-
     }
 }

@@ -4,7 +4,7 @@
 // Binary.cs
 // Released under the GNU GLP v3.0
 
-namespace Mac_EFI_Toolkit.Utils.Structs
+namespace Mac_EFI_Toolkit.Tools.Structs
 {
     internal struct Binary
     {

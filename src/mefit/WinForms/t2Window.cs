@@ -5,8 +5,8 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.T2;
+using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -147,7 +147,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     return;
 
                 // Save the Scfg stores bytes to disk.
-                if (FileUtils.WriteAllBytesEx(
+                if (FileTools.WriteAllBytesEx(
                     dialog.FileName,
                     T2ROM.ScfgSectionData.ScfgBytes))
                 {
@@ -176,7 +176,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 ResetWindow();
 
             // Check filesize
-            if (!FileUtils.IsValidMinMaxSize(filePath, this))
+            if (!FileTools.IsValidMinMaxSize(filePath, this))
             {
                 // reset all data
                 return;
@@ -331,11 +331,11 @@ namespace Mac_EFI_Toolkit.WinForms
                 T2ROM.FileInfoData.Length;
 
             bool isValidSize =
-                FileUtils.GetIsValidBinSize(
+                FileTools.GetIsValidBinSize(
                     fsDecimal);
 
             lblFilesize.Text =
-                $"{FileUtils.FormatFileSize(fsDecimal)} " +
+                $"{FileTools.FormatFileSize(fsDecimal)} " +
                 $"{EFISTRINGS.BYTES} ({fsDecimal:X}h)";
 
             if (!isValidSize)
@@ -344,7 +344,7 @@ namespace Mac_EFI_Toolkit.WinForms
                     AppColours.ERROR;
 
                 lblFilesize.Text +=
-                    $" ({FileUtils.GetSizeDifference(fsDecimal)})";
+                    $" ({FileTools.GetSizeDifference(fsDecimal)})";
             }
         }
 
@@ -416,7 +416,7 @@ namespace Mac_EFI_Toolkit.WinForms
         internal async void GetConfigCodeAsync(string hwc)
         {
             string configcode =
-                await MacUtils.GetDeviceConfigCodeSupportRemote(hwc);
+                await MacTools.GetDeviceConfigCodeSupportRemote(hwc);
 
             if (!string.IsNullOrEmpty(configcode))
             {
@@ -482,16 +482,8 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void SetButtonProperties()
         {
-            var buttons = new[]
-            {
-                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Chars.EXIT_CROSS},
-            };
-
-            foreach (var buttonData in buttons)
-            {
-                buttonData.Button.Font = buttonData.Font;
-                buttonData.Button.Text = buttonData.Text;
-            }
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion
     }

@@ -101,7 +101,7 @@
     <Compile Include="UI\Controls\METTableLayout.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Utils\Structs\Binary.cs" />
+    <Compile Include="Tools\Structs\Binary.cs" />
     <Compile Include="Firmware\EFI\Structs\EFILock.cs" />
     <Compile Include="Firmware\EFI\Structs\Sections.cs" />
     <Compile Include="Firmware\EFI\Structs\Stores.cs" />
@@ -123,7 +123,6 @@
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Common\Logger.cs" />
     <Compile Include="AppVersion.cs" />
-    <Compile Include="Chars.cs" />
     <Compile Include="Language\English.cs" />
     <Compile Include="Firmware\T2\Structs\ScfgData.cs" />
     <Compile Include="Firmware\T2\T2ROM.cs" />
@@ -150,7 +149,7 @@
     <Compile Include="UI\Controls\METSwitch.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Utils\OSUtils.cs" />
+    <Compile Include="Tools\SystemTools.cs" />
     <Compile Include="WinForms\aboutWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,10 +177,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\Renderers\METMenuRenderer.cs" />
-    <Compile Include="Utils\BinaryUtils.cs" />
-    <Compile Include="Utils\MacUtils.cs" />
-    <Compile Include="Utils\FileUtils.cs" />
-    <Compile Include="Utils\NetUtils.cs" />
+    <Compile Include="Tools\BinaryTools.cs" />
+    <Compile Include="Tools\MacTools.cs" />
+    <Compile Include="Tools\FileTools.cs" />
+    <Compile Include="Tools\NetworkTools.cs" />
     <Compile Include="WinForms\nvramWindow.cs">
       <SubType>Form</SubType>
     </Compile>

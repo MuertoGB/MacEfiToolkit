@@ -1,14 +1,15 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// OSUtils.cs
+// OSTools.cs
 // Released under the GNU GLP v3.0
 
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Principal;
 
-namespace Mac_EFI_Toolkit.Utils
+namespace Mac_EFI_Toolkit.Tools
 {
 
     #region Enum
@@ -20,9 +21,8 @@ namespace Mac_EFI_Toolkit.Utils
     }
     #endregion
 
-    internal class OSUtils
+    internal class SystemTools
     {
-
         internal static string GetName =>
             new Microsoft.VisualBasic.Devices.ComputerInfo().OSFullName;
 
@@ -37,5 +37,18 @@ namespace Mac_EFI_Toolkit.Utils
                     Environment.SystemDirectory,
                     "kernel32.dll"));
 
+        internal static bool GetIsElevated()
+        {
+            return new WindowsPrincipal(
+                WindowsIdentity.GetCurrent()).IsInRole(
+                    WindowsBuiltInRole.Administrator);
+        }
+
+        internal static string GetSystemBitnessMode()
+        {
+            return IntPtr.Size == 8
+                ? "x64"
+                : "x86";
+        }
     }
 }

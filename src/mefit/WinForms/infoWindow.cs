@@ -7,7 +7,7 @@
 
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Tools;
 using System;
 using System.IO;
 using System.Text;
@@ -50,7 +50,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 ?? "N/A";
             lblModel.Text = EFIROM.AppleRomInfoSectionData.Model != null
                 ? $"{EFIROM.AppleRomInfoSectionData.Model} " +
-                $"({MacUtils.ConvertEfiModelCode(EFIROM.AppleRomInfoSectionData.Model)})"
+                $"({MacTools.ConvertEfiModelCode(EFIROM.AppleRomInfoSectionData.Model)})"
                 : "N/A";
             lblEfiVersion.Text =
                 EFIROM.AppleRomInfoSectionData.EfiVersion
@@ -160,7 +160,7 @@ namespace Mac_EFI_Toolkit.WinForms
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Chars.EXIT_CROSS;
+            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion
     }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// English.cs
+// Released under the GNU GLP v3.0
 
 namespace Mac_EFI_Toolkit
 {
@@ -72,6 +76,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string PATCH_END =
             "Patching ended:";
+
+        internal const string CREATING_BUFFERS =
+            "Creating buffers";
 
         internal const string FILE_EXPORT_CANCELLED =
             "The file export was cancelled";
@@ -192,6 +199,66 @@ namespace Mac_EFI_Toolkit
 
         internal const string NVRAM_INIT_HDR_SUCCESS =
             "Initializing header successful";
+
+        internal const string CRC_MASK =
+            "Mask fsys checksum";
+
+        internal const string CRC_PATCH =
+            "Patching checksum";
+
+        internal const string CRC_WRITE_TO_FW =
+            "Write patched store to firmware";
+
+        internal const string CRC_WRITE_FAIL =
+            "Write unsuccessful";
+
+        internal const string CRC_WRITE_SUCCESS =
+            "Write successful";
+
+        internal const string CRC_BUFFER_EMPTY =
+            "Buffer was empty";
+
+        internal const string NVR_HAS_BODY_ERASING =
+            "has body data - erasing";
+
+        internal const string NVR_ERASE_BUFFER_EMPTY =
+            "erase failed - the returned buffer was empty";
+
+        internal const string NVR_IS_EMPTY =
+            "is empty - skipping";
+
+        internal const string NVR_VERIFY_FAIL =
+            "Verification failed for";
+
+        internal const string NVR_VERIFY_SUCCESS =
+            "Verification succeeded for";
+
+        internal const string AT =
+            "at";
+
+        internal const string LOCK_INVALIDATE =
+            "Invalidating EFI lock";
+
+        internal const string LOCK_PRIMARY_MAC =
+            "Patching primary message authentication code";
+
+        internal const string LOCK_WRITE =
+            "Writing patched store to firmware";
+
+        internal const string LOCK_BACKUP_MAC =
+            "Patching backup message authentication code";
+
+        internal const string LOCK_LOAD_SVS =
+            "Loading NVRAM SVS stores from patched firmware";
+
+        internal const string LOCK_PRIM_VERIF_FAIL =
+            "Primary SVS store verification failed";
+
+        internal const string LOCK_BACK_VERIF_FAIL =
+            "Backup SVS store verification failed";
+
+        internal const string LOCK_VERIF_SUCCESS =
+            "NVRAM SVS verification succeeded";
         #endregion
     }
 
@@ -293,6 +360,9 @@ namespace Mac_EFI_Toolkit
         internal const string CRC_FIXED =
             "CRC_FIXED";
 
+        internal const string PRIMARY =
+            "Primary";
+
         internal const string BACKUP =
             "Backup";
 
@@ -317,17 +387,35 @@ namespace Mac_EFI_Toolkit
         internal const string BYTES =
             "bytes";
 
+        internal const string BASE =
+            "Base:";
+
+        internal const string LIMIT =
+            "Limit:";
+
+        internal const string SIZE =
+            "Size:";
+
+        internal const string PRIMARY_REGION =
+            "PRIMARYREGION";
+
+        internal const string BACKUP_REGION =
+            "BACKUPREGION";
+
+        internal const string CRC_VALID =
+            "CRC VALID";
+
+        internal const string CRC_INVALID =
+            "CRC INVALID";
+
+        internal const string EMPTY =
+            "Empty";
+
         internal const string APFS_DRIVER_FOUND =
             "YES (DRIVER FOUND)";
 
         internal const string APFS_DRIVER_NOT_FOUND =
             "NO (DRIVER NOT FOUND)";
-
-        internal const string PRIMARY_STORE_BUFFER_MISMATCH =
-            "Patched primary store bytes do not match the buffer";
-
-        internal const string BACKUP_STORE_BUFFER_MISMATCH =
-            "Patched backup store bytes do not match the buffer";
 
         internal const string MENU_TIP_OPEN =
             "Open a Mac EFI/BIOS";
@@ -338,8 +426,8 @@ namespace Mac_EFI_Toolkit
         internal const string MENU_TIP_COPY =
             "Open the Copy Menu";
 
-        internal const string MENU_TIP_RELOAD =
-            "Reload File from Disk";
+        internal const string MENU_TIP_FOLDERS =
+            "Open the Folders Menu";
 
         internal const string MENU_TIP_EXPORT =
             "Open the Export Menu";
@@ -355,6 +443,12 @@ namespace Mac_EFI_Toolkit
 
         internal const string COPIED_TO_CB_LC =
             "copied to clipboard.";
+
+        internal const string FIRMWARE_MOD_FAILED_LOG =
+            "Firmware modification failed. Would you like to view the application log?";
+
+        internal const string FIRMWARE_MOD_SUCCESS_SAVE =
+            "Firmware modified successfully. Would you like to save the output?";
         #endregion
     }
 

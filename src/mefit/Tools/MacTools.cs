@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// MacUtils.cs
+// MacTools.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.EFI;
@@ -10,19 +10,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace Mac_EFI_Toolkit.Utils
+namespace Mac_EFI_Toolkit.Tools
 {
-    class MacUtils
+    class MacTools
     {
-
         #region Configuation Code
         /// <summary>
         /// Retrieves the configuration model string for a given HWC identifier from the internal db. 
@@ -74,7 +71,7 @@ namespace Mac_EFI_Toolkit.Utils
                 // Retrieve data from Apple's server
                 string url = $"http://support-sp.apple.com/sp/product?cc={hwc}&lang=en_GB";
 
-                if (!NetUtils.IsWebsiteAvailable(url))
+                if (!NetworkTools.IsWebsiteAvailable(url))
                     return null;
 
                 string xml = await new WebClient().DownloadStringTaskAsync(url);
@@ -133,7 +130,7 @@ namespace Mac_EFI_Toolkit.Utils
                     0,
                     bytesTempFsys.Length);
 
-                return FileUtils.GetCrc32Digest(
+                return FileTools.GetCrc32Digest(
                     bytesTempFsys);
             }
 
@@ -368,6 +365,5 @@ namespace Mac_EFI_Toolkit.Utils
             "P", "Q", "R", "T", "V", "W", "X", "Y"
         };
         #endregion
-
     }
 }

@@ -7,7 +7,7 @@
 
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
             if (charLength == EFIROM.FsysStoreData.Serial.Length)
             {
-                if (MacUtils.IsValidAppleSerial(textBox.Text))
+                if (MacTools.IsValidAppleSerial(textBox.Text))
                 {
                     UpdateTextBoxColour(textBox, AppColours.COMPLETE);
                     cmdOkay.Enabled = true;

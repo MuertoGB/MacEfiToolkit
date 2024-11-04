@@ -7,7 +7,6 @@
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 

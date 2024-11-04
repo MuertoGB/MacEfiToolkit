@@ -1,4 +1,11 @@
-﻿using System.Windows.Forms;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// UI Components
+// METForm.cs
+// Released under the GNU GLP v3.0
+
+using System.Windows.Forms;
 
 public class METForm : Form
 {

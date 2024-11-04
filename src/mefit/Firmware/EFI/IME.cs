@@ -5,7 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Tools;
 using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Firmware.EFI
@@ -64,7 +64,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             switch (versionType)
             {
                 case VersionType.FlashImageTool:
-                    headerPos = BinaryUtils.GetBaseAddress(
+                    headerPos = BinaryTools.GetBaseAddress(
                         sourceBytes,
                         FPT_SIGNATURE,
                         (int)IFD.ME_REGION_BASE,
@@ -73,7 +73,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                     break;
 
                 case VersionType.ManagementEngine:
-                    headerPos = BinaryUtils.GetBaseAddress(
+                    headerPos = BinaryTools.GetBaseAddress(
                         sourceBytes,
                         MN2_SIGNATURE,
                         (int)IFD.ME_REGION_BASE,
@@ -87,7 +87,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 if (versionType == VersionType.ManagementEngine)
                     headerPos += 2;
 
-                byte[] headerBytes = BinaryUtils.GetBytesBaseLength(
+                byte[] headerBytes = BinaryTools.GetBytesBaseLength(
                     sourceBytes,
                     headerPos,
                     dataLength);

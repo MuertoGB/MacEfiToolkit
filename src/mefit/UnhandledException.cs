@@ -5,7 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -18,32 +18,6 @@ namespace Mac_EFI_Toolkit
 {
     internal class UnhandledException
     {
-
-        #region Functions
-        internal static bool GetIsDebugMode()
-        {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
-        }
-
-        internal static bool IsElevated()
-        {
-            return new WindowsPrincipal(
-                WindowsIdentity.GetCurrent()).IsInRole(
-                    WindowsBuiltInRole.Administrator);
-        }
-
-        internal static string GetBitnessMode()
-        {
-            return IntPtr.Size == 8
-                ? "x64"
-                : "x86";
-        }
-        #endregion
-
         internal static string GenerateReport(Exception unhandled)
         {
             StringBuilder builder =
@@ -67,15 +41,15 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"Version:  {Application.ProductVersion}.{METVersion.APP_BUILD}");
                 builder.AppendLine($"LZMA SDK: {METVersion.LZMA_SDK}");
                 builder.AppendLine($"Channel:  {METVersion.APP_CHANNEL}");
-                builder.AppendLine($"Mode:     {GetBitnessMode()}");
-                builder.AppendLine($"Debug:    {GetIsDebugMode()}");
-                builder.AppendLine($"Elevated: {IsElevated()}");
-                builder.AppendLine($"SHA256:   {FileUtils.GetSha256Digest(appBytes)}\r\n");
+                builder.AppendLine($"Mode:     {SystemTools.GetSystemBitnessMode()}");
+                builder.AppendLine($"Debug:    {Program.GetIsDebugMode()}");
+                builder.AppendLine($"Elevated: {SystemTools.GetIsElevated()}");
+                builder.AppendLine($"SHA256:   {FileTools.GetSha256Digest(appBytes)}\r\n");
 
                 builder.AppendLine("<== Operating System ==>\r\n");
-                builder.AppendLine($"Name:     {OSUtils.GetName}");
-                builder.AppendLine($"Bitness:  {OSUtils.GetBitness()}");
-                builder.AppendLine($"Kernel:   {OSUtils.GetKernelVersion.ProductVersion}\r\n");
+                builder.AppendLine($"Name:     {SystemTools.GetName}");
+                builder.AppendLine($"Bitness:  {SystemTools.GetBitness()}");
+                builder.AppendLine($"Kernel:   {SystemTools.GetKernelVersion.ProductVersion}\r\n");
 
                 builder.AppendLine("<== Fonts ==>\r\n");
                 builder.AppendLine($"Segoe UI Reg: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Regular)}");

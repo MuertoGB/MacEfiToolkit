@@ -1,21 +1,19 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// BinaryUtils.cs - A collection of functions to handle binary data.
+// BinaryTools.cs - A collection of functions to handle binary data.
 // This code uses the Knuth-Morris-Pratt algorithm for pattern matching and string searching,
 // developed by Donald Knuth, Vaughan Pratt, and James Morris.
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Firmware.EFI;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace Mac_EFI_Toolkit.Utils
+namespace Mac_EFI_Toolkit.Tools
 {
-    internal class BinaryUtils
+    internal class BinaryTools
     {
-
         #region Binary Find
         /// <summary>
         /// Finds the base of a byte pattern within a byte array.
@@ -300,6 +298,5 @@ namespace Mac_EFI_Toolkit.Utils
                 sourceBytes[i] = eraseByte;
         }
         #endregion
-
     }
 }

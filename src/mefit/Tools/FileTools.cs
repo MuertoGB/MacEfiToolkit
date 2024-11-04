@@ -1,14 +1,13 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// FileUtils.cs
+// FileTools.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.Utils.Structs;
+using Mac_EFI_Toolkit.Tools.Structs;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
@@ -22,9 +21,9 @@ enum Status
 }
 #endregion
 
-namespace Mac_EFI_Toolkit.Utils
+namespace Mac_EFI_Toolkit.Tools
 {
-    class FileUtils
+    class FileTools
     {
         /// <summary>
         /// Calculates the SHA256 hash of a byte array.
@@ -175,7 +174,7 @@ namespace Mac_EFI_Toolkit.Utils
                     File.ReadAllBytes(
                         path);
 
-                return BinaryUtils.ByteArraysMatch(
+                return BinaryTools.ByteArraysMatch(
                     sourceBytes,
                     fileBytes);
             }
@@ -276,7 +275,7 @@ namespace Mac_EFI_Toolkit.Utils
 
                 Length = (int)fileInfo.Length,
 
-                CRC32 = FileUtils.GetCrc32Digest(
+                CRC32 = FileTools.GetCrc32Digest(
                     fileBytes)
             };
         }
@@ -302,6 +301,5 @@ namespace Mac_EFI_Toolkit.Utils
 
             return true;
         }
-
     }
 }

@@ -1,18 +1,17 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// NetUtils.cs
+// NetworkTools.cs
 // Released under the GNU GLP v3.0
 
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
 
-namespace Mac_EFI_Toolkit.Utils
+namespace Mac_EFI_Toolkit.Tools
 {
-    class NetUtils
+    class NetworkTools
     {
-
         /// <summary>
         /// Checks if a website is available by making a HEAD request to its URL.
         /// </summary>
@@ -64,6 +63,5 @@ namespace Mac_EFI_Toolkit.Utils
                 return false;
             }
         }
-
     }
 }

@@ -6,8 +6,8 @@
 // MET uses embedded font resource "Segoe MDL2 Assets" which is copyright Microsoft Corp.
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.Utils;
 using Mac_EFI_Toolkit.WinForms;
 using System;
 using System.ComponentModel;
@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241103.0210";
+        internal const string APP_BUILD = "241104.0230";
         internal const string APP_CHANNEL = "DEV";
     }
 
@@ -71,6 +71,11 @@ namespace Mac_EFI_Toolkit
         #region Internal Members
         internal static string draggedFilePath = string.Empty;
         internal static startupWindow MAIN_WINDOW;
+
+        internal const string GLYPH_EXIT_CROSS = "\uE947";
+        internal const string GLYPH_FILE_EXPLORER = "\uED25";
+        internal const string GLYPH_DOWN_ARROW = "\uE74B";
+        internal const string NOWRAP_SPACE = "\u00A0";
 
         internal static Font FONT_MDL2_REG_9;
         internal static Font FONT_MDL2_REG_10;
@@ -194,7 +199,7 @@ namespace Mac_EFI_Toolkit
             {
                 result =
                     MessageBox.Show(
-                        $"{e.Message}\r\n\r\nDetails were saved to {logPath.Replace(" ", Chars.NB_SPACE)}" +
+                        $"{e.Message}\r\n\r\nDetails were saved to {logPath.Replace(" ", Program.NOWRAP_SPACE)}" +
                         $"'\r\n\r\nForce quit application?",
                         $"MET Exception Handler",
                         MessageBoxButtons.YesNo,
@@ -325,7 +330,7 @@ namespace Mac_EFI_Toolkit
         private static bool IsSupportedOS()
         {
             FileVersionInfo version =
-                OSUtils.GetKernelVersion;
+                SystemTools.GetKernelVersion;
 
             // Check for Windows 7 (6.1) or later (Windows 8, 8.1, 10, and 11)
             if (version.ProductMajorPart > 6 || (version.ProductMajorPart == 6 && version.ProductMinorPart >= 1))
@@ -363,6 +368,15 @@ namespace Mac_EFI_Toolkit
                 Logger.WriteError(nameof(TryLoadCustomFont), e.GetType(), e.Message);
                 return false;
             }
+        }
+
+        internal static bool GetIsDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
         }
         #endregion
     }

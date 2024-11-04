@@ -8,7 +8,7 @@
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.T2;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -360,13 +360,13 @@ namespace Mac_EFI_Toolkit.WinForms
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Chars.EXIT_CROSS;
+            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
 
         private void SetLabelProperties()
         {
             lblGlyph.Font = Program.FONT_MDL2_REG_20;
-            lblGlyph.Text = Chars.DOWN;
+            lblGlyph.Text = Program.GLYPH_DOWN_ARROW;
         }
 
         private void ApplyDragEnterColours()
@@ -401,7 +401,7 @@ namespace Mac_EFI_Toolkit.WinForms
 
         private void OpenBinary(string filePath)
         {
-            if (!FileUtils.IsValidMinMaxSize(filePath, this))
+            if (!FileTools.IsValidMinMaxSize(filePath, this))
                 return;
 
             byte[] fileBytes = File.ReadAllBytes(filePath);

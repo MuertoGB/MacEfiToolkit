@@ -2,10 +2,10 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // UI Components
-// InterfaceUtils.cs
+// UITools.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Utils;
+using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
