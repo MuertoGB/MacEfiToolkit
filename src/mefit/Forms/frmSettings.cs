@@ -168,7 +168,7 @@ namespace Mac_EFI_Toolkit.Forms
                     SettingsStringType.SocInitialDirectory,
                     _strSocInitialPath);
 
-            CheckResetBorderColor();
+            METForm.UpdateAccentColor();
 
             if (_updateUI)
             {
@@ -225,7 +225,8 @@ namespace Mac_EFI_Toolkit.Forms
                 SettingsStringType.SocInitialDirectory,
                 METPath.WORKING_DIR);
 
-            CheckResetBorderColor();
+            METForm.UpdateAccentColor();
+
             UpdateCheckBoxControls();
             UpdatePathLabel();
             _showSettingsAppliedLabel();
@@ -314,12 +315,6 @@ namespace Mac_EFI_Toolkit.Forms
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
-        }
-
-        private void CheckResetBorderColor()
-        {
-            BackColor = Settings.GetBorderColor();
-            Program.MAIN_WINDOW.BackColor = BackColor;
         }
         #endregion
     }

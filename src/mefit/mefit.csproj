@@ -218,6 +218,9 @@
     <Compile Include="Forms\termsWindow.Designer.cs">
       <DependentUpon>termsWindow.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\METForm.resx">
+      <DependentUpon>METForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\METPrompt\METPrompt.resx">
       <DependentUpon>METPrompt.cs</DependentUpon>
     </EmbeddedResource>

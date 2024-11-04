@@ -93,7 +93,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdMenuPatch = new System.Windows.Forms.Button();
             this.cmdMenuFolders = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
-            this.lblWindowTitle = new System.Windows.Forms.Label();
+            this.lblTitle = new METLabel();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
@@ -155,7 +155,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.openFsysStoresFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openIntelMEFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openNVRAMFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openSCFGFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.openWorkingDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlMain.SuspendLayout();
@@ -1265,19 +1264,19 @@ namespace Mac_EFI_Toolkit.Forms
             this.pnlSeperator.Size = new System.Drawing.Size(761, 1);
             this.pnlSeperator.TabIndex = 94;
             // 
-            // lblWindowTitle
+            // lblTitle
             // 
-            this.lblWindowTitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWindowTitle.ForeColor = System.Drawing.Color.White;
-            this.lblWindowTitle.Location = new System.Drawing.Point(50, 0);
-            this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
-            this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(611, 50);
-            this.lblWindowTitle.TabIndex = 0;
-            this.lblWindowTitle.Text = "EFIROM";
-            this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(50, 0);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(611, 50);
+            this.lblTitle.TabIndex = 0;
+            this.lblTitle.Text = "EFIROM";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // pbxLogo
             // 
@@ -1303,7 +1302,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpTitle.Controls.Add(this.lblWindowTitle, 1, 0);
+            this.tlpTitle.Controls.Add(this.lblTitle, 1, 0);
             this.tlpTitle.Controls.Add(this.cmdClose, 3, 0);
             this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTitle.Controls.Add(this.cmdMinimize, 2, 0);
@@ -1817,7 +1816,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.openFsysStoresFolderToolStripMenuItem,
             this.openIntelMEFolderToolStripMenuItem,
             this.openNVRAMFolderToolStripMenuItem,
-            this.openSCFGFolderToolStripMenuItem,
             this.toolStripSeparator4,
             this.openWorkingDirectoryToolStripMenuItem});
             this.cmsFolders.Name = "cmsFolders";
@@ -1863,13 +1861,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.openNVRAMFolderToolStripMenuItem.Text = "Open NVRAM Folder";
             this.openNVRAMFolderToolStripMenuItem.Click += new System.EventHandler(this.openNVRAMFolderToolStripMenuItem_Click);
             // 
-            // openSCFGFolderToolStripMenuItem
-            // 
-            this.openSCFGFolderToolStripMenuItem.Name = "openSCFGFolderToolStripMenuItem";
-            this.openSCFGFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
-            this.openSCFGFolderToolStripMenuItem.Text = "Open SCFG Folder";
-            this.openSCFGFolderToolStripMenuItem.Click += new System.EventHandler(this.openSCFGFolderToolStripMenuItem_Click);
-            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
@@ -1883,7 +1874,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.openWorkingDirectoryToolStripMenuItem.Text = "Open Working Directory";
             this.openWorkingDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openWorkingDirectoryToolStripMenuItem_Click);
             // 
-            // efiWindow
+            // frmEfiRom
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -1902,7 +1893,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(763, 492);
-            this.Name = "efiWindow";
+            this.Name = "frmEfiRom";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "EFIROM";
@@ -1943,7 +1934,7 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.Label lblBoardIdText;
         private System.Windows.Forms.Button cmdMenuOpen;
         internal System.Windows.Forms.PictureBox pbxLogo;
-        internal System.Windows.Forms.Label lblWindowTitle;
+        internal METLabel lblTitle;
         private System.Windows.Forms.Label lblFsysStoreText;
         private System.Windows.Forms.Label lblOrderNumberText;
         private System.Windows.Forms.Label lblFsysStore;
@@ -2055,7 +2046,6 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.ToolStripMenuItem openFsysStoresFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openIntelMEFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openNVRAMFolderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openSCFGFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem openWorkingDirectoryToolStripMenuItem;
     }

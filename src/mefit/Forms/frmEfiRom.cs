@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit.Forms
             UITools.EnableFormDrag(
                 this,
                 tlpTitle,
-                lblWindowTitle);
+                lblTitle);
 
             // Set tip handlers for controls.
             SetTipHandlers();
@@ -355,9 +355,6 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void openNVRAMFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
             UITools.OpenFolderInExplorer(METPath.NVRAM_DIR, this);
-
-        private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.SCFG_DIR, this);
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
             UITools.OpenFolderInExplorer(METPath.WORKING_DIR, this);
@@ -852,10 +849,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Hide loading image.
             pbxLoad.Image = null;
 
-            // Set window text.
-            this.Text =
-                EFIROM.FileInfoData.FileNameExt ??
-                APPSTRINGS.EFIROM;
+            UpdateWindowTitle();
 
             // Check and set control enable.
             ToggleControlEnable(true);
@@ -1373,6 +1367,8 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (tooltips.ContainsKey(sender))
                     lblStatusBarTip.Text = tooltips[sender];
+
+                tooltips.Clear();
             }
         }
 
@@ -1424,6 +1420,16 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (ShowPatchFailedPrompt() == DialogResult.Yes)
                 Logger.OpenLogFile(this);
+        }
+
+        private void UpdateWindowTitle()
+        {
+            string title =
+                $"{APPSTRINGS.EFIROM} {Program.GLYPH_RIGHT_ARROW} " +
+                $"{EFIROM.FileInfoData.FileNameExt}";
+
+            this.Text = EFIROM.FileInfoData.FileNameExt;
+            lblTitle.Text =  title;
         }
         #endregion
 
@@ -1559,6 +1565,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Reset window text.
             Text = APPSTRINGS.EFIROM;
+            lblTitle.Text = APPSTRINGS.EFIROM;
 
             // Reset initial directory.
             SetInitialDirectory();

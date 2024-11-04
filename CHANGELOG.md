@@ -13,6 +13,8 @@
   <a href="#version-120">V1.2.0</a>
 </p>
 
+## Version 1.2.0
+
 #### New
 - User Interface redesigned for improved usability.
 - The application now supports Intel T2 SOCROM firmware.

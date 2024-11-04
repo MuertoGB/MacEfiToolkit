@@ -804,11 +804,11 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #region Apple ROM Information Section
         internal static AppleRomInformationSection GetRomInformationData(byte[] sourceBytes)
         {
-            // Define index and termination bytes for data extraction.
-            byte indexByte = 0x20;
-            byte terminationByte = 0x0A;
+            // Define constants for index and termination bytes.
+            const byte indexByte = 0x20;
+            const byte terminationByte = 0x0A;
 
-            // Create a dictionary to hold signature-data pairs.
+            // Initialize signature-data dictionary.
             Dictionary<byte[], string> romInfoData = new Dictionary<byte[], string>
             {
                 { BIOS_ID_SIGNATURE, null },
@@ -823,87 +823,35 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 { COMPILER_SIGNATURE, null }
             };
 
-            // First we need to locate the AppleRomInformation section GUID.
-            List<int> romSectionBaseAddresses = new List<int>();
+            // Find all GUID locations.
+            List<int> romSectionBaseAddresses =
+                GetRomSectionBaseAddresses(sourceBytes);
 
-            int guidBaseAddress =
-                BinaryTools.GetBaseAddress(
-                    sourceBytes,
-                    Guids.APPLE_ROM_INFO_GUID,
-                    (int)IFD.BIOS_REGION_BASE,
-                    (int)IFD.BIOS_REGION_LIMIT);
-
-            // Seach all GUIDs.
-            while (guidBaseAddress != -1)
-            {
-                // Store the base position of the AppleRomInformation section.
-                romSectionBaseAddresses.Add(guidBaseAddress);
-
-                // Move the search position to the next occurrence of the GUID.
-                guidBaseAddress =
-                    BinaryTools.GetBaseAddress(
-                        sourceBytes,
-                        Guids.APPLE_ROM_INFO_GUID,
-                        guidBaseAddress + 1,
-                        (int)IFD.BIOS_REGION_LIMIT);
-            }
-
-            // AppleRomInformation GUID was not found, so return default data.
+            // Return default if no AppleRomInformation GUID was found.
             if (romSectionBaseAddresses.Count == 0)
                 return DefaultRomInformationBase();
-
-            // Declare the variables outside the loop to ensure accessibility.
-            byte[] romSectionBytes = null;
 
             // Process each AppleRomInformation section.
             foreach (int sectionBaseAddress in romSectionBaseAddresses)
             {
-                // Header Length (18h) AppleRomInformation section size (2h, int16).
-                int headerLength = 24; // 18h
-                int dataLength = 2; // 2h
-
-                // Read first two bytes after the header.
-                byte[] dataLengthBytes =
-                    BinaryTools.GetBytesBaseLength(
-                        sourceBytes,
-                        sectionBaseAddress + headerLength,
-                        dataLength);
-
-                // Convert first two bytes to an int16 value and get the AppleRomInformation section size.
-                int sectionSize =
-                    BitConverter.ToInt16(
-                        dataLengthBytes,
-                        0);
-
-                // Skip reading the section if the length is under 6.
-                if (sectionSize <= 6)
-                    continue;
-
-                // Read the entire AppleRomInformation section using sectionLength as the max search length.
-                romSectionBytes =
-                    BinaryTools.GetBytesBaseLength(
-                        sourceBytes,
-                        sectionBaseAddress + headerLength,
-                        sectionSize);
+                byte[] romSectionBytes =
+                    ExtractSectionBytes(sourceBytes, sectionBaseAddress);
 
                 if (romSectionBytes == null)
                     return DefaultRomInformationBase();
 
-                // Extract data from the romSectionBytes based on the signature.
-                Dictionary<byte[], string> updatedRomInfoData = new Dictionary<byte[], string>(romInfoData);
-
-                foreach (KeyValuePair<byte[], string> kvPair in romInfoData)
+                // Extract information based on each signature.
+                foreach (byte[] signature in romInfoData.Keys.ToList())
                 {
                     int dataBaseAddress =
-                        BinaryTools.GetBaseAddress
-                        (romSectionBytes,
-                        kvPair.Key);
+                        BinaryTools.GetBaseAddress(
+                            romSectionBytes,
+                            signature);
 
                     if (dataBaseAddress != -1)
                     {
-                        int keyLength = kvPair.Key.Length;
+                        int keyLength = signature.Length;
 
-                        // Extract the data using the signature position, signature length, index byte, and termination byte.
                         byte[] infoBytes =
                             BinaryTools.GetBytesDelimited(
                                 romSectionBytes,
@@ -911,20 +859,14 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                                 indexByte,
                                 terminationByte);
 
-                        // Convert the extracted byte array to string using UTF-8 encoding.
                         if (infoBytes != null)
-                            updatedRomInfoData[kvPair.Key] = _utf8.GetString(infoBytes);
+                            romInfoData[signature] = _utf8.GetString(infoBytes);
                     }
                 }
 
-                // Update the original romInfoData dictionary with the extracted and updated values.
-                foreach (KeyValuePair<byte[], string> kvPair in updatedRomInfoData)
-                    romInfoData[kvPair.Key] = kvPair.Value;
-
-                // Create and return an instance of AppleRomInformation with the extracted data.
                 return new AppleRomInformationSection
                 {
-                    SectionExists = sectionSize > 6,
+                    SectionExists = true,
                     SectionBytes = romSectionBytes,
                     SectionBase = sectionBaseAddress,
                     BiosId = romInfoData[BIOS_ID_SIGNATURE],
@@ -940,8 +882,48 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 };
             }
 
-            // If no valid AppleRomInformation section is found, return default data.
+            // Return default if no valid section was processed.
             return DefaultRomInformationBase();
+
+            // Local function to locate all AppleRomInformation section GUIDs.
+            List<int> GetRomSectionBaseAddresses(byte[] bytes)
+            {
+                List<int> addresses = new List<int>();
+                int address =
+                    BinaryTools.GetBaseAddress(
+                        bytes,
+                        Guids.APPLE_ROM_INFO_GUID,
+                        (int)IFD.BIOS_REGION_BASE,
+                        (int)IFD.BIOS_REGION_LIMIT);
+
+                while (address != -1)
+                {
+                    addresses.Add(address);
+
+                    address =
+                        BinaryTools.GetBaseAddress(
+                            bytes,
+                            Guids.APPLE_ROM_INFO_GUID,
+                            address + 1,
+                            (int)IFD.BIOS_REGION_LIMIT);
+                }
+
+                return addresses;
+            }
+
+            // Local function to extract the section bytes.
+            byte[] ExtractSectionBytes(byte[] bytes, int baseAddress)
+            {
+                const int headerLength = 24; // 18h
+                const int dataLength = 2; // 2h
+
+                byte[] sectionSizeBytes = BinaryTools.GetBytesBaseLength(bytes, baseAddress + headerLength, dataLength);
+                int sectionSize = BitConverter.ToInt16(sectionSizeBytes, 0);
+
+                return sectionSize > 6
+                    ? BinaryTools.GetBytesBaseLength(bytes, baseAddress + headerLength, sectionSize)
+                    : null;
+            }
         }
 
         internal static AppleRomInformationSection DefaultRomInformationBase()

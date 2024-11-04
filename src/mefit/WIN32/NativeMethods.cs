@@ -12,10 +12,12 @@ using System.Text;
 namespace Mac_EFI_Toolkit.WIN32
 {
     class NativeMethods
-    {
+    { 
+        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasecapture
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
 
+        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(
             HandleRef hWnd,
