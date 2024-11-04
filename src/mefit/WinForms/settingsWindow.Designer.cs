@@ -868,7 +868,7 @@ namespace Mac_EFI_Toolkit.WinForms
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(435, 524);
+            this.MinimumSize = new System.Drawing.Size(435, 557);
             this.Name = "settingsWindow";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
