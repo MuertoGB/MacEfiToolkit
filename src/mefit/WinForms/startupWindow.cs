@@ -408,9 +408,6 @@ namespace Mac_EFI_Toolkit.WinForms
 
             byte[] fileBytes = File.ReadAllBytes(filePath);
 
-            // Try processing flash descriptor
-            IFD.ParseRegionData(fileBytes);
-
             // Identify and open the correct window based on the image type
             Form childForm = GetChildFormForImage(fileBytes);
 

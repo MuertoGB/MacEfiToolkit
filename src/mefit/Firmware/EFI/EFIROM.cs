@@ -59,6 +59,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #region Parse Firmware
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
+            // Try processing flash descriptor
+            IFD.ParseRegionData(sourceBytes);
+
             // Parse file info.
             FileInfoData =
                 FileTools.GetBinaryFileInfo(
@@ -250,8 +253,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 BinaryTools.GetBaseAddress(
                     sourceBytes,
                     guid,
-                    (int)IFD.BIOS_REGION_BASE,
-                    (int)IFD.BIOS_REGION_SIZE) != -1);
+                    0,
+                    sourceBytes.Length) != -1);
         }
         #endregion 
 

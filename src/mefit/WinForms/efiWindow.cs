@@ -1466,10 +1466,6 @@ namespace Mac_EFI_Toolkit
                 File.ReadAllBytes(
                     filePath);
 
-            // Process the descriptor.
-            IFD.ParseRegionData(
-                EFIROM.LoadedBinaryBytes);
-
             // Check if the image is what we're looking for.
             if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBytes))
             {
