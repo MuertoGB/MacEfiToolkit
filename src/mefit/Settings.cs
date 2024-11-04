@@ -5,7 +5,9 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.UI;
 using System;
+using System.Drawing;
 using System.IO;
 
 namespace Mac_EFI_Toolkit
@@ -14,6 +16,7 @@ namespace Mac_EFI_Toolkit
     #region Enum
     public enum SettingsBoolType
     {
+        UseAccentColor,
         DisableVersionCheck,
         DisableFlashingUI,
         DisableMessageSounds,
@@ -86,6 +89,11 @@ namespace Mac_EFI_Toolkit
                 ini.Write("Application", "SocInitialPath", METPath.WORKING_DIR);
             }
 
+            if (!ini.SectionExists("Application") || !ini.KeyExists("Application", "UseAccentColor"))
+            {
+                ini.Write("Application", "UseAccentColor", "False");
+            }
+
             if (!ini.SectionExists("Firmware") || !ini.KeyExists("Firmware", "AcceptedEditingTerms"))
             {
                 ini.Write("Firmware", "AcceptedEditingTerms", "False");
@@ -140,6 +148,9 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.DisableConfDiag:
                     section = "Application"; key = "DisableConfDiag";
+                    break;
+                case SettingsBoolType.UseAccentColor:
+                    section = "Application"; key = "UseAccentColor";
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
                     section = "Firmware"; key = "AcceptedEditingTerms";
@@ -276,6 +287,9 @@ namespace Mac_EFI_Toolkit
                 case SettingsBoolType.DisableConfDiag:
                     section = "Application"; key = "DisableConfDiag";
                     break;
+                case SettingsBoolType.UseAccentColor:
+                    section = "Application"; key = "UseAccentColor";
+                    break;
                 case SettingsBoolType.AcceptedEditingTerms:
                     section = "Firmware"; key = "AcceptedEditingTerms";
                     break;
@@ -374,6 +388,18 @@ namespace Mac_EFI_Toolkit
 
                 return false;
             }
+        }
+        #endregion
+
+        #region Functions
+        internal static Color GetBorderColor()
+        {
+            if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
+            {
+                return AccentColorHelper.GetWindowsAccentColor();
+            }
+
+            return AppColours.DEFAULT_APP_BORDER;
         }
         #endregion
     }

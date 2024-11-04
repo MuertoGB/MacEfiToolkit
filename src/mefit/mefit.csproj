@@ -92,6 +92,7 @@
     <Compile Include="Common\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Firmware\EFI\IME.cs" />
+    <Compile Include="UI\AccentColorHelper.cs" />
     <Compile Include="UI\BlurHelper.cs" />
     <Compile Include="UI\METForm.cs">
       <SubType>Form</SubType>

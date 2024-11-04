@@ -18,6 +18,7 @@
 - The application now supports Intel T2 SOCROM firmware.
 - Added capability to open multiple firmwares simultaneously.
 - Startup Window: Introduced a new startup window where users can drag and drop or browse for a compatible EFIROM or T2 SOCROM. The main window is now dedicated to EFIROM, with some functions moved to the startup window.
+- Added a new setting: "Use Windows accent color for form borders," allowing form borders to match the system's accent color for a more integrated appearance.
 - EFI Window Updates:
   - Patcher Relocation: Removed the firmware patcher window; all patching features are now consolidated in the EFI window.
   - Structured File Naming: Added an option to automatically generate a structured file name for the loaded firmware and copy it to the clipboard.

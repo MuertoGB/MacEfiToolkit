@@ -5,6 +5,8 @@
 // BlurHelper.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit;
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -48,7 +50,13 @@ public static class BlurHelper
         form.TransparencyKey = System.Drawing.Color.Green;
 
         // Flip the border back to normal.
-        form.BackColor = Color.FromArgb(0, 170, 180);
+        if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
+        {
+            form.BackColor = AccentColorHelper.GetWindowsAccentColor();
+            return;
+        }
+
+        form.BackColor = AppColours.DEFAULT_APP_BORDER;
     }
 
     public static void RemoveBlur(Form form)

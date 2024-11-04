@@ -134,6 +134,10 @@ namespace Mac_EFI_Toolkit.WinForms
                 swDisableVersionCheck.Checked);
 
             Settings.SetBool(
+                SettingsBoolType.UseAccentColor,
+                swUseAccentColor.Checked);
+
+            Settings.SetBool(
                 SettingsBoolType.DisableFlashingUI,
                 swDisableFlashingUiElements.Checked);
 
@@ -164,6 +168,8 @@ namespace Mac_EFI_Toolkit.WinForms
                     SettingsStringType.SocInitialDirectory,
                     _strSocInitialPath);
 
+            CheckResetBorderColor();
+
             if (_updateUI)
             {
                 _showSettingsAppliedLabel();
@@ -185,6 +191,10 @@ namespace Mac_EFI_Toolkit.WinForms
 
             Settings.SetBool(
                 SettingsBoolType.DisableVersionCheck,
+                false);
+
+            Settings.SetBool(
+                SettingsBoolType.UseAccentColor,
                 false);
 
             Settings.SetBool(
@@ -215,6 +225,7 @@ namespace Mac_EFI_Toolkit.WinForms
                 SettingsStringType.SocInitialDirectory,
                 METPath.WORKING_DIR);
 
+            CheckResetBorderColor();
             UpdateCheckBoxControls();
             UpdatePathLabel();
             _showSettingsAppliedLabel();
@@ -252,30 +263,41 @@ namespace Mac_EFI_Toolkit.WinForms
         #region Checkbox Events
         private void UpdateCheckBoxControls()
         {
-            swDisableVersionCheck.Checked = Settings.ReadBool(
-                SettingsBoolType.DisableVersionCheck)
-                ? true :
-                false;
+            swDisableVersionCheck.Checked =
+                Settings.ReadBool(
+                    SettingsBoolType.DisableVersionCheck) ?
+                    true :
+                    false;
 
-            swDisableFlashingUiElements.Checked = Settings.ReadBool(
-                SettingsBoolType.DisableFlashingUI)
-                ? true :
-                false;
+            swUseAccentColor.Checked =
+                Settings.ReadBool(
+                    SettingsBoolType.UseAccentColor) ?
+                    true :
+                    false;
 
-            swDisableMessageWindowSounds.Checked = Settings.ReadBool(
-                SettingsBoolType.DisableMessageSounds)
-                ? true
-                : false;
+            swDisableFlashingUiElements.Checked =
+                Settings.ReadBool(
+                    SettingsBoolType.DisableFlashingUI) ?
+                    true :
+                    false;
 
-            swDisableStatusBarTips.Checked = Settings.ReadBool(
-                SettingsBoolType.DisableTips)
-                ? true
-                : false;
+            swDisableMessageWindowSounds.Checked =
+                Settings.ReadBool(
+                    SettingsBoolType.DisableMessageSounds) ?
+                    true :
+                    false;
 
-            swDisableConfirmationDialogs.Checked = Settings.ReadBool(
-                SettingsBoolType.DisableConfDiag)
-                ? true :
-                false;
+            swDisableStatusBarTips.Checked =
+                Settings.ReadBool
+                    (SettingsBoolType.DisableTips) ?
+                    true :
+                    false;
+
+            swDisableConfirmationDialogs.Checked =
+                Settings.ReadBool(
+                    SettingsBoolType.DisableConfDiag) ?
+                    true :
+                    false;
         }
         #endregion
 
@@ -292,6 +314,12 @@ namespace Mac_EFI_Toolkit.WinForms
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
+        }
+
+        private void CheckResetBorderColor()
+        {
+            BackColor = Settings.GetBorderColor();
+            Program.MAIN_WINDOW.BackColor = BackColor;
         }
         #endregion
     }
