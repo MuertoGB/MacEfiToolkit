@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit.Forms
             UITools.EnableFormDrag(
                 this,
                 tlpTitle,
-                lblWindowTitle);
+                lblTitle);
 
             // Set button propeties.
             SetButtonProperties();
@@ -37,14 +37,14 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void WireEventHandlers()
         {
-            Load += infoWindow_Load;
-            KeyDown += infoWindow_KeyDown;
+            Load += frmRominfo_Load;
+            KeyDown += frmRominfo_KeyDown;
             pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
         }
         #endregion
 
         #region Window Events
-        private void infoWindow_Load(object sender, EventArgs e)
+        private void frmRominfo_Load(object sender, EventArgs e)
         {
             lblBiosId.Text = EFIROM.AppleRomInfoSectionData.BiosId
                 ?? "N/A";
@@ -88,7 +88,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region KeyDown Events
-        private void infoWindow_KeyDown(object sender, KeyEventArgs e)
+        private void frmRominfo_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
                 Close();

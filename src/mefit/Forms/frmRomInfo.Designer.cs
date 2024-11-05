@@ -32,7 +32,7 @@ namespace Mac_EFI_Toolkit.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmRominfo));
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
-            this.lblWindowTitle = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
@@ -79,7 +79,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
-            this.tlpTitle.Controls.Add(this.lblWindowTitle, 1, 0);
+            this.tlpTitle.Controls.Add(this.lblTitle, 1, 0);
             this.tlpTitle.Controls.Add(this.cmdClose, 2, 0);
             this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpTitle.Location = new System.Drawing.Point(1, 1);
@@ -103,19 +103,19 @@ namespace Mac_EFI_Toolkit.Forms
             this.pbxLogo.TabIndex = 14;
             this.pbxLogo.TabStop = false;
             // 
-            // lblWindowTitle
+            // lblTitle
             // 
-            this.lblWindowTitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWindowTitle.ForeColor = System.Drawing.Color.White;
-            this.lblWindowTitle.Location = new System.Drawing.Point(40, 0);
-            this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
-            this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(338, 40);
-            this.lblWindowTitle.TabIndex = 0;
-            this.lblWindowTitle.Text = "ROM Information";
-            this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.Color.White;
+            this.lblTitle.Location = new System.Drawing.Point(40, 0);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(338, 40);
+            this.lblTitle.TabIndex = 0;
+            this.lblTitle.Text = "ROM Information";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdClose
             // 
@@ -606,7 +606,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdExport.UseVisualStyleBackColor = false;
             this.cmdExport.Click += new System.EventHandler(this.cmdExport_Click);
             // 
-            // infoWindow
+            // frmRominfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -625,7 +625,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(420, 449);
-            this.Name = "infoWindow";
+            this.Name = "frmRominfo";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ROM Information";
@@ -642,7 +642,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         internal System.Windows.Forms.TableLayoutPanel tlpTitle;
-        internal System.Windows.Forms.Label lblWindowTitle;
+        internal System.Windows.Forms.Label lblTitle;
         internal System.Windows.Forms.Button cmdClose;
         private System.Windows.Forms.Panel pnlSeperatorTop;
         private System.Windows.Forms.Panel pnlMain;

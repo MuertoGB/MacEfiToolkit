@@ -1678,7 +1678,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.exportFirmwareInformationTextToolStripMenuItem});
             this.cmsExport.Name = "cmsExport";
             this.cmsExport.ShowImageMargin = false;
-            this.cmsExport.Size = new System.Drawing.Size(319, 178);
+            this.cmsExport.Size = new System.Drawing.Size(319, 206);
             // 
             // exportFsysStoreToolStripMenuItem
             // 

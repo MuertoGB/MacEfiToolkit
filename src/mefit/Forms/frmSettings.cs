@@ -42,37 +42,23 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void WireEventHandlers()
         {
-            Load += settingsWindow_Load;
-            KeyDown += aboutWindow_KeyDown;
+            Load += frmSettings_Load;
+            KeyDown += frmSettings_KeyDown;
             pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
         }
         #endregion
 
         #region Window Events
-        private void settingsWindow_Load(object sender, EventArgs e)
+        private void frmSettings_Load(object sender, EventArgs e)
         {
             lblSettingsSaved.Hide();
             UpdateCheckBoxControls();
             UpdatePathLabel();
         }
-
-        private void UpdatePathLabel()
-        {
-            UpdateLabel(lblStartupDirectory, SettingsStringType.StartupInitialDirectory);
-            UpdateLabel(lblEfiDirectory, SettingsStringType.EfiInitialDirectory);
-            UpdateLabel(lblSocDirectory, SettingsStringType.SocInitialDirectory);
-        }
-
-        private void UpdateLabel(Label label, SettingsStringType settingsType)
-        {
-            string path = Settings.ReadString(settingsType);
-            label.Text = path;
-            label.ForeColor = Directory.Exists(path) ? AppColours.SETTINGS_PATH_OKAY : AppColours.WARNING;
-        }
         #endregion
 
         #region KeyDown Events
-        private void aboutWindow_KeyDown(object sender, KeyEventArgs e)
+        private void frmSettings_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
                 Close();
@@ -280,7 +266,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Checkbox Events
+        #region METSwitch Events
         private void UpdateCheckBoxControls()
         {
             swDisableVersionCheck.Checked =
@@ -330,6 +316,20 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region UI Events
+        private void UpdatePathLabel()
+        {
+            UpdateLabel(lblStartupDirectory, SettingsStringType.StartupInitialDirectory);
+            UpdateLabel(lblEfiDirectory, SettingsStringType.EfiInitialDirectory);
+            UpdateLabel(lblSocDirectory, SettingsStringType.SocInitialDirectory);
+        }
+
+        private void UpdateLabel(Label label, SettingsStringType settingsType)
+        {
+            string path = Settings.ReadString(settingsType);
+            label.Text = path;
+            label.ForeColor = Directory.Exists(path) ? AppColours.SETTINGS_PATH_OKAY : AppColours.WARNING;
+        }
+
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;

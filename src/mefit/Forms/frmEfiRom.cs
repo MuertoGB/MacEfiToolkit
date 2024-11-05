@@ -51,19 +51,19 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void WireEventHandlers()
         {
-            Load += efiWindow_Load;
-            FormClosing += efiWindow_FormClosing;
-            FormClosed += efiWindow_FormClosed;
-            KeyDown += efiWindow_KeyDown;
-            DragEnter += efiWindow_DragEnter;
-            DragDrop += efiWindow_DragDrop;
-            Deactivate += efiWindow_Deactivate;
-            Activated += efiWindow_Activated;
+            Load += frmEfiRom_Load;
+            FormClosing += frmEfiRom_FormClosing;
+            FormClosed += frmEfiRom_FormClosed;
+            KeyDown += frmEfiRom_KeyDown;
+            DragEnter += frmEfiRom_DragEnter;
+            DragDrop += frmEfiRom_DragDrop;
+            Deactivate += frmEfiRom_Deactivate;
+            Activated += frmEfiRom_Activated;
         }
         #endregion
 
         #region Window Events
-        private void efiWindow_Load(object sender, EventArgs e)
+        private void frmEfiRom_Load(object sender, EventArgs e)
         {
             // Get and set the primary file dialog initial directory.
             SetInitialDirectory();
@@ -74,19 +74,19 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(Program.MAIN_WINDOW.loadedFile);
         }
 
-        private void efiWindow_FormClosing(object sender, FormClosingEventArgs e)
+        private void frmEfiRom_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_cancellationToken != null && !_cancellationToken.IsCancellationRequested)
                 _cancellationToken.Cancel();
         }
 
-        private void efiWindow_FormClosed(object sender, FormClosedEventArgs e) =>
+        private void frmEfiRom_FormClosed(object sender, FormClosedEventArgs e) =>
             _cancellationToken?.Dispose();
 
-        private void efiWindow_DragEnter(object sender, DragEventArgs e) =>
+        private void frmEfiRom_DragEnter(object sender, DragEventArgs e) =>
             Program.HandleDragEnter(sender, e);
 
-        private void efiWindow_DragDrop(object sender, DragEventArgs e)
+        private void frmEfiRom_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
             string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -96,15 +96,15 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(draggedFilename);
         }
 
-        private void efiWindow_Deactivate(object sender, EventArgs e) =>
+        private void frmEfiRom_Deactivate(object sender, EventArgs e) =>
             SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
 
-        private void efiWindow_Activated(object sender, EventArgs e) =>
+        private void frmEfiRom_Activated(object sender, EventArgs e) =>
             SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
         #endregion
 
         #region KeyDown Events
-        private void efiWindow_KeyDown(object sender, KeyEventArgs e)
+        private void frmEfiRom_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
                 Close();
@@ -535,7 +535,10 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 InitialDirectory = METPath.BACKUPS_DIR,
                 Filter = APPSTRINGS.FILTER_ZIP,
-                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.BACKUP.ToLower()}",
+                FileName =
+                    $"{EFIROM.FileInfoData.FileName}_" +
+                    $"{APPSTRINGS.EFIROM}_" +
+                    $"{APPSTRINGS.BACKUP}",
                 OverwritePrompt = true
             })
             {
@@ -570,81 +573,82 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{EFISTRINGS.FIRMWARE_INFO}_{EFIROM.FileInfoData.FileName}",
+                FileName = $"{APPSTRINGS.FIRMWARE_INFO}_{EFIROM.FileInfoData.FileName}",
                 OverwritePrompt = true,
-                InitialDirectory = _strInitialDirectory
+                InitialDirectory = METPath.WORKING_DIR
             })
             {
-                // Action was cancelled
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
                     return;
 
-                StringBuilder builder = new StringBuilder();
+                StringBuilder stringBuilder = new StringBuilder();
 
-                builder.AppendLine("File");
-                builder.AppendLine("----------------------------------");
-                builder.AppendLine($"Filename:        {EFIROM.FileInfoData.FileNameExt}");
-                builder.AppendLine($"Size (Bytes):    {FileTools.FormatFileSize(EFIROM.FileInfoData.Length)} bytes");
-                builder.AppendLine($"Size (Hex):      {EFIROM.FileInfoData.Length:X}h");
-                builder.AppendLine($"Size (MB):       {Helper.GetBytesReadableSize(EFIROM.FileInfoData.Length)}");
-                builder.AppendLine($"CRC32:           {EFIROM.FileInfoData.CRC32:X}");
-                builder.AppendLine($"Created:         {EFIROM.FileInfoData.CreationTime}");
-                builder.AppendLine($"Modified:        {EFIROM.FileInfoData.LastWriteTime}\r\n");
+                stringBuilder.AppendLine("File Information");
+                stringBuilder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine($"Filename:        {EFIROM.FileInfoData.FileNameExt}");
+                stringBuilder.AppendLine($"Size (Bytes):    {FileTools.FormatFileSize(EFIROM.FileInfoData.Length)} bytes");
+                stringBuilder.AppendLine($"Size (MB):       {Helper.GetBytesReadableSize(EFIROM.FileInfoData.Length)}");
+                stringBuilder.AppendLine($"Size (Hex):      {EFIROM.FileInfoData.Length:X}h");
+                stringBuilder.AppendLine($"CRC32:           {EFIROM.FileInfoData.CRC32:X}");
+                stringBuilder.AppendLine($"Created:         {EFIROM.FileInfoData.CreationTime}");
+                stringBuilder.AppendLine($"Modified:        {EFIROM.FileInfoData.LastWriteTime}\r\n");
 
-                builder.AppendLine("Descriptor Regions");
-                builder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine("Descriptor Information");
+                stringBuilder.AppendLine("----------------------------------");
                 if (IFD.IsDescriptorMode)
                 {
-                    builder.AppendLine(
+                    stringBuilder.AppendLine(
                         $"PDR Region:      Base: {IFD.PDR_REGION_BASE:X}h, " +
                         $"Limit: {IFD.PDR_REGION_LIMIT:X}h, " +
                         $"Size: {IFD.PDR_REGION_SIZE:X}h");
-                    builder.AppendLine(
+                    stringBuilder.AppendLine(
                         $"ME Region:       Base: {IFD.ME_REGION_BASE:X}h, " +
                         $"Limit: {IFD.ME_REGION_LIMIT:X}h, " +
                         $"Size: {IFD.ME_REGION_SIZE:X}h");
-                    builder.AppendLine(
+                    stringBuilder.AppendLine(
                         $"BIOS Region:     Base: {IFD.BIOS_REGION_BASE:X}h, " +
                         $"Limit: {IFD.BIOS_REGION_LIMIT:X}h, " +
                         $"Size: {IFD.BIOS_REGION_SIZE:X}h\r\n");
                 }
                 else
                 {
-                    builder.AppendLine("Descriptor mode is disabled.\r\n");
+                    stringBuilder.AppendLine("Descriptor mode is disabled.\r\n");
                 }
 
-                builder.AppendLine("Model Information");
-                builder.AppendLine("----------------------------------");
-                builder.AppendLine($"Identifier:      {EFIROM.EfiBiosIdSectionData.ModelPart ?? "N/A"}");
-                builder.AppendLine($"Model:           {MacTools.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart) ?? "N/A"}");
-                builder.AppendLine($"Configuration:   {EFIROM.ConfigCode ?? "N/A"}");
-                builder.AppendLine($"Board ID:        {EFIROM.PdrSectionData.BoardId ?? "N/A"}\r\n");
+                stringBuilder.AppendLine("Model Information");
+                stringBuilder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine($"Identifier:      {EFIROM.EfiBiosIdSectionData.ModelPart ?? "N/A"}");
+                stringBuilder.AppendLine($"Model:           {MacTools.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart) ?? "N/A"}");
+                stringBuilder.AppendLine($"Configuration:   {EFIROM.ConfigCode ?? "N/A"}");
+                stringBuilder.AppendLine($"Board ID:        {EFIROM.PdrSectionData.BoardId ?? "N/A"}\r\n");
 
-                builder.AppendLine("Fsys Store");
-                builder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine("Fsys Store");
+                stringBuilder.AppendLine("----------------------------------");
                 if (EFIROM.FsysStoreData.FsysBytes != null)
                 {
-                    builder.AppendLine($"Base:            {EFIROM.FsysStoreData.FsysBase:X}h");
-                    builder.AppendLine($"Size:            {EFIROM.FSYS_RGN_SIZE:X}h");
-                    builder.AppendLine($"CRC32:           {EFIROM.FsysStoreData.CrcString ?? "N/A"}");
-                    builder.AppendLine($"Serial:          {EFIROM.FsysStoreData.Serial ?? "N/A"}");
-                    builder.AppendLine($"HWC:             {EFIROM.FsysStoreData.HWC ?? "N/A"}");
-                    builder.AppendLine($"SON:             {EFIROM.FsysStoreData.SON ?? "N/A"}\r\n");
+                    stringBuilder.AppendLine($"Base:            {EFIROM.FsysStoreData.FsysBase:X}h");
+                    stringBuilder.AppendLine($"Size:            {EFIROM.FSYS_RGN_SIZE:X}h");
+                    stringBuilder.AppendLine($"CRC32:           {EFIROM.FsysStoreData.CrcString ?? "N/A"}");
+                    stringBuilder.AppendLine($"Serial:          {EFIROM.FsysStoreData.Serial ?? "N/A"}");
+                    stringBuilder.AppendLine($"HWC:             {EFIROM.FsysStoreData.HWC ?? "N/A"}");
+                    stringBuilder.AppendLine($"SON:             {EFIROM.FsysStoreData.SON ?? "N/A"}\r\n");
                 }
                 else
                 {
-                    builder.AppendLine("Fsys Store was not found.\r\n");
+                    stringBuilder.AppendLine("Fsys Store was not found.\r\n");
                 }
 
-                builder.AppendLine("Firmware");
-                builder.AppendLine("----------------------------------");
-                builder.AppendLine($"EFI Version:     {EFIROM.FirmwareVersion ?? "N/A"}");
-                builder.AppendLine($"EFI Lock:        {EFIROM.EfiPrimaryLockData.LockType.ToString() ?? "N/A"}");
-                builder.AppendLine($"APFS Capable:    {EFIROM.IsApfsCapable.ToString() ?? "N/A"}\r\n");
+                stringBuilder.AppendLine("Firmware Information");
+                stringBuilder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine($"EFI Version:     {EFIROM.FirmwareVersion ?? "N/A"}");
+                stringBuilder.AppendLine($"EFI Lock:        {EFIROM.EfiPrimaryLockData.LockType.ToString() ?? "N/A"}");
+                stringBuilder.AppendLine($"APFS Capable:    {EFIROM.IsApfsCapable.ToString() ?? "N/A"}\r\n");
 
                 File.WriteAllText(
                     saveFileDialog.FileName,
-                    builder.ToString());
+                    stringBuilder.ToString());
+
+                stringBuilder.Clear();
 
                 if (!File.Exists(saveFileDialog.FileName))
                 {

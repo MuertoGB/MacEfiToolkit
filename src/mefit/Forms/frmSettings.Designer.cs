@@ -856,6 +856,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(435, 557);
+            this.ControlBox = false;
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tlpMenu);

@@ -23,11 +23,11 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void WireEventHandlers() =>
-            KeyDown += nvramWindow_KeyDown;
+            KeyDown += frmNvramSelect_KeyDown;
         #endregion
 
         #region Window Events
-        private void nvramWindow_KeyDown(object sender, KeyEventArgs e)
+        private void frmNvramSelect_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
                 DialogResult = DialogResult.Cancel;

@@ -5,6 +5,7 @@
 // frmSocRom.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -47,19 +49,19 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void WireEventHandlers()
         {
-            Load += t2Window_Load;
-            FormClosing += t2Window_FormClosing;
-            FormClosed += t2Window_FormClosed;
-            KeyDown += t2Window_KeyDown;
-            DragEnter += t2Window_DragEnter;
-            DragDrop += t2Window_DragDrop;
-            Deactivate += t2Window_Deactivate;
-            Activated += t2Window_Activated;
+            Load += frmSocRom_Load;
+            FormClosing += frmSocRom_FormClosing;
+            FormClosed += frmSocRom_FormClosed;
+            KeyDown += frmSocRom_KeyDown;
+            DragEnter += frmSocRom_DragEnter;
+            DragDrop += frmSocRom_DragDrop;
+            Deactivate += frmSocRom_Deactivate;
+            Activated += frmSocRom_Activated;
         }
         #endregion
 
         #region Window Events
-        private void t2Window_Load(object sender, EventArgs e)
+        private void frmSocRom_Load(object sender, EventArgs e)
         {
             _cancellationToken =
                 new CancellationTokenSource();
@@ -67,19 +69,19 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(Program.MAIN_WINDOW.loadedFile);
         }
 
-        private void t2Window_FormClosing(object sender, FormClosingEventArgs e)
+        private void frmSocRom_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_cancellationToken != null && !_cancellationToken.IsCancellationRequested)
                 _cancellationToken.Cancel();
         }
 
-        private void t2Window_FormClosed(object sender, FormClosedEventArgs e) =>
+        private void frmSocRom_FormClosed(object sender, FormClosedEventArgs e) =>
             _cancellationToken?.Dispose();
 
-        private void t2Window_DragEnter(object sender, DragEventArgs e) =>
+        private void frmSocRom_DragEnter(object sender, DragEventArgs e) =>
             Program.HandleDragEnter(sender, e);
 
-        private void t2Window_DragDrop(object sender, DragEventArgs e)
+        private void frmSocRom_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
             string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -89,18 +91,43 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(draggedFilename);
         }
 
-        private void t2Window_Deactivate(object sender, EventArgs e) =>
+        private void frmSocRom_Deactivate(object sender, EventArgs e) =>
             SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
 
-        private void t2Window_Activated(object sender, EventArgs e) =>
+        private void frmSocRom_Activated(object sender, EventArgs e) =>
             SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
         #endregion
 
         #region KeyDown Events
-        private void t2Window_KeyDown(object sender, KeyEventArgs e)
+        private void frmSocRom_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
                 Close();
+
+            if (e.Modifiers == Keys.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.O:
+                        cmdMenuOpen.PerformClick();
+                        break;
+                    case Keys.R:
+                        cmdMenuReset.PerformClick();
+                        break;
+                    case Keys.C:
+                        cmdMenuCopy.PerformClick();
+                        break;
+                    case Keys.L:
+                        cmdMenuFolders.PerformClick();
+                        break;
+                    case Keys.E:
+                        cmdMenuExport.PerformClick();
+                        break;
+                    case Keys.P:
+                        cmdMenuPatch.PerformClick();
+                        break;
+                }
+            }
         }
         #endregion
 
@@ -152,40 +179,17 @@ namespace Mac_EFI_Toolkit.Forms
                 cmsCopy,
                 MenuPosition.BottomLeft);
 
-        private void cmdExportScfg_Click(object sender, EventArgs e)
-        {
-            Program.EnsureDirectoriesExist();
+        private void cmdMenuFolders_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+            sender,
+            cmsFolders,
+            MenuPosition.BottomLeft);
 
-            using (SaveFileDialog dialog = new SaveFileDialog
-            {
-                Filter = "Binary Files (*.bin)|*.bin|All Files (*.*)|*.*",
-                FileName = $"{T2STRINGS.SCFG}_{SOCROM.ScfgSectionData.SerialText}",
-                OverwritePrompt = true,
-                InitialDirectory = METPath.SCFG_DIR
-            })
-            {
-                if (dialog.ShowDialog() != DialogResult.OK)
-                    return;
-
-                // Save the Scfg stores bytes to disk.
-                if (FileTools.WriteAllBytesEx(
-                    dialog.FileName,
-                    SOCROM.ScfgSectionData.ScfgBytes))
-                {
-                    UITools.ShowExplorerFileHighlightPrompt(
-                        this,
-                        dialog.FileName);
-
-                    return;
-                }
-
-                METPrompt.Show(
-                    this,
-                    DIALOGSTRINGS.SCFG_EXPORT_FAIL,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
-            }
-        }
+        private void cmdMenuExport_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsExport,
+                MenuPosition.BottomLeft);
         #endregion
 
         #region Copy Toolstrip Events
@@ -227,6 +231,164 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void orderNoToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetScfgOrderNo();
+        #endregion
+
+        #region Folders Toolstrip Events
+        private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.BACKUPS_DIR, this);
+
+        private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.BUILDS_DIR, this);
+
+        private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.SCFG_DIR, this);
+
+        private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.WORKING_DIR, this);
+        #endregion
+
+        #region Export Toolstrip Events
+        private void exportScfgStoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Program.EnsureDirectoriesExist();
+
+            using (SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = APPSTRINGS.FILTER_BIN,
+                FileName = $"{SOCSTRINGS.SCFG}_{SOCROM.ScfgSectionData.SerialText}",
+                OverwritePrompt = true,
+                InitialDirectory = METPath.SCFG_DIR
+            })
+            {
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                // Save the Scfg stores bytes to disk.
+                if (FileTools.WriteAllBytesEx(
+                    dialog.FileName,
+                    SOCROM.ScfgSectionData.ScfgBytes))
+                {
+                    UITools.ShowExplorerFileHighlightPrompt(
+                        this,
+                        dialog.FileName);
+
+                    return;
+                }
+
+                METPrompt.Show(
+                    this,
+                    DIALOGSTRINGS.SCFG_EXPORT_FAIL,
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
+            }
+        }
+
+        private void backupFirmwareZIPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Program.EnsureDirectoriesExist();
+
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                InitialDirectory = METPath.BACKUPS_DIR,
+                Filter = APPSTRINGS.FILTER_ZIP,
+                FileName = $"{SOCROM.FileInfoData.FileName}_" +
+                           $"{APPSTRINGS.SOCROM}_" +
+                           $"{APPSTRINGS.BACKUP}",
+                OverwritePrompt = true
+            })
+            {
+                // Action was cancelled
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                FileTools.BackupFileToZip(
+                    SOCROM.LoadedBinaryBytes,
+                    SOCROM.FileInfoData.FileNameExt,
+                    saveFileDialog.FileName);
+
+                if (File.Exists(saveFileDialog.FileName))
+                {
+                    UITools.ShowExplorerFileHighlightPrompt(
+                        this,
+                        saveFileDialog.FileName);
+
+                    return;
+                }
+
+                METPrompt.Show(
+                    this,
+                    DIALOGSTRINGS.ARCHIVE_CREATE_FAILED,
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
+            }
+        }
+
+        private void exportFirmwareInformationTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = APPSTRINGS.FILTER_TEXT,
+                FileName = $"{APPSTRINGS.FIRMWARE_INFO}_{SOCROM.FileInfoData.FileName}",
+                OverwritePrompt = true,
+                InitialDirectory = METPath.WORKING_DIR
+            })
+            {
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                stringBuilder.AppendLine("File Information");
+                stringBuilder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine($"Filename:        {SOCROM.FileInfoData.FileNameExt}");
+                stringBuilder.AppendLine($"Size (Bytes):    {FileTools.FormatFileSize(SOCROM.FileInfoData.Length)} bytes");
+                stringBuilder.AppendLine($"Size (MB):       {Helper.GetBytesReadableSize(SOCROM.FileInfoData.Length)}");
+                stringBuilder.AppendLine($"Size (Hex):      {SOCROM.FileInfoData.Length:X}h");
+                stringBuilder.AppendLine($"CRC32:           {SOCROM.FileInfoData.CRC32:X}");
+                stringBuilder.AppendLine($"Created:         {SOCROM.FileInfoData.CreationTime}");
+                stringBuilder.AppendLine($"Modified:        {SOCROM.FileInfoData.LastWriteTime}\r\n");
+
+                stringBuilder.AppendLine("Scfg Store");
+                stringBuilder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine($"Base:            {SOCROM.ScfgSectionData.StoreBase:X}h");
+                stringBuilder.AppendLine($"Size (Bytes):    {SOCROM.ScfgSectionData.StoreSize} bytes");
+                stringBuilder.AppendLine($"Size (Hex):      {SOCROM.ScfgSectionData.StoreSize:X}h");
+                stringBuilder.AppendLine($"CRC32:           {SOCROM.ScfgSectionData.ScfgCrc ?? APPSTRINGS.NA}");
+                stringBuilder.AppendLine($"Serial:          {SOCROM.ScfgSectionData.SerialText ?? APPSTRINGS.NA}\r\n");
+
+                stringBuilder.AppendLine("Model Information");
+                stringBuilder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine($"Config:          {SOCROM.ConfigCode ?? APPSTRINGS.NA}");
+                stringBuilder.AppendLine($"Order No:        {SOCROM.ScfgSectionData.SonText ?? APPSTRINGS.NA}");
+                stringBuilder.AppendLine($"Reg No:          {SOCROM.ScfgSectionData.RegNumText ?? APPSTRINGS.NA}\r\n");
+
+                stringBuilder.AppendLine("Firmware Information");
+                stringBuilder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine($"iBoot Version:   {SOCROM.iBootVersion ?? APPSTRINGS.NA}");
+
+                File.WriteAllText(
+                    saveFileDialog.FileName,
+                    stringBuilder.ToString());
+
+                stringBuilder.Clear();
+
+                if (!File.Exists(saveFileDialog.FileName))
+                {
+                    METPrompt.Show(
+                        this,
+                        DIALOGSTRINGS.DATA_EXPORT_FAILED,
+                        METPromptType.Error,
+                        METPromptButtons.Okay);
+
+                    return;
+                }
+
+                UITools.ShowExplorerFileHighlightPrompt(
+                 this,
+                 saveFileDialog.FileName);
+            }
+        }
+
         #endregion
 
         #region Open Binary
@@ -320,6 +482,9 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuOpen,
                 cmdMenuReset,
                 cmdMenuCopy,
+                cmdMenuFolders,
+                cmdMenuExport,
+                cmdMenuPatch
             };
 
             foreach (Button button in buttons)
@@ -335,9 +500,12 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 Dictionary<object, string> tooltips = new Dictionary<object, string>
                 {
-                    { cmdMenuOpen, "Open a T2SOCROM (CTRL + O)" },
-                    { cmdMenuReset, "Reset Window Data (CTRL + R)"},
-                    { cmdMenuCopy, "Open the Clipboard Copy Menu (CTRL + C)" },
+                    { cmdMenuOpen, $"{SOCSTRINGS.MENU_TIP_OPEN} (CTRL + O)" },
+                    { cmdMenuReset, $"{SOCSTRINGS.MENU_TIP_RESET} (CTRL + R)"},
+                    { cmdMenuCopy, $"{SOCSTRINGS.MENU_TIP_COPY} (CTRL + C)" },
+                    { cmdMenuFolders, $"{SOCSTRINGS.MENU_TIP_FOLDERS} (CTRL + L)" },
+                    { cmdMenuExport, $"{SOCSTRINGS.MENU_TIP_EXPORT} (CTRL + E)"},
+                    { cmdMenuPatch, $"{SOCSTRINGS.MENU_TIP_PATCH} (CTRL + P)"}
                 };
 
                 if (tooltips.ContainsKey(sender))
@@ -414,6 +582,8 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 cmdMenuReset,
                 cmdMenuCopy,
+                cmdMenuFolders,
+                cmdMenuExport
             };
 
             void EnableButtons(params Button[] buttons)
@@ -430,7 +600,8 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 EnableButtons(standardButtons);
 
-                bool scfgStoreExists = SOCROM.ScfgSectionData.ScfgBytes != null;
+                exportScfgStoreToolStripMenuItem.Enabled =
+                    SOCROM.ScfgSectionData.StoreBase != -1;
             }
 
             tlpFirmware.Enabled = enable;

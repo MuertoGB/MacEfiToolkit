@@ -222,7 +222,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.pnlSeperatorTop.Size = new System.Drawing.Size(573, 1);
             this.pnlSeperatorTop.TabIndex = 98;
             // 
-            // termsWindow
+            // frmTerms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -243,7 +243,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(575, 310);
-            this.Name = "termsWindow";
+            this.Name = "frmTerms";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

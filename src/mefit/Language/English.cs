@@ -18,6 +18,9 @@ namespace Mac_EFI_Toolkit
         internal const string LZMA_SDK =
             "LZMA SDK";
 
+        internal const string BACKUP =
+            "BACKUP";
+
         internal const string EFIROM =
             "EFIROM";
 
@@ -38,6 +41,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string NOT_FOUND =
             "Not Found";
+
+        internal const string FIRMWARE_INFO =
+            "FirmwareInfo";
 
         internal const string FILTER_SUPPORT_FIRMWARE =
             "UEFI/BIOS Files (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*";
@@ -381,9 +387,6 @@ namespace Mac_EFI_Toolkit
         internal const string NOFWVER =
             "NOFWVER";
 
-        internal const string FIRMWARE_INFO =
-            "FirmwareInfo";
-
         internal const string UNLOCKED =
             "Unlocked";
 
@@ -455,11 +458,29 @@ namespace Mac_EFI_Toolkit
         #endregion
     }
 
-    internal class T2STRINGS
+    internal class SOCSTRINGS
     {
         #region Strings
         internal const string SCFG =
             "SCFG";
+
+        internal const string MENU_TIP_OPEN =
+           "Open a T2 SOCROM";
+
+        internal const string MENU_TIP_RESET =
+            "Unload Firmware and Reset Window";
+
+        internal const string MENU_TIP_COPY =
+            "Open the Copy Menu";
+
+        internal const string MENU_TIP_FOLDERS =
+            "Open the Folders Menu";
+
+        internal const string MENU_TIP_EXPORT =
+            "Open the Export Menu";
+
+        internal const string MENU_TIP_PATCH =
+            "Open the Firmware Patching Menu";
         #endregion
     }
 }

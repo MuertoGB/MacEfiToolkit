@@ -59,21 +59,21 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void WireEventHandlers()
         {
-            Load += startupWindow_Load;
-            KeyDown += startupWindow_KeyDown;
-            FormClosing += startupWindow_FormClosing;
-            DragEnter += startupWindow_DragEnter;
-            DragDrop += startupWindow_DragDrop;
-            DragLeave += startupWindow_DragLeave;
-            Deactivate += startupWindow_Deactivate;
-            Activated += startupWindow_Activated;
+            Load += frmStartup_Load;
+            KeyDown += frmStartup_KeyDown;
+            FormClosing += frmStartup_FormClosing;
+            DragEnter += frmStartup_DragEnter;
+            DragDrop += frmStartup_DragDrop;
+            DragLeave += frmStartup_DragLeave;
+            Deactivate += frmStartup_Deactivate;
+            Activated += frmStartup_Activated;
 
             tlpDrop.Paint += tlpDrop_Paint;
         }
         #endregion
 
         #region Window Events
-        private void startupWindow_Load(object sender, EventArgs e)
+        private void frmStartup_Load(object sender, EventArgs e)
         {
             // Set version text.
             lblAppVersion.Text =
@@ -94,7 +94,7 @@ namespace Mac_EFI_Toolkit.Forms
                 StartupVersionCheck();
         }
 
-        private void startupWindow_FormClosing(object sender, FormClosingEventArgs e)
+        private void frmStartup_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Intercept ALT+F4
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
@@ -115,13 +115,13 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void startupWindow_DragEnter(object sender, DragEventArgs e)
+        private void frmStartup_DragEnter(object sender, DragEventArgs e)
         {
             ApplyDragEnterColours();
             Program.HandleDragEnter(sender, e);
         }
 
-        private void startupWindow_DragDrop(object sender, DragEventArgs e)
+        private void frmStartup_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
             string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -132,39 +132,18 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(draggedFilename);
         }
 
-        private void startupWindow_DragLeave(object sender, EventArgs e) =>
+        private void frmStartup_DragLeave(object sender, EventArgs e) =>
             ApplyDragLeaveColours();
 
-        internal async void StartupVersionCheck()
-        {
-            // Check for a new version using the specified URL.
-            VersionResult result =
-                await AppVersion.CheckForNewVersion(
-                    METUrl.VERSION_MANIFEST);
-
-            // If a new version is available and update the UI.
-            if (result == VersionResult.UpToDate)
-            {
-                cmdMore.Text += " (1)";
-                updateAvailableToolStripMenuItem.Visible = true;
-            }
-        }
-
-        private void startupWindow_Deactivate(object sender, EventArgs e) =>
+        private void frmStartup_Deactivate(object sender, EventArgs e) =>
             SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
 
-        private void startupWindow_Activated(object sender, EventArgs e) =>
+        private void frmStartup_Activated(object sender, EventArgs e) =>
             SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
-
-        private void SetControlForeColor(Control parentControl, Color foreColor)
-        {
-            foreach (Control control in parentControl.Controls)
-                control.ForeColor = foreColor;
-        }
         #endregion
 
         #region KeyDown Events
-        private void startupWindow_KeyDown(object sender, KeyEventArgs e)
+        private void frmStartup_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Modifiers == Keys.Control)
             {
@@ -361,6 +340,12 @@ namespace Mac_EFI_Toolkit.Forms
             tlpDrop.GradientEndColor = Color.Transparent;
             lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
         }
+
+        private void SetControlForeColor(Control parentControl, Color foreColor)
+        {
+            foreach (Control control in parentControl.Controls)
+                control.ForeColor = foreColor;
+        }
         #endregion
 
         #region Misc Events
@@ -433,7 +418,6 @@ namespace Mac_EFI_Toolkit.Forms
             childForm.Show();
         }
 
-
         private void UpdateWindowTitle()
         {
             if (_childWindowCount == 0)
@@ -444,6 +428,21 @@ namespace Mac_EFI_Toolkit.Forms
 
             lblWindowTitle.Text =
                 $"{APPSTRINGS.APPNAME} ({_childWindowCount})";
+        }
+
+        internal async void StartupVersionCheck()
+        {
+            // Check for a new version using the specified URL.
+            VersionResult result =
+                await AppVersion.CheckForNewVersion(
+                    METUrl.VERSION_MANIFEST);
+
+            // If a new version is available and update the UI.
+            if (result == VersionResult.UpToDate)
+            {
+                cmdMore.Text += " (1)";
+                updateAvailableToolStripMenuItem.Visible = true;
+            }
         }
         #endregion
 

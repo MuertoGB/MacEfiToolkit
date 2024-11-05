@@ -27,13 +27,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void WireEventHandlers()
         {
-            Load += ssnWindow_Load;
-            KeyDown += ssnWindow_KeyDown;
+            Load += frmSerialSelect_Load;
+            KeyDown += frmSerialSelect_KeyDown;
         }
         #endregion
 
         #region Window Events
-        private void ssnWindow_Load(object sender, EventArgs e)
+        private void frmSerialSelect_Load(object sender, EventArgs e)
         {
             tbSsn.MaxLength = EFIROM.FsysStoreData.Serial.Length;
             tbSsn.Select();
@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region KeyDown Events
-        private void ssnWindow_KeyDown(object sender, KeyEventArgs e)
+        private void frmSerialSelect_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
                 DialogResult = DialogResult.Cancel;

@@ -40,7 +40,7 @@
             this.cmdMenuReset = new System.Windows.Forms.Button();
             this.cmdMenuPatch = new System.Windows.Forms.Button();
             this.cmdMenuExport = new System.Windows.Forms.Button();
-            this.cmdMenuFolder = new System.Windows.Forms.Button();
+            this.cmdMenuFolders = new System.Windows.Forms.Button();
             this.tlpFirmware = new System.Windows.Forms.TableLayoutPanel();
             this.lblFilesizeText = new System.Windows.Forms.Label();
             this.lblFilenameText = new System.Windows.Forms.Label();
@@ -84,6 +84,17 @@
             this.serialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.orderNoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsFolders = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.openBackupsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openBuildsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openSCFGFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.openWorkingDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsExport = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.exportScfgStoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.backupFirmwareZIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportFirmwareInformationTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
@@ -93,6 +104,8 @@
             this.tlpStatusBarImage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLoad)).BeginInit();
             this.cmsCopy.SuspendLayout();
+            this.cmsFolders.SuspendLayout();
+            this.cmsExport.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpTitle
@@ -211,7 +224,7 @@
             this.tlpMenu.Controls.Add(this.cmdMenuReset, 2, 0);
             this.tlpMenu.Controls.Add(this.cmdMenuPatch, 10, 0);
             this.tlpMenu.Controls.Add(this.cmdMenuExport, 8, 0);
-            this.tlpMenu.Controls.Add(this.cmdMenuFolder, 6, 0);
+            this.tlpMenu.Controls.Add(this.cmdMenuFolders, 6, 0);
             this.tlpMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpMenu.Location = new System.Drawing.Point(1, 52);
             this.tlpMenu.Margin = new System.Windows.Forms.Padding(2);
@@ -322,26 +335,27 @@
             this.cmdMenuExport.TabIndex = 4;
             this.cmdMenuExport.Text = "EXPORT";
             this.cmdMenuExport.UseVisualStyleBackColor = false;
+            this.cmdMenuExport.Click += new System.EventHandler(this.cmdMenuExport_Click);
             // 
-            // cmdMenuFolder
+            // cmdMenuFolders
             // 
-            this.cmdMenuFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdMenuFolder.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdMenuFolder.Enabled = false;
-            this.cmdMenuFolder.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdMenuFolder.FlatAppearance.BorderSize = 0;
-            this.cmdMenuFolder.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.cmdMenuFolder.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
-            this.cmdMenuFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmdMenuFolder.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdMenuFolder.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
-            this.cmdMenuFolder.Location = new System.Drawing.Point(264, 0);
-            this.cmdMenuFolder.Margin = new System.Windows.Forms.Padding(0);
-            this.cmdMenuFolder.Name = "cmdMenuFolder";
-            this.cmdMenuFolder.Size = new System.Drawing.Size(87, 32);
-            this.cmdMenuFolder.TabIndex = 3;
-            this.cmdMenuFolder.Text = "FOLDERS";
-            this.cmdMenuFolder.UseVisualStyleBackColor = false;
+            this.cmdMenuFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdMenuFolders.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cmdMenuFolders.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdMenuFolders.FlatAppearance.BorderSize = 0;
+            this.cmdMenuFolders.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdMenuFolders.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdMenuFolders.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmdMenuFolders.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdMenuFolders.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.cmdMenuFolders.Location = new System.Drawing.Point(264, 0);
+            this.cmdMenuFolders.Margin = new System.Windows.Forms.Padding(0);
+            this.cmdMenuFolders.Name = "cmdMenuFolders";
+            this.cmdMenuFolders.Size = new System.Drawing.Size(87, 32);
+            this.cmdMenuFolders.TabIndex = 3;
+            this.cmdMenuFolders.Text = "FOLDERS";
+            this.cmdMenuFolders.UseVisualStyleBackColor = false;
+            this.cmdMenuFolders.Click += new System.EventHandler(this.cmdMenuFolders_Click);
             // 
             // tlpFirmware
             // 
@@ -951,6 +965,100 @@
             this.orderNoToolStripMenuItem.Text = "Order No";
             this.orderNoToolStripMenuItem.Click += new System.EventHandler(this.orderNoToolStripMenuItem_Click);
             // 
+            // cmsFolders
+            // 
+            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsFolders.Font = new System.Drawing.Font("Segoe UI", 10.2F);
+            this.cmsFolders.ForeColor = System.Drawing.Color.White;
+            this.cmsFolders.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsFolders.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openBackupsFolderToolStripMenuItem,
+            this.openBuildsFolderToolStripMenuItem,
+            this.openSCFGFolderToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.openWorkingDirectoryToolStripMenuItem});
+            this.cmsFolders.Name = "cmsFolders";
+            this.cmsFolders.ShowImageMargin = false;
+            this.cmsFolders.Size = new System.Drawing.Size(240, 122);
+            // 
+            // openBackupsFolderToolStripMenuItem
+            // 
+            this.openBackupsFolderToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.openBackupsFolderToolStripMenuItem.Name = "openBackupsFolderToolStripMenuItem";
+            this.openBackupsFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openBackupsFolderToolStripMenuItem.Text = "Open Backups Folder";
+            this.openBackupsFolderToolStripMenuItem.Click += new System.EventHandler(this.openBackupsFolderToolStripMenuItem_Click);
+            // 
+            // openBuildsFolderToolStripMenuItem
+            // 
+            this.openBuildsFolderToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.openBuildsFolderToolStripMenuItem.Name = "openBuildsFolderToolStripMenuItem";
+            this.openBuildsFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openBuildsFolderToolStripMenuItem.Text = "Open Builds Folder";
+            this.openBuildsFolderToolStripMenuItem.Click += new System.EventHandler(this.openBuildsFolderToolStripMenuItem_Click);
+            // 
+            // openSCFGFolderToolStripMenuItem
+            // 
+            this.openSCFGFolderToolStripMenuItem.Name = "openSCFGFolderToolStripMenuItem";
+            this.openSCFGFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openSCFGFolderToolStripMenuItem.Text = "Open SCFG Folder";
+            this.openSCFGFolderToolStripMenuItem.Click += new System.EventHandler(this.openSCFGFolderToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(236, 6);
+            // 
+            // openWorkingDirectoryToolStripMenuItem
+            // 
+            this.openWorkingDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.openWorkingDirectoryToolStripMenuItem.Name = "openWorkingDirectoryToolStripMenuItem";
+            this.openWorkingDirectoryToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
+            this.openWorkingDirectoryToolStripMenuItem.Text = "Open Working Directory";
+            this.openWorkingDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openWorkingDirectoryToolStripMenuItem_Click);
+            // 
+            // cmsExport
+            // 
+            this.cmsExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsExport.Font = new System.Drawing.Font("Segoe UI", 10.2F);
+            this.cmsExport.ForeColor = System.Drawing.Color.White;
+            this.cmsExport.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsExport.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportScfgStoreToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.backupFirmwareZIPToolStripMenuItem,
+            this.exportFirmwareInformationTextToolStripMenuItem});
+            this.cmsExport.Name = "cmsExport";
+            this.cmsExport.ShowImageMargin = false;
+            this.cmsExport.Size = new System.Drawing.Size(319, 94);
+            // 
+            // exportScfgStoreToolStripMenuItem
+            // 
+            this.exportScfgStoreToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.exportScfgStoreToolStripMenuItem.Name = "exportScfgStoreToolStripMenuItem";
+            this.exportScfgStoreToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
+            this.exportScfgStoreToolStripMenuItem.Text = "Export Scfg Store";
+            this.exportScfgStoreToolStripMenuItem.Click += new System.EventHandler(this.exportScfgStoreToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(315, 6);
+            // 
+            // backupFirmwareZIPToolStripMenuItem
+            // 
+            this.backupFirmwareZIPToolStripMenuItem.Name = "backupFirmwareZIPToolStripMenuItem";
+            this.backupFirmwareZIPToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
+            this.backupFirmwareZIPToolStripMenuItem.Text = "Backup Firmware (ZIP)";
+            this.backupFirmwareZIPToolStripMenuItem.Click += new System.EventHandler(this.backupFirmwareZIPToolStripMenuItem_Click);
+            // 
+            // exportFirmwareInformationTextToolStripMenuItem
+            // 
+            this.exportFirmwareInformationTextToolStripMenuItem.Name = "exportFirmwareInformationTextToolStripMenuItem";
+            this.exportFirmwareInformationTextToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
+            this.exportFirmwareInformationTextToolStripMenuItem.Text = "Export Firmware Information (Text)";
+            this.exportFirmwareInformationTextToolStripMenuItem.Click += new System.EventHandler(this.exportFirmwareInformationTextToolStripMenuItem_Click);
+            // 
             // frmSocRom
             // 
             this.AllowDrop = true;
@@ -985,6 +1093,8 @@
             this.tlpStatusBarImage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLoad)).EndInit();
             this.cmsCopy.ResumeLayout(false);
+            this.cmsFolders.ResumeLayout(false);
+            this.cmsExport.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1030,7 +1140,7 @@
         private System.Windows.Forms.Button cmdMenuExport;
         private System.Windows.Forms.Label lblScfg;
         internal System.Windows.Forms.Button cmdMinimize;
-        private System.Windows.Forms.Button cmdMenuFolder;
+        private System.Windows.Forms.Button cmdMenuFolders;
         private UI.METContextMenuStrip cmsCopy;
         private System.Windows.Forms.ToolStripMenuItem filenameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sizeToolStripMenuItem;
@@ -1046,5 +1156,16 @@
         private System.Windows.Forms.ToolStripMenuItem serialToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem configToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem orderNoToolStripMenuItem;
+        private UI.METContextMenuStrip cmsFolders;
+        private System.Windows.Forms.ToolStripMenuItem openBackupsFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openBuildsFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openSCFGFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem openWorkingDirectoryToolStripMenuItem;
+        private UI.METContextMenuStrip cmsExport;
+        private System.Windows.Forms.ToolStripMenuItem exportScfgStoreToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem backupFirmwareZIPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportFirmwareInformationTextToolStripMenuItem;
     }
 }

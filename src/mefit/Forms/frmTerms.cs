@@ -33,14 +33,14 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void WireEventHandlers()
         {
-            Load += termsWindow_Load;
-            KeyDown += termsWindow_KeyDown;
+            Load += frmTerms_Load;
+            KeyDown += frmTerms_KeyDown;
             pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
         }
         #endregion
 
         #region Window Events
-        private void termsWindow_Load(object sender, EventArgs e) =>
+        private void frmTerms_Load(object sender, EventArgs e) =>
             tbxTermsText.Text = Properties.Resources.editorterms;
         #endregion
 
@@ -75,7 +75,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region KeyDown Events
-        private void termsWindow_KeyDown(object sender, KeyEventArgs e)
+        private void frmTerms_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {

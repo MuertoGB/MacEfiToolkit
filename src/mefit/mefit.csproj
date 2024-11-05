@@ -127,7 +127,6 @@
     <Compile Include="Language\English.cs" />
     <Compile Include="Firmware\SOCROM\Structs\ScfgStore.cs" />
     <Compile Include="Firmware\SOCROM\SOCROM.cs" />
-    <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
     <Compile Include="UI\METPrompt\Enums.cs" />
     <Compile Include="UI\UITools.cs" />
@@ -142,9 +141,6 @@
     </Compile>
     <Compile Include="UI\METPrompt\METPrompt.Designer.cs">
       <DependentUpon>METPrompt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Controls\METRadioButton.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\Controls\METSwitch.cs">
       <SubType>Component</SubType>
