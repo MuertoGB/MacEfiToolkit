@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241104.2325";
+        internal const string APP_BUILD = "241105.0205";
         internal const string APP_CHANNEL = "DEV";
     }
 
@@ -378,6 +378,33 @@ namespace Mac_EFI_Toolkit
 #else
             return false;
 #endif
+        }
+
+        public static void HandleDragEnter(object sender, DragEventArgs e)
+        {
+            // Check if the dragged data is a file.
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                // Check if only one file is being dragged.
+                if (draggedFiles.Length == 1)
+                {
+                    // Check if the dragged item is a file and not a folder.
+                    string draggedFile = draggedFiles[0];
+                    FileAttributes attributes = File.GetAttributes(draggedFile);
+
+                    // If it's a file (not a folder) then allow the copy operation.
+                    if ((attributes & FileAttributes.Directory) == 0)
+                    {
+                        e.Effect = DragDropEffects.Copy;
+                        return;
+                    }
+                }
+            }
+
+            // Disable the drop operation.
+            e.Effect = DragDropEffects.None;
         }
         #endregion
     }

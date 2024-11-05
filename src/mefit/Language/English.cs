@@ -21,11 +21,17 @@ namespace Mac_EFI_Toolkit
         internal const string EFIROM =
             "EFIROM";
 
+        internal const string SOCROM =
+            "SOCROM";
+
         internal const string UNKNOWN =
             "Unknown";
 
         internal const string NA =
             "N/A";
+
+        internal const string BYTES =
+            "bytes";
 
         internal const string CONTACT_SERVER =
             "Contacting Server...";
@@ -383,9 +389,6 @@ namespace Mac_EFI_Toolkit
 
         internal const string LOCKED =
             "Locked";
-
-        internal const string BYTES =
-            "bytes";
 
         internal const string BASE =
             "Base:";

@@ -220,7 +220,7 @@
             this.tlpMenu.RowCount = 1;
             this.tlpMenu.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMenu.Size = new System.Drawing.Size(433, 32);
-            this.tlpMenu.TabIndex = 0;
+            this.tlpMenu.TabIndex = 1;
             // 
             // cmdSettings
             // 
@@ -237,7 +237,7 @@
             this.cmdSettings.Margin = new System.Windows.Forms.Padding(0);
             this.cmdSettings.Name = "cmdSettings";
             this.cmdSettings.Size = new System.Drawing.Size(107, 32);
-            this.cmdSettings.TabIndex = 6;
+            this.cmdSettings.TabIndex = 0;
             this.cmdSettings.Text = "SETTINGS";
             this.cmdSettings.UseVisualStyleBackColor = false;
             this.cmdSettings.Click += new System.EventHandler(this.cmdSettings_Click);
@@ -257,7 +257,7 @@
             this.cmdAbout.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAbout.Name = "cmdAbout";
             this.cmdAbout.Size = new System.Drawing.Size(107, 32);
-            this.cmdAbout.TabIndex = 7;
+            this.cmdAbout.TabIndex = 1;
             this.cmdAbout.Text = "ABOUT";
             this.cmdAbout.UseVisualStyleBackColor = false;
             this.cmdAbout.Click += new System.EventHandler(this.cmdAbout_Click);
@@ -277,7 +277,7 @@
             this.cmdMore.Margin = new System.Windows.Forms.Padding(0);
             this.cmdMore.Name = "cmdMore";
             this.cmdMore.Size = new System.Drawing.Size(109, 32);
-            this.cmdMore.TabIndex = 8;
+            this.cmdMore.TabIndex = 3;
             this.cmdMore.Text = "MORE";
             this.cmdMore.UseVisualStyleBackColor = false;
             this.cmdMore.Click += new System.EventHandler(this.cmdMore_Click);
@@ -297,7 +297,7 @@
             this.cmdMenuFolders.Margin = new System.Windows.Forms.Padding(0);
             this.cmdMenuFolders.Name = "cmdMenuFolders";
             this.cmdMenuFolders.Size = new System.Drawing.Size(107, 32);
-            this.cmdMenuFolders.TabIndex = 9;
+            this.cmdMenuFolders.TabIndex = 2;
             this.cmdMenuFolders.Text = "FOLDERS";
             this.cmdMenuFolders.UseVisualStyleBackColor = false;
             this.cmdMenuFolders.Click += new System.EventHandler(this.cmdMenuFolders_Click);
@@ -330,7 +330,7 @@
             this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 56F));
             this.tlpDrop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpDrop.Size = new System.Drawing.Size(433, 195);
-            this.tlpDrop.TabIndex = 1;
+            this.tlpDrop.TabIndex = 0;
             this.tlpDrop.Paint += new System.Windows.Forms.PaintEventHandler(this.tlpDrop_Paint);
             // 
             // lblDrag
@@ -564,7 +564,7 @@
             this.openWorkingDirectoryToolStripMenuItem.Text = "Open Working Directory";
             this.openWorkingDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openWorkingDirectoryToolStripMenuItem_Click);
             // 
-            // startupWindow
+            // frmStartup
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -583,7 +583,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(435, 280);
-            this.Name = "startupWindow";
+            this.Name = "frmStartup";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mac EFI Toolkit";

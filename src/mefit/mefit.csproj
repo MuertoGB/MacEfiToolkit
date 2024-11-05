@@ -125,9 +125,8 @@
     <Compile Include="Common\Logger.cs" />
     <Compile Include="AppVersion.cs" />
     <Compile Include="Language\English.cs" />
-    <Compile Include="Firmware\T2\Structs\ScfgData.cs" />
-    <Compile Include="Firmware\T2\T2ROM.cs" />
-    <Compile Include="Firmware\T2\ROMSigs.cs" />
+    <Compile Include="Firmware\SOCROM\Structs\ScfgStore.cs" />
+    <Compile Include="Firmware\SOCROM\SOCROM.cs" />
     <Compile Include="UI\Design\METRadioButtonDesigner.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
     <Compile Include="UI\METPrompt\Enums.cs" />
@@ -212,11 +211,11 @@
     <Compile Include="Forms\frmSocRom.Designer.cs">
       <DependentUpon>frmSocRom.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\termsWindow.cs">
+    <Compile Include="Forms\frmTerms.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\termsWindow.Designer.cs">
-      <DependentUpon>termsWindow.cs</DependentUpon>
+    <Compile Include="Forms\frmTerms.Designer.cs">
+      <DependentUpon>frmTerms.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="UI\METForm.resx">
       <DependentUpon>METForm.cs</DependentUpon>
@@ -259,8 +258,8 @@
     <EmbeddedResource Include="Forms\frmSocRom.resx">
       <DependentUpon>frmSocRom.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\termsWindow.resx">
-      <DependentUpon>termsWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\frmTerms.resx">
+      <DependentUpon>frmTerms.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>

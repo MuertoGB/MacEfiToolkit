@@ -88,6 +88,12 @@ namespace Mac_EFI_Toolkit.Forms
             OpenFolderDialog(
                 SettingsStringType.StartupInitialDirectory,
                 ref _strStartupInitialPath);
+
+            if (!string.Equals(_strStartupInitialPath, lblStartupDirectory.Text))
+            {
+                lblStartupDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strStartupInitialPath}";
+                lblStartupDirectory.ForeColor = AppColours.COMPLETE;
+            }
         }
 
         private void cmdEditEfiDir_Click(object sender, EventArgs e)
@@ -95,6 +101,12 @@ namespace Mac_EFI_Toolkit.Forms
             OpenFolderDialog(
                 SettingsStringType.EfiInitialDirectory,
                 ref _strEfiInitialPath);
+
+            if (!string.Equals(_strEfiInitialPath, lblEfiDirectory.Text))
+            {
+                lblEfiDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strEfiInitialPath}";
+                lblEfiDirectory.ForeColor = AppColours.COMPLETE;
+            }
         }
 
         private void cmdEditSocDir_Click(object sender, EventArgs e)
@@ -102,15 +114,22 @@ namespace Mac_EFI_Toolkit.Forms
             OpenFolderDialog(
                 SettingsStringType.SocInitialDirectory,
                 ref _strSocInitialPath);
+
+            if (!string.Equals(_strSocInitialPath, lblSocDirectory))
+            {
+                lblSocDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strSocInitialPath}";
+                lblSocDirectory.ForeColor = AppColours.COMPLETE;
+            }
         }
 
         private void OpenFolderDialog(SettingsStringType settingsType, ref string pathVariable)
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                dialog.SelectedPath = string.IsNullOrEmpty(Settings.ReadString(settingsType))
-                    ? METPath.WORKING_DIR
-                    : Settings.ReadString(settingsType);
+                dialog.SelectedPath =
+                    string.IsNullOrEmpty(Settings.ReadString(settingsType))
+                        ? METPath.WORKING_DIR
+                        : Settings.ReadString(settingsType);
 
                 dialog.Description = APPSTRINGS.SELECT_FOLDER;
                 dialog.ShowNewFolderButton = true;

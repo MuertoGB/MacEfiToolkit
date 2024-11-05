@@ -6,7 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.EFI;
-using Mac_EFI_Toolkit.Firmware.T2;
+using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
 using System;
@@ -117,30 +117,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void startupWindow_DragEnter(object sender, DragEventArgs e)
         {
-            // Check if the dragged data is a file.
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                // Check if only one file is being dragged.
-                if (draggedFiles.Length == 1)
-                {
-                    // Check if the dragged item is a file and not a folder.
-                    string draggedFile = draggedFiles[0];
-                    FileAttributes attributes = File.GetAttributes(draggedFile);
-
-                    // If it's a file (not a folder) then allow the copy operation.
-                    if ((attributes & FileAttributes.Directory) == 0)
-                    {
-                        ApplyDragEnterColours();
-                        e.Effect = DragDropEffects.Copy;
-                        return;
-                    }
-                }
-            }
-
-            // Disable the drop operation.
-            e.Effect = DragDropEffects.None;
+            ApplyDragEnterColours();
+            Program.HandleDragEnter(sender, e);
         }
 
         private void startupWindow_DragDrop(object sender, DragEventArgs e)
@@ -379,8 +357,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ApplyDragLeaveColours()
         {
-            tlpDrop.GradientStartColor = Color.FromArgb(30, 30, 30);
-            tlpDrop.GradientEndColor = Color.FromArgb(30, 30, 30);
+            tlpDrop.GradientStartColor = Color.Transparent;
+            tlpDrop.GradientEndColor = Color.Transparent;
             lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
         }
         #endregion
@@ -429,7 +407,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (EFIROM.IsValidImage(sourceBytes))
                 return new frmEfiRom();
-            else if (T2ROM.IsValidImage(sourceBytes))
+            else if (SOCROM.IsValidImage(sourceBytes))
                 return new frmSocRom();
 
             return null;

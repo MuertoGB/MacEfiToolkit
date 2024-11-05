@@ -20,6 +20,7 @@ public class METForm : Form
     private const int WS_MINIMIZEBOX = 0x20000;
     private const int CS_DBLCLKS = 0x8;
     private const int CS_DROP = 0x20000;
+
     private static List<METForm> openForms = new List<METForm>();
     #endregion
 
@@ -102,16 +103,4 @@ public class METForm : Form
 
     }
     #endregion
-
-    private void InitializeComponent()
-    {
-            this.SuspendLayout();
-            // 
-            // METForm
-            // 
-            this.ClientSize = new System.Drawing.Size(163, 19);
-            this.Name = "METForm";
-            this.ResumeLayout(false);
-
-    }
 }

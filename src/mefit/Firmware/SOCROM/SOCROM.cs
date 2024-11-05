@@ -8,9 +8,9 @@ using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.Tools.Structs;
 using System.Text;
 
-namespace Mac_EFI_Toolkit.Firmware.T2
+namespace Mac_EFI_Toolkit.Firmware.SOCROM
 {
-    internal class T2ROM
+    internal class SOCROM
     {
         #region Internal Members
         internal static string LoadedBinaryPath = null;
@@ -20,7 +20,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
         internal static string iBootVersion = null;
         internal static string ConfigCode = null;
         internal static Binary FileInfoData;
-        internal static SCfgData ScfgSectionData;
+        internal static ScfgStore ScfgSectionData;
         #endregion
 
         #region Private Members
@@ -65,7 +65,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             int ibootSig =
                 BinaryTools.GetBaseAddress(
                     source,
-                    ROMSigs.IBOOT_VER_SIG,
+                    IBOOT_VER_SIG,
                     0);
 
             return (ibootSig != -1);
@@ -78,7 +78,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             int ibootSig =
                 BinaryTools.GetBaseAddress(
                     source,
-                    ROMSigs.IBOOT_VER_SIG, 0);
+                    IBOOT_VER_SIG, 0);
 
             if (ibootSig != -1) // Signature found
             {
@@ -86,7 +86,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
                 byte[] lByte =
                     BinaryTools.GetBytesBaseLength(
                     source,
-                    ibootSig + ROMSigs.IBOOT_VER_SIG.Length + 1,
+                    ibootSig + IBOOT_VER_SIG.Length + 1,
                     1);
 
                 // Convert data length to unsigned int8
@@ -107,12 +107,12 @@ namespace Mac_EFI_Toolkit.Firmware.T2
         #endregion
 
         #region SCfg
-        internal static SCfgData GetSCfgData(byte[] source)
+        internal static ScfgStore GetSCfgData(byte[] source)
         {
             int scfgBase =
                 BinaryTools.GetBaseAddress(
                     source,
-                    ROMSigs.SCFG_HEADER_SIG);
+                    SCFG_HEADER_SIG);
 
             if (scfgBase == -1)
                 return DefaultScfgData();
@@ -120,7 +120,7 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             byte dataSize =
                 BinaryTools.GetBytesBaseLength(
                     source,
-                    scfgBase + ROMSigs.SCFG_HEADER_SIG.Length, 1)[0];
+                    scfgBase + SCFG_HEADER_SIG.Length, 1)[0];
 
             if (dataSize == 0)
                 return DefaultScfgData();
@@ -140,23 +140,23 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             string serial =
                 GetStringFromSig(
                     scfgBytes,
-                    ROMSigs.SCFG_SSN_SIG,
+                    SCFG_SSN_SIG,
                     _serialLength,
                     out string hwc);
 
             string son =
                 GetStringFromSigWithLimit(
                     scfgBytes,
-                    ROMSigs.SCFG_SON_SIG,
+                    SCFG_SON_SIG,
                     _limitChars);
 
             string regno =
                 GetStringFromSigWithLimit(
                     scfgBytes,
-                    ROMSigs.SCFG_SON_REGN,
+                    SCFG_SON_REGN,
                     _limitChars);
 
-            return new SCfgData
+            return new ScfgStore
             {
                 StoreBase = scfgBase,
                 StoreSize = dataSize,
@@ -232,9 +232,9 @@ namespace Mac_EFI_Toolkit.Firmware.T2
             return _utf8.GetString(bytes);
         }
 
-        private static SCfgData DefaultScfgData()
+        private static ScfgStore DefaultScfgData()
         {
-            return new SCfgData
+            return new ScfgStore
             {
                 StoreBase = -1,
                 StoreSize = 0,
@@ -247,6 +247,31 @@ namespace Mac_EFI_Toolkit.Firmware.T2
                 RegNumText = null
             };
         }
+
+        internal static readonly byte[] IBOOT_VER_SIG = // iBoot version signature, byte 5 is validity byte?, byte 6 is var size.
+{
+            0x69, 0x6C, 0X6C, 0X62
+        };
+
+        internal static readonly byte[] SCFG_HEADER_SIG = // Header
+        {
+            0x67, 0x66, 0x43, 0x53
+        };
+
+        internal static readonly byte[] SCFG_SSN_SIG = // System Serial Number
+        {
+            0x6D, 0x4E, 0x72, 0x53
+        };
+
+        internal static readonly byte[] SCFG_SON_SIG = // System Order Number
+        {
+            0x23, 0x64, 0x6F, 0x4D
+        };
+
+        internal static readonly byte[] SCFG_SON_REGN = // Registration Number?
+        {
+            0x6E, 0x67, 0x65, 0x52
+        };
         #endregion
     }
 }

@@ -77,8 +77,8 @@ namespace Mac_EFI_Toolkit.Forms
                 EFIROM.AppleRomInfoSectionData.Compiler
                 ?? "N/A";
             lblSectionData.Text =
-                $"BASE 0x{EFIROM.AppleRomInfoSectionData.SectionBase:X}h, " +
-                $"SIZE {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h"
+                $"BASE: {EFIROM.AppleRomInfoSectionData.SectionBase:X}h, " +
+                $"SIZE: {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h"
                 ?? string.Empty;
 
             foreach (Label label in tlpInfo.Controls)

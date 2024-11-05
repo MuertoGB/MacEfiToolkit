@@ -198,7 +198,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableConfirmationDialogs.BackColor = System.Drawing.Color.Black;
             this.swDisableConfirmationDialogs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableConfirmationDialogs.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableConfirmationDialogs.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableConfirmationDialogs.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.swDisableConfirmationDialogs.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableConfirmationDialogs.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableConfirmationDialogs.Location = new System.Drawing.Point(390, 8);
@@ -309,7 +309,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableVersionCheck.BackColor = System.Drawing.Color.Black;
             this.swDisableVersionCheck.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableVersionCheck.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableVersionCheck.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.swDisableVersionCheck.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableVersionCheck.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableVersionCheck.Location = new System.Drawing.Point(390, 7);
@@ -371,7 +371,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableFlashingUiElements.BackColor = System.Drawing.Color.Black;
             this.swDisableFlashingUiElements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableFlashingUiElements.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableFlashingUiElements.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableFlashingUiElements.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.swDisableFlashingUiElements.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableFlashingUiElements.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableFlashingUiElements.Location = new System.Drawing.Point(390, 7);
@@ -486,7 +486,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableStatusBarTips.BackColor = System.Drawing.Color.Black;
             this.swDisableStatusBarTips.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableStatusBarTips.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableStatusBarTips.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableStatusBarTips.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.swDisableStatusBarTips.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableStatusBarTips.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableStatusBarTips.Location = new System.Drawing.Point(390, 7);
@@ -532,7 +532,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableMessageWindowSounds.BackColor = System.Drawing.Color.Black;
             this.swDisableMessageWindowSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swDisableMessageWindowSounds.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableMessageWindowSounds.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swDisableMessageWindowSounds.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.swDisableMessageWindowSounds.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swDisableMessageWindowSounds.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swDisableMessageWindowSounds.Location = new System.Drawing.Point(390, 7);
@@ -564,7 +564,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblEfiDirectory.Location = new System.Drawing.Point(0, 359);
             this.lblEfiDirectory.Margin = new System.Windows.Forms.Padding(0);
             this.lblEfiDirectory.Name = "lblEfiDirectory";
-            this.lblEfiDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+            this.lblEfiDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 2);
             this.lblEfiDirectory.Size = new System.Drawing.Size(433, 28);
             this.lblEfiDirectory.TabIndex = 0;
             this.lblEfiDirectory.Text = "...";
@@ -629,7 +629,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblStartupDirectory.Location = new System.Drawing.Point(0, 298);
             this.lblStartupDirectory.Margin = new System.Windows.Forms.Padding(0);
             this.lblStartupDirectory.Name = "lblStartupDirectory";
-            this.lblStartupDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+            this.lblStartupDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 2);
             this.lblStartupDirectory.Size = new System.Drawing.Size(433, 28);
             this.lblStartupDirectory.TabIndex = 102;
             this.lblStartupDirectory.Text = "...";
@@ -694,7 +694,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblSocDirectory.Location = new System.Drawing.Point(0, 420);
             this.lblSocDirectory.Margin = new System.Windows.Forms.Padding(0);
             this.lblSocDirectory.Name = "lblSocDirectory";
-            this.lblSocDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+            this.lblSocDirectory.Padding = new System.Windows.Forms.Padding(12, 0, 0, 2);
             this.lblSocDirectory.Size = new System.Drawing.Size(433, 28);
             this.lblSocDirectory.TabIndex = 0;
             this.lblSocDirectory.Text = "...";
@@ -722,7 +722,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swUseAccentColor.BackColor = System.Drawing.Color.Black;
             this.swUseAccentColor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.swUseAccentColor.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swUseAccentColor.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(170)))), ((int)(((byte)(255)))));
+            this.swUseAccentColor.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.swUseAccentColor.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.swUseAccentColor.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
             this.swUseAccentColor.Location = new System.Drawing.Point(390, 7);
@@ -848,7 +848,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.panel1.Size = new System.Drawing.Size(433, 1);
             this.panel1.TabIndex = 101;
             // 
-            // settingsWindow
+            // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -869,7 +869,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(435, 557);
-            this.Name = "settingsWindow";
+            this.Name = "frmSettings";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

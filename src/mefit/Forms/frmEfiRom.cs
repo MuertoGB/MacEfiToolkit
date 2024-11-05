@@ -83,32 +83,8 @@ namespace Mac_EFI_Toolkit.Forms
         private void efiWindow_FormClosed(object sender, FormClosedEventArgs e) =>
             _cancellationToken?.Dispose();
 
-        private void efiWindow_DragEnter(object sender, DragEventArgs e)
-        {
-            // Check if the dragged data is a file.
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                // Check if only one file is being dragged.
-                if (draggedFiles.Length == 1)
-                {
-                    // Check if the dragged item is a file and not a folder.
-                    string draggedFile = draggedFiles[0];
-                    FileAttributes attributes = File.GetAttributes(draggedFile);
-
-                    // If it's a file (not a folder) then allow the copy operation.
-                    if ((attributes & FileAttributes.Directory) == 0)
-                    {
-                        e.Effect = DragDropEffects.Copy;
-                        return;
-                    }
-                }
-            }
-
-            // Disable the drop operation.
-            e.Effect = DragDropEffects.None;
-        }
+        private void efiWindow_DragEnter(object sender, DragEventArgs e) =>
+            Program.HandleDragEnter(sender, e);
 
         private void efiWindow_DragDrop(object sender, DragEventArgs e)
         {
@@ -620,16 +596,16 @@ namespace Mac_EFI_Toolkit.Forms
                 if (IFD.IsDescriptorMode)
                 {
                     builder.AppendLine(
-                        $"PDR Region:      Base: 0x{IFD.PDR_REGION_BASE:X}h, " +
-                        $"Limit: 0x{IFD.PDR_REGION_LIMIT:X}h, " +
+                        $"PDR Region:      Base: {IFD.PDR_REGION_BASE:X}h, " +
+                        $"Limit: {IFD.PDR_REGION_LIMIT:X}h, " +
                         $"Size: {IFD.PDR_REGION_SIZE:X}h");
                     builder.AppendLine(
-                        $"ME Region:       Base: 0x{IFD.ME_REGION_BASE:X}h, " +
-                        $"Limit: 0x{IFD.ME_REGION_LIMIT:X}h, " +
+                        $"ME Region:       Base: {IFD.ME_REGION_BASE:X}h, " +
+                        $"Limit: {IFD.ME_REGION_LIMIT:X}h, " +
                         $"Size: {IFD.ME_REGION_SIZE:X}h");
                     builder.AppendLine(
-                        $"BIOS Region:     Base: 0x{IFD.BIOS_REGION_BASE:X}h, " +
-                        $"Limit: 0x{IFD.BIOS_REGION_LIMIT:X}h, " +
+                        $"BIOS Region:     Base: {IFD.BIOS_REGION_BASE:X}h, " +
+                        $"Limit: {IFD.BIOS_REGION_LIMIT:X}h, " +
                         $"Size: {IFD.BIOS_REGION_SIZE:X}h\r\n");
                 }
                 else
@@ -648,7 +624,7 @@ namespace Mac_EFI_Toolkit.Forms
                 builder.AppendLine("----------------------------------");
                 if (EFIROM.FsysStoreData.FsysBytes != null)
                 {
-                    builder.AppendLine($"Base:            0x{EFIROM.FsysStoreData.FsysBase:X}h");
+                    builder.AppendLine($"Base:            {EFIROM.FsysStoreData.FsysBase:X}h");
                     builder.AppendLine($"Size:            {EFIROM.FSYS_RGN_SIZE:X}h");
                     builder.AppendLine($"CRC32:           {EFIROM.FsysStoreData.CrcString ?? "N/A"}");
                     builder.AppendLine($"Serial:          {EFIROM.FsysStoreData.Serial ?? "N/A"}");
@@ -807,7 +783,91 @@ namespace Mac_EFI_Toolkit.Forms
             Process.Start($"https://everymac.com/ultimate-mac-lookup/?search_keywords={EFIROM.FsysStoreData.Serial}");
         #endregion
 
-        #region Update Main Window
+        #region Open binary
+        private void OpenBinary(string filePath)
+        {
+            ToggleControlEnable(false);
+
+            // If a firmware is loaded, reset all data.
+            if (EFIROM.FirmwareLoaded)
+                ResetWindow();
+
+            // Check the filesize
+            if (!FileTools.IsValidMinMaxSize(filePath, this))
+            {
+                ResetWindow();
+                return;
+            }
+
+            // Set the binary path and load the bytes.
+            EFIROM.LoadedBinaryPath = filePath;
+
+            EFIROM.LoadedBinaryBytes =
+                File.ReadAllBytes(
+                    filePath);
+
+            // Check if the image is what we're looking for.
+            if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBytes))
+            {
+                METPrompt.Show(
+                    this,
+                    DIALOGSTRINGS.FILE_NOT_VALID,
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
+
+                ResetWindow();
+
+                return;
+            }
+
+            // Show loading resource.
+            pbxLoad.Image = Properties.Resources.loading;
+
+            // Set the current initial directory.
+            _strInitialDirectory = Path.GetDirectoryName(filePath);
+
+            // Load the firmware base in a separate thread.
+            _tLoadFirmware = new Thread(() => LoadFirmwareBase(filePath, _cancellationToken.Token))
+            {
+                IsBackground = true
+            };
+
+            _tLoadFirmware.Start();
+        }
+
+        private void LoadFirmwareBase(string filePath, CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
+            EFIROM.LoadFirmwareBaseData(
+                EFIROM.LoadedBinaryBytes,
+                filePath);
+
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
+            if (this.IsHandleCreated && !cancellationToken.IsCancellationRequested)
+            {
+                try
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        UpdateUI();
+                    });
+                }
+                catch (ObjectDisposedException)
+                {
+                    return;
+                }
+            }
+
+            if (!cancellationToken.IsCancellationRequested)
+                EFIROM.FirmwareLoaded = true;
+        }
+        #endregion
+
+        #region Update Window
         internal void UpdateUI()
         {
             // File information.
@@ -846,10 +906,11 @@ namespace Mac_EFI_Toolkit.Forms
             biosBaseToolStripMenuItem.Enabled =
                 IFD.BIOS_REGION_BASE != 0;
 
+            // Update window title.
+            UpdateWindowTitle();
+
             // Hide loading image.
             pbxLoad.Image = null;
-
-            UpdateWindowTitle();
 
             // Check and set control enable.
             ToggleControlEnable(true);
@@ -868,7 +929,7 @@ namespace Mac_EFI_Toolkit.Forms
                     fileSizeDecimal);
 
             lblFilesize.Text =
-                $"{FileTools.FormatFileSize(fileSizeDecimal)} {EFISTRINGS.BYTES} ({fileSizeDecimal:X}h)";
+                $"{FileTools.FormatFileSize(fileSizeDecimal)} {APPSTRINGS.BYTES} ({fileSizeDecimal:X}h)";
 
             if (!isValidSize)
             {
@@ -960,7 +1021,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (EFIROM.FsysStoreData.FsysBase != -1)
             {
                 lblFsysStore.Text =
-                    $"0x{EFIROM.FsysStoreData.FsysBase:X2}h";
+                    $"{EFIROM.FsysStoreData.FsysBase:X2}h";
 
                 bool crcMatch =
                     string.Equals(
@@ -1116,7 +1177,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (baseAddress != -1)
             {
-                label.Text = $"0x{baseAddress:X2}h {(isEmpty ? $"[{EFISTRINGS.EMPTY}]" : string.Empty)}";
+                label.Text = $"{baseAddress:X2}h {(isEmpty ? $"[{EFISTRINGS.EMPTY}]" : string.Empty)}";
                 menuItem.Enabled = true;
             }
             else
@@ -1180,7 +1241,7 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 if (IFD.ME_REGION_BASE != 0)
                     if (!string.IsNullOrEmpty(meVersion))
-                        lblMeVersion.Text += $" (0x{IFD.ME_REGION_BASE:X}h)";
+                        lblMeVersion.Text += $" ({IFD.ME_REGION_BASE:X}h)";
 
                 meVersionToolStripMenuItem.Enabled = true;
 
@@ -1429,7 +1490,7 @@ namespace Mac_EFI_Toolkit.Forms
                 $"{EFIROM.FileInfoData.FileNameExt}";
 
             this.Text = EFIROM.FileInfoData.FileNameExt;
-            lblTitle.Text =  title;
+            lblTitle.Text = title;
         }
         #endregion
 
@@ -1447,88 +1508,6 @@ namespace Mac_EFI_Toolkit.Forms
                     ? directory
                     : METPath.WORKING_DIR;
             }
-        }
-
-        private void OpenBinary(string filePath)
-        {
-            ToggleControlEnable(false);
-
-            // If a firmware is loaded, reset all data.
-            if (EFIROM.FirmwareLoaded)
-                ResetWindow();
-
-            // Check the filesize
-            if (!FileTools.IsValidMinMaxSize(filePath, this))
-            {
-                ResetWindow();
-                return;
-            }
-
-            // Set the binary path and load the bytes.
-            EFIROM.LoadedBinaryPath = filePath;
-
-            EFIROM.LoadedBinaryBytes =
-                File.ReadAllBytes(
-                    filePath);
-
-            // Check if the image is what we're looking for.
-            if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBytes))
-            {
-                METPrompt.Show(
-                    this,
-                    DIALOGSTRINGS.FILE_NOT_VALID,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
-
-                ResetWindow();
-
-                return;
-            }
-
-            // Show loading resource.
-            pbxLoad.Image = Properties.Resources.loading;
-
-            // Set the current initial directory.
-            _strInitialDirectory = Path.GetDirectoryName(filePath);
-
-            // Load the firmware base in a separate thread.
-            _tLoadFirmware = new Thread(() => LoadFirmwareBase(filePath, _cancellationToken.Token))
-            {
-                IsBackground = true
-            };
-
-            _tLoadFirmware.Start();
-        }
-
-        private void LoadFirmwareBase(string filePath, CancellationToken cancellationToken)
-        {
-            if (cancellationToken.IsCancellationRequested)
-                return;
-
-            EFIROM.LoadFirmwareBaseData(
-                EFIROM.LoadedBinaryBytes,
-                filePath);
-
-            if (cancellationToken.IsCancellationRequested)
-                return;
-
-            if (this.IsHandleCreated && !cancellationToken.IsCancellationRequested)
-            {
-                try
-                {
-                    this.Invoke((MethodInvoker)delegate
-                    {
-                        UpdateUI();
-                    });
-                }
-                catch (ObjectDisposedException)
-                {
-                    return;
-                }
-            }
-
-            if (!cancellationToken.IsCancellationRequested)
-                EFIROM.FirmwareLoaded = true;
         }
 
         private void ResetWindow()
@@ -1603,7 +1582,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetFileSize() => SetClipboardText(
             $"{FileTools.FormatFileSize(EFIROM.FileInfoData.Length)} " +
-            $"{EFISTRINGS.BYTES} ({EFIROM.FileInfoData.Length:X}h)");
+            $"{APPSTRINGS.BYTES} ({EFIROM.FileInfoData.Length:X}h)");
 
         private void ClipboardSetFileCrc32() => SetClipboardText(
             $"{EFIROM.FileInfoData.CRC32:X8}");
@@ -1621,7 +1600,7 @@ namespace Mac_EFI_Toolkit.Forms
             EFIROM.ConfigCode);
 
         private void ClipboardSetFsysBaseAddress() => SetClipboardText(
-            $"0x{EFIROM.FsysStoreData.FsysBase:X2}h");
+            $"{EFIROM.FsysStoreData.FsysBase:X2}h");
 
         private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(
             EFIROM.FsysStoreData.CrcString);
@@ -1639,10 +1618,10 @@ namespace Mac_EFI_Toolkit.Forms
             EFIROM.FirmwareVersion);
 
         private void ClipboardSetVssBaseAddress() => SetClipboardText(
-            $"0x{EFIROM.VssStoreData.PrimaryStoreBase:X2}h");
+            $"{EFIROM.VssStoreData.PrimaryStoreBase:X2}h");
 
         private void ClipboardSetSvsBaseAddress() => SetClipboardText(
-            $"0x{EFIROM.SvsStoreData.PrimaryStoreBase:X2}h");
+            $"{EFIROM.SvsStoreData.PrimaryStoreBase:X2}h");
 
         private void ClipboardSetFirmwareBoardId() => SetClipboardText(
             EFIROM.PdrSectionData.BoardId);
@@ -1654,19 +1633,19 @@ namespace Mac_EFI_Toolkit.Forms
             EFIROM.MeVersion);
 
         private void ClipboardSetPdrRegionOffsets() => SetClipboardText(
-            $"{EFISTRINGS.BASE} 0x{IFD.PDR_REGION_BASE:X}h, " +
-            $"{EFISTRINGS.LIMIT} 0x{IFD.PDR_REGION_LIMIT:X}h, " +
-            $"{EFISTRINGS.SIZE} 0x{IFD.PDR_REGION_SIZE:X}h");
+            $"{EFISTRINGS.BASE} {IFD.PDR_REGION_BASE:X}h, " +
+            $"{EFISTRINGS.LIMIT} {IFD.PDR_REGION_LIMIT:X}h, " +
+            $"{EFISTRINGS.SIZE} {IFD.PDR_REGION_SIZE:X}h");
 
         private void ClipboardSetMeRegionOffsets() => SetClipboardText(
-            $"{EFISTRINGS.BASE} 0x{IFD.ME_REGION_BASE:X}h, " +
-            $"{EFISTRINGS.LIMIT} 0x{IFD.ME_REGION_LIMIT:X}h, " +
-            $"{EFISTRINGS.SIZE} 0x{IFD.ME_REGION_SIZE:X}h");
+            $"{EFISTRINGS.BASE} {IFD.ME_REGION_BASE:X}h, " +
+            $"{EFISTRINGS.LIMIT} {IFD.ME_REGION_LIMIT:X}h, " +
+            $"{EFISTRINGS.SIZE} {IFD.ME_REGION_SIZE:X}h");
 
         private void ClipboardSetBiosRegionOffsets() => SetClipboardText(
-            $"{EFISTRINGS.BASE} 0x{IFD.BIOS_REGION_BASE:X}h, " +
-            $"{EFISTRINGS.LIMIT} 0x{IFD.BIOS_REGION_LIMIT:X}h, " +
-            $"{EFISTRINGS.SIZE} 0x{IFD.BIOS_REGION_SIZE:X}h");
+            $"{EFISTRINGS.BASE} {IFD.BIOS_REGION_BASE:X}h, " +
+            $"{EFISTRINGS.LIMIT} {IFD.BIOS_REGION_LIMIT:X}h, " +
+            $"{EFISTRINGS.SIZE} {IFD.BIOS_REGION_SIZE:X}h");
         #endregion
 
         #region Edit Serial
