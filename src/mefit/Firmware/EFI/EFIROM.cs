@@ -333,46 +333,45 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             if (NVRAM_BASE == -1)
                 return DefaultNvramStoreData();
 
-            (int primaryStoreSize,
-                int primaryStoreBase,
-                byte[] primaryStoreData,
-                bool isPrimaryStoreEmpty) =
+            // Retrieve primary store details.
+            (int primaryStoreSize, int primaryStoreBase, byte[] primaryStoreData, bool isPrimaryStoreEmpty) =
                 ParseStoreData(
-                    sourceBytes,
-                    storeTypeSignature,
-                    NVRAM_BASE,
-                    GUID_SIZE);
+                    sourceBytes, storeTypeSignature, NVRAM_BASE, GUID_SIZE);
 
-            // Check if primaryStoreSize is -1 but store base is found.
+            // Return immediately if the primary store base is not found.
+            if (primaryStoreBase == -1)
+            {
+                Console.WriteLine(
+                    "Primary store not found. Skipping padding and backup store.");
+
+                return DefaultNvramStoreData();
+            }
+
+            // If primary store is empty, retain the base address and empty status but no size/data.
             if (primaryStoreSize == -1)
             {
-                // If the store base is found, set isPrimaryStoreEmpty to true.
-                if (primaryStoreBase != -1)
+                return new NvramStore
                 {
-                    isPrimaryStoreEmpty = true;
-                }
-                primaryStoreSize = -1;  // Ensuring primaryStoreSize is still -1.
-                primaryStoreData = null; // No data available.
+                    StoreType = storeType,
+                    PrimaryStoreSize = primaryStoreSize,      // -1 indicates no size
+                    PrimaryStoreBase = primaryStoreBase,      // Base address of found empty store
+                    PrimaryStoreBytes = primaryStoreData,     // Null data for empty store
+                    IsPrimaryStoreEmpty = true,
+                    BackupStoreSize = -1,                     // No backup store since primary is empty
+                    BackupStoreBase = -1,
+                    BackupStoreBytes = null,
+                    IsBackupStoreEmpty = true
+                };
             }
 
+            // Calculate padding size only if primary store has valid data.
             int paddingSize = 0;
-
-            for (int i = primaryStoreBase + primaryStoreSize;
-                i < sourceBytes.Length && sourceBytes[i] == 0xFF;
-                i++)
-            {
+            for (int i = primaryStoreBase + primaryStoreSize; i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
                 paddingSize++;
-            }
 
-            (int backupStoreSize,
-                int backupStoreBase,
-                byte[] backupStoreData,
-                bool isBackupStoreEmpty) =
-                ParseStoreData(
-                    sourceBytes,
-                    storeTypeSignature,
-                    primaryStoreBase + primaryStoreSize + paddingSize,
-                    GUID_SIZE);
+            // Fetch backup store data.
+            (int backupStoreSize, int backupStoreBase, byte[] backupStoreData, bool isBackupStoreEmpty) =
+                ParseStoreData(sourceBytes, storeTypeSignature, primaryStoreBase + primaryStoreSize + paddingSize, GUID_SIZE);
 
             return new NvramStore
             {
@@ -388,11 +387,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             };
         }
 
-        private static (int Size, int BaseAddress, byte[] Data, bool IsEmpty) ParseStoreData(
-            byte[] sourceBytes,
-            byte[] storeSignatureType,
-            int baseAddress,
-            int headerSize)
+        private static (int Size, int BaseAddress, byte[] Data, bool IsEmpty) ParseStoreData(byte[] sourceBytes, byte[] storeSignatureType, int baseAddress, int headerSize)
         {
             int storeSize = -1;
             byte[] storeData = null;
@@ -400,48 +395,36 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             int storeBaseAddress =
                 BinaryTools.GetBaseAddress(
-                    sourceBytes,
-                    storeSignatureType,
-                    baseAddress);
+                    sourceBytes, storeSignatureType, baseAddress);
 
-            if (storeBaseAddress != -1 &&
-                BinaryTools.GetBytesBaseLength(
-                    sourceBytes,
-                    storeBaseAddress,
-                    6)
-                is byte[] bytesStoreHeader)
+            if (storeBaseAddress != -1 && BinaryTools.GetBytesBaseLength(sourceBytes, storeBaseAddress, 6) is byte[] bytesStoreHeader)
             {
                 NvramStoreHeader storeHeader =
-                    Helper.DeserializeHeader<NvramStoreHeader>(
-                        bytesStoreHeader);
+                    Helper.DeserializeHeader<NvramStoreHeader>(bytesStoreHeader);
 
                 if (storeHeader.SizeOfData != 0xFFFF && storeHeader.SizeOfData != 0)
                 {
-                    storeSize = storeHeader.SizeOfData;
+                    storeSize =
+                        storeHeader.SizeOfData;
 
                     storeData =
                         BinaryTools.GetBytesBaseLength(
-                            sourceBytes,
-                            storeBaseAddress,
-                            storeSize);
+                            sourceBytes, storeBaseAddress, storeSize);
 
                     if (storeData != null)
                     {
                         byte[] storeBodyData =
                             BinaryTools.GetBytesBaseLength(
-                                sourceBytes,
-                                storeBaseAddress + headerSize,
-                                storeSize - headerSize);
+                                sourceBytes, storeBaseAddress + headerSize, storeSize - headerSize);
 
-                        isStoreEmpty =
-                            BinaryTools.IsByteBlockEmpty(
-                                storeBodyData);
+                        isStoreEmpty = BinaryTools.IsByteBlockEmpty(storeBodyData);
                     }
                 }
             }
 
             return (storeSize, storeBaseAddress, storeData, isStoreEmpty);
         }
+
 
         private static NvramStore DefaultNvramStoreData()
         {
