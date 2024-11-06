@@ -20,13 +20,13 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
 
 >🛈 **Access to some features requires accepting the editing terms.**
 
-| Startup Window                                   | About Window |
+| Startup Window                                   | ROM Information Window |
 | ------------------------------------------------ |--------------|
-| ![window](stream/images/application/startup.png) | ![window](stream/images/application/about.png) |
+| ![window](stream/images/application/startup.png) | ![window](stream/images/application/rominfo.png) | |
 
-| EFI Window                                       | ROM Information Window |
+| EFI Window                                       | SOCROM Window |
 | ------------------------------------------------ |-----------------------
-| ![window](stream/images/application/efi.png)     | ![window](stream/images/application/rominfo.png) |
+| ![window](stream/images/application/efi.png)     | ![window](stream/images/application/socrom.png) |
 
 ## Features
 
@@ -56,8 +56,7 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
   - Reset NVRAM stores with proper header configuration.
   - Detect and remove EFI passwords (EFI lock).
 - Firmware (T2 SOCROM)
-  - Placeholder for upcoming features related to T2 chip handling and SOCROM analysis.
-
+  - Placeholder for upcoming features related to T2 SOCROM firmware.
 ## Download
 
 | Version| Release Date| Latest | Channel |
