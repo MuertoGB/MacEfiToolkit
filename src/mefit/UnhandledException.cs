@@ -10,7 +10,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
 
@@ -20,19 +19,12 @@ namespace Mac_EFI_Toolkit
     {
         internal static string GenerateReport(Exception unhandled)
         {
-            StringBuilder builder =
-                new StringBuilder();
-
-            string exePath =
-                Path.Combine(
-                    METPath.WORKING_DIR,
-                    METPath.FRIENDLY_NAME);
+            StringBuilder builder = new StringBuilder();
+            string exePath = Path.Combine(METPath.WORKING_DIR, METPath.FRIENDLY_NAME);
 
             try
             {
-                byte[] appBytes =
-                    File.ReadAllBytes(
-                        exePath);
+                byte[] appBytes = File.ReadAllBytes(exePath);
 
                 builder.AppendLine($"Mac EFI Toolkit Unhandled Exception: {DateTime.Now}\r\n");
 

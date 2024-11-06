@@ -6,9 +6,9 @@
 // MET uses embedded font resource "Segoe MDL2 Assets" which is copyright Microsoft Corp.
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.Forms;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
-using Mac_EFI_Toolkit.Forms;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241106.0340";
+        internal const string APP_BUILD = "241106.1905";
         internal const string APP_CHANNEL = "BETA";
     }
 
@@ -141,9 +141,6 @@ namespace Mac_EFI_Toolkit
             // Ensure that required application directories exist; create them if they don't
             EnsureDirectoriesExist();
 
-            // Debugging
-            //Process.Start("unhandledexception.exe");
-
             // Create the main window instance
             MAIN_WINDOW = new frmStartup();
 
@@ -172,16 +169,13 @@ namespace Mac_EFI_Toolkit
         #region Exception Handler
         internal static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            if (e != null)
-                ExceptionHandler(e.Exception);
+            if (e != null) ExceptionHandler(e.Exception);
         }
 
         internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
-
-            if (ex != null)
-                ExceptionHandler(ex);
+            if (ex != null) ExceptionHandler(ex);
         }
 
         internal static void ExceptionHandler(Exception e)
@@ -251,7 +245,6 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        // Execute the exit action based on the given type
         private static void ExecuteExitAction(ExitAction action)
         {
             switch (action)
@@ -321,7 +314,9 @@ namespace Mac_EFI_Toolkit
             try
             {
                 if (!Directory.Exists(directoryPath))
+                {
                     Directory.CreateDirectory(directoryPath);
+                }
             }
             catch (Exception e) // Permission error
             {
@@ -331,15 +326,18 @@ namespace Mac_EFI_Toolkit
 
         private static bool IsSupportedOS()
         {
-            FileVersionInfo version =
-                SystemTools.GetKernelVersion;
+            FileVersionInfo version = SystemTools.GetKernelVersion;
 
             // Check for Windows 7 (6.1) or later (Windows 8, 8.1, 10, and 11)
             if (version.ProductMajorPart > 6 || (version.ProductMajorPart == 6 && version.ProductMinorPart >= 1))
                 return true;
 
-            MessageBox.Show("This application requires Windows 7 or later to run.",
-                            "Unsupported OS", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(
+                "This application requires Windows 7 or later to run.",
+                "Unsupported OS",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
             return false;
         }
 
@@ -352,8 +350,7 @@ namespace Mac_EFI_Toolkit
 
             try
             {
-                var loadedFont =
-                    FontResolver.LoadFontFromResource(fontData);
+                var loadedFont = FontResolver.LoadFontFromResource(fontData);
 
                 fonts = new[]
                 {
@@ -366,7 +363,6 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                // Log the error
                 Logger.WriteError(nameof(TryLoadCustomFont), e.GetType(), e.Message);
                 return false;
             }

@@ -33,8 +33,8 @@
             this.lblAppVersion = new System.Windows.Forms.Label();
             this.lblWindowTitle = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.cmdMin = new System.Windows.Forms.Button();
+            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
             this.cmdSettings = new System.Windows.Forms.Button();
@@ -54,6 +54,9 @@
             this.homepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.newEFIROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newSOCROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.updateAvailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewApplicationLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -80,17 +83,16 @@
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
             this.tlpTitle.ColumnCount = 5;
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 44F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpTitle.Controls.Add(this.lblAppVersion, 2, 0);
             this.tlpTitle.Controls.Add(this.lblWindowTitle, 1, 0);
             this.tlpTitle.Controls.Add(this.cmdClose, 4, 0);
-            this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTitle.Controls.Add(this.cmdMin, 3, 0);
+            this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpTitle.Location = new System.Drawing.Point(1, 1);
             this.tlpTitle.Margin = new System.Windows.Forms.Padding(0);
@@ -123,10 +125,10 @@
             this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWindowTitle.ForeColor = System.Drawing.Color.White;
-            this.lblWindowTitle.Location = new System.Drawing.Point(50, 0);
+            this.lblWindowTitle.Location = new System.Drawing.Point(44, 0);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(217, 50);
+            this.lblWindowTitle.Size = new System.Drawing.Size(223, 50);
             this.lblWindowTitle.TabIndex = 0;
             this.lblWindowTitle.Text = "Mac EFI Toolkit";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -153,20 +155,6 @@
             this.cmdClose.UseVisualStyleBackColor = false;
             this.cmdClose.Click += new System.EventHandler(this.cmdClose_Click);
             // 
-            // pbxLogo
-            // 
-            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.icon32;
-            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pbxLogo.Location = new System.Drawing.Point(8, 9);
-            this.pbxLogo.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(32, 32);
-            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbxLogo.TabIndex = 1;
-            this.pbxLogo.TabStop = false;
-            // 
             // cmdMin
             // 
             this.cmdMin.BackColor = System.Drawing.Color.Transparent;
@@ -188,6 +176,20 @@
             this.cmdMin.Text = "—";
             this.cmdMin.UseVisualStyleBackColor = false;
             this.cmdMin.Click += new System.EventHandler(this.cmdMinimize_Click);
+            // 
+            // pbxLogo
+            // 
+            this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.icon32;
+            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pbxLogo.Location = new System.Drawing.Point(10, 10);
+            this.pbxLogo.Margin = new System.Windows.Forms.Padding(0, 0, 4, 0);
+            this.pbxLogo.Name = "pbxLogo";
+            this.pbxLogo.Size = new System.Drawing.Size(30, 30);
+            this.pbxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbxLogo.TabIndex = 1;
+            this.pbxLogo.TabStop = false;
             // 
             // pnlSeperatorTop
             // 
@@ -389,20 +391,23 @@
             this.homepageToolStripMenuItem,
             this.manualToolStripMenuItem,
             this.toolStripSeparator2,
+            this.newEFIROMSessionToolStripMenuItem,
+            this.newSOCROMSessionToolStripMenuItem,
+            this.toolStripSeparator4,
             this.updateAvailableToolStripMenuItem,
             this.viewApplicationLogToolStripMenuItem,
             this.toolStripSeparator1,
             this.restartApplicationToolStripMenuItem});
             this.cmsMore.Name = "cmsMore";
             this.cmsMore.ShowImageMargin = false;
-            this.cmsMore.Size = new System.Drawing.Size(216, 268);
+            this.cmsMore.Size = new System.Drawing.Size(227, 358);
             // 
             // changelogToolStripMenuItem
             // 
             this.changelogToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.changelogToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.changelogToolStripMenuItem.Name = "changelogToolStripMenuItem";
-            this.changelogToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.changelogToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.changelogToolStripMenuItem.Text = "Changelog";
             this.changelogToolStripMenuItem.Click += new System.EventHandler(this.changelogToolStripMenuItem_Click);
             // 
@@ -410,7 +415,7 @@
             // 
             this.donateToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
-            this.donateToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.donateToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.donateToolStripMenuItem.Text = "Donate";
             this.donateToolStripMenuItem.Click += new System.EventHandler(this.donateToolStripMenuItem_Click);
             // 
@@ -418,7 +423,7 @@
             // 
             this.emailMeToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.emailMeToolStripMenuItem.Name = "emailMeToolStripMenuItem";
-            this.emailMeToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.emailMeToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.emailMeToolStripMenuItem.Text = "Email Me";
             this.emailMeToolStripMenuItem.Click += new System.EventHandler(this.emailMeToolStripMenuItem_Click);
             // 
@@ -426,7 +431,7 @@
             // 
             this.githubIssuesToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.githubIssuesToolStripMenuItem.Name = "githubIssuesToolStripMenuItem";
-            this.githubIssuesToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.githubIssuesToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.githubIssuesToolStripMenuItem.Text = "Github Issues";
             this.githubIssuesToolStripMenuItem.Click += new System.EventHandler(this.githubIssuesToolStripMenuItem_Click);
             // 
@@ -435,7 +440,7 @@
             this.homepageToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.homepageToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.homepageToolStripMenuItem.Name = "homepageToolStripMenuItem";
-            this.homepageToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.homepageToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.homepageToolStripMenuItem.Text = "Homepage";
             this.homepageToolStripMenuItem.Click += new System.EventHandler(this.homepageToolStripMenuItem_Click);
             // 
@@ -444,20 +449,39 @@
             this.manualToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.manualToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
-            this.manualToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.manualToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.manualToolStripMenuItem.Text = "Manual";
             this.manualToolStripMenuItem.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(212, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(223, 6);
+            // 
+            // newEFIROMSessionToolStripMenuItem
+            // 
+            this.newEFIROMSessionToolStripMenuItem.Name = "newEFIROMSessionToolStripMenuItem";
+            this.newEFIROMSessionToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
+            this.newEFIROMSessionToolStripMenuItem.Text = "New EFIROM Session";
+            this.newEFIROMSessionToolStripMenuItem.Click += new System.EventHandler(this.newEFIROMSessionToolStripMenuItem_Click);
+            // 
+            // newSOCROMSessionToolStripMenuItem
+            // 
+            this.newSOCROMSessionToolStripMenuItem.Name = "newSOCROMSessionToolStripMenuItem";
+            this.newSOCROMSessionToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
+            this.newSOCROMSessionToolStripMenuItem.Text = "New SOCROM Session";
+            this.newSOCROMSessionToolStripMenuItem.Click += new System.EventHandler(this.newSOCROMSessionToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(223, 6);
             // 
             // updateAvailableToolStripMenuItem
             // 
             this.updateAvailableToolStripMenuItem.ForeColor = System.Drawing.Color.SpringGreen;
             this.updateAvailableToolStripMenuItem.Name = "updateAvailableToolStripMenuItem";
-            this.updateAvailableToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.updateAvailableToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.updateAvailableToolStripMenuItem.Text = "Update Available (1)";
             this.updateAvailableToolStripMenuItem.Visible = false;
             this.updateAvailableToolStripMenuItem.Click += new System.EventHandler(this.updateAvailableToolStripMenuItem_Click);
@@ -467,21 +491,21 @@
             this.viewApplicationLogToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.viewApplicationLogToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.viewApplicationLogToolStripMenuItem.Name = "viewApplicationLogToolStripMenuItem";
-            this.viewApplicationLogToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.viewApplicationLogToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.viewApplicationLogToolStripMenuItem.Text = "View Application Log";
             this.viewApplicationLogToolStripMenuItem.Click += new System.EventHandler(this.viewApplicationLogToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(212, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(223, 6);
             // 
             // restartApplicationToolStripMenuItem
             // 
             this.restartApplicationToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.restartApplicationToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.restartApplicationToolStripMenuItem.Name = "restartApplicationToolStripMenuItem";
-            this.restartApplicationToolStripMenuItem.Size = new System.Drawing.Size(215, 28);
+            this.restartApplicationToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.restartApplicationToolStripMenuItem.Text = "Restart Application";
             this.restartApplicationToolStripMenuItem.Click += new System.EventHandler(this.restartApplicationToolStripMenuItem_Click);
             // 
@@ -638,5 +662,8 @@
         private System.Windows.Forms.ToolStripMenuItem openNVRAMFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSCFGFolderToolStripMenuItem;
         private System.Windows.Forms.Button cmdSettings;
+        private System.Windows.Forms.ToolStripMenuItem newEFIROMSessionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newSOCROMSessionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }

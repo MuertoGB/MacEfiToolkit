@@ -59,8 +59,14 @@ namespace Mac_EFI_Toolkit
         internal const string FIRMWARE_INFO =
             "FirmwareInfo";
 
-        internal const string FILTER_SUPPORT_FIRMWARE =
-            "UEFI/BIOS Files (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*";
+        internal const string FILTER_STARTUP_WINDOW =
+            "Firmware Files (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*";
+
+        internal const string FILTER_EFI_SUPPORTED_FIRMWARE =
+            "Apple EFI/BIOS (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*";
+
+        internal const string FILTER_SOCROM_SUPPORTED_FIRMWARE =
+            "Apple T2 SOCROM (*.bin, *.rom)|*.bin;*.rom|All Files (*.*)|*.*";
 
         internal const string FILTER_BIN =
             "Binary Files (*.bin, *.rom, *.rgn)|*.bin;*.rom;*.rgn|All Files (*.*)|*.*";
@@ -336,8 +342,14 @@ namespace Mac_EFI_Toolkit
         internal const string LOG_NOT_FOUND =
             "The log file does not exist.";
 
-        internal const string FILE_NOT_VALID =
-            "The selected file is not a valid firmware.";
+        internal const string NOT_VALID_FIRMWARE=
+            "The provided file was not a valid firmware.";
+
+        internal const string NOT_VALID_EFIROM =
+            "The provided file was not a valid Mac EFIROM.";
+
+        internal const string NOT_VALID_SOCROM =
+            "The provided file was not a valid Mac SOCROM.";
 
         internal const string SCFG_EXPORT_FAIL =
             "Scfg Store export failed.";

@@ -43,17 +43,15 @@ namespace Mac_EFI_Toolkit.Tools
         internal static bool IsNetworkAvailable()
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
+            {
                 return false;
+            }
 
             try
             {
                 using (Ping ping = new Ping())
                 {
-                    PingReply reply =
-                        ping.Send(
-                            "8.8.8.8",
-                            1000);
-
+                    PingReply reply = ping.Send("8.8.8.8", 1000);
                     return (reply.Status == IPStatus.Success);
                 }
             }

@@ -24,10 +24,7 @@ namespace Mac_EFI_Toolkit.Tools
         internal static int GetBaseAddress(byte[] sourceBytes, byte[] pattern)
         {
             // Call the overload that takes a basePos parameter and sets it to 0.
-            return GetBaseAddress(
-                sourceBytes,
-                pattern,
-                0);
+            return GetBaseAddress(sourceBytes, pattern, 0);
         }
 
         /// <summary>
@@ -40,11 +37,7 @@ namespace Mac_EFI_Toolkit.Tools
         internal static int GetBaseAddress(byte[] sourceBytes, byte[] pattern, int basePosition)
         {
             // Call the overload that takes a basePosition and maxSearchLength parameters and sets maxSearchLength to the remaining length of the sourceBytes array.
-            return GetBaseAddress(
-                sourceBytes,
-                pattern,
-                basePosition,
-                sourceBytes.Length - basePosition);
+            return GetBaseAddress(sourceBytes, pattern, basePosition, sourceBytes.Length - basePosition);
         }
 
         /// <summary>
@@ -58,15 +51,10 @@ namespace Mac_EFI_Toolkit.Tools
         internal static int GetBaseAddress(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
         {
             // Ensure that maxSearchLength is within the bounds of the sourceBytes array.
-            maxSearchLength =
-                Math.Min(
-                    maxSearchLength,
-                    sourceBytes.Length - basePosition);
+            maxSearchLength = Math.Min(maxSearchLength, sourceBytes.Length - basePosition);
 
             // Build the partial match table for the pattern using the Knuth-Morris-Pratt algorithm.
-            int[] partialMatchTable =
-                BuildPartialMatchTable(
-                    patternBytes);
+            int[] partialMatchTable = BuildPartialMatchTable(patternBytes);
 
             // Initialize the source and pattern indices.
             int sourceIndex = basePosition;
@@ -151,13 +139,7 @@ namespace Mac_EFI_Toolkit.Tools
                 return null;
 
             byte[] buffer = new byte[length];
-
-            Buffer.BlockCopy(
-                sourceBytes,
-                basePosition,
-                buffer,
-                0,
-                length);
+            Buffer.BlockCopy(sourceBytes, basePosition, buffer, 0, length);
 
             return buffer;
         }
@@ -175,12 +157,7 @@ namespace Mac_EFI_Toolkit.Tools
                 return new byte[0]; // Nothing to read
 
             int length = limitPosition - basePosition;
-
-            ArraySegment<byte> segment =
-                new ArraySegment<byte>(
-                    sourceBytes,
-                    basePosition,
-                    length);
+            ArraySegment<byte> segment = new ArraySegment<byte>(sourceBytes, basePosition, length);
 
             return segment.ToArray();
         }
@@ -195,11 +172,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>The bytes read from the byte array up to the terminating byte.</returns>
         internal static byte[] GetBytesDelimited(byte[] sourceBytes, int basePosition, byte startByte, params byte[] terminationBytes)
         {
-            int startIndex =
-                Array.IndexOf(
-                    sourceBytes,
-                    startByte,
-                    basePosition);
+            int startIndex = Array.IndexOf(sourceBytes, startByte, basePosition);
 
             if (startIndex < 0 || startIndex == sourceBytes.Length - 1)
                 return null;
@@ -209,16 +182,15 @@ namespace Mac_EFI_Toolkit.Tools
             while (startIndex < sourceBytes.Length && sourceBytes[startIndex] == startByte)
                 startIndex++;
 
-            using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                while (startIndex < sourceBytes.Length &&
-                    !terminationBytes.Contains(sourceBytes[startIndex]))
+                while (startIndex < sourceBytes.Length && !terminationBytes.Contains(sourceBytes[startIndex]))
                 {
-                    ms.WriteByte(sourceBytes[startIndex]);
+                    memoryStream.WriteByte(sourceBytes[startIndex]);
                     startIndex++;
                 }
 
-                return ms.ToArray();
+                return memoryStream.ToArray();
             }
         }
 
@@ -276,12 +248,7 @@ namespace Mac_EFI_Toolkit.Tools
                     nameof(basePosition),
                     "Base position is out of range.");
 
-            Buffer.BlockCopy(
-                newBytes,
-                0,
-                sourceBytes,
-                basePosition,
-                newBytes.Length);
+            Buffer.BlockCopy(newBytes, 0, sourceBytes, basePosition, newBytes.Length);
         }
 
         /// <summary>
@@ -291,8 +258,7 @@ namespace Mac_EFI_Toolkit.Tools
         internal static void EraseByteArray(byte[] sourceBytes, byte eraseByte)
         {
             if (sourceBytes == null)
-                throw new ArgumentNullException(
-                    nameof(sourceBytes));
+                throw new ArgumentNullException(nameof(sourceBytes));
 
             for (int i = 0; i < sourceBytes.Length; i++)
                 sourceBytes[i] = eraseByte;

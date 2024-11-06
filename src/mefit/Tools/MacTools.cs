@@ -31,15 +31,11 @@ namespace Mac_EFI_Toolkit.Tools
             try
             {
                 // Attempt to load the data from the embedded XML db.
-                byte[] xmlData =
-                    Encoding.UTF8.GetBytes(
-                        Properties.Resources.modeldb);
+                byte[] xmlData = Encoding.UTF8.GetBytes(Properties.Resources.modeldb);
 
                 using (MemoryStream stream = new MemoryStream(xmlData))
                 {
-                    XDocument xmlDoc =
-                        XDocument.Load(
-                            stream);
+                    XDocument xmlDoc = XDocument.Load(stream);
 
                     string name = xmlDoc.Descendants(
                         "section").FirstOrDefault(e => e.Element(
@@ -76,21 +72,15 @@ namespace Mac_EFI_Toolkit.Tools
 
                 string xml = await new WebClient().DownloadStringTaskAsync(url);
 
-                XDocument doc =
-                    XDocument.Parse(
-                        xml);
+                XDocument doc = XDocument.Parse(xml);
 
-                string data =
-                    doc.XPathSelectElement(
-                        "/root/configCode")?.Value;
+                string data = doc.XPathSelectElement("/root/configCode")?.Value;
 
                 if (!string.IsNullOrEmpty(data))
                     Logger.Write(
                         $"'{hwc}' not present in local db > support-sp server returned: '{data}'", LogType.Database);
 
-                return string.IsNullOrEmpty(data)
-                    ? null
-                    : data;
+                return string.IsNullOrEmpty(data) ? null : data;
             }
             catch (Exception e)
             {
@@ -119,19 +109,13 @@ namespace Mac_EFI_Toolkit.Tools
                     "Given bytes are too large.");
 
             // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes.
-            byte[] bytesTempFsys = new byte[EFIROM.FSYS_RGN_SIZE - EFIROM.CRC32_SIZE];
+            byte[] fsysTempBuffer = new byte[EFIROM.FSYS_RGN_SIZE - EFIROM.CRC32_SIZE];
 
             if (fsysStore != null)
             {
-                Array.Copy(
-                    fsysStore,
-                    0,
-                    bytesTempFsys,
-                    0,
-                    bytesTempFsys.Length);
+                Array.Copy(fsysStore, 0, fsysTempBuffer, 0, fsysTempBuffer.Length);
 
-                return FileTools.GetCrc32Digest(
-                    bytesTempFsys);
+                return FileTools.GetCrc32Digest(fsysTempBuffer);
             }
 
             return 0xFFFFFFFF;
@@ -150,11 +134,9 @@ namespace Mac_EFI_Toolkit.Tools
             if (string.IsNullOrEmpty(model))
                 return null;
 
-            string letters = new string(
-                model.Where(char.IsLetter).ToArray());
+            string letters = new string(model.Where(char.IsLetter).ToArray());
 
-            string numbers =
-                new string(model.Where(char.IsDigit).ToArray());
+            string numbers = new string(model.Where(char.IsDigit).ToArray());
 
             int minLength = 2;
             int maxLength = 3;
@@ -248,9 +230,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>True if the input string contains only valid characters, otherwise false.</returns>
         internal static bool IsValidSerialChars(string serial)
         {
-            return Regex.IsMatch(
-                serial,
-                "^[0-9A-Z]+$");
+            return Regex.IsMatch(serial, "^[0-9A-Z]+$");
         }
 
         // Serial Number Structure:

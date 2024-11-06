@@ -159,7 +159,7 @@ namespace Mac_EFI_Toolkit.Forms
                     case Keys.A:
                         cmdAbout.PerformClick();
                         break;
-                    case Keys.E:
+                    case Keys.L:
                         cmdMenuFolders.PerformClick();
                         break;
                     case Keys.M:
@@ -226,7 +226,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
-                Filter = APPSTRINGS.FILTER_SUPPORT_FIRMWARE
+                Filter = APPSTRINGS.FILTER_STARTUP_WINDOW
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -280,10 +280,14 @@ namespace Mac_EFI_Toolkit.Forms
         private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) =>
             Process.Start(METUrl.GH_LATEST);
 
-        private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        private void newEFIROMSessionToolStripMenuItem_Click(object sender, EventArgs e) =>
+            InitializeChildForm(new frmEfiRom(), string.Empty);
+
+        private void newSOCROMSessionToolStripMenuItem_Click(object sender, EventArgs e) =>
+            InitializeChildForm(new frmSocRom(), string.Empty);
+
+        private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) =>
             Logger.OpenLogFile(this);
-        }
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -376,8 +380,8 @@ namespace Mac_EFI_Toolkit.Forms
 
             METPrompt.Show(
                 this,
-                "The provided file was not a supported firmware.",
-                METPromptType.Error,
+                DIALOGSTRINGS.NOT_VALID_FIRMWARE,
+                METPromptType.Warning,
                 METPromptButtons.Okay);
         }
 

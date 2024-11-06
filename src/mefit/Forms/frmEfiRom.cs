@@ -74,7 +74,11 @@ namespace Mac_EFI_Toolkit.Forms
             _cancellationToken =
                 new CancellationTokenSource();
 
-            OpenBinary(Program.MAIN_WINDOW.loadedFile);
+            if (!string.IsNullOrEmpty(Program.MAIN_WINDOW.loadedFile))
+            {
+                OpenBinary(Program.MAIN_WINDOW.loadedFile);
+                Program.MAIN_WINDOW.loadedFile = null;
+            }
         }
 
         private void frmEfiRom_FormClosing(object sender, FormClosingEventArgs e)
@@ -166,11 +170,13 @@ namespace Mac_EFI_Toolkit.Forms
             using (OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
-                Filter = APPSTRINGS.FILTER_SUPPORT_FIRMWARE
+                Filter = APPSTRINGS.FILTER_EFI_SUPPORTED_FIRMWARE
             })
             {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
                     OpenBinary(openFileDialog.FileName);
+                }
             }
         }
 
@@ -611,7 +617,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 StringBuilder stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine("File Information");
+                stringBuilder.AppendLine("File");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Filename:        {EFIROM.FileInfoData.FileNameExt}");
                 stringBuilder.AppendLine($"Size (Bytes):    {FileTools.FormatFileSize(EFIROM.FileInfoData.Length)} bytes");
@@ -621,7 +627,7 @@ namespace Mac_EFI_Toolkit.Forms
                 stringBuilder.AppendLine($"Created:         {EFIROM.FileInfoData.CreationTime}");
                 stringBuilder.AppendLine($"Modified:        {EFIROM.FileInfoData.LastWriteTime}\r\n");
 
-                stringBuilder.AppendLine("Descriptor Information");
+                stringBuilder.AppendLine("Descriptor");
                 stringBuilder.AppendLine("----------------------------------");
                 if (IFD.IsDescriptorMode)
                 {
@@ -643,14 +649,14 @@ namespace Mac_EFI_Toolkit.Forms
                     stringBuilder.AppendLine("Descriptor mode is disabled.\r\n");
                 }
 
-                stringBuilder.AppendLine("Model Information");
+                stringBuilder.AppendLine("Model");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Identifier:      {EFIROM.EfiBiosIdSectionData.ModelPart ?? "N/A"}");
                 stringBuilder.AppendLine($"Model:           {MacTools.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart) ?? "N/A"}");
                 stringBuilder.AppendLine($"Configuration:   {EFIROM.ConfigCode ?? "N/A"}");
                 stringBuilder.AppendLine($"Board ID:        {EFIROM.PdrSectionData.BoardId ?? "N/A"}\r\n");
 
-                stringBuilder.AppendLine("Fsys Store");
+                stringBuilder.AppendLine("Fsys");
                 stringBuilder.AppendLine("----------------------------------");
                 if (EFIROM.FsysStoreData.FsysBytes != null)
                 {
@@ -666,7 +672,7 @@ namespace Mac_EFI_Toolkit.Forms
                     stringBuilder.AppendLine("Fsys Store was not found.\r\n");
                 }
 
-                stringBuilder.AppendLine("Firmware Information");
+                stringBuilder.AppendLine("Firmware");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"EFI Version:     {EFIROM.FirmwareVersion ?? "N/A"}");
                 stringBuilder.AppendLine($"EFI Lock:        {EFIROM.EfiPrimaryLockData.LockType.ToString() ?? "N/A"}");
@@ -749,18 +755,15 @@ namespace Mac_EFI_Toolkit.Forms
                 EFIROM.EfiBiosIdSectionData.ModelPart
                 ?? EFISTRINGS.NOMODEL;
 
-            string systemSerial =
-                EFIROM.FsysStoreData.Serial
-                ?? EFISTRINGS.NOSERIAL;
-
-            if (MacTools.IsValidAppleSerial(systemSerial))
-                systemSerial = EFISTRINGS.NOSERIAL;
-
             string efiversion =
                 EFIROM.FirmwareVersion
                 ?? EFISTRINGS.NOFWVER;
 
-            SetClipboardText($"{efiModel}_{systemSerial}_{efiversion}");
+            string systemSerial =
+                EFIROM.FsysStoreData.Serial
+                ?? EFISTRINGS.NOSERIAL;
+
+            SetClipboardText($"{efiModel}_{efiversion}_{systemSerial}");
         }
 
         private void reloadFileFromDiskToolStripMenuItem_Click(object sender, EventArgs e)
@@ -843,8 +846,8 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 METPrompt.Show(
                     this,
-                    DIALOGSTRINGS.FILE_NOT_VALID,
-                    METPromptType.Error,
+                    DIALOGSTRINGS.NOT_VALID_EFIROM,
+                    METPromptType.Warning,
                     METPromptButtons.Okay);
 
                 ResetWindow();
@@ -859,7 +862,9 @@ namespace Mac_EFI_Toolkit.Forms
             _strInitialDirectory = Path.GetDirectoryName(filePath);
 
             // Load the firmware base in a separate thread.
-            _tLoadFirmware = new Thread(() => LoadFirmwareBase(filePath, _cancellationToken.Token))
+            _tLoadFirmware = new Thread(() => LoadFirmwareBase(
+                filePath,
+                _cancellationToken.Token))
             {
                 IsBackground = true
             };
@@ -1501,7 +1506,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private string cbxCensorTipString() =>
-            $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER}";
+            $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER} (CTRL + S)";
 
         private void HandleCheckBoxChanged(object sender, EventArgs e)
         {
@@ -2686,7 +2691,9 @@ namespace Mac_EFI_Toolkit.Forms
                             METPromptButtons.YesNo);
 
                     if (result == DialogResult.Yes)
+                    {
                         OpenBinary(saveFileDialog.FileName);
+                    }                   
                 }
             }
         }

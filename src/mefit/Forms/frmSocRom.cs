@@ -6,7 +6,6 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
@@ -70,7 +69,11 @@ namespace Mac_EFI_Toolkit.Forms
             _cancellationToken =
                 new CancellationTokenSource();
 
-            OpenBinary(Program.MAIN_WINDOW.loadedFile);
+            if (!string.IsNullOrEmpty(Program.MAIN_WINDOW.loadedFile))
+            {
+                OpenBinary(Program.MAIN_WINDOW.loadedFile);
+                Program.MAIN_WINDOW.loadedFile = null;
+            }
         }
 
         private void frmSocRom_FormClosing(object sender, FormClosingEventArgs e)
@@ -149,11 +152,13 @@ namespace Mac_EFI_Toolkit.Forms
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = "T2 SOCROM Files (*.bin, *.rom)|*.bin;*.rom|All Files (*.*)|*.*"
+                Filter = APPSTRINGS.FILTER_SOCROM_SUPPORTED_FIRMWARE
             })
             {
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
                     OpenBinary(openFileDialog.FileName);
+                }             
             }
         }
 
@@ -367,7 +372,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 StringBuilder stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine("File Information");
+                stringBuilder.AppendLine("File");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Filename:        {SOCROM.FileInfoData.FileNameExt}");
                 stringBuilder.AppendLine($"Size (Bytes):    {FileTools.FormatFileSize(SOCROM.FileInfoData.Length)} bytes");
@@ -377,7 +382,7 @@ namespace Mac_EFI_Toolkit.Forms
                 stringBuilder.AppendLine($"Created:         {SOCROM.FileInfoData.CreationTime}");
                 stringBuilder.AppendLine($"Modified:        {SOCROM.FileInfoData.LastWriteTime}\r\n");
 
-                stringBuilder.AppendLine("Scfg Store");
+                stringBuilder.AppendLine("Scfg");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Base:            {SOCROM.ScfgSectionData.StoreBase:X}h");
                 stringBuilder.AppendLine($"Size (Bytes):    {SOCROM.ScfgSectionData.StoreSize} bytes");
@@ -385,13 +390,13 @@ namespace Mac_EFI_Toolkit.Forms
                 stringBuilder.AppendLine($"CRC32:           {SOCROM.ScfgSectionData.ScfgCrc ?? APPSTRINGS.NA}");
                 stringBuilder.AppendLine($"Serial:          {SOCROM.ScfgSectionData.SerialText ?? APPSTRINGS.NA}\r\n");
 
-                stringBuilder.AppendLine("Model Information");
+                stringBuilder.AppendLine("Model");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Config:          {SOCROM.ConfigCode ?? APPSTRINGS.NA}");
                 stringBuilder.AppendLine($"Order No:        {SOCROM.ScfgSectionData.SonText ?? APPSTRINGS.NA}");
                 stringBuilder.AppendLine($"Reg No:          {SOCROM.ScfgSectionData.RegNumText ?? APPSTRINGS.NA}\r\n");
 
-                stringBuilder.AppendLine("Firmware Information");
+                stringBuilder.AppendLine("Firmware");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"iBoot Version:   {SOCROM.iBootVersion ?? APPSTRINGS.NA}");
 
@@ -444,8 +449,8 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 METPrompt.Show(
                     this,
-                    DIALOGSTRINGS.FILE_NOT_VALID,
-                    METPromptType.Error,
+                    DIALOGSTRINGS.NOT_VALID_SOCROM,
+                    METPromptType.Warning,
                     METPromptButtons.Okay);
 
                 return;
@@ -569,7 +574,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private string cbxCensorTipString() =>
-            $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER}";
+            $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER} (CTRL + S)";
 
         private void HandleCheckBoxChanged(object sender, EventArgs e)
         {

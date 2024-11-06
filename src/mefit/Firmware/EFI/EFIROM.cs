@@ -62,10 +62,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #region Parse Firmware
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
-            // Start bench
+            // Start bench.
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            // Try processing flash descriptor
+            // Try processing flash descriptor.
             IFD.ParseRegionData(sourceBytes);
 
             // Parse file info.
@@ -227,29 +227,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
-            // Updated 28.10.24
-            // We don't care about IFD, this is handled when needed.
-            // We need to check for the DXE core, or valids Apple GUIDs.
-            int dxeCore =
-                BinaryTools.GetBaseAddress(
-                    sourceBytes,
-                    Guids.DXE_CORE_GUID,
-                    16,
-                    16);
-
-            // Check for the DXE core
-            if (dxeCore == -1)
-            {
-                // Check for valid GUIDs
-                if (!IsAppleFirmware(sourceBytes))
-                    return false;
-            }
-
-            return true;
-        }
-
-        internal static bool IsAppleFirmware(byte[] sourceBytes)
-        {
             var appleGuids = new[]
             {
                 Guids.APPLE_IMMUTABLE_FV_GUID,
@@ -257,7 +234,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 Guids.APPLE_IMC_GUID
             };
 
-            // Check if any of the Apple GUIDs are found within the BIOS region
+            // Check if any of the Apple GUIDs are found within the firmware.
             return appleGuids.Any(guid =>
                 BinaryTools.GetBaseAddress(
                     sourceBytes,
@@ -340,12 +317,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             // Return immediately if the primary store base is not found.
             if (primaryStoreBase == -1)
-            {
-                Console.WriteLine(
-                    "Primary store not found. Skipping padding and backup store.");
-
                 return DefaultNvramStoreData();
-            }
 
             // If primary store is empty, retain the base address and empty status but no size/data.
             if (primaryStoreSize == -1)

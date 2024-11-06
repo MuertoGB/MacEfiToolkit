@@ -46,9 +46,7 @@ namespace Mac_EFI_Toolkit.Tools
 
         internal static string GetSystemBitnessMode()
         {
-            return IntPtr.Size == 8
-                ? "x64"
-                : "x86";
+            return IntPtr.Size == 8 ? "x64" : "x86";
         }
     }
 }

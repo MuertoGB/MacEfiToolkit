@@ -5,7 +5,6 @@
 // UITools.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
@@ -37,17 +36,9 @@ namespace Mac_EFI_Toolkit.UI
 
                 for (int i = 0; i < 3; i++)
                 {
-                    control.ForeColor =
-                        Color.FromArgb(
-                            control.ForeColor.A,
-                            130,
-                            130,
-                            130);
-
+                    control.ForeColor = Color.FromArgb(control.ForeColor.A, 130, 130, 130);
                     await Task.Delay(70);
-
                     control.ForeColor = originalColor;
-
                     await Task.Delay(70);
                 }
             }
@@ -115,8 +106,7 @@ namespace Mac_EFI_Toolkit.UI
                 return;
             }
 
-            DirectoryInfo directoryInfo =
-                new DirectoryInfo(path);
+            DirectoryInfo directoryInfo = new DirectoryInfo(path);
 
             if (!directoryInfo.Attributes.HasFlag(FileAttributes.Directory))
             {
@@ -171,8 +161,7 @@ namespace Mac_EFI_Toolkit.UI
             MouseEventArgs mouseEventArgs =
                 e as MouseEventArgs;
 
-            if (mouseEventArgs != null
-                && (mouseEventArgs.Button == MouseButtons.Right
+            if (mouseEventArgs != null && (mouseEventArgs.Button == MouseButtons.Right
                 || (showOnLeftClick && mouseEventArgs.Button == MouseButtons.Left)))
                 menu.Show(Cursor.Position);
         }
@@ -196,6 +185,7 @@ namespace Mac_EFI_Toolkit.UI
         private static void StartDrag(Form form)
         {
             NativeMethods.ReleaseCapture();
+
             NativeMethods.SendMessage(new HandleRef(form, form.Handle),
                 Program.WM_NCLBUTTONDOWN,
                 (IntPtr)Program.HT_CAPTION,

@@ -36,21 +36,21 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #region Parse Fimware
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
-            // Start bench
+            // Start bench.
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            // Parse file info
+            // Parse file info.
             FileInfoData =
                 FileTools.GetBinaryFileInfo
                 (fileName);
 
-            // Parse iBoot version
+            // Parse iBoot version.
             iBootVersion = GetIbootVersion(sourceBytes);
 
-            // Parse Scfg Store data
+            // Parse Scfg Store data.
             ScfgSectionData = GetSCfgData(sourceBytes);
 
-            // Fetch the Config Code
+            // Fetch the Config Code.
             ConfigCode = ScfgSectionData.HWC != null
                 ? MacTools.GetDeviceConfigCodeLocalLocal(ScfgSectionData.HWC)
                 : null;

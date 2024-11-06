@@ -5,8 +5,8 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
-using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.Tools.Structs;
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -34,12 +34,9 @@ namespace Mac_EFI_Toolkit.Tools
         {
             using (SHA256 provider = SHA256.Create())
             {
-                byte[] digestBytes =
-                    provider.ComputeHash(
-                        sourceBytes);
+                byte[] digestBytes = provider.ComputeHash(sourceBytes);
 
-                return BitConverter.ToString(
-                    digestBytes).Replace("-", "").ToLower();
+                return BitConverter.ToString(digestBytes).Replace("-", "").ToLower();
             }
         }
 
@@ -58,7 +55,9 @@ namespace Mac_EFI_Toolkit.Tools
                 crc ^= sourceBytes[i];
 
                 for (int j = 0; j < 8; j++)
+                {
                     crc = (uint)((crc >> 1) ^ (polynomial & -(crc & 1)));
+                }
             }
 
             return crc ^ 0xFFFFFFFF;
@@ -71,8 +70,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>A string representation of the number of bytes with commas.</returns>
         internal static string FormatFileSize(long size)
         {
-            return string.Format
-                ("{0:#,##0}", size);
+            return string.Format("{0:#,##0}", size);
         }
 
         /// <summary>
@@ -110,9 +108,7 @@ namespace Mac_EFI_Toolkit.Tools
             long closestSize = FWVars.MIN_IMAGE_SIZE;
 
             // Calculate the initial difference between the input size and the closest size
-            long difference =
-                Math.Abs(
-                    size - closestSize);
+            long difference = Math.Abs(size - closestSize);
 
             // Iterate through the valid sizes to find the closest size
             while (closestSize <= FWVars.MAX_IMAGE_SIZE)
@@ -120,9 +116,7 @@ namespace Mac_EFI_Toolkit.Tools
                 // Calculate the doubled size and its difference from the input size
                 long doubledSize = closestSize * 2;
 
-                long doubledDifference =
-                    Math.Abs(
-                        size - doubledSize);
+                long doubledDifference = Math.Abs(size - doubledSize);
 
                 // If the doubled difference is smaller, update the closest size and difference
                 if (doubledDifference < difference)
@@ -166,27 +160,11 @@ namespace Mac_EFI_Toolkit.Tools
         {
             try
             {
-                File.WriteAllBytes(
-                    path,
-                    sourceBytes);
+                File.WriteAllBytes(path, sourceBytes);
 
-                byte[] fileBytes =
-                    File.ReadAllBytes(
-                        path);
+                byte[] fileBytes = File.ReadAllBytes(path);
 
-                return BinaryTools.ByteArraysMatch(
-                    sourceBytes,
-                    fileBytes);
-            }
-            catch (IOException ioEx)
-            {
-                Logger.WriteError(nameof(WriteAllBytesEx), ioEx.GetType(), ioEx.Message);
-                return false;
-            }
-            catch (UnauthorizedAccessException authEx)
-            {
-                Logger.WriteError(nameof(WriteAllBytesEx), authEx.GetType(), authEx.Message);
-                return false;
+                return BinaryTools.ByteArraysMatch(sourceBytes, fileBytes);
             }
             catch (Exception e)
             {
@@ -227,15 +205,12 @@ namespace Mac_EFI_Toolkit.Tools
                 using (FileStream zipStream = new FileStream(path, FileMode.Create))
                 using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
                 {
-                    ZipArchiveEntry fileEntry =
-                        archive.CreateEntry(
-                            entryName);
+                    ZipArchiveEntry fileEntry = archive.CreateEntry(entryName);
 
                     using (Stream fileStream = fileEntry.Open())
-                        fileStream.Write(
-                            sourceBytes,
-                            0,
-                            sourceBytes.Length);
+                    {
+                        fileStream.Write(sourceBytes, 0, sourceBytes.Length);
+                    }
                 }
             }
             catch (Exception e)
@@ -253,30 +228,18 @@ namespace Mac_EFI_Toolkit.Tools
         /// </returns>
         internal static Binary GetBinaryFileInfo(string fileName)
         {
-            FileInfo fileInfo =
-                new FileInfo(
-                    fileName);
+            FileInfo fileInfo = new FileInfo(fileName);
 
-            byte[] fileBytes =
-                File.ReadAllBytes(
-                    fileInfo.FullName);
+            byte[] fileBytes = File.ReadAllBytes(fileInfo.FullName);
 
             return new Binary
             {
-                FileNameExt =
-                fileInfo.Name,
-
-                FileName = Path.GetFileNameWithoutExtension(
-                    fileName),
-
+                FileNameExt = fileInfo.Name,
+                FileName = Path.GetFileNameWithoutExtension(fileName),
                 CreationTime = fileInfo.CreationTime.ToString(),
-
                 LastWriteTime = fileInfo.LastWriteTime.ToString(),
-
                 Length = (int)fileInfo.Length,
-
-                CRC32 = FileTools.GetCrc32Digest(
-                    fileBytes)
+                CRC32 = FileTools.GetCrc32Digest(fileBytes)
             };
         }
 

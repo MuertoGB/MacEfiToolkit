@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// AppUpdate.cs - Provides a simple version check
+// AppVersion.cs - Provides a simple version check
 // Released under the GNU GLP v3.0
 
 using System;
@@ -31,9 +31,7 @@ namespace Mac_EFI_Toolkit
             {
                 using (WebClient client = new WebClient())
                 {
-                    byte[] response =
-                        await client.DownloadDataTaskAsync(
-                            versionUrl);
+                    byte[] response = await client.DownloadDataTaskAsync(versionUrl);
 
                     using (MemoryStream stream = new MemoryStream(response))
                     using (XmlReader reader = XmlReader.Create(stream))
@@ -42,20 +40,13 @@ namespace Mac_EFI_Toolkit
 
                         doc.Load(reader);
 
-                        XmlNode node =
-                            doc.SelectSingleNode(
-                                "data/MET/VersionString");
+                        XmlNode node = doc.SelectSingleNode("data/MET/VersionString");
 
                         if (node == null)
                             return VersionResult.Error;
 
-                        Version remoteVersion =
-                            new Version(
-                                node.InnerText);
-
-                        Version localVersion =
-                            new Version(
-                                Application.ProductVersion);
+                        Version remoteVersion = new Version(node.InnerText);
+                        Version localVersion = new Version(Application.ProductVersion);
 
                         return remoteVersion > localVersion
                             ? VersionResult.NewVersionAvailable
