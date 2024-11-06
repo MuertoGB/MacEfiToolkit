@@ -158,7 +158,7 @@ namespace Mac_EFI_Toolkit.Forms
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     OpenBinary(openFileDialog.FileName);
-                }             
+                }
             }
         }
 
@@ -193,14 +193,25 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdMenuFolders_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
-            sender,
-            cmsFolders,
-            MenuPosition.BottomLeft);
+                sender,
+                cmsFolders,
+                MenuPosition.BottomLeft);
 
         private void cmdMenuExport_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsExport,
+                MenuPosition.BottomLeft);
+
+        private void cmdMenuPatch_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsPatch,
+                MenuPosition.BottomLeft);
+        private void cmdNenuOptions_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsOptions,
                 MenuPosition.BottomLeft);
         #endregion
 
@@ -423,6 +434,48 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
+        #endregion
+
+        #region Options Toolstrip Events
+        private void reloadFileFromDiskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(SOCROM.LoadedBinaryPath))
+            {
+                METPrompt.Show(
+                    this,
+                    DIALOGSTRINGS.COULD_NOT_RELOAD,
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
+
+                return;
+            }
+
+            // Load bytes from loaded binary file.
+            byte[] fileBytes =
+                File.ReadAllBytes(
+                    SOCROM.LoadedBinaryPath);
+
+            // Check if the binaries match in size and data.
+            if (BinaryTools.ByteArraysMatch(fileBytes, SOCROM.LoadedBinaryBytes))
+            {
+                // Loaded binaries match.
+                METPrompt.Show(
+                    this,
+                    DIALOGSTRINGS.WARN_DATA_MATCHES_BUFF,
+                    METPromptType.Warning,
+                    METPromptButtons.Okay);
+
+                return;
+            }
+
+            OpenBinary(SOCROM.LoadedBinaryPath);
+        }
+
+        private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Logger.OpenLogFile(this);
+
+        private void lookupSerialNumberEveryMacToolStripMenuItem_Click(object sender, EventArgs e) =>
+            MacTools.LookupSerialOnEveryMac(SOCROM.ScfgSectionData.SerialText);
         #endregion
 
         #region Open Binary
@@ -666,7 +719,9 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuReset,
                 cmdMenuCopy,
                 cmdMenuFolders,
-                cmdMenuExport
+                cmdMenuExport,
+                cmdMenuPatch,
+                cmdMenuOptions
             };
 
             void EnableButtons(params Button[] buttons)
@@ -685,6 +740,9 @@ namespace Mac_EFI_Toolkit.Forms
 
                 exportScfgStoreToolStripMenuItem.Enabled =
                     SOCROM.ScfgSectionData.StoreBase != -1;
+
+                lookupSerialNumberEveryMacToolStripMenuItem.Enabled =
+                    !string.IsNullOrEmpty(SOCROM.ScfgSectionData.SerialText);
             }
 
             tlpFirmware.Enabled = enable;

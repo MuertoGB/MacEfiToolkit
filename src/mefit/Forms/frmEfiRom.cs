@@ -815,7 +815,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void lookupSerialNumberOnEveryMacToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start($"https://everymac.com/ultimate-mac-lookup/?search_keywords={EFIROM.FsysStoreData.Serial}");
+            MacTools.LookupSerialOnEveryMac(EFIROM.FsysStoreData.Serial);
         #endregion
 
         #region Open binary
@@ -1403,8 +1403,7 @@ namespace Mac_EFI_Toolkit.Forms
                     EFIROM.AppleRomInfoSectionData.SectionExists;
 
                 lookupSerialNumberOnEveryMacToolStripMenuItem.Enabled =
-                    !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial) &&
-                    MacTools.IsValidAppleSerial(EFIROM.FsysStoreData.Serial);
+                    !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial);
             }
 
             tlpFilename.Enabled = enable;

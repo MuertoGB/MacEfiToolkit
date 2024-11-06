@@ -7,6 +7,7 @@
 using Mac_EFI_Toolkit.Firmware.EFI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -220,6 +221,11 @@ namespace Mac_EFI_Toolkit.Tools
         {
             return $"{modelPart}.{majorPart}.{minorPart}";
         }
+        #endregion
+
+        #region Serial Lookup
+        internal static void LookupSerialOnEveryMac(string serial) =>
+            Process.Start($"https://everymac.com/ultimate-mac-lookup/?search_keywords={serial}");
         #endregion
 
         #region Serial Validation

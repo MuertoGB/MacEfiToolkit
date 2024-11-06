@@ -24,6 +24,8 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         internal static Binary FileInfoData;
         internal static ScfgStore ScfgSectionData;
 
+        internal const int SCFG_EXPECTED_BASE = 0x28A000;
+
         internal static TimeSpan tsParseTime { get; private set; }
         #endregion
 
