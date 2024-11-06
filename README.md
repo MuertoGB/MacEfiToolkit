@@ -1,5 +1,5 @@
 <h1 align="center">
-<img width="200" src="stream/images/application/img128px.png" alt="SMCFT Logo">
+<img width="160" src="stream/images/application/icon256.png" alt="SMCFT Logo">
 <br>
 Mac EFI Toolkit V1.2.0
 </h1>
@@ -24,7 +24,7 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
 | ------------------------------------------------ |--------------|
 | ![window](stream/images/application/startup.png) | ![window](stream/images/application/rominfo.png) | |
 
-| EFI Window                                       | SOCROM Window |
+| EFIROM Window                                    | SOCROM Window |
 | ------------------------------------------------ |-----------------------
 | ![window](stream/images/application/efi.png)     | ![window](stream/images/application/socrom.png) |
 
@@ -88,7 +88,7 @@ TODO - The original manual is outdated, and being rewritten.
 LZMA [v22.01 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.\
 The [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and  Vaughan Pratt.\
 [MacModelShelf](https://github.com/MagerValp/MacModelShelf) database, by MagerValp.\
-Application icon by [Creatype](https://www.flaticon.com/free-icon/toolkit_6457096?term=toolkit&page=1&position=38&origin=search&related_id=6457096), menu icons by [afif-fudin](https://www.flaticon.com/authors/afif-fudin).
+Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
 
 ## Donate
 

@@ -37,7 +37,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblChannel = new System.Windows.Forms.Label();
             this.tlpImages = new System.Windows.Forms.TableLayoutPanel();
             this.pbxMuerto = new System.Windows.Forms.PictureBox();
-            this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
@@ -46,7 +45,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpTopLabels.SuspendLayout();
             this.tlpImages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxMuerto)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpTitle.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,10 +69,10 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblInfo.Location = new System.Drawing.Point(0, 165);
+            this.lblInfo.Location = new System.Drawing.Point(0, 163);
             this.lblInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(288, 73);
+            this.lblInfo.Size = new System.Drawing.Size(288, 75);
             this.lblInfo.TabIndex = 0;
             this.lblInfo.Text = "This software was created by, and is the intellectual property of David R, aka Mu" +
     "erto, so don\'t eat it.";
@@ -89,7 +87,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpTopLabels.Controls.Add(this.lblBuild, 0, 0);
             this.tlpTopLabels.Controls.Add(this.lblChannel, 0, 1);
             this.tlpTopLabels.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tlpTopLabels.Location = new System.Drawing.Point(0, 113);
+            this.tlpTopLabels.Location = new System.Drawing.Point(0, 111);
             this.tlpTopLabels.Margin = new System.Windows.Forms.Padding(0);
             this.tlpTopLabels.Name = "tlpTopLabels";
             this.tlpTopLabels.RowCount = 3;
@@ -136,17 +134,16 @@ namespace Mac_EFI_Toolkit.Forms
             // tlpImages
             // 
             this.tlpImages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(32)))));
-            this.tlpImages.ColumnCount = 2;
-            this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpImages.Controls.Add(this.pbxMuerto, 1, 0);
-            this.tlpImages.Controls.Add(this.pbxLogo, 0, 0);
+            this.tlpImages.ColumnCount = 1;
+            this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpImages.Controls.Add(this.pbxMuerto, 0, 0);
             this.tlpImages.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpImages.Location = new System.Drawing.Point(0, 33);
             this.tlpImages.Name = "tlpImages";
             this.tlpImages.RowCount = 1;
             this.tlpImages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpImages.Size = new System.Drawing.Size(288, 80);
+            this.tlpImages.Size = new System.Drawing.Size(288, 78);
             this.tlpImages.TabIndex = 87;
             // 
             // pbxMuerto
@@ -156,25 +153,13 @@ namespace Mac_EFI_Toolkit.Forms
             this.pbxMuerto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pbxMuerto.Cursor = System.Windows.Forms.Cursors.Default;
             this.pbxMuerto.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbxMuerto.Location = new System.Drawing.Point(144, 7);
-            this.pbxMuerto.Margin = new System.Windows.Forms.Padding(0, 7, 50, 7);
+            this.pbxMuerto.Location = new System.Drawing.Point(0, 0);
+            this.pbxMuerto.Margin = new System.Windows.Forms.Padding(0);
             this.pbxMuerto.Name = "pbxMuerto";
-            this.pbxMuerto.Size = new System.Drawing.Size(94, 66);
+            this.pbxMuerto.Size = new System.Drawing.Size(288, 78);
             this.pbxMuerto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbxMuerto.TabIndex = 85;
             this.pbxMuerto.TabStop = false;
-            // 
-            // pbxLogo
-            // 
-            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.icon64;
-            this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pbxLogo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbxLogo.Location = new System.Drawing.Point(50, 10);
-            this.pbxLogo.Margin = new System.Windows.Forms.Padding(50, 10, 0, 10);
-            this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(94, 60);
-            this.pbxLogo.TabIndex = 86;
-            this.pbxLogo.TabStop = false;
             // 
             // pnlSeperatorTop
             // 
@@ -238,7 +223,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblTitle.Text = "Mac EFI Toolkit";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // aboutWindow
+            // frmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -256,7 +241,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(290, 240);
-            this.Name = "aboutWindow";
+            this.Name = "frmAbout";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -266,7 +251,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpTopLabels.PerformLayout();
             this.tlpImages.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxMuerto)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpTitle.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -283,7 +267,6 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.TableLayoutPanel tlpTitle;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.TableLayoutPanel tlpImages;
-        private System.Windows.Forms.PictureBox pbxLogo;
         internal System.Windows.Forms.Button cmdClose;
     }
 }

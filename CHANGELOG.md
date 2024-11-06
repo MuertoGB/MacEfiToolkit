@@ -16,7 +16,7 @@
 ## Version 1.2.0
 
 #### New
-- User Interface redesigned for improved usability.
+- User interface redesigned for improved usability, with an new application icon.
 - The application now supports Intel T2 SOCROM firmware.
 - Added capability to open multiple firmwares simultaneously.
 - Startup Window: Introduced a new startup window where users can drag and drop or browse for a compatible EFIROM or T2 SOCROM. The main window is now dedicated to EFIROM, with some functions moved to the startup window.

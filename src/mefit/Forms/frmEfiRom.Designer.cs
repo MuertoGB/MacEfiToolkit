@@ -1356,7 +1356,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.logo32px;
+            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.icon32;
             this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pbxLogo.Location = new System.Drawing.Point(8, 9);
             this.pbxLogo.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);

@@ -172,7 +172,7 @@
             this.pnlSeperatorTip.Size = new System.Drawing.Size(308, 1);
             this.pnlSeperatorTip.TabIndex = 1;
             // 
-            // ssnWindow
+            // frmSerialSelect
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -190,7 +190,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(310, 145);
-            this.Name = "ssnWindow";
+            this.Name = "frmSerialSelect";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

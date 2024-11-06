@@ -130,6 +130,9 @@ namespace Mac_EFI_Toolkit.Forms
                     case Keys.P:
                         cmdMenuPatch.PerformClick();
                         break;
+                    case Keys.S:
+                        cbxCensor.Checked = !cbxCensor.Checked;
+                        break;
                 }
             }
         }

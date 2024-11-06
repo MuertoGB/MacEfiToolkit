@@ -82,9 +82,10 @@
             this.tlpTitle.ColumnCount = 5;
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 67F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpTitle.Controls.Add(this.lblAppVersion, 2, 0);
             this.tlpTitle.Controls.Add(this.lblWindowTitle, 1, 0);
             this.tlpTitle.Controls.Add(this.cmdClose, 4, 0);
@@ -125,7 +126,7 @@
             this.lblWindowTitle.Location = new System.Drawing.Point(50, 0);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(216, 50);
+            this.lblWindowTitle.Size = new System.Drawing.Size(217, 50);
             this.lblWindowTitle.TabIndex = 0;
             this.lblWindowTitle.Text = "Mac EFI Toolkit";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -156,7 +157,7 @@
             // 
             this.pbxLogo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.pbxLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.logo32px;
+            this.pbxLogo.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.icon32;
             this.pbxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pbxLogo.Location = new System.Drawing.Point(8, 9);
             this.pbxLogo.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
@@ -237,7 +238,7 @@
             this.cmdSettings.Margin = new System.Windows.Forms.Padding(0);
             this.cmdSettings.Name = "cmdSettings";
             this.cmdSettings.Size = new System.Drawing.Size(107, 32);
-            this.cmdSettings.TabIndex = 0;
+            this.cmdSettings.TabIndex = 4;
             this.cmdSettings.Text = "SETTINGS";
             this.cmdSettings.UseVisualStyleBackColor = false;
             this.cmdSettings.Click += new System.EventHandler(this.cmdSettings_Click);
@@ -360,8 +361,8 @@
             // 
             this.cmdBrowse.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cmdBrowse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
-            this.cmdBrowse.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(80)))), ((int)(((byte)(90)))));
-            this.cmdBrowse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
+            this.cmdBrowse.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(90)))), ((int)(((byte)(100)))));
+            this.cmdBrowse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
             this.cmdBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdBrowse.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -611,7 +612,6 @@
         private System.Windows.Forms.Label lblDrag;
         private System.Windows.Forms.Button cmdBrowse;
         private System.Windows.Forms.TableLayoutPanel tlpMenu;
-        private System.Windows.Forms.Button cmdSettings;
         private System.Windows.Forms.Button cmdAbout;
         internal System.Windows.Forms.Button cmdMore;
         private System.Windows.Forms.ToolStripMenuItem changelogToolStripMenuItem;
@@ -637,5 +637,6 @@
         private System.Windows.Forms.ToolStripMenuItem openWorkingDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openNVRAMFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSCFGFolderToolStripMenuItem;
+        private System.Windows.Forms.Button cmdSettings;
     }
 }

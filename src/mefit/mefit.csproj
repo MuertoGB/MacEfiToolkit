@@ -59,7 +59,7 @@
     <StartupObject>Mac_EFI_Toolkit.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Assets\met.ico</ApplicationIcon>
+    <ApplicationIcon>mefit.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -271,14 +271,14 @@
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\icon64.png" />
-    <None Include="Resources\logo24px.png" />
+    <Content Include="Assets\mefit.ico" />
+    <Content Include="mefit.ico" />
+    <None Include="Resources\icon24.png" />
+    <None Include="Resources\icon32.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Assets\editorterms.txt" />
-    <Content Include="Assets\met.ico" />
     <None Include="Resources\modeldb.xml" />
     <None Include="Resources\imgmuerto64px.png" />
-    <None Include="Resources\logo32px.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
