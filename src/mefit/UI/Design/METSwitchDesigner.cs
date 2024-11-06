@@ -6,7 +6,6 @@
 // Released under the GNU GLP v3.0
 
 using System.Collections;
-using System.ComponentModel.Design;
 using System.Windows.Forms.Design;
 
 namespace Mac_EFI_Toolkit.UI.Design
@@ -40,8 +39,12 @@ namespace Mac_EFI_Toolkit.UI.Design
             };
 
             if (properties != null)
+            {
                 foreach (string item in propList)
+                {
                     properties.Remove(item);
+                }
+            }
 
             base.PreFilterProperties(properties);
         }

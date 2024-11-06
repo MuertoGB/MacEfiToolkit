@@ -9,15 +9,11 @@ namespace Mac_EFI_Toolkit.UI
 {
     public enum METPromptType
     {
-        Error,
-        Warning,
-        Information,
-        Question
+        Error, Warning, Information, Question
     }
 
     public enum METPromptButtons
     {
-        Okay,
-        YesNo
+        Okay, YesNo
     }
 }

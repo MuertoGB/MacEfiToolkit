@@ -18,7 +18,7 @@ namespace Mac_EFI_Toolkit.UI
         {
             Renderer = new METMenuRenderer();
             BackColor = Color.FromArgb(20, 20, 20);
-            ForeColor = Color.White;
+            ForeColor = Color.FromArgb(255, 255, 255);
             Font = new Font("Segoe UI", 10.2f, FontStyle.Regular);
             ShowImageMargin = false;
         }

@@ -7,6 +7,7 @@
 
 using System;
 using System.Drawing;
+using System.Media;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
@@ -14,9 +15,8 @@ namespace Mac_EFI_Toolkit.UI
     public partial class METPrompt : METForm
     {
         #region Static Members
-        static System.Media.SystemSound MB_SOUND;
+        static SystemSound MB_SOUND;
         static string MB_MESSAGE;
-
         static METPromptType MB_TYPE;
         static METPromptButtons MB_BUTTONS;
         static DialogResult MB_RESULT;

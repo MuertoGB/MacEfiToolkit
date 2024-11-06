@@ -12,7 +12,28 @@ using System.Text;
 namespace Mac_EFI_Toolkit.WIN32
 {
     class NativeMethods
-    { 
+    {
+        // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmenableblurbehindwindow
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND blurBehind);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DWM_BLURBEHIND
+        {
+            public DwmBlurBehindFlags dwFlags;
+            public bool fEnable;
+            public IntPtr hRgnBlur;
+            public bool fTransitionOnMaximized;
+        }
+
+        [Flags]
+        public enum DwmBlurBehindFlags : uint
+        {
+            DWM_BB_ENABLE = 0x1,
+            DWM_BB_BLURREGION = 0x2,
+            DWM_BB_TRANSITIONONMAXIMIZED = 0x4
+        }
+
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasecapture
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();

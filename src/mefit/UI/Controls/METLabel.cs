@@ -13,23 +13,17 @@ public class METLabel : Label
 {
     #region Private Members
     private ToolTip toolTip;
-    private TextFormatFlags flags =
-            TextFormatFlags.Left |
-            TextFormatFlags.VerticalCenter |
-            TextFormatFlags.EndEllipsis;
+    private TextFormatFlags flags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
     #endregion
 
     #region Constructor
-    public METLabel() =>
-        toolTip = new ToolTip { AutoPopDelay = 15000 };
+    public METLabel() => toolTip = new ToolTip { AutoPopDelay = 15000 };
     #endregion
 
     #region Paint Methods
-    protected override void OnPaint(PaintEventArgs e) =>
-        DrawText(e.Graphics, flags, ForeColor);
+    protected override void OnPaint(PaintEventArgs e) => DrawText(e.Graphics, flags, ForeColor);
 
-    protected virtual void OnPaintForeground(PaintEventArgs e) =>
-        DrawText(e.Graphics, flags, ForeColor);
+    protected virtual void OnPaintForeground(PaintEventArgs e) => DrawText(e.Graphics, flags, ForeColor);
     #endregion
 
     #region Custom Methods
@@ -43,17 +37,9 @@ public class METLabel : Label
                 ClientRectangle.Height - Padding.Vertical);
 
         // Override text color when the control is !enabled.
-        textColor = !Enabled
-            ? Color.FromArgb(14, 14, 14)
-            : ForeColor;
+        textColor = !Enabled ? Color.FromArgb(14, 14, 14) : ForeColor;
 
-        TextRenderer.DrawText(
-            graphics,
-            Text,
-            Font,
-            textRect,
-            textColor,
-            flags);
+        TextRenderer.DrawText(graphics, Text, Font, textRect, textColor, flags);
     }
 
     protected override void OnMouseEnter(EventArgs e)
