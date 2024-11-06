@@ -619,6 +619,11 @@ namespace Mac_EFI_Toolkit.Forms
         #region Misc Events
         private void ResetWindow()
         {
+            // Reset censor switch.
+            cbxCensor.Checked = false;
+            cbxCensor.Enabled = false;
+
+            // Reset labels.
             Label[] labels =
             {
                 lblFilename,
@@ -638,9 +643,6 @@ namespace Mac_EFI_Toolkit.Forms
                 label.Text = string.Empty;
                 label.ForeColor = Color.White;
             }
-
-            // Disable switch.
-            cbxCensor.Enabled = false;
 
             // Reset parse time.
             lblParseTime.Text = "0.00s";
@@ -938,7 +940,7 @@ namespace Mac_EFI_Toolkit.Forms
             SOCROM.iBootVersion);
 
         private void ClipboardSetScfgBaseAddress() => SetClipboardText(
-            $"{SOCROM.ScfgSectionData.StoreBase:X}h");
+            $"{SOCROM.ScfgSectionData.StoreBase:X}");
 
         private void ClipboardSetScfgSizeDecimal() => SetClipboardText(
             $"{SOCROM.ScfgSectionData.StoreSize} {APPSTRINGS.BYTES}");

@@ -1588,6 +1588,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ResetWindow()
         {
+            // Reset censor switch.
+            cbxCensor.Checked = false;
+            cbxCensor.Enabled = false;
+
             // Clear label data, and reset color properties.
             Label[] labels =
             {
@@ -1617,9 +1621,6 @@ namespace Mac_EFI_Toolkit.Forms
                 label.Text = string.Empty;
                 label.ForeColor = AppColours.NORMAL_INFO_TEXT;
             }
-
-            // Disable switch.
-            cbxCensor.Enabled = false;
 
             // Reset parse time.
             lblParseTime.Text = "0.00s";
@@ -1682,7 +1683,7 @@ namespace Mac_EFI_Toolkit.Forms
             EFIROM.ConfigCode);
 
         private void ClipboardSetFsysBaseAddress() => SetClipboardText(
-            $"{EFIROM.FsysStoreData.FsysBase:X2}h");
+            $"{EFIROM.FsysStoreData.FsysBase:X2}");
 
         private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(
             EFIROM.FsysStoreData.CrcString);
@@ -1697,10 +1698,10 @@ namespace Mac_EFI_Toolkit.Forms
             EFIROM.FirmwareVersion);
 
         private void ClipboardSetVssBaseAddress() => SetClipboardText(
-            $"{EFIROM.VssStoreData.PrimaryStoreBase:X2}h");
+            $"{EFIROM.VssStoreData.PrimaryStoreBase:X2}");
 
         private void ClipboardSetSvsBaseAddress() => SetClipboardText(
-            $"{EFIROM.SvsStoreData.PrimaryStoreBase:X2}h");
+            $"{EFIROM.SvsStoreData.PrimaryStoreBase:X2}");
 
         private void ClipboardSetFirmwareBoardId() => SetClipboardText(
             EFIROM.PdrSectionData.BoardId);
@@ -2690,6 +2691,5 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
         #endregion
-
     }
 }
