@@ -328,18 +328,11 @@ namespace Mac_EFI_Toolkit.Forms
             lblGlyph.Text = Program.GLYPH_DOWN_ARROW;
         }
 
-        private void ApplyDragEnterColours()
-        {
-            tlpDrop.GradientStartColor = Color.FromArgb(152, 251, 152);
+        private void ApplyDragEnterColours() =>
             lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
-        }
 
-        private void ApplyDragLeaveColours()
-        {
-            tlpDrop.GradientStartColor = Color.Transparent;
-            tlpDrop.GradientEndColor = Color.Transparent;
+        private void ApplyDragLeaveColours() =>
             lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
-        }
 
         private void SetControlForeColor(Control parentControl, Color foreColor)
         {
@@ -463,10 +456,10 @@ namespace Mac_EFI_Toolkit.Forms
 
                 int labelHeight = 20;
                 Rectangle labelRectangle = new Rectangle(
-                    0,
+                    2,
                     tlp.Height - labelHeight,
-                    tlp.Width,
-                    labelHeight
+                    tlp.Width - 4,
+                    labelHeight - 2
                 );
 
                 using (Brush backgroundBrush = new SolidBrush(Color.Tomato))
@@ -474,8 +467,8 @@ namespace Mac_EFI_Toolkit.Forms
                     g.FillRectangle(backgroundBrush, labelRectangle);
                 }
 
-                string labelText = "== Debug Mode - Do not Release ==";
-                using (Font font = new Font("Arial", 9, FontStyle.Bold))
+                string labelText = "==== Debug Mode - Do not Release ====";
+                using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
                 using (Brush textBrush = new SolidBrush(Color.Black))
                 {
                     SizeF textSize = g.MeasureString(labelText, font);

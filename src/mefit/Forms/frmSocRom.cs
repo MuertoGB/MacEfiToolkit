@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
@@ -40,11 +41,14 @@ namespace Mac_EFI_Toolkit.Forms
                 tlpTitle,
                 lblTitle);
 
-            // Set tip handlers for controls
+            // Set tip handlers for controls.
             SetTipHandlers();
 
-            // Set button properties (font and text)
-            SetButtonProperties();
+            // Set button properties.
+            SetButtonFontAndGlyph();
+
+            // Set label properties.
+            SetLabelFontAndGlyph();
         }
 
         private void WireEventHandlers()
@@ -192,6 +196,11 @@ namespace Mac_EFI_Toolkit.Forms
                 MenuPosition.BottomLeft);
         #endregion
 
+        #region Switch Events
+        private void cbxCensor_CheckedChanged(object sender, EventArgs e) =>
+            UpdateSerialControls();
+        #endregion
+
         #region Copy Toolstrip Events
         private void filenameToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFilename(true);
@@ -223,8 +232,25 @@ namespace Mac_EFI_Toolkit.Forms
         private void scfgCRC32ToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetScfgCrc32();
 
-        private void serialToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetScfgSerial();
+        private void serialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string serial = SOCROM.ScfgSectionData.SerialText;
+
+            if (string.IsNullOrEmpty(serial))
+                return;
+
+            Clipboard.SetText(serial);
+
+            if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            {
+                METPrompt.Show(
+                    this,
+                    $"{APPSTRINGS.SERIAL_NUMBER} " +
+                    $"{EFISTRINGS.COPIED_TO_CB_LC}",
+                    METPromptType.Information,
+                    METPromptButtons.Okay);
+            }
+        }
 
         private void configToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetScfgConfig();
@@ -255,7 +281,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = $"{SOCSTRINGS.SCFG}_{SOCROM.ScfgSectionData.SerialText}",
+                FileName = $"{SOCSTRINGS.SCFG}_{SOCROM.FileInfoData.FileName}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.SCFG_DIR
             })
@@ -487,10 +513,34 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuPatch
             };
 
+            Label[] labels =
+{
+                lblParseTime
+            };
+
+            CheckBox[] checkBoxes =
+            {
+                cbxCensor
+            };
+
+
             foreach (Button button in buttons)
             {
                 button.MouseEnter += HandleMouseEnterTip;
                 button.MouseLeave += HandleMouseLeaveTip;
+            }
+
+            foreach (Label label in labels)
+            {
+                label.MouseEnter += HandleMouseEnterTip;
+                label.MouseLeave += HandleMouseLeaveTip;
+            }
+
+            foreach (CheckBox checkBox in checkBoxes)
+            {
+                checkBox.MouseEnter += HandleMouseEnterTip;
+                checkBox.MouseLeave += HandleMouseLeaveTip;
+                checkBox.CheckedChanged += HandleCheckBoxChanged;
             }
         }
 
@@ -505,7 +555,9 @@ namespace Mac_EFI_Toolkit.Forms
                     { cmdMenuCopy, $"{SOCSTRINGS.MENU_TIP_COPY} (CTRL + C)" },
                     { cmdMenuFolders, $"{SOCSTRINGS.MENU_TIP_FOLDERS} (CTRL + L)" },
                     { cmdMenuExport, $"{SOCSTRINGS.MENU_TIP_EXPORT} (CTRL + E)"},
-                    { cmdMenuPatch, $"{SOCSTRINGS.MENU_TIP_PATCH} (CTRL + P)"}
+                    { cmdMenuPatch, $"{SOCSTRINGS.MENU_TIP_PATCH} (CTRL + P)"},
+                    { lblParseTime, APPSTRINGS.FW_PARSE_TIME},
+                    { cbxCensor, cbxCensorTipString() }
                 };
 
                 if (tooltips.ContainsKey(sender))
@@ -513,13 +565,28 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
+        private string cbxCensorTipString() =>
+            $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER}";
+
+        private void HandleCheckBoxChanged(object sender, EventArgs e)
+        {
+            if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
+                lblStatusBarTip.Text = cbxCensorTipString();
+        }
+
         private void HandleMouseLeaveTip(object sender, EventArgs e) =>
             lblStatusBarTip.Text = string.Empty;
 
-        private void SetButtonProperties()
+        private void SetButtonFontAndGlyph()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
+        }
+
+        private void SetLabelFontAndGlyph()
+        {
+            lblView.Font = Program.FONT_MDL2_REG_10;
+            lblView.Text = Program.GLYPH_VIEW;
         }
 
         private void SetControlForeColor(Control parentControl, Color foreColor)
@@ -569,6 +636,12 @@ namespace Mac_EFI_Toolkit.Forms
                 label.ForeColor = Color.White;
             }
 
+            // Disable switch.
+            cbxCensor.Enabled = false;
+
+            // Reset parse time.
+            lblParseTime.Text = "0.00s";
+
             // Reset window text.
             Text = APPSTRINGS.SOCROM;
             lblTitle.Text = APPSTRINGS.SOCROM;
@@ -611,6 +684,9 @@ namespace Mac_EFI_Toolkit.Forms
         #region Update Window
         internal void UpdateUI()
         {
+            // Parse time.
+            UpdateParseTimeControls();
+
             // File information
             UpdateFilenameControls();
             UpdateFileSizeControls();
@@ -632,12 +708,15 @@ namespace Mac_EFI_Toolkit.Forms
             // Update window title.
             UpdateWindowTitle();
 
-            // Unload image
+            // Unload image.
             pbxLoad.Image = null;
 
             // Check and set control enable
             ToggleControlEnable(true);
         }
+
+        private void UpdateParseTimeControls() =>
+            lblParseTime.Text = $"{SOCROM.tsParseTime.TotalSeconds:F2}s";
 
         private void UpdateFilenameControls() =>
             lblFilename.Text = SOCROM.FileInfoData.FileNameExt;
@@ -691,7 +770,6 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateScfgControls()
         {
-            // Check if ScfgSectionData is null to avoid NullReferenceException
             if (SOCROM.ScfgSectionData.StoreBase == -1)
             {
                 DisableScfgMenuItems();
@@ -699,22 +777,12 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            // Check if StoreBase is -1, indicating SCFG not found
-            if (SOCROM.ScfgSectionData.StoreBase == -1)
-            {
-                DisableScfgMenuItems();
-                lblScfg.Text = APPSTRINGS.NA;
-                return;
-            }
-
-            // Fetch data and update the label
             string scfgBase = $"{SOCROM.ScfgSectionData.StoreBase:X}h";
             string crc = SOCROM.ScfgSectionData.ScfgCrc;
             int scfgSize = SOCROM.ScfgSectionData.StoreSize;
 
             lblScfg.Text = $"{scfgBase}, {scfgSize:X}h ({scfgSize} bytes), {crc}";
 
-            // Enable menu items
             EnableScfgMenuItems();
         }
 
@@ -736,18 +804,34 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateSerialControls()
         {
-            if (string.IsNullOrEmpty(SOCROM.ScfgSectionData.SerialText))
+            string serialNumber = SOCROM.ScfgSectionData.SerialText;
+
+            if (!string.IsNullOrEmpty(serialNumber))
+            {
+                if (cbxCensor.Checked)
+                {
+                    lblSerial.Text = serialNumber;
+                }
+                else
+                {
+                    lblSerial.Text = $"{serialNumber.Substring(0, 2)}******{serialNumber.Substring(8, 4)}";
+                }
+
+                // Prototype in testing
+                if (!MacTools.IsValidAppleSerial(serialNumber))
+                {
+                    lblSerial.ForeColor = AppColours.WARNING;
+                }
+
+                cbxCensor.Enabled = true;
+                serialToolStripMenuItem.Enabled = true;
+            }
+            else
             {
                 lblSerial.Text = APPSTRINGS.NA;
-
+                cbxCensor.Enabled = false;
                 serialToolStripMenuItem.Enabled = false;
-
-                return;
             }
-
-            serialToolStripMenuItem.Enabled = true;
-
-            lblSerial.Text = SOCROM.ScfgSectionData.SerialText;
         }
 
         private void UpdateConfigCodeControls()
@@ -861,9 +945,6 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetScfgCrc32() => SetClipboardText(
             SOCROM.ScfgSectionData.ScfgCrc);
-
-        private void ClipboardSetScfgSerial() => SetClipboardText(
-            SOCROM.ScfgSectionData.SerialText);
 
         private void ClipboardSetScfgConfig() => SetClipboardText(
             SOCROM.ConfigCode);

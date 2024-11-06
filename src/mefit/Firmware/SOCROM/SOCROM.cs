@@ -6,6 +6,8 @@
 
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.Tools.Structs;
+using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace Mac_EFI_Toolkit.Firmware.SOCROM
@@ -21,6 +23,8 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         internal static string ConfigCode = null;
         internal static Binary FileInfoData;
         internal static ScfgStore ScfgSectionData;
+
+        internal static TimeSpan tsParseTime { get; private set; }
         #endregion
 
         #region Private Members
@@ -32,6 +36,9 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #region Parse Fimware
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
+            // Start bench
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             // Parse file info
             FileInfoData =
                 FileTools.GetBinaryFileInfo
@@ -47,6 +54,9 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             ConfigCode = ScfgSectionData.HWC != null
                 ? MacTools.GetDeviceConfigCodeLocalLocal(ScfgSectionData.HWC)
                 : null;
+
+            stopwatch.Start();
+            tsParseTime = stopwatch.Elapsed;
         }
 
         internal static void ResetFirmwareBaseData()

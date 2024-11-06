@@ -21,6 +21,9 @@
 - Added capability to open multiple firmwares simultaneously.
 - Startup Window: Introduced a new startup window where users can drag and drop or browse for a compatible EFIROM or T2 SOCROM. The main window is now dedicated to EFIROM, with some functions moved to the startup window.
 - Added a new setting: "Use Windows accent color for form borders," allowing form borders to match the system's accent color for a more integrated appearance.
+- Added firmware parse time to status bars.
+- Serial numbers are now censored by default. They can be uncensored by toggling the switch in the status bar.
+- Serial numbers will no longer be displayed in the "Copied to Clipboard" dialogs. Instead, a default message "Serial Number copied to clipboard" will be shown.
 - EFI Window Updates:
   - Patcher Relocation: Removed the firmware patcher window; all patching features are now consolidated in the EFI window.
   - Structured File Naming: Added an option to automatically generate a structured file name for the loaded firmware and copy it to the clipboard.
@@ -32,6 +35,7 @@
 
 #### Enhancements
 - Restricted non-Apple EFI files from being opened.
+- When an NVRAM store base address is found but the size is invalid (0xFFFF), the parser will now treat the store as empty, rather than incorrectly indicating that the store is missing.
 - Enhanced NVRAM reset functionality to simulate an uninitialized factory firmware state.
 - Improved validation process for serial numbers.
 - Updated the internal database with more models.

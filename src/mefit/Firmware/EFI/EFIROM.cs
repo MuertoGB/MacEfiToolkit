@@ -9,6 +9,7 @@ using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.Tools.Structs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -42,6 +43,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
 
+        internal static TimeSpan tsParseTime { get; private set; }
+
         internal static int FSYS_RGN_SIZE = 0;
         internal static int NVRAM_BASE = -1;
         internal static int NVRAM_SIZE = -1;
@@ -59,6 +62,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #region Parse Firmware
         internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
         {
+            // Start bench
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             // Try processing flash descriptor
             IFD.ParseRegionData(sourceBytes);
 
@@ -183,6 +189,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 IME.GetVersionData(
                     LoadedBinaryBytes,
                     VersionType.ManagementEngine);
+
+            stopwatch.Stop();
+            tsParseTime = stopwatch.Elapsed;
         }
 
         internal static void ResetFirmwareBaseData()
@@ -319,8 +328,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static NvramStore GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
         {
             byte[] storeTypeSignature =
-                GetNvramStoreSignature(
-                    storeType);
+                GetNvramStoreSignature(storeType);
 
             if (NVRAM_BASE == -1)
                 return DefaultNvramStoreData();
@@ -335,8 +343,17 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                     NVRAM_BASE,
                     GUID_SIZE);
 
+            // Check if primaryStoreSize is -1 but store base is found.
             if (primaryStoreSize == -1)
-                return DefaultNvramStoreData();
+            {
+                // If the store base is found, set isPrimaryStoreEmpty to true.
+                if (primaryStoreBase != -1)
+                {
+                    isPrimaryStoreEmpty = true;
+                }
+                primaryStoreSize = -1;  // Ensuring primaryStoreSize is still -1.
+                primaryStoreData = null; // No data available.
+            }
 
             int paddingSize = 0;
 

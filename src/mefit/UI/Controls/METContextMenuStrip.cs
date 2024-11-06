@@ -13,6 +13,7 @@ namespace Mac_EFI_Toolkit.UI
 {
     internal class METContextMenuStrip : ContextMenuStrip
     {
+        #region Constructor
         public METContextMenuStrip()
         {
             Renderer = new METMenuRenderer();
@@ -21,5 +22,6 @@ namespace Mac_EFI_Toolkit.UI
             Font = new Font("Segoe UI", 10.2f, FontStyle.Regular);
             ShowImageMargin = false;
         }
+        #endregion
     }
 }

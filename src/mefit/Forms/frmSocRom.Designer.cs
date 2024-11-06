@@ -64,9 +64,14 @@
             this.lblScfg = new System.Windows.Forms.Label();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
+            this.pnlSplit1 = new System.Windows.Forms.Panel();
             this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLoad = new System.Windows.Forms.PictureBox();
             this.lblStatusBarTip = new System.Windows.Forms.Label();
+            this.lblParseTime = new System.Windows.Forms.Label();
+            this.pnlSplit0 = new System.Windows.Forms.Panel();
+            this.lblView = new System.Windows.Forms.Label();
+            this.cbxCensor = new Mac_EFI_Toolkit.UI.METSwitch();
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.pnlSeperatorBottom = new System.Windows.Forms.Panel();
             this.cmsCopy = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
@@ -758,14 +763,22 @@
             // 
             // tlpStatusBar
             // 
-            this.tlpStatusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.tlpStatusBar.ColumnCount = 2;
+            this.tlpStatusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.tlpStatusBar.ColumnCount = 7;
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 1, 0);
-            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 0, 0);
+            this.tlpStatusBar.Controls.Add(this.pnlSplit1, 4, 0);
+            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 6, 0);
+            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 5, 0);
+            this.tlpStatusBar.Controls.Add(this.lblParseTime, 0, 0);
+            this.tlpStatusBar.Controls.Add(this.pnlSplit0, 1, 0);
+            this.tlpStatusBar.Controls.Add(this.lblView, 3, 0);
+            this.tlpStatusBar.Controls.Add(this.cbxCensor, 2, 0);
             this.tlpStatusBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatusBar.Location = new System.Drawing.Point(0, 370);
             this.tlpStatusBar.Margin = new System.Windows.Forms.Padding(0);
@@ -773,7 +786,16 @@
             this.tlpStatusBar.RowCount = 1;
             this.tlpStatusBar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.Size = new System.Drawing.Size(528, 36);
-            this.tlpStatusBar.TabIndex = 100;
+            this.tlpStatusBar.TabIndex = 1;
+            // 
+            // pnlSplit1
+            // 
+            this.pnlSplit1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlSplit1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.pnlSplit1.Location = new System.Drawing.Point(138, 7);
+            this.pnlSplit1.Name = "pnlSplit1";
+            this.pnlSplit1.Size = new System.Drawing.Size(1, 22);
+            this.pnlSplit1.TabIndex = 101;
             // 
             // tlpStatusBarImage
             // 
@@ -808,15 +830,67 @@
             this.lblStatusBarTip.AutoSize = true;
             this.lblStatusBarTip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.lblStatusBarTip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblStatusBarTip.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatusBarTip.ForeColor = System.Drawing.Color.White;
-            this.lblStatusBarTip.Location = new System.Drawing.Point(0, 0);
-            this.lblStatusBarTip.Margin = new System.Windows.Forms.Padding(0);
+            this.lblStatusBarTip.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatusBarTip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblStatusBarTip.Location = new System.Drawing.Point(141, 1);
+            this.lblStatusBarTip.Margin = new System.Windows.Forms.Padding(1);
             this.lblStatusBarTip.Name = "lblStatusBarTip";
-            this.lblStatusBarTip.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblStatusBarTip.Size = new System.Drawing.Size(492, 36);
-            this.lblStatusBarTip.TabIndex = 99;
+            this.lblStatusBarTip.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblStatusBarTip.Size = new System.Drawing.Size(350, 34);
+            this.lblStatusBarTip.TabIndex = 0;
             this.lblStatusBarTip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblParseTime
+            // 
+            this.lblParseTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.lblParseTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblParseTime.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblParseTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblParseTime.Location = new System.Drawing.Point(10, 7);
+            this.lblParseTime.Margin = new System.Windows.Forms.Padding(0, 0, 4, 0);
+            this.lblParseTime.Name = "lblParseTime";
+            this.lblParseTime.Size = new System.Drawing.Size(56, 22);
+            this.lblParseTime.TabIndex = 0;
+            this.lblParseTime.Text = "0.00s";
+            this.lblParseTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pnlSplit0
+            // 
+            this.pnlSplit0.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlSplit0.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.pnlSplit0.Location = new System.Drawing.Point(73, 7);
+            this.pnlSplit0.Name = "pnlSplit0";
+            this.pnlSplit0.Size = new System.Drawing.Size(1, 22);
+            this.pnlSplit0.TabIndex = 0;
+            // 
+            // lblView
+            // 
+            this.lblView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblView.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lblView.Location = new System.Drawing.Point(111, 0);
+            this.lblView.Margin = new System.Windows.Forms.Padding(0);
+            this.lblView.Name = "lblView";
+            this.lblView.Size = new System.Drawing.Size(24, 36);
+            this.lblView.TabIndex = 0;
+            this.lblView.Text = "...";
+            this.lblView.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // cbxCensor
+            // 
+            this.cbxCensor.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxCensor.BackColor = System.Drawing.Color.Black;
+            this.cbxCensor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(140)))));
+            this.cbxCensor.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxCensor.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
+            this.cbxCensor.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxCensor.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.cbxCensor.Enabled = false;
+            this.cbxCensor.Location = new System.Drawing.Point(80, 10);
+            this.cbxCensor.Name = "cbxCensor";
+            this.cbxCensor.Size = new System.Drawing.Size(26, 16);
+            this.cbxCensor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(160)))));
+            this.cbxCensor.TabIndex = 9;
+            this.cbxCensor.CheckedChanged += new System.EventHandler(this.cbxCensor_CheckedChanged);
             // 
             // pnlSeperatorTop
             // 
@@ -1130,10 +1204,6 @@
         private System.Windows.Forms.Label lblIbootText;
         private System.Windows.Forms.Label lbliBoot;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
-        private System.Windows.Forms.TableLayoutPanel tlpStatusBar;
-        private System.Windows.Forms.TableLayoutPanel tlpStatusBarImage;
-        private System.Windows.Forms.PictureBox pbxLoad;
-        private System.Windows.Forms.Label lblStatusBarTip;
         private System.Windows.Forms.Panel pnlSeperatorTop;
         private System.Windows.Forms.Panel pnlSeperatorBottom;
         private System.Windows.Forms.Button cmdMenuPatch;
@@ -1167,5 +1237,14 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem backupFirmwareZIPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportFirmwareInformationTextToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel tlpStatusBar;
+        private System.Windows.Forms.Panel pnlSplit1;
+        private System.Windows.Forms.TableLayoutPanel tlpStatusBarImage;
+        private System.Windows.Forms.PictureBox pbxLoad;
+        private System.Windows.Forms.Label lblStatusBarTip;
+        private System.Windows.Forms.Label lblParseTime;
+        private System.Windows.Forms.Panel pnlSplit0;
+        private System.Windows.Forms.Label lblView;
+        private UI.METSwitch cbxCensor;
     }
 }

@@ -46,7 +46,10 @@ namespace Mac_EFI_Toolkit.Forms
             SetTipHandlers();
 
             // Set button properties.
-            SetButtonProperties();
+            SetButtonFontAndGlyph();
+
+            // Set label properties.
+            SetLabelFontAndGlyph();
         }
 
         private void WireEventHandlers()
@@ -249,6 +252,11 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
+        #region Switch Events
+        private void cbxCensor_CheckedChanged(object sender, EventArgs e) =>
+            UpdateSerialNumberControls();
+        #endregion
+
         #region Copy Toolstrip Events
         // File Clipboard Menu.
         private void filenameToolStripMenuItem_Click(object sender, EventArgs e) =>
@@ -279,8 +287,25 @@ namespace Mac_EFI_Toolkit.Forms
         private void fsysCRC32ToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareFsysCrc32();
 
-        private void serialToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetFirmwareSerial();
+        private void serialToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string serial = EFIROM.FsysStoreData.Serial;
+
+            if (string.IsNullOrEmpty(serial))
+                return;
+
+            Clipboard.SetText(serial);
+
+            if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            {
+                METPrompt.Show(
+                    this,
+                    $"{APPSTRINGS.SERIAL_NUMBER} " +
+                    $"{EFISTRINGS.COPIED_TO_CB_LC}",
+                    METPromptType.Information,
+                    METPromptButtons.Okay);
+            }
+        }
 
         private void hwcToolStripMenuItem_Click(object sender, EventArgs e) =>
             ClipboardSetFirmwareHwc();
@@ -874,6 +899,9 @@ namespace Mac_EFI_Toolkit.Forms
         #region Update Window
         internal void UpdateUI()
         {
+            // Parse time.
+            UpdateParseTimeControls();
+
             // File information.
             UpdateFileNameControls();
             UpdateFileSizeControls();
@@ -897,7 +925,6 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateDescriptorModeControls();
             UpdateIntelMeControls();
 
-            // Apply DISABLED_TEXT color to N/A text labels.
             ApplyNestedPanelLabelForeColor(
                 tlpFirmware,
                 AppColours.DISABLED_TEXT);
@@ -919,6 +946,9 @@ namespace Mac_EFI_Toolkit.Forms
             // Check and set control enable.
             ToggleControlEnable(true);
         }
+
+        private void UpdateParseTimeControls() =>
+            lblParseTime.Text = $"{EFIROM.tsParseTime.TotalSeconds:F2}s";
 
         private void UpdateFileNameControls() =>
             lblFilename.Text = $"{EFISTRINGS.FILE}: '{EFIROM.FileInfoData.FileNameExt}'";
@@ -1061,30 +1091,41 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateSerialNumberControls()
         {
-            string serialNumber =
-                EFIROM.FsysStoreData.Serial;
-
-            lblSerialNumber.Text =
-                serialNumber
-                ?? APPSTRINGS.NA;
+            string serialNumber = EFIROM.FsysStoreData.Serial;
 
             if (!string.IsNullOrEmpty(serialNumber))
             {
+                if (cbxCensor.Checked)
+                {
+                    lblSerialNumber.Text = serialNumber;
+                }
+                else
+                {
+                    if (serialNumber.Length == 11)
+                    {
+                        lblSerialNumber.Text = $"{serialNumber.Substring(0, 2)}******{serialNumber.Substring(8, 3)}";
+                    }
+                    else if (serialNumber.Length == 12)
+                    {
+                        lblSerialNumber.Text = $"{serialNumber.Substring(0, 2)}******{serialNumber.Substring(8, 4)}";
+                    }
+                }
+
                 // Prototype in testing
                 if (!MacTools.IsValidAppleSerial(serialNumber))
+                {
                     lblSerialNumber.ForeColor = AppColours.WARNING;
+                }
 
-                lblSerialNumber.Text +=
-                    (serialNumber.Length == 11 || serialNumber.Length == 12)
-                    ? $" ({serialNumber.Length})"
-                    : string.Empty;
-
+                cbxCensor.Enabled = true;
                 serialToolStripMenuItem.Enabled = true;
-
-                return;
             }
-
-            serialToolStripMenuItem.Enabled = false;
+            else
+            {
+                lblSerialNumber.Text = APPSTRINGS.NA;
+                cbxCensor.Enabled = false;
+                serialToolStripMenuItem.Enabled = false;
+            }
         }
 
         private void UpdateHardwareConfigControls()
@@ -1362,7 +1403,7 @@ namespace Mac_EFI_Toolkit.Forms
             tlpFirmware.Enabled = enable;
         }
 
-        private void SetButtonProperties()
+        private void SetButtonFontAndGlyph()
         {
             var buttons = new[]
             {
@@ -1381,6 +1422,12 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
+        private void SetLabelFontAndGlyph()
+        {
+            lblView.Font = Program.FONT_MDL2_REG_10;
+            lblView.Text = Program.GLYPH_VIEW;
+        }
+
         private void SetTipHandlers()
         {
             Button[] buttons =
@@ -1397,8 +1444,12 @@ namespace Mac_EFI_Toolkit.Forms
 
             Label[] labels =
             {
-                lblVss,
-                lblSvs,
+                lblParseTime
+            };
+
+            CheckBox[] checkBoxes =
+            {
+                cbxCensor
             };
 
             foreach (Button button in buttons)
@@ -1411,6 +1462,13 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 label.MouseEnter += HandleMouseEnterTip;
                 label.MouseLeave += HandleMouseLeaveTip;
+            }
+
+            foreach (CheckBox checkBox in checkBoxes)
+            {
+                checkBox.MouseEnter += HandleMouseEnterTip;
+                checkBox.MouseLeave += HandleMouseLeaveTip;
+                checkBox.CheckedChanged += HandleCheckBoxChanged;
             }
         }
 
@@ -1427,7 +1485,9 @@ namespace Mac_EFI_Toolkit.Forms
                     { cmdMenuExport, $"{EFISTRINGS.MENU_TIP_EXPORT} (CTRL + E)"},
                     { cmdMenuPatch, $"{EFISTRINGS.MENU_TIP_PATCH} (CTRL + P)"},
                     { cmdMenuOptions, $"{EFISTRINGS.MENU_TIP_OPTIONS} (CTRL + T)"},
-                    { cmdOpenInExplorer, $"{EFISTRINGS.MENU_TIP_OPENFILELOCATION} (CTRL + SHIFT + L)" }
+                    { cmdOpenInExplorer, $"{EFISTRINGS.MENU_TIP_OPENFILELOCATION} (CTRL + SHIFT + L)" },
+                    { lblParseTime, APPSTRINGS.FW_PARSE_TIME},
+                    { cbxCensor, cbxCensorTipString() }
                 };
 
                 if (tooltips.ContainsKey(sender))
@@ -1435,6 +1495,15 @@ namespace Mac_EFI_Toolkit.Forms
 
                 tooltips.Clear();
             }
+        }
+
+        private string cbxCensorTipString() =>
+            $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER}";
+
+        private void HandleCheckBoxChanged(object sender, EventArgs e)
+        {
+            if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
+                lblStatusBarTip.Text = cbxCensorTipString();
         }
 
         private void HandleMouseLeaveTip(object sender, EventArgs e) =>
@@ -1543,8 +1612,14 @@ namespace Mac_EFI_Toolkit.Forms
             foreach (Label label in labels)
             {
                 label.Text = string.Empty;
-                label.ForeColor = Color.FromArgb(235, 235, 235);
+                label.ForeColor = AppColours.NORMAL_INFO_TEXT;
             }
+
+            // Disable switch.
+            cbxCensor.Enabled = false;
+
+            // Reset parse time.
+            lblParseTime.Text = "0.00s";
 
             // Reset window text.
             Text = APPSTRINGS.EFIROM;
@@ -1608,9 +1683,6 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(
             EFIROM.FsysStoreData.CrcString);
-
-        private void ClipboardSetFirmwareSerial() => SetClipboardText(
-            EFIROM.FsysStoreData.Serial);
 
         private void ClipboardSetFirmwareHwc() => SetClipboardText(
             EFIROM.FsysStoreData.HWC);
@@ -2615,5 +2687,6 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
         #endregion
+
     }
 }

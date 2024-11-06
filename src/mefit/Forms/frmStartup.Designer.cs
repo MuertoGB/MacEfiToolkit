@@ -42,7 +42,7 @@
             this.cmdMore = new System.Windows.Forms.Button();
             this.cmdMenuFolders = new System.Windows.Forms.Button();
             this.pnlSeperatorBtm = new System.Windows.Forms.Panel();
-            this.tlpDrop = new METTableLayout();
+            this.tlpDrop = new System.Windows.Forms.TableLayoutPanel();
             this.lblDrag = new System.Windows.Forms.Label();
             this.lblGlyph = new System.Windows.Forms.Label();
             this.cmdBrowse = new System.Windows.Forms.Button();
@@ -321,8 +321,6 @@
             this.tlpDrop.Controls.Add(this.lblGlyph, 0, 0);
             this.tlpDrop.Controls.Add(this.cmdBrowse, 0, 2);
             this.tlpDrop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDrop.GradientEndColor = System.Drawing.Color.Transparent;
-            this.tlpDrop.GradientStartColor = System.Drawing.Color.Transparent;
             this.tlpDrop.Location = new System.Drawing.Point(1, 84);
             this.tlpDrop.Name = "tlpDrop";
             this.tlpDrop.RowCount = 3;
@@ -609,7 +607,7 @@
         private System.Windows.Forms.Label lblAppVersion;
         private System.Windows.Forms.Panel pnlSeperatorTop;
         private System.Windows.Forms.Label lblGlyph;
-        private METTableLayout tlpDrop;
+        private System.Windows.Forms.TableLayoutPanel tlpDrop;
         private System.Windows.Forms.Label lblDrag;
         private System.Windows.Forms.Button cmdBrowse;
         private System.Windows.Forms.TableLayoutPanel tlpMenu;

@@ -11,7 +11,6 @@ using System.Windows.Forms;
 
 public class METLabel : Label
 {
-
     #region Private Members
     private ToolTip toolTip;
     private TextFormatFlags flags =
@@ -94,5 +93,4 @@ public class METLabel : Label
         Invalidate();
     }
     #endregion
-
 }

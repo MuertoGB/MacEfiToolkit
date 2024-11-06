@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241105.0420";
+        internal const string APP_BUILD = "241106.0130";
         internal const string APP_CHANNEL = "BETA";
     }
 
@@ -76,6 +76,7 @@ namespace Mac_EFI_Toolkit
         internal const string GLYPH_FILE_EXPLORER = "\uED25";
         internal const string GLYPH_DOWN_ARROW = "\uE74B";
         internal const string GLYPH_RIGHT_ARROW = "\u2192";
+        internal const string GLYPH_VIEW = "\uE890";
         internal const string NOWRAP_SPACE = "\u00A0";
 
         internal static Font FONT_MDL2_REG_9;

@@ -4,6 +4,8 @@
 // English.cs
 // Released under the GNU GLP v3.0
 
+using System.Dynamic;
+
 namespace Mac_EFI_Toolkit
 {
     internal class APPSTRINGS
@@ -35,6 +37,18 @@ namespace Mac_EFI_Toolkit
 
         internal const string BYTES =
             "bytes";
+
+        internal const string SERIAL_NUMBER =
+            "Serial Number";
+
+        internal const string FW_PARSE_TIME =
+            "Firmware Parse Time";
+
+        internal const string HIDE =
+            "Hide";
+
+        internal const string SHOW = 
+            "Show";
 
         internal const string CONTACT_SERVER =
             "Contacting Server...";

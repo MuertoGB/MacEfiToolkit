@@ -321,6 +321,5 @@ namespace Mac_EFI_Toolkit.UI
             return preferredSize;
         }
         #endregion
-
     }
 }
