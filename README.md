@@ -1,7 +1,7 @@
 <h1 align="center">
 <img width="160" src="stream/images/application/icon256.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit V1.2.0
+Mac EFI Toolkit V2.0.0
 </h1>
 
 <h4 align="center">A tool for analysis of Mac BIOS/UEFI and Intel T2 SOCROM, with limited editing capabilities.</h4>
@@ -61,7 +61,7 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
 
 | Version| Release Date| Latest | Channel |
 |--------|-------------|--------|---------|
-|[1.2.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set, 2024 | Yes | Stable |
+|[2.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set, 2024 | Yes | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 

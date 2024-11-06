@@ -10,10 +10,10 @@
   <a href="#version-113">V1.1.3</a> •
   <a href="#version-114">V1.1.4</a> •
   <a href="#version-115">V1.1.5</a> •
-  <a href="#version-120">V1.2.0</a>
+  <a href="#version-200">V2.0.0</a>
 </p>
 
-## Version 1.2.0
+## Version 2.0.0
 
 #### New
 - User interface redesigned for improved usability, with an new application icon.
