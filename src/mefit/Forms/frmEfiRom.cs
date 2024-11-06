@@ -855,11 +855,11 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            // Show loading resource.
-            pbxLoad.Image = Properties.Resources.loading;
-
-            // Set the current initial directory.
+            // Set the current directory.
             _strInitialDirectory = Path.GetDirectoryName(filePath);
+
+            // Show loading bar.
+            pbxLoad.Image = Properties.Resources.loading;
 
             // Load the firmware base in a separate thread.
             _tLoadFirmware = new Thread(() => LoadFirmwareBase(

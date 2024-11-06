@@ -22,6 +22,7 @@ namespace Mac_EFI_Toolkit.Forms
     public partial class frmSocRom : METForm
     {
         #region Private Members
+        private string _strInitialDirectory = METPath.WORKING_DIR;
         private Thread _tLoadFirmware = null;
         private CancellationTokenSource _cancellationToken;
         #endregion
@@ -66,6 +67,8 @@ namespace Mac_EFI_Toolkit.Forms
         #region Window Events
         private void frmSocRom_Load(object sender, EventArgs e)
         {
+            SetInitialDirectory();
+
             _cancellationToken =
                 new CancellationTokenSource();
 
@@ -152,6 +155,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog
             {
+                InitialDirectory = _strInitialDirectory,
                 Filter = APPSTRINGS.FILTER_SOCROM_SUPPORTED_FIRMWARE
             })
             {
@@ -509,6 +513,10 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
+            // Set the current directory.
+            _strInitialDirectory = Path.GetDirectoryName(filePath);
+
+            // Show loading bar.
             pbxLoad.Image = Properties.Resources.loading;
 
             _tLoadFirmware = new Thread(() => LoadFirmwareBase(filePath, _cancellationToken.Token))
@@ -675,6 +683,21 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Misc Events
+        internal void SetInitialDirectory()
+        {
+            // Get the initial directory from settings.
+            string directory =
+                Settings.ReadString(SettingsStringType.SocInitialDirectory);
+
+            // If the path is not empty check if it exists and set it as the initial directory.
+            if (!string.IsNullOrEmpty(directory))
+            {
+                _strInitialDirectory = Directory.Exists(directory)
+                    ? directory
+                    : METPath.WORKING_DIR;
+            }
+        }
+
         private void ResetWindow()
         {
             // Reset censor switch.
@@ -704,6 +727,9 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Reset parse time.
             lblParseTime.Text = "0.00s";
+
+            // Reset initial directory.
+            SetInitialDirectory();
 
             // Reset window text.
             Text = APPSTRINGS.SOCROM;
