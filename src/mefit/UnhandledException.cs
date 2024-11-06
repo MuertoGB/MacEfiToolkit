@@ -68,7 +68,9 @@ namespace Mac_EFI_Toolkit
         private static string GetExceptionData(Exception e)
         {
             if (e == null)
+            {
                 return $"Exception data was null.\r\n";
+            }
 
             StringBuilder builder = new StringBuilder();
 
@@ -108,6 +110,5 @@ namespace Mac_EFI_Toolkit
                 return null;
             }
         }
-
     }
 }

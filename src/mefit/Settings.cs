@@ -56,8 +56,7 @@ namespace Mac_EFI_Toolkit
         #region Initialize
         internal static void Initialize()
         {
-            IniFile ini =
-                new IniFile(METPath.SETTINGS_FILE);
+            IniFile ini = new IniFile(METPath.SETTINGS_FILE);
 
             WriteSections(ini);
             WriteStartupKeys(ini);
@@ -71,13 +70,17 @@ namespace Mac_EFI_Toolkit
         private static void WriteSections(IniFile ini)
         {
             if (!ini.SectionExists(SEC_STARTUP))
+            {
                 ini.WriteSection(SEC_STARTUP);
-
+            }
             if (!ini.SectionExists(SEC_APPLICATION))
+            {
                 ini.WriteSection(SEC_APPLICATION);
-
+            }
             if (!ini.SectionExists(SEC_FIRMWARE))
+            {
                 ini.WriteSection(SEC_FIRMWARE);
+            }
         }
         #endregion
 
@@ -85,7 +88,9 @@ namespace Mac_EFI_Toolkit
         private static void WriteStartupKeys(IniFile ini)
         {
             if (!ini.KeyExists(SEC_STARTUP, KEY_DISABLE_VERSION_CHECK))
+            {
                 ini.Write(SEC_STARTUP, KEY_DISABLE_VERSION_CHECK, "False");
+            }
         }
 
         private static void WriteApplicationKeys(IniFile ini)
@@ -114,14 +119,18 @@ namespace Mac_EFI_Toolkit
             foreach (var entry in defaults)
             {
                 if (!ini.KeyExists(section, entry.Key))
+                {
                     ini.Write(section, entry.Key, entry.Value);
+                }
             }
         }
 
         private static void WriteFirmwareKeys(IniFile ini)
         {
             if (!ini.SectionExists(SEC_FIRMWARE) || !ini.KeyExists(SEC_FIRMWARE, KEY_ACCEPTED_TERMS))
+            {
                 ini.Write(SEC_FIRMWARE, KEY_ACCEPTED_TERMS, "False");
+            }
         }
         #endregion
 
@@ -129,7 +138,9 @@ namespace Mac_EFI_Toolkit
         internal static bool ReadBool(SettingsBoolType settingType)
         {
             if (!SettingsFileExists())
+            {
                 return false;
+            }
 
             string section, key;
 
@@ -160,9 +171,7 @@ namespace Mac_EFI_Toolkit
                     return false;
             }
 
-            IniFile settingsIni =
-                new IniFile(
-                    METPath.SETTINGS_FILE);
+            IniFile settingsIni = new IniFile(METPath.SETTINGS_FILE);
 
             if (!settingsIni.SectionExists(section))
             {
@@ -171,13 +180,11 @@ namespace Mac_EFI_Toolkit
                     LogType.Application);
 
                 using (StreamWriter writer = new StreamWriter(METPath.SETTINGS_FILE, true))
-                    writer.WriteLine(
-                        $"[{section}]");
+                {
+                    writer.WriteLine($"[{section}]");
+                }
 
-                settingsIni.Write(
-                    section,
-                    key,
-                    "False");
+                settingsIni.Write(section, key, "False");
 
                 return false;
             }
@@ -188,10 +195,7 @@ namespace Mac_EFI_Toolkit
                     $"ReadBool (Settings): Key '{key}' was missing and created automatically.",
                     LogType.Application);
 
-                settingsIni.Write(
-                    section,
-                    key,
-                    "False");
+                settingsIni.Write(section, key, "False");
 
                 return false;
             }
@@ -202,7 +206,9 @@ namespace Mac_EFI_Toolkit
         internal static string ReadString(SettingsStringType settingType)
         {
             if (!SettingsFileExists())
+            {
                 return string.Empty;
+            }
 
             string section, key;
 
@@ -221,9 +227,7 @@ namespace Mac_EFI_Toolkit
                     return string.Empty;
             }
 
-            IniFile settingsIni =
-                new IniFile(
-                    METPath.SETTINGS_FILE);
+            IniFile settingsIni = new IniFile(METPath.SETTINGS_FILE);
 
             if (!settingsIni.SectionExists(section))
             {
@@ -233,14 +237,10 @@ namespace Mac_EFI_Toolkit
 
                 using (StreamWriter writer = new StreamWriter(METPath.SETTINGS_FILE, true))
                 {
-                    writer.WriteLine(
-                        $"[{section}]");
+                    writer.WriteLine($"[{section}]");
                 }
 
-                settingsIni.Write(
-                    section,
-                    key,
-                    "False");
+                settingsIni.Write(section, key, "False");
 
                 return string.Empty;
             }
@@ -251,10 +251,7 @@ namespace Mac_EFI_Toolkit
                     $"ReadString (Settings): Key '{key}' was missing and created automatically.",
                     LogType.Application);
 
-                settingsIni.Write(
-                    section,
-                    key,
-                    "False");
+                settingsIni.Write(section, key, "False");
 
                 return string.Empty;
             }
@@ -267,7 +264,9 @@ namespace Mac_EFI_Toolkit
         internal static void SetBool(SettingsBoolType settingType, bool value)
         {
             if (!SettingsFileExists())
+            {
                 return;
+            }
 
             string section, key;
 
@@ -298,18 +297,13 @@ namespace Mac_EFI_Toolkit
                     return;
             }
 
-            IniFile settingsIni =
-                new IniFile(
-                    METPath.SETTINGS_FILE);
+            IniFile settingsIni = new IniFile(METPath.SETTINGS_FILE);
 
             if (settingsIni.SectionExists(section))
             {
                 if (settingsIni.KeyExists(section, key))
                 {
-                    settingsIni.Write(
-                        section,
-                        key,
-                        value.ToString());
+                    settingsIni.Write(section, key, value.ToString());
                 }
                 else
                 {
@@ -323,7 +317,9 @@ namespace Mac_EFI_Toolkit
         internal static void SetString(SettingsStringType settingType, string value)
         {
             if (!SettingsFileExists())
+            {
                 return;
+            }
 
             string section, key;
 
@@ -342,22 +338,16 @@ namespace Mac_EFI_Toolkit
                     return;
             }
 
-            IniFile ini =
-                new IniFile(
-                    METPath.SETTINGS_FILE);
+            IniFile ini = new IniFile(METPath.SETTINGS_FILE);
 
             if (!ini.SectionExists(section))
-                ini.Write(
-                    section,
-                    string.Empty,
-                    null);
+            {
+                ini.Write(section, string.Empty, null);
+            }
 
             if (ini.KeyExists(section, key))
             {
-                ini.Write(
-                    section,
-                    key,
-                    value);
+                ini.Write(section, key, value);
             }
             else
             {
@@ -378,15 +368,12 @@ namespace Mac_EFI_Toolkit
         {
             try
             {
-                File.Delete(
-                    METPath.SETTINGS_FILE);
-
+                File.Delete(METPath.SETTINGS_FILE);
                 return SettingsFileExists();
             }
             catch (Exception e)
             {
                 Logger.WriteError(nameof(Delete), e.GetType(), e.Message);
-
                 return false;
             }
         }

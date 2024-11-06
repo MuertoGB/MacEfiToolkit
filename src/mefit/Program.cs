@@ -96,7 +96,9 @@ namespace Mac_EFI_Toolkit
         {
             // Check if the OS is supported (Windows 7 or later is required)
             if (!IsSupportedOS())
+            {
                 return;
+            }
 
             // Register application-wide exception handlers
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
@@ -121,7 +123,9 @@ namespace Mac_EFI_Toolkit
 
             // Load custom fonts into memory
             if (!TryLoadCustomFont(Properties.Resources.segmdl2, out Font[] fonts))
+            {
                 return;
+            }
 
             // Assign loaded fonts to corresponding variables
             FONT_MDL2_REG_9 = fonts[0];
@@ -169,13 +173,20 @@ namespace Mac_EFI_Toolkit
         #region Exception Handler
         internal static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            if (e != null) ExceptionHandler(e.Exception);
+            if (e != null)
+            {
+                ExceptionHandler(e.Exception);
+            }
         }
 
         internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
-            if (ex != null) ExceptionHandler(ex);
+
+            if (ex != null)
+            {
+                ExceptionHandler(ex);
+            }
         }
 
         internal static void ExceptionHandler(Exception e)
@@ -187,9 +198,7 @@ namespace Mac_EFI_Toolkit
             string logFileName = $"unhandled_{timestamp}.log";
             string logPath = Path.Combine(workingDir, logFileName);
 
-            File.WriteAllText(
-                logPath,
-                UnhandledException.GenerateReport(e));
+            File.WriteAllText(logPath, UnhandledException.GenerateReport(e));
 
             if (File.Exists(logPath))
             {
@@ -213,10 +222,8 @@ namespace Mac_EFI_Toolkit
 
             if (result == DialogResult.Yes)
             {
-                // We need to clean any necessary objects as OnExit will not fire
-                // when Environment.Exit is called.
+                // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
                 HandleOnExitingCleanup();
-
                 Environment.Exit(-1);
             }
 
@@ -234,10 +241,13 @@ namespace Mac_EFI_Toolkit
                 return;
             }
 
-            string title = action == ExitAction.Restart ? "Restart" : "Quit";
-            string message = action == ExitAction.Restart
-                ? $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_RESTART}"
-                : $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_EXIT}";
+            string title = action ==
+                ExitAction.Restart ? "Restart" : "Quit";
+
+            string message = action ==
+                ExitAction.Restart
+                    ? $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_RESTART}"
+                    : $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_EXIT}";
 
             if (ShowConfirmationDialog(owner, title, message))
             {
@@ -294,7 +304,9 @@ namespace Mac_EFI_Toolkit
         private static string GetDraggedFilePath(string[] args)
         {
             if (args.Length > 0 && File.Exists(args[0]))
+            {
                 return args[0];
+            }
 
             return string.Empty;
         }
@@ -318,7 +330,7 @@ namespace Mac_EFI_Toolkit
                     Directory.CreateDirectory(directoryPath);
                 }
             }
-            catch (Exception e) // Permission error
+            catch (Exception e)
             {
                 Logger.WriteError(nameof(CreateDirectoryIfNotExists), e.GetType(), e.Message);
             }
@@ -328,13 +340,15 @@ namespace Mac_EFI_Toolkit
         {
             FileVersionInfo version = SystemTools.GetKernelVersion;
 
-            // Check for Windows 7 (6.1) or later (Windows 8, 8.1, 10, and 11)
+            // Check for Windows 7 (6.1) or later (Windows 8, 8.1, 10, and 11).
             if (version.ProductMajorPart > 6 || (version.ProductMajorPart == 6 && version.ProductMinorPart >= 1))
+            {
                 return true;
+            }
 
             MessageBox.Show(
-                "This application requires Windows 7 or later to run.",
-                "Unsupported OS",
+                DIALOGSTRINGS.REQUIRES_WIN_7,
+                DIALOGSTRINGS.UNSUPP_OS,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
 
@@ -346,7 +360,9 @@ namespace Mac_EFI_Toolkit
             fonts = null;
 
             if (fontData == null)
+            {
                 return false;
+            }
 
             try
             {
@@ -359,6 +375,7 @@ namespace Mac_EFI_Toolkit
                     new Font(loadedFont, 12.0F, FontStyle.Regular),
                     new Font(loadedFont, 20.0F, FontStyle.Regular)
                 };
+
                 return true;
             }
             catch (Exception e)
@@ -366,15 +383,6 @@ namespace Mac_EFI_Toolkit
                 Logger.WriteError(nameof(TryLoadCustomFont), e.GetType(), e.Message);
                 return false;
             }
-        }
-
-        internal static bool GetIsDebugMode()
-        {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
         }
 
         public static void HandleDragEnter(object sender, DragEventArgs e)
@@ -402,6 +410,15 @@ namespace Mac_EFI_Toolkit
 
             // Disable the drop operation.
             e.Effect = DragDropEffects.None;
+        }
+
+        internal static bool GetIsDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
         }
         #endregion
     }

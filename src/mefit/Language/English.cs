@@ -297,6 +297,12 @@ namespace Mac_EFI_Toolkit
     internal class DIALOGSTRINGS
     {
         #region Strings
+        internal const string REQUIRES_WIN_7 =
+            "This application requires Windows 7 or later to run.";
+
+        internal const string UNSUPP_OS =
+            "Unsupported OS";
+
         internal const string UNLOAD_FIRMWARE_RESET =
             "This will unload the firmware and all associated data. Are you sure you want to reset?";
 
