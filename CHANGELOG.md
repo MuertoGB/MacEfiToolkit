@@ -32,6 +32,7 @@
   - NVRAM Data: The window now displays base addresses of primary stores and whether they are empty.
   - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
   - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
+- Updated LZMA SDK to version 24.08.
 
 #### Enhancements
 - Restricted non-Apple EFI files from being opened.

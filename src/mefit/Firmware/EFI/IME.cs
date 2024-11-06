@@ -4,11 +4,11 @@
 // IME.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Tools;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.Firmware.EFI
+namespace Mac_EFI_Toolkit.Firmware
 {
 
     #region Structs
@@ -96,9 +96,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 {
                     if (versionType == VersionType.FlashImageTool)
                     {
-                        FPTHeader fptHeader =
-                            Helper.DeserializeHeader<FPTHeader>(
-                                headerBytes);
+                        FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(headerBytes);
 
                         version =
                             $"{fptHeader.FitMajor}." +
@@ -108,9 +106,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                     }
                     else if (versionType == VersionType.ManagementEngine)
                     {
-                        MN2Manifest mn2Header =
-                            Helper.DeserializeHeader<MN2Manifest>(
-                                headerBytes);
+                        MN2Manifest mn2Header = Helper.DeserializeHeader<MN2Manifest>(headerBytes);
 
                         version =
                             $"{mn2Header.EngineMajor}." +

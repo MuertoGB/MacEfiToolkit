@@ -82,16 +82,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppColours.cs" />
-    <Compile Include="Common\FWVars.cs" />
     <Compile Include="Firmware\EFI\IFD.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Common\KeyboardHookManager.cs" />
-    <Compile Include="Common\ToInt24.cs" />
     <Compile Include="Firmware\EFI\Guids.cs" />
     <Compile Include="Firmware\EFI\EFIROM.cs" />
-    <Compile Include="Common\Helper.cs" />
+    <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Firmware\EFI\IME.cs" />
+    <Compile Include="Firmware\FirmwareVars.cs" />
+    <Compile Include="Firmware\Serial.cs" />
     <Compile Include="UI\AccentColorHelper.cs" />
     <Compile Include="UI\BlurHelper.cs" />
     <Compile Include="UI\METForm.cs">

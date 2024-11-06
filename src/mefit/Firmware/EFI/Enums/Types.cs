@@ -8,21 +8,16 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 {
     internal enum ApfsCapable
     {
-        Yes,
-        No,
-        Unknown
+        Yes, No, Unknown
     }
 
     internal enum EfiLockType
     {
-        Locked,
-        Unlocked,
-        Unknown
+        Locked, Unlocked, Unknown
     }
 
     internal enum NvramStoreType
     {
-        VSS,
-        SVS
+        VSS, SVS
     }
 }

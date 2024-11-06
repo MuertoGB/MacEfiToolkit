@@ -5,6 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Tools.Structs;
 using Mac_EFI_Toolkit.UI;
 using System;
@@ -80,8 +81,8 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>True if the size is valid, otherwise false.</returns>
         internal static bool GetIsValidBinSize(long size)
         {
-            int expectedSize = FWVars.MIN_IMAGE_SIZE;
-            int maxSize = FWVars.MAX_IMAGE_SIZE;
+            int expectedSize = FirmwareVars.MIN_IMAGE_SIZE;
+            int maxSize = FirmwareVars.MAX_IMAGE_SIZE;
 
             while (expectedSize <= maxSize)
             {
@@ -105,13 +106,13 @@ namespace Mac_EFI_Toolkit.Tools
         internal static string GetSizeDifference(long size)
         {
             // Initialize the closest size with the minimum image size
-            long closestSize = FWVars.MIN_IMAGE_SIZE;
+            long closestSize = FirmwareVars.MIN_IMAGE_SIZE;
 
             // Calculate the initial difference between the input size and the closest size
             long difference = Math.Abs(size - closestSize);
 
             // Iterate through the valid sizes to find the closest size
-            while (closestSize <= FWVars.MAX_IMAGE_SIZE)
+            while (closestSize <= FirmwareVars.MAX_IMAGE_SIZE)
             {
                 // Calculate the doubled size and its difference from the input size
                 long doubledSize = closestSize * 2;
@@ -247,11 +248,11 @@ namespace Mac_EFI_Toolkit.Tools
         {
             long fileSize = new FileInfo(filePath).Length;
 
-            if (fileSize < FWVars.MIN_IMAGE_SIZE || fileSize > FWVars.MAX_IMAGE_SIZE)
+            if (fileSize < FirmwareVars.MIN_IMAGE_SIZE || fileSize > FirmwareVars.MAX_IMAGE_SIZE)
             {
-                string message = fileSize < FWVars.MIN_IMAGE_SIZE
-                    ? $"The selected file does not meet the minimum size requirement of {FWVars.MIN_IMAGE_SIZE:X}h."
-                    : $"The selected file exceeds the maximum size limit of {FWVars.MAX_IMAGE_SIZE:X}h.";
+                string message = fileSize < FirmwareVars.MIN_IMAGE_SIZE
+                    ? $"The selected file does not meet the minimum size requirement of {FirmwareVars.MIN_IMAGE_SIZE:X}h."
+                    : $"The selected file exceeds the maximum size limit of {FirmwareVars.MAX_IMAGE_SIZE:X}h.";
 
                 METPrompt.Show(
                     owner,

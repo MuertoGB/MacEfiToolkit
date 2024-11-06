@@ -4,7 +4,6 @@
 // EFIROM.cs - Handles parsing of firmware data
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.Tools.Structs;
 using System;
@@ -27,7 +26,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static string FitVersion = null;
         internal static string MeVersion = null;
 
-        internal static string sNewSsn = null;
         internal static bool bResetVss = false;
         internal static bool bResetSvs = false;
 
@@ -157,7 +155,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Fetch the Config Code
             ConfigCode =
                 FsysStoreData.HWC != null
-                    ? MacTools.GetDeviceConfigCodeLocalLocal(FsysStoreData.HWC)
+                    ? MacTools.GetDeviceConfigCodeLocal(FsysStoreData.HWC)
                     : null;
 
             // Parse AppleRomSectionInformation region data.
@@ -205,7 +203,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             FitVersion = null;
             MeVersion = null;
 
-            sNewSsn = null;
             bResetVss = false;
             bResetSvs = false;
 
@@ -220,6 +217,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             EfiBiosIdSectionData = default;
             IsApfsCapable = ApfsCapable.Unknown;
 
+            Serial.NewValue = string.Empty;
+
             FSYS_RGN_SIZE = 0;
             NVRAM_BASE = -1;
             NVRAM_SIZE = -1;
@@ -227,7 +226,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
-            var appleGuids = new[]
+            byte[][] appleGuids = new[]
             {
                 Guids.APPLE_IMMUTABLE_FV_GUID,
                 Guids.APPLE_AUTH_FV_GUID,
@@ -1102,7 +1101,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             // Convert section length bytes to int24.
             int sectionSize =
-                BitConvert.ToInt24(
+                Helper.ToInt24(
                     dataLengthBytes);
 
             // Determine the end of the lzma guid section.

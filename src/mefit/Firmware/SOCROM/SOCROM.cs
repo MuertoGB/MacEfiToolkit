@@ -54,7 +54,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
             // Fetch the Config Code.
             ConfigCode = ScfgSectionData.HWC != null
-                ? MacTools.GetDeviceConfigCodeLocalLocal(ScfgSectionData.HWC)
+                ? MacTools.GetDeviceConfigCodeLocal(ScfgSectionData.HWC)
                 : null;
 
             stopwatch.Start();
@@ -70,6 +70,8 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             iBootVersion = null;
             ConfigCode = null;
             ScfgSectionData = default;
+
+            Serial.NewValue = string.Empty;
         }
 
         internal static bool IsValidImage(byte[] source)

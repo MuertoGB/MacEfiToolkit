@@ -13,7 +13,6 @@ namespace Mac_EFI_Toolkit.Common
 {
     internal class KeyboardHookManager
     {
-
         #region Const Members
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
@@ -34,11 +33,7 @@ namespace Mac_EFI_Toolkit.Common
             using (Process process = Process.GetCurrentProcess())
             using (ProcessModule module = process.MainModule)
             {
-                return NativeMethods.SetWindowsHookExA(
-                    WH_KEYBOARD_LL,
-                    kbProc,
-                    NativeMethods.GetModuleHandleA(module.ModuleName),
-                    0);
+                return NativeMethods.SetWindowsHookExA(WH_KEYBOARD_LL, kbProc, NativeMethods.GetModuleHandleA(module.ModuleName), 0);
             }
         }
 
@@ -47,20 +42,16 @@ namespace Mac_EFI_Toolkit.Common
         {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
-                int vkCode =
-                    Marshal.ReadInt32(
-                        lParam);
+                int vkCode = Marshal.ReadInt32(lParam);
 
                 // Disable the Windows+Up shortcut by not passing it to the operating system.
                 if (vkCode == VK_UP && (NativeMethods.GetKeyState(VK_LWIN) & KEY_PRESSED) != 0)
+                {
                     return (IntPtr)1;
+                }
             }
 
-            return NativeMethods.CallNextHookEx(
-                _hookId,
-                nCode,
-                wParam,
-                lParam);
+            return NativeMethods.CallNextHookEx(_hookId, nCode, wParam, lParam);
         }
 
         internal static void Hook()
@@ -75,6 +66,5 @@ namespace Mac_EFI_Toolkit.Common
             NativeMethods.UnhookWindowsHookEx(_hookId);
             _hookHandle.Free();
         }
-
     }
 }

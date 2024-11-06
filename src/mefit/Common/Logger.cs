@@ -42,10 +42,8 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void WriteError(string methodName, Type exceptionType, string message)
-        {
+        internal static void WriteError(string methodName, Type exceptionType, string message) =>
             Logger.Write($"{methodName} - {exceptionType.Name}: {message}", LogType.Application);
-        }
 
         internal static void OpenLogFile(Form owner)
         {

@@ -5,6 +5,7 @@
 // frmSerialSelect.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Tools;
 using System;
@@ -35,6 +36,7 @@ namespace Mac_EFI_Toolkit.Forms
         #region Window Events
         private void frmSerialSelect_Load(object sender, EventArgs e)
         {
+            Serial.NewValue = string.Empty;
             tbSsn.MaxLength = EFIROM.FsysStoreData.Serial.Length;
             tbSsn.Select();
         }
@@ -55,7 +57,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void cmdOkay_Click(object sender, EventArgs e)
         {
             // Please ensure new SSN is validated
-            EFIROM.sNewSsn = tbSsn.Text;
+            Serial.NewValue = tbSsn.Text;
             DialogResult = DialogResult.OK;
         }
         #endregion
@@ -68,7 +70,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (charLength == EFIROM.FsysStoreData.Serial.Length)
             {
-                if (MacTools.IsValidAppleSerial(textBox.Text))
+                if (Serial.IsValid(textBox.Text))
                 {
                     UpdateTextBoxColour(textBox, AppColours.COMPLETE);
                     cmdOkay.Enabled = true;

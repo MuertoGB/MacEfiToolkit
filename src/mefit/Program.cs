@@ -39,8 +39,8 @@ namespace Mac_EFI_Toolkit
 
     internal readonly struct METVersion
     {
-        internal const string LZMA_SDK = "23.01";
-        internal const string APP_BUILD = "241106.2120";
+        internal const string LZMA_SDK = "24.08";
+        internal const string APP_BUILD = "241106.2215";
         internal const string APP_CHANNEL = "BETA";
     }
 
@@ -350,7 +350,7 @@ namespace Mac_EFI_Toolkit
 
             try
             {
-                var loadedFont = FontResolver.LoadFontFromResource(fontData);
+                var loadedFont = FontResolver.LoadFont(fontData);
 
                 fonts = new[]
                 {
