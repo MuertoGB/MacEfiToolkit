@@ -247,8 +247,14 @@ namespace Mac_EFI_Toolkit.UI
         #region Overridden Methods
         protected override void OnCheckedChanged(EventArgs e)
         {
+            // Prevent check when control is disabled.
+            if (!Enabled)
+            {
+                Checked = false;
+                return;
+            }
+
             base.OnCheckedChanged(e);
-            Invalidate();
         }
 
         protected override void OnMouseLeave(EventArgs eventargs)
