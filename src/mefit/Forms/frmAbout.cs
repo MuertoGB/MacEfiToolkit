@@ -21,7 +21,7 @@ namespace Mac_EFI_Toolkit.Forms
             WireEventHandlers();
 
             // Set button properties.
-            SetButtonProperties();
+            SetButtonGlyphAndText();
         }
 
         private void WireEventHandlers()
@@ -34,13 +34,8 @@ namespace Mac_EFI_Toolkit.Forms
         #region Window Events
         private void frmAbout_Load(object sender, EventArgs e)
         {
-            lblBuild.Text =
-                $"{Application.ProductVersion}.{METVersion.APP_BUILD} " +
-                $"({METVersion.APP_CHANNEL})";
-
-            lblChannel.Text =
-                $"{APPSTRINGS.LZMA_SDK} " +
-                $"{METVersion.LZMA_SDK}";
+            lblBuild.Text = $"{Application.ProductVersion}.{METVersion.APP_BUILD} ({METVersion.APP_CHANNEL})";
+            lblChannel.Text = $"{APPSTRINGS.LZMA_SDK} {METVersion.LZMA_SDK}";
         }
         #endregion
 
@@ -48,15 +43,18 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmAbout_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
+            {
                 Close();
+            }
         }
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e) =>
-            Close();
+        private void cmdClose_Click(object sender, EventArgs e) => Close();
+        #endregion
 
-        private void SetButtonProperties()
+        #region UI Events
+        private void SetButtonGlyphAndText()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_10;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
