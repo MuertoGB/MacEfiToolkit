@@ -137,8 +137,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void cmdClose_Click(object sender, System.EventArgs e) =>
-            Close();
+        private void cmdClose_Click(object sender, System.EventArgs e) => Close();
         #endregion
 
         #region UI Events

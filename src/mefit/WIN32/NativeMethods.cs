@@ -6,17 +6,13 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using System.Text;
 
 namespace Mac_EFI_Toolkit.WIN32
 {
     class NativeMethods
     {
-        // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmenableblurbehindwindow
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmEnableBlurBehindWindow(IntPtr hwnd, ref DWM_BLURBEHIND blurBehind);
-
+        #region Types
         [StructLayout(LayoutKind.Sequential)]
         public struct DWM_BLURBEHIND
         {
@@ -33,6 +29,14 @@ namespace Mac_EFI_Toolkit.WIN32
             DWM_BB_BLURREGION = 0x2,
             DWM_BB_TRANSITIONONMAXIMIZED = 0x4
         }
+        #endregion
+
+        #region API
+        // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmenableblurbehindwindow
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmEnableBlurBehindWindow(
+            IntPtr hWnd,
+            ref DWM_BLURBEHIND pBlurBehind);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasecapture
         [DllImport("user32.dll")]
@@ -42,7 +46,7 @@ namespace Mac_EFI_Toolkit.WIN32
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(
             HandleRef hWnd,
-            int msg,
+            int Msg,
             IntPtr wParam,
             IntPtr lParam);
 
@@ -92,7 +96,7 @@ namespace Mac_EFI_Toolkit.WIN32
         internal static extern IntPtr SetWindowsHookExA(
             int idHook,
             LowLevelKeyboardProc lpfn,
-            IntPtr hMod,
+            IntPtr hmod,
             uint dwThreadId);
 
         // Low level keyboard hook delegate
@@ -104,8 +108,8 @@ namespace Mac_EFI_Toolkit.WIN32
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwindowshookex
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool UnhookWindowsHookEx(
-            IntPtr hhk);
+        internal static extern bool UnhookWindowsHookEx
+            (IntPtr hhk);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-callnexthookex
         [DllImport("user32.dll", SetLastError = true)]
@@ -127,6 +131,9 @@ namespace Mac_EFI_Toolkit.WIN32
 
         // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmgetcolorizationcolor
         [DllImport("dwmapi.dll", EntryPoint = "DwmGetColorizationColor")]
-        internal static extern int DwmGetColorizationColor(out uint color, out bool opaque);
+        internal static extern int DwmGetColorizationColor(
+            out uint pcrColorization,
+            out bool pfOpaqueBlend);
+        #endregion
     }
 }

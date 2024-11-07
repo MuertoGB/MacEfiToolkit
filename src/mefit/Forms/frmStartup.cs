@@ -387,17 +387,15 @@ namespace Mac_EFI_Toolkit.Forms
         private void InitializeChildForm(Form childForm, string filePath)
         {
             this.loadedFile = filePath;
-            childForm.Tag = FormTag.Firmware;
 
+            // Increment child count and update window text.
             _childWindowCount++;
             UpdateWindowTitle();
 
-            // Attach event handler for child form closure.
+            // Configure child.
+            childForm.Tag = FormTag.Firmware;
             childForm.FormClosed += ChildWindowClosed;
-
-            // Center child form relative to the main window.
             childForm.Location = new Point(this.Location.X + (this.Width - childForm.Width) / 2, this.Location.Y + (this.Height - childForm.Height) / 2);
-
             childForm.Owner = this;
             childForm.Show();
         }
@@ -432,7 +430,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             // This is to stop some stupid dumbass releasing debug builds.
             // No idea who that could be.
-            // Certinaly wasn't me.
+            // Certainly wasn't me.
             // In would never do such a thing.
 
             if (Program.GetIsDebugMode())
@@ -459,11 +457,7 @@ namespace Mac_EFI_Toolkit.Forms
                 using (Brush textBrush = new SolidBrush(Color.Black))
                 {
                     SizeF textSize = g.MeasureString(labelText, font);
-                    PointF textPosition = new PointF(
-                        (labelRectangle.Width - textSize.Width) / 2,
-                        labelRectangle.Top + (labelRectangle.Height - textSize.Height) / 2
-                    );
-
+                    PointF textPosition = new PointF((labelRectangle.Width - textSize.Width) / 2, labelRectangle.Top + (labelRectangle.Height - textSize.Height) / 2);
                     g.DrawString(labelText, font, textBrush, textPosition);
                 }
             }

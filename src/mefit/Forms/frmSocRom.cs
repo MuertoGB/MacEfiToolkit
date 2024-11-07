@@ -206,6 +206,7 @@ namespace Mac_EFI_Toolkit.Forms
                 sender,
                 cmsPatch,
                 MenuPosition.BottomLeft);
+
         private void cmdNenuOptions_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
                 sender,
@@ -563,7 +564,6 @@ namespace Mac_EFI_Toolkit.Forms
 
             CheckBox[] checkBoxes = { cbxCensor };
 
-
             foreach (Button button in buttons)
             {
                 button.MouseEnter += HandleMouseEnterTip;
@@ -650,9 +650,7 @@ namespace Mac_EFI_Toolkit.Forms
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(directory)
-                    ? directory
-                    : METPath.WORKING_DIR;
+                _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
             }
         }
 
@@ -954,15 +952,10 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void ClipboardSetFilename(bool showExtention) =>
-            SetClipboardText(
-                showExtention
-                ? SOCROM.FileInfoData.FileNameExt
-                : SOCROM.FileInfoData.FileName);
+            SetClipboardText(showExtention ? SOCROM.FileInfoData.FileNameExt : SOCROM.FileInfoData.FileName);
 
         private void ClipboardSetFileSize() =>
-            SetClipboardText(
-                $"{FileTools.FormatFileSize(SOCROM.FileInfoData.Length)} " +
-                $"{APPSTRINGS.BYTES} ({SOCROM.FileInfoData.Length:X}h)");
+            SetClipboardText($"{FileTools.FormatFileSize(SOCROM.FileInfoData.Length)} {APPSTRINGS.BYTES} ({SOCROM.FileInfoData.Length:X}h)");
 
         private void ClipboardSetFileCrc32() => SetClipboardText($"{SOCROM.FileInfoData.CRC32:X8}");
 
@@ -982,10 +975,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetScfgConfig() => SetClipboardText(SOCROM.ConfigCode);
 
-        private void ClipboardSetScfgOrderNo() =>
-            SetClipboardText(
-                $"{SOCROM.ScfgSectionData.SonText}" +
-                $"{SOCROM.ScfgSectionData.RegNumText ?? string.Empty}");
+        private void ClipboardSetScfgOrderNo() => SetClipboardText($"{SOCROM.ScfgSectionData.SonText}{SOCROM.ScfgSectionData.RegNumText ?? string.Empty}");
         #endregion
     }
 }

@@ -236,6 +236,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         {
             return new PdrSection
             {
+                BoardIdBase = -1,
                 BoardId = null
             };
         }
