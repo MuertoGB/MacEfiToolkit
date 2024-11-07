@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241106.2215";
+        internal const string APP_BUILD = "241107.1845";
         internal const string APP_CHANNEL = "BETA";
     }
 
@@ -94,61 +94,61 @@ namespace Mac_EFI_Toolkit
         [STAThread]
         static void Main(string[] args)
         {
-            // Check if the OS is supported (Windows 7 or later is required)
+            // Register application-wide exception handlers.
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+
+            // Catch exceptions on the main thread.
+            Application.ThreadException +=
+                new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+
+            // Catch exceptions from non-UI threads.
+            AppDomain.CurrentDomain.UnhandledException +=
+                new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+            // Register application exit handler.
+            Application.ApplicationExit += OnExiting;
+
+            // Check if the OS is supported (Windows 7 or later is required).
             if (!IsSupportedOS())
             {
                 return;
             }
 
-            // Register application-wide exception handlers
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-
-            // Catch exceptions on the main thread
-            Application.ThreadException +=
-                new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-
-            // Catch exceptions from non-UI threads
-            AppDomain.CurrentDomain.UnhandledException +=
-                new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
-            // Register application exit handler
-            Application.ApplicationExit += OnExiting;
-
-            // Set the security protocol to TLS 1.2
+            // Set the security protocol to TLS 1.2.
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
-            // Standard winforms setup
+            // Standard winforms setup.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Load custom fonts into memory
+            // Load custom fonts into memory.
             if (!TryLoadCustomFont(Properties.Resources.segmdl2, out Font[] fonts))
             {
                 return;
             }
 
-            // Assign loaded fonts to corresponding variables
+            // Assign loaded fonts to corresponding variables.
             FONT_MDL2_REG_9 = fonts[0];
             FONT_MDL2_REG_10 = fonts[1];
             FONT_MDL2_REG_12 = fonts[2];
             FONT_MDL2_REG_20 = fonts[3];
 
-            // Initialize application settings
+            // Initialize application settings.
             Settings.Initialize();
 
-            // Retrieve a file path from command-line
+            // Retrieve a file path from command-line.
             draggedFilePath = GetDraggedFilePath(args);
 
-            // Register a low-level keyboard hook to disable Win+Up
+            // Register a low-level keyboard hook to disable Win+Up.
             KeyboardHookManager.Hook();
 
-            // Ensure that required application directories exist; create them if they don't
+            // Ensure that required application directories exist; create them if they don't.
             EnsureDirectoriesExist();
 
-            // Create the main window instance
+            // Create the main window instance.
             MAIN_WINDOW = new frmStartup();
 
-            // Start the application message loop
+            // Start the application message loop.
             Application.Run(MAIN_WINDOW);
         }
         #endregion

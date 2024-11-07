@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
@@ -73,11 +74,15 @@ namespace Mac_EFI_Toolkit
             }
 
             StringBuilder builder = new StringBuilder();
+            builder.AppendLine("Message -->");
+            builder.AppendLine($"{CensorUsernameInPath(e.Message)}\r\n");
+            builder.AppendLine("Exception -->");
 
-            builder.AppendLine($"Message -->\r\n");
-            builder.AppendLine($"{e.Message}\r\n");
-            builder.AppendLine($"Exception -->\r\n");
-            builder.AppendLine($"{e}");
+            // Process each line of the exception details separately
+            foreach (string line in e.ToString().Split(new[] { "\r\n", "\n" }, StringSplitOptions.None))
+            {
+                builder.AppendLine(CensorUsernameInPath(line));
+            }
 
             return builder.ToString();
         }
@@ -93,8 +98,10 @@ namespace Mac_EFI_Toolkit
                 {
                     moduleNumber++;
 
+                    string censoredPath = CensorUsernameInPath(module.FileName);
+
                     builder.AppendLine($"Module {moduleNumber}: --> '{module.ModuleName}'\r\n");
-                    builder.AppendLine($" Path:         {module.FileName}");
+                    builder.AppendLine($" Path:         {censoredPath}");
                     builder.AppendLine($" Version:      {module.FileVersionInfo.FileVersion}");
                     builder.AppendLine($" Description:  {module.FileVersionInfo.FileDescription}");
                     builder.AppendLine($" Size (Bytes): {module.ModuleMemorySize}");
@@ -109,6 +116,15 @@ namespace Mac_EFI_Toolkit
                 Logger.WriteError(nameof(GetProcessModules), e.GetType(), e.Message);
                 return null;
             }
+        }
+
+        private static string CensorUsernameInPath(string path)
+        {
+            string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string driveLetter = Regex.Escape(userProfilePath.Substring(0, userProfilePath.IndexOf("\\Users\\") + 1));
+            string userPathPattern = $@"({driveLetter}Users\\)([^\\]+)";
+
+            return Regex.Replace(path, userPathPattern, @"$1****", RegexOptions.IgnoreCase);
         }
     }
 }

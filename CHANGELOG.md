@@ -33,6 +33,7 @@
   - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
   - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
 - Updated LZMA SDK to version 24.08.
+- User Privacy Update: Unhandled exception reports now use regular expressions (regex) to sanitize usernames from exception messages and file paths, where possible. However, there may still be some cases where this data could appear. Please review the reports carefully before uploading them to GitHub issues.
 
 #### Enhancements
 - Restricted non-Apple EFI files from being opened.
