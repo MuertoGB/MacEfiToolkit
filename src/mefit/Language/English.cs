@@ -4,8 +4,6 @@
 // English.cs
 // Released under the GNU GLP v3.0
 
-using System.Dynamic;
-
 namespace Mac_EFI_Toolkit
 {
     internal class APPSTRINGS
@@ -47,7 +45,7 @@ namespace Mac_EFI_Toolkit
         internal const string HIDE =
             "Hide";
 
-        internal const string SHOW = 
+        internal const string SHOW =
             "Show";
 
         internal const string CONTACT_SERVER =
@@ -58,6 +56,18 @@ namespace Mac_EFI_Toolkit
 
         internal const string FIRMWARE_INFO =
             "FirmwareInfo";
+
+        internal const string ROM_SECTION_INFO =
+            "AppleRomSectionInfo";
+
+        internal const string BASE =
+            "Base:";
+
+        internal const string LIMIT =
+            "Limit:";
+
+        internal const string SIZE =
+            "Size:";
 
         internal const string FILTER_STARTUP_WINDOW =
             "Firmware Files (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*";
@@ -106,8 +116,11 @@ namespace Mac_EFI_Toolkit
         internal const string PATCH_START =
             "Patching started:";
 
-        internal const string PATCH_END =
-            "Patching ended:";
+        internal const string PATCH_FAIL =
+            "Patching failed:";
+
+        internal const string PATCH_SUCCESS =
+            "Patching successful:";
 
         internal const string CREATING_BUFFERS =
             "Creating buffers";
@@ -145,9 +158,6 @@ namespace Mac_EFI_Toolkit
         internal const string FSYS_SUM_MASK_SUCCESS =
             "Fsys checksum masking successful.";
 
-        internal const string FSYS_WRITE_SUCCESS =
-            "Fsys store written successfully";
-
         internal const string FSYS_SUM_INVALID =
             "Fsys checksum is invalid";
 
@@ -181,9 +191,6 @@ namespace Mac_EFI_Toolkit
         internal const string HWC_NOT_WRITTEN =
             "New hardware configuration (HWC) could not be written";
 
-        internal const string SSN_WRITE_SUCCESS =
-            "Serial number written successfully";
-
         internal const string IME_REPLACE =
             "Replace Intel Management Engine";
 
@@ -204,9 +211,6 @@ namespace Mac_EFI_Toolkit
 
         internal const string IME_BUFFER_MISMATCH =
             "IME buffers do not match";
-
-        internal const string IME_WRITE_SUCCESS =
-            "IME written successfully";
 
         internal const string FILE_SAVE_SUCCESS =
             "File saved successully:";
@@ -288,9 +292,6 @@ namespace Mac_EFI_Toolkit
 
         internal const string LOCK_BACK_VERIF_FAIL =
             "Backup SVS store verification failed";
-
-        internal const string LOCK_VERIF_SUCCESS =
-            "NVRAM SVS verification succeeded";
         #endregion
     }
 
@@ -348,7 +349,7 @@ namespace Mac_EFI_Toolkit
         internal const string LOG_NOT_FOUND =
             "The log file does not exist.";
 
-        internal const string NOT_VALID_FIRMWARE=
+        internal const string NOT_VALID_FIRMWARE =
             "The provided file was not a valid firmware.";
 
         internal const string NOT_VALID_EFIROM =
@@ -424,15 +425,6 @@ namespace Mac_EFI_Toolkit
 
         internal const string LOCKED =
             "Locked";
-
-        internal const string BASE =
-            "Base:";
-
-        internal const string LIMIT =
-            "Limit:";
-
-        internal const string SIZE =
-            "Size:";
 
         internal const string PRIMARY_REGION =
             "PRIMARYREGION";

@@ -64,7 +64,6 @@ namespace Mac_EFI_Toolkit.Forms
             DragLeave += frmStartup_DragLeave;
             Deactivate += frmStartup_Deactivate;
             Activated += frmStartup_Activated;
-
             tlpDrop.Paint += tlpDrop_Paint;
         }
         #endregion
@@ -287,13 +286,54 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
+        #region Open Binary
+        private void OpenBinary(string filePath)
+        {
+            if (!FileTools.IsValidMinMaxSize(filePath, this))
+            {
+                return;
+            }
+
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+
+            // Identify and open the correct window based on the firmware type.
+            Form childForm = GetChildFormForImage(fileBytes);
+
+            if (childForm != null)
+            {
+                _strInitialDirectory = Path.GetDirectoryName(filePath);
+                InitializeChildForm(childForm, filePath);
+                return;
+            }
+
+            METPrompt.Show(
+                this,
+                DIALOGSTRINGS.NOT_VALID_FIRMWARE,
+                METPromptType.Warning,
+                METPromptButtons.Okay);
+        }
+
+        private Form GetChildFormForImage(byte[] sourceBytes)
+        {
+            if (EFIROM.IsValidImage(sourceBytes))
+            {
+                return new frmEfiRom();
+            }
+            else if (SOCROM.IsValidImage(sourceBytes))
+            {
+                return new frmSocRom();
+            }
+
+            return null;
+        }
+        #endregion
+
         #region UI Events
         private void ChildWindowClosed(object sender, EventArgs e)
         {
             if (sender is Form closedForm)
             {
-                if (closedForm.Tag is FormTag formTag
-                    && formTag == FormTag.Firmware)
+                if (closedForm.Tag is FormTag formTag && formTag == FormTag.Firmware)
                 {
                     if (_childWindowCount > 0)
                     {
@@ -342,46 +382,6 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
             }
-        }
-
-        private void OpenBinary(string filePath)
-        {
-            if (!FileTools.IsValidMinMaxSize(filePath, this))
-            {
-                return;
-            }
-
-            byte[] fileBytes = File.ReadAllBytes(filePath);
-
-            // Identify and open the correct window based on the firmware type.
-            Form childForm = GetChildFormForImage(fileBytes);
-
-            if (childForm != null)
-            {
-                _strInitialDirectory = Path.GetDirectoryName(filePath);
-                InitializeChildForm(childForm, filePath);
-                return;
-            }
-
-            METPrompt.Show(
-                this,
-                DIALOGSTRINGS.NOT_VALID_FIRMWARE,
-                METPromptType.Warning,
-                METPromptButtons.Okay);
-        }
-
-        private Form GetChildFormForImage(byte[] sourceBytes)
-        {
-            if (EFIROM.IsValidImage(sourceBytes))
-            {
-                return new frmEfiRom();
-            }
-            else if (SOCROM.IsValidImage(sourceBytes))
-            {
-                return new frmSocRom();
-            }
-
-            return null;
         }
 
         private void InitializeChildForm(Form childForm, string filePath)

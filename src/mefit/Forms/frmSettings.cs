@@ -153,7 +153,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (_updateUI)
             {
-                _showSettingsAppliedLabel();
+                ShowSettingsAppliedLabel();
                 UpdatePathLabel();
             }
         }
@@ -186,12 +186,12 @@ namespace Mac_EFI_Toolkit.Forms
 
             UpdateCheckBoxControls();
             UpdatePathLabel();
-            _showSettingsAppliedLabel();
+            ShowSettingsAppliedLabel();
         }
         #endregion
 
         #region Label Events
-        private void _showSettingsAppliedLabel()
+        private void ShowSettingsAppliedLabel()
         {
             lblSettingsSaved.Show();
 

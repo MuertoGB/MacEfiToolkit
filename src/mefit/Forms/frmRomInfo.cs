@@ -44,37 +44,31 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void LoadRomInformation()
         {
-            lblBiosId.Text = EFIROM.AppleRomInfoSectionData.BiosId ?? "N/A";
+            lblBiosId.Text = EFIROM.AppleRomInfoSectionData.BiosId ?? APPSTRINGS.NA;
 
-            lblModel.Text = EFIROM.AppleRomInfoSectionData.Model != null ? $"{EFIROM.AppleRomInfoSectionData.Model} " +
-                $"({MacTools.ConvertEfiModelCode(EFIROM.AppleRomInfoSectionData.Model)})" : "N/A";
+            lblModel.Text = EFIROM.AppleRomInfoSectionData.Model != null ?
+                $"{EFIROM.AppleRomInfoSectionData.Model} ({MacTools.ConvertEfiModelCode(EFIROM.AppleRomInfoSectionData.Model)})" : APPSTRINGS.NA;
 
-            lblEfiVersion.Text = EFIROM.AppleRomInfoSectionData.EfiVersion ?? "N/A";
+            lblEfiVersion.Text = EFIROM.AppleRomInfoSectionData.EfiVersion ?? APPSTRINGS.NA;
 
-            lblBuiltBy.Text = EFIROM.AppleRomInfoSectionData.BuiltBy ?? "N/A";
+            lblBuiltBy.Text = EFIROM.AppleRomInfoSectionData.BuiltBy ?? APPSTRINGS.NA;
 
-            lblDateStamp.Text = EFIROM.AppleRomInfoSectionData.DateStamp ?? "N/A";
+            lblDateStamp.Text = EFIROM.AppleRomInfoSectionData.DateStamp ?? APPSTRINGS.NA;
 
-            lblRevision.Text = EFIROM.AppleRomInfoSectionData.Revision ?? "N/A";
+            lblRevision.Text = EFIROM.AppleRomInfoSectionData.Revision ?? APPSTRINGS.NA;
 
-            lblBootRom.Text = EFIROM.AppleRomInfoSectionData.RomVersion ?? "N/A";
+            lblBootRom.Text = EFIROM.AppleRomInfoSectionData.RomVersion ?? APPSTRINGS.NA;
 
-            lblBuildcaveId.Text = EFIROM.AppleRomInfoSectionData.BuildcaveId ?? "N/A";
+            lblBuildcaveId.Text = EFIROM.AppleRomInfoSectionData.BuildcaveId ?? APPSTRINGS.NA;
 
-            lblBuildType.Text = EFIROM.AppleRomInfoSectionData.BuildType ?? "N/A";
+            lblBuildType.Text = EFIROM.AppleRomInfoSectionData.BuildType ?? APPSTRINGS.NA;
 
-            lblCompiler.Text = EFIROM.AppleRomInfoSectionData.Compiler ?? "N/A";
+            lblCompiler.Text = EFIROM.AppleRomInfoSectionData.Compiler ?? APPSTRINGS.NA;
 
-            lblSectionData.Text = $"BASE: {EFIROM.AppleRomInfoSectionData.SectionBase:X}h, " +
-                $"SIZE: {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h" ?? string.Empty;
+            lblSectionData.Text = $"{APPSTRINGS.BASE.ToUpper()} {EFIROM.AppleRomInfoSectionData.SectionBase:X}h" ?? APPSTRINGS.NA;
+            lblSectionData.Text += $", {APPSTRINGS.SIZE.ToUpper()} {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h" ?? APPSTRINGS.NA;
 
-            foreach (Label label in tlpInfo.Controls)
-            {
-                if (label.Text == "N/A")
-                {
-                    label.ForeColor = AppColours.DISABLED_TEXT;
-                }
-            }
+            UITools.ApplyNestedPanelLabelForeColor(tlpInfo, AppColours.DISABLED_TEXT);
         }
         #endregion
 
@@ -93,8 +87,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             using (SaveFileDialog dialog = new SaveFileDialog
             {
-                Filter = "Text Files (*.txt)|*.txt",
-                FileName = $"AppleRomSectionInformation_{EFIROM.FileInfoData.FileName}",
+                Filter = APPSTRINGS.FILTER_TEXT,
+                FileName = $"{APPSTRINGS.ROM_SECTION_INFO}_{EFIROM.FileInfoData.FileName}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.WORKING_DIR
             })
@@ -107,16 +101,16 @@ namespace Mac_EFI_Toolkit.Forms
 
                 StringBuilder builder = new StringBuilder();
 
-                builder.AppendLine($"Bios ID:       {EFIROM.AppleRomInfoSectionData.BiosId ?? "N/A"}");
-                builder.AppendLine($"Model:         {EFIROM.AppleRomInfoSectionData.Model ?? "N/A"}");
-                builder.AppendLine($"EFI Version:   {EFIROM.AppleRomInfoSectionData.EfiVersion ?? "N/A"}");
-                builder.AppendLine($"Built By:      {EFIROM.AppleRomInfoSectionData.BuiltBy ?? "N/A"}");
-                builder.AppendLine($"Date Stamp:    {EFIROM.AppleRomInfoSectionData.DateStamp ?? "N/A"}");
-                builder.AppendLine($"Revision:      {EFIROM.AppleRomInfoSectionData.Revision ?? "N/A"}");
-                builder.AppendLine($"Boot ROM:      {EFIROM.AppleRomInfoSectionData.RomVersion ?? "N/A"}");
-                builder.AppendLine($"Buildcave ID:  {EFIROM.AppleRomInfoSectionData.BuildcaveId ?? "N/A"}");
-                builder.AppendLine($"Built Type:    {EFIROM.AppleRomInfoSectionData.BuildType ?? "N/A"}");
-                builder.AppendLine($"Compiler:      {EFIROM.AppleRomInfoSectionData.Compiler ?? "N/A"}");
+                builder.AppendLine($"Bios ID:       {EFIROM.AppleRomInfoSectionData.BiosId ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Model:         {EFIROM.AppleRomInfoSectionData.Model ?? APPSTRINGS.NA}");
+                builder.AppendLine($"EFI Version:   {EFIROM.AppleRomInfoSectionData.EfiVersion ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Built By:      {EFIROM.AppleRomInfoSectionData.BuiltBy ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Date Stamp:    {EFIROM.AppleRomInfoSectionData.DateStamp ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Revision:      {EFIROM.AppleRomInfoSectionData.Revision ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Boot ROM:      {EFIROM.AppleRomInfoSectionData.RomVersion ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Buildcave ID:  {EFIROM.AppleRomInfoSectionData.BuildcaveId ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Built Type:    {EFIROM.AppleRomInfoSectionData.BuildType ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Compiler:      {EFIROM.AppleRomInfoSectionData.Compiler ?? APPSTRINGS.NA}");
 
                 File.WriteAllText(dialog.FileName, builder.ToString());
 
@@ -126,7 +120,7 @@ namespace Mac_EFI_Toolkit.Forms
                 {
                     METPrompt.Show(
                         this,
-                        "Data export failed.",
+                        DIALOGSTRINGS.DATA_EXPORT_FAILED,
                         METPromptType.Error,
                         METPromptButtons.Okay);
 

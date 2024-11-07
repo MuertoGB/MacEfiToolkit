@@ -254,7 +254,9 @@ namespace Mac_EFI_Toolkit.Forms
             string serial = SOCROM.ScfgSectionData.SerialText;
 
             if (string.IsNullOrEmpty(serial))
+            {
                 return;
+            }
 
             Clipboard.SetText(serial);
 
@@ -420,7 +422,6 @@ namespace Mac_EFI_Toolkit.Forms
                 UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
             }
         }
-
         #endregion
 
         #region Options Toolstrip Events

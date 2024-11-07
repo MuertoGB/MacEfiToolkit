@@ -22,7 +22,6 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Attach event handlers.
             WireEventHandlers();
-
         }
 
         private void WireEventHandlers()
