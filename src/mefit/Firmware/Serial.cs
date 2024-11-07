@@ -48,22 +48,26 @@ namespace Mac_EFI_Toolkit.Firmware
         //    - FFFF = Hardware Configuration (4 characters): Represents the hardware configuration or variant.
         internal static bool IsValid(string serialNumber)
         {
-            // Check for valid length (11 or 12 characters)
+            // Check for valid length (11 or 12 characters).
             if (serialNumber.Length != 11 && serialNumber.Length != 12)
+            {
                 return false;
+            }
 
-            // Validate accepted chars
+            // Validate accepted chars.
             if (!IsValidChars(serialNumber))
+            {
                 return false;
+            }
 
-            // Validate factory code
+            // Validate factory code.
             if (!IsValidCode(serialNumber.Substring(0, 2), factoryCodes))
+            {
                 return false;
+            }
 
-            // Determine and validate the year and week codes based on serial length
-            return serialNumber.Length == 11
-                ? IsValid11CharSerial(serialNumber)
-                : IsValid12CharSerial(serialNumber);
+            // Determine and validate the year and week codes based on serial length.
+            return serialNumber.Length == 11 ? IsValid11CharSerial(serialNumber) : IsValid12CharSerial(serialNumber);
         }
 
         private static bool IsValid11CharSerial(string serialNumber)
@@ -91,7 +95,7 @@ namespace Mac_EFI_Toolkit.Firmware
         #region Hashsets
         // These hashsets were built on information from:
         // https://forums.macrumors.com/threads/decoding-apple-serials-where-when-hardware-was-assembled-1983-2021-and-apple-model-numbers-1977-present.2310423/
-        // All credit for the hashsets goes to the author (B S Magnet)
+        // All credit for the hashsets goes to the author (B S Magnet).
         private static readonly HashSet<string> factoryCodes = new HashSet<string>
         {
             "16", "17", "1B", "1C", "1E", "1G", "1L", "1M", "1O", "1P", "1X", "2A", "2C", "2D", "2O", "2Z",
