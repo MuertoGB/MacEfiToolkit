@@ -5,7 +5,6 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware;
-using Mac_EFI_Toolkit.Tools.Structs;
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.IO;
@@ -228,13 +227,13 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>
         /// A Binary object containing the file's name, name without extension, creation time, last write time, file length, and CRC32 checksum.
         /// </returns>
-        internal static Binary GetBinaryFileInfo(string fileName)
+        internal static FileInfoStore GetBinaryFileInfo(string fileName)
         {
             FileInfo fileInfo = new FileInfo(fileName);
 
             byte[] fileBytes = File.ReadAllBytes(fileInfo.FullName);
 
-            return new Binary
+            return new FileInfoStore
             {
                 FileNameExt = fileInfo.Name,
                 FileName = Path.GetFileNameWithoutExtension(fileName),

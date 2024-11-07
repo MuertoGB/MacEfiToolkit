@@ -5,7 +5,6 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Tools;
-using Mac_EFI_Toolkit.Tools.Structs;
 using System;
 using System.Diagnostics;
 using System.Text;
@@ -21,7 +20,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
         internal static string iBootVersion = null;
         internal static string ConfigCode = null;
-        internal static Binary FileInfoData;
+        internal static FileInfoStore FileInfoData;
         internal static ScfgStore ScfgSectionData;
 
         internal const int SCFG_EXPECTED_BASE = 0x28A000;

@@ -5,7 +5,6 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Tools;
-using Mac_EFI_Toolkit.Tools.Structs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,7 +28,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static bool bResetVss = false;
         internal static bool bResetSvs = false;
 
-        internal static Binary FileInfoData;
+        internal static FileInfoStore FileInfoData;
         internal static PdrSection PdrSectionData;
         internal static NvramStore VssStoreData;
         internal static NvramStore SvsStoreData;

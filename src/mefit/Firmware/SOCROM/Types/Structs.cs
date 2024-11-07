@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// ScfgData.cs
+// Structs.cs
 // Released under the GNU GLP v3.0
 
 namespace Mac_EFI_Toolkit.Firmware.SOCROM

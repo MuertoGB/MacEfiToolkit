@@ -87,6 +87,7 @@
     <Compile Include="Common\KeyboardHookManager.cs" />
     <Compile Include="Firmware\EFI\Guids.cs" />
     <Compile Include="Firmware\EFI\EFIROM.cs" />
+    <Compile Include="Firmware\EFI\Types\Structs.cs" />
     <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Firmware\EFI\IME.cs" />
@@ -98,11 +99,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UnhandledException.cs" />
-    <Compile Include="Firmware\EFI\Enums\Types.cs" />
-    <Compile Include="Tools\Structs\Binary.cs" />
-    <Compile Include="Firmware\EFI\Structs\EFILock.cs" />
-    <Compile Include="Firmware\EFI\Structs\Sections.cs" />
-    <Compile Include="Firmware\EFI\Structs\Stores.cs" />
+    <Compile Include="Firmware\EFI\Types\Enums.cs" />
+    <Compile Include="Tools\Types\Structs.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />
     <Compile Include="Common\SevenZip\Common\CRC.cs" />
@@ -122,7 +120,7 @@
     <Compile Include="Common\Logger.cs" />
     <Compile Include="AppVersion.cs" />
     <Compile Include="Language\English.cs" />
-    <Compile Include="Firmware\SOCROM\Structs\ScfgStore.cs" />
+    <Compile Include="Firmware\SOCROM\Types\Structs.cs" />
     <Compile Include="Firmware\SOCROM\SOCROM.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
     <Compile Include="UI\METPrompt\Enums.cs" />
