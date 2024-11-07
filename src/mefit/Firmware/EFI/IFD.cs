@@ -83,24 +83,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal const uint DESCRIPTOR_BASE = 0; // 0h
         internal const uint DESCRIPTOR_LENGTH = 4096; // 1000h
 
-        internal static uint
-            BIOS_REGION_BASE,
-            BIOS_REGION_LIMIT,
-            BIOS_REGION_SIZE = 0;
-
-        internal static uint
-            ME_REGION_BASE,
-            ME_REGION_LIMIT,
-            ME_REGION_SIZE = 0;
-
-        internal static uint
-            PDR_REGION_BASE,
-            PDR_REGION_LIMIT,
-            PDR_REGION_SIZE = 0;
-
-        internal static DescriptorHeader Header;
-        internal static DescriptorMap Map;
-        internal static DescriptorRegions Regions;
+        internal static uint BIOS_REGION_BASE, BIOS_REGION_LIMIT, BIOS_REGION_SIZE = 0;
+        internal static uint ME_REGION_BASE, ME_REGION_LIMIT, ME_REGION_SIZE = 0;
+        internal static uint PDR_REGION_BASE, PDR_REGION_LIMIT, PDR_REGION_SIZE = 0;
 
         internal static bool IsDescriptorMode = false;
         #endregion
@@ -117,144 +102,65 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // For example:
             // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h.
             if (limitPosition != 0)
+            {
                 return (uint)(limitPosition + 1 - basePosition) * DESCRIPTOR_LENGTH;
+            }
 
             return 0;
         }
 
         internal static void ParseRegionData(byte[] sourceBytes)
         {
-            // Read in the flash descriptor.
-            byte[] DescriptorBytes =
-                BinaryTools.GetBytesBaseLength(
-                    sourceBytes,
-                    (int)DESCRIPTOR_BASE,
-                    (int)DESCRIPTOR_LENGTH);
+            byte[] descriptorBytes = BinaryTools.GetBytesBaseLength(sourceBytes, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
+            DescriptorHeader header = DeserializeStruct<DescriptorHeader>(descriptorBytes, 0);
 
-            // Deserialize the header
-            byte[] HeaderBytes =
-                new byte[Marshal.SizeOf(typeof(DescriptorHeader))];
+            IsDescriptorMode = header.Tag.SequenceEqual(FLASH_DESC_SIGNATURE);
 
-            Array.Copy(
-                DescriptorBytes,
-                0,
-                HeaderBytes,
-                0,
-                Marshal.SizeOf(typeof(DescriptorHeader)));
-
-            Header =
-                Helper.DeserializeHeader<DescriptorHeader>(
-                    HeaderBytes);
-
-            // Match flash descriptor tag (5AA5F00F).
-            IsDescriptorMode =
-                Header.Tag.SequenceEqual(
-                    FLASH_DESC_SIGNATURE);
-
-            // Descriptor mode.
             if (IsDescriptorMode)
             {
-                // Deserialize the flash map.
-                byte[] MapBytes =
-                    new byte[Marshal.SizeOf(typeof(DescriptorMap))];
+                DescriptorMap map = DeserializeStruct<DescriptorMap>(descriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)));
+                DescriptorRegions regions = DeserializeStruct<DescriptorRegions>(descriptorBytes, map.RegionBase << 4);
 
-                Array.Copy(
-                    DescriptorBytes,
-                    Marshal.SizeOf(typeof(DescriptorHeader)),
-                    MapBytes,
-                    0,
-                    Marshal.SizeOf(typeof(DescriptorMap)));
+                ParseRegion(regions.BiosBase, regions.BiosLimit, sourceBytes.Length, out BIOS_REGION_BASE, out BIOS_REGION_LIMIT, out BIOS_REGION_SIZE);
+                ParseRegion(regions.MeBase, regions.MeLimit, sourceBytes.Length, out ME_REGION_BASE, out ME_REGION_LIMIT, out ME_REGION_SIZE);
+                ParseRegion(regions.PdrBase, regions.PdrLimit, sourceBytes.Length, out PDR_REGION_BASE, out PDR_REGION_LIMIT, out PDR_REGION_SIZE);
 
-                Map =
-                    Helper.DeserializeHeader<DescriptorMap>(
-                        MapBytes);
-
-                // Deserialize the regions data.
-                byte[] RegionBytes =
-                    new byte[Marshal.SizeOf(typeof(DescriptorRegions))];
-
-                // Left shift right four bits: Example: 04h: 0000 0100 << 40h: 0100 0000.
-                int RegionBase = Map.RegionBase << 4;
-
-                Array.Copy(
-                    DescriptorBytes,
-                    RegionBase,
-                    RegionBytes,
-                    0,
-                    Marshal.SizeOf(typeof(DescriptorRegions)));
-
-                Regions =
-                    Helper.DeserializeHeader<DescriptorRegions>(
-                        RegionBytes);
-
-                // Parse BIOS Region base, limit and size.
-                BIOS_REGION_BASE =
-                    CalculateRegionBase(
-                        Regions.BiosBase);
-
-                if (BIOS_REGION_BASE > sourceBytes.Length) BIOS_REGION_BASE = 0;
-
-                if (Regions.BiosLimit == 0 || Regions.BiosLimit > sourceBytes.Length)
-                {
-                    BIOS_REGION_LIMIT = (uint)sourceBytes.Length; BIOS_REGION_SIZE = 0;
-                }
-                else
-                {
-                    BIOS_REGION_SIZE = CalculateRegionSize(Regions.BiosBase, Regions.BiosLimit);
-                    BIOS_REGION_LIMIT = BIOS_REGION_BASE + BIOS_REGION_SIZE;
-                }
-
-                // Parse Management Engine Region base, limit and size.
-                ME_REGION_BASE =
-                    CalculateRegionBase(
-                        Regions.MeBase);
-
-                if (ME_REGION_BASE > sourceBytes.Length) ME_REGION_BASE = 0;
-
-                if (Regions.MeLimit == 0 || Regions.MeLimit > sourceBytes.Length)
-                {
-                    ME_REGION_LIMIT = (uint)sourceBytes.Length; ; ME_REGION_SIZE = 0;
-                }
-                else
-                {
-                    ME_REGION_SIZE = CalculateRegionSize(Regions.MeBase, Regions.MeLimit);
-                    ME_REGION_LIMIT = ME_REGION_BASE + ME_REGION_SIZE;
-                }
-
-                // Parse Platform Data Region base, limit and size.
-                PDR_REGION_BASE =
-                    CalculateRegionBase(
-                        Regions.PdrBase);
-
-                if (PDR_REGION_BASE > sourceBytes.Length) PDR_REGION_BASE = 0;
-
-                if (Regions.BiosLimit == 0 || Regions.BiosLimit > sourceBytes.Length)
-                {
-                    ME_REGION_LIMIT = (uint)sourceBytes.Length; ME_REGION_SIZE = 0;
-                }
-                else
-                {
-                    PDR_REGION_SIZE = CalculateRegionSize(Regions.PdrBase, Regions.PdrLimit);
-                    PDR_REGION_LIMIT = PDR_REGION_BASE + PDR_REGION_SIZE;
-                }
-
-                // We end execution here when descriptor mode is set.
                 return;
             }
 
-            // Base/Size data is already set to zero, we need to set region limits
-            // as the file length when descriptor mode is not set.
-            PDR_REGION_LIMIT = (uint)sourceBytes.Length;
-            ME_REGION_LIMIT = (uint)sourceBytes.Length;
             BIOS_REGION_LIMIT = (uint)sourceBytes.Length;
+            ME_REGION_LIMIT = (uint)sourceBytes.Length;
+            PDR_REGION_LIMIT = (uint)sourceBytes.Length;
+        }
+
+        private static T DeserializeStruct<T>(byte[] source, int offset) where T : struct
+        {
+            byte[] structBytes = new byte[Marshal.SizeOf(typeof(T))];
+            Array.Copy(source, offset, structBytes, 0, structBytes.Length);
+            return Helper.DeserializeHeader<T>(structBytes);
+        }
+
+        private static void ParseRegion(ushort basePosition, ushort limitPosition, int sourceLength, out uint regionBase, out uint regionLimit, out uint regionSize)
+        {
+            regionBase = CalculateRegionBase(basePosition);
+
+            if (regionBase > sourceLength)
+                regionBase = 0;
+
+            if (limitPosition == 0 || limitPosition > sourceLength)
+            {
+                regionLimit = (uint)sourceLength;
+                regionSize = 0;
+            }
+            else
+            {
+                regionSize = CalculateRegionSize(basePosition, limitPosition);
+                regionLimit = regionBase + regionSize;
+            }
         }
 
         internal static void ClearRegionData()
         {
-            Header = default;
-            Map = default;
-            Regions = default;
-
             BIOS_REGION_BASE = 0; BIOS_REGION_LIMIT = 0; BIOS_REGION_SIZE = 0;
             ME_REGION_BASE = 0; ME_REGION_LIMIT = 0; ME_REGION_SIZE = 0;
             PDR_REGION_BASE = 0; PDR_REGION_LIMIT = 0; PDR_REGION_SIZE = 0;

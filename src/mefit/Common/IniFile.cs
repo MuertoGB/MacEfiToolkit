@@ -20,13 +20,14 @@ namespace Mac_EFI_Toolkit.Common
 
         internal IniFile(string filePath) => this._strFilePath = filePath;
 
-        internal void Write(string section, string key, string value) =>
-            NativeMethods.WritePrivateProfileString(section, key, value, _strFilePath);
+        internal void Write(string section, string key, string value) => NativeMethods.WritePrivateProfileString(section, key, value, _strFilePath);
 
         internal void WriteSection(string section)
         {
             using (StreamWriter writer = new StreamWriter(_strFilePath, true))
+            {
                 writer.WriteLine($"[{section}]");
+            }
         }
 
         internal string Read(string section, string key, string defaultValue = "")
@@ -49,8 +50,12 @@ namespace Mac_EFI_Toolkit.Common
             if (sectionNames != null)
             {
                 foreach (string s in sectionNames)
+                {
                     if (s == section)
+                    {
                         return true;
+                    }
+                }
             }
 
             return false;
@@ -61,11 +66,17 @@ namespace Mac_EFI_Toolkit.Common
             string[] keyNames = GetSectionKeys(section, _strFilePath);
 
             if (keyNames == null)
+            {
                 return false;
+            }
 
             foreach (string s in keyNames)
+            {
                 if (s == key)
+                {
                     return true;
+                }
+            }
 
             return false;
         }

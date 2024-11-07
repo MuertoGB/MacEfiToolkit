@@ -59,8 +59,12 @@ namespace Mac_EFI_Toolkit.Common
             try
             {
                 using (FontFamily family = new FontFamily(fontFamily))
+                {
                     if (family.IsStyleAvailable(fontStyle))
+                    {
                         return FontStatus.Available;
+                    }
+                }
             }
             catch (Exception e)
             {

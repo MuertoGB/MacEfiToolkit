@@ -46,8 +46,7 @@ namespace Mac_EFI_Toolkit.Firmware
     #region Enums
     internal enum VersionType
     {
-        FlashImageTool,
-        ManagementEngine
+        FlashImageTool, ManagementEngine
     }
     #endregion
 
@@ -64,20 +63,12 @@ namespace Mac_EFI_Toolkit.Firmware
             switch (versionType)
             {
                 case VersionType.FlashImageTool:
-                    headerPos = BinaryTools.GetBaseAddress(
-                        sourceBytes,
-                        FPT_SIGNATURE,
-                        (int)IFD.ME_REGION_BASE,
-                        (int)IFD.ME_REGION_SIZE);
+                    headerPos = BinaryTools.GetBaseAddress(sourceBytes, FPT_SIGNATURE, (int)IFD.ME_REGION_BASE, (int)IFD.ME_REGION_SIZE);
                     dataLength = 0x20;
                     break;
 
                 case VersionType.ManagementEngine:
-                    headerPos = BinaryTools.GetBaseAddress(
-                        sourceBytes,
-                        MN2_SIGNATURE,
-                        (int)IFD.ME_REGION_BASE,
-                        (int)IFD.ME_REGION_SIZE);
+                    headerPos = BinaryTools.GetBaseAddress(sourceBytes, MN2_SIGNATURE, (int)IFD.ME_REGION_BASE, (int)IFD.ME_REGION_SIZE);
                     dataLength = 0x10;
                     break;
             }
@@ -85,40 +76,31 @@ namespace Mac_EFI_Toolkit.Firmware
             if (headerPos != -1)
             {
                 if (versionType == VersionType.ManagementEngine)
+                {
                     headerPos += 2;
+                }
 
-                byte[] headerBytes = BinaryTools.GetBytesBaseLength(
-                    sourceBytes,
-                    headerPos,
-                    dataLength);
+                byte[] headerBytes = BinaryTools.GetBytesBaseLength(sourceBytes, headerPos, dataLength);
 
                 if (headerBytes != null)
                 {
                     if (versionType == VersionType.FlashImageTool)
                     {
                         FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(headerBytes);
-
-                        version =
-                            $"{fptHeader.FitMajor}." +
-                            $"{fptHeader.FitMinor}." +
-                            $"{fptHeader.FitHotfix}." +
-                            $"{fptHeader.FitBuild}";
+                        version = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                     }
                     else if (versionType == VersionType.ManagementEngine)
                     {
                         MN2Manifest mn2Header = Helper.DeserializeHeader<MN2Manifest>(headerBytes);
-
-                        version =
-                            $"{mn2Header.EngineMajor}." +
-                            $"{mn2Header.EngineMinor}." +
-                            $"{mn2Header.EngineHotfix}." +
-                            $"{mn2Header.EngineBuild}";
+                        version = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
                     }
                 }
             }
 
             if (string.IsNullOrEmpty(version) || version == _default)
+            {
                 return null;
+            }
 
             return version;
         }
