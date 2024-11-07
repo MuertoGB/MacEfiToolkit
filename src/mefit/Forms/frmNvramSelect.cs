@@ -22,21 +22,21 @@ namespace Mac_EFI_Toolkit.Forms
             WireEventHandlers();
         }
 
-        private void WireEventHandlers() =>
-            KeyDown += frmNvramSelect_KeyDown;
+        private void WireEventHandlers() => KeyDown += frmNvramSelect_KeyDown;
         #endregion
 
         #region Window Events
         private void frmNvramSelect_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
+            {
                 DialogResult = DialogResult.Cancel;
+            }
         }
         #endregion
 
         #region Button Events
-        private void cmdCancel_Click(object sender, EventArgs e) =>
-            DialogResult = DialogResult.Cancel;
+        private void cmdCancel_Click(object sender, EventArgs e) => DialogResult = DialogResult.Cancel;
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
@@ -48,11 +48,9 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region CheckBox Events
-        private void cbxResetVss_CheckedChanged(object sender, EventArgs e) =>
-            SetButtonEnable();
+        private void cbxResetVss_CheckedChanged(object sender, EventArgs e) => SetButtonEnable();
 
-        private void cbxResetSvs_CheckedChanged(object sender, EventArgs e) =>
-            SetButtonEnable();
+        private void cbxResetSvs_CheckedChanged(object sender, EventArgs e) => SetButtonEnable();
 
         private void SetButtonEnable()
         {

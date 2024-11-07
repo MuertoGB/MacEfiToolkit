@@ -45,16 +45,13 @@ namespace Mac_EFI_Toolkit.Forms
             WireEventHandlers();
 
             // Enable drag.
-            UITools.EnableFormDrag(
-                this,
-                tlpTitle,
-                lblWindowTitle);
+            UITools.EnableFormDrag(this, tlpTitle, lblWindowTitle);
 
             // Set button properties.
-            SetButtonProperties();
+            SetButtonGlyphAndText();
 
             //Set label properties.
-            SetLabelProperties();
+            SetLabelGlyphAndText();
         }
 
         private void WireEventHandlers()
@@ -76,8 +73,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmStartup_Load(object sender, EventArgs e)
         {
             // Set version text.
-            lblAppVersion.Text =
-                Application.ProductVersion;
+            lblAppVersion.Text = Application.ProductVersion;
 
             SetInitialDirectory();
 
@@ -89,17 +85,19 @@ namespace Mac_EFI_Toolkit.Forms
                 Program.draggedFilePath = string.Empty;
             }
 
-            // Check for a new application version
+            // Check for a new application version.
             if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
+            {
                 StartupVersionCheck();
+            }
         }
 
         private void frmStartup_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Intercept ALT+F4
+            // Intercept ALT+F4.
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
-                // We need to cancel the original request to close if confirmation dialogs are not disabled
+                // We need to cancel the original request to close if confirmation dialogs are not disabled.
                 if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
                 {
                     if (_childWindowCount != 0)
@@ -132,14 +130,11 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(draggedFilename);
         }
 
-        private void frmStartup_DragLeave(object sender, EventArgs e) =>
-            ApplyDragLeaveColours();
+        private void frmStartup_DragLeave(object sender, EventArgs e) => ApplyDragLeaveColours();
 
-        private void frmStartup_Deactivate(object sender, EventArgs e) =>
-            SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
+        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
 
-        private void frmStartup_Activated(object sender, EventArgs e) =>
-            SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
+        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
         #endregion
 
         #region KeyDown Events
@@ -171,8 +166,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdMinimize_Click(object sender, EventArgs e) =>
-            WindowState = FormWindowState.Minimized;
+        private void cmdMinimize_Click(object sender, EventArgs e) => WindowState = FormWindowState.Minimized;
 
         private void cmdClose_Click(object sender, EventArgs e)
         {
@@ -230,7 +224,9 @@ namespace Mac_EFI_Toolkit.Forms
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
+                {
                     OpenBinary(dialog.FileName);
+                }
             }
         }
         #endregion
@@ -259,35 +255,25 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region More Context Menu Events
-        private void changelogToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.CHANGELOG);
+        private void changelogToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.CHANGELOG);
 
-        private void donateToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.DONATE);
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.DONATE);
 
-        private void emailMeToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.EMAILME);
+        private void emailMeToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.EMAILME);
 
-        private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.GH_ISSUE);
+        private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_ISSUE);
 
-        private void homepageToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.HOMEPAGE);
+        private void homepageToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.HOMEPAGE);
 
-        private void manualToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.MANUAL);
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
 
-        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Process.Start(METUrl.GH_LATEST);
+        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_LATEST);
 
-        private void newEFIROMSessionToolStripMenuItem_Click(object sender, EventArgs e) =>
-            InitializeChildForm(new frmEfiRom(), string.Empty);
+        private void newEFIROMSessionToolStripMenuItem_Click(object sender, EventArgs e) => InitializeChildForm(new frmEfiRom(), string.Empty);
 
-        private void newSOCROMSessionToolStripMenuItem_Click(object sender, EventArgs e) =>
-            InitializeChildForm(new frmSocRom(), string.Empty);
+        private void newSOCROMSessionToolStripMenuItem_Click(object sender, EventArgs e) => InitializeChildForm(new frmSocRom(), string.Empty);
 
-        private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) =>
-            Logger.OpenLogFile(this);
+        private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
         private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -320,28 +306,28 @@ namespace Mac_EFI_Toolkit.Forms
             BlurHelper.RemoveBlur(this);
         }
 
-        private void SetButtonProperties()
+        private void SetButtonGlyphAndText()
         {
             cmdClose.Font = Program.FONT_MDL2_REG_12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
 
-        private void SetLabelProperties()
+        private void SetLabelGlyphAndText()
         {
             lblGlyph.Font = Program.FONT_MDL2_REG_20;
             lblGlyph.Text = Program.GLYPH_DOWN_ARROW;
         }
 
-        private void ApplyDragEnterColours() =>
-            lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
+        private void ApplyDragEnterColours() => lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
 
-        private void ApplyDragLeaveColours() =>
-            lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
+        private void ApplyDragLeaveColours() => lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
 
         private void SetControlForeColor(Control parentControl, Color foreColor)
         {
             foreach (Control control in parentControl.Controls)
+            {
                 control.ForeColor = foreColor;
+            }
         }
         #endregion
 
@@ -349,26 +335,25 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string directory =
-                Settings.ReadString(SettingsStringType.StartupInitialDirectory);
+            string directory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(directory)
-                    ? directory
-                    : METPath.WORKING_DIR;
+                _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
             }
         }
 
         private void OpenBinary(string filePath)
         {
             if (!FileTools.IsValidMinMaxSize(filePath, this))
+            {
                 return;
+            }
 
             byte[] fileBytes = File.ReadAllBytes(filePath);
 
-            // Identify and open the correct window based on the image type
+            // Identify and open the correct window based on the firmware type.
             Form childForm = GetChildFormForImage(fileBytes);
 
             if (childForm != null)
@@ -388,9 +373,13 @@ namespace Mac_EFI_Toolkit.Forms
         private Form GetChildFormForImage(byte[] sourceBytes)
         {
             if (EFIROM.IsValidImage(sourceBytes))
+            {
                 return new frmEfiRom();
+            }
             else if (SOCROM.IsValidImage(sourceBytes))
+            {
                 return new frmSocRom();
+            }
 
             return null;
         }
@@ -403,13 +392,11 @@ namespace Mac_EFI_Toolkit.Forms
             _childWindowCount++;
             UpdateWindowTitle();
 
-            // Attach event handler for child form closure
+            // Attach event handler for child form closure.
             childForm.FormClosed += ChildWindowClosed;
 
-            // Center child form relative to the main window
-            childForm.Location = new Point(
-                this.Location.X + (this.Width - childForm.Width) / 2,
-                this.Location.Y + (this.Height - childForm.Height) / 2);
+            // Center child form relative to the main window.
+            childForm.Location = new Point(this.Location.X + (this.Width - childForm.Width) / 2, this.Location.Y + (this.Height - childForm.Height) / 2);
 
             childForm.Owner = this;
             childForm.Show();
@@ -423,16 +410,13 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            lblWindowTitle.Text =
-                $"{APPSTRINGS.APPNAME} ({_childWindowCount})";
+            lblWindowTitle.Text = $"{APPSTRINGS.APPNAME} ({_childWindowCount})";
         }
 
         internal async void StartupVersionCheck()
         {
             // Check for a new version using the specified URL.
-            VersionResult result =
-                await AppVersion.CheckForNewVersion(
-                    METUrl.VERSION_MANIFEST);
+            VersionResult result = await AppVersion.CheckForNewVersion(METUrl.VERSION_MANIFEST);
 
             // If a new version is available and update the UI.
             if (result == VersionResult.UpToDate)
@@ -453,18 +437,17 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (Program.GetIsDebugMode())
             {
-                var g = e.Graphics;
+                Graphics g = e.Graphics;
+                int labelHeight = 20;
 
                 TableLayoutPanel tlp = sender as TableLayoutPanel;
-                if (tlp == null) return;
 
-                int labelHeight = 20;
-                Rectangle labelRectangle = new Rectangle(
-                    2,
-                    tlp.Height - labelHeight,
-                    tlp.Width - 4,
-                    labelHeight - 2
-                );
+                if (tlp == null)
+                {
+                    return;
+                }
+
+                Rectangle labelRectangle = new Rectangle(2, tlp.Height - labelHeight, tlp.Width - 4, labelHeight - 2);
 
                 using (Brush backgroundBrush = new SolidBrush(Color.Tomato))
                 {

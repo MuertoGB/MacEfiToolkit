@@ -56,7 +56,9 @@ namespace Mac_EFI_Toolkit.UI
                         METPromptButtons.YesNo);
 
             if (result == DialogResult.Yes)
+            {
                 HighlightPathInExplorer(path, owner);
+            }
         }
 
         internal static void ShowOpenFolderInExplorerPromt(Form owner, string path)
@@ -69,7 +71,9 @@ namespace Mac_EFI_Toolkit.UI
                         METPromptButtons.YesNo);
 
             if (result == DialogResult.Yes)
+            {
                 Process.Start("explorer.exe", path);
+            }
         }
 
         /// <summary>
@@ -129,28 +133,22 @@ namespace Mac_EFI_Toolkit.UI
             Control control = sender as Control;
 
             if (control == null)
-                throw new ArgumentException(
-                    "Invalid sender object type. Expected a Control.");
+            {
+                throw new ArgumentException("Invalid sender object type. Expected a Control.");
+            }
 
             Point position;
 
             switch (menuPosition)
             {
                 case MenuPosition.TopRight:
-                    position = control.PointToScreen(
-                        new Point(
-                            control.Width + 1,
-                            -1));
+                    position = control.PointToScreen(new Point(control.Width + 1, -1));
                     break;
                 case MenuPosition.BottomLeft:
-                    position = control.PointToScreen(
-                        new Point(
-                            0,
-                            control.Height + 1));
+                    position = control.PointToScreen(new Point(0, control.Height + 1));
                     break;
                 default:
-                    throw new ArgumentException(
-                        "Invalid MenuPosition value.");
+                    throw new ArgumentException("Invalid MenuPosition value.");
             }
 
             menu.Show(position);
@@ -158,12 +156,12 @@ namespace Mac_EFI_Toolkit.UI
 
         internal static void ShowContextMenuAtCursor(object sender, EventArgs e, ContextMenuStrip menu, bool showOnLeftClick)
         {
-            MouseEventArgs mouseEventArgs =
-                e as MouseEventArgs;
+            MouseEventArgs mouseEventArgs = e as MouseEventArgs;
 
-            if (mouseEventArgs != null && (mouseEventArgs.Button == MouseButtons.Right
-                || (showOnLeftClick && mouseEventArgs.Button == MouseButtons.Left)))
+            if (mouseEventArgs != null && (mouseEventArgs.Button == MouseButtons.Right || (showOnLeftClick && mouseEventArgs.Button == MouseButtons.Left)))
+            {
                 menu.Show(Cursor.Position);
+            }
         }
         #endregion
 
@@ -185,11 +183,24 @@ namespace Mac_EFI_Toolkit.UI
         private static void StartDrag(Form form)
         {
             NativeMethods.ReleaseCapture();
+            NativeMethods.SendMessage(new HandleRef(form, form.Handle), Program.WM_NCLBUTTONDOWN, (IntPtr)Program.HT_CAPTION, IntPtr.Zero);
+        }
+        #endregion
 
-            NativeMethods.SendMessage(new HandleRef(form, form.Handle),
-                Program.WM_NCLBUTTONDOWN,
-                (IntPtr)Program.HT_CAPTION,
-                IntPtr.Zero);
+        #region Nested panel text color setter
+        internal static void ApplyNestedPanelLabelForeColor(TableLayoutPanel tableLayoutPanel, Color color)
+        {
+            foreach (Control control in tableLayoutPanel.Controls)
+            {
+                if (control is Label label && label.Text == APPSTRINGS.NA)
+                {
+                    label.ForeColor = color;
+                }
+                else if (control is TableLayoutPanel nestedTableLayoutPanel)
+                {
+                    ApplyNestedPanelLabelForeColor(nestedTableLayoutPanel, color);
+                }
+            }
         }
         #endregion
     }

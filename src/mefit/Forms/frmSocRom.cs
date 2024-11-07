@@ -5,7 +5,6 @@
 // frmSocRom.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
@@ -37,10 +36,7 @@ namespace Mac_EFI_Toolkit.Forms
             WireEventHandlers();
 
             // Enable drag.
-            UITools.EnableFormDrag(
-                this,
-                tlpTitle,
-                lblTitle);
+            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
 
             // Set tip handlers for controls.
             SetTipHandlers();
@@ -70,8 +66,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             SetInitialDirectory();
 
-            _cancellationToken =
-                new CancellationTokenSource();
+            _cancellationToken = new CancellationTokenSource();
 
             if (!string.IsNullOrEmpty(Program.MAIN_WINDOW.loadedFile))
             {
@@ -83,14 +78,14 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmSocRom_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_cancellationToken != null && !_cancellationToken.IsCancellationRequested)
+            {
                 _cancellationToken.Cancel();
+            }
         }
 
-        private void frmSocRom_FormClosed(object sender, FormClosedEventArgs e) =>
-            _cancellationToken?.Dispose();
+        private void frmSocRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();
 
-        private void frmSocRom_DragEnter(object sender, DragEventArgs e) =>
-            Program.HandleDragEnter(sender, e);
+        private void frmSocRom_DragEnter(object sender, DragEventArgs e) => Program.HandleDragEnter(sender, e);
 
         private void frmSocRom_DragDrop(object sender, DragEventArgs e)
         {
@@ -102,18 +97,18 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(draggedFilename);
         }
 
-        private void frmSocRom_Deactivate(object sender, EventArgs e) =>
-            SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
+        private void frmSocRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
 
-        private void frmSocRom_Activated(object sender, EventArgs e) =>
-            SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
+        private void frmSocRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
         #endregion
 
         #region KeyDown Events
         private void frmSocRom_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
+            {
                 Close();
+            }
 
             if (e.Modifiers == Keys.Control)
             {
@@ -146,11 +141,9 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e) =>
-            Close();
+        private void cmdClose_Click(object sender, EventArgs e) => Close();
 
-        private void cmdMinimize_Click(object sender, EventArgs e) =>
-            WindowState = FormWindowState.Minimized;
+        private void cmdMinimize_Click(object sender, EventArgs e) => WindowState = FormWindowState.Minimized;
 
         private void cmdMenuOpen_Click(object sender, EventArgs e)
         {
@@ -221,8 +214,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Switch Events
-        private void cbxCensor_CheckedChanged(object sender, EventArgs e) =>
-            UpdateSerialControls();
+        private void cbxCensor_CheckedChanged(object sender, EventArgs e) => UpdateSerialControls();
         #endregion
 
         #region Copy Toolstrip Events
@@ -311,17 +303,14 @@ namespace Mac_EFI_Toolkit.Forms
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
+                {
                     return;
+                }
 
                 // Save the Scfg stores bytes to disk.
-                if (FileTools.WriteAllBytesEx(
-                    dialog.FileName,
-                    SOCROM.ScfgSectionData.ScfgBytes))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, SOCROM.ScfgSectionData.ScfgBytes))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(
-                        this,
-                        dialog.FileName);
-
+                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
                 }
 
@@ -341,27 +330,21 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 InitialDirectory = METPath.BACKUPS_DIR,
                 Filter = APPSTRINGS.FILTER_ZIP,
-                FileName = $"{SOCROM.FileInfoData.FileName}_" +
-                           $"{APPSTRINGS.SOCROM}_" +
-                           $"{APPSTRINGS.BACKUP}",
+                FileName = $"{SOCROM.FileInfoData.FileName}_{APPSTRINGS.SOCROM}_{APPSTRINGS.BACKUP}",
                 OverwritePrompt = true
             })
             {
                 // Action was cancelled
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
                     return;
+                }
 
-                FileTools.BackupFileToZip(
-                    SOCROM.LoadedBinaryBytes,
-                    SOCROM.FileInfoData.FileNameExt,
-                    saveFileDialog.FileName);
+                FileTools.BackupFileToZip(SOCROM.LoadedBinaryBytes, SOCROM.FileInfoData.FileNameExt, saveFileDialog.FileName);
 
                 if (File.Exists(saveFileDialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(
-                        this,
-                        saveFileDialog.FileName);
-
+                    UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
                     return;
                 }
 
@@ -384,7 +367,9 @@ namespace Mac_EFI_Toolkit.Forms
             })
             {
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
                     return;
+                }
 
                 StringBuilder stringBuilder = new StringBuilder();
 
@@ -416,9 +401,7 @@ namespace Mac_EFI_Toolkit.Forms
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"iBoot Version:   {SOCROM.iBootVersion ?? APPSTRINGS.NA}");
 
-                File.WriteAllText(
-                    saveFileDialog.FileName,
-                    stringBuilder.ToString());
+                File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
 
                 stringBuilder.Clear();
 
@@ -433,9 +416,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlightPrompt(
-                 this,
-                 saveFileDialog.FileName);
+                UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
             }
         }
 
@@ -456,9 +437,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Load bytes from loaded binary file.
-            byte[] fileBytes =
-                File.ReadAllBytes(
-                    SOCROM.LoadedBinaryPath);
+            byte[] fileBytes = File.ReadAllBytes(SOCROM.LoadedBinaryPath);
 
             // Check if the binaries match in size and data.
             if (BinaryTools.ByteArraysMatch(fileBytes, SOCROM.LoadedBinaryBytes))
@@ -489,18 +468,19 @@ namespace Mac_EFI_Toolkit.Forms
             ToggleControlEnable(false);
 
             if (SOCROM.FirmwareLoaded)
+            {
                 ResetWindow();
+            }
 
             // Check filesize
             if (!FileTools.IsValidMinMaxSize(filePath, this))
+            {
                 return;
+            }
 
             // Set the binary path and load the bytes.
             SOCROM.LoadedBinaryPath = filePath;
-
-            SOCROM.LoadedBinaryBytes =
-                File.ReadAllBytes(
-                    filePath);
+            SOCROM.LoadedBinaryBytes = File.ReadAllBytes(filePath);
 
             // Check if the image is what we're looking for.
             if (!SOCROM.IsValidImage(SOCROM.LoadedBinaryBytes))
@@ -520,25 +500,23 @@ namespace Mac_EFI_Toolkit.Forms
             // Show loading bar.
             pbxLoad.Image = Properties.Resources.loading;
 
-            _tLoadFirmware = new Thread(() => LoadFirmwareBase(filePath, _cancellationToken.Token))
-            {
-                IsBackground = true
-            };
-
+            _tLoadFirmware = new Thread(() => LoadFirmwareBase(filePath, _cancellationToken.Token)) { IsBackground = true };
             _tLoadFirmware.Start();
         }
 
         private void LoadFirmwareBase(string filePath, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested)
+            {
                 return;
+            }
 
-            SOCROM.LoadFirmwareBaseData(
-                SOCROM.LoadedBinaryBytes,
-                filePath);
+            SOCROM.LoadFirmwareBaseData(SOCROM.LoadedBinaryBytes, filePath);
 
             if (cancellationToken.IsCancellationRequested)
+            {
                 return;
+            }
 
             if (IsHandleCreated && !cancellationToken.IsCancellationRequested)
             {
@@ -556,19 +534,17 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             if (!cancellationToken.IsCancellationRequested)
+            {
                 SOCROM.FirmwareLoaded = true;
+            }
         }
         #endregion
 
         #region UI Events
         private void UpdateWindowTitle()
         {
-            string title =
-                $"{APPSTRINGS.SOCROM} {Program.GLYPH_RIGHT_ARROW} " +
-                $"{SOCROM.FileInfoData.FileNameExt}";
-
             this.Text = SOCROM.FileInfoData.FileNameExt;
-            lblTitle.Text = title;
+            lblTitle.Text = $"{APPSTRINGS.SOCROM} {Program.GLYPH_RIGHT_ARROW} {SOCROM.FileInfoData.FileNameExt}";
         }
 
         private void SetTipHandlers()
@@ -583,15 +559,9 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuPatch
             };
 
-            Label[] labels =
-{
-                lblParseTime
-            };
+            Label[] labels = { lblParseTime };
 
-            CheckBox[] checkBoxes =
-            {
-                cbxCensor
-            };
+            CheckBox[] checkBoxes = { cbxCensor };
 
 
             foreach (Button button in buttons)
@@ -631,7 +601,9 @@ namespace Mac_EFI_Toolkit.Forms
                 };
 
                 if (tooltips.ContainsKey(sender))
+                {
                     lblStatusBarTip.Text = tooltips[sender];
+                }
             }
         }
 
@@ -641,11 +613,12 @@ namespace Mac_EFI_Toolkit.Forms
         private void HandleCheckBoxChanged(object sender, EventArgs e)
         {
             if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
+            {
                 lblStatusBarTip.Text = cbxCensorTipString();
+            }
         }
 
-        private void HandleMouseLeaveTip(object sender, EventArgs e) =>
-            lblStatusBarTip.Text = string.Empty;
+        private void HandleMouseLeaveTip(object sender, EventArgs e) => lblStatusBarTip.Text = string.Empty;
 
         private void SetButtonFontAndGlyph()
         {
@@ -662,23 +635,8 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetControlForeColor(Control parentControl, Color foreColor)
         {
             foreach (Control ctrl in parentControl.Controls)
-                ctrl.ForeColor = foreColor;
-        }
-
-        void ApplyNestedPanelLabelForeColor(TableLayoutPanel tableLayoutPanel, Color color)
-        {
-            foreach (Control control in tableLayoutPanel.Controls)
             {
-                if (control is Label label && label.Text == APPSTRINGS.NA)
-                {
-                    label.ForeColor = color;
-                }
-                else if (control is TableLayoutPanel nestedTableLayoutPanel)
-                {
-                    ApplyNestedPanelLabelForeColor(
-                        nestedTableLayoutPanel,
-                        color);
-                }
+                ctrl.ForeColor = foreColor;
             }
         }
         #endregion
@@ -687,8 +645,7 @@ namespace Mac_EFI_Toolkit.Forms
         internal void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string directory =
-                Settings.ReadString(SettingsStringType.SocInitialDirectory);
+            string directory = Settings.ReadString(SettingsStringType.SocInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
@@ -754,7 +711,9 @@ namespace Mac_EFI_Toolkit.Forms
             void EnableButtons(params Button[] buttons)
             {
                 foreach (var button in buttons)
+                {
                     button.Enabled = enable;
+                }
             }
 
             if (!enable)
@@ -765,11 +724,8 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 EnableButtons(standardButtons);
 
-                exportScfgStoreToolStripMenuItem.Enabled =
-                    SOCROM.ScfgSectionData.StoreBase != -1;
-
-                lookupSerialNumberEveryMacToolStripMenuItem.Enabled =
-                    !string.IsNullOrEmpty(SOCROM.ScfgSectionData.SerialText);
+                exportScfgStoreToolStripMenuItem.Enabled = SOCROM.ScfgSectionData.StoreBase != -1;
+                lookupSerialNumberEveryMacToolStripMenuItem.Enabled = !string.IsNullOrEmpty(SOCROM.ScfgSectionData.SerialText);
             }
 
             tlpFirmware.Enabled = enable;
@@ -796,9 +752,8 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateConfigCodeControls();
             UpdateModelControls();
 
-            ApplyNestedPanelLabelForeColor(
-                tlpFirmware,
-                AppColours.DISABLED_TEXT);
+            // Apply DISABLED_TEXT to N/A labels.
+            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, AppColours.DISABLED_TEXT);
 
             // Update window title.
             UpdateWindowTitle();
@@ -810,43 +765,30 @@ namespace Mac_EFI_Toolkit.Forms
             ToggleControlEnable(true);
         }
 
-        private void UpdateParseTimeControls() =>
-            lblParseTime.Text = $"{SOCROM.tsParseTime.TotalSeconds:F2}s";
+        private void UpdateParseTimeControls() => lblParseTime.Text = $"{SOCROM.tsParseTime.TotalSeconds:F2}s";
 
-        private void UpdateFilenameControls() =>
-            lblFilename.Text = SOCROM.FileInfoData.FileNameExt;
+        private void UpdateFilenameControls() => lblFilename.Text = SOCROM.FileInfoData.FileNameExt;
 
         private void UpdateFileSizeControls()
         {
-            int fsDecimal =
-                SOCROM.FileInfoData.Length;
+            int fsDecimal = SOCROM.FileInfoData.Length;
 
-            bool isValidSize =
-                FileTools.GetIsValidBinSize(
-                    fsDecimal);
+            bool isValidSize = FileTools.GetIsValidBinSize(fsDecimal);
 
-            lblFilesize.Text =
-                $"{FileTools.FormatFileSize(fsDecimal)} " +
-                $"{APPSTRINGS.BYTES} ({fsDecimal:X}h)";
+            lblFilesize.Text = $"{FileTools.FormatFileSize(fsDecimal)} {APPSTRINGS.BYTES} ({fsDecimal:X}h)";
 
             if (!isValidSize)
             {
-                lblFilesize.ForeColor =
-                    AppColours.ERROR;
-
-                lblFilesize.Text +=
-                    $" ({FileTools.GetSizeDifference(fsDecimal)})";
+                lblFilesize.ForeColor = AppColours.ERROR;
+                lblFilesize.Text += $" ({FileTools.GetSizeDifference(fsDecimal)})";
             }
         }
 
-        private void UpdateFileCrc32Controls() =>
-            lblCrc.Text = $"{SOCROM.FileInfoData.CRC32:X8}";
+        private void UpdateFileCrc32Controls() => lblCrc.Text = $"{SOCROM.FileInfoData.CRC32:X8}";
 
-        private void UpdateFileCreationDateControls() =>
-            lblCreated.Text = SOCROM.FileInfoData.CreationTime;
+        private void UpdateFileCreationDateControls() => lblCreated.Text = SOCROM.FileInfoData.CreationTime;
 
-        private void UpdateFileModifiedDateControls() =>
-            lblModified.Text = SOCROM.FileInfoData.LastWriteTime;
+        private void UpdateFileModifiedDateControls() => lblModified.Text = SOCROM.FileInfoData.LastWriteTime;
 
         private void UpdateIbootControls()
         {
@@ -949,8 +891,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         internal async void GetConfigCodeAsync(string hwc)
         {
-            string configcode =
-                await MacTools.GetDeviceConfigCodeSupportRemote(hwc);
+            string configcode = await MacTools.GetDeviceConfigCodeSupportRemote(hwc);
 
             if (!string.IsNullOrEmpty(configcode))
             {
@@ -986,7 +927,9 @@ namespace Mac_EFI_Toolkit.Forms
             lblSon.Text = SOCROM.ScfgSectionData.SonText;
 
             if (!string.IsNullOrEmpty(SOCROM.ScfgSectionData.RegNumText))
+            {
                 lblSon.Text += SOCROM.ScfgSectionData.RegNumText;
+            }
         }
         #endregion
 
@@ -994,7 +937,9 @@ namespace Mac_EFI_Toolkit.Forms
         internal void SetClipboardText(string text)
         {
             if (string.IsNullOrEmpty(text))
+            {
                 return;
+            }
 
             Clipboard.SetText(text);
 
@@ -1008,41 +953,34 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void ClipboardSetFilename(bool showExtention) => SetClipboardText(
-            showExtention
-            ? SOCROM.FileInfoData.FileNameExt
-            : SOCROM.FileInfoData.FileName);
+        private void ClipboardSetFilename(bool showExtention) =>
+            SetClipboardText(
+                showExtention
+                ? SOCROM.FileInfoData.FileNameExt
+                : SOCROM.FileInfoData.FileName);
 
-        private void ClipboardSetFileSize() => SetClipboardText(
-            $"{FileTools.FormatFileSize(SOCROM.FileInfoData.Length)} " +
-            $"{APPSTRINGS.BYTES} ({SOCROM.FileInfoData.Length:X}h)");
+        private void ClipboardSetFileSize() =>
+            SetClipboardText(
+                $"{FileTools.FormatFileSize(SOCROM.FileInfoData.Length)} " +
+                $"{APPSTRINGS.BYTES} ({SOCROM.FileInfoData.Length:X}h)");
 
-        private void ClipboardSetFileCrc32() => SetClipboardText(
-            $"{SOCROM.FileInfoData.CRC32:X8}");
+        private void ClipboardSetFileCrc32() => SetClipboardText($"{SOCROM.FileInfoData.CRC32:X8}");
 
-        private void ClipboardSetFileCreationTime() => SetClipboardText(
-            SOCROM.FileInfoData.CreationTime);
+        private void ClipboardSetFileCreationTime() => SetClipboardText(SOCROM.FileInfoData.CreationTime);
 
-        private void ClipboardSetFileModifiedTime() => SetClipboardText(
-            SOCROM.FileInfoData.LastWriteTime);
+        private void ClipboardSetFileModifiedTime() => SetClipboardText(SOCROM.FileInfoData.LastWriteTime);
 
-        private void ClipboardSetIbootVersion() => SetClipboardText(
-            SOCROM.iBootVersion);
+        private void ClipboardSetIbootVersion() => SetClipboardText(SOCROM.iBootVersion);
 
-        private void ClipboardSetScfgBaseAddress() => SetClipboardText(
-            $"{SOCROM.ScfgSectionData.StoreBase:X}");
+        private void ClipboardSetScfgBaseAddress() => SetClipboardText($"{SOCROM.ScfgSectionData.StoreBase:X}");
 
-        private void ClipboardSetScfgSizeDecimal() => SetClipboardText(
-            $"{SOCROM.ScfgSectionData.StoreSize} {APPSTRINGS.BYTES}");
+        private void ClipboardSetScfgSizeDecimal() => SetClipboardText($"{SOCROM.ScfgSectionData.StoreSize} {APPSTRINGS.BYTES}");
 
-        private void ClipboardSetScfgSizeHex() => SetClipboardText(
-            $"{SOCROM.ScfgSectionData.StoreSize:X}h");
+        private void ClipboardSetScfgSizeHex() => SetClipboardText($"{SOCROM.ScfgSectionData.StoreSize:X}h");
 
-        private void ClipboardSetScfgCrc32() => SetClipboardText(
-            SOCROM.ScfgSectionData.ScfgCrc);
+        private void ClipboardSetScfgCrc32() => SetClipboardText(SOCROM.ScfgSectionData.ScfgCrc);
 
-        private void ClipboardSetScfgConfig() => SetClipboardText(
-            SOCROM.ConfigCode);
+        private void ClipboardSetScfgConfig() => SetClipboardText(SOCROM.ConfigCode);
 
         private void ClipboardSetScfgOrderNo() =>
             SetClipboardText(

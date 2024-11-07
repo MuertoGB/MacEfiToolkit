@@ -7,7 +7,6 @@
 
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
-using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -46,17 +45,17 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmSerialSelect_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
+            {
                 DialogResult = DialogResult.Cancel;
+            }
         }
         #endregion
 
         #region Button Events
-        private void cmdCancel_Click(object sender, EventArgs e) =>
-            DialogResult = DialogResult.Cancel;
+        private void cmdCancel_Click(object sender, EventArgs e) => DialogResult = DialogResult.Cancel;
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
-            // Please ensure new SSN is validated
             Serial.NewValue = tbSsn.Text;
             DialogResult = DialogResult.OK;
         }
@@ -90,8 +89,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region UI Events
-        private void UpdateTextBoxColour(TextBox control, Color color) =>
-            control.ForeColor = color;
+        private void UpdateTextBoxColour(TextBox control, Color color) => control.ForeColor = color;
         #endregion
     }
 }

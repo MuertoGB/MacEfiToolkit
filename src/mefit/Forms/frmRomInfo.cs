@@ -26,10 +26,7 @@ namespace Mac_EFI_Toolkit.Forms
             WireEventHandlers();
 
             // Enable drag.
-            UITools.EnableFormDrag(
-                this,
-                tlpTitle,
-                lblTitle);
+            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
 
             // Set button propeties.
             SetButtonProperties();
@@ -39,51 +36,45 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Load += frmRominfo_Load;
             KeyDown += frmRominfo_KeyDown;
-            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
         }
         #endregion
 
         #region Window Events
-        private void frmRominfo_Load(object sender, EventArgs e)
+        private void frmRominfo_Load(object sender, EventArgs e) => LoadRomInformation();
+
+        private void LoadRomInformation()
         {
-            lblBiosId.Text = EFIROM.AppleRomInfoSectionData.BiosId
-                ?? "N/A";
-            lblModel.Text = EFIROM.AppleRomInfoSectionData.Model != null
-                ? $"{EFIROM.AppleRomInfoSectionData.Model} " +
-                $"({MacTools.ConvertEfiModelCode(EFIROM.AppleRomInfoSectionData.Model)})"
-                : "N/A";
-            lblEfiVersion.Text =
-                EFIROM.AppleRomInfoSectionData.EfiVersion
-                ?? "N/A";
-            lblBuiltBy.Text =
-                EFIROM.AppleRomInfoSectionData.BuiltBy
-                ?? "N/A";
-            lblDateStamp.Text =
-                EFIROM.AppleRomInfoSectionData.DateStamp
-                ?? "N/A";
-            lblRevision.Text =
-                EFIROM.AppleRomInfoSectionData.Revision
-                ?? "N/A";
-            lblBootRom.Text =
-                EFIROM.AppleRomInfoSectionData.RomVersion
-                ?? "N/A";
-            lblBuildcaveId.Text =
-                EFIROM.AppleRomInfoSectionData.BuildcaveId
-                ?? "N/A";
-            lblBuildType.Text =
-                EFIROM.AppleRomInfoSectionData.BuildType
-                ?? "N/A";
-            lblCompiler.Text =
-                EFIROM.AppleRomInfoSectionData.Compiler
-                ?? "N/A";
-            lblSectionData.Text =
-                $"BASE: {EFIROM.AppleRomInfoSectionData.SectionBase:X}h, " +
-                $"SIZE: {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h"
-                ?? string.Empty;
+            lblBiosId.Text = EFIROM.AppleRomInfoSectionData.BiosId ?? "N/A";
+
+            lblModel.Text = EFIROM.AppleRomInfoSectionData.Model != null ? $"{EFIROM.AppleRomInfoSectionData.Model} " +
+                $"({MacTools.ConvertEfiModelCode(EFIROM.AppleRomInfoSectionData.Model)})" : "N/A";
+
+            lblEfiVersion.Text = EFIROM.AppleRomInfoSectionData.EfiVersion ?? "N/A";
+
+            lblBuiltBy.Text = EFIROM.AppleRomInfoSectionData.BuiltBy ?? "N/A";
+
+            lblDateStamp.Text = EFIROM.AppleRomInfoSectionData.DateStamp ?? "N/A";
+
+            lblRevision.Text = EFIROM.AppleRomInfoSectionData.Revision ?? "N/A";
+
+            lblBootRom.Text = EFIROM.AppleRomInfoSectionData.RomVersion ?? "N/A";
+
+            lblBuildcaveId.Text = EFIROM.AppleRomInfoSectionData.BuildcaveId ?? "N/A";
+
+            lblBuildType.Text = EFIROM.AppleRomInfoSectionData.BuildType ?? "N/A";
+
+            lblCompiler.Text = EFIROM.AppleRomInfoSectionData.Compiler ?? "N/A";
+
+            lblSectionData.Text = $"BASE: {EFIROM.AppleRomInfoSectionData.SectionBase:X}h, " +
+                $"SIZE: {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h" ?? string.Empty;
 
             foreach (Label label in tlpInfo.Controls)
+            {
                 if (label.Text == "N/A")
+                {
                     label.ForeColor = AppColours.DISABLED_TEXT;
+                }
+            }
         }
         #endregion
 
@@ -91,7 +82,9 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmRominfo_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
+            {
                 Close();
+            }
         }
         #endregion
 
@@ -108,7 +101,9 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 // Action was cancelled
                 if (dialog.ShowDialog() != DialogResult.OK)
+                {
                     return;
+                }
 
                 StringBuilder builder = new StringBuilder();
 
@@ -123,9 +118,9 @@ namespace Mac_EFI_Toolkit.Forms
                 builder.AppendLine($"Built Type:    {EFIROM.AppleRomInfoSectionData.BuildType ?? "N/A"}");
                 builder.AppendLine($"Compiler:      {EFIROM.AppleRomInfoSectionData.Compiler ?? "N/A"}");
 
-                File.WriteAllText(
-                    dialog.FileName,
-                    builder.ToString());
+                File.WriteAllText(dialog.FileName, builder.ToString());
+
+                builder.Clear();
 
                 if (!File.Exists(dialog.FileName))
                 {
@@ -138,22 +133,12 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlightPrompt(
-                 this,
-                 dialog.FileName);
+                UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
             }
         }
 
         private void cmdClose_Click(object sender, System.EventArgs e) =>
             Close();
-        #endregion
-
-        #region Picturebox Events
-        private void pbxLogo_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                CenterToParent();
-        }
         #endregion
 
         #region UI Events

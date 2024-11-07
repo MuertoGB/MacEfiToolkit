@@ -43,8 +43,7 @@ public class METForm : Form
         base.OnFormClosed(e);
     }
 
-    private void METForm_Load(object sender, EventArgs e) =>
-        SetBorderAccent();
+    private void METForm_Load(object sender, EventArgs e) => SetBorderAccent();
     #endregion
 
     #region Overrides Methods
@@ -53,15 +52,8 @@ public class METForm : Form
         get
         {
             CreateParams Params = base.CreateParams;
-
-            Params.Style |=
-                WS_MINIMIZEBOX;
-
-            Params.ClassStyle =
-                Params.ClassStyle |
-                CS_DBLCLKS |
-                CS_DROP;
-
+            Params.Style |= WS_MINIMIZEBOX;
+            Params.ClassStyle = Params.ClassStyle | CS_DBLCLKS | CS_DROP;
             return Params;
         }
     }

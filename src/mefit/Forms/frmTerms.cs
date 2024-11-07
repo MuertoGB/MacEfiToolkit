@@ -22,26 +22,21 @@ namespace Mac_EFI_Toolkit.Forms
             WireEventHandlers();
 
             // Enable drag.
-            UITools.EnableFormDrag(
-                this,
-                tlpTitle,
-                lblTitle);
+            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
 
             // Set button properties.
-            SetButtonProperties();
+            SetButtonGlyphAndText();
         }
 
         private void WireEventHandlers()
         {
             Load += frmTerms_Load;
             KeyDown += frmTerms_KeyDown;
-            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
         }
         #endregion
 
         #region Window Events
-        private void frmTerms_Load(object sender, EventArgs e) =>
-            tbxTermsText.Text = Properties.Resources.editorterms;
+        private void frmTerms_Load(object sender, EventArgs e) => tbxTermsText.Text = Properties.Resources.editorterms;
         #endregion
 
         #region Button Events
@@ -53,9 +48,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdAccept_Click(object sender, EventArgs e)
         {
-            Settings.SetBool(
-                SettingsBoolType.AcceptedEditingTerms,
-                true);
+            Settings.SetBool(SettingsBoolType.AcceptedEditingTerms, true);
 
             DialogResult = DialogResult.Yes;
             Close();
@@ -65,12 +58,6 @@ namespace Mac_EFI_Toolkit.Forms
         {
             DialogResult = DialogResult.No;
             Close();
-        }
-
-        private void SetButtonProperties()
-        {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion
 
@@ -85,11 +72,11 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Picturebox Events
-        private void pbxLogo_MouseDoubleClick(object sender, MouseEventArgs e)
+        #region UI Events
+        private void SetButtonGlyphAndText()
         {
-            if (e.Button == MouseButtons.Left)
-                CenterToParent();
+            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion
     }

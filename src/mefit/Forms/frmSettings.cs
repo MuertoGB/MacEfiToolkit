@@ -31,10 +31,7 @@ namespace Mac_EFI_Toolkit.Forms
             WireEventHandlers();
 
             // Enable drag.
-            UITools.EnableFormDrag(
-                this,
-                tlpTitle,
-                lblTitle);
+            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
 
             // Set button properties
             SetButtonProperties();
@@ -44,7 +41,6 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Load += frmSettings_Load;
             KeyDown += frmSettings_KeyDown;
-            pbxLogo.MouseDoubleClick += pbxLogo_MouseDoubleClick;
         }
         #endregion
 
@@ -61,19 +57,18 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmSettings_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
+            {
                 Close();
+            }
         }
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e) =>
-            Close();
+        private void cmdClose_Click(object sender, EventArgs e) => Close();
 
         private void cmdEditStartupDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(
-                SettingsStringType.StartupInitialDirectory,
-                ref _strStartupInitialPath);
+            OpenFolderDialog(SettingsStringType.StartupInitialDirectory, ref _strStartupInitialPath);
 
             if (!string.Equals(_strStartupInitialPath, lblStartupDirectory.Text))
             {
@@ -84,9 +79,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdEditEfiDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(
-                SettingsStringType.EfiInitialDirectory,
-                ref _strEfiInitialPath);
+            OpenFolderDialog(SettingsStringType.EfiInitialDirectory, ref _strEfiInitialPath);
 
             if (!string.Equals(_strEfiInitialPath, lblEfiDirectory.Text))
             {
@@ -97,9 +90,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdEditSocDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(
-                SettingsStringType.SocInitialDirectory,
-                ref _strSocInitialPath);
+            OpenFolderDialog(SettingsStringType.SocInitialDirectory, ref _strSocInitialPath);
 
             if (!string.Equals(_strSocInitialPath, lblSocDirectory))
             {
@@ -108,7 +99,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void OpenFolderDialog(SettingsStringType settingsType, ref string pathVariable)
+        private void OpenFolderDialog(SettingsStringType settingsType, ref string path)
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
@@ -121,7 +112,9 @@ namespace Mac_EFI_Toolkit.Forms
                 dialog.ShowNewFolderButton = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK)
-                    pathVariable = dialog.SelectedPath;
+                {
+                    path = dialog.SelectedPath;
+                }
             }
         }
 
@@ -134,44 +127,27 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdApply_Click(object sender, EventArgs e)
         {
-            Settings.SetBool(
-                SettingsBoolType.DisableVersionCheck,
-                swDisableVersionCheck.Checked);
-
-            Settings.SetBool(
-                SettingsBoolType.UseAccentColor,
-                swUseAccentColor.Checked);
-
-            Settings.SetBool(
-                SettingsBoolType.DisableFlashingUI,
-                swDisableFlashingUiElements.Checked);
-
-            Settings.SetBool(
-                SettingsBoolType.DisableMessageSounds,
-                swDisableMessageWindowSounds.Checked);
-
-            Settings.SetBool(
-                SettingsBoolType.DisableTips,
-                swDisableStatusBarTips.Checked);
-
-            Settings.SetBool(
-                SettingsBoolType.DisableConfDiag,
-                swDisableConfirmationDialogs.Checked);
+            Settings.SetBool(SettingsBoolType.DisableVersionCheck, swDisableVersionCheck.Checked);
+            Settings.SetBool(SettingsBoolType.UseAccentColor, swUseAccentColor.Checked);
+            Settings.SetBool(SettingsBoolType.DisableFlashingUI, swDisableFlashingUiElements.Checked);
+            Settings.SetBool(SettingsBoolType.DisableMessageSounds, swDisableMessageWindowSounds.Checked);
+            Settings.SetBool(SettingsBoolType.DisableTips, swDisableStatusBarTips.Checked);
+            Settings.SetBool(SettingsBoolType.DisableConfDiag, swDisableConfirmationDialogs.Checked);
 
             if (_strStartupInitialPath != string.Empty)
-                Settings.SetString(
-                    SettingsStringType.StartupInitialDirectory,
-                    _strStartupInitialPath);
+            {
+                Settings.SetString(SettingsStringType.StartupInitialDirectory, _strStartupInitialPath);
+            }
 
             if (_strEfiInitialPath != string.Empty)
-                Settings.SetString(
-                    SettingsStringType.EfiInitialDirectory,
-                    _strEfiInitialPath);
+            {
+                Settings.SetString(SettingsStringType.EfiInitialDirectory, _strEfiInitialPath);
+            }
 
             if (_strSocInitialPath != string.Empty)
-                Settings.SetString(
-                    SettingsStringType.SocInitialDirectory,
-                    _strSocInitialPath);
+            {
+                Settings.SetString(SettingsStringType.SocInitialDirectory, _strSocInitialPath);
+            }
 
             METForm.UpdateAccentColor();
 
@@ -192,43 +168,19 @@ namespace Mac_EFI_Toolkit.Forms
                     METPromptButtons.YesNo);
 
             if (result != DialogResult.Yes)
+            {
                 return;
+            }
 
-            Settings.SetBool(
-                SettingsBoolType.DisableVersionCheck,
-                false);
-
-            Settings.SetBool(
-                SettingsBoolType.UseAccentColor,
-                false);
-
-            Settings.SetBool(
-                SettingsBoolType.DisableFlashingUI,
-                false);
-
-            Settings.SetBool(
-                SettingsBoolType.DisableMessageSounds,
-                false);
-
-            Settings.SetBool(
-                SettingsBoolType.DisableTips,
-                false);
-
-            Settings.SetBool(
-                SettingsBoolType.DisableConfDiag,
-                false);
-
-            Settings.SetString(
-                SettingsStringType.StartupInitialDirectory,
-                METPath.WORKING_DIR);
-
-            Settings.SetString(
-                SettingsStringType.EfiInitialDirectory,
-                METPath.WORKING_DIR);
-
-            Settings.SetString(
-                SettingsStringType.SocInitialDirectory,
-                METPath.WORKING_DIR);
+            Settings.SetBool(SettingsBoolType.DisableVersionCheck, false);
+            Settings.SetBool(SettingsBoolType.UseAccentColor, false);
+            Settings.SetBool(SettingsBoolType.DisableFlashingUI, false);
+            Settings.SetBool(SettingsBoolType.DisableMessageSounds, false);
+            Settings.SetBool(SettingsBoolType.DisableTips, false);
+            Settings.SetBool(SettingsBoolType.DisableConfDiag, false);
+            Settings.SetString(SettingsStringType.StartupInitialDirectory, METPath.WORKING_DIR);
+            Settings.SetString(SettingsStringType.EfiInitialDirectory, METPath.WORKING_DIR);
+            Settings.SetString(SettingsStringType.SocInitialDirectory, METPath.WORKING_DIR);
 
             METForm.UpdateAccentColor();
 
@@ -269,49 +221,12 @@ namespace Mac_EFI_Toolkit.Forms
         #region METSwitch Events
         private void UpdateCheckBoxControls()
         {
-            swDisableVersionCheck.Checked =
-                Settings.ReadBool(
-                    SettingsBoolType.DisableVersionCheck) ?
-                    true :
-                    false;
-
-            swUseAccentColor.Checked =
-                Settings.ReadBool(
-                    SettingsBoolType.UseAccentColor) ?
-                    true :
-                    false;
-
-            swDisableFlashingUiElements.Checked =
-                Settings.ReadBool(
-                    SettingsBoolType.DisableFlashingUI) ?
-                    true :
-                    false;
-
-            swDisableMessageWindowSounds.Checked =
-                Settings.ReadBool(
-                    SettingsBoolType.DisableMessageSounds) ?
-                    true :
-                    false;
-
-            swDisableStatusBarTips.Checked =
-                Settings.ReadBool
-                    (SettingsBoolType.DisableTips) ?
-                    true :
-                    false;
-
-            swDisableConfirmationDialogs.Checked =
-                Settings.ReadBool(
-                    SettingsBoolType.DisableConfDiag) ?
-                    true :
-                    false;
-        }
-        #endregion
-
-        #region Picturebox Events
-        private void pbxLogo_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                CenterToParent();
+            swDisableVersionCheck.Checked = Settings.ReadBool(SettingsBoolType.DisableVersionCheck) ? true : false;
+            swUseAccentColor.Checked = Settings.ReadBool(SettingsBoolType.UseAccentColor) ? true : false;
+            swDisableFlashingUiElements.Checked = Settings.ReadBool(SettingsBoolType.DisableFlashingUI) ? true : false;
+            swDisableMessageWindowSounds.Checked = Settings.ReadBool(SettingsBoolType.DisableMessageSounds) ? true : false;
+            swDisableStatusBarTips.Checked = Settings.ReadBool(SettingsBoolType.DisableTips) ? true : false;
+            swDisableConfirmationDialogs.Checked = Settings.ReadBool(SettingsBoolType.DisableConfDiag) ? true : false;
         }
         #endregion
 

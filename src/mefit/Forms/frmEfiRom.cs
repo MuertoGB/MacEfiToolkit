@@ -204,15 +204,15 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdMenuFolders_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
-            sender,
-            cmsFolders,
-            MenuPosition.BottomLeft);
+                sender,
+                cmsFolders,
+                MenuPosition.BottomLeft);
 
         private void cmdMenuExport_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
-            sender,
-            cmsExport,
-            MenuPosition.BottomLeft);
+                sender,
+                cmsExport,
+                MenuPosition.BottomLeft);
 
         private void cmdMenuPatch_Click(object sender, EventArgs e)
         {
@@ -241,9 +241,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdMenuOptions_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
-            sender,
-            cmsOptions,
-            MenuPosition.BottomLeft);
+                sender,
+                cmsOptions,
+                MenuPosition.BottomLeft);
 
         private void cmdNavigate_Click(object sender, EventArgs e) => UITools.HighlightPathInExplorer(EFIROM.LoadedBinaryPath, this);
         #endregion
@@ -858,7 +858,7 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateIntelMeControls();
 
             // Apply DISABLED_TEXT to N/A labels.
-            ApplyNestedPanelLabelForeColor(tlpFirmware, AppColours.DISABLED_TEXT);
+            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, AppColours.DISABLED_TEXT);
 
             // Check which descriptor copy menu items should be enabled.
             pdrBaseToolStripMenuItem.Enabled = IFD.PDR_REGION_BASE != 0;
@@ -1203,12 +1203,14 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuPatch,
                 cmdMenuOptions,
                 cmdOpenInExplorer,
-                };
+            };
 
             void EnableButtons(params Button[] buttons)
             {
                 foreach (Button button in buttons)
+                {
                     button.Enabled = enable;
+                }
             }
 
             if (!enable)
@@ -1219,68 +1221,28 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 EnableButtons(menuButtons);
 
-                bool modelPartExists =
-                    EFIROM.EfiBiosIdSectionData.ModelPart
-                    != null;
-
-                bool fsysBytesExist =
-                    EFIROM.FsysStoreData.FsysBytes
-                    != null;
-
-                bool fsysCrcMismatch = fsysBytesExist &&
-                    !string.Equals(EFIROM.FsysStoreData.CrcCalcString,
-                        EFIROM.FsysStoreData.CrcString);
-
-                bool isAppleFirmware =
-                    modelPartExists
-                    && fsysBytesExist;
+                bool modelPartExists = EFIROM.EfiBiosIdSectionData.ModelPart != null;
+                bool fsysBytesExist = EFIROM.FsysStoreData.FsysBytes != null;
+                bool fsysCrcMismatch = fsysBytesExist && !string.Equals(EFIROM.FsysStoreData.CrcCalcString, EFIROM.FsysStoreData.CrcString);
+                bool isAppleFirmware = modelPartExists && fsysBytesExist;
 
                 // Export Menu
-                exportFsysStoreToolStripMenuItem.Enabled =
-                    fsysBytesExist;
-
-                exportIntelMERegionToolStripMenuItem.Enabled =
-                    IFD.IsDescriptorMode &&
-                    IFD.ME_REGION_BASE != 0 &&
-                    IFD.ME_REGION_LIMIT != 0;
-
-                exportNVRAMVSSStoresToolStripMenuItem.Enabled =
-                    EFIROM.VssStoreData.PrimaryStoreBase != -1 &&
-                    !EFIROM.VssStoreData.IsPrimaryStoreEmpty;
-
-                exportNVRAMSVSStoresToolStripMenuItem.Enabled =
-                    EFIROM.SvsStoreData.PrimaryStoreBase != -1 &&
-                    !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
+                exportFsysStoreToolStripMenuItem.Enabled = fsysBytesExist;
+                exportIntelMERegionToolStripMenuItem.Enabled = IFD.IsDescriptorMode && IFD.ME_REGION_BASE != 0 && IFD.ME_REGION_LIMIT != 0;
+                exportNVRAMVSSStoresToolStripMenuItem.Enabled = EFIROM.VssStoreData.PrimaryStoreBase != -1 && !EFIROM.VssStoreData.IsPrimaryStoreEmpty;
+                exportNVRAMSVSStoresToolStripMenuItem.Enabled = EFIROM.SvsStoreData.PrimaryStoreBase != -1 && !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
 
                 // Patch Menu
-                changeSerialNumberToolStripMenuItem.Enabled =
-                    EFIROM.FsysStoreData.FsysBase != -1 &&
-                    EFIROM.FsysStoreData.SerialBase != -1;
-
-                replaceIntelMERegionToolStripMenuItem.Enabled =
-                    IFD.IsDescriptorMode &&
-                    IFD.ME_REGION_BASE != 0 &&
-                    IFD.ME_REGION_LIMIT != 0;
-
-                replaceFsysStoreToolStripMenuItem.Enabled =
-                    EFIROM.FsysStoreData.FsysBase != -1;
-
-                eraseNVRAMToolStripMenuItem.Enabled =
-                    !EFIROM.VssStoreData.IsPrimaryStoreEmpty ||
-                    !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
-
-                fixFsysChecksumCRC32ToolStripMenuItem.Enabled =
-                    fsysCrcMismatch;
-
-                invalidateEFILockToolStripMenuItem.Enabled =
-                    EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
+                changeSerialNumberToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1 && EFIROM.FsysStoreData.SerialBase != -1;
+                replaceIntelMERegionToolStripMenuItem.Enabled = IFD.IsDescriptorMode && IFD.ME_REGION_BASE != 0 && IFD.ME_REGION_LIMIT != 0;
+                replaceFsysStoreToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1;
+                eraseNVRAMToolStripMenuItem.Enabled = !EFIROM.VssStoreData.IsPrimaryStoreEmpty || !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
+                fixFsysChecksumCRC32ToolStripMenuItem.Enabled = fsysCrcMismatch;
+                invalidateEFILockToolStripMenuItem.Enabled = EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
 
                 // Options Menu
-                viewRomInformationToolStripMenuItem.Enabled =
-                    EFIROM.AppleRomInfoSectionData.SectionExists;
-
-                lookupSerialNumberOnEveryMacToolStripMenuItem.Enabled =
-                    !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial);
+                viewRomInformationToolStripMenuItem.Enabled = EFIROM.AppleRomInfoSectionData.SectionExists;
+                lookupSerialNumberOnEveryMacToolStripMenuItem.Enabled = !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial);
             }
 
             tlpFilename.Enabled = enable;
@@ -1322,15 +1284,9 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuOptions
             };
 
-            Label[] labels =
-            {
-                lblParseTime
-            };
+            Label[] labels = { lblParseTime };
 
-            CheckBox[] checkBoxes =
-            {
-                cbxCensor
-            };
+            CheckBox[] checkBoxes = { cbxCensor };
 
             foreach (Button button in buttons)
             {
@@ -1392,28 +1348,12 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void HandleMouseLeaveTip(object sender, EventArgs e) => lblStatusBarTip.Text = string.Empty;
 
-        void ApplyNestedPanelLabelForeColor(TableLayoutPanel tableLayoutPanel, Color color)
-        {
-            foreach (Control control in tableLayoutPanel.Controls)
-            {
-                if (control is Label label && label.Text == APPSTRINGS.NA)
-                {
-                    label.ForeColor = color;
-                }
-                else if (control is TableLayoutPanel nestedTableLayoutPanel)
-                {
-                    ApplyNestedPanelLabelForeColor(nestedTableLayoutPanel, color);
-                }
-            }
-        }
-
         private void SetControlForeColor(Control parentControl, Color foreColor)
         {
             foreach (Control control in parentControl.Controls)
             {
                 control.ForeColor = foreColor;
             }
-
         }
 
         private DialogResult ShowPatchFailedPrompt()
