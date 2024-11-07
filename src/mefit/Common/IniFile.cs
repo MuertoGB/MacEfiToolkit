@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// IniFile.cs - Handles INI file read/write
+// IniFile.cs
 // Released under the GNU GLP v3.0
 // IniFile uses code from pinvoke.net, thank you to whoever wrote it (See GetSectionNames)
 

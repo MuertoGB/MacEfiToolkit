@@ -145,7 +145,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             regionBase = CalculateRegionBase(basePosition);
 
             if (regionBase > sourceLength)
+            {
                 regionBase = 0;
+            }
 
             if (limitPosition == 0 || limitPosition > sourceLength)
             {

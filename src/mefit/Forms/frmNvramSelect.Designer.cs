@@ -147,7 +147,7 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.cbxResetVss, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblEraseVss, 1, 0);
@@ -168,7 +168,7 @@
             this.cbxResetVss.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.cbxResetVss.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cbxResetVss.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxResetVss.Location = new System.Drawing.Point(8, 4);
+            this.cbxResetVss.Location = new System.Drawing.Point(10, 4);
             this.cbxResetVss.Margin = new System.Windows.Forms.Padding(0);
             this.cbxResetVss.Name = "cbxResetVss";
             this.cbxResetVss.Size = new System.Drawing.Size(32, 18);
@@ -182,7 +182,7 @@
             this.lblEraseVss.AutoSize = true;
             this.lblEraseVss.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEraseVss.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblEraseVss.Location = new System.Drawing.Point(43, 3);
+            this.lblEraseVss.Location = new System.Drawing.Point(45, 3);
             this.lblEraseVss.Name = "lblEraseVss";
             this.lblEraseVss.Size = new System.Drawing.Size(73, 20);
             this.lblEraseVss.TabIndex = 1;
@@ -192,7 +192,7 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.lblEraseSvs, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.cbxResetSvs, 0, 0);
@@ -210,7 +210,7 @@
             this.lblEraseSvs.AutoSize = true;
             this.lblEraseSvs.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEraseSvs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblEraseSvs.Location = new System.Drawing.Point(43, 3);
+            this.lblEraseSvs.Location = new System.Drawing.Point(45, 3);
             this.lblEraseSvs.Name = "lblEraseSvs";
             this.lblEraseSvs.Size = new System.Drawing.Size(217, 20);
             this.lblEraseSvs.TabIndex = 3;
@@ -226,7 +226,7 @@
             this.cbxResetSvs.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.cbxResetSvs.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cbxResetSvs.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxResetSvs.Location = new System.Drawing.Point(8, 4);
+            this.cbxResetSvs.Location = new System.Drawing.Point(10, 4);
             this.cbxResetSvs.Margin = new System.Windows.Forms.Padding(0);
             this.cbxResetSvs.Name = "cbxResetSvs";
             this.cbxResetSvs.Size = new System.Drawing.Size(32, 18);

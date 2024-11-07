@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// T2ROM.cs - Handles parsing of T2 SOCROM data
+// SOCROM.cs - Handles parsing of T2 SOCROM data
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Tools;
@@ -42,9 +42,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             // Parse file info.
-            FileInfoData =
-                FileTools.GetBinaryFileInfo
-                (fileName);
+            FileInfoData = FileTools.GetBinaryFileInfo(fileName);
 
             // Parse iBoot version.
             iBootVersion = GetIbootVersion(sourceBytes);
@@ -53,9 +51,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             ScfgSectionData = GetSCfgData(sourceBytes);
 
             // Fetch the Config Code.
-            ConfigCode = ScfgSectionData.HWC != null
-                ? MacTools.GetDeviceConfigCodeLocal(ScfgSectionData.HWC)
-                : null;
+            ConfigCode = ScfgSectionData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(ScfgSectionData.HWC) : null;
 
             stopwatch.Start();
             tsParseTime = stopwatch.Elapsed;
@@ -70,48 +66,30 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             iBootVersion = null;
             ConfigCode = null;
             ScfgSectionData = default;
-
             Serial.NewValue = string.Empty;
         }
 
         internal static bool IsValidImage(byte[] source)
         {
-            int ibootSig =
-                BinaryTools.GetBaseAddress(
-                    source,
-                    IBOOT_VER_SIG,
-                    0);
-
-            return (ibootSig != -1);
+            return (BinaryTools.GetBaseAddress(source, IBOOT_VER_SIG, 0) != -1);
         }
         #endregion
 
         #region IBoot
         internal static string GetIbootVersion(byte[] source)
         {
-            int ibootSig =
-                BinaryTools.GetBaseAddress(
-                    source,
-                    IBOOT_VER_SIG, 0);
+            int ibootSig = BinaryTools.GetBaseAddress(source, IBOOT_VER_SIG, 0);
 
             if (ibootSig != -1) // Signature found
             {
                 // Get byte containing data length
-                byte[] lByte =
-                    BinaryTools.GetBytesBaseLength(
-                    source,
-                    ibootSig + IBOOT_VER_SIG.Length + 1,
-                    1);
+                byte[] lByte = BinaryTools.GetBytesBaseLength(source, ibootSig + IBOOT_VER_SIG.Length + 1, 1);
 
                 // Convert data length to unsigned int8
                 byte dataSize = (byte)lByte[0];
 
                 // Get iboot version data bytes
-                byte[] stringData =
-                    BinaryTools.GetBytesBaseLength(
-                        source,
-                        ibootSig + 0x6,
-                        dataSize);
+                byte[] stringData = BinaryTools.GetBytesBaseLength(source, ibootSig + 0x6, dataSize);
 
                 return _utf8.GetString(stringData);
             }
@@ -123,52 +101,31 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #region SCfg
         internal static ScfgStore GetSCfgData(byte[] source)
         {
-            int scfgBase =
-                BinaryTools.GetBaseAddress(
-                    source,
-                    SCFG_HEADER_SIG);
+            int scfgBase = BinaryTools.GetBaseAddress(source, SCFG_HEADER_SIG);
 
             if (scfgBase == -1)
+            {
                 return DefaultScfgData();
+            }
 
-            byte dataSize =
-                BinaryTools.GetBytesBaseLength(
-                    source,
-                    scfgBase + SCFG_HEADER_SIG.Length, 1)[0];
+            byte dataSize = BinaryTools.GetBytesBaseLength(source, scfgBase + SCFG_HEADER_SIG.Length, 1)[0];
 
             if (dataSize == 0)
+            {
                 return DefaultScfgData();
+            }
 
-            byte[] scfgBytes =
-                BinaryTools.GetBytesBaseLength(
-                    source,
-                    scfgBase,
-                    dataSize);
+            byte[] scfgBytes = BinaryTools.GetBytesBaseLength(source, scfgBase, dataSize);
 
             if (scfgBytes == null)
+            {
                 return DefaultScfgData();
+            }
 
-            string crc =
-                $"{FileTools.GetCrc32Digest(scfgBytes):X8}";
-
-            string serial =
-                GetStringFromSig(
-                    scfgBytes,
-                    SCFG_SSN_SIG,
-                    _serialLength,
-                    out string hwc);
-
-            string son =
-                GetStringFromSigWithLimit(
-                    scfgBytes,
-                    SCFG_SON_SIG,
-                    _limitChars);
-
-            string regno =
-                GetStringFromSigWithLimit(
-                    scfgBytes,
-                    SCFG_SON_REGN,
-                    _limitChars);
+            string crc = $"{FileTools.GetCrc32Digest(scfgBytes):X8}";
+            string serial = GetStringFromSig(scfgBytes, SCFG_SSN_SIG, _serialLength, out string hwc);
+            string son = GetStringFromSigWithLimit(scfgBytes, SCFG_SON_SIG, _limitChars);
+            string regno = GetStringFromSigWithLimit(scfgBytes, SCFG_SON_REGN, _limitChars);
 
             return new ScfgStore
             {
@@ -188,60 +145,46 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         {
             hwc = null;
 
-            int baseAddress =
-                BinaryTools.GetBaseAddress(
-                    scfgBytes,
-                    sig);
+            int baseAddress = BinaryTools.GetBaseAddress(scfgBytes, sig);
 
             if (baseAddress == -1)
+            {
                 return null;
+            }
 
-            byte[] bytes =
-                BinaryTools.GetBytesBaseLength(
-                    scfgBytes,
-                    baseAddress + sig.Length,
-                    expectedLength);
+            byte[] bytes = BinaryTools.GetBytesBaseLength(scfgBytes, baseAddress + sig.Length, expectedLength);
 
             if (bytes?.Length != expectedLength)
+            {
                 return null;
+            }
 
-            string serial =
-                _utf8.GetString(bytes);
+            string serial = _utf8.GetString(bytes);
 
-            hwc =
-                serial.Length >= 4 ?
-                serial.Substring(serial.Length - 4, 4)
-                : null;
+            hwc = serial.Length >= 4 ? serial.Substring(serial.Length - 4, 4) : null;
 
             return serial;
         }
 
         private static string GetStringFromSigWithLimit(byte[] scfgBytes, byte[] sig, byte[] limitChars)
         {
-            int baseAddress =
-                BinaryTools.GetBaseAddress(
-                    scfgBytes,
-                    sig);
+            int baseAddress = BinaryTools.GetBaseAddress(scfgBytes, sig);
 
             if (baseAddress == -1)
+            {
                 return null;
+            }
 
             baseAddress += sig.Length;
 
-            int limit =
-                BinaryTools.GetBaseAddress
-                (scfgBytes,
-                limitChars,
-                baseAddress);
+            int limit = BinaryTools.GetBaseAddress(scfgBytes, limitChars, baseAddress);
 
             if (limit == -1)
+            {
                 return null;
+            }
 
-            byte[] bytes =
-                BinaryTools.GetBytesBaseLimit(
-                    scfgBytes,
-                    baseAddress,
-                    limit);
+            byte[] bytes = BinaryTools.GetBytesBaseLimit(scfgBytes, baseAddress, limit);
 
             return _utf8.GetString(bytes);
         }
@@ -262,27 +205,32 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             };
         }
 
-        internal static readonly byte[] IBOOT_VER_SIG = // iBoot version signature, byte 5 is validity byte?, byte 6 is var size.
-{
+        // iBoot version signature, byte 5 is validity byte?, byte 6 is var size.
+        internal static readonly byte[] IBOOT_VER_SIG =
+        {
             0x69, 0x6C, 0X6C, 0X62
         };
 
-        internal static readonly byte[] SCFG_HEADER_SIG = // Header
+        // Header.
+        internal static readonly byte[] SCFG_HEADER_SIG =
         {
             0x67, 0x66, 0x43, 0x53
         };
 
-        internal static readonly byte[] SCFG_SSN_SIG = // System Serial Number
+        // System Serial Number.
+        internal static readonly byte[] SCFG_SSN_SIG =
         {
             0x6D, 0x4E, 0x72, 0x53
         };
 
-        internal static readonly byte[] SCFG_SON_SIG = // System Order Number
+        // System Order Number.
+        internal static readonly byte[] SCFG_SON_SIG =
         {
             0x23, 0x64, 0x6F, 0x4D
         };
 
-        internal static readonly byte[] SCFG_SON_REGN = // Registration Number?
+        // Registration Number?
+        internal static readonly byte[] SCFG_SON_REGN =
         {
             0x6E, 0x67, 0x65, 0x52
         };

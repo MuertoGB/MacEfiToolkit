@@ -8,6 +8,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 {
     internal struct PdrSection
     {
+        internal int BoardIdBase { get; set; }
         internal string BoardId { get; set; }
     }
 
