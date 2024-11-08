@@ -1111,7 +1111,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (baseAddress != -1)
             {
-                label.Text = $"{baseAddress:X2}h {(isEmpty ? $"[{EFISTRINGS.EMPTY}]" : string.Empty)}";
+                label.Text = $"{baseAddress:X2}h {(isEmpty ? $"[{EFISTRINGS.EMPTY}]" : $"[{EFISTRINGS.ACTIVE}]")}";
                 menuItem.Enabled = true;
             }
             else
@@ -1524,10 +1524,11 @@ namespace Mac_EFI_Toolkit.Forms
         #region Edit Serial
         private void WriteEfiromSerialNumber(string serial)
         {
+            MessageBox.Show(serial);
             Logger.Write($"{LOGSTRINGS.PATCH_START} {nameof(WriteEfiromSerialNumber)} {LOGSTRINGS.SSN_REPLACE}", LogType.Application);
 
             // Check serial length.
-            if (serial.Length != 11 || serial.Length != 12)
+            if (serial.Length != 11 && serial.Length != 12)
             {
                 Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SERIAL_LEN_INVALID} ({serial.Length})", LogType.Application);
                 NotifyPatchingFailure();

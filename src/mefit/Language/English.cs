@@ -456,6 +456,9 @@ namespace Mac_EFI_Toolkit
         internal const string EMPTY =
             "Empty";
 
+        internal const string ACTIVE =
+            "Active";
+
         internal const string APFS_DRIVER_FOUND =
             "YES (DRIVER FOUND)";
 
