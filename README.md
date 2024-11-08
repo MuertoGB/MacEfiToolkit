@@ -20,43 +20,76 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
 
 >🛈 **Access to some features requires accepting the editing terms.**
 
-| Startup Window                                   | ROM Information Window |
-| ------------------------------------------------ |--------------|
-| ![window](stream/images/application/startup.png) | ![window](stream/images/application/rominfo.png) | |
-
 | EFIROM Window                                    | SOCROM Window |
 | ------------------------------------------------ |-----------------------
 | ![window](stream/images/application/efi.png)     | ![window](stream/images/application/socrom.png) |
 
 ## Features
 
-- Application
-  - All files are edited in memory, preserving the original.
-  - Knuth–Morris–Pratt algorithm for binary data searching.
-  - Backup firmwares to a .zip archive for long term storage.
-  - Automatic handling of uncaught exceptions.
-  - Automatic background logging for errors and key actions.
-  - DPI scaling support.
-  - Drag and drop support.
-  - New version notifications.
-  - No installation required.
-  - Works with Wine.
-- Firmware (EFIROM)
-  - View the firmware checksum, created and modified date.
-  - View the model, config code, system serial, hardware configuration code and system order number.
-  - Check the system serial on EveryMac.
-  - View the firmware version and ROM section information.
-  - View the Intel Management Engine version and base address.
-  - View the Platform Data Region Board-ID (UEFI 2013+).
-  - View if the firmware is APFS capable.
-  - Export and replace the Intel Management Engine firmware region.
-  - Export and replace the Fsys store section.
-  - Detect and repair invalid Fsys CRC32 checksums.
-  - View and validate binary size.
-  - Reset NVRAM stores with proper header configuration.
-  - Detect and remove EFI passwords (EFI lock).
-- Firmware (T2 SOCROM)
-  - Placeholder for upcoming features related to T2 SOCROM firmware.
+- **Application**
+  - **File Handling**
+    - All files are edited in memory preserving the original
+    - Backup firmwares to a .zip archive for long-term storage
+    - Drag and drop support
+  - **Error Handling and Logging**
+    - Automatic handling of uncaught exceptions
+    - Automatic background logging for errors and key actions
+  - **User Interface**
+    - Automatic DPI scaling
+    - New version notifications
+    - Serial numbers are censored by default
+  - **Search and Verification**
+    - Knuth–Morris–Pratt algorithm for binary data searching
+    - Serial number validation rules
+    - Check serial numbers on EveryMac
+    - View firmware parse time
+  - **Misc**
+    - No installation required
+    - Works with Wine
+
+- **Firmware (EFIROM)**
+  - **View firmware details**
+    - Binary size (bytes, hex)
+    - Checksum
+    - Created and modified date
+    - EFI version
+    - EFI lock status
+    - Platform Data Region Board-ID
+    - APFS driver status
+    - Intel ME version
+    - **Model information**
+      - System model
+      - System config code
+      - System serial number
+      - Hardware config code
+      - System order number
+  - Automatic Fsys checksum masking
+  - Edit the system serial number
+  - Export and replace the Fsys region
+  - Export and replace the Intel Management Engine region
+  - Export firmware information to a text file
+  - Detect invalid binary size
+  - Detect and repair invalid Fsys checksums
+  - View Apple ROM section information
+  - Reset NVRAM stores with proper header configuration
+  - Detect and remove EFI passwords (EFI lock)
+
+- **Firmware (T2 SOCROM)**
+  - **View firmware details**
+    - Binary size (bytes, hex)
+    - Checksum
+    - Created and modified date
+    - iBoot version
+    - **Model Information**
+      - Scfg store details
+      - System serial number
+      - System config code
+      - System order number
+  - Edit the serial number
+  - Export and replace the Scfg store
+  - Export firmware information to a text file
+
+
 ## Download
 
 | Version| Release Date| Latest | Channel |
