@@ -202,7 +202,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpMain.RowCount = 5;
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 332F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tlpMain.Size = new System.Drawing.Size(761, 406);
@@ -241,7 +241,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblFilename.Location = new System.Drawing.Point(0, 0);
             this.lblFilename.Margin = new System.Windows.Forms.Padding(0);
             this.lblFilename.Name = "lblFilename";
-            this.lblFilename.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
+            this.lblFilename.Padding = new System.Windows.Forms.Padding(7, 0, 0, 0);
             this.lblFilename.Size = new System.Drawing.Size(724, 36);
             this.lblFilename.TabIndex = 0;
             this.lblFilename.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -265,7 +265,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdOpenInExplorer.TabIndex = 3;
             this.cmdOpenInExplorer.Text = "N";
             this.cmdOpenInExplorer.UseVisualStyleBackColor = false;
-            this.cmdOpenInExplorer.Click += new System.EventHandler(this.cmdNavigate_Click);
+            this.cmdOpenInExplorer.Click += new System.EventHandler(this.cmdOpenInExplorer_Click);
             // 
             // tlpFirmware
             // 
@@ -1403,7 +1403,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.biosBaseToolStripMenuItem});
             this.cmsCopy.Name = "cmsCopy";
             this.cmsCopy.ShowImageMargin = false;
-            this.cmsCopy.Size = new System.Drawing.Size(207, 632);
+            this.cmsCopy.Size = new System.Drawing.Size(207, 604);
             // 
             // filenameToolStripMenuItem
             // 

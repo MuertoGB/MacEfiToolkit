@@ -22,6 +22,7 @@ namespace Mac_EFI_Toolkit
         DisableMessageSounds,
         DisableTips,
         DisableConfDiag,
+        DisableSerialValidation,
         AcceptedEditingTerms
     }
 
@@ -45,6 +46,7 @@ namespace Mac_EFI_Toolkit
         private const string KEY_DISABLE_MESSAGE_SOUNDS = "DisableMessageSounds";
         private const string KEY_DISABLE_TIPS = "DisableTips";
         private const string KEY_DISABLE_CONF_DIAG = "DisableConfDiag";
+        private const string KEY_DISABLE_SN_VALIDATION = "DisableSerialValidation";
         private const string KEY_STARTUP_INIT_DIR = "StartupInitialPath";
         private const string KEY_EFI_INIT_DIR = "EfiInitialPath";
         private const string KEY_SOC_INIT_DIR = "SocInitialPath";
@@ -105,6 +107,7 @@ namespace Mac_EFI_Toolkit
                 { KEY_DISABLE_MESSAGE_SOUNDS, "False" },
                 { KEY_DISABLE_TIPS, "False" },
                 { KEY_DISABLE_CONF_DIAG, "False" },
+                { KEY_DISABLE_SN_VALIDATION, "False"},
                 { KEY_STARTUP_INIT_DIR, defaultPath },
                 { KEY_EFI_INIT_DIR, defaultPath },
                 { KEY_SOC_INIT_DIR, defaultPath }
@@ -163,6 +166,9 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.UseAccentColor:
                     section = SEC_APPLICATION; key = KEY_USE_ACCENT_COLOR;
+                    break;
+                case SettingsBoolType.DisableSerialValidation:
+                    section = SEC_APPLICATION; key = KEY_DISABLE_SN_VALIDATION;
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
                     section = SEC_FIRMWARE; key = KEY_ACCEPTED_TERMS;
@@ -289,6 +295,9 @@ namespace Mac_EFI_Toolkit
                     break;
                 case SettingsBoolType.UseAccentColor:
                     section = SEC_APPLICATION; key = KEY_USE_ACCENT_COLOR;
+                    break;
+                case SettingsBoolType.DisableSerialValidation:
+                    section = SEC_APPLICATION; key = KEY_DISABLE_SN_VALIDATION;
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
                     section = SEC_FIRMWARE; key = KEY_ACCEPTED_TERMS;

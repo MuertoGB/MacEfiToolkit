@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
@@ -132,8 +133,20 @@ namespace Mac_EFI_Toolkit.Forms
                     case Keys.P:
                         cmdMenuPatch.PerformClick();
                         break;
+                    case Keys.T:
+                        cmdMenuOptions.PerformClick();
+                        break;
                     case Keys.S:
                         cbxCensor.Checked = !cbxCensor.Checked;
+                        break;
+                }
+            }
+            else if ((e.Modifiers & Keys.Control) == Keys.Control && (e.Modifiers & Keys.Shift) == Keys.Shift)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.L:
+                        cmdOpenInExplorer.PerformClick();
                         break;
                 }
             }
@@ -226,11 +239,13 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void cmdNenuOptions_Click(object sender, EventArgs e) =>
+        private void cmdMenuOptions_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsOptions,
                 MenuPosition.BottomLeft);
+
+        private void cmdOpenInExplorer_Click(object sender, EventArgs e) => UITools.HighlightPathInExplorer(SOCROM.LoadedBinaryPath, this);
         #endregion
 
         #region Switch Events
@@ -603,7 +618,9 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuCopy,
                 cmdMenuFolders,
                 cmdMenuExport,
-                cmdMenuPatch
+                cmdMenuOptions,
+                cmdMenuPatch,
+                cmdOpenInExplorer
             };
 
             Label[] labels = { lblParseTime };
@@ -642,6 +659,8 @@ namespace Mac_EFI_Toolkit.Forms
                     { cmdMenuFolders, $"{SOCSTRINGS.MENU_TIP_FOLDERS} (CTRL + L)" },
                     { cmdMenuExport, $"{SOCSTRINGS.MENU_TIP_EXPORT} (CTRL + E)"},
                     { cmdMenuPatch, $"{SOCSTRINGS.MENU_TIP_PATCH} (CTRL + P)"},
+                    { cmdMenuOptions, $"{SOCSTRINGS.MENU_TIP_OPTIONS} (CTRL + T)"},
+                    { cmdOpenInExplorer, $"{SOCSTRINGS.MENU_TIP_OPENFILELOCATION} (CTRL + SHIFT + L)"},
                     { lblParseTime, APPSTRINGS.FW_PARSE_TIME},
                     { cbxCensor, cbxCensorTipString() }
                 };
@@ -668,8 +687,17 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonFontAndGlyph()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
-            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
+            var buttons = new[]
+            {
+                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Program.GLYPH_EXIT_CROSS },
+                new { Button = cmdOpenInExplorer, Font = Program.FONT_MDL2_REG_10, Text = Program.GLYPH_FILE_EXPLORER },
+            };
+
+            foreach (var buttonData in buttons)
+            {
+                buttonData.Button.Font = buttonData.Font;
+                buttonData.Button.Text = buttonData.Text;
+            }
         }
 
         private void SetLabelFontAndGlyph()
@@ -757,7 +785,8 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuFolders,
                 cmdMenuExport,
                 cmdMenuPatch,
-                cmdMenuOptions
+                cmdMenuOptions,
+                cmdOpenInExplorer
             };
 
             void EnableButtons(params Button[] buttons)
@@ -821,7 +850,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateParseTimeControls() => lblParseTime.Text = $"{SOCROM.tsParseTime.TotalSeconds:F2}s";
 
-        private void UpdateFilenameControls() => lblFilename.Text = SOCROM.FileInfoData.FileNameExt;
+        private void UpdateFilenameControls() => lblFilename.Text = $"{APPSTRINGS.FILE}: '{SOCROM.FileInfoData.FileNameExt}'";
 
         private void UpdateFileSizeControls()
         {

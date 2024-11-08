@@ -4,6 +4,9 @@
 // English.cs
 // Released under the GNU GLP v3.0
 
+using static System.Windows.Forms.Design.AxImporter;
+using System.Drawing;
+
 namespace Mac_EFI_Toolkit
 {
     internal class APPSTRINGS
@@ -26,6 +29,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string SOCROM =
             "SOCROM";
+
+        internal const string FILE =
+            "FILE";
 
         internal const string UNKNOWN =
             "Unknown";
@@ -405,9 +411,6 @@ namespace Mac_EFI_Toolkit
         internal const string SVS =
             "SVS";
 
-        internal const string FILE =
-            "FILE";
-
         internal const string FSYS =
             "FSYS";
 
@@ -523,6 +526,12 @@ namespace Mac_EFI_Toolkit
 
         internal const string MENU_TIP_PATCH =
             "Open the Firmware Patching Menu";
+
+        internal const string MENU_TIP_OPTIONS =
+            "Open the Options Menu";
+
+        internal const string MENU_TIP_OPENFILELOCATION =
+            "Open File Location";
         #endregion
     }
 }

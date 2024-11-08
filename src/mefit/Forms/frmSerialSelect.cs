@@ -93,6 +93,15 @@ namespace Mac_EFI_Toolkit.Forms
             // Update the validity label each time the text changes
             UpdateValidityLabel();
 
+            if (Settings.ReadBool(SettingsBoolType.DisableSerialValidation))
+            {
+                if (charLength == tbSsn.MaxLength)
+                {
+                    cmdOkay.Enabled = true;
+                    return;
+                }
+            }
+
             // Check if the character length matches the expected serial length
             if (charLength == tbSsn.MaxLength)
             {
@@ -113,6 +122,7 @@ namespace Mac_EFI_Toolkit.Forms
                 UpdateTextBoxColour(textBox, Color.FromArgb(235, 235, 235));
                 cmdOkay.Enabled = false;
             }
+
         }
         #endregion
 

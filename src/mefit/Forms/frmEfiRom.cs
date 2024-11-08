@@ -7,7 +7,6 @@
 
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
-using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
 using System;
@@ -246,7 +245,7 @@ namespace Mac_EFI_Toolkit.Forms
                 cmsOptions,
                 MenuPosition.BottomLeft);
 
-        private void cmdNavigate_Click(object sender, EventArgs e) => UITools.HighlightPathInExplorer(EFIROM.LoadedBinaryPath, this);
+        private void cmdOpenInExplorer_Click(object sender, EventArgs e) => UITools.HighlightPathInExplorer(EFIROM.LoadedBinaryPath, this);
         #endregion
 
         #region Switch Events
@@ -879,7 +878,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateParseTimeControls() => lblParseTime.Text = $"{EFIROM.tsParseTime.TotalSeconds:F2}s";
 
-        private void UpdateFileNameControls() => lblFilename.Text = $"{EFISTRINGS.FILE}: '{EFIROM.FileInfoData.FileNameExt}'";
+        private void UpdateFileNameControls() => lblFilename.Text = $"{APPSTRINGS.FILE}: '{EFIROM.FileInfoData.FileNameExt}'";
 
         private void UpdateFileSizeControls()
         {
@@ -1521,10 +1520,9 @@ namespace Mac_EFI_Toolkit.Forms
                 $"{APPSTRINGS.SIZE} {IFD.BIOS_REGION_SIZE:X}h");
         #endregion
 
-        #region Edit Serial
+        #region Write Serial
         private void WriteEfiromSerialNumber(string serial)
         {
-            MessageBox.Show(serial);
             Logger.Write($"{LOGSTRINGS.PATCH_START} {nameof(WriteEfiromSerialNumber)} {LOGSTRINGS.SSN_REPLACE}", LogType.Application);
 
             // Check serial length.
@@ -1841,7 +1839,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Replace Fsys Store
+        #region Write Fsys Store
         private void WriteFsysStore()
         {
             Logger.Write($"{LOGSTRINGS.PATCH_START} {LOGSTRINGS.FSYS_REPLACE}", LogType.Application);
@@ -1965,7 +1963,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Fix Fsys Checksum
+        #region Mask Fsys Checksum
         private void MaskFsysChecksum()
         {
             Logger.Write($"{LOGSTRINGS.PATCH_START} {LOGSTRINGS.CRC_MASK}", LogType.Application);
@@ -1997,7 +1995,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Invalidate EFI Lock
+        #region Remove EFI Lock
         private void RemoveEfiLock()
         {
             // Check editing terms have been accepted.
@@ -2088,7 +2086,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Replace Intel ME
+        #region Write Intel ME
         private void WriteIntelMeRegion()
         {
             Logger.Write($"{LOGSTRINGS.PATCH_START} {LOGSTRINGS.IME_REPLACE}", LogType.Application);
