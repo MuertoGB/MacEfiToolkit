@@ -201,11 +201,30 @@ namespace Mac_EFI_Toolkit.Forms
                 cmsExport,
                 MenuPosition.BottomLeft);
 
-        private void cmdMenuPatch_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
-                sender,
-                cmsPatch,
-                MenuPosition.BottomLeft);
+        private void cmdMenuPatch_Click(object sender, EventArgs e)
+        {
+            bool bOpenEditor = Settings.ReadBool(SettingsBoolType.AcceptedEditingTerms);
+
+            if (!bOpenEditor)
+            {
+                BlurHelper.ApplyBlur(this);
+
+                using (Form frm = new frmTerms())
+                {
+                    frm.FormClosed += ChildWindowClosed;
+                    DialogResult result = frm.ShowDialog();
+                    bOpenEditor = (result != DialogResult.No);
+                }
+            }
+
+            if (bOpenEditor)
+            {
+                UITools.ShowContextMenuAtControlPoint(
+                    sender,
+                    cmsPatch,
+                    MenuPosition.BottomLeft);
+            }
+        }
 
         private void cmdNenuOptions_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
@@ -251,7 +270,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string serial = SOCROM.ScfgSectionData.SerialText;
+            string serial = SOCROM.ScfgSectionData.Serial;
 
             if (string.IsNullOrEmpty(serial))
             {
@@ -343,7 +362,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                FileTools.BackupFileToZip(SOCROM.LoadedBinaryBytes, SOCROM.FileInfoData.FileNameExt, saveFileDialog.FileName);
+                FileTools.BackupFileToZip(SOCROM.LoadedBinaryBuffer, SOCROM.FileInfoData.FileNameExt, saveFileDialog.FileName);
 
                 if (File.Exists(saveFileDialog.FileName))
                 {
@@ -392,12 +411,12 @@ namespace Mac_EFI_Toolkit.Forms
                 stringBuilder.AppendLine($"Size (Bytes):    {SOCROM.ScfgSectionData.StoreSize} bytes");
                 stringBuilder.AppendLine($"Size (Hex):      {SOCROM.ScfgSectionData.StoreSize:X}h");
                 stringBuilder.AppendLine($"CRC32:           {SOCROM.ScfgSectionData.ScfgCrc ?? APPSTRINGS.NA}");
-                stringBuilder.AppendLine($"Serial:          {SOCROM.ScfgSectionData.SerialText ?? APPSTRINGS.NA}\r\n");
+                stringBuilder.AppendLine($"Serial:          {SOCROM.ScfgSectionData.Serial ?? APPSTRINGS.NA}\r\n");
 
                 stringBuilder.AppendLine("Model");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Config:          {SOCROM.ConfigCode ?? APPSTRINGS.NA}");
-                stringBuilder.AppendLine($"Order No:        {SOCROM.ScfgSectionData.SonText ?? APPSTRINGS.NA}");
+                stringBuilder.AppendLine($"Order No:        {SOCROM.ScfgSectionData.SON ?? APPSTRINGS.NA}");
                 stringBuilder.AppendLine($"Reg No:          {SOCROM.ScfgSectionData.RegNumText ?? APPSTRINGS.NA}\r\n");
 
                 stringBuilder.AppendLine("Firmware");
@@ -424,6 +443,30 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
+        #region Patch Toolstrip Events
+        private void changeSerialNumberToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BlurHelper.ApplyBlur(this);
+
+            using (frmSerialSelect child = new frmSerialSelect())
+            {
+                child.Tag = SerialSenderTag.SOCROM;
+                child.FormClosed += ChildWindowClosed;
+                child.ShowDialog();
+
+                if (child.DialogResult == DialogResult.OK)
+                {
+                    WriteSocromSerialNumber(SOCROM.NewSerial);
+                }
+            }
+        }
+
+        private void replaceScfgStoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WriteScfgStore();
+        }
+        #endregion
+
         #region Options Toolstrip Events
         private void reloadFileFromDiskToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -442,7 +485,7 @@ namespace Mac_EFI_Toolkit.Forms
             byte[] fileBytes = File.ReadAllBytes(SOCROM.LoadedBinaryPath);
 
             // Check if the binaries match in size and data.
-            if (BinaryTools.ByteArraysMatch(fileBytes, SOCROM.LoadedBinaryBytes))
+            if (BinaryTools.ByteArraysMatch(fileBytes, SOCROM.LoadedBinaryBuffer))
             {
                 // Loaded binaries match.
                 METPrompt.Show(
@@ -461,7 +504,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.OpenLogFile(this);
 
         private void lookupSerialNumberEveryMacToolStripMenuItem_Click(object sender, EventArgs e) =>
-            MacTools.LookupSerialOnEveryMac(SOCROM.ScfgSectionData.SerialText);
+            MacTools.LookupSerialOnEveryMac(SOCROM.ScfgSectionData.Serial);
         #endregion
 
         #region Open Binary
@@ -482,10 +525,10 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Set the binary path and load the bytes.
             SOCROM.LoadedBinaryPath = filePath;
-            SOCROM.LoadedBinaryBytes = File.ReadAllBytes(filePath);
+            SOCROM.LoadedBinaryBuffer = File.ReadAllBytes(filePath);
 
             // Check if the image is what we're looking for.
-            if (!SOCROM.IsValidImage(SOCROM.LoadedBinaryBytes))
+            if (!SOCROM.IsValidImage(SOCROM.LoadedBinaryBuffer))
             {
                 METPrompt.Show(
                     this,
@@ -513,7 +556,7 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            SOCROM.LoadFirmwareBaseData(SOCROM.LoadedBinaryBytes, filePath);
+            SOCROM.LoadFirmwareBaseData(SOCROM.LoadedBinaryBuffer, filePath);
 
             if (cancellationToken.IsCancellationRequested)
             {
@@ -543,6 +586,8 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region UI Events
+        private void ChildWindowClosed(object sender, EventArgs e) => BlurHelper.RemoveBlur(this);
+
         private void UpdateWindowTitle()
         {
             this.Text = SOCROM.FileInfoData.FileNameExt;
@@ -640,6 +685,14 @@ namespace Mac_EFI_Toolkit.Forms
                 ctrl.ForeColor = foreColor;
             }
         }
+
+        private void NotifyPatchingFailure()
+        {
+            if (Prompts.ShowPatchFailedPrompt(this) == DialogResult.Yes)
+            {
+                Logger.OpenLogFile(this);
+            }
+        }
         #endregion
 
         #region Misc Events
@@ -724,7 +777,9 @@ namespace Mac_EFI_Toolkit.Forms
                 EnableButtons(standardButtons);
 
                 exportScfgStoreToolStripMenuItem.Enabled = SOCROM.ScfgSectionData.StoreBase != -1;
-                lookupSerialNumberEveryMacToolStripMenuItem.Enabled = !string.IsNullOrEmpty(SOCROM.ScfgSectionData.SerialText);
+                lookupSerialNumberEveryMacToolStripMenuItem.Enabled = !string.IsNullOrEmpty(SOCROM.ScfgSectionData.Serial);
+
+                changeSerialNumberToolStripMenuItem.Enabled = SOCROM.ScfgSectionData.StoreBase != -1;
             }
 
             tlpFirmware.Enabled = enable;
@@ -840,7 +895,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateSerialControls()
         {
-            string serialNumber = SOCROM.ScfgSectionData.SerialText;
+            string serialNumber = SOCROM.ScfgSectionData.Serial;
 
             if (!string.IsNullOrEmpty(serialNumber))
             {
@@ -912,7 +967,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateModelControls()
         {
-            if (string.IsNullOrEmpty(SOCROM.ScfgSectionData.SonText))
+            if (string.IsNullOrEmpty(SOCROM.ScfgSectionData.SON))
             {
                 lblSon.Text = APPSTRINGS.NA;
 
@@ -923,7 +978,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             orderNoToolStripMenuItem.Enabled = true;
 
-            lblSon.Text = SOCROM.ScfgSectionData.SonText;
+            lblSon.Text = SOCROM.ScfgSectionData.SON;
 
             if (!string.IsNullOrEmpty(SOCROM.ScfgSectionData.RegNumText))
             {
@@ -976,7 +1031,199 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetScfgConfig() => SetClipboardText(SOCROM.ConfigCode);
 
-        private void ClipboardSetScfgOrderNo() => SetClipboardText($"{SOCROM.ScfgSectionData.SonText}{SOCROM.ScfgSectionData.RegNumText ?? string.Empty}");
+        private void ClipboardSetScfgOrderNo() => SetClipboardText($"{SOCROM.ScfgSectionData.SON}{SOCROM.ScfgSectionData.RegNumText ?? string.Empty}");
+        #endregion
+
+        #region Write Serial
+        private void WriteSocromSerialNumber(string serial)
+        {
+            Logger.Write($"{LOGSTRINGS.PATCH_START} {nameof(WriteSocromSerialNumber)} {LOGSTRINGS.SSN_REPLACE}", LogType.Application);
+
+            // Check serial length.
+            if (serial.Length != SOCROM.SERIAL_LEN)
+            {
+                Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SERIAL_LEN_INVALID} ({serial.Length})", LogType.Application);
+                NotifyPatchingFailure();
+                return;
+            }
+
+            // Check if the SerialBase exists.
+            if (SOCROM.ScfgSectionData.SerialBase == -1)
+            {
+                Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_BASE_NOT_FOUND}", LogType.Application);
+                NotifyPatchingFailure();
+                return;
+            }
+
+            // Create buffers.
+            byte[] binaryBuffer = SOCROM.LoadedBinaryBuffer;
+            byte[] newSerialBytes = Encoding.UTF8.GetBytes(serial);
+
+            // Overwrite serial number.
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, SOCROM.ScfgSectionData.SerialBase, newSerialBytes);
+
+            // Load patched scfg from the binary buffer.
+            ScfgStore scfgStoreFromBuffer = SOCROM.GetSCfgData(binaryBuffer, false);
+
+            // Verify the serial was written correctly.
+            if (!string.Equals(serial, scfgStoreFromBuffer.Serial))
+            {
+                Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_NOT_WRITTEN}", LogType.Application);
+                NotifyPatchingFailure();
+                return;
+            }
+
+            // Log success and prompt for saving the patched firmware.
+            Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {nameof(WriteSocromSerialNumber)} {LOGSTRINGS.SSN_REPLACE}", LogType.Application);
+
+            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
+            {
+                SaveOutputFirmwareSocrom(binaryBuffer);
+                return;
+            }
+
+            Logger.Write($"{nameof(WriteSocromSerialNumber)}: {LOGSTRINGS.FILE_EXPORT_CANCELLED}", LogType.Application);
+        }
+        #endregion
+
+        #region Write Scfg Store
+        private void WriteScfgStore()
+        {
+            Logger.Write($"{LOGSTRINGS.PATCH_START} {LOGSTRINGS.SCFG_REPLACE}", LogType.Application);
+
+            using (OpenFileDialog openFileDialog = CreateScfgOpenFileDialog())
+            {
+                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SCFG_IMPORT_CANCELLED}", LogType.Application);
+                    return;
+                }
+                // Check the SOCROM contains a store, otherwise set the base address.
+                int scfgBase = SOCROM.ScfgSectionData.StoreBase;
+
+                // Set the Scfg base manually.
+                if (scfgBase == -1)
+                {
+                    Logger.Write($"{LOGSTRINGS.SCFG_BASE_ADJUST} {SOCROM.SCFG_EXPECTED_BASE:X}h", LogType.Application);
+                    scfgBase = SOCROM.SCFG_EXPECTED_BASE;
+                }
+
+                byte[] newScfgBuffer = File.ReadAllBytes(openFileDialog.FileName);
+
+                if (!ValidateScfgStore(newScfgBuffer))
+                {
+                    return;
+                }
+
+                Logger.Write(LOGSTRINGS.VALIDATION_PASS, LogType.Application);
+
+                // Create buffer from loaded binary file.
+                byte[] binaryBuffer = SOCROM.LoadedBinaryBuffer;
+
+                Logger.Write(LOGSTRINGS.WRITE_NEW_DATA, LogType.Application);
+
+                // Overwrite Scfg store in the binary buffer.
+                BinaryTools.OverwriteBytesAtBase(binaryBuffer, scfgBase, newScfgBuffer);
+
+                // Load Scfg store from the binary buffer.
+                ScfgStore scfgTempStore = SOCROM.GetSCfgData(binaryBuffer, false);
+
+                // Check store was written successfully.
+                if (!BinaryTools.ByteArraysMatch(scfgTempStore.ScfgBytes, newScfgBuffer))
+                {
+                    Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_COMP_FAILED}", LogType.Application);
+                    NotifyPatchingFailure();
+                    return;
+                }
+
+                Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {LOGSTRINGS.SCFG_REPLACE}", LogType.Application);
+
+                if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
+                {
+                    SaveOutputFirmwareSocrom(binaryBuffer);
+                    return;
+                }
+
+                Logger.Write($"{nameof(WriteScfgStore)}: {LOGSTRINGS.FILE_EXPORT_CANCELLED}", LogType.Application);
+            }
+        }
+
+        private OpenFileDialog CreateScfgOpenFileDialog()
+        {
+            return new OpenFileDialog
+            {
+                InitialDirectory = METPath.SCFG_DIR,
+                Filter = APPSTRINGS.FILTER_BIN
+            };
+        }
+
+        private bool ValidateScfgStore(byte[] scfgBuffer)
+        {
+            int scfgBase = BinaryTools.GetBaseAddress(scfgBuffer, SOCROM.SCFG_HEADER_SIG);
+
+            // A serialized Scfg store should be B8h, 184 bytes length.
+            if (scfgBuffer.Length != SOCROM.SCFG_EXPECTED_LEN)
+            {
+                Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} " +
+                    $"{SOCROM.SCFG_EXPECTED_LEN:X}h ({scfgBuffer.Length:X}h)", LogType.Application);
+                NotifyPatchingFailure();
+                return false;
+            }
+
+            // Expect scfg signature at address 0h.
+            if (scfgBase != 0)
+            {
+                Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_SIG_MISALIGNED}", LogType.Application);
+                NotifyPatchingFailure();
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+
+        #region Patching IO
+        private SaveFileDialog CreateFirmwareSaveFileDialog()
+        {
+            Program.EnsureDirectoriesExist();
+
+            return new SaveFileDialog
+            {
+                Filter = APPSTRINGS.FILTER_BIN,
+                FileName = SOCROM.FileInfoData.FileName,
+                OverwritePrompt = true,
+                InitialDirectory = METPath.BUILDS_DIR
+            };
+        }
+
+        private void SaveOutputFirmwareSocrom(byte[] binaryBuffer)
+        {
+            using (SaveFileDialog saveFileDialog = CreateFirmwareSaveFileDialog())
+            {
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    Logger.Write($"{nameof(SaveOutputFirmwareSocrom)}: {LOGSTRINGS.FILE_EXPORT_CANCELLED}", LogType.Application);
+                    return;
+                }
+
+                if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, binaryBuffer) && File.Exists(saveFileDialog.FileName))
+                {
+                    Logger.Write($"{LOGSTRINGS.FILE_SAVE_SUCCESS} {saveFileDialog.FileName}", LogType.Application);
+
+                    DialogResult result =
+                        METPrompt.Show(
+                            this,
+                            DIALOGSTRINGS.FW_SAVED_SUCCESS_LOAD,
+                            METPromptType.Question,
+                            METPromptButtons.YesNo);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        OpenBinary(saveFileDialog.FileName);
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

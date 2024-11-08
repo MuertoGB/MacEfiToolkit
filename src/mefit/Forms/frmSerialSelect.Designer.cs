@@ -35,6 +35,7 @@
             this.cmdCancel = new System.Windows.Forms.Button();
             this.tlpSsn = new System.Windows.Forms.TableLayoutPanel();
             this.tbSsn = new System.Windows.Forms.TextBox();
+            this.lblValidity = new System.Windows.Forms.Label();
             this.lblWindowTitle = new System.Windows.Forms.Label();
             this.pnlSeperatorTip = new System.Windows.Forms.Panel();
             this.tlpMain.SuspendLayout();
@@ -125,30 +126,47 @@
             this.tlpSsn.ColumnCount = 1;
             this.tlpSsn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpSsn.Controls.Add(this.tbSsn, 0, 0);
+            this.tlpSsn.Controls.Add(this.lblValidity, 0, 1);
             this.tlpSsn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSsn.Location = new System.Drawing.Point(0, 0);
             this.tlpSsn.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSsn.Name = "tlpSsn";
-            this.tlpSsn.RowCount = 1;
+            this.tlpSsn.RowCount = 2;
             this.tlpSsn.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpSsn.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tlpSsn.Size = new System.Drawing.Size(308, 77);
             this.tlpSsn.TabIndex = 2;
             // 
             // tbSsn
             // 
-            this.tbSsn.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tbSsn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.tbSsn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.tbSsn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tbSsn.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.tbSsn.Font = new System.Drawing.Font("Segoe UI Semibold", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSsn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.tbSsn.Location = new System.Drawing.Point(44, 23);
+            this.tbSsn.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbSsn.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.tbSsn.Location = new System.Drawing.Point(70, 14);
+            this.tbSsn.Margin = new System.Windows.Forms.Padding(0);
             this.tbSsn.MaxLength = 12;
+            this.tbSsn.Multiline = true;
             this.tbSsn.Name = "tbSsn";
-            this.tbSsn.Size = new System.Drawing.Size(220, 31);
+            this.tbSsn.Size = new System.Drawing.Size(167, 27);
             this.tbSsn.TabIndex = 0;
             this.tbSsn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.tbSsn.TextChanged += new System.EventHandler(this.tbSsn_TextChanged);
+            // 
+            // lblValidity
+            // 
+            this.lblValidity.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblValidity.AutoSize = true;
+            this.lblValidity.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblValidity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblValidity.Location = new System.Drawing.Point(143, 46);
+            this.lblValidity.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.lblValidity.Name = "lblValidity";
+            this.lblValidity.Size = new System.Drawing.Size(21, 20);
+            this.lblValidity.TabIndex = 0;
+            this.lblValidity.Text = "...";
             // 
             // lblWindowTitle
             // 
@@ -214,5 +232,6 @@
         private System.Windows.Forms.Button cmdCancel;
         private System.Windows.Forms.Panel pnlSeperatorTip;
         private System.Windows.Forms.TableLayoutPanel tlpSsn;
+        private System.Windows.Forms.Label lblValidity;
     }
 }

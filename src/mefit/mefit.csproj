@@ -93,6 +93,8 @@
     <Compile Include="Firmware\EFI\IME.cs" />
     <Compile Include="Firmware\FirmwareVars.cs" />
     <Compile Include="Firmware\Serial.cs" />
+    <Compile Include="Forms\Prompts\Prompts.cs" />
+    <Compile Include="Forms\Types\Enums.cs" />
     <Compile Include="UI\AccentColorHelper.cs" />
     <Compile Include="UI\BlurHelper.cs" />
     <Compile Include="UI\METForm.cs">

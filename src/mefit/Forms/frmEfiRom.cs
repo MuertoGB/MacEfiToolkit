@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
+using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
 using System;
@@ -421,7 +422,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                byte[] meBytes = BinaryTools.GetBytesBaseLength(EFIROM.LoadedBinaryBytes, (int)IFD.ME_REGION_BASE, (int)IFD.ME_REGION_SIZE);
+                byte[] meBytes = BinaryTools.GetBytesBaseLength(EFIROM.LoadedBinaryBuffer, (int)IFD.ME_REGION_BASE, (int)IFD.ME_REGION_SIZE);
 
                 if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, meBytes) && File.Exists(saveFileDialog.FileName))
                 {
@@ -531,7 +532,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                FileTools.BackupFileToZip(EFIROM.LoadedBinaryBytes, EFIROM.FileInfoData.FileNameExt, saveFileDialog.FileName);
+                FileTools.BackupFileToZip(EFIROM.LoadedBinaryBuffer, EFIROM.FileInfoData.FileNameExt, saveFileDialog.FileName);
 
                 if (File.Exists(saveFileDialog.FileName))
                 {
@@ -652,12 +653,13 @@ namespace Mac_EFI_Toolkit.Forms
 
             using (frmSerialSelect child = new frmSerialSelect())
             {
+                child.Tag = SerialSenderTag.EFIROM;
                 child.FormClosed += ChildWindowClosed;
                 child.ShowDialog();
 
                 if (child.DialogResult == DialogResult.OK)
                 {
-                    WriteSerialNumber(Serial.NewValue);
+                    WriteEfiromSerialNumber(EFIROM.NewSerial);
                 }
             }
         }
@@ -714,7 +716,7 @@ namespace Mac_EFI_Toolkit.Forms
             byte[] fileBytes = File.ReadAllBytes(EFIROM.LoadedBinaryPath);
 
             // Check if the binaries match in size and data.
-            if (BinaryTools.ByteArraysMatch(fileBytes, EFIROM.LoadedBinaryBytes))
+            if (BinaryTools.ByteArraysMatch(fileBytes, EFIROM.LoadedBinaryBuffer))
             {
                 // Loaded binaries match.
                 METPrompt.Show(
@@ -766,10 +768,10 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Set the binary path and load the bytes.
             EFIROM.LoadedBinaryPath = filePath;
-            EFIROM.LoadedBinaryBytes = File.ReadAllBytes(filePath);
+            EFIROM.LoadedBinaryBuffer = File.ReadAllBytes(filePath);
 
             // Check if the image is what we're looking for.
-            if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBytes))
+            if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBuffer))
             {
                 METPrompt.Show(
                     this,
@@ -799,7 +801,7 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            EFIROM.LoadFirmwareBaseData(EFIROM.LoadedBinaryBytes, filePath);
+            EFIROM.LoadFirmwareBaseData(EFIROM.LoadedBinaryBuffer, filePath);
 
             if (cancellationToken.IsCancellationRequested)
             {
@@ -1356,27 +1358,9 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private DialogResult ShowPatchFailedPrompt()
-        {
-            return METPrompt.Show(
-                this,
-                EFISTRINGS.FIRMWARE_MOD_FAILED_LOG,
-                METPromptType.Warning,
-                METPromptButtons.YesNo);
-        }
-
-        private DialogResult ShowPathSuccessPrompt()
-        {
-            return METPrompt.Show(
-                this,
-                EFISTRINGS.FIRMWARE_MOD_SUCCESS_SAVE,
-                METPromptType.Question,
-                METPromptButtons.YesNo);
-        }
-
         private void NotifyPatchingFailure()
         {
-            if (ShowPatchFailedPrompt() == DialogResult.Yes)
+            if (Prompts.ShowPatchFailedPrompt(this) == DialogResult.Yes)
             {
                 Logger.OpenLogFile(this);
             }
@@ -1538,11 +1522,19 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Edit Serial
-        private void WriteSerialNumber(string serial)
+        private void WriteEfiromSerialNumber(string serial)
         {
-            Logger.Write($"{LOGSTRINGS.PATCH_START} {LOGSTRINGS.SSN_REPLACE}", LogType.Application);
+            Logger.Write($"{LOGSTRINGS.PATCH_START} {nameof(WriteEfiromSerialNumber)} {LOGSTRINGS.SSN_REPLACE}", LogType.Application);
 
-            // Check if the SerialBase exists
+            // Check serial length.
+            if (serial.Length != 11 || serial.Length != 12)
+            {
+                Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SERIAL_LEN_INVALID} ({serial.Length})", LogType.Application);
+                NotifyPatchingFailure();
+                return;
+            }
+
+            // Check if the SerialBase exists.
             if (EFIROM.FsysStoreData.SerialBase == -1)
             {
                 Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_BASE_NOT_FOUND}", LogType.Application);
@@ -1551,10 +1543,10 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             bool isHwcBasePresent = EFIROM.FsysStoreData.HWCBase != -1;
-            byte[] binaryBuffer = EFIROM.LoadedBinaryBytes;
+            byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(serial);
 
-            // Overwrite serial in the binary buffer
+            // Overwrite serial in the binary buffer.
             BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.FsysStoreData.SerialBase, newSerialBytes);
 
             string newHwc = null;
@@ -1568,48 +1560,48 @@ namespace Mac_EFI_Toolkit.Forms
                 BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.FsysStoreData.HWCBase, newHwcBytes);
             }
 
-            // Load patched fsys from the binary buffer
-            FsysStore fsysBuffer = EFIROM.GetFsysStoreData(binaryBuffer, false);
+            // Load patched fsys from the binary buffer.
+            FsysStore fsysStoreFromBuffer = EFIROM.GetFsysStoreData(binaryBuffer, false);
 
-            // Verify the serial was written correctly
-            if (!string.Equals(serial, fsysBuffer.Serial))
+            // Verify the serial was written correctly.
+            if (!string.Equals(serial, fsysStoreFromBuffer.Serial))
             {
                 Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_NOT_WRITTEN}", LogType.Application);
                 NotifyPatchingFailure();
                 return;
             }
 
-            // Verify the HWC was written correctly, if applicable
-            if (isHwcBasePresent && fsysBuffer.HWCBase != 0 && !string.Equals(newHwc, fsysBuffer.HWC))
+            // Verify the HWC was written correctly, if applicable.
+            if (isHwcBasePresent && fsysStoreFromBuffer.HWCBase != 0 && !string.Equals(newHwc, fsysStoreFromBuffer.HWC))
             {
                 Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.HWC_NOT_WRITTEN}", LogType.Application);
                 NotifyPatchingFailure();
                 return;
             }
 
-            // Patch fsys checksum in the binary buffer
-            binaryBuffer = EFIROM.MakeFsysCrcPatchedBinary(binaryBuffer, fsysBuffer.FsysBase, fsysBuffer.FsysBytes, fsysBuffer.CRC32CalcInt);
+            // Patch fsys checksum in the binary buffer.
+            binaryBuffer = EFIROM.MakeFsysCrcPatchedBinary(binaryBuffer, fsysStoreFromBuffer.FsysBase, fsysStoreFromBuffer.FsysBytes, fsysStoreFromBuffer.CRC32CalcInt);
 
-            // Reload fsys store from the binary buffer and verify CRC masking success
-            fsysBuffer = EFIROM.GetFsysStoreData(binaryBuffer, false);
+            // Reload fsys store from the binary buffer and verify CRC masking success.
+            fsysStoreFromBuffer = EFIROM.GetFsysStoreData(binaryBuffer, false);
 
-            if (!string.Equals(fsysBuffer.CrcString, fsysBuffer.CrcCalcString))
+            if (!string.Equals(fsysStoreFromBuffer.CrcString, fsysStoreFromBuffer.CrcCalcString))
             {
                 Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.FSYS_SUM_MASK_FAIL}", LogType.Application);
                 NotifyPatchingFailure();
                 return;
             }
 
-            // Log success and prompt for saving the patched firmware
-            Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {LOGSTRINGS.SSN_REPLACE}", LogType.Application);
+            // Log success and prompt for saving the patched firmware.
+            Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {nameof(WriteEfiromSerialNumber)} {LOGSTRINGS.SSN_REPLACE}", LogType.Application);
 
-            if (ShowPathSuccessPrompt() == DialogResult.Yes)
+            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
-                SaveOutputFirmware(binaryBuffer);
+                SaveOutputFirmwareEfirom(binaryBuffer);
                 return;
             }
 
-            Logger.Write($"{nameof(WriteSerialNumber)}: {LOGSTRINGS.FILE_EXPORT_CANCELLED}", LogType.Application);
+            Logger.Write($"{nameof(WriteEfiromSerialNumber)}: {LOGSTRINGS.FILE_EXPORT_CANCELLED}", LogType.Application);
         }
         #endregion
 
@@ -1618,7 +1610,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Logger.Write($"{LOGSTRINGS.PATCH_START} {LOGSTRINGS.NVRAM_ERASE}", LogType.Application);
 
-            byte[] binaryBuffer = EFIROM.LoadedBinaryBytes;
+            byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
 
             if (resetVss)
             {
@@ -1656,9 +1648,9 @@ namespace Mac_EFI_Toolkit.Forms
 
             Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {LOGSTRINGS.NVRAM_ERASE}", LogType.Application);
 
-            if (ShowPathSuccessPrompt() == DialogResult.Yes)
+            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
-                SaveOutputFirmware(binaryBuffer);
+                SaveOutputFirmwareEfirom(binaryBuffer);
                 return;
             }
 
@@ -1869,15 +1861,14 @@ namespace Mac_EFI_Toolkit.Forms
                 }
 
                 Logger.Write(LOGSTRINGS.VALIDATION_PASS, LogType.Application);
-                FsysStore fsysTempBuffer = EFIROM.GetFsysStoreData(newFsysBuffer, true);
-                LogFsysStoreDetails(fsysTempBuffer);
+                FsysStore fsysTempStore = EFIROM.GetFsysStoreData(newFsysBuffer, true);
 
-                if (!ValidateFsysCrc(fsysTempBuffer, ref newFsysBuffer))
+                if (!ValidateFsysCrc(fsysTempStore, ref newFsysBuffer))
                 {
                     return;
                 }
 
-                byte[] binaryBuffer = EFIROM.LoadedBinaryBytes;
+                byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
 
                 if (!WriteNewFsysStore(binaryBuffer, newFsysBuffer))
                 {
@@ -1886,9 +1877,9 @@ namespace Mac_EFI_Toolkit.Forms
 
                 Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {LOGSTRINGS.FSYS_REPLACE}", LogType.Application);
 
-                if (ShowPathSuccessPrompt() == DialogResult.Yes)
+                if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
                 {
-                    SaveOutputFirmware(binaryBuffer);
+                    SaveOutputFirmwareEfirom(binaryBuffer);
                     return;
                 }
 
@@ -1909,15 +1900,16 @@ namespace Mac_EFI_Toolkit.Forms
         {
             int fsysBase = BinaryTools.GetBaseAddress(fsysBuffer, EFIROM.FSYS_SIG);
 
+            // Fsys store length should equal 800h, 2048 bytes.
             if (fsysBuffer.Length != EFIROM.FSYS_RGN_SIZE)
             {
                 Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} " +
-                    $"{EFIROM.FSYS_RGN_SIZE:X2}h ({fsysBuffer.Length:X2}h)", LogType.Application);
-
+                    $"{EFIROM.FSYS_RGN_SIZE:X}h ({fsysBuffer.Length:X}h)", LogType.Application);
                 NotifyPatchingFailure();
                 return false;
             }
 
+            // Expect Fsys signature at 0h.
             if (fsysBase != 0)
             {
                 Logger.Write($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_SIG_MISALIGNED}", LogType.Application);
@@ -1956,6 +1948,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private bool WriteNewFsysStore(byte[] binaryBuffer, byte[] newFsysBuffer)
         {
+            Logger.Write(LOGSTRINGS.WRITE_NEW_DATA, LogType.Application);
+
             BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.FsysStoreData.FsysBase, newFsysBuffer);
             FsysStore fsysTempBuffer = EFIROM.GetFsysStoreData(binaryBuffer, false);
 
@@ -1968,12 +1962,6 @@ namespace Mac_EFI_Toolkit.Forms
 
             return true;
         }
-
-        private void LogFsysStoreDetails(FsysStore fsysBuffer)
-        {
-            Logger.Write($"{LOGSTRINGS.NEW_SERIAL} {fsysBuffer.Serial} | {LOGSTRINGS.LENGTH} {fsysBuffer.Serial.Length}", LogType.Application);
-            Logger.Write($"{LOGSTRINGS.NEW_HWC} {fsysBuffer.HWC} | {LOGSTRINGS.LENGTH} {fsysBuffer.HWC.Length}", LogType.Application);
-        }
         #endregion
 
         #region Fix Fsys Checksum
@@ -1984,7 +1972,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Make binary with patched Fsys crc.
             byte[] binaryBuffer =
                 EFIROM.MakeFsysCrcPatchedBinary(
-                    EFIROM.LoadedBinaryBytes,
+                    EFIROM.LoadedBinaryBuffer,
                     EFIROM.FsysStoreData.FsysBase,
                     EFIROM.FsysStoreData.FsysBytes,
                     EFIROM.FsysStoreData.CRC32CalcInt);
@@ -1998,9 +1986,9 @@ namespace Mac_EFI_Toolkit.Forms
 
             Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {LOGSTRINGS.CRC_MASK}", LogType.Application);
 
-            if (ShowPathSuccessPrompt() == DialogResult.Yes)
+            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
-                SaveOutputFirmware(binaryBuffer);
+                SaveOutputFirmwareEfirom(binaryBuffer);
                 return;
             }
 
@@ -2035,7 +2023,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.Write(LOGSTRINGS.CREATING_BUFFERS, LogType.Application);
 
             // Create buffers.
-            byte[] binaryBuffer = EFIROM.LoadedBinaryBytes;
+            byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
             byte[] unlockedPrimaryStore = null;
             byte[] unlockedBackupStore = null;
 
@@ -2044,7 +2032,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Create a patched primary store.
             unlockedPrimaryStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsStoreData.PrimaryStoreBytes, EFIROM.EfiPrimaryLockData.LockCrcBase);
 
-            Logger.Write(LOGSTRINGS.LOCK_WRITE, LogType.Application);
+            Logger.Write(LOGSTRINGS.WRITE_NEW_DATA, LogType.Application);
 
             // Write patched primary store the buffer.
             BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsStoreData.PrimaryStoreBase, unlockedPrimaryStore);
@@ -2057,7 +2045,7 @@ namespace Mac_EFI_Toolkit.Forms
                 // A MAC CRC base was found in the backup store so we need to patch it.
                 unlockedBackupStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsStoreData.BackupStoreBytes, EFIROM.EfiBackupLockData.LockCrcBase);
 
-                Logger.Write(LOGSTRINGS.LOCK_WRITE, LogType.Application);
+                Logger.Write(LOGSTRINGS.WRITE_NEW_DATA, LogType.Application);
 
                 // Write patched backup store to the buffer.
                 BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsStoreData.BackupStoreBase, unlockedBackupStore);
@@ -2089,9 +2077,9 @@ namespace Mac_EFI_Toolkit.Forms
 
             Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {LOGSTRINGS.LOCK_INVALIDATE}", LogType.Application);
 
-            if (ShowPathSuccessPrompt() == DialogResult.Yes)
+            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
-                SaveOutputFirmware(binaryBuffer);
+                SaveOutputFirmwareEfirom(binaryBuffer);
                 return;
             }
 
@@ -2125,7 +2113,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 Logger.Write($"{LOGSTRINGS.IME_VERSION} {imeVersion ?? APPSTRINGS.NOT_FOUND}", LogType.Application);
 
-                byte[] binaryBuffer = EFIROM.LoadedBinaryBytes;
+                byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
 
                 if (!WriteMeRegion(imeBuffer, binaryBuffer))
                 {
@@ -2134,9 +2122,9 @@ namespace Mac_EFI_Toolkit.Forms
 
                 Logger.Write($"{LOGSTRINGS.PATCH_SUCCESS} {LOGSTRINGS.IME_REPLACE}", LogType.Application);
 
-                if (ShowPathSuccessPrompt() == DialogResult.Yes)
+                if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
                 {
-                    SaveOutputFirmware(binaryBuffer);
+                    SaveOutputFirmwareEfirom(binaryBuffer);
                     return;
                 }
 
@@ -2214,13 +2202,13 @@ namespace Mac_EFI_Toolkit.Forms
             };
         }
 
-        private void SaveOutputFirmware(byte[] binaryBuffer)
+        private void SaveOutputFirmwareEfirom(byte[] binaryBuffer)
         {
             using (SaveFileDialog saveFileDialog = CreateFirmwareSaveFileDialog())
             {
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
                 {
-                    Logger.Write($"{LOGSTRINGS.FILE_EXPORT_CANCELLED}", LogType.Application);
+                    Logger.Write($"{nameof(SaveOutputFirmwareEfirom)}: {LOGSTRINGS.FILE_EXPORT_CANCELLED}", LogType.Application);
                     return;
                 }
 

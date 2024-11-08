@@ -17,7 +17,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
     {
         #region Internal Members
         internal static string LoadedBinaryPath = null;
-        internal static byte[] LoadedBinaryBytes = null;
+        internal static byte[] LoadedBinaryBuffer = null;
         internal static bool FirmwareLoaded = false;
         internal static string FirmwareVersion = null;
         internal static string ConfigCode = null;
@@ -27,6 +27,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static bool bResetVss = false;
         internal static bool bResetSvs = false;
+        internal static string NewSerial = null;
 
         internal static FileInfoStore FileInfoData;
         internal static PdrSection PdrSectionData;
@@ -129,16 +130,16 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             EfiBiosIdSectionData = GetEfiBiosIdSectionData(sourceBytes);
 
             // Check if the firmware is APFS capable.
-            IsApfsCapable = GetIsApfsCapable(LoadedBinaryBytes);
+            IsApfsCapable = GetIsApfsCapable(LoadedBinaryBuffer);
 
             // Generate a proper EFI version string.
             FirmwareVersion = MacTools.GetFirmwareVersion();
 
             // Get the Intel ME Flash Image Tool version.
-            FitVersion = IME.GetVersionData(LoadedBinaryBytes, VersionType.FlashImageTool);
+            FitVersion = IME.GetVersionData(LoadedBinaryBuffer, VersionType.FlashImageTool);
 
             // Get the Intel ME version.
-            MeVersion = IME.GetVersionData(LoadedBinaryBytes, VersionType.ManagementEngine);
+            MeVersion = IME.GetVersionData(LoadedBinaryBuffer, VersionType.ManagementEngine);
 
             stopwatch.Stop();
             tsParseTime = stopwatch.Elapsed;
@@ -147,7 +148,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static void ResetFirmwareBaseData()
         {
             LoadedBinaryPath = null;
-            LoadedBinaryBytes = null;
+            LoadedBinaryBuffer = null;
             FirmwareLoaded = false;
             FirmwareVersion = null;
             ConfigCode = null;
@@ -157,6 +158,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             bResetVss = false;
             bResetSvs = false;
+            NewSerial = null;
 
             FileInfoData = default;
             PdrSectionData = default;
@@ -168,8 +170,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             AppleRomInfoSectionData = default;
             EfiBiosIdSectionData = default;
             IsApfsCapable = ApfsCapable.Unknown;
-
-            Serial.NewValue = string.Empty;
 
             FSYS_RGN_SIZE = 0;
             NVRAM_BASE = -1;
@@ -441,7 +441,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             {
                 return DefaultFsysRegion();
             }
-
 
             // Retrieve CRC bytes and calculate CRC values.
             byte[] crcBytes = GetCrcBytes(sourceBytes, fsysBaseAddress);

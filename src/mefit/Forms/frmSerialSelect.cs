@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
+using Mac_EFI_Toolkit.Firmware.SOCROM;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -34,9 +35,24 @@ namespace Mac_EFI_Toolkit.Forms
         #region Window Events
         private void frmSerialSelect_Load(object sender, EventArgs e)
         {
-            Serial.NewValue = string.Empty;
-            tbSsn.MaxLength = EFIROM.FsysStoreData.Serial.Length;
+            SetSerialLength();
+            UpdateValidityLabel();
             tbSsn.Select();
+        }
+
+        private void SetSerialLength()
+        {
+            if (Tag is SerialSenderTag.EFIROM)
+            {
+                tbSsn.MaxLength = EFIROM.FsysStoreData.Serial.Length;
+                return;
+            }
+
+            if (Tag is SerialSenderTag.SOCROM)
+            {
+                tbSsn.MaxLength = SOCROM.SERIAL_LEN;
+                return;
+            }
         }
         #endregion
 
@@ -55,7 +71,15 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
-            Serial.NewValue = tbSsn.Text;
+            if (Tag is SerialSenderTag.EFIROM)
+            {
+                EFIROM.NewSerial = tbSsn.Text;
+            }
+            else if (Tag is SerialSenderTag.SOCROM)
+            {
+                SOCROM.NewSerial = tbSsn.Text;
+            }
+
             DialogResult = DialogResult.OK;
         }
         #endregion
@@ -66,7 +90,11 @@ namespace Mac_EFI_Toolkit.Forms
             TextBox textBox = (TextBox)sender;
             int charLength = textBox.Text.Length;
 
-            if (charLength == EFIROM.FsysStoreData.Serial.Length)
+            // Update the validity label each time the text changes
+            UpdateValidityLabel();
+
+            // Check if the character length matches the expected serial length
+            if (charLength == tbSsn.MaxLength)
             {
                 if (Serial.IsValid(textBox.Text))
                 {
@@ -76,6 +104,7 @@ namespace Mac_EFI_Toolkit.Forms
                 else
                 {
                     UpdateTextBoxColour(textBox, AppColours.ERROR);
+                    lblValidity.Text += $" - {APPSTRINGS.INVALID}";
                     cmdOkay.Enabled = false;
                 }
             }
@@ -89,6 +118,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region UI Events
         private void UpdateTextBoxColour(TextBox control, Color color) => control.ForeColor = color;
+
+        private void UpdateValidityLabel()
+        {
+            lblValidity.Text = $"{tbSsn.Text.Length}/{tbSsn.MaxLength}";
+        }
         #endregion
     }
 }

@@ -19,14 +19,6 @@ namespace Mac_EFI_Toolkit.Forms
 {
     public partial class frmStartup : METForm
     {
-        #region Enums
-        private enum FormTag
-        {
-            Firmware,
-            Other
-        }
-        #endregion
-
         #region Public Members
         public string loadedFile = string.Empty;
         #endregion
@@ -184,7 +176,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             using (Form child = new frmSettings())
             {
-                child.Tag = FormTag.Other;
+                child.Tag = StartupSenderTag.Other;
                 child.FormClosed += ChildWindowClosed;
                 child.ShowDialog();
             }
@@ -196,7 +188,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             using (Form child = new frmAbout())
             {
-                child.Tag = FormTag.Other;
+                child.Tag = StartupSenderTag.Other;
                 child.FormClosed += ChildWindowClosed;
                 child.ShowDialog();
             }
@@ -333,7 +325,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (sender is Form closedForm)
             {
-                if (closedForm.Tag is FormTag formTag && formTag == FormTag.Firmware)
+                if (closedForm.Tag is StartupSenderTag formTag && formTag == StartupSenderTag.Firmware)
                 {
                     if (_childWindowCount > 0)
                     {
@@ -393,7 +385,7 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateWindowTitle();
 
             // Configure child.
-            childForm.Tag = FormTag.Firmware;
+            childForm.Tag = StartupSenderTag.Firmware;
             childForm.FormClosed += ChildWindowClosed;
             childForm.Location = new Point(this.Location.X + (this.Width - childForm.Width) / 2, this.Location.Y + (this.Height - childForm.Height) / 2);
             childForm.Owner = this;

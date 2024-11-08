@@ -86,8 +86,6 @@
             this.scfgBaseAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scfgSizeDecimalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scfgSizeHexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.scfgCRC32ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serialToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -967,15 +965,13 @@
             this.scfgBaseAddressToolStripMenuItem,
             this.scfgSizeDecimalToolStripMenuItem,
             this.scfgSizeHexToolStripMenuItem,
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem1,
             this.scfgCRC32ToolStripMenuItem,
             this.serialToolStripMenuItem,
             this.configToolStripMenuItem,
             this.orderNoToolStripMenuItem});
             this.cmsCopy.Name = "cmsCopy";
             this.cmsCopy.ShowImageMargin = false;
-            this.cmsCopy.Size = new System.Drawing.Size(199, 430);
+            this.cmsCopy.Size = new System.Drawing.Size(199, 402);
             // 
             // filenameToolStripMenuItem
             // 
@@ -1053,22 +1049,6 @@
             this.scfgSizeHexToolStripMenuItem.Size = new System.Drawing.Size(198, 28);
             this.scfgSizeHexToolStripMenuItem.Text = "Scfg Size (Hex)";
             this.scfgSizeHexToolStripMenuItem.Click += new System.EventHandler(this.scfgSizeHexToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(198, 28);
-            this.toolStripMenuItem2.Text = "Scfg CRC32";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.scfgCRC32ToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(198, 28);
-            this.toolStripMenuItem1.Text = "Serial";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.serialToolStripMenuItem_Click);
             // 
             // scfgCRC32ToolStripMenuItem
             // 
@@ -1254,23 +1234,23 @@
             this.replaceScfgStoreToolStripMenuItem});
             this.cmsPatch.Name = "cmsPatch";
             this.cmsPatch.ShowImageMargin = false;
-            this.cmsPatch.Size = new System.Drawing.Size(229, 88);
+            this.cmsPatch.Size = new System.Drawing.Size(229, 60);
             // 
             // changeSerialNumberToolStripMenuItem
             // 
-            this.changeSerialNumberToolStripMenuItem.Enabled = false;
             this.changeSerialNumberToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.changeSerialNumberToolStripMenuItem.Name = "changeSerialNumberToolStripMenuItem";
             this.changeSerialNumberToolStripMenuItem.Size = new System.Drawing.Size(228, 28);
             this.changeSerialNumberToolStripMenuItem.Text = "Change Serial Number";
+            this.changeSerialNumberToolStripMenuItem.Click += new System.EventHandler(this.changeSerialNumberToolStripMenuItem_Click);
             // 
             // replaceScfgStoreToolStripMenuItem
             // 
-            this.replaceScfgStoreToolStripMenuItem.Enabled = false;
             this.replaceScfgStoreToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
             this.replaceScfgStoreToolStripMenuItem.Name = "replaceScfgStoreToolStripMenuItem";
             this.replaceScfgStoreToolStripMenuItem.Size = new System.Drawing.Size(228, 28);
-            this.replaceScfgStoreToolStripMenuItem.Text = "Replace Scfg Store";
+            this.replaceScfgStoreToolStripMenuItem.Text = "Write New Scfg Store";
+            this.replaceScfgStoreToolStripMenuItem.Click += new System.EventHandler(this.replaceScfgStoreToolStripMenuItem_Click);
             // 
             // frmSocRom
             // 
@@ -1394,8 +1374,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem lookupSerialNumberEveryMacToolStripMenuItem;
         private UI.METContextMenuStrip cmsPatch;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem changeSerialNumberToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem replaceScfgStoreToolStripMenuItem;
     }

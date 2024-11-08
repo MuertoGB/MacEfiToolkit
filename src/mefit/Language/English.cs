@@ -48,6 +48,9 @@ namespace Mac_EFI_Toolkit
         internal const string SHOW =
             "Show";
 
+        internal const string INVALID =
+            "Invalid";
+
         internal const string CONTACT_SERVER =
             "Contacting Server...";
 
@@ -135,7 +138,7 @@ namespace Mac_EFI_Toolkit
             "Expected store size is not";
 
         internal const string STORE_SIG_MISALIGNED =
-            "Store signature misaligned";
+            "Store signature misaligned or not found";
 
         internal const string NEW_SERIAL =
             "New serial:";
@@ -186,7 +189,7 @@ namespace Mac_EFI_Toolkit
             "Serial number base address was not found";
 
         internal const string SSN_NOT_WRITTEN =
-            "New serial could not be written";
+            "Serial number did not match the patched binary";
 
         internal const string HWC_NOT_WRITTEN =
             "New hardware configuration (HWC) could not be written";
@@ -278,8 +281,8 @@ namespace Mac_EFI_Toolkit
         internal const string LOCK_PRIMARY_MAC =
             "Patching primary message authentication code";
 
-        internal const string LOCK_WRITE =
-            "Writing patched store to firmware";
+        internal const string WRITE_NEW_DATA =
+            "Writing new data to firmware";
 
         internal const string LOCK_BACKUP_MAC =
             "Patching backup message authentication code";
@@ -292,6 +295,18 @@ namespace Mac_EFI_Toolkit
 
         internal const string LOCK_BACK_VERIF_FAIL =
             "Backup SVS store verification failed";
+
+        internal const string SCFG_IMPORT_CANCELLED =
+            "An Scfg store was not provided";
+
+        internal const string SERIAL_LEN_INVALID =
+            "Serial length invalid";
+
+        internal const string SCFG_REPLACE =
+            "Replace Scfg store";
+
+        internal const string SCFG_BASE_ADJUST =
+            "Scfg base not found - adjusted to";
         #endregion
     }
 

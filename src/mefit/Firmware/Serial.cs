@@ -11,10 +11,6 @@ namespace Mac_EFI_Toolkit.Firmware
 {
     internal class Serial
     {
-        #region Internal Members
-        internal static string NewValue = string.Empty;
-        #endregion
-
         #region Serial Validation
         /// <summary>
         /// Checks if a given input string contains only valid characters for a serial number.
@@ -72,6 +68,12 @@ namespace Mac_EFI_Toolkit.Firmware
 
         private static bool IsValid11CharSerial(string serialNumber)
         {
+            // Check if the last three digits are the same.
+            if (serialNumber.Substring(8, 3) == new string(serialNumber[8], 3))
+            {
+                return false;
+            }
+
             string yearCode = serialNumber.Substring(2, 1);
             string weekCode = serialNumber.Substring(3, 2);
 
@@ -80,6 +82,12 @@ namespace Mac_EFI_Toolkit.Firmware
 
         private static bool IsValid12CharSerial(string serialNumber)
         {
+            // Check if the last four digits are the same.
+            if (serialNumber.Substring(8, 4) == new string(serialNumber[8], 4))
+            {
+                return false;
+            }
+
             string yearCode = serialNumber.Substring(3, 1);
             string weekCode = serialNumber.Substring(4, 1);
 
@@ -90,6 +98,7 @@ namespace Mac_EFI_Toolkit.Firmware
         {
             return knownCodes.Contains(code);
         }
+
         #endregion
 
         #region Hashsets

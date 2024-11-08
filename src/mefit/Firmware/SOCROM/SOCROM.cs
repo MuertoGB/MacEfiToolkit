@@ -15,15 +15,19 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
     {
         #region Internal Members
         internal static string LoadedBinaryPath = null;
-        internal static byte[] LoadedBinaryBytes = null;
+        internal static byte[] LoadedBinaryBuffer = null;
         internal static bool FirmwareLoaded = false;
 
         internal static string iBootVersion = null;
         internal static string ConfigCode = null;
+        internal static string NewSerial = null;
+
         internal static FileInfoStore FileInfoData;
         internal static ScfgStore ScfgSectionData;
 
         internal const int SCFG_EXPECTED_BASE = 0x28A000;
+        internal const int SCFG_EXPECTED_LEN = 0xB8;
+        internal const int SERIAL_LEN = 12;
 
         internal static TimeSpan tsParseTime { get; private set; }
         #endregion
@@ -47,7 +51,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             iBootVersion = GetIbootVersion(sourceBytes);
 
             // Parse Scfg Store data.
-            ScfgSectionData = GetSCfgData(sourceBytes);
+            ScfgSectionData = GetSCfgData(sourceBytes, false);
 
             // Fetch the Config Code.
             ConfigCode = ScfgSectionData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(ScfgSectionData.HWC) : null;
@@ -59,18 +63,18 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         internal static void ResetFirmwareBaseData()
         {
             LoadedBinaryPath = null;
-            LoadedBinaryBytes = null;
+            LoadedBinaryBuffer = null;
             FirmwareLoaded = false;
             FileInfoData = default;
             iBootVersion = null;
             ConfigCode = null;
+            NewSerial = null;
             ScfgSectionData = default;
-            Serial.NewValue = string.Empty;
         }
 
-        internal static bool IsValidImage(byte[] source)
+        internal static bool IsValidImage(byte[] sourceBytes)
         {
-            return (BinaryTools.GetBaseAddress(source, IBOOT_VER_SIG, 0) != -1);
+            return (BinaryTools.GetBaseAddress(sourceBytes, IBOOT_VER_SIG, 0) != -1);
         }
         #endregion
 
@@ -97,47 +101,60 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         }
         #endregion
 
-        #region SCfg
-        internal static ScfgStore GetSCfgData(byte[] source)
+        #region Scfg Store
+        internal static ScfgStore GetSCfgData(byte[] sourceBytes, bool isScfgStoreOnly)
         {
-            int scfgBase = BinaryTools.GetBaseAddress(source, SCFG_HEADER_SIG);
+            int scfgBase = FindScfgBaseAddress(sourceBytes, isScfgStoreOnly);
 
             if (scfgBase == -1)
             {
                 return DefaultScfgData();
             }
 
-            byte dataSize = BinaryTools.GetBytesBaseLength(source, scfgBase + SCFG_HEADER_SIG.Length, 1)[0];
+            byte dataSize = BinaryTools.GetBytesBaseLength(sourceBytes, scfgBase + SCFG_HEADER_SIG.Length, 1)[0];
 
             if (dataSize == 0)
             {
                 return DefaultScfgData();
             }
 
-            byte[] scfgBytes = BinaryTools.GetBytesBaseLength(source, scfgBase, dataSize);
+            byte[] scfgBytes = BinaryTools.GetBytesBaseLength(sourceBytes, scfgBase, dataSize);
 
             if (scfgBytes == null)
             {
                 return DefaultScfgData();
             }
 
-            string crc = $"{FileTools.GetCrc32Digest(scfgBytes):X8}";
+            int serialBase = BinaryTools.GetBaseAddress(sourceBytes, SCFG_SSN_SIG) + SCFG_SSN_SIG.Length;
+
             string serial = GetStringFromSig(scfgBytes, SCFG_SSN_SIG, _serialLength, out string hwc);
             string son = GetStringFromSigWithLimit(scfgBytes, SCFG_SON_SIG, _limitChars);
             string regno = GetStringFromSigWithLimit(scfgBytes, SCFG_SON_REGN, _limitChars);
+            string crc = $"{FileTools.GetCrc32Digest(scfgBytes):X8}";
 
             return new ScfgStore
             {
                 StoreBase = scfgBase,
                 StoreSize = dataSize,
                 ScfgBytes = scfgBytes,
-                ScfgCrc = crc,
-                SerialText = serial,
+                Serial = serial,
+                SerialBase = serialBase,
                 HWC = hwc,
-                SonText = son,
+                SON = son,
+                ScfgCrc = crc,
                 MdlC = null,
                 RegNumText = regno
             };
+        }
+
+        private static int FindScfgBaseAddress(byte[] sourceBytes, bool isScfgStoreOnly)
+        {
+            if (isScfgStoreOnly)
+            {
+                return 0;
+            }
+
+            return BinaryTools.GetBaseAddress(sourceBytes, SCFG_HEADER_SIG);
         }
 
         private static string GetStringFromSig(byte[] scfgBytes, byte[] sig, int expectedLength, out string hwc)
@@ -196,9 +213,9 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 StoreSize = 0,
                 ScfgBytes = null,
                 ScfgCrc = null,
-                SerialText = null,
+                Serial = null,
                 HWC = null,
-                SonText = null,
+                SON = null,
                 MdlC = null,
                 RegNumText = null
             };
