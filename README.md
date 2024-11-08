@@ -89,12 +89,12 @@ Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in anal
   - Export and replace the Scfg store
   - Export firmware information to a text file
 
-
 ## Download
 
-| Version| Release Date| Latest | Channel |
-|--------|-------------|--------|---------|
-|[2.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set, 2024 | Yes | Stable |
+| Version| Build | Release Date| Latest | Channel |
+|--------|-------|-------------|--------|---------|
+|[2.0.0](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| Not Set | Not Set | Yes | Stable |
+|[1.1.5](https://github.com/MuertoGB/MacEfiToolkit/releases/tag/115)| 241018.1450 | 10th October, 2024 | No | Stable |
 
 > 📋 View the full changelog [here](CHANGELOG.md)
 
@@ -118,9 +118,9 @@ TODO - The original manual is outdated, and being rewritten.
 
 **This software uses the following third party libraries, or resources:-**
 
-LZMA [v22.01 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.\
+LZMA [v24.08 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.\
 The [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and  Vaughan Pratt.\
-[MacModelShelf](https://github.com/MagerValp/MacModelShelf) database, by MagerValp.\
+[MacModelShelf](https://github.com/MagerValp/MacModelShelf) database by MagerValp.\
 Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
 
 ## Donate

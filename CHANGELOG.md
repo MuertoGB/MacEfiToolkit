@@ -16,7 +16,7 @@
 ## Version 2.0.0
 
 #### New
-- User interface redesigned for improved usability, with an new application icon.
+- User interface redesigned for improved usability, with a new application icon.
 - The application now supports Intel T2 SOCROM firmware.
 - Added capability to open multiple firmwares simultaneously.
 - Startup Window: Introduced a new startup window where users can drag and drop or browse for a compatible EFIROM or T2 SOCROM. The main window is now dedicated to EFIROM, with some functions moved to the startup window.
@@ -60,7 +60,8 @@
   - Removed single-click copy functionality for labels and reset their cursors to default to better align with UI design best practices.
   - Removed display of private memory usage to improve compatibility with Wine.
   - Removed NSS store details and NVRAM store tips.
-  - Disabled option to turn off LZMA decompression, as it is required for APFS compatibility detection.
+- Settings Adjustments:
+  - Removed option to disable LZMA decompression, as it is required for APFS compatibility detection.
 
 ## Version 1.1.5
 
