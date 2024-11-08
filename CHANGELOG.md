@@ -29,7 +29,7 @@
   - Structured File Naming: Added an option to automatically generate a structured file name for the loaded firmware and copy it to the clipboard.
   - Firmware Export Options: Users can now export firmware information to a text file, as well as export NVRAM stores.
   - Address Copying: Added options to copy the Fsys store base address and NVRAM VSS and SVS base addresses.
-  - NVRAM Data: The window now displays base addresses of primary stores and whether they are empty.
+  - NVRAM Data: The window now displays base addresses of primary stores and whether they are empty, or active.
   - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
   - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
 - Updated LZMA SDK to version 24.08.
