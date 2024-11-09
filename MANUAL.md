@@ -1,6 +1,6 @@
 <h4 align="center">Mac EFI Toolkit Manual</h4>
 <p align="center">
-  <a href="#efirom-windows">EFIROM Window</a> •
+  <a href="#efirom-window">EFIROM Window</a> •
   <a href="#socrom-window">SOCROM Window</a>
 </p>
 
