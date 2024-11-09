@@ -18,7 +18,7 @@ Welcome to the **Mac EFI Toolkit** (also known as **mefit**). This application i
   - Windows 10 (32/64-bit)
   - Windows 8/8.1 (32/64-bit)
   - Windows 7 (32/64-bit)
-  - **mefit** is compatible with Wine
+  - **mefit** is compatible with [Wine](https://www.winehq.org/)
 
 - **Internet Connectivity** (required for specific features):
   - Receiving notifications about new versions (can be disabled in settings).
