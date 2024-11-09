@@ -1295,6 +1295,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(610, 492);
             this.MinimumSize = new System.Drawing.Size(610, 492);
             this.Name = "frmSocRom";
             this.Padding = new System.Windows.Forms.Padding(1);

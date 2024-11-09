@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241108.0315";
+        internal const string APP_BUILD = "241109.2100";
         internal const string APP_CHANNEL = "BETA";
     }
 
@@ -139,9 +139,6 @@ namespace Mac_EFI_Toolkit
             // Retrieve a file path from command-line.
             draggedFilePath = GetDraggedFilePath(args);
 
-            // Register a low-level keyboard hook to disable Win+Up.
-            KeyboardHookManager.Hook();
-
             // Ensure that required application directories exist; create them if they don't.
             EnsureDirectoriesExist();
 
@@ -166,9 +163,6 @@ namespace Mac_EFI_Toolkit
             FONT_MDL2_REG_10?.Dispose();
             FONT_MDL2_REG_12?.Dispose();
             FONT_MDL2_REG_20?.Dispose();
-
-            // Unhook the low level keyboard hook.
-            KeyboardHookManager.Unhook();
         }
         #endregion
 

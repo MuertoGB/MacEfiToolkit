@@ -9,6 +9,7 @@ using Mac_EFI_Toolkit;
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 public class METForm : Form
@@ -43,10 +44,30 @@ public class METForm : Form
         base.OnFormClosed(e);
     }
 
-    private void METForm_Load(object sender, EventArgs e) => SetBorderAccent();
+    private void METForm_Load(object sender, EventArgs e)
+    {
+        // Ensure the form is within screen bounds
+        AdjustFormToScreenBounds();
+
+        // Set accent color.
+        SetBorderAccent();
+    }
+
+    private void AdjustFormToScreenBounds()
+    {
+        // Get the screen where the form is currently displayed.
+        Screen currentScreen = Screen.FromControl(this);
+        Rectangle screenBounds = currentScreen.WorkingArea;
+
+        // Adjust edges if they're outside the screen bounds.
+        Top = Top < screenBounds.Top ? screenBounds.Top : Top; // Top
+        Left = Left < screenBounds.Left ? screenBounds.Left : Left; // Left
+        Left = Right > screenBounds.Right ? screenBounds.Right - Width : Left; // Right
+        Top = Bottom > screenBounds.Bottom ? screenBounds.Bottom - Height : Top; // Bottom
+    }
     #endregion
 
-    #region Overrides Methods
+        #region Overrides Methods
     protected override CreateParams CreateParams
     {
         get

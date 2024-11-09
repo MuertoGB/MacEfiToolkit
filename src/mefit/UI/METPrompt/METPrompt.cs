@@ -120,15 +120,11 @@ namespace Mac_EFI_Toolkit.UI
             lblMessage.MaximumSize = new Size(MaxWidth, MaxHeight);
 
             Size preferredSize = lblMessage.PreferredSize;
-
             int idealWidth = Math.Min(preferredSize.Width, MaxWidth);
             int idealHeight = Math.Min(preferredSize.Height, MaxHeight);
 
-            lblMessage.Width = idealWidth;
-            lblMessage.Height = idealHeight;
-
-            tlpLabel.Width = idealWidth;
-            tlpLabel.Height = idealHeight;
+            lblMessage.Size = new Size(idealWidth, idealHeight);
+            tlpLabel.Size = new Size(idealWidth, idealHeight);
 
             this.ClientSize = new Size(
                 idealWidth + PaddingWidth,
@@ -142,6 +138,8 @@ namespace Mac_EFI_Toolkit.UI
                     this.Owner.Location.Y + (this.Owner.Height - this.Height) / 2
                 );
             }
+
+            this.MaximumSize = this.Size;
         }
         #endregion
 

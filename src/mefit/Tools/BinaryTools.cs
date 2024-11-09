@@ -136,7 +136,9 @@ namespace Mac_EFI_Toolkit.Tools
         internal static byte[] GetBytesBaseLength(byte[] sourceBytes, int basePosition, int length)
         {
             if (basePosition < 0 || basePosition + length > sourceBytes.Length)
+            {
                 return null;
+            }
 
             byte[] buffer = new byte[length];
             Buffer.BlockCopy(sourceBytes, basePosition, buffer, 0, length);
@@ -154,7 +156,9 @@ namespace Mac_EFI_Toolkit.Tools
         internal static byte[] GetBytesBaseLimit(byte[] sourceBytes, int basePosition, int limitPosition)
         {
             if (limitPosition <= basePosition)
-                return new byte[0]; // Nothing to read
+            {
+                return new byte[0];
+            }
 
             int length = limitPosition - basePosition;
             ArraySegment<byte> segment = new ArraySegment<byte>(sourceBytes, basePosition, length);
@@ -175,12 +179,16 @@ namespace Mac_EFI_Toolkit.Tools
             int startIndex = Array.IndexOf(sourceBytes, startByte, basePosition);
 
             if (startIndex < 0 || startIndex == sourceBytes.Length - 1)
+            {
                 return null;
+            }
 
             startIndex++;
 
             while (startIndex < sourceBytes.Length && sourceBytes[startIndex] == startByte)
+            {
                 startIndex++;
+            }
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -203,14 +211,15 @@ namespace Mac_EFI_Toolkit.Tools
         {
             if (sourceBytes == null)
             {
-                throw new ArgumentNullException(
-                    nameof(sourceBytes));
+                throw new ArgumentNullException(nameof(sourceBytes));
             }
 
             for (int i = 0; i < sourceBytes.Length; i++)
             {
                 if (sourceBytes[i] != 0xFF)
+                {
                     return false;
+                }
             }
 
             return true;
@@ -225,10 +234,14 @@ namespace Mac_EFI_Toolkit.Tools
         internal static bool ByteArraysMatch(byte[] array1, byte[] array2)
         {
             if (array1 == null || array2 == null)
+            {
                 return false;
+            }
 
             if (array1.Length != array2.Length)
+            {
                 return false;
+            }
 
             return array1.SequenceEqual(array2);
         }
@@ -244,9 +257,9 @@ namespace Mac_EFI_Toolkit.Tools
         internal static void OverwriteBytesAtBase(byte[] sourceBytes, int basePosition, byte[] newBytes)
         {
             if (basePosition < 0 || basePosition + newBytes.Length > sourceBytes.Length)
-                throw new ArgumentOutOfRangeException(
-                    nameof(basePosition),
-                    "Base position is out of range.");
+            {
+                throw new ArgumentOutOfRangeException(nameof(basePosition), "Base position is out of range.");
+            }            
 
             Buffer.BlockCopy(newBytes, 0, sourceBytes, basePosition, newBytes.Length);
         }
@@ -255,13 +268,13 @@ namespace Mac_EFI_Toolkit.Tools
         /// Fills a byte array with 0xFF values.
         /// </summary>
         /// <param name="sourceBytes">The byte array to fill with 0xFF values.</param>
-        internal static void EraseByteArray(byte[] sourceBytes, byte eraseByte)
+        internal static void EraseByteArray(byte[] sourceBytes)
         {
             if (sourceBytes == null)
                 throw new ArgumentNullException(nameof(sourceBytes));
 
             for (int i = 0; i < sourceBytes.Length; i++)
-                sourceBytes[i] = eraseByte;
+                sourceBytes[i] = 0xFF;
         }
         #endregion
     }

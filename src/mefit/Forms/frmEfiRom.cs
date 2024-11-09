@@ -1802,7 +1802,7 @@ namespace Mac_EFI_Toolkit.Forms
                 byte[] erasedStoreBodyBuffer = BinaryTools.GetBytesBaseLength(storeBuffer, storeHeaderLength, storeBodyEnd);
 
                 // Erase the store body.
-                BinaryTools.EraseByteArray(erasedStoreBodyBuffer, 0xFF);
+                BinaryTools.EraseByteArray(erasedStoreBodyBuffer);
 
                 // Write the erased store back to the nvram store buffer.
                 BinaryTools.OverwriteBytesAtBase(storeBuffer, storeHeaderLength, erasedStoreBodyBuffer);
@@ -2169,7 +2169,7 @@ namespace Mac_EFI_Toolkit.Forms
         private bool WriteMeRegion(byte[] newImeBuffer, byte[] binaryBuffer)
         {
             byte[] ffBuffer = new byte[IFD.ME_REGION_SIZE];
-            BinaryTools.EraseByteArray(ffBuffer, 0xFF);
+            BinaryTools.EraseByteArray(ffBuffer);
 
             Array.Copy(newImeBuffer, 0, ffBuffer, 0, newImeBuffer.Length);
             Array.Copy(ffBuffer, 0, binaryBuffer, IFD.ME_REGION_BASE, ffBuffer.Length);

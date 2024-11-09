@@ -32,12 +32,6 @@ namespace Mac_EFI_Toolkit.WIN32
         #endregion
 
         #region API
-        // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmenableblurbehindwindow
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmEnableBlurBehindWindow(
-            IntPtr hWnd,
-            ref DWM_BLURBEHIND pBlurBehind);
-
         // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-releasecapture
         [DllImport("user32.dll")]
         public static extern bool ReleaseCapture();
@@ -91,43 +85,11 @@ namespace Mac_EFI_Toolkit.WIN32
             uint nSize,
             string lpFileName);
 
-        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowshookexa
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern IntPtr SetWindowsHookExA(
-            int idHook,
-            LowLevelKeyboardProc lpfn,
-            IntPtr hmod,
-            uint dwThreadId);
-
-        // Low level keyboard hook delegate
-        internal delegate IntPtr LowLevelKeyboardProc(
-            int nCode,
-            IntPtr wParam,
-            IntPtr lParam);
-
-        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-unhookwindowshookex
-        [DllImport("user32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        internal static extern bool UnhookWindowsHookEx
-            (IntPtr hhk);
-
-        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-callnexthookex
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern IntPtr CallNextHookEx(
-            IntPtr hhk,
-            int nCode,
-            IntPtr wParam,
-            IntPtr lParam);
-
-        // https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeystate
-        [DllImport("user32.dll", SetLastError = true)]
-        internal static extern short GetKeyState(
-            int nVirtKey);
-
-        // https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandlea
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        internal static extern IntPtr GetModuleHandleA(
-            string lpModuleName);
+        // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmenableblurbehindwindow
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmEnableBlurBehindWindow(
+            IntPtr hWnd,
+            ref DWM_BLURBEHIND pBlurBehind);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/nf-dwmapi-dwmgetcolorizationcolor
         [DllImport("dwmapi.dll", EntryPoint = "DwmGetColorizationColor")]

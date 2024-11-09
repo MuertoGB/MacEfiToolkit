@@ -623,6 +623,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(420, 449);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(420, 449);
             this.Name = "frmRominfo";

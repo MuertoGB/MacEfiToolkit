@@ -1876,6 +1876,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(763, 492);
             this.MinimumSize = new System.Drawing.Size(763, 492);
             this.Name = "frmEfiRom";
             this.Padding = new System.Windows.Forms.Padding(1);

@@ -400,7 +400,7 @@
             this.restartApplicationToolStripMenuItem});
             this.cmsMore.Name = "cmsMore";
             this.cmsMore.ShowImageMargin = false;
-            this.cmsMore.Size = new System.Drawing.Size(227, 358);
+            this.cmsMore.Size = new System.Drawing.Size(227, 330);
             // 
             // changelogToolStripMenuItem
             // 
@@ -605,6 +605,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.MaximumSize = new System.Drawing.Size(435, 280);
             this.MinimumSize = new System.Drawing.Size(435, 280);
             this.Name = "frmStartup";
             this.Padding = new System.Windows.Forms.Padding(1);

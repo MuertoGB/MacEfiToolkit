@@ -84,7 +84,6 @@
     <Compile Include="AppColours.cs" />
     <Compile Include="Firmware\EFI\IFD.cs" />
     <Compile Include="Common\FontResolver.cs" />
-    <Compile Include="Common\KeyboardHookManager.cs" />
     <Compile Include="Firmware\EFI\Guids.cs" />
     <Compile Include="Firmware\EFI\EFIROM.cs" />
     <Compile Include="Firmware\EFI\Types\Structs.cs" />

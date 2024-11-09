@@ -5,6 +5,7 @@
 // frmAbout.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.Windows.Forms;
 
@@ -19,6 +20,9 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Attach event handlers.
             WireEventHandlers();
+
+            // Enable drag.
+            UITools.EnableFormDrag(this, lblTitle);
 
             // Set button properties.
             SetButtonGlyphAndText();

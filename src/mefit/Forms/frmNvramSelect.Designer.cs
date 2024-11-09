@@ -273,6 +273,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(310, 145);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(310, 145);
             this.Name = "frmNvramSelect";
