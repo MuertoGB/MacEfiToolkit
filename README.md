@@ -105,7 +105,7 @@ The application manual can be viewed [here](MANUAL.md).
 ## Requirements
 
 - **Operating System:**
-  - Windows 11 (32/64-bit)
+  - Windows 11 (64-bit)
   - Windows 10 (32/64-bit)
   - Windows 8/8.1 (32/64-bit)
   - Windows 7 (32/64-bit)
@@ -114,7 +114,7 @@ The application manual can be viewed [here](MANUAL.md).
 - **Runtimes:**
   - Microsoft [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
 
-- **Internet Connectivity** (required for specific features):
+- **Internet Connectivity** (optional, only required for specific features):
   - Receiving notifications about new versions (can be disabled in settings).
   - Fetching device configuration data from Apple’s server if not available in the internal database.
   - Checking serial numbers on EveryMac.
