@@ -21,7 +21,7 @@ Mac EFI Toolkit
 
 ## System Requirements
 
-- **Operating System**: 
+- **Operating System:**
   - Windows 11 (64-bit)
   - Windows 10 (32/64-bit)
   - Windows 8/8.1 (32/64-bit)
@@ -41,6 +41,7 @@ Mac EFI Toolkit
 1. Ensure your system has [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) installed.
 2. Download the [latest version](https://github.com/MuertoGB/MacEfiToolkit/releases/latest) of **mefit**.
 3. If needed, create a dump of your Mac firmware using an SPIROM programmer.
+4. Launch the software (**no installation required**) and open your firmware.
 
 ## EFIROM Window
 
@@ -60,7 +61,7 @@ This section explains the EFIROM Window and its functionality.
 | **Folders**| Opens the folders menu for quick access to essential directories.                                     |
 | **Export** | Opens the export menu with options to save firmware data in different formats.                        |
 | **Patch**  | Opens the patching menu, offering tools to modify and customize firmware data.                        |
-| **Options**| Opens a menu with additional firmware tools, like serial number lookup.   |
+| **Options**| Opens a menu with additional firmware tools. |
 
 - **Export Menu:**
   - **Export Fsys Store**: Exports the Fsys Store located within NVRAM.
@@ -82,7 +83,7 @@ This section explains the EFIROM Window and its functionality.
   - **Reload File from Disk**: Reloads the firmware file to reflect any changes made on disk.
   - **View Application Log**: Opens the application log file.
   - **View ROM Information**: Displays details from the firmware’s AppleRomInformation section `{B535ABF6-967D-43F2-B494-A1EB8E21A28E}`.
-  - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup.
+  - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup (internet connection required).
 
 - **Status Bar:**
   - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
@@ -107,9 +108,21 @@ This section explains the SOCROM Window and its functionality.
 | **Folders**| Opens the folders menu for quick access to essential directories.                                     |
 | **Export** | Opens the export menu with options to save firmware data in different formats.                        |
 | **Patch**  | Opens the patching menu, offering tools to modify and customize firmware data.                        |
-| **Options**| Opens a menu with additional firmware tools, like serial number lookup.   |
+| **Options**| Opens a menu with additional firmware tools. |
 
-TODO
+- **Export Menu:**
+  - **Export Scfg Store**: Exports the Scfg store located in the firmware.
+  - **Backup Firmware (ZIP)**: Compresses and saves the loaded firmware as a ZIP archive.
+  - **Export Firmware Information (Text)**: Saves firmware information to a text file.
+
+- **Patch Menu:** (Access to the patching menu requires accepting the editing terms.)
+  - **Change Serial Number**: Edits the System Serial Number (SSN) within the Scfg Store.
+  - **Write New Scfg Store**: Allows selection and replacement of the Scfg store within firmware.
+ 
+- **Options Menu:**
+  - **Reload File from Disk**: Reloads the firmware file to reflect any changes made on disk.
+  - **View Application Log**: Opens the application log file.
+  - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup (internet connection required).
 
 - **Status Bar:**
   - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
