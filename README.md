@@ -84,6 +84,11 @@ This section explains the EFIROM Window and its functionality.
   - **View ROM Information**: Displays details from the firmware’s AppleRomInformation section `{B535ABF6-967D-43F2-B494-A1EB8E21A28E}`.
   - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup.
 
+- **Status Bar:**
+  - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
+  - **Serial Toggle Switch**: Hides or displays the System Serial Number.
+  - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
+
 ## SOCROM Window
 
 This section explains the SOCROM Window and its functionality.
@@ -105,6 +110,11 @@ This section explains the SOCROM Window and its functionality.
 | **Options**| Opens a menu with additional firmware tools, like serial number lookup.   |
 
 TODO
+
+- **Status Bar:**
+  - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
+  - **Serial Toggle Switch**: Hides or displays the System Serial Number.
+  - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
 
 ## Changelog
 
