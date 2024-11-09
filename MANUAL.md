@@ -39,6 +39,13 @@ This section explains the EFIROM Window and its functionality.
   - **Fix Fsys Checksum (CRC32)**: Automatically corrects an invalid checksum in the Fsys store.
   - **Invalidate EFI Lock**: Invalidates the Message Authentication Code in the SVS NVRAM, safely disabling the EFI password.
 
+- **Options Menu:**
+  - **Automatic Filename Generation**: Generates a structured filename for the firmware and copies it to the clipboard.
+  - **Reload File from Disk**: Reloads the firmware file to reflect any changes made on disk.
+  - **View Application Log**: Opens the application log file.
+  - **View ROM Information**: Displays details from the firmware’s AppleRomInformation section `{B535ABF6-967D-43F2-B494-A1EB8E21A28E}`.
+  - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup.
+
 ## SOCROM Window
 
 This section explains the SOCROM Window and its functionality.
