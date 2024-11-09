@@ -4,8 +4,6 @@
 Mac EFI Toolkit
 </h1>
 
----
-
 ## Table of Contents
 1. [Intoduction](#introduction)
 2. [System Requirements](#system-requirements)
@@ -17,13 +15,9 @@ Mac EFI Toolkit
 8. [Acknowledgements](#acknowledgements)
 9. [Donate](#donate)
 
----
-
 ## Introduction
 
 **Mac EFI Toolkit** (also known as **mefit**) is designed to aid technicians in repair and analysis of Mac EFI and Intel based Mac SOCROM firmwares. Designed to be compact, this application provides information gathering capabilities and limited patching functionality.
-
----
 
 ## System Requirements
 
@@ -42,15 +36,11 @@ Mac EFI Toolkit
 - **Build Requirements:**
   - [Visual Studio 2022](https://visualstudio.microsoft.com/vs/), targeting .NET Framework 4.8.
 
----
-
 ## Getting Started
 
 1. Ensure your system has [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) installed.
 2. Download the [latest version](https://github.com/MuertoGB/MacEfiToolkit/releases/latest) of **mefit**.
 3. If needed, create a dump of your Mac firmware using an SPIROM programmer.
-
----
 
 ## EFIROM Window
 
@@ -94,8 +84,6 @@ This section explains the EFIROM Window and its functionality.
   - **View ROM Information**: Displays details from the firmware’s AppleRomInformation section `{B535ABF6-967D-43F2-B494-A1EB8E21A28E}`.
   - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup.
 
----
-
 ## SOCROM Window
 
 This section explains the SOCROM Window and its functionality.
@@ -118,13 +106,9 @@ This section explains the SOCROM Window and its functionality.
 
 TODO
 
----
-
 ## Changelog
 
 > 📋 View the full changelog [here](CHANGELOG.md).
-
----
 
 ## Features
 
@@ -191,8 +175,6 @@ TODO
   - Export and replace the Scfg store
   - Export firmware information to a text file
 
----
-
 ## Acknowledgements
 
 **This software uses the following third-party libraries and resources:**
@@ -201,8 +183,6 @@ TODO
 - [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and Vaughan Pratt.
 - [MacModelShelf](https://github.com/MagerValp/MacModelShelf) database by MagerValp.
 - Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
-
----
 
 ## Donate
 
