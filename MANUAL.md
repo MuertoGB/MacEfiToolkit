@@ -1,8 +1,35 @@
-<h4 align="center">Mac EFI Toolkit Manual</h4>
-<p align="center">
-  <a href="#efirom-window">EFIROM Window</a> •
-  <a href="#socrom-window">SOCROM Window</a>
-</p>
+# Mac EFI Toolkit Manual
+
+## Table of Contents
+1. [Intoduction](#introduction)
+2. [System Requirements](#system-requirements)
+3. [Getting Started](#getting-started)
+4. [EFIROM Window](#efirom-window)
+5. [SOCROM Window](#socrom-window)
+
+## Introduction
+
+Welcome to the **Mac EFI Toolkit** (also known as **mefit**). This application is designed to assist technicians in retrieving information from Mac firmware files and provides limited patching capabilities.
+
+## System Requirements
+
+- **Operating System**: 
+  - Windows 11 (32/64-bit)
+  - Windows 10 (32/64-bit)
+  - Windows 8/8.1 (32/64-bit)
+  - Windows 7 (32/64-bit)
+  - **mefit** is compatible with Wine
+
+- **Internet Connectivity** (required for specific features):
+  - Receiving notifications about new versions (can be disabled in settings).
+  - Fetching device configuration data from Apple’s server if not available in the internal database.
+  - Checking serial numbers on EveryMac.
+
+## Getting Started
+
+1. Ensure your system has [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) installed.
+2. Download the [latest version](https://github.com/MuertoGB/MacEfiToolkit/releases/latest) of **mefit**.
+3. If needed, create a dump of your Mac firmware using an SPIROM programmer.
 
 ## EFIROM Window
 
@@ -58,7 +85,7 @@ This section explains the SOCROM Window and its functionality.
 
 | Button     | Description                                                                                           |
 |------------|-------------------------------------------------------------------------------------------------------|
-| **Open**   | Opens a file dialog to load a compatible EFI file into the application.                               |
+| **Open**   | Opens a file dialog to load a compatible Intel T2 SOCROM firmware into the application.                               |
 | **Reset**  | Clears all firmware data and resets the window to its default view.                                   |
 | **Copy**   | Opens the copy menu, allowing you to copy key data to the clipboard.                                  |
 | **Folders**| Opens the folders menu for quick access to essential directories.                                     |
