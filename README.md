@@ -124,12 +124,13 @@ The application manual can be viewed [here](MANUAL.md).
 
 ## Acknowledgements
 
-**This software uses the following third party libraries, or resources:-**
+**This software uses the following third-party libraries and resources:**
 
-LZMA [v24.08 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.\
-The [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and  Vaughan Pratt.\
-[MacModelShelf](https://github.com/MagerValp/MacModelShelf) database by MagerValp.\
-Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
+- LZMA [v24.08 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.
+- [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and Vaughan Pratt.
+- [MacModelShelf](https://github.com/MagerValp/MacModelShelf) database by MagerValp.
+- Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
+
 
 ## Donate
 
