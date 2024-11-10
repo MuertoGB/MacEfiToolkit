@@ -70,24 +70,5 @@ namespace Mac_EFI_Toolkit.Firmware
 
             return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";
         }
-
-        internal static bool ContainsIllegalSignature(byte[] buffer)
-        {
-            byte[][] headers = new byte[][]
-            {
-                new byte[] { 0x4D, 0x5A }, // EXE
-
-            };
-
-            foreach (byte[] header in headers)
-            {
-                if (buffer.Length >= header.Length && buffer.Take(header.Length).SequenceEqual(header))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
     }
 }

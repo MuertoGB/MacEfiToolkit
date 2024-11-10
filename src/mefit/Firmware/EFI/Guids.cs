@@ -8,6 +8,14 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 {
     class Guids
     {
+        internal static readonly byte[] DXE_CORE =
+        {
+            0xD9, 0x54, 0x93, 0x7A,
+            0x68, 0x04,
+            0x4A, 0x44,
+            0x81, 0xCE, 0x0B, 0xF6, 0x17, 0xD8, 0x90, 0xDF
+        };
+
         internal static readonly byte[] LZMA_DXE_VOLUME_IMAGE_0_GUID =
         {
             0xDB, 0x7F, 0xAD, 0x77,

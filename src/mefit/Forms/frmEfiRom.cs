@@ -750,6 +750,12 @@ namespace Mac_EFI_Toolkit.Forms
         #region Open binary
         private void OpenBinary(string filePath)
         {
+            // Check the filesize
+            if (!FileTools.IsValidMinMaxSize(filePath, this))
+            {
+                return;
+            }
+
             // Check if the image is what we're looking for.
             if (!EFIROM.IsValidImage(File.ReadAllBytes(filePath)))
             {
@@ -759,13 +765,6 @@ namespace Mac_EFI_Toolkit.Forms
                     METPromptType.Warning,
                     METPromptButtons.Okay);
 
-                return;
-            }
-
-            // Check the filesize
-            if (!FileTools.IsValidMinMaxSize(filePath, this))
-            {
-                ResetWindow();
                 return;
             }
 

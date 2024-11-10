@@ -126,7 +126,7 @@ namespace Mac_EFI_Toolkit
             "Patch started";
 
         internal const string PATCH_FAIL =
-            "Patch failed - ";
+            "Patch failed -";
 
         internal const string PATCH_SUCCESS =
             "Patch successful";

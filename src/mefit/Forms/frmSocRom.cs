@@ -524,25 +524,14 @@ namespace Mac_EFI_Toolkit.Forms
         #region Open Binary
         private void OpenBinary(string filePath)
         {
-            ToggleControlEnable(false);
-
-            if (SOCROM.FirmwareLoaded)
-            {
-                ResetWindow();
-            }
-
-            // Check filesize
+            // Check filesize.
             if (!FileTools.IsValidMinMaxSize(filePath, this))
             {
                 return;
             }
 
-            // Set the binary path and load the bytes.
-            SOCROM.LoadedBinaryPath = filePath;
-            SOCROM.LoadedBinaryBuffer = File.ReadAllBytes(filePath);
-
             // Check if the image is what we're looking for.
-            if (!SOCROM.IsValidImage(SOCROM.LoadedBinaryBuffer))
+            if (!SOCROM.IsValidImage(File.ReadAllBytes(filePath)))
             {
                 METPrompt.Show(
                     this,
@@ -552,6 +541,18 @@ namespace Mac_EFI_Toolkit.Forms
 
                 return;
             }
+
+            // If a firmware is loaded, reset all data.
+            if (SOCROM.FirmwareLoaded)
+            {
+                ResetWindow();
+            }
+
+            ToggleControlEnable(false);
+
+            // Set the binary path and load the bytes.
+            SOCROM.LoadedBinaryPath = filePath;
+            SOCROM.LoadedBinaryBuffer = File.ReadAllBytes(filePath);
 
             // Set the current directory.
             _strInitialDirectory = Path.GetDirectoryName(filePath);

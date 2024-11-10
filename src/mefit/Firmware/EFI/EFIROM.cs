@@ -52,6 +52,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         #region Private Members
         private const int GUID_SIZE = 16;          // 10h
+        private const int RSVD_SIZE = 16;          // 10h
         private const int ZERO_VECTOR_SIZE = 16;   // 10h
         private const int LITERAL_POS = 2;         // 2h
         private static readonly Encoding _utf8 = Encoding.UTF8;
@@ -178,9 +179,15 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
-            if (Helper.ContainsIllegalSignature(sourceBytes))
+            int dxeCore = BinaryTools.GetBaseAddress(sourceBytes, Guids.DXE_CORE, RSVD_SIZE, GUID_SIZE);
+            byte[] fdSignature = BinaryTools.GetBytesBaseLength(sourceBytes, RSVD_SIZE, IFD.IFD_SIG_LENGTH);
+
+            if (!BinaryTools.ByteArraysMatch(fdSignature, IFD.FLASH_DESC_SIGNATURE))
             {
-                return false;
+                if (dxeCore == -1)
+                {
+                    return false;
+                }
             }
 
             byte[][] appleGuids = new[]

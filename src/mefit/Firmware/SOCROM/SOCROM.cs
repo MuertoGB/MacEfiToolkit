@@ -29,6 +29,8 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         internal const int SCFG_EXPECTED_LEN = 0xB8;
         internal const int SERIAL_LEN = 12;
 
+        internal static readonly byte[] T2_BASE_SIG = { 0x30, 0x83 };
+
         internal static TimeSpan tsParseTime { get; private set; }
         #endregion
 
@@ -74,7 +76,9 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
-            if (Helper.ContainsIllegalSignature(sourceBytes))
+            byte[] socromSignature = BinaryTools.GetBytesBaseLength(sourceBytes, 0, T2_BASE_SIG.Length);
+
+            if (!BinaryTools.ByteArraysMatch(socromSignature, T2_BASE_SIG))
             {
                 return false;
             }

@@ -82,6 +82,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #region Internal Members
         internal const uint DESCRIPTOR_BASE = 0; // 0h
         internal const uint DESCRIPTOR_LENGTH = 4096; // 1000h
+        internal const int IFD_SIG_LENGTH = 4;
 
         internal static uint BIOS_REGION_BASE, BIOS_REGION_LIMIT, BIOS_REGION_SIZE = 0;
         internal static uint ME_REGION_BASE, ME_REGION_LIMIT, ME_REGION_SIZE = 0;

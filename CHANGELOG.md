@@ -49,6 +49,7 @@
 - Modified shortcut keys in the EFI window for improved accessibility.
 - When 'Disable Confirmation Dialogs' is enabled, the EFI window will no longer display a "copied to clipboard" message.
 - Redesigned the logging system to consolidate all entries into a single log file, streamlining log management and improving readability.
+- If a firmware is loaded (EFIROM, SOCROM) and an incompatible file is opened, the window will no longer reset unnecessarily.
 
 #### Bugs
 - Added missing icon in the ROM Information window.
