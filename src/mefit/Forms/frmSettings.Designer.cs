@@ -1,4 +1,5 @@
-﻿
+﻿using Mac_EFI_Toolkit.UI.Controls;
+
 namespace Mac_EFI_Toolkit.Forms
 {
     partial class frmSettings
@@ -14,12 +15,22 @@ namespace Mac_EFI_Toolkit.Forms
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
+            {
+                if (_timer != null)
+                {
+                    _timer.Dispose();
+                }
+            }
+
+            if (components != null)
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
+
 
         #region Windows Form Designer generated code
 

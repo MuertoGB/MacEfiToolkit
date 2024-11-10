@@ -1015,19 +1015,19 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         /// <returns>The patched file byte array, or null if the new calculated crc does not match the crc in the Fsys store.</returns>
         internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes, int fsysBase, byte[] fsysStore, uint uiNewCrc)
         {
-            Logger.Write($"{nameof(MakeFsysCrcPatchedBinary)}: {LOGSTRINGS.CREATING_BUFFERS}", LogType.Application);
+            Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
             // Create a new byte array to hold the patched binary.
             byte[] patchedBytes = new byte[sourceBytes.Length];
 
             Array.Copy(sourceBytes, patchedBytes, sourceBytes.Length);
 
-            Logger.Write($"{nameof(MakeFsysCrcPatchedBinary)}: " + $"{LOGSTRINGS.CRC_PATCH}", LogType.Application);
+            Logger.WritePatchLine(LOGSTRINGS.CRC_PATCH);
 
             // Patch the Fsys store crc.
             byte[] patchedStore = PatchFsysCrc(fsysStore, uiNewCrc);
 
-            Logger.Write($"{nameof(MakeFsysCrcPatchedBinary)}: {LOGSTRINGS.CRC_WRITE_TO_FW}", LogType.Application);
+            Logger.WritePatchLine(LOGSTRINGS.CRC_WRITE_TO_FW);
 
             // Overwrite the loaded Fsys crc32 with the newly calculated crc32.
             BinaryTools.OverwriteBytesAtBase(patchedBytes, fsysBase, patchedStore);
@@ -1038,12 +1038,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Compare the new checksums.
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)
             {
-                Logger.Write($"{nameof(MakeFsysCrcPatchedBinary)}: {LOGSTRINGS.CRC_WRITE_FAIL}", LogType.Application);
+                Logger.WritePatchLine(LOGSTRINGS.CRC_WRITE_FAIL);
 
                 return null;
             }
 
-            Logger.Write($"{nameof(MakeFsysCrcPatchedBinary)}: {LOGSTRINGS.CRC_WRITE_SUCCESS}", LogType.Application);
+            Logger.WritePatchLine(LOGSTRINGS.CRC_WRITE_SUCCESS);
 
             return patchedBytes;
         }

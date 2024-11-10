@@ -61,7 +61,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(GenerateReport), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(GenerateReport), e.GetType(), e.Message);
                 return null;
             }
         }
@@ -113,7 +113,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(GetProcessModules), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(GetProcessModules), e.GetType(), e.Message);
                 return null;
             }
         }

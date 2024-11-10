@@ -382,7 +382,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(Delete), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(Delete), e.GetType(), e.Message);
                 return false;
             }
         }

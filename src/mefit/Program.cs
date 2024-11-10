@@ -40,7 +40,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241109.2100";
+        internal const string APP_BUILD = "241110.0020";
         internal const string APP_CHANNEL = "BETA";
     }
 
@@ -284,7 +284,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Win32Exception e)
             {
-                Logger.WriteError(nameof(Restart), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(Restart), e.GetType(), e.Message);
                 return;
             }
             finally
@@ -328,7 +328,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(CreateDirectoryIfNotExists), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(CreateDirectoryIfNotExists), e.GetType(), e.Message);
             }
         }
 
@@ -376,7 +376,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(TryLoadCustomFont), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(TryLoadCustomFont), e.GetType(), e.Message);
                 return false;
             }
         }

@@ -50,7 +50,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(DecompressBytes), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(DecompressBytes), e.GetType(), e.Message);
                 return null;
             }
         }

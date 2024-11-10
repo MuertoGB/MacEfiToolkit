@@ -1,4 +1,6 @@
 ﻿
+using Mac_EFI_Toolkit.UI.Controls;
+
 namespace Mac_EFI_Toolkit.Forms
 {
     partial class frmRominfo

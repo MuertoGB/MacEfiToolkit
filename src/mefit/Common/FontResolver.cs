@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(LoadFont), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(LoadFont), e.GetType(), e.Message);
                 return null;
             }
             finally
@@ -68,7 +68,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(IsFontStyleAvailable), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(IsFontStyleAvailable), e.GetType(), e.Message);
                 return FontStatus.Unknown;
             }
 

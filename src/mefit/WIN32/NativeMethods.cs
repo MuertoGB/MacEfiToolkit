@@ -53,7 +53,15 @@ namespace Mac_EFI_Toolkit.WIN32
             [In] ref uint pNumFonts);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilestring
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+        internal static extern bool WritePrivateProfileString(
+            string lpAppName,
+            string lpKeyName,
+            string lpString,
+            string lpFilename);
+
+        // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-writeprivateprofilestringa
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         internal static extern bool GetPrivateProfileString(
             string lpAppName,
             string lpKeyName,
@@ -62,23 +70,13 @@ namespace Mac_EFI_Toolkit.WIN32
             int nSize,
             string lpFilename);
 
-        // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-writeprivateprofilestringa
-        [DllImport("kernel32.dll")]
-        internal static extern bool WritePrivateProfileString(
-            string lpAppName,
-            string lpKeyName,
-            string lpString,
-            string lpFilename);
-
-        // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilesectionnames
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         internal static extern uint GetPrivateProfileSectionNames(
             IntPtr lpszReturnBuffer,
             uint nSize,
             string lpFileName);
 
-        // https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getprivateprofilesection
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         internal static extern uint GetPrivateProfileSection(
             string lpAppName,
             IntPtr lpReturnedString,

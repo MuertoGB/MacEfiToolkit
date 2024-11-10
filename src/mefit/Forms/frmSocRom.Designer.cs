@@ -1,4 +1,6 @@
-﻿namespace Mac_EFI_Toolkit.Forms
+﻿using Mac_EFI_Toolkit.UI.Controls;
+
+namespace Mac_EFI_Toolkit.Forms
 {
     partial class frmSocRom
     {
@@ -13,10 +15,19 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                if (_cancellationToken != null)
+                {
+                    _cancellationToken.Dispose();
+                }
+
+                if (components != null)
+                {
+                    components.Dispose();
+                }
             }
+
             base.Dispose(disposing);
         }
 

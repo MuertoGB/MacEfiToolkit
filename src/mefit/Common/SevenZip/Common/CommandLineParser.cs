@@ -212,37 +212,6 @@ namespace SevenZip.CommandLineParser
 			postString = "";
 			return -1;
 		}
-
-		static bool ParseSubCharsCommand(int numForms, CommandSubCharsSet[] forms,
-			string commandString, ArrayList indices)
-		{
-			indices.Clear();
-			int numUsedChars = 0;
-			for (int i = 0; i < numForms; i++)
-			{
-				CommandSubCharsSet charsSet = forms[i];
-				int currentIndex = -1;
-				int len = charsSet.Chars.Length;
-				for (int j = 0; j < len; j++)
-				{
-					char c = charsSet.Chars[j];
-					int newIndex = commandString.IndexOf(c);
-					if (newIndex >= 0)
-					{
-						if (currentIndex >= 0)
-							return false;
-						if (commandString.IndexOf(c, newIndex + 1) >= 0)
-							return false;
-						currentIndex = j;
-						numUsedChars++;
-					}
-				}
-				if (currentIndex == -1 && !charsSet.EmptyAllowed)
-					return false;
-				indices.Add(currentIndex);
-			}
-			return (numUsedChars == commandString.Length);
-		}
 		const char kSwitchID1 = '-';
 		const char kSwitchID2 = '/';
 

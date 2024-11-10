@@ -31,7 +31,7 @@ namespace Mac_EFI_Toolkit.Tools
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(IsWebsiteAvailable), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(IsWebsiteAvailable), e.GetType(), e.Message);
                 return false;
             }
         }
@@ -57,7 +57,7 @@ namespace Mac_EFI_Toolkit.Tools
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(IsNetworkAvailable), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(IsNetworkAvailable), e.GetType(), e.Message);
                 return false;
             }
         }

@@ -47,7 +47,7 @@ namespace Mac_EFI_Toolkit.Tools
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(GetDeviceConfigCodeLocal), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(GetDeviceConfigCodeLocal), e.GetType(), e.Message);
                 return null;
             }
         }
@@ -84,7 +84,7 @@ namespace Mac_EFI_Toolkit.Tools
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(GetDeviceConfigCodeSupportRemote), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(GetDeviceConfigCodeSupportRemote), e.GetType(), e.Message);
                 return null;
             }
         }

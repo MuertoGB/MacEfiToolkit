@@ -42,8 +42,11 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void WriteError(string methodName, Type exceptionType, string message) =>
+        internal static void WriteErrorLine(string methodName, Type exceptionType, string message) =>
             Logger.Write($"{methodName} - {exceptionType.Name}: {message}", LogType.Application);
+
+        internal static void WritePatchLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
+            Logger.Write($"{methodName}: {logText}", LogType.Application);
 
         internal static void OpenLogFile(Form owner)
         {
@@ -58,13 +61,11 @@ namespace Mac_EFI_Toolkit
             Process.Start(logPath);
         }
 
-        private static void ShowLogFileNotFoundError(Form owner)
-        {
+        private static void ShowLogFileNotFoundError(Form owner) =>
             METPrompt.Show(
                 owner,
                 DIALOGSTRINGS.LOG_NOT_FOUND,
                 METPromptType.Error,
                 METPromptButtons.Okay);
-        }
     }
 }

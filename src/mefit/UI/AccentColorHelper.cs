@@ -30,7 +30,7 @@ namespace Mac_EFI_Toolkit.UI
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(NativeMethods.DwmGetColorizationColor), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(NativeMethods.DwmGetColorizationColor), e.GetType(), e.Message);
                 return AppColours.DEFAULT_APP_BORDER;
             }
         }

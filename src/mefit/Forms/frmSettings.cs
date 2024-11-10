@@ -99,7 +99,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void OpenFolderDialog(SettingsStringType settingsType, ref string path)
+        private static void OpenFolderDialog(SettingsStringType settingsType, ref string path)
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
@@ -238,7 +238,7 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateLabel(lblSocDirectory, SettingsStringType.SocInitialDirectory);
         }
 
-        private void UpdateLabel(Label label, SettingsStringType settingsType)
+        private static void UpdateLabel(Label label, SettingsStringType settingsType)
         {
             string path = Settings.ReadString(settingsType);
             label.Text = path;

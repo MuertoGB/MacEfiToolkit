@@ -3,7 +3,6 @@
 
 // IniFile.cs
 // Released under the GNU GLP v3.0
-// IniFile uses code from pinvoke.net, thank you to whoever wrote it (See GetSectionNames)
 
 using Mac_EFI_Toolkit.WIN32;
 using System;
@@ -81,9 +80,6 @@ namespace Mac_EFI_Toolkit.Common
             return false;
         }
 
-        // GetSectionNames code found on pinvoke.
-        // GetSectionKeys I adapted from GetSectionNames using GetPrivateProfileSection.
-        // https://www.pinvoke.net/default.aspx/kernel32/GetPrivateProfileSectionNames.html
         internal static string[] GetSectionNames(string lpFileName)
         {
             IntPtr lpszReturnBuffer = IntPtr.Zero;
@@ -99,13 +95,13 @@ namespace Mac_EFI_Toolkit.Common
                     return null;
                 }
 
-                string ansiString = Marshal.PtrToStringAnsi(lpszReturnBuffer, (int)data).ToString();
+                string unicodeString = Marshal.PtrToStringUni(lpszReturnBuffer, (int)data);
 
-                return ansiString.Substring(0, ansiString.Length - 1).Split('\0');
+                return unicodeString.Substring(0, unicodeString.Length - 1).Split('\0');
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(GetSectionNames), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(GetSectionNames), e.GetType(), e.Message);
                 return null;
             }
             finally
@@ -132,9 +128,9 @@ namespace Mac_EFI_Toolkit.Common
                     return null;
                 }
 
-                string ansiString = Marshal.PtrToStringAnsi(lpReturnedString, (int)data).ToString();
+                string unicodeString = Marshal.PtrToStringUni(lpReturnedString, (int)data);
 
-                string[] keys = ansiString.Substring(0, ansiString.Length - 1).Split('\0');
+                string[] keys = unicodeString.Substring(0, unicodeString.Length - 1).Split('\0');
 
                 for (int i = 0; i < keys.Length; i++)
                 {
@@ -150,7 +146,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(GetSectionKeys), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(GetSectionKeys), e.GetType(), e.Message);
                 return null;
             }
             finally

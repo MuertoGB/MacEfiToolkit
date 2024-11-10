@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Mac EFI Toolkit")]
-[assembly: AssemblyDescription("A tool for analyzing Mac UEFI/BIOS firmware, with limited editing capabilities.")]
+[assembly: AssemblyDescription("A tool for analyzing mac firmware, with limited patching capabilities.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("N/A")]
 [assembly: AssemblyProduct("Mac EFI Toolkit")]
-[assembly: AssemblyCopyright("© David Roberts 2023")]
+[assembly: AssemblyCopyright("© David Roberts 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,4 +35,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2.0.0")]
 [assembly: AssemblyFileVersion("2.0.0")]
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: NeutralResourcesLanguage("en-GB")]

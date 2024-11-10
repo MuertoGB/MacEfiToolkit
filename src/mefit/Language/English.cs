@@ -123,13 +123,13 @@ namespace Mac_EFI_Toolkit
     {
         #region Strings
         internal const string PATCH_START =
-            "Patching started:";
+            "Patch started";
 
         internal const string PATCH_FAIL =
-            "Patching failed:";
+            "Patch failed - ";
 
         internal const string PATCH_SUCCESS =
-            "Patching successful:";
+            "Patch successful";
 
         internal const string CREATING_BUFFERS =
             "Creating buffers";
@@ -145,21 +145,6 @@ namespace Mac_EFI_Toolkit
 
         internal const string STORE_SIG_MISALIGNED =
             "Store signature misaligned or not found";
-
-        internal const string NEW_SERIAL =
-            "New serial:";
-
-        internal const string NEW_HWC =
-            "New HWC:";
-
-        internal const string LENGTH =
-            "Length";
-
-        internal const string ERROR_FILE_BYTES =
-            "Error loading file bytes:";
-
-        internal const string FSYS_REPLACE =
-            "Replace Fsys store";
 
         internal const string FSYS_IMPORT_CANCELLED =
             "An Fsys store was not provided";
@@ -188,20 +173,29 @@ namespace Mac_EFI_Toolkit
         internal const string STORE_COMP_FAILED =
             "Store comparison check failed";
 
-        internal const string SSN_REPLACE =
-            "Replace system serial number";
-
         internal const string SSN_BASE_NOT_FOUND =
             "Serial number base address was not found";
 
+        internal const string SSN_WTB =
+            "Write new SSN to firmware buffer";
+
+        internal const string HWC_WTB =
+            "Write new HWC to firmware buffer";
+
+        internal const string FSYS_LFB =
+            "Loading Fsys store from firmware buffer";
+
+        internal const string SSN_WRITE_SUCCESS =
+            "SSN written successfully";
+
+        internal const string HWC_WRITE_SUCCESS =
+            "HWC written successfully";
+
         internal const string SSN_NOT_WRITTEN =
-            "Serial number did not match the patched binary";
+            "New SSN could not be written";
 
         internal const string HWC_NOT_WRITTEN =
-            "New hardware configuration (HWC) could not be written";
-
-        internal const string IME_REPLACE =
-            "Replace Intel Management Engine";
+            "New HWC could not be written";
 
         internal const string IME_IMPORT_CANCELLED =
             "An Intel ME region was not provided";
@@ -224,9 +218,6 @@ namespace Mac_EFI_Toolkit
         internal const string FILE_SAVE_SUCCESS =
             "File saved successully:";
 
-        internal const string NVRAM_ERASE =
-            "Erase NVRAM";
-
         internal const string NVRAM_VSS_ERASE =
             "Erasing NVRAM VSS regions";
 
@@ -245,14 +236,11 @@ namespace Mac_EFI_Toolkit
         internal const string NVRAM_INIT_HDR_SUCCESS =
             "Initializing header successful";
 
-        internal const string CRC_MASK =
-            "Mask fsys checksum";
-
         internal const string CRC_PATCH =
-            "Patching checksum";
+            "Patch CRC32 checksum";
 
         internal const string CRC_WRITE_TO_FW =
-            "Write patched store to firmware";
+            "Write patched store to firmware buffer";
 
         internal const string CRC_WRITE_FAIL =
             "Write unsuccessful";
@@ -313,6 +301,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string SCFG_BASE_ADJUST =
             "Scfg base not found - adjusted to";
+
+        internal const string SCFG_LFB =
+            "Loading Scfg store from firmware buffer";
         #endregion
     }
 

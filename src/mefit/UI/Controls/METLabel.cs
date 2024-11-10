@@ -9,74 +9,87 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-public class METLabel : Label
+namespace Mac_EFI_Toolkit.UI.Controls
 {
-    #region Private Members
-    private ToolTip toolTip;
-    private TextFormatFlags flags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
-    #endregion
-
-    #region Constructor
-    public METLabel() => toolTip = new ToolTip { AutoPopDelay = 15000 };
-    #endregion
-
-    #region Paint Methods
-    protected override void OnPaint(PaintEventArgs e) => DrawText(e.Graphics, flags, ForeColor);
-
-    protected virtual void OnPaintForeground(PaintEventArgs e) => DrawText(e.Graphics, flags, ForeColor);
-    #endregion
-
-    #region Custom Methods
-    private void DrawText(Graphics graphics, TextFormatFlags flags, Color textColor)
+    public class METLabel : Label
     {
-        Rectangle textRect =
-            new Rectangle(
-                ClientRectangle.Left + Padding.Left,
-                ClientRectangle.Top + Padding.Top,
-                ClientRectangle.Width - Padding.Horizontal,
-                ClientRectangle.Height - Padding.Vertical);
+        #region Private Members
+        private ToolTip toolTip;
+        private TextFormatFlags flags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
+        #endregion
 
-        // Override text color when the control is !enabled.
-        textColor = !Enabled ? Color.FromArgb(14, 14, 14) : ForeColor;
+        #region Constructor
+        public METLabel() => toolTip = new ToolTip { AutoPopDelay = 15000 };
+        #endregion
 
-        TextRenderer.DrawText(graphics, Text, Font, textRect, textColor, flags);
-    }
+        #region Paint Methods
+        protected override void OnPaint(PaintEventArgs e) => DrawText(e.Graphics, flags, ForeColor);
 
-    protected override void OnMouseEnter(EventArgs e)
-    {
-        base.OnMouseEnter(e);
+        protected virtual void OnPaintForeground(PaintEventArgs e) => DrawText(e.Graphics, flags, ForeColor);
+        #endregion
 
-        if (IsTextEllipsized() && Text != toolTip.GetToolTip(this))
+        #region Custom Methods
+        private void DrawText(Graphics graphics, TextFormatFlags flags, Color textColor)
         {
-            toolTip.SetToolTip(this, Text);
+            Rectangle textRect =
+                new Rectangle(
+                    ClientRectangle.Left + Padding.Left,
+                    ClientRectangle.Top + Padding.Top,
+                    ClientRectangle.Width - Padding.Horizontal,
+                    ClientRectangle.Height - Padding.Vertical);
+
+            // Override text color when the control is !enabled.
+            textColor = !Enabled ? Color.FromArgb(14, 14, 14) : ForeColor;
+
+            TextRenderer.DrawText(graphics, Text, Font, textRect, textColor, flags);
         }
-        else if (!IsTextEllipsized())
+
+        protected override void OnMouseEnter(EventArgs e)
         {
-            toolTip.SetToolTip(this, string.Empty);
-        }
-    }
+            base.OnMouseEnter(e);
 
-    private bool IsTextEllipsized()
-    {
-        using (Graphics g = CreateGraphics())
+            if (IsTextEllipsized() && Text != toolTip.GetToolTip(this))
+            {
+                toolTip.SetToolTip(this, Text);
+            }
+            else if (!IsTextEllipsized())
+            {
+                toolTip.SetToolTip(this, string.Empty);
+            }
+        }
+
+        private bool IsTextEllipsized()
         {
-            Size textSize = TextRenderer.MeasureText(Text, Font);
-            return textSize.Width > ClientSize.Width;
+            using (Graphics g = CreateGraphics())
+            {
+                Size textSize = TextRenderer.MeasureText(Text, Font);
+                return textSize.Width > ClientSize.Width;
+            }
         }
-    }
-    #endregion
+        #endregion
 
-    #region Overriden Methods
-    protected override void OnEnabledChanged(EventArgs e)
-    {
-        base.OnEnabledChanged(e);
-        Invalidate();
-    }
+        #region Overriden Methods
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+            Invalidate();
+        }
 
-    protected override void OnParentEnabledChanged(EventArgs e)
-    {
-        base.OnParentEnabledChanged(e);
-        Invalidate();
+        protected override void OnParentEnabledChanged(EventArgs e)
+        {
+            base.OnParentEnabledChanged(e);
+            Invalidate();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                toolTip?.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+        #endregion
     }
-    #endregion
 }

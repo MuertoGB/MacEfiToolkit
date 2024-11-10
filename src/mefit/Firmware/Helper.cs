@@ -37,7 +37,6 @@ namespace Mac_EFI_Toolkit.Firmware
                 {
                     Marshal.FreeHGlobal(ptr);
                 }
-
             }
         }
 

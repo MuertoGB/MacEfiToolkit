@@ -169,7 +169,7 @@ namespace Mac_EFI_Toolkit.Tools
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(WriteAllBytesEx), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(WriteAllBytesEx), e.GetType(), e.Message);
                 return false;
             }
         }
@@ -216,7 +216,7 @@ namespace Mac_EFI_Toolkit.Tools
             }
             catch (Exception e)
             {
-                Logger.WriteError(nameof(BackupFileToZip), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(BackupFileToZip), e.GetType(), e.Message);
             }
         }
 

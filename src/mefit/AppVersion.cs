@@ -58,10 +58,9 @@ namespace Mac_EFI_Toolkit
             {
                 if (!Program.GetIsDebugMode())
                 {
-                    Logger.WriteError(nameof(CheckForNewVersion), e.GetType(), e.Message);
+                    Logger.WriteErrorLine(nameof(CheckForNewVersion), e.GetType(), e.Message);
                 }
 
-                Console.WriteLine(nameof(CheckForNewVersion), e.GetType(), e.Message);
                 return VersionResult.Error;
             }
         }
