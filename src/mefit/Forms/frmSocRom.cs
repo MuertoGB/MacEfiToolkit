@@ -6,7 +6,6 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware;
-using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
@@ -1138,9 +1137,12 @@ namespace Mac_EFI_Toolkit.Forms
                 // Check the SOCROM contains a store, otherwise set the base address.
                 int scfgBase = SOCROM.ScfgSectionData.StoreBase;
 
+                bool bScfgFound = true;
+
                 // Set the Scfg base manually.
                 if (scfgBase == -1)
                 {
+                    bScfgFound = false;
                     Logger.WritePatchLine($"{LOGSTRINGS.SCFG_BASE_ADJUST} {SOCROM.SCFG_EXPECTED_BASE:X}h");
                     scfgBase = SOCROM.SCFG_EXPECTED_BASE;
                 }
@@ -1148,14 +1150,28 @@ namespace Mac_EFI_Toolkit.Forms
                 Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
                 byte[] scfgBuffer = File.ReadAllBytes(openFileDialog.FileName);
+                byte[] binaryBuffer = SOCROM.LoadedBinaryBuffer;
 
                 if (!ValidateScfgStore(scfgBuffer))
                 {
                     return;
                 }
 
-                // Create buffer from loaded binary file.
-                byte[] binaryBuffer = SOCROM.LoadedBinaryBuffer;
+                // Check were not writing over data we shouldn't be.
+                if (!bScfgFound)
+                {
+                    byte[] writeBuffer = BinaryTools.GetBytesBaseLength(binaryBuffer, SOCROM.SCFG_EXPECTED_BASE, SOCROM.SCFG_EXPECTED_LEN);
+
+                    for (int i = 0; i < writeBuffer.Length; i++)
+                    {
+                        if (writeBuffer[i] != 0xFF)
+                        {
+                            Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SCFG_POS_INITIALIZED}");
+                            NotifyPatchingFailure();
+                            return;
+                        }
+                    }
+                }
 
                 Logger.Write(LOGSTRINGS.WRITE_NEW_DATA, LogType.Application);
 

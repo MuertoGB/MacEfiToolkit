@@ -304,6 +304,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string SCFG_LFB =
             "Loading Scfg store from firmware buffer";
+
+        internal const string SCFG_POS_INITIALIZED =
+            "Cannot write to 0x28A000h (Length B8h) because initialized data is present";
         #endregion
     }
 
