@@ -4,7 +4,9 @@
 // Helper.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Tools;
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Firmware
@@ -67,6 +69,25 @@ namespace Mac_EFI_Toolkit.Firmware
             double sizeInSuffix = size / Math.Pow(1024, suffixIndex);
 
             return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";
+        }
+
+        internal static bool ContainsIllegalSignature(byte[] buffer)
+        {
+            byte[][] headers = new byte[][]
+            {
+                new byte[] { 0x4D, 0x5A }, // EXE
+
+            };
+
+            foreach (byte[] header in headers)
+            {
+                if (buffer.Length >= header.Length && buffer.Take(header.Length).SequenceEqual(header))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

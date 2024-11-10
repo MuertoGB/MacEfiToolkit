@@ -365,10 +365,10 @@ namespace Mac_EFI_Toolkit
             "The provided file was not a valid firmware.";
 
         internal const string NOT_VALID_EFIROM =
-            "The provided file was not a valid Mac EFIROM.";
+            "The provided file was not a valid EFIROM.";
 
         internal const string NOT_VALID_SOCROM =
-            "The provided file was not a valid Mac SOCROM.";
+            "The provided file was not a valid T2 SOCROM.";
 
         internal const string SCFG_EXPORT_FAIL =
             "Scfg Store export failed.";

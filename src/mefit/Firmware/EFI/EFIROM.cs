@@ -178,6 +178,11 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
+            if (Helper.ContainsIllegalSignature(sourceBytes))
+            {
+                return false;
+            }
+
             byte[][] appleGuids = new[]
             {
                 Guids.APPLE_IMMUTABLE_FV_GUID,

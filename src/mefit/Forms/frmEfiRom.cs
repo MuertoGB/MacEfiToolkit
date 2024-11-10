@@ -750,12 +750,16 @@ namespace Mac_EFI_Toolkit.Forms
         #region Open binary
         private void OpenBinary(string filePath)
         {
-            ToggleControlEnable(false);
-
-            // If a firmware is loaded, reset all data.
-            if (EFIROM.FirmwareLoaded)
+            // Check if the image is what we're looking for.
+            if (!EFIROM.IsValidImage(File.ReadAllBytes(filePath)))
             {
-                ResetWindow();
+                METPrompt.Show(
+                    this,
+                    DIALOGSTRINGS.NOT_VALID_EFIROM,
+                    METPromptType.Warning,
+                    METPromptButtons.Okay);
+
+                return;
             }
 
             // Check the filesize
@@ -765,22 +769,17 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
+            // If a firmware is loaded, reset all data.
+            if (EFIROM.FirmwareLoaded)
+            {
+                ResetWindow();
+            }
+
+            ToggleControlEnable(false);
+
             // Set the binary path and load the bytes.
             EFIROM.LoadedBinaryPath = filePath;
             EFIROM.LoadedBinaryBuffer = File.ReadAllBytes(filePath);
-
-            // Check if the image is what we're looking for.
-            if (!EFIROM.IsValidImage(EFIROM.LoadedBinaryBuffer))
-            {
-                METPrompt.Show(
-                    this,
-                    DIALOGSTRINGS.NOT_VALID_EFIROM,
-                    METPromptType.Warning,
-                    METPromptButtons.Okay);
-
-                ResetWindow();
-                return;
-            }
 
             // Set the current directory.
             _strInitialDirectory = Path.GetDirectoryName(filePath);

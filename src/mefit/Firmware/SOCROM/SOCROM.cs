@@ -74,6 +74,11 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
+            if (Helper.ContainsIllegalSignature(sourceBytes))
+            {
+                return false;
+            }
+
             return (BinaryTools.GetBaseAddress(sourceBytes, IBOOT_VER_SIG, 0) != -1);
         }
         #endregion
