@@ -151,7 +151,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.pbxMuerto.BackColor = System.Drawing.Color.Transparent;
             this.pbxMuerto.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgmuerto64px;
             this.pbxMuerto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pbxMuerto.Cursor = System.Windows.Forms.Cursors.Default;
             this.pbxMuerto.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbxMuerto.Location = new System.Drawing.Point(0, 0);
             this.pbxMuerto.Margin = new System.Windows.Forms.Padding(0);
@@ -244,7 +243,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.MinimumSize = new System.Drawing.Size(290, 240);
             this.Name = "frmAbout";
             this.Padding = new System.Windows.Forms.Padding(1);
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.pnlMain.ResumeLayout(false);

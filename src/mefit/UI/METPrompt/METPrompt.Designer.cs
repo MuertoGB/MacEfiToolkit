@@ -175,6 +175,7 @@ namespace Mac_EFI_Toolkit.UI
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(350, 200);
+            this.ControlBox = false;
             this.Controls.Add(this.pnlSeperatorBtm);
             this.Controls.Add(this.tlpLabel);
             this.Controls.Add(this.pnlSeperatorTop);
@@ -190,7 +191,6 @@ namespace Mac_EFI_Toolkit.UI
             this.MinimumSize = new System.Drawing.Size(350, 200);
             this.Name = "METPrompt";
             this.Padding = new System.Windows.Forms.Padding(1);
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Message";
             this.tlpButtons.ResumeLayout(false);

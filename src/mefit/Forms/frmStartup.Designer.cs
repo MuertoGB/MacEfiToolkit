@@ -108,7 +108,6 @@
             this.lblAppVersion.AutoSize = true;
             this.lblAppVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblAppVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblAppVersion.Cursor = System.Windows.Forms.Cursors.Default;
             this.lblAppVersion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAppVersion.ForeColor = System.Drawing.Color.White;
             this.lblAppVersion.Location = new System.Drawing.Point(286, 14);
@@ -596,6 +595,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(435, 280);
+            this.ControlBox = false;
             this.Controls.Add(this.pnlSeperatorBtm);
             this.Controls.Add(this.tlpDrop);
             this.Controls.Add(this.tlpMenu);
@@ -605,7 +605,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(435, 280);
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(435, 280);
             this.Name = "frmStartup";
             this.Padding = new System.Windows.Forms.Padding(1);

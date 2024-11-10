@@ -174,6 +174,7 @@
             this.cbxResetVss.Size = new System.Drawing.Size(32, 18);
             this.cbxResetVss.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxResetVss.TabIndex = 0;
+            this.cbxResetVss.UseVisualStyleBackColor = false;
             this.cbxResetVss.CheckedChanged += new System.EventHandler(this.cbxResetVss_CheckedChanged);
             // 
             // lblEraseVss
@@ -232,6 +233,7 @@
             this.cbxResetSvs.Size = new System.Drawing.Size(32, 18);
             this.cbxResetSvs.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxResetSvs.TabIndex = 2;
+            this.cbxResetSvs.UseVisualStyleBackColor = false;
             this.cbxResetSvs.CheckedChanged += new System.EventHandler(this.cbxResetSvs_CheckedChanged);
             // 
             // lblWindowTitle
@@ -265,6 +267,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(310, 145);
+            this.ControlBox = false;
             this.Controls.Add(this.pnlSeperatorTop);
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.lblWindowTitle);

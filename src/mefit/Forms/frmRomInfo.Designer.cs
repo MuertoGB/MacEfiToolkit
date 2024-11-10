@@ -61,7 +61,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblBootRom = new System.Windows.Forms.Label();
             this.lblBuildcaveId = new System.Windows.Forms.Label();
             this.lblBuildType = new System.Windows.Forms.Label();
-            this.lblCompiler = new METLabel();
+            this.lblCompiler = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
             this.cmdExport = new System.Windows.Forms.Button();
             this.tlpTitle.SuspendLayout();
@@ -616,6 +616,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(420, 449);
+            this.ControlBox = false;
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlSeperatorTop);
             this.Controls.Add(this.tlpTitle);

@@ -68,15 +68,15 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpDisableMessageWindowSounds = new System.Windows.Forms.TableLayoutPanel();
             this.swDisableMessageWindowSounds = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblDisableMessageWindowSounds = new System.Windows.Forms.Label();
-            this.lblEfiDirectory = new METLabel();
+            this.lblEfiDirectory = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.tlpStartupDir = new System.Windows.Forms.TableLayoutPanel();
             this.cmdEditStartupDir = new System.Windows.Forms.Button();
             this.lblStartupDefaultDir = new System.Windows.Forms.Label();
-            this.lblStartupDirectory = new METLabel();
+            this.lblStartupDirectory = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.tlpSocDir = new System.Windows.Forms.TableLayoutPanel();
             this.cmdEditSocDir = new System.Windows.Forms.Button();
             this.lblSocDefaultDir = new System.Windows.Forms.Label();
-            this.lblSocDirectory = new METLabel();
+            this.lblSocDirectory = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.tlpAccentColor = new System.Windows.Forms.TableLayoutPanel();
             this.swUseAccentColor = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblUseAccentColorText = new System.Windows.Forms.Label();
@@ -217,6 +217,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableConfirmationDialogs.Size = new System.Drawing.Size(32, 18);
             this.swDisableConfirmationDialogs.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableConfirmationDialogs.TabIndex = 0;
+            this.swDisableConfirmationDialogs.UseVisualStyleBackColor = false;
             // 
             // lblDisableConfirmationDialogs
             // 
@@ -328,6 +329,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableVersionCheck.Size = new System.Drawing.Size(32, 18);
             this.swDisableVersionCheck.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableVersionCheck.TabIndex = 0;
+            this.swDisableVersionCheck.UseVisualStyleBackColor = false;
             // 
             // lblStartup
             // 
@@ -390,6 +392,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableFlashingUiElements.Size = new System.Drawing.Size(32, 18);
             this.swDisableFlashingUiElements.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableFlashingUiElements.TabIndex = 0;
+            this.swDisableFlashingUiElements.UseVisualStyleBackColor = false;
             // 
             // lblDisableFlashingUiElements
             // 
@@ -505,6 +508,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableStatusBarTips.Size = new System.Drawing.Size(32, 18);
             this.swDisableStatusBarTips.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableStatusBarTips.TabIndex = 0;
+            this.swDisableStatusBarTips.UseVisualStyleBackColor = false;
             // 
             // lblDisableStatusBarTips
             // 
@@ -551,6 +555,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swDisableMessageWindowSounds.Size = new System.Drawing.Size(32, 18);
             this.swDisableMessageWindowSounds.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swDisableMessageWindowSounds.TabIndex = 0;
+            this.swDisableMessageWindowSounds.UseVisualStyleBackColor = false;
             // 
             // lblDisableMessageWindowSounds
             // 
@@ -741,6 +746,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.swUseAccentColor.Size = new System.Drawing.Size(32, 18);
             this.swUseAccentColor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.swUseAccentColor.TabIndex = 0;
+            this.swUseAccentColor.UseVisualStyleBackColor = false;
             // 
             // lblUseAccentColorText
             // 
@@ -884,7 +890,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.MinimumSize = new System.Drawing.Size(435, 557);
             this.Name = "frmSettings";
             this.Padding = new System.Windows.Forms.Padding(1);
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             this.tlpDisableConfirmationDialogs.ResumeLayout(false);

@@ -230,6 +230,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(575, 310);
+            this.ControlBox = false;
             this.Controls.Add(this.pnlSeperatorTop);
             this.Controls.Add(this.pnlSeperatorBtm);
             this.Controls.Add(this.pnlMain);
@@ -246,7 +247,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.MinimumSize = new System.Drawing.Size(575, 310);
             this.Name = "frmTerms";
             this.Padding = new System.Windows.Forms.Padding(1);
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Terms";
             this.pnlMain.ResumeLayout(false);

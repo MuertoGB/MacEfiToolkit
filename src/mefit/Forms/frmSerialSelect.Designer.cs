@@ -199,6 +199,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(310, 145);
+            this.ControlBox = false;
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.pnlSeperatorTip);
             this.Controls.Add(this.lblWindowTitle);
@@ -212,7 +213,6 @@
             this.MinimumSize = new System.Drawing.Size(310, 145);
             this.Name = "frmSerialSelect";
             this.Padding = new System.Windows.Forms.Padding(1);
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter Serial Number";
             this.tlpMain.ResumeLayout(false);
