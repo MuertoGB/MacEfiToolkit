@@ -29,8 +29,8 @@
   - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
   - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
 - Added new settings:
-  - "Use Windows Accent Colour for Borders" allowing form borders to match the system's accent color for a more integrated appearance.
-  - "Disable Serial Number Validation": TDisables the validation process when entering a new serial number for the firmware.
+  - "Use Windows Accent Colour for Borders": allowing form borders to match the system's accent color for a more integrated appearance.
+  - "Disable Serial Number Validation": Disables the validation process when entering a new serial number for the firmware.
 - Added firmware parse time to status bars.
 - Serial numbers are now censored by default. They can be uncensored by toggling the switch in the status bar.
 - Serial numbers will no longer be displayed in the "Copied to Clipboard" dialogs. Instead, a default message "Serial Number copied to clipboard" will be shown.
