@@ -129,6 +129,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Settings.SetBool(SettingsBoolType.DisableVersionCheck, swDisableVersionCheck.Checked);
             Settings.SetBool(SettingsBoolType.UseAccentColor, swUseAccentColor.Checked);
+            Settings.SetBool(SettingsBoolType.DisableSerialValidation, swDisableSnValidation.Checked);
             Settings.SetBool(SettingsBoolType.DisableFlashingUI, swDisableFlashingUiElements.Checked);
             Settings.SetBool(SettingsBoolType.DisableMessageSounds, swDisableMessageWindowSounds.Checked);
             Settings.SetBool(SettingsBoolType.DisableTips, swDisableStatusBarTips.Checked);
@@ -174,6 +175,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             Settings.SetBool(SettingsBoolType.DisableVersionCheck, false);
             Settings.SetBool(SettingsBoolType.UseAccentColor, false);
+            Settings.SetBool(SettingsBoolType.DisableSerialValidation, false);
             Settings.SetBool(SettingsBoolType.DisableFlashingUI, false);
             Settings.SetBool(SettingsBoolType.DisableMessageSounds, false);
             Settings.SetBool(SettingsBoolType.DisableTips, false);
@@ -223,6 +225,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             swDisableVersionCheck.Checked = Settings.ReadBool(SettingsBoolType.DisableVersionCheck) ? true : false;
             swUseAccentColor.Checked = Settings.ReadBool(SettingsBoolType.UseAccentColor) ? true : false;
+            swDisableSnValidation.Checked = Settings.ReadBool(SettingsBoolType.DisableSerialValidation) ? true : false;
             swDisableFlashingUiElements.Checked = Settings.ReadBool(SettingsBoolType.DisableFlashingUI) ? true : false;
             swDisableMessageWindowSounds.Checked = Settings.ReadBool(SettingsBoolType.DisableMessageSounds) ? true : false;
             swDisableStatusBarTips.Checked = Settings.ReadBool(SettingsBoolType.DisableTips) ? true : false;

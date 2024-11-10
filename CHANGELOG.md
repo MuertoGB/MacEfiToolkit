@@ -20,10 +20,6 @@
 - The application now supports Intel T2 SOCROM firmware.
 - Added capability to open multiple firmwares simultaneously.
 - Startup Window: Introduced a new startup window where users can drag and drop or browse for a compatible EFIROM or T2 SOCROM. The main window is now dedicated to EFIROM, with some functions moved to the startup window.
-- Added a new setting: "Use Windows accent color for form borders," allowing form borders to match the system's accent color for a more integrated appearance.
-- Added firmware parse time to status bars.
-- Serial numbers are now censored by default. They can be uncensored by toggling the switch in the status bar.
-- Serial numbers will no longer be displayed in the "Copied to Clipboard" dialogs. Instead, a default message "Serial Number copied to clipboard" will be shown.
 - EFI Window Updates:
   - Patcher Relocation: Removed the firmware patcher window; all patching features are now consolidated in the EFI window.
   - Structured File Naming: Added an option to automatically generate a structured file name for the loaded firmware and copy it to the clipboard.
@@ -32,6 +28,12 @@
   - NVRAM Data: The window now displays base addresses of primary stores and whether they are empty, or active.
   - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
   - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
+- Added new settings:
+  - "Use Windows Accent Colour for Borders" allowing form borders to match the system's accent color for a more integrated appearance.
+  - "Disable Serial Number Validation": TDisables the validation process when entering a new serial number for the firmware.
+- Added firmware parse time to status bars.
+- Serial numbers are now censored by default. They can be uncensored by toggling the switch in the status bar.
+- Serial numbers will no longer be displayed in the "Copied to Clipboard" dialogs. Instead, a default message "Serial Number copied to clipboard" will be shown.
 - Updated LZMA SDK to version 24.08.
 - User Privacy Update: Unhandled exception reports now use regular expressions (regex) to sanitize usernames from exception messages and file paths, where possible. However, there may still be some cases where this data could appear. Please review the reports carefully before uploading them to GitHub issues.
 
