@@ -32,6 +32,7 @@
   - "Use Windows Accent Colour for Borders": allowing form borders to match the system's accent color for a more integrated appearance.
   - "Disable Serial Number Validation": Disables the validation process when entering a new serial number for the firmware.
 - Added firmware parse time to status bars.
+- Added an option in the EFIROM window to export decompressed LZMA DXE archives, which can be extracted using 7-Zip.
 - Serial numbers are now censored by default. They can be uncensored by toggling the switch in the status bar.
 - Serial numbers will no longer be displayed in the "Copied to Clipboard" dialogs. Instead, a default message "Serial Number copied to clipboard" will be shown.
 - Updated LZMA SDK to version 24.08.

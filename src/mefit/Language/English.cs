@@ -6,6 +6,8 @@
 
 using static System.Windows.Forms.Design.AxImporter;
 using System.Drawing;
+using System.Dynamic;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Mac_EFI_Toolkit
 {
@@ -92,6 +94,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string FILTER_ZIP =
             "Zip files (*.zip)|*.zip";
+
+        internal const string FILTER_LZMA =
+            "LZMA Files (*.lzma)|*.lzma|All Files (*.*)|*.*";
 
         internal const string FILTER_TEXT =
             "Text Files (*.txt)|*.txt";
@@ -376,6 +381,9 @@ namespace Mac_EFI_Toolkit
         internal const string SCFG_EXPORT_FAIL =
             "Scfg Store export failed.";
 
+        internal const string ARCHIVE_EXPORT_FAIL =
+            "Archive export failed.";
+
         internal const string FSYS_PATCH_SUCCESS_SAVE =
             "Fsys patching was successful. Do you want to save the output?";
 
@@ -449,6 +457,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string CRC_INVALID =
             "CRC INVALID";
+
+        internal const string DXE_ARCHIVE =
+            "DXE_ARCHIVE";
 
         internal const string EMPTY =
             "Empty";

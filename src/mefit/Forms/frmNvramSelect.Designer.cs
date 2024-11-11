@@ -100,7 +100,7 @@
             this.cmdOkay.Margin = new System.Windows.Forms.Padding(0);
             this.cmdOkay.Name = "cmdOkay";
             this.cmdOkay.Size = new System.Drawing.Size(154, 32);
-            this.cmdOkay.TabIndex = 3;
+            this.cmdOkay.TabIndex = 2;
             this.cmdOkay.Text = "OKAY";
             this.cmdOkay.UseVisualStyleBackColor = false;
             this.cmdOkay.Click += new System.EventHandler(this.cmdOkay_Click);
@@ -120,7 +120,7 @@
             this.cmdCancel.Margin = new System.Windows.Forms.Padding(0);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(153, 32);
-            this.cmdCancel.TabIndex = 4;
+            this.cmdCancel.TabIndex = 3;
             this.cmdCancel.Text = "CANCEL";
             this.cmdCancel.UseVisualStyleBackColor = false;
             this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
@@ -174,7 +174,6 @@
             this.cbxResetVss.Size = new System.Drawing.Size(32, 18);
             this.cbxResetVss.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxResetVss.TabIndex = 0;
-            this.cbxResetVss.UseVisualStyleBackColor = false;
             this.cbxResetVss.CheckedChanged += new System.EventHandler(this.cbxResetVss_CheckedChanged);
             // 
             // lblEraseVss
@@ -232,8 +231,7 @@
             this.cbxResetSvs.Name = "cbxResetSvs";
             this.cbxResetSvs.Size = new System.Drawing.Size(32, 18);
             this.cbxResetSvs.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxResetSvs.TabIndex = 2;
-            this.cbxResetSvs.UseVisualStyleBackColor = false;
+            this.cbxResetSvs.TabIndex = 1;
             this.cbxResetSvs.CheckedChanged += new System.EventHandler(this.cbxResetSvs_CheckedChanged);
             // 
             // lblWindowTitle

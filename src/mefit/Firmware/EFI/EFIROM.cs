@@ -8,6 +8,7 @@ using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -18,6 +19,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #region Internal Members
         internal static string LoadedBinaryPath = null;
         internal static byte[] LoadedBinaryBuffer = null;
+        internal static byte[] LzmaDecompressedBuffer = null;
         internal static bool FirmwareLoaded = false;
         internal static string FirmwareVersion = null;
         internal static string ConfigCode = null;
@@ -150,6 +152,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         {
             LoadedBinaryPath = null;
             LoadedBinaryBuffer = null;
+            LzmaDecompressedBuffer = null;
             FirmwareLoaded = false;
             FirmwareVersion = null;
             ConfigCode = null;
@@ -972,6 +975,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             {
                 return ApfsCapable.Unknown;
             }
+
+            // May as well store the archive buffer here.
+            LzmaDecompressedBuffer = decompressedBytes;
 
             // Search the decompressed volume for the APFS DXE GUID.
             if (BinaryTools.GetBaseAddress(decompressedBytes, Guids.APFS_DXE_GUID) == -1)

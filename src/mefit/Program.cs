@@ -31,6 +31,7 @@ namespace Mac_EFI_Toolkit
         internal static readonly string INTELME_DIR = Path.Combine(WORKING_DIR, "me_regions");
         internal static readonly string NVRAM_DIR = Path.Combine(WORKING_DIR, "nvram_stores");
         internal static readonly string SCFG_DIR = Path.Combine(WORKING_DIR, "scfg_stores");
+        internal static readonly string LZMA_DIR = Path.Combine(WORKING_DIR, "lzma_archives");
         internal static readonly string SETTINGS_FILE = Path.Combine(WORKING_DIR, "Settings.ini");
         internal static readonly string DEBUG_LOG = Path.Combine(WORKING_DIR, "debug.log");
         internal static readonly string APP_LOG = Path.Combine(WORKING_DIR, "application.log");
@@ -40,7 +41,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241111.0205";
+        internal const string APP_BUILD = "241111.1040";
         internal const string APP_CHANNEL = "BETA 3";
     }
 
@@ -315,6 +316,7 @@ namespace Mac_EFI_Toolkit
             CreateDirectoryIfNotExists(METPath.INTELME_DIR);
             CreateDirectoryIfNotExists(METPath.NVRAM_DIR);
             CreateDirectoryIfNotExists(METPath.SCFG_DIR);
+            CreateDirectoryIfNotExists(METPath.LZMA_DIR);
         }
 
         private static void CreateDirectoryIfNotExists(string directoryPath)

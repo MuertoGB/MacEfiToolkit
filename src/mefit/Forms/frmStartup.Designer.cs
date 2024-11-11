@@ -239,7 +239,7 @@
             this.cmdSettings.Margin = new System.Windows.Forms.Padding(0);
             this.cmdSettings.Name = "cmdSettings";
             this.cmdSettings.Size = new System.Drawing.Size(107, 32);
-            this.cmdSettings.TabIndex = 4;
+            this.cmdSettings.TabIndex = 0;
             this.cmdSettings.Text = "SETTINGS";
             this.cmdSettings.UseVisualStyleBackColor = false;
             this.cmdSettings.Click += new System.EventHandler(this.cmdSettings_Click);

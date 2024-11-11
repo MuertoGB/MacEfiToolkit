@@ -4,7 +4,6 @@
 // LzmaCoder.cs - Handles LZMA decompression
 // Released under the GNU GLP v3.0
 
-using SevenZip.Compression.LZMA;
 using System;
 using System.IO;
 
@@ -15,7 +14,7 @@ namespace Mac_EFI_Toolkit
         internal static byte[] DecompressBytes(byte[] sourceBytes)
         {
             // Create a new instance of the Decoder class.
-            Decoder decoder = new Decoder();
+            SevenZip.Compression.LZMA.Decoder decoder = new SevenZip.Compression.LZMA.Decoder();
 
             // Create a memory stream to store the decompressed data.
             MemoryStream decoderStream = new MemoryStream();

@@ -80,15 +80,15 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpAccentColor = new System.Windows.Forms.TableLayoutPanel();
             this.swUseAccentColor = new Mac_EFI_Toolkit.UI.METSwitch();
             this.lblUseAccentColorText = new System.Windows.Forms.Label();
+            this.tlpDisableSnValidation = new System.Windows.Forms.TableLayoutPanel();
+            this.swDisableSnValidation = new Mac_EFI_Toolkit.UI.METSwitch();
+            this.lblDisableSnValidationText = new System.Windows.Forms.Label();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.cmdClose = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tlpDisableSnValidation = new System.Windows.Forms.TableLayoutPanel();
-            this.swDisableSnValidation = new Mac_EFI_Toolkit.UI.METSwitch();
-            this.lblDisableSnValidationText = new System.Windows.Forms.Label();
             this.tlpDisableConfirmationDialogs.SuspendLayout();
             this.tlpEfiDir.SuspendLayout();
             this.tlpDisableVersionCheck.SuspendLayout();
@@ -100,10 +100,10 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpStartupDir.SuspendLayout();
             this.tlpSocDir.SuspendLayout();
             this.tlpAccentColor.SuspendLayout();
+            this.tlpDisableSnValidation.SuspendLayout();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
-            this.tlpDisableSnValidation.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdDefaults
@@ -732,7 +732,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpAccentColor.RowCount = 1;
             this.tlpAccentColor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpAccentColor.Size = new System.Drawing.Size(433, 32);
-            this.tlpAccentColor.TabIndex = 1;
+            this.tlpAccentColor.TabIndex = 0;
             // 
             // swUseAccentColor
             // 
@@ -762,6 +762,52 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblUseAccentColorText.Size = new System.Drawing.Size(281, 20);
             this.lblUseAccentColorText.TabIndex = 0;
             this.lblUseAccentColorText.Text = "Use Windows Accent Colour for Borders";
+            // 
+            // tlpDisableSnValidation
+            // 
+            this.tlpDisableSnValidation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
+            this.tlpDisableSnValidation.ColumnCount = 2;
+            this.tlpDisableSnValidation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDisableSnValidation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tlpDisableSnValidation.Controls.Add(this.swDisableSnValidation, 0, 0);
+            this.tlpDisableSnValidation.Controls.Add(this.lblDisableSnValidationText, 0, 0);
+            this.tlpDisableSnValidation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpDisableSnValidation.Location = new System.Drawing.Point(0, 132);
+            this.tlpDisableSnValidation.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpDisableSnValidation.Name = "tlpDisableSnValidation";
+            this.tlpDisableSnValidation.RowCount = 1;
+            this.tlpDisableSnValidation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpDisableSnValidation.Size = new System.Drawing.Size(433, 32);
+            this.tlpDisableSnValidation.TabIndex = 1;
+            // 
+            // swDisableSnValidation
+            // 
+            this.swDisableSnValidation.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.swDisableSnValidation.BackColor = System.Drawing.Color.Black;
+            this.swDisableSnValidation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.swDisableSnValidation.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.swDisableSnValidation.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
+            this.swDisableSnValidation.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.swDisableSnValidation.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.swDisableSnValidation.Location = new System.Drawing.Point(390, 7);
+            this.swDisableSnValidation.Name = "swDisableSnValidation";
+            this.swDisableSnValidation.Size = new System.Drawing.Size(32, 18);
+            this.swDisableSnValidation.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.swDisableSnValidation.TabIndex = 0;
+            // 
+            // lblDisableSnValidationText
+            // 
+            this.lblDisableSnValidationText.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblDisableSnValidationText.AutoSize = true;
+            this.lblDisableSnValidationText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDisableSnValidationText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblDisableSnValidationText.Location = new System.Drawing.Point(2, 6);
+            this.lblDisableSnValidationText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDisableSnValidationText.Name = "lblDisableSnValidationText";
+            this.lblDisableSnValidationText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblDisableSnValidationText.Size = new System.Drawing.Size(237, 20);
+            this.lblDisableSnValidationText.TabIndex = 0;
+            this.lblDisableSnValidationText.Text = "Disable Serial Number Validation";
             // 
             // tlpTitle
             // 
@@ -866,52 +912,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.panel1.Size = new System.Drawing.Size(433, 1);
             this.panel1.TabIndex = 101;
             // 
-            // tlpDisableSnValidation
-            // 
-            this.tlpDisableSnValidation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(52)))));
-            this.tlpDisableSnValidation.ColumnCount = 2;
-            this.tlpDisableSnValidation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpDisableSnValidation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tlpDisableSnValidation.Controls.Add(this.swDisableSnValidation, 0, 0);
-            this.tlpDisableSnValidation.Controls.Add(this.lblDisableSnValidationText, 0, 0);
-            this.tlpDisableSnValidation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpDisableSnValidation.Location = new System.Drawing.Point(0, 132);
-            this.tlpDisableSnValidation.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpDisableSnValidation.Name = "tlpDisableSnValidation";
-            this.tlpDisableSnValidation.RowCount = 1;
-            this.tlpDisableSnValidation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpDisableSnValidation.Size = new System.Drawing.Size(433, 32);
-            this.tlpDisableSnValidation.TabIndex = 103;
-            // 
-            // swDisableSnValidation
-            // 
-            this.swDisableSnValidation.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.swDisableSnValidation.BackColor = System.Drawing.Color.Black;
-            this.swDisableSnValidation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.swDisableSnValidation.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableSnValidation.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
-            this.swDisableSnValidation.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.swDisableSnValidation.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.swDisableSnValidation.Location = new System.Drawing.Point(390, 7);
-            this.swDisableSnValidation.Name = "swDisableSnValidation";
-            this.swDisableSnValidation.Size = new System.Drawing.Size(32, 18);
-            this.swDisableSnValidation.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.swDisableSnValidation.TabIndex = 0;
-            // 
-            // lblDisableSnValidationText
-            // 
-            this.lblDisableSnValidationText.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblDisableSnValidationText.AutoSize = true;
-            this.lblDisableSnValidationText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDisableSnValidationText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblDisableSnValidationText.Location = new System.Drawing.Point(2, 6);
-            this.lblDisableSnValidationText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblDisableSnValidationText.Name = "lblDisableSnValidationText";
-            this.lblDisableSnValidationText.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
-            this.lblDisableSnValidationText.Size = new System.Drawing.Size(237, 20);
-            this.lblDisableSnValidationText.TabIndex = 0;
-            this.lblDisableSnValidationText.Text = "Disable Serial Number Validation";
-            // 
             // frmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -959,11 +959,11 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpSocDir.PerformLayout();
             this.tlpAccentColor.ResumeLayout(false);
             this.tlpAccentColor.PerformLayout();
+            this.tlpDisableSnValidation.ResumeLayout(false);
+            this.tlpDisableSnValidation.PerformLayout();
             this.tlpTitle.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpMenu.ResumeLayout(false);
-            this.tlpDisableSnValidation.ResumeLayout(false);
-            this.tlpDisableSnValidation.PerformLayout();
             this.ResumeLayout(false);
 
         }

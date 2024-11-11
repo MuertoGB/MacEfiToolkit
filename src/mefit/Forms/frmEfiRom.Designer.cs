@@ -44,7 +44,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.pnlMain = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
-            this.lblFilename = new METLabel();
+            this.lblFilename = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.cmdOpenInExplorer = new System.Windows.Forms.Button();
             this.tlpFirmware = new System.Windows.Forms.TableLayoutPanel();
             this.lblEfiVersion = new System.Windows.Forms.Label();
@@ -66,8 +66,8 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblFsysStoreText = new System.Windows.Forms.Label();
             this.lblFilesizeText = new System.Windows.Forms.Label();
             this.lblFileCreatedDate = new System.Windows.Forms.Label();
-            this.lblConfigCode = new METLabel();
-            this.lblFilesize = new METLabel();
+            this.lblConfigCode = new Mac_EFI_Toolkit.UI.Controls.METLabel();
+            this.lblFilesize = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.lblEfiVersionText = new System.Windows.Forms.Label();
             this.lblVssText = new System.Windows.Forms.Label();
             this.lblSvs = new System.Windows.Forms.Label();
@@ -102,7 +102,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdMenuPatch = new System.Windows.Forms.Button();
             this.cmdMenuFolders = new System.Windows.Forms.Button();
             this.pnlSeperator = new System.Windows.Forms.Panel();
-            this.lblTitle = new METLabel();
+            this.lblTitle = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
             this.cmdClose = new System.Windows.Forms.Button();
@@ -150,6 +150,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.backupFirmwareZIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportFirmwareInformationTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportLZMADXEArchiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsPatch = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.changeSerialNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eraseNVRAMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -271,7 +272,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdOpenInExplorer.Name = "cmdOpenInExplorer";
             this.cmdOpenInExplorer.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.cmdOpenInExplorer.Size = new System.Drawing.Size(36, 36);
-            this.cmdOpenInExplorer.TabIndex = 3;
+            this.cmdOpenInExplorer.TabIndex = 7;
             this.cmdOpenInExplorer.Text = "N";
             this.cmdOpenInExplorer.UseVisualStyleBackColor = false;
             this.cmdOpenInExplorer.Click += new System.EventHandler(this.cmdOpenInExplorer_Click);
@@ -1052,7 +1053,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cbxCensor.Name = "cbxCensor";
             this.cbxCensor.Size = new System.Drawing.Size(26, 16);
             this.cbxCensor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(160)))));
-            this.cbxCensor.TabIndex = 9;
+            this.cbxCensor.TabIndex = 8;
             this.cbxCensor.CheckedChanged += new System.EventHandler(this.cbxCensor_CheckedChanged);
             // 
             // pnlTopSplitMain
@@ -1176,7 +1177,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdMenuExport.Margin = new System.Windows.Forms.Padding(0);
             this.cmdMenuExport.Name = "cmdMenuExport";
             this.cmdMenuExport.Size = new System.Drawing.Size(107, 32);
-            this.cmdMenuExport.TabIndex = 6;
+            this.cmdMenuExport.TabIndex = 4;
             this.cmdMenuExport.Text = "EXPORT";
             this.cmdMenuExport.UseVisualStyleBackColor = false;
             this.cmdMenuExport.Click += new System.EventHandler(this.cmdMenuExport_Click);
@@ -1197,7 +1198,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdMenuOptions.Margin = new System.Windows.Forms.Padding(0);
             this.cmdMenuOptions.Name = "cmdMenuOptions";
             this.cmdMenuOptions.Size = new System.Drawing.Size(113, 32);
-            this.cmdMenuOptions.TabIndex = 8;
+            this.cmdMenuOptions.TabIndex = 6;
             this.cmdMenuOptions.Text = "OPTIONS";
             this.cmdMenuOptions.UseVisualStyleBackColor = false;
             this.cmdMenuOptions.Click += new System.EventHandler(this.cmdMenuOptions_Click);
@@ -1218,7 +1219,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdMenuPatch.Margin = new System.Windows.Forms.Padding(0);
             this.cmdMenuPatch.Name = "cmdMenuPatch";
             this.cmdMenuPatch.Size = new System.Drawing.Size(107, 32);
-            this.cmdMenuPatch.TabIndex = 7;
+            this.cmdMenuPatch.TabIndex = 5;
             this.cmdMenuPatch.Text = "PATCH";
             this.cmdMenuPatch.UseVisualStyleBackColor = false;
             this.cmdMenuPatch.Click += new System.EventHandler(this.cmdMenuPatch_Click);
@@ -1240,7 +1241,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdMenuFolders.Name = "cmdMenuFolders";
             this.cmdMenuFolders.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.cmdMenuFolders.Size = new System.Drawing.Size(107, 32);
-            this.cmdMenuFolders.TabIndex = 4;
+            this.cmdMenuFolders.TabIndex = 3;
             this.cmdMenuFolders.Text = "FOLDERS";
             this.cmdMenuFolders.UseVisualStyleBackColor = false;
             this.cmdMenuFolders.Click += new System.EventHandler(this.cmdMenuFolders_Click);
@@ -1665,12 +1666,13 @@ namespace Mac_EFI_Toolkit.Forms
             this.exportIntelMERegionToolStripMenuItem,
             this.exportNVRAMVSSStoresToolStripMenuItem,
             this.exportNVRAMSVSStoresToolStripMenuItem,
+            this.exportLZMADXEArchiveToolStripMenuItem,
             this.toolStripSeparator3,
             this.backupFirmwareZIPToolStripMenuItem,
             this.exportFirmwareInformationTextToolStripMenuItem});
             this.cmsExport.Name = "cmsExport";
             this.cmsExport.ShowImageMargin = false;
-            this.cmsExport.Size = new System.Drawing.Size(319, 178);
+            this.cmsExport.Size = new System.Drawing.Size(319, 206);
             // 
             // exportFsysStoreToolStripMenuItem
             // 
@@ -1724,6 +1726,14 @@ namespace Mac_EFI_Toolkit.Forms
             this.exportFirmwareInformationTextToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
             this.exportFirmwareInformationTextToolStripMenuItem.Text = "Export Firmware Information (Text)";
             this.exportFirmwareInformationTextToolStripMenuItem.Click += new System.EventHandler(this.exportFirmwareInformationTextToolStripMenuItem_Click);
+            // 
+            // exportLZMADXEArchiveToolStripMenuItem
+            // 
+            this.exportLZMADXEArchiveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.exportLZMADXEArchiveToolStripMenuItem.Name = "exportLZMADXEArchiveToolStripMenuItem";
+            this.exportLZMADXEArchiveToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
+            this.exportLZMADXEArchiveToolStripMenuItem.Text = "Export LZMA DXE Archive";
+            this.exportLZMADXEArchiveToolStripMenuItem.Click += new System.EventHandler(this.exportLZMADXEArchiveToolStripMenuItem_Click);
             // 
             // cmsPatch
             // 
@@ -2037,5 +2047,6 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.Label lblFileCrc32;
         private System.Windows.Forms.Label lblSerialNumber;
         private System.Windows.Forms.Label lblMeVersion;
+        private System.Windows.Forms.ToolStripMenuItem exportLZMADXEArchiveToolStripMenuItem;
     }
 }

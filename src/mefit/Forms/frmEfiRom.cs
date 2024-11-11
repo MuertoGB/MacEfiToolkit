@@ -513,6 +513,38 @@ namespace Mac_EFI_Toolkit.Forms
 
         private static void SaveFile(string filePath, byte[] fileData) => File.WriteAllBytes(filePath, fileData);
 
+        private void exportLZMADXEArchiveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Program.EnsureDirectoriesExist();
+
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = APPSTRINGS.FILTER_LZMA,
+                FileName = $"{EFISTRINGS.DXE_ARCHIVE}_{EFIROM.FileInfoData.FileName}",
+                OverwritePrompt = true,
+                InitialDirectory = METPath.LZMA_DIR
+            })
+            {
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                // Save the Fsys stores bytes to disk.
+                if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, EFIROM.LzmaDecompressedBuffer) && File.Exists(saveFileDialog.FileName))
+                {
+                    UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                    return;
+                }
+
+                METPrompt.Show(
+                    this,
+                    DIALOGSTRINGS.ARCHIVE_EXPORT_FAIL,
+                    METPromptType.Error,
+                    METPromptButtons.Okay);
+            }
+        }
+
         private void backupFirmwareZIPToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Program.EnsureDirectoriesExist();
@@ -1226,6 +1258,7 @@ namespace Mac_EFI_Toolkit.Forms
                 exportIntelMERegionToolStripMenuItem.Enabled = IFD.IsDescriptorMode && IFD.ME_REGION_BASE != 0 && IFD.ME_REGION_LIMIT != 0;
                 exportNVRAMVSSStoresToolStripMenuItem.Enabled = EFIROM.VssStoreData.PrimaryStoreBase != -1 && !EFIROM.VssStoreData.IsPrimaryStoreEmpty;
                 exportNVRAMSVSStoresToolStripMenuItem.Enabled = EFIROM.SvsStoreData.PrimaryStoreBase != -1 && !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
+                exportLZMADXEArchiveToolStripMenuItem.Enabled = EFIROM.LzmaDecompressedBuffer != null;
 
                 // Patch Menu
                 changeSerialNumberToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1 && EFIROM.FsysStoreData.SerialBase != -1;
