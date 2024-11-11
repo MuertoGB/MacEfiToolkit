@@ -216,7 +216,7 @@ namespace Mac_EFI_Toolkit
             "IME buffers do not match";
 
         internal const string FILE_SAVE_SUCCESS =
-            "File saved successully:";
+            "File saved successfully -";
 
         internal const string NVRAM_VSS_ERASE =
             "Erasing NVRAM VSS regions";

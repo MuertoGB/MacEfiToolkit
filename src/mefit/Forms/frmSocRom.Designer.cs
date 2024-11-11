@@ -784,7 +784,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpStatusBar.RowCount = 1;
             this.tlpStatusBar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.Size = new System.Drawing.Size(608, 36);
-            this.tlpStatusBar.TabIndex = 1;
+            this.tlpStatusBar.TabIndex = 3;
             // 
             // pnlSplit1
             // 
@@ -887,7 +887,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cbxCensor.Name = "cbxCensor";
             this.cbxCensor.Size = new System.Drawing.Size(26, 16);
             this.cbxCensor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(160)))));
-            this.cbxCensor.TabIndex = 7;
+            this.cbxCensor.TabIndex = 8;
             this.cbxCensor.CheckedChanged += new System.EventHandler(this.cbxCensor_CheckedChanged);
             // 
             // tlpFilename
@@ -905,7 +905,8 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpFilename.RowCount = 1;
             this.tlpFilename.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpFilename.Size = new System.Drawing.Size(608, 36);
-            this.tlpFilename.TabIndex = 2;
+            this.tlpFilename.TabIndex = 1;
+            this.tlpFilename.TabStop = true;
             // 
             // cmdOpenInExplorer
             // 
@@ -923,7 +924,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdOpenInExplorer.Name = "cmdOpenInExplorer";
             this.cmdOpenInExplorer.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.cmdOpenInExplorer.Size = new System.Drawing.Size(36, 36);
-            this.cmdOpenInExplorer.TabIndex = 4;
+            this.cmdOpenInExplorer.TabIndex = 7;
             this.cmdOpenInExplorer.Text = "N";
             this.cmdOpenInExplorer.UseVisualStyleBackColor = false;
             this.cmdOpenInExplorer.Click += new System.EventHandler(this.cmdOpenInExplorer_Click);

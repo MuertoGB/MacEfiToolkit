@@ -8,6 +8,7 @@ using Mac_EFI_Toolkit.UI;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
@@ -50,15 +51,16 @@ namespace Mac_EFI_Toolkit
 
         internal static void OpenLogFile(Form owner)
         {
-            var logPath = METPath.APP_LOG;
+            string logPath = METPath.APP_LOG;
 
+            // Check if the log file exists
             if (!File.Exists(logPath))
             {
                 ShowLogFileNotFoundError(owner);
                 return;
             }
 
-            Process.Start(logPath);
+            Process.Start("notepad.exe", logPath);
         }
 
         private static void ShowLogFileNotFoundError(Form owner) =>

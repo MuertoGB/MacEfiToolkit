@@ -10,10 +10,11 @@ Mac EFI Toolkit
 3. [Getting Started](#getting-started)
 4. [EFIROM Window](#efirom-window)
 5. [SOCROM Window](#socrom-window)
-6. [Changelog](#changelog)
-7. [Features](#features)
-8. [Acknowledgements](#acknowledgements)
-9. [Donate](#donate)
+6. [Wine Instructions](#wine-instructions)
+7. [Changelog](#changelog)
+8. [Features](#features)
+9. [Acknowledgements](#acknowledgements)
+10. [Donate](#donate)
 
 ## Introduction
 
@@ -128,6 +129,17 @@ This section explains the SOCROM Window and its functionality.
   - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
   - **Serial Toggle Switch**: Hides or displays the System Serial Number.
   - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
+
+## Wine Instructions
+
+To run **Mac EFI Toolkit** on Linux or macOS using Wine, follow these steps:
+
+1. **Install [Wine](https://gitlab.winehq.org/wine/wine/-/wikis/home)** to your Operating System.
+2. Open the terminal and run the command `winecfg`. This will open the Wine configuration window. Then, navigate to the **'Graphics'** tab and change the **'Screen resolution'** to **120 dpi**.
+3. Download all four required fonts from [here](stream/fonts). After downloading, navigate to `Home\.wine\drive_c\windows\Fonts` and copy the downloaded fonts into this folder.
+
+Once these steps are completed, you should be able to run **Mac EFI Toolkit** under Wine.
+
 
 ## Changelog
 

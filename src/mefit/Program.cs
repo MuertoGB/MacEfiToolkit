@@ -33,15 +33,15 @@ namespace Mac_EFI_Toolkit
         internal static readonly string SCFG_DIR = Path.Combine(WORKING_DIR, "scfg_stores");
         internal static readonly string SETTINGS_FILE = Path.Combine(WORKING_DIR, "Settings.ini");
         internal static readonly string DEBUG_LOG = Path.Combine(WORKING_DIR, "debug.log");
-        internal static readonly string APP_LOG = Path.Combine(WORKING_DIR, "mefit.log");
+        internal static readonly string APP_LOG = Path.Combine(WORKING_DIR, "application.log");
         internal static readonly string DATABASE_LOG = Path.Combine(WORKING_DIR, "database.log");
     }
 
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241110.0445";
-        internal const string APP_CHANNEL = "BETA";
+        internal const string APP_BUILD = "241111.0205";
+        internal const string APP_CHANNEL = "BETA 3";
     }
 
     internal readonly struct METUrl

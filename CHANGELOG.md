@@ -38,6 +38,7 @@
 - User Privacy Update: Unhandled exception reports now use regular expressions (regex) to sanitize usernames from exception messages and file paths, where possible. However, there may still be some cases where this data could appear. Please review the reports carefully before uploading them to GitHub issues.
 
 #### Enhancements
+- Changed the application log filename from 'mefit.log' to 'application.log'.
 - Restricted non-Apple EFI files from being opened.
 - When an NVRAM store base address is found but the size is invalid (0xFFFF), the parser will now treat the store as empty, rather than incorrectly indicating that the store is missing.
 - Enhanced NVRAM reset functionality to simulate an uninitialized factory firmware state.
@@ -54,7 +55,8 @@
 #### Bugs
 - Added missing icon in the ROM Information window.
 - Fixed broken FIT version strings.
-- Corrected a logic error causing the internal database to be skipped when the Fsys Store was force-found, which led to misleading "not present" messages in the database log.
+- Fixed a logic error causing the internal database to be skipped when the Fsys Store was force-found, which led to misleading "not present" messages in the database log.
+- Fixed an issue where the application log file would not open when running under Wine.
 
 #### Miscellaneous
 - Some settings have been restructured; users will need to reselect the 'EFI Window Default Directory' in settings.
