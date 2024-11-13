@@ -84,7 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppColours.cs" />
     <Compile Include="Firmware\EFI\IFD.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Firmware\EFI\Guids.cs" />
@@ -102,7 +101,7 @@
     <Compile Include="UI\METForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UnhandledException.cs" />
+    <Compile Include="Unhandled.cs" />
     <Compile Include="Firmware\EFI\Types\Enums.cs" />
     <Compile Include="Tools\Types\Structs.cs" />
     <Compile Include="Settings.cs" />

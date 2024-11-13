@@ -123,9 +123,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void frmStartup_DragLeave(object sender, EventArgs e) => ApplyDragLeaveColours();
 
-        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
+        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.CLR_INACTIVEFORM);
 
-        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
+        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.CLR_ACTIVEFORM);
         #endregion
 
         #region KeyDown Events

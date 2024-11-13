@@ -8,6 +8,7 @@
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
+using Mac_EFI_Toolkit.UI;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -107,12 +108,12 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 if (Serial.IsValid(textBox.Text))
                 {
-                    UpdateTextBoxColour(textBox, AppColours.COMPLETE);
+                    UpdateTextBoxColour(textBox, Colours.CLR_GOOD);
                     cmdOkay.Enabled = true;
                 }
                 else
                 {
-                    UpdateTextBoxColour(textBox, AppColours.ERROR);
+                    UpdateTextBoxColour(textBox, Colours.CLR_ERROR);
                     lblValidity.Text += $" - {APPSTRINGS.INVALID}";
                     cmdOkay.Enabled = false;
                 }

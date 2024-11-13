@@ -26,12 +26,12 @@ namespace Mac_EFI_Toolkit.UI
                     return Color.FromArgb(red, green, blue);
                 }
 
-                return AppColours.DEFAULT_APP_BORDER;
+                return Colours.CLR_DEFAULTBORDER;
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLine(nameof(NativeMethods.DwmGetColorizationColor), e.GetType(), e.Message);
-                return AppColours.DEFAULT_APP_BORDER;
+                return Colours.CLR_DEFAULTBORDER;
             }
         }
     }

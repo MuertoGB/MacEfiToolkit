@@ -224,10 +224,10 @@ namespace Mac_EFI_Toolkit
             "File saved successfully -";
 
         internal const string NVRAM_VSS_ERASE =
-            "Erasing NVRAM VSS regions";
+            "Erasing Variable Storage Subsystem ($VSS) stores";
 
         internal const string NVRAM_SVS_ERASE =
-            "Erasing NVRAM SVS regions";
+            "Erasing Secure Variable stores ($SVS)";
 
         internal const string NVRAM_INIT_HDR =
             "Initializing header bytes 0x4h > 0x7h (0xFF)";
@@ -256,20 +256,32 @@ namespace Mac_EFI_Toolkit
         internal const string CRC_BUFFER_EMPTY =
             "Buffer was empty";
 
+        internal const string NVR_BASE_NOT_FOUND =
+            "base not found - skipping";
+
         internal const string NVR_HAS_BODY_ERASING =
             "has body data - erasing";
-
-        internal const string NVR_ERASE_BUFFER_EMPTY =
-            "erase failed - the returned buffer was empty";
 
         internal const string NVR_IS_EMPTY =
             "is empty - skipping";
 
-        internal const string NVR_VERIFY_FAIL =
-            "Verification failed for";
+        internal const string NVR_FAIL_ERASE_BODY =
+            "Failed to erase body";
 
-        internal const string NVR_VERIFY_SUCCESS =
-            "Verification succeeded for";
+        internal const string NVR_FAIL_WRITE_VERIFY =
+            "Write verification failed";
+
+        internal const string NVR_ERASE_BODY =
+            "Erasing store body data";
+
+        internal const string NVR_WRITE_ERASED_BODY =
+            "Writing erased body back to store";
+
+        internal const string NVR_BODY_WRITE_FAIL =
+            "New store body write unsuccessful";
+
+        internal const string NVR_STORE_ERASE_SUCESS =
+            "Store erase successful";
 
         internal const string AT =
             "at";
@@ -505,6 +517,9 @@ namespace Mac_EFI_Toolkit
 
         internal const string FIRMWARE_MOD_SUCCESS_SAVE =
             "Firmware modified successfully. Would you like to save the output?";
+
+        internal const string LZMA_VOL_FOUND =
+            "LZMA DXE Volume Detected in Firmware";
         #endregion
     }
 

@@ -18,6 +18,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
     internal enum NvramStoreType
     {
-        VSS, SVS
+        Variable, Secure, None
     }
 }

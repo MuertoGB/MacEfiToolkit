@@ -18,14 +18,19 @@ namespace Mac_EFI_Toolkit.UI
     [Designer(typeof(METSwitchDesigner))]
     public class METSwitch : CheckBox
     {
+        #region Private Members
+        private readonly Color clrControlDisabled = Color.FromArgb(80, 80, 80);
+        internal static readonly Color clrSwitchHeadDisabled = Color.FromArgb(100, 100, 100);
+        #endregion
+
         #region Fields
         private bool _mouseHovered = false;
-        private Color _borderColorInactive = Colours.BORDER_INACTIVE;
-        private Color _borderColorActive = Colours.BORDER_ACTIVE;
-        private Color _clientColorInactive = Colours.CLIENT_INACTIVE;
-        private Color _clientColorActive = Colours.CLIENT_ACTIVE;
-        private Color _checkedColor = Colours.CHECKED;
-        private Color _switchHeadColor = Colours.SWITCH_HEAD_ENABLED;
+        private Color _borderColorInactive = Color.FromArgb(120, 120, 120);
+        private Color _borderColorActive = Color.FromArgb(200, 200, 200);
+        private Color _clientColorInactive = Color.FromArgb(10, 10, 10);
+        private Color _clientColorActive = Color.FromArgb(30, 30, 30);
+        private Color _checkedColor = Color.FromArgb(85, 170, 255);
+        private Color _switchHeadColor = Color.FromArgb(170, 170, 170);
         #endregion
 
         #region Constructor
@@ -125,7 +130,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private Color GetBorderColor()
         {
-            return Enabled ? (Focused ? BorderColorActive : BorderColor) : Colours.DISABLED_CONTROL;
+            return Enabled ? (Focused ? BorderColorActive : BorderColor) : clrControlDisabled;
         }
 
         private Color GetClientColor()
@@ -135,7 +140,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private Color GetSwitchHeadColor()
         {
-            return Enabled ? SwitchHeadColor : Colours.SWITCH_HEAD_DISABLED;
+            return Enabled ? SwitchHeadColor : clrSwitchHeadDisabled;
         }
 
         private void DrawSwitchBorder(Graphics g, Color borderColor)

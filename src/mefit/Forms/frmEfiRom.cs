@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -98,9 +99,9 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(draggedFilename);
         }
 
-        private void frmEfiRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, AppColours.DEACTIVATED_TEXT);
+        private void frmEfiRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.CLR_INACTIVEFORM);
 
-        private void frmEfiRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, AppColours.WHITE_TEXT);
+        private void frmEfiRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.CLR_ACTIVEFORM);
         #endregion
 
         #region KeyDown Events
@@ -438,31 +439,27 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void exportNVRAMVSSStoresToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ExportNVRAM(EFIROM.VssStoreData.PrimaryStoreBytes, EFIROM.VssStoreData.BackupStoreBytes, EFISTRINGS.VSS);
+            ExportNVRAM(EFIROM.VssPrimary, EFIROM.VssSecondary, NvramStoreType.Variable, this);
 
         private void exportNVRAMSVSStoresToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ExportNVRAM(EFIROM.SvsStoreData.PrimaryStoreBytes, EFIROM.SvsStoreData.BackupStoreBytes, EFISTRINGS.SVS);
+            ExportNVRAM(EFIROM.SvsPrimary, EFIROM.SvsSecondary, NvramStoreType.Secure, this);
 
-        public void ExportNVRAM(byte[] primaryStore, byte[] backupStore, string storeType)
+        internal static void ExportNVRAM(NvramStore primaryStore, NvramStore secondaryStore, NvramStoreType storeType, Form owner)
         {
             Program.EnsureDirectoriesExist();
 
-            if (primaryStore != null && backupStore != null)
+            switch (storeType)
             {
-                SaveFilesInFolder(primaryStore, backupStore, storeType);
-                return;
-            }
-
-            byte[] fileBuffer = primaryStore ?? backupStore;
-
-            if (fileBuffer != null)
-            {
-                SaveSingleFile(fileBuffer, storeType);
-                return;
+                case NvramStoreType.Variable:
+                    SaveFilesInFolder(primaryStore.StoreBuffer, secondaryStore.StoreBuffer, "VSS", owner);
+                    break;
+                case NvramStoreType.Secure:
+                    SaveFilesInFolder(primaryStore.StoreBuffer, secondaryStore.StoreBuffer, "SVS", owner);
+                    break;
             }
         }
 
-        private void SaveFilesInFolder(byte[] primaryStore, byte[] backupStore, string storeType)
+        private static void SaveFilesInFolder(byte[] primaryStore, byte[] backupStore, string storeType, Form owner)
         {
             using (var folderDialog = new FolderBrowserDialog
             {
@@ -479,34 +476,10 @@ namespace Mac_EFI_Toolkit.Forms
                         Directory.CreateDirectory(folderPath);
                     }
 
-                    SaveFile(Path.Combine(folderPath, $"{storeType}_{EFISTRINGS.PRIMARY_REGION}_{EFIROM.FileInfoData.FileName}.bin"), primaryStore);
-                    SaveFile(Path.Combine(folderPath, $"{storeType}_{EFISTRINGS.BACKUP_REGION}_{EFIROM.FileInfoData.FileName}.bin"), backupStore);
+                    if (primaryStore != null) SaveFile(Path.Combine(folderPath, $"{storeType}_{EFISTRINGS.PRIMARY_REGION}_{EFIROM.FileInfoData.FileName}.bin"), primaryStore);
+                    if (backupStore != null) SaveFile(Path.Combine(folderPath, $"{storeType}_{EFISTRINGS.BACKUP_REGION}_{EFIROM.FileInfoData.FileName}.bin"), backupStore);
 
-                    UITools.ShowOpenFolderInExplorerPromt(this, folderPath);
-                }
-            }
-        }
-
-        private void SaveSingleFile(byte[] fileToSave, string storeType)
-        {
-            string defaultFileName =
-                fileToSave ==
-                    EFIROM.VssStoreData.PrimaryStoreBytes
-                        ? $"{storeType}_{EFISTRINGS.PRIMARY_REGION}_{EFIROM.FileInfoData.FileName}.bin"
-                        : $"{storeType}_{EFISTRINGS.BACKUP_REGION}_{EFIROM.FileInfoData.FileName}.bin";
-
-            using (var saveDialog = new SaveFileDialog
-            {
-                Filter = APPSTRINGS.FILTER_BIN,
-                FileName = defaultFileName,
-                InitialDirectory = METPath.NVRAM_DIR
-            })
-            {
-                if (saveDialog.ShowDialog() == DialogResult.OK)
-                {
-                    SaveFile(saveDialog.FileName, fileToSave);
-
-                    UITools.ShowExplorerFileHighlightPrompt(this, saveDialog.FileName);
+                    UITools.ShowOpenFolderInExplorerPromt(owner, folderPath);
                 }
             }
         }
@@ -888,8 +861,10 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateDescriptorModeControls();
             UpdateIntelMeControls();
 
+            UpdateLzmaArchiveControls();
+
             // Apply DISABLED_TEXT to N/A labels.
-            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, AppColours.DISABLED_TEXT);
+            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, Colours.CLR_NATEXT);
 
             // Check which descriptor copy menu items should be enabled.
             pdrBaseToolStripMenuItem.Enabled = IFD.PDR_REGION_BASE != 0;
@@ -920,7 +895,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!isValidSize)
             {
-                lblFilesize.ForeColor = AppColours.ERROR;
+                lblFilesize.ForeColor = Colours.CLR_ERROR;
 
                 lblFilesize.Text += isValidSize ? string.Empty : $" ({FileTools.GetSizeDifference(fileSizeDecimal)})";
             }
@@ -963,7 +938,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
-            lblConfigCode.ForeColor = Colours.INFO_BOX;
+            lblConfigCode.ForeColor = Colours.CLR_INFO;
 
             GetConfigCodeAsync(EFIROM.FsysStoreData.HWC);
         }
@@ -977,7 +952,7 @@ namespace Mac_EFI_Toolkit.Forms
                 EFIROM.ConfigCode = configCode;
 
                 lblConfigCode.Text = configCode;
-                lblConfigCode.ForeColor = AppColours.NORMAL_INFO_TEXT;
+                lblConfigCode.ForeColor = Colours.CLR_NORMALTEXT;
 
                 configurationToolStripMenuItem.Enabled = true;
 
@@ -985,7 +960,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             lblConfigCode.Text = APPSTRINGS.NA;
-            lblConfigCode.ForeColor = Colours.CONTROL_DISABLED_TEXT;
+            lblConfigCode.ForeColor = Colours.CLR_DISABLEDTEXT;
 
             configurationToolStripMenuItem.Enabled = false;
         }
@@ -1001,7 +976,7 @@ namespace Mac_EFI_Toolkit.Forms
                 if (!string.IsNullOrEmpty(EFIROM.FsysStoreData.CrcString))
                 {
                     lblFsysStore.Text += crcMatch ? $" ({EFISTRINGS.CRC_VALID})" : $" ({EFISTRINGS.CRC_INVALID})";
-                    lblFsysStore.ForeColor = crcMatch ? lblFsysStore.ForeColor : AppColours.WARNING;
+                    lblFsysStore.ForeColor = crcMatch ? lblFsysStore.ForeColor : Colours.CLR_WARNING;
                 }
 
                 if (EFIROM.ForceFoundFsys)
@@ -1045,7 +1020,7 @@ namespace Mac_EFI_Toolkit.Forms
                 // Prototype in testing
                 if (!Serial.IsValid(serialNumber))
                 {
-                    lblSerialNumber.ForeColor = AppColours.WARNING;
+                    lblSerialNumber.ForeColor = Colours.CLR_WARNING;
                 }
 
                 cbxCensor.Enabled = true;
@@ -1125,10 +1100,10 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateNvramControls()
         {
             // Retrieve base addresses and empty states
-            int vssBase = EFIROM.VssStoreData.PrimaryStoreBase;
-            int svsBase = EFIROM.SvsStoreData.PrimaryStoreBase;
-            bool isVssEmpty = EFIROM.VssStoreData.IsPrimaryStoreEmpty;
-            bool isSvsEmpty = EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
+            int vssBase = EFIROM.VssPrimary.StoreBase;
+            int svsBase = EFIROM.SvsPrimary.StoreBase;
+            bool isVssEmpty = EFIROM.VssPrimary.IsStoreEmpty;
+            bool isSvsEmpty = EFIROM.SvsPrimary.IsStoreEmpty;
 
             // Update labels and menu items
             UpdateStoreDisplay(lblVss, vSSBaseAddressToolStripMenuItem, vssBase, isVssEmpty);
@@ -1156,7 +1131,7 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 case EfiLockType.Locked:
                     lblEfiLock.Text = EFISTRINGS.LOCKED.ToUpper();
-                    lblEfiLock.ForeColor = AppColours.WARNING;
+                    lblEfiLock.ForeColor = Colours.CLR_WARNING;
                     break;
                 case EfiLockType.Unlocked:
                     lblEfiLock.Text = EFISTRINGS.UNLOCKED.ToUpper();
@@ -1164,7 +1139,7 @@ namespace Mac_EFI_Toolkit.Forms
                 case EfiLockType.Unknown:
                 default:
                     lblEfiLock.Text = APPSTRINGS.UNKNOWN.ToUpper();
-                    lblEfiLock.ForeColor = AppColours.WARNING;
+                    lblEfiLock.ForeColor = Colours.CLR_WARNING;
                     break;
             }
         }
@@ -1178,11 +1153,11 @@ namespace Mac_EFI_Toolkit.Forms
                     break;
                 case ApfsCapable.No:
                     lblApfsCapable.Text = EFISTRINGS.APFS_DRIVER_NOT_FOUND;
-                    lblApfsCapable.ForeColor = AppColours.WARNING;
+                    lblApfsCapable.ForeColor = Colours.CLR_WARNING;
                     break;
                 case ApfsCapable.Unknown:
                     lblApfsCapable.Text = APPSTRINGS.UNKNOWN.ToUpper();
-                    lblApfsCapable.ForeColor = AppColours.WARNING;
+                    lblApfsCapable.ForeColor = Colours.CLR_WARNING;
                     break;
             }
         }
@@ -1214,8 +1189,10 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void UpdateIntelFitControls() =>
-            fitVersionToolStripMenuItem.Enabled =
-                !string.IsNullOrEmpty(EFIROM.FitVersion);
+            fitVersionToolStripMenuItem.Enabled = !string.IsNullOrEmpty(EFIROM.FitVersion);
+
+        private void UpdateLzmaArchiveControls() =>
+            lblLzma.ForeColor = EFIROM.LzmaDecompressedBuffer != null ? Colours.CLR_LZMAFOUND : Colours.CLR_LZMADEFAULT;
         #endregion
 
         #region UI Events
@@ -1252,19 +1229,24 @@ namespace Mac_EFI_Toolkit.Forms
 
                 bool fsysBytesExist = EFIROM.FsysStoreData.FsysBytes != null;
                 bool fsysCrcMismatch = fsysBytesExist && !string.Equals(EFIROM.FsysStoreData.CrcCalcString, EFIROM.FsysStoreData.CrcString);
+                bool allNvStoresEmpty =
+                    EFIROM.VssPrimary.IsStoreEmpty &&
+                    EFIROM.VssSecondary.IsStoreEmpty &&
+                    EFIROM.SvsPrimary.IsStoreEmpty &&
+                    EFIROM.SvsSecondary.IsStoreEmpty;
 
                 // Export Menu
                 exportFsysStoreToolStripMenuItem.Enabled = fsysBytesExist;
                 exportIntelMERegionToolStripMenuItem.Enabled = IFD.IsDescriptorMode && IFD.ME_REGION_BASE != 0 && IFD.ME_REGION_LIMIT != 0;
-                exportNVRAMVSSStoresToolStripMenuItem.Enabled = EFIROM.VssStoreData.PrimaryStoreBase != -1 && !EFIROM.VssStoreData.IsPrimaryStoreEmpty;
-                exportNVRAMSVSStoresToolStripMenuItem.Enabled = EFIROM.SvsStoreData.PrimaryStoreBase != -1 && !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
+                exportNVRAMVSSStoresToolStripMenuItem.Enabled = !EFIROM.VssPrimary.IsStoreEmpty || !EFIROM.VssSecondary.IsStoreEmpty;
+                exportNVRAMSVSStoresToolStripMenuItem.Enabled = !EFIROM.SvsPrimary.IsStoreEmpty || !EFIROM.SvsSecondary.IsStoreEmpty;
                 exportLZMADXEArchiveToolStripMenuItem.Enabled = EFIROM.LzmaDecompressedBuffer != null;
 
                 // Patch Menu
                 changeSerialNumberToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1 && EFIROM.FsysStoreData.SerialBase != -1;
                 replaceIntelMERegionToolStripMenuItem.Enabled = IFD.IsDescriptorMode && IFD.ME_REGION_BASE != 0 && IFD.ME_REGION_LIMIT != 0;
                 replaceFsysStoreToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1;
-                eraseNVRAMToolStripMenuItem.Enabled = !EFIROM.VssStoreData.IsPrimaryStoreEmpty || !EFIROM.SvsStoreData.IsPrimaryStoreEmpty;
+                eraseNVRAMToolStripMenuItem.Enabled = !allNvStoresEmpty;
                 fixFsysChecksumCRC32ToolStripMenuItem.Enabled = fsysCrcMismatch;
                 invalidateEFILockToolStripMenuItem.Enabled = EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
 
@@ -1296,6 +1278,9 @@ namespace Mac_EFI_Toolkit.Forms
         {
             lblView.Font = Program.FONT_MDL2_REG_10;
             lblView.Text = Program.GLYPH_VIEW;
+
+            lblLzma.Font = Program.FONT_MDL2_REG_10;
+            lblLzma.Text = Program.GLYPH_ZIP;
         }
 
         private void SetTipHandlers()
@@ -1312,7 +1297,7 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuOptions
             };
 
-            Label[] labels = { lblParseTime };
+            Label[] labels = { lblParseTime, lblLzma };
 
             CheckBox[] checkBoxes = { cbxCensor };
 
@@ -1351,6 +1336,7 @@ namespace Mac_EFI_Toolkit.Forms
                     { cmdMenuOptions, $"{EFISTRINGS.MENU_TIP_OPTIONS} (CTRL + T)"},
                     { cmdOpenInExplorer, $"{EFISTRINGS.MENU_TIP_OPENFILELOCATION} (CTRL + SHIFT + L)" },
                     { lblParseTime, APPSTRINGS.FW_PARSE_TIME},
+                    { lblLzma, lzmaFoundString()},
                     { cbxCensor, cbxCensorTipString() }
                 };
 
@@ -1365,6 +1351,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private string cbxCensorTipString() =>
             $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER} (CTRL + S)";
+
+        private string lzmaFoundString() =>
+            EFIROM.LzmaDecompressedBuffer != null ? EFISTRINGS.LZMA_VOL_FOUND : string.Empty;
 
         private void HandleCheckBoxChanged(object sender, EventArgs e)
         {
@@ -1445,11 +1434,12 @@ namespace Mac_EFI_Toolkit.Forms
             foreach (Label label in labels)
             {
                 label.Text = string.Empty;
-                label.ForeColor = AppColours.NORMAL_INFO_TEXT;
+                label.ForeColor = Colours.CLR_NORMALTEXT;
             }
 
             // Reset parse time.
             lblParseTime.Text = "0.00s";
+            lblLzma.ForeColor = Colours.CLR_LZMADEFAULT;
 
             // Reset window text.
             Text = APPSTRINGS.EFIROM;
@@ -1518,9 +1508,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetFirmwareVersion() => SetClipboardText(EFIROM.FirmwareVersion);
 
-        private void ClipboardSetVssBaseAddress() => SetClipboardText($"{EFIROM.VssStoreData.PrimaryStoreBase:X2}");
+        private void ClipboardSetVssBaseAddress() => SetClipboardText($"{EFIROM.VssPrimary.StoreBase:X2}");
 
-        private void ClipboardSetSvsBaseAddress() => SetClipboardText($"{EFIROM.SvsStoreData.PrimaryStoreBase:X2}");
+        private void ClipboardSetSvsBaseAddress() => SetClipboardText($"{EFIROM.SvsPrimary.StoreBase:X2}");
 
         private void ClipboardSetFirmwareBoardId() => SetClipboardText(EFIROM.PdrSectionData.BoardId);
 
@@ -1650,38 +1640,27 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Logger.WritePatchLine(LOGSTRINGS.PATCH_START);
 
+            // Load current firmware into buffer.
             byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
 
             if (resetVss)
             {
-                bool vssPrimaryPatched = false;
-                bool vssBackupPatched = false;
-
                 Logger.WritePatchLine(LOGSTRINGS.NVRAM_VSS_ERASE);
 
-                bool eraseVssResult = EraseStore(EFIROM.VssStoreData, NvramStoreType.VSS, binaryBuffer, ref vssPrimaryPatched, ref vssBackupPatched);
-
-                if (!eraseVssResult)
+                if (!GetAndEraseStore(nameof(EFIROM.VssPrimary), EFIROM.VssPrimary, binaryBuffer) ||
+                    !GetAndEraseStore(nameof(EFIROM.VssSecondary), EFIROM.VssSecondary, binaryBuffer))
                 {
-                    Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {nameof(eraseVssResult)}: {eraseVssResult}");
-                    NotifyPatchingFailure();
                     return;
                 }
             }
 
             if (resetSvs)
             {
-                bool svsPrimaryPatched = false;
-                bool svsBackupPatched = false;
-
                 Logger.WritePatchLine(LOGSTRINGS.NVRAM_SVS_ERASE);
 
-                bool eraseSvsResult = EraseStore(EFIROM.SvsStoreData, NvramStoreType.SVS, binaryBuffer, ref svsPrimaryPatched, ref svsBackupPatched);
-
-                if (!eraseSvsResult)
+                if (!GetAndEraseStore(nameof(EFIROM.SvsPrimary), EFIROM.SvsPrimary, binaryBuffer) ||
+                    !GetAndEraseStore(nameof(EFIROM.SvsSecondary), EFIROM.SvsSecondary, binaryBuffer))
                 {
-                    Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {nameof(eraseSvsResult)}: {eraseSvsResult}");
-                    NotifyPatchingFailure();
                     return;
                 }
             }
@@ -1697,140 +1676,70 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
         }
 
-        private bool EraseStore(NvramStore storeData, NvramStoreType storeType, byte[] binaryBuffer, ref bool primaryPatched, ref bool backupPatched)
+        private bool GetAndEraseStore(string storeName, NvramStore nvramStore, byte[] binaryBuffer)
         {
-            byte[] primaryBuffer = null;
-            byte[] backupBuffer = null;
-
-            // Handle primary store erase
-            if (!storeData.IsPrimaryStoreEmpty)
+            if (nvramStore.StoreBase == -1)
             {
-                Logger.WritePatchLine($"{EFISTRINGS.PRIMARY} {storeType} {LOGSTRINGS.AT} {storeData.PrimaryStoreBase:X2}h {LOGSTRINGS.NVR_HAS_BODY_ERASING}");
-
-                primaryBuffer =
-                    GetAndEraseNvramStore(
-                        storeData.PrimaryStoreBytes,
-                        storeData.IsPrimaryStoreEmpty,
-                        storeData.PrimaryStoreBase,
-                        storeType,
-                        binaryBuffer,
-                        ref primaryPatched);
-
-                // Check if erase failed
-                if (primaryBuffer == null)
-                {
-                    Logger.WritePatchLine($"{storeType} {LOGSTRINGS.AT} {storeData.PrimaryStoreBase:X2}h {LOGSTRINGS.NVR_ERASE_BUFFER_EMPTY}");
-                    return false;
-                }
-            }
-            else
-            {
-                Logger.WritePatchLine($"{EFISTRINGS.PRIMARY} {storeType} {LOGSTRINGS.AT} {storeData.PrimaryStoreBase:X2}h {LOGSTRINGS.NVR_IS_EMPTY}");
+                Logger.WritePatchLine($"{storeName} {LOGSTRINGS.NVR_BASE_NOT_FOUND}");
+                return true;
             }
 
-            // Handle backup store erase
-            if (!storeData.IsBackupStoreEmpty)
+            if (nvramStore.IsStoreEmpty)
             {
-                Logger.WritePatchLine($"{EFISTRINGS.BACKUP} {storeType} {LOGSTRINGS.AT} {storeData.BackupStoreBase:X2}h {LOGSTRINGS.NVR_HAS_BODY_ERASING}");
-
-                backupBuffer =
-                    GetAndEraseNvramStore(
-                        storeData.BackupStoreBytes,
-                        storeData.IsBackupStoreEmpty,
-                        storeData.BackupStoreBase,
-                        storeType,
-                        binaryBuffer,
-                        ref backupPatched);
-
-                // Check if erase failed
-                if (backupBuffer == null)
-                {
-                    Logger.WritePatchLine($"{storeType} {LOGSTRINGS.AT} {storeData.BackupStoreBase:X2}h {LOGSTRINGS.NVR_ERASE_BUFFER_EMPTY}");
-                    return false;
-                }
-            }
-            else
-            {
-                Logger.WritePatchLine($"{EFISTRINGS.BACKUP} {storeType} {LOGSTRINGS.AT} {storeData.BackupStoreBase:X2}h {LOGSTRINGS.NVR_IS_EMPTY}");
+                Logger.WritePatchLine($"{storeName} {LOGSTRINGS.NVR_IS_EMPTY}");
+                return true;
             }
 
-            // Verify primary buffer match if patched
-            if (primaryPatched)
-            {
-                if (!VerifyBufferMatch(binaryBuffer, primaryBuffer, storeData.PrimaryStoreBase, storeData.PrimaryStoreSize))
-                {
-                    Logger.WritePatchLine($"{LOGSTRINGS.NVR_VERIFY_FAIL} {storeType} {LOGSTRINGS.AT} {storeData.PrimaryStoreBase:X2}h");
-                    return false;
-                }
+            Logger.WritePatchLine($"{storeName} {LOGSTRINGS.AT} {nvramStore.StoreBase:X}h {LOGSTRINGS.NVR_HAS_BODY_ERASING}");
 
-                Logger.WritePatchLine($"{LOGSTRINGS.NVR_VERIFY_SUCCESS} {storeType} {LOGSTRINGS.AT} {storeData.PrimaryStoreBase:X2}h");
+            byte[] erasedBuffer = EraseNvramStore(NvramStoreType.Variable, nvramStore);
+
+            if (erasedBuffer == null)
+            {
+                Logger.WritePatchLine($"{LOGSTRINGS.NVR_FAIL_ERASE_BODY} ({storeName})");
+                NotifyPatchingFailure();
+                return false;
             }
 
-            // Verify backup buffer match if patched
-            if (backupPatched)
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, nvramStore.StoreBase, erasedBuffer);
+
+            byte[] tempBuffer = BinaryTools.GetBytesBaseLength(binaryBuffer, nvramStore.StoreBase, nvramStore.StoreSize);
+
+            if (!BinaryTools.ByteArraysMatch(tempBuffer, erasedBuffer))
             {
-                if (!VerifyBufferMatch(binaryBuffer, backupBuffer, storeData.BackupStoreBase, storeData.BackupStoreSize))
-                {
-                    Logger.WritePatchLine($"{LOGSTRINGS.NVR_VERIFY_FAIL} {storeType} {LOGSTRINGS.AT} {storeData.BackupStoreBase:X2}h");
-
-                    return false;
-                }
-
-                Logger.WritePatchLine($"{LOGSTRINGS.NVR_VERIFY_SUCCESS} {storeType} {LOGSTRINGS.AT} {storeData.BackupStoreBase:X2}h");
+                Logger.WritePatchLine($"{LOGSTRINGS.NVR_FAIL_WRITE_VERIFY} ({storeName})");
+                NotifyPatchingFailure();
+                return false;
             }
 
             return true;
         }
 
-        private byte[] GetAndEraseNvramStore(byte[] storeBytes, bool isStoreEmpty, int storeBase, NvramStoreType storeType, byte[] binaryBuffer, ref bool patchedFlag)
-        {
-            if (!isStoreEmpty)
-            {
-                EraseNvramStore(storeBytes, storeType);
-
-                if (storeBytes != null)
-                {
-                    BinaryTools.OverwriteBytesAtBase(binaryBuffer, storeBase, storeBytes);
-                    patchedFlag = true;
-                }
-            }
-
-            return storeBytes;
-        }
-
-        private static bool VerifyBufferMatch(byte[] binaryBuffer, byte[] storeBuffer, int storeBase, int storeLength)
-        {
-            byte[] tempBufferFromBinary = BinaryTools.GetBytesBaseLength(binaryBuffer, storeBase, storeLength);
-
-            return BinaryTools.ByteArraysMatch(storeBuffer, tempBufferFromBinary);
-        }
-
-        private byte[] EraseNvramStore(byte[] storeBuffer, NvramStoreType storeType)
+        private byte[] EraseNvramStore(NvramStoreType storeType, NvramStore store)
         {
             try
             {
-                int storeHeaderLength = 0x10;
-                int storeBodyEnd = storeBuffer.Length - storeHeaderLength;
-
-                Logger.WritePatchLine(LOGSTRINGS.NVRAM_INIT_HDR);
+                byte[] storeBuffer = store.StoreBuffer;
+                int bodyStart = EFIROM.HDR_SIZE;
+                int bodyEnd = store.StoreBuffer.Length - EFIROM.HDR_SIZE;
 
                 // Initialize header.
+                Logger.WritePatchLine(LOGSTRINGS.NVRAM_INIT_HDR);
                 for (int i = 0x4; i <= 0x7; i++)
                 {
                     storeBuffer[i] = 0xFF;
                 }
 
-                if (storeType == NvramStoreType.VSS)
+                if (storeType == NvramStoreType.Variable)
                 {
                     Logger.WritePatchLine(LOGSTRINGS.NVRAM_INIT_HDR_VSS);
-
                     for (int i = 0x9; i <= 0xA; i++)
                     {
                         storeBuffer[i] = 0xFF;
                     }
                 }
 
-                // Verify that the relevant bytes have been set to 0xFF.
+                // Verify that the relevant header bytes have been set to 0xFF.
                 if (!VerifyErasedHeader(storeBuffer, storeType))
                 {
                     Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.NVRAM_INIT_HDR_FAIL}");
@@ -1840,13 +1749,28 @@ namespace Mac_EFI_Toolkit.Forms
                 Logger.WritePatchLine(LOGSTRINGS.NVRAM_INIT_HDR_SUCCESS);
 
                 // Pull the store body from the buffer.
-                byte[] erasedStoreBodyBuffer = BinaryTools.GetBytesBaseLength(storeBuffer, storeHeaderLength, storeBodyEnd);
+                byte[] erasedStoreBodyBuffer = BinaryTools.GetBytesBaseLength(storeBuffer, bodyStart, bodyEnd);
+
+                Logger.WritePatchLine(LOGSTRINGS.NVR_ERASE_BODY);
 
                 // Erase the store body.
                 BinaryTools.EraseByteArray(erasedStoreBodyBuffer);
 
+                Logger.WritePatchLine(LOGSTRINGS.NVR_WRITE_ERASED_BODY);
+
                 // Write the erased store back to the nvram store buffer.
-                BinaryTools.OverwriteBytesAtBase(storeBuffer, storeHeaderLength, erasedStoreBodyBuffer);
+                BinaryTools.OverwriteBytesAtBase(storeBuffer, bodyStart, erasedStoreBodyBuffer);
+
+                // Check the body was erased.
+                erasedStoreBodyBuffer = BinaryTools.GetBytesBaseLength(storeBuffer, bodyStart, bodyEnd);
+
+                if (!BinaryTools.IsByteBlockEmpty(erasedStoreBodyBuffer))
+                {
+                    MessageBox.Show(LOGSTRINGS.NVR_BODY_WRITE_FAIL);
+                    return null;
+                }
+
+                Logger.WritePatchLine(LOGSTRINGS.NVR_STORE_ERASE_SUCESS);
 
                 return storeBuffer;
             }
@@ -1865,7 +1789,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return false;
             }
 
-            if (storeType == NvramStoreType.VSS)
+            if (storeType == NvramStoreType.Variable)
             {
                 for (int i = 0x9; i <= 0xA; i++)
                 {
@@ -2070,12 +1994,12 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WritePatchLine(LOGSTRINGS.LOCK_PRIMARY_MAC);
 
             // Create a patched primary store.
-            unlockedPrimaryStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsStoreData.PrimaryStoreBytes, EFIROM.EfiPrimaryLockData.LockCrcBase);
+            unlockedPrimaryStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsPrimary.StoreBuffer, EFIROM.EfiPrimaryLockData.LockCrcBase);
 
             Logger.WritePatchLine(LOGSTRINGS.WRITE_NEW_DATA);
 
             // Write patched primary store the buffer.
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsStoreData.PrimaryStoreBase, unlockedPrimaryStore);
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsPrimary.StoreBase, unlockedPrimaryStore);
 
             // We should probably patch any Message Authentication Code in the backup SVS store as well.
             if (EFIROM.EfiBackupLockData.LockCrcBase != -1)
@@ -2083,21 +2007,23 @@ namespace Mac_EFI_Toolkit.Forms
                 Logger.WritePatchLine(LOGSTRINGS.LOCK_BACKUP_MAC);
 
                 // A MAC CRC base was found in the backup store so we need to patch it.
-                unlockedBackupStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsStoreData.BackupStoreBytes, EFIROM.EfiBackupLockData.LockCrcBase);
+                unlockedBackupStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsSecondary.StoreBuffer, EFIROM.EfiBackupLockData.LockCrcBase);
 
                 Logger.WritePatchLine(LOGSTRINGS.WRITE_NEW_DATA);
 
                 // Write patched backup store to the buffer.
-                BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsStoreData.BackupStoreBase, unlockedBackupStore);
+                BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsSecondary.StoreBase, unlockedBackupStore);
             }
 
             Logger.WritePatchLine(LOGSTRINGS.LOCK_LOAD_SVS);
 
             // Load SVS NVRAM stores from the buffer.
-            NvramStore svsStore = EFIROM.GetNvramStoreData(binaryBuffer, NvramStoreType.SVS);
+            int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFIROM.SVS_STORE_SIG, EFIROM.NVRAM_BASE, EFIROM.NVRAM_LIMIT);
+
+            NvramStore svsPrimary = EFIROM.ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
 
             // Check patched primary store matches the patched buffer.
-            if (!BinaryTools.ByteArraysMatch(svsStore.PrimaryStoreBytes, unlockedPrimaryStore))
+            if (!BinaryTools.ByteArraysMatch(svsPrimary.StoreBuffer, unlockedPrimaryStore))
             {
                 Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_PRIM_VERIF_FAIL}");
                 NotifyPatchingFailure();
@@ -2107,7 +2033,10 @@ namespace Mac_EFI_Toolkit.Forms
             // Check patched backup store matches the patched buffer (if backup store is ! null).
             if (unlockedBackupStore != null)
             {
-                if (!BinaryTools.ByteArraysMatch(svsStore.BackupStoreBytes, unlockedBackupStore))
+                int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFIROM.SVS_STORE_SIG, svsPrimaryBase + EFIROM.HDR_SIZE, EFIROM.NVRAM_LIMIT);
+                NvramStore svsBackup = EFIROM.ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
+
+                if (!BinaryTools.ByteArraysMatch(svsBackup.StoreBuffer, unlockedBackupStore))
                 {
                     Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_BACK_VERIF_FAIL}");
                     NotifyPatchingFailure();

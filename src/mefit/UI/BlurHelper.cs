@@ -34,7 +34,7 @@ public static class BlurHelper
             return;
         }
 
-        form.BackColor = AppColours.DEFAULT_APP_BORDER;
+        form.BackColor = Colours.CLR_DEFAULTBORDER;
     }
 
     public static void RemoveBlur(Form form)

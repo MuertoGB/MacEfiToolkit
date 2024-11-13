@@ -67,22 +67,22 @@ namespace Mac_EFI_Toolkit.UI
             switch (MB_TYPE)
             {
                 case METPromptType.Error:
-                    lblTitle.ForeColor = Colours.ERROR_BOX;
+                    lblTitle.ForeColor = Colours.CLR_ERROR;
                     lblTitle.Text = ERROR;
                     MB_SOUND = System.Media.SystemSounds.Hand;
                     break;
                 case METPromptType.Warning:
-                    lblTitle.ForeColor = Colours.WARNING_BOX;
+                    lblTitle.ForeColor = Colours.CLR_WARNING;
                     lblTitle.Text = WARN;
                     MB_SOUND = System.Media.SystemSounds.Exclamation;
                     break;
                 case METPromptType.Information:
-                    lblTitle.ForeColor = Colours.INFO_BOX;
+                    lblTitle.ForeColor = Colours.CLR_INFO;
                     lblTitle.Text = INFO;
                     MB_SOUND = System.Media.SystemSounds.Beep;
                     break;
                 case METPromptType.Question:
-                    lblTitle.ForeColor = Colours.INFO_BOX;
+                    lblTitle.ForeColor = Colours.CLR_INFO;
                     lblTitle.Text = INFO;
                     MB_SOUND = System.Media.SystemSounds.Beep;
                     break;

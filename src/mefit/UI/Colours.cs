@@ -11,19 +11,18 @@ namespace Mac_EFI_Toolkit.UI
 {
     class Colours
     {
-        internal static readonly Color CONTROL_DISABLED_TEXT = Color.FromArgb(140, 140, 140);
-        internal static readonly Color CONTROL_WHITE_TEXT = Color.FromArgb(255, 255, 255);
-        internal static readonly Color DISABLED_CONTROL = Color.FromArgb(80, 80, 80);
-        internal static readonly Color BORDER_INACTIVE = Color.FromArgb(120, 120, 120);
-        internal static readonly Color BORDER_ACTIVE = Color.FromArgb(200, 200, 200);
-        internal static readonly Color CLIENT_INACTIVE = Color.FromArgb(10, 10, 10);
-        internal static readonly Color CLIENT_ACTIVE = Color.FromArgb(30, 30, 30);
-        internal static readonly Color CHECKED = Color.FromArgb(85, 170, 255);
-        internal static readonly Color WARNING_BOX = Color.Tomato;
-        internal static readonly Color ERROR_BOX = Color.FromArgb(240, 70, 80);
-        internal static readonly Color INFO_BOX = Color.FromArgb(85, 170, 255);
-        internal static readonly Color SWITCH_HEAD_DISABLED = Color.FromArgb(100, 100, 100);
-        internal static readonly Color SWITCH_HEAD_ENABLED = Color.FromArgb(170, 170, 170);
-        internal static readonly Color FOCUS_RECTANGLE = Color.FromArgb(150, 150, 150);
+        internal static readonly Color CLR_INFO = Color.FromArgb(85, 170, 255);
+        internal static readonly Color CLR_WARNING = Color.Tomato;
+        internal static readonly Color CLR_ERROR = Color.FromArgb(240, 70, 80);
+        internal static readonly Color CLR_GOOD = Color.FromArgb(128, 255, 128);
+        internal static readonly Color CLR_ACTIVEFORM = Color.White;
+        internal static readonly Color CLR_INACTIVEFORM = Color.FromArgb(100, 100, 100);
+        internal static readonly Color CLR_NATEXT = Color.FromArgb(140, 140, 140);
+        internal static readonly Color CLR_DISABLEDTEXT = Color.FromArgb(140, 140, 140);
+        internal static readonly Color CLR_NORMALTEXT = Color.FromArgb(235, 235, 235);
+        internal static readonly Color CLR_SETTINGSPATHTEXT = Color.FromArgb(200, 220, 240);
+        internal static readonly Color CLR_DEFAULTBORDER = Color.FromArgb(0, 170, 180);
+        internal static readonly Color CLR_LZMADEFAULT = Color.FromArgb(100, 100, 100);
+        internal static readonly Color CLR_LZMAFOUND = Color.FromArgb(70, 150, 70);
     }
 }

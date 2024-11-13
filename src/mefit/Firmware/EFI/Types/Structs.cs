@@ -4,6 +4,7 @@
 // Structs.cs
 // Released under the GNU GLP v3.0
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Firmware.EFI
@@ -46,25 +47,32 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal string DatePart { get; set; }
     }
 
-    internal struct NvramStore
-    {
-        internal NvramStoreType StoreType { get; set; }
-        internal int PrimaryStoreBase { get; set; }
-        internal int PrimaryStoreSize { get; set; }
-        internal byte[] PrimaryStoreBytes { get; set; }
-        internal bool IsPrimaryStoreEmpty { get; set; }
-        internal int BackupStoreBase { get; set; }
-        internal int BackupStoreSize { get; set; }
-        internal byte[] BackupStoreBytes { get; set; }
-        internal bool IsBackupStoreEmpty { get; set; }
-    }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct NvramStoreHeader
+    internal struct VariableStoreHeader
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal char[] Signature;
-        internal ushort SizeOfData;
+        internal ushort StoreSize;
+        internal ushort Unknown;
+        internal byte Format;
+        internal byte State;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+        public byte[] Reserved;
+    }
+
+    internal struct NvramStore
+    {
+        internal NvramStoreType StoreType { get; set; }
+        internal int StoreBase { get; set; }
+        internal int StoreSize { get; set; }
+        internal byte[] StoreBuffer { get; set; }
+        internal byte StoreFormat { get; set; }
+        internal byte StoreState { get; set; }
+        internal int BodyBase { get; set; }
+        internal int BodySize { get; set; }
+        internal int BodyLimit { get; set; }
+        internal bool IsStoreEmpty { get; set; }
     }
 
     internal struct FsysStore

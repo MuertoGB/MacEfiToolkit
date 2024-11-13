@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    internal class UnhandledException
+    internal class Unhandled
     {
         internal static string GenerateReport(Exception unhandled)
         {

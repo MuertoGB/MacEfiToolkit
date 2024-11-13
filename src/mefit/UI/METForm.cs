@@ -112,7 +112,7 @@ public class METForm : Form
             return;
         }
 
-        BackColor = AppColours.DEFAULT_APP_BORDER;
+        BackColor = Colours.CLR_DEFAULTBORDER;
 
     }
     #endregion

@@ -84,6 +84,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblSerialNumber = new System.Windows.Forms.Label();
             this.lblMeVersion = new System.Windows.Forms.Label();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
+            this.lblLzma = new System.Windows.Forms.Label();
             this.pnlSplit1 = new System.Windows.Forms.Panel();
             this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLoad = new System.Windows.Forms.PictureBox();
@@ -92,6 +93,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.pnlSplit0 = new System.Windows.Forms.Panel();
             this.lblView = new System.Windows.Forms.Label();
             this.cbxCensor = new Mac_EFI_Toolkit.UI.METSwitch();
+            this.pnlSplit2 = new System.Windows.Forms.Panel();
             this.pnlTopSplitMain = new System.Windows.Forms.Panel();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
             this.cmdMenuOpen = new System.Windows.Forms.Button();
@@ -147,10 +149,10 @@ namespace Mac_EFI_Toolkit.Forms
             this.exportIntelMERegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportNVRAMVSSStoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportNVRAMSVSStoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportLZMADXEArchiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.backupFirmwareZIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportFirmwareInformationTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportLZMADXEArchiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsPatch = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.changeSerialNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eraseNVRAMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -928,21 +930,25 @@ namespace Mac_EFI_Toolkit.Forms
             // tlpStatusBar
             // 
             this.tlpStatusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.tlpStatusBar.ColumnCount = 7;
+            this.tlpStatusBar.ColumnCount = 9;
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tlpStatusBar.Controls.Add(this.lblLzma, 5, 0);
             this.tlpStatusBar.Controls.Add(this.pnlSplit1, 4, 0);
-            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 6, 0);
-            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 5, 0);
+            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 8, 0);
+            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 7, 0);
             this.tlpStatusBar.Controls.Add(this.lblParseTime, 0, 0);
             this.tlpStatusBar.Controls.Add(this.pnlSplit0, 1, 0);
             this.tlpStatusBar.Controls.Add(this.lblView, 3, 0);
             this.tlpStatusBar.Controls.Add(this.cbxCensor, 2, 0);
+            this.tlpStatusBar.Controls.Add(this.pnlSplit2, 6, 0);
             this.tlpStatusBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatusBar.Location = new System.Drawing.Point(0, 370);
             this.tlpStatusBar.Margin = new System.Windows.Forms.Padding(0);
@@ -952,14 +958,26 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpStatusBar.Size = new System.Drawing.Size(761, 36);
             this.tlpStatusBar.TabIndex = 0;
             // 
+            // lblLzma
+            // 
+            this.lblLzma.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLzma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.lblLzma.Location = new System.Drawing.Point(143, 0);
+            this.lblLzma.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lblLzma.Name = "lblLzma";
+            this.lblLzma.Size = new System.Drawing.Size(21, 36);
+            this.lblLzma.TabIndex = 0;
+            this.lblLzma.Text = "...";
+            this.lblLzma.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // pnlSplit1
             // 
             this.pnlSplit1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlSplit1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.pnlSplit1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.pnlSplit1.Location = new System.Drawing.Point(138, 7);
             this.pnlSplit1.Name = "pnlSplit1";
             this.pnlSplit1.Size = new System.Drawing.Size(1, 22);
-            this.pnlSplit1.TabIndex = 101;
+            this.pnlSplit1.TabIndex = 0;
             // 
             // tlpStatusBarImage
             // 
@@ -996,11 +1014,11 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblStatusBarTip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblStatusBarTip.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatusBarTip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblStatusBarTip.Location = new System.Drawing.Point(141, 1);
+            this.lblStatusBarTip.Location = new System.Drawing.Point(170, 1);
             this.lblStatusBarTip.Margin = new System.Windows.Forms.Padding(1);
             this.lblStatusBarTip.Name = "lblStatusBarTip";
             this.lblStatusBarTip.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblStatusBarTip.Size = new System.Drawing.Size(583, 34);
+            this.lblStatusBarTip.Size = new System.Drawing.Size(554, 34);
             this.lblStatusBarTip.TabIndex = 0;
             this.lblStatusBarTip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1021,7 +1039,7 @@ namespace Mac_EFI_Toolkit.Forms
             // pnlSplit0
             // 
             this.pnlSplit0.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlSplit0.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.pnlSplit0.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.pnlSplit0.Location = new System.Drawing.Point(73, 7);
             this.pnlSplit0.Name = "pnlSplit0";
             this.pnlSplit0.Size = new System.Drawing.Size(1, 22);
@@ -1031,10 +1049,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.lblView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.lblView.Location = new System.Drawing.Point(111, 0);
-            this.lblView.Margin = new System.Windows.Forms.Padding(0);
+            this.lblView.Location = new System.Drawing.Point(112, 0);
+            this.lblView.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
             this.lblView.Name = "lblView";
-            this.lblView.Size = new System.Drawing.Size(24, 36);
+            this.lblView.Size = new System.Drawing.Size(23, 36);
             this.lblView.TabIndex = 0;
             this.lblView.Text = "...";
             this.lblView.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1055,6 +1073,15 @@ namespace Mac_EFI_Toolkit.Forms
             this.cbxCensor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(160)))));
             this.cbxCensor.TabIndex = 8;
             this.cbxCensor.CheckedChanged += new System.EventHandler(this.cbxCensor_CheckedChanged);
+            // 
+            // pnlSplit2
+            // 
+            this.pnlSplit2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlSplit2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.pnlSplit2.Location = new System.Drawing.Point(167, 7);
+            this.pnlSplit2.Name = "pnlSplit2";
+            this.pnlSplit2.Size = new System.Drawing.Size(1, 22);
+            this.pnlSplit2.TabIndex = 102;
             // 
             // pnlTopSplitMain
             // 
@@ -1706,6 +1733,14 @@ namespace Mac_EFI_Toolkit.Forms
             this.exportNVRAMSVSStoresToolStripMenuItem.Text = "Export NVRAM SVS Stores";
             this.exportNVRAMSVSStoresToolStripMenuItem.Click += new System.EventHandler(this.exportNVRAMSVSStoresToolStripMenuItem_Click);
             // 
+            // exportLZMADXEArchiveToolStripMenuItem
+            // 
+            this.exportLZMADXEArchiveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.exportLZMADXEArchiveToolStripMenuItem.Name = "exportLZMADXEArchiveToolStripMenuItem";
+            this.exportLZMADXEArchiveToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
+            this.exportLZMADXEArchiveToolStripMenuItem.Text = "Export LZMA DXE Archive";
+            this.exportLZMADXEArchiveToolStripMenuItem.Click += new System.EventHandler(this.exportLZMADXEArchiveToolStripMenuItem_Click);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -1726,14 +1761,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.exportFirmwareInformationTextToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
             this.exportFirmwareInformationTextToolStripMenuItem.Text = "Export Firmware Information (Text)";
             this.exportFirmwareInformationTextToolStripMenuItem.Click += new System.EventHandler(this.exportFirmwareInformationTextToolStripMenuItem_Click);
-            // 
-            // exportLZMADXEArchiveToolStripMenuItem
-            // 
-            this.exportLZMADXEArchiveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.exportLZMADXEArchiveToolStripMenuItem.Name = "exportLZMADXEArchiveToolStripMenuItem";
-            this.exportLZMADXEArchiveToolStripMenuItem.Size = new System.Drawing.Size(318, 28);
-            this.exportLZMADXEArchiveToolStripMenuItem.Text = "Export LZMA DXE Archive";
-            this.exportLZMADXEArchiveToolStripMenuItem.Click += new System.EventHandler(this.exportLZMADXEArchiveToolStripMenuItem_Click);
             // 
             // cmsPatch
             // 
@@ -2048,5 +2075,7 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.Label lblSerialNumber;
         private System.Windows.Forms.Label lblMeVersion;
         private System.Windows.Forms.ToolStripMenuItem exportLZMADXEArchiveToolStripMenuItem;
+        private System.Windows.Forms.Label lblLzma;
+        private System.Windows.Forms.Panel pnlSplit2;
     }
 }

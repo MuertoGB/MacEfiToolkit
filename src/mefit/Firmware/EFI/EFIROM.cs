@@ -8,7 +8,6 @@ using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -26,38 +25,36 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static bool ForceFoundFsys = false;
         internal static string FitVersion = null;
         internal static string MeVersion = null;
-
         internal static bool bResetVss = false;
         internal static bool bResetSvs = false;
         internal static string NewSerial = null;
-
         internal static FileInfoStore FileInfoData;
         internal static PdrSection PdrSectionData;
-        internal static NvramStore VssStoreData;
-        internal static NvramStore SvsStoreData;
+        internal static NvramStore VssPrimary;
+        internal static NvramStore VssSecondary;
+        internal static NvramStore SvsPrimary;
+        internal static NvramStore SvsSecondary;
         internal static EFILock EfiPrimaryLockData;
         internal static EFILock EfiBackupLockData;
         internal static FsysStore FsysStoreData;
         internal static AppleRomInformationSection AppleRomInfoSectionData;
         internal static EfiBiosIdSection EfiBiosIdSectionData;
-
         internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
-
         internal static TimeSpan tsParseTime { get; private set; }
-
         internal static int FSYS_RGN_SIZE = 0;
         internal static int NVRAM_BASE = -1;
         internal static int NVRAM_SIZE = -1;
-
+        internal static int NVRAM_LIMIT = -1;
         internal const int CRC32_SIZE = 4; // 4h
+        internal static readonly Encoding _utf8 = Encoding.UTF8;
         #endregion
 
-        #region Private Members
-        private const int GUID_SIZE = 16;          // 10h
-        private const int RSVD_SIZE = 16;          // 10h
-        private const int ZERO_VECTOR_SIZE = 16;   // 10h
-        private const int LITERAL_POS = 2;         // 2h
-        private static readonly Encoding _utf8 = Encoding.UTF8;
+        #region Const Members
+        internal const int GUID_SIZE = 16;          // 10h
+        internal const int RSVD_SIZE = 16;          // 10h
+        internal const int HDR_SIZE = 16;          // 10h
+        internal const int ZERO_VECTOR_SIZE = 16;   // 10h
+        internal const int LITERAL_POS = 2;         // 2h
         #endregion
 
         #region Parse Firmware
@@ -76,8 +73,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             PdrSectionData = GetPdrData(sourceBytes);
 
             // Find the NVRAM base address.
-            NVRAM_BASE = BinaryTools.GetBaseAddress(
-                sourceBytes, Guids.NVRAM_SECTION_GUID, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT) - ZERO_VECTOR_SIZE;
+            NVRAM_BASE = BinaryTools.GetBaseAddress(sourceBytes, Guids.NVRAM_SECTION_GUID, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT) - ZERO_VECTOR_SIZE;
 
             if (NVRAM_BASE < 0 || NVRAM_BASE > FileInfoData.Length)
             {
@@ -87,7 +83,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             // Determine size of the NVRAM section.
             // Int32 value is stored at NVRAM_BASE + 0x20 (32 decimal).
-            NVRAM_SIZE = BitConverter.ToInt32(BinaryTools.GetBytesBaseLength(sourceBytes, NVRAM_BASE + (ZERO_VECTOR_SIZE + GUID_SIZE), 4), 0);
+            NVRAM_SIZE = BitConverter.ToInt32(BinaryTools.GetBytesBaseLength(
+                sourceBytes, NVRAM_BASE + (ZERO_VECTOR_SIZE + GUID_SIZE), 4), 0);
 
             if (NVRAM_SIZE < 0 || NVRAM_SIZE > FileInfoData.Length)
             {
@@ -95,15 +92,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 NVRAM_SIZE = -1;
             }
 
-            // Parse NVRAM VSS Store data.
-            VssStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.VSS);
-
-            // Parse NVRAM SVS Store data.
-            SvsStoreData = GetNvramStoreData(sourceBytes, NvramStoreType.SVS);
+            // Parse NVRAM stores.
+            GetNvramStores(sourceBytes);
 
             // Search both NVRAM SVS stores for a Message Authentication Code.
-            EfiPrimaryLockData = GetIsEfiLocked(SvsStoreData.PrimaryStoreBytes);
-            EfiBackupLockData = GetIsEfiLocked(SvsStoreData.BackupStoreBytes);
+            EfiPrimaryLockData = GetIsEfiLocked(SvsPrimary.StoreBuffer);
+            EfiBackupLockData = GetIsEfiLocked(SvsSecondary.StoreBuffer);
 
             // Parse Fsys Store data.
             FsysStoreData = GetFsysStoreData(sourceBytes, false);
@@ -166,8 +160,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             FileInfoData = default;
             PdrSectionData = default;
-            VssStoreData = default;
-            SvsStoreData = default;
+            VssPrimary = default;
+            VssSecondary = default;
+            SvsPrimary = default;
+            SvsSecondary = default;
             EfiPrimaryLockData = default;
             EfiBackupLockData = default;
             FsysStoreData = default;
@@ -178,6 +174,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             FSYS_RGN_SIZE = 0;
             NVRAM_BASE = -1;
             NVRAM_SIZE = -1;
+            NVRAM_LIMIT = -1;
         }
 
         internal static bool IsValidImage(byte[] sourceBytes)
@@ -263,123 +260,127 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #endregion
 
         #region NVRAM / EFI Lock
-        internal static NvramStore GetNvramStoreData(byte[] sourceBytes, NvramStoreType storeType)
+        internal static void GetNvramStores(byte[] binaryBuffer)
         {
-            byte[] storeTypeSignature = GetNvramStoreSignature(storeType);
-
-            if (NVRAM_BASE == -1)
+            if (NVRAM_BASE == -1 || NVRAM_SIZE == -1)
             {
-                return DefaultNvramStoreData();
+                VssPrimary = DefaultNvramSection();
+                VssSecondary = DefaultNvramSection();
+                SvsPrimary = DefaultNvramSection();
+                SvsSecondary = DefaultNvramSection();
+
+                return;
             }
 
-            // Retrieve primary store details.
-            (int primaryStoreSize, int primaryStoreBase, byte[] primaryStoreData, bool isPrimaryStoreEmpty) =
-                ParseStoreData(sourceBytes, storeTypeSignature, NVRAM_BASE, GUID_SIZE);
+            NVRAM_LIMIT = NVRAM_BASE + NVRAM_SIZE;
 
-            // Return immediately if the primary store base is not found.
-            if (primaryStoreBase == -1)
-            {
-                return DefaultNvramStoreData();
-            }
+            // Detect and parse Variable Storage Subsystem ($VSS) stores.
+            int vssPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, VSS_STORE_SIG, NVRAM_BASE, NVRAM_LIMIT);
 
-            // If primary store is empty, retain the base address and empty status but no size/data.
-            if (primaryStoreSize == -1)
+            if (vssPrimaryBase != -1)
             {
-                return new NvramStore
+                VssPrimary = ParseNvramStore(binaryBuffer, vssPrimaryBase, NvramStoreType.Variable);
+
+                int vssBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, VSS_STORE_SIG, vssPrimaryBase + HDR_SIZE, NVRAM_LIMIT);
+
+                if (vssBackupBase != -1)
                 {
-                    StoreType = storeType,
-                    PrimaryStoreSize = primaryStoreSize,      // -1 indicates no size
-                    PrimaryStoreBase = primaryStoreBase,      // Base address of found empty store
-                    PrimaryStoreBytes = primaryStoreData,     // Null data for empty store
-                    IsPrimaryStoreEmpty = true,
-                    BackupStoreSize = -1,                     // No backup store since primary is empty
-                    BackupStoreBase = -1,
-                    BackupStoreBytes = null,
-                    IsBackupStoreEmpty = true
-                };
+                    VssSecondary = ParseNvramStore(binaryBuffer, vssBackupBase, NvramStoreType.Variable);
+                }
             }
-
-            // Calculate padding size only if primary store has valid data.
-            int paddingSize = 0;
-            for (int i = primaryStoreBase + primaryStoreSize; i < sourceBytes.Length && sourceBytes[i] == 0xFF; i++)
+            else
             {
-                paddingSize++;
+                VssPrimary = DefaultNvramSection();
+                VssSecondary = DefaultNvramSection();
             }
 
-            // Fetch backup store data.
-            (int backupStoreSize, int backupStoreBase, byte[] backupStoreData, bool isBackupStoreEmpty) =
-                ParseStoreData(sourceBytes, storeTypeSignature, primaryStoreBase + primaryStoreSize + paddingSize, GUID_SIZE);
+            // Detect and parse Secure Varible Stores ($SVS).
+            int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, SVS_STORE_SIG, NVRAM_BASE, NVRAM_LIMIT);
+
+            if (svsPrimaryBase != -1)
+            {
+                SvsPrimary = ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
+
+                int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, SVS_STORE_SIG, svsPrimaryBase + HDR_SIZE, NVRAM_LIMIT);
+
+                if (svsBackupBase != -1)
+                {
+                    SvsSecondary = ParseNvramStore(binaryBuffer, svsBackupBase, NvramStoreType.Secure);
+                }
+            }
+            else
+            {
+                SvsPrimary = DefaultNvramSection();
+                SvsSecondary = DefaultNvramSection();
+            }
+        }
+
+        internal static NvramStore ParseNvramStore(byte[] buffer, int storeBase, NvramStoreType storeType)
+        {
+            int storeSize = -1;
+            byte storeFormat = 0xFF;
+            byte storeState = 0xFF;
+            byte[] storeBuff = null;
+            int bodyBase = -1;
+            int bodySize = -1;
+            int bodyLimit = -1;
+            bool bodyEmpty = true;
+
+            byte[] hdrBuffer = BinaryTools.GetBytesBaseLength(buffer, storeBase, HDR_SIZE);
+
+            VariableStoreHeader hdr = Helper.DeserializeHeader<VariableStoreHeader>(hdrBuffer);
+
+            if (hdr.StoreSize != 0xFFFF && hdr.StoreSize != 0)
+            {
+                storeSize = hdr.StoreSize;
+                storeFormat = hdr.Format;
+                storeState = hdr.State;
+
+                storeBuff = BinaryTools.GetBytesBaseLength(buffer, storeBase, storeSize);
+
+                if (storeBuff != null)
+                {
+                    bodyBase = storeBase + HDR_SIZE;
+                    bodySize = storeSize - HDR_SIZE;
+                    bodyLimit = storeBase + bodySize - HDR_SIZE;
+
+                    byte[] storeBodyBuffer = BinaryTools.GetBytesBaseLength(buffer, bodyBase, bodySize);
+                    bodyEmpty = BinaryTools.IsByteBlockEmpty(storeBodyBuffer);
+                }
+            }
+
+            Console.WriteLine($"NVRAM Store - Base: {storeBase:X}h, Size: {storeSize:X}h, Type: {storeType}, Empty: {bodyEmpty}, Format: {storeFormat:X}h, State: {storeState:X}h");
 
             return new NvramStore
             {
                 StoreType = storeType,
-                PrimaryStoreSize = primaryStoreSize,
-                PrimaryStoreBase = primaryStoreBase,
-                PrimaryStoreBytes = primaryStoreData,
-                IsPrimaryStoreEmpty = isPrimaryStoreEmpty,
-                BackupStoreSize = backupStoreSize,
-                BackupStoreBase = backupStoreBase,
-                BackupStoreBytes = backupStoreData,
-                IsBackupStoreEmpty = isBackupStoreEmpty
+                StoreBase = storeBase,
+                StoreSize = storeSize,
+                StoreBuffer = storeBuff,
+                StoreFormat = storeFormat,
+                StoreState = storeState,
+                BodyBase = bodyBase,
+                BodySize = bodySize,
+                BodyLimit = bodyLimit,
+                IsStoreEmpty = bodyEmpty
             };
         }
 
-        private static (int Size, int BaseAddress, byte[] Data, bool IsEmpty) ParseStoreData(byte[] sourceBytes, byte[] storeSignatureType, int baseAddress, int headerSize)
-        {
-            int storeSize = -1;
-            byte[] storeData = null;
-            bool isStoreEmpty = true;
-
-            int storeBaseAddress = BinaryTools.GetBaseAddress(sourceBytes, storeSignatureType, baseAddress);
-
-            if (storeBaseAddress != -1 && BinaryTools.GetBytesBaseLength(sourceBytes, storeBaseAddress, 6) is byte[] bytesStoreHeader)
-            {
-                NvramStoreHeader storeHeader = Helper.DeserializeHeader<NvramStoreHeader>(bytesStoreHeader);
-
-                if (storeHeader.SizeOfData != 0xFFFF && storeHeader.SizeOfData != 0)
-                {
-                    storeSize = storeHeader.SizeOfData;
-
-                    storeData = BinaryTools.GetBytesBaseLength(sourceBytes, storeBaseAddress, storeSize);
-
-                    if (storeData != null)
-                    {
-                        byte[] storeBodyData = BinaryTools.GetBytesBaseLength(sourceBytes, storeBaseAddress + headerSize, storeSize - headerSize);
-
-                        isStoreEmpty = BinaryTools.IsByteBlockEmpty(storeBodyData);
-                    }
-                }
-            }
-
-            return (storeSize, storeBaseAddress, storeData, isStoreEmpty);
-        }
-
-        private static NvramStore DefaultNvramStoreData()
+        private static NvramStore DefaultNvramSection()
         {
             return new NvramStore
             {
-                PrimaryStoreSize = -1,
-                PrimaryStoreBase = -1,
-                PrimaryStoreBytes = null,
-                IsPrimaryStoreEmpty = true,
-                BackupStoreSize = -1,
-                BackupStoreBase = -1,
-                BackupStoreBytes = null,
-                IsBackupStoreEmpty = true
+                StoreType = NvramStoreType.None,
+                StoreBase = -1,
+                StoreSize = -1,
+                StoreBuffer = null,
+                StoreFormat = 0xFF,
+                StoreState = 0xFF,
+                BodyBase = -1,
+                BodySize = -1,
+                BodyLimit = -1,
+                IsStoreEmpty = true
             };
-        }
-
-        private static byte[] GetNvramStoreSignature(NvramStoreType storeType)
-        {
-            switch (storeType)
-            {
-                case NvramStoreType.SVS:
-                    return SVS_STORE_SIG;
-                case NvramStoreType.VSS:
-                    return VSS_STORE_SIG;
-                default:
-                    throw new ArgumentException("Invalid NVRAM header type.");
-            }
         }
 
         internal static EFILock GetIsEfiLocked(byte[] nvramStoreBytes)
@@ -418,21 +419,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static readonly byte[] EFI_LOCK_MAC_SIG =
         {
-            0x43, 0x00, 0x42, 0x00,
-            0x46, 0x00, 0x32, 0x00,
-            0x43, 0x00, 0x43, 0x00,
-            0x33, 0x00, 0x32
+            0x43, 0x00, 0x42, 0x00, 0x46, 0x00, 0x32, 0x00,
+            0x43, 0x00, 0x43, 0x00, 0x33, 0x00, 0x32
         };
 
-        internal static readonly byte[] VSS_STORE_SIG =
-        {
-            0x24, 0x56, 0x53, 0x53
-        };
-
-        internal static readonly byte[] SVS_STORE_SIG =
-        {
-            0x24, 0x53, 0x56, 0x53
-        };
+        internal static readonly byte[] VSS_STORE_SIG = { 0x24, 0x56, 0x53, 0x53 };
+        internal static readonly byte[] SVS_STORE_SIG = { 0x24, 0x53, 0x56, 0x53 };
         #endregion
 
         #region Fsys Store
@@ -1003,12 +995,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             int storeLength = fsysStore.Length;
 
             // Check if the size of the byte array is valid
-            if (storeLength < EFIROM.FSYS_RGN_SIZE)
+            if (storeLength < FSYS_RGN_SIZE)
             {
                 throw new ArgumentException(nameof(PatchFsysCrc), $"Given byes are too small: {storeLength:X2}h");
             }
 
-            if (storeLength > EFIROM.FSYS_RGN_SIZE)
+            if (storeLength > FSYS_RGN_SIZE)
             {
                 throw new ArgumentException(nameof(PatchFsysCrc), $"Given bytes are too large: {storeLength:X2}h");
             }
@@ -1017,7 +1009,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
 
             // Write the new bytes back to the Fsys store at the appropriate base
-            BinaryTools.OverwriteBytesAtBase(fsysStore, EFIROM.FSYS_RGN_SIZE - EFIROM.CRC32_SIZE, newCrcBytes);
+            BinaryTools.OverwriteBytesAtBase(fsysStore, FSYS_RGN_SIZE - CRC32_SIZE, newCrcBytes);
 
             // Return the patched data
             return fsysStore;
@@ -1051,7 +1043,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             BinaryTools.OverwriteBytesAtBase(patchedBytes, fsysBase, patchedStore);
 
             // Load the Fsys store from the new binary.
-            FsysStore newBinaryFsys = EFIROM.GetFsysStoreData(patchedBytes, false);
+            FsysStore newBinaryFsys = GetFsysStoreData(patchedBytes, false);
 
             // Compare the new checksums.
             if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)

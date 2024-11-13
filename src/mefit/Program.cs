@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241111.1040";
+        internal const string APP_BUILD = "241113.0330";
         internal const string APP_CHANNEL = "BETA 3";
     }
 
@@ -78,6 +78,7 @@ namespace Mac_EFI_Toolkit
         internal const string GLYPH_DOWN_ARROW = "\uE74B";
         internal const string GLYPH_RIGHT_ARROW = "\u2192";
         internal const string GLYPH_VIEW = "\uE890";
+        internal const string GLYPH_ZIP = "\uF012";
         internal const string NOWRAP_SPACE = "\u00A0";
 
         internal static Font FONT_MDL2_REG_9;
@@ -195,7 +196,7 @@ namespace Mac_EFI_Toolkit
             string logFileName = $"unhandled_{timestamp}.log";
             string logPath = Path.Combine(workingDir, logFileName);
 
-            File.WriteAllText(logPath, UnhandledException.GenerateReport(e));
+            File.WriteAllText(logPath, Unhandled.GenerateReport(e));
 
             if (File.Exists(logPath))
             {
