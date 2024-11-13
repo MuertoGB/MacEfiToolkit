@@ -71,7 +71,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal byte StoreState { get; set; }
         internal int BodyBase { get; set; }
         internal int BodySize { get; set; }
-        internal int BodyLimit { get; set; }
         internal bool IsStoreEmpty { get; set; }
     }
 

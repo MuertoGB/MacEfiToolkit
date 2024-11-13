@@ -272,7 +272,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 return;
             }
 
-            NVRAM_LIMIT = NVRAM_BASE + NVRAM_SIZE;
+            NVRAM_LIMIT = NVRAM_BASE + NVRAM_SIZE -1;
 
             // Detect and parse Variable Storage Subsystem ($VSS) stores.
             int vssPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, VSS_STORE_SIG, NVRAM_BASE, NVRAM_LIMIT);
@@ -323,7 +323,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             byte[] storeBuff = null;
             int bodyBase = -1;
             int bodySize = -1;
-            int bodyLimit = -1;
             bool bodyEmpty = true;
 
             byte[] hdrBuffer = BinaryTools.GetBytesBaseLength(buffer, storeBase, HDR_SIZE);
@@ -342,7 +341,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 {
                     bodyBase = storeBase + HDR_SIZE;
                     bodySize = storeSize - HDR_SIZE;
-                    bodyLimit = storeBase + bodySize - HDR_SIZE;
 
                     byte[] storeBodyBuffer = BinaryTools.GetBytesBaseLength(buffer, bodyBase, bodySize);
                     bodyEmpty = BinaryTools.IsByteBlockEmpty(storeBodyBuffer);
@@ -361,7 +359,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 StoreState = storeState,
                 BodyBase = bodyBase,
                 BodySize = bodySize,
-                BodyLimit = bodyLimit,
                 IsStoreEmpty = bodyEmpty
             };
         }
@@ -378,7 +375,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 StoreState = 0xFF,
                 BodyBase = -1,
                 BodySize = -1,
-                BodyLimit = -1,
                 IsStoreEmpty = true
             };
         }
