@@ -28,6 +28,7 @@
   - NVRAM Data: The window now displays base addresses of primary stores and whether they are empty, or active.
   - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
   - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
+  - Added an icon to the status bar which will indicate if a compressed LZMA DXE archive was found within the firmware.
 - Added new settings:
   - "Use Windows Accent Colour for Borders": allowing form borders to match the system's accent color for a more integrated appearance.
   - "Disable Serial Number Validation": Disables the validation process when entering a new serial number for the firmware.
@@ -37,6 +38,7 @@
 - Serial numbers will no longer be displayed in the "Copied to Clipboard" dialogs. Instead, a default message "Serial Number copied to clipboard" will be shown.
 - Updated LZMA SDK to version 24.08.
 - User Privacy Update: Unhandled exception reports now use regular expressions (regex) to sanitize usernames from exception messages and file paths, where possible. However, there may still be some cases where this data could appear. Please review the reports carefully before uploading them to GitHub issues.
+- The EFIROM NVRAM parser was rewritten, enhancing functionality and performance.
 
 #### Enhancements
 - Changed the application log filename from 'mefit.log' to 'application.log'.
