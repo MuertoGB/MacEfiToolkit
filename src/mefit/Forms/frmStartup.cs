@@ -256,8 +256,6 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.HOMEPAGE);
 
-        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
-
         private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_LATEST);
 
         private void newEFIROMSessionToolStripMenuItem_Click(object sender, EventArgs e) => InitializeChildForm(new frmEfiRom(), string.Empty);

@@ -52,7 +52,6 @@
             this.emailMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.newEFIROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newSOCROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -388,7 +387,6 @@
             this.emailMeToolStripMenuItem,
             this.githubIssuesToolStripMenuItem,
             this.homepageToolStripMenuItem,
-            this.manualToolStripMenuItem,
             this.toolStripSeparator2,
             this.newEFIROMSessionToolStripMenuItem,
             this.newSOCROMSessionToolStripMenuItem,
@@ -442,15 +440,6 @@
             this.homepageToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
             this.homepageToolStripMenuItem.Text = "Homepage";
             this.homepageToolStripMenuItem.Click += new System.EventHandler(this.homepageToolStripMenuItem_Click);
-            // 
-            // manualToolStripMenuItem
-            // 
-            this.manualToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.manualToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
-            this.manualToolStripMenuItem.Size = new System.Drawing.Size(226, 28);
-            this.manualToolStripMenuItem.Text = "Manual";
-            this.manualToolStripMenuItem.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -643,7 +632,6 @@
         internal System.Windows.Forms.Button cmdMore;
         private System.Windows.Forms.ToolStripMenuItem changelogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem homepageToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem viewApplicationLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

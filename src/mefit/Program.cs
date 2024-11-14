@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241114.0045";
+        internal const string APP_BUILD = "241114.0230";
         internal const string APP_CHANNEL = "BETA 4";
     }
 
@@ -53,7 +53,6 @@ namespace Mac_EFI_Toolkit
         internal const string HOMEPAGE = "https://github.com/MuertoGB/MacEfiToolkit";
         internal const string GH_ISSUE = "https://github.com/MuertoGB/MacEfiToolkit/issues";
         internal const string GH_LATEST = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
-        internal const string MANUAL = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
         internal const string VERSION_MANIFEST = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/stream/manifests/version.xml";
 
     }
