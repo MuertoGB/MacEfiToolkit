@@ -11,10 +11,11 @@ Mac EFI Toolkit
 4. [EFIROM Window](#efirom-window)
 5. [SOCROM Window](#socrom-window)
 6. [Wine Instructions](#wine-instructions)
-7. [Changelog](#changelog)
-8. [Features](#features)
-9. [Acknowledgements](#acknowledgements)
-10. [Donate](#donate)
+7. [Support](#support)
+8. [Changelog](#changelog)
+9. [Features](#features)
+10. [Acknowledgements](#acknowledgements)
+11. [Donate](#donate)
 
 ## Introduction
 
@@ -143,6 +144,20 @@ To run **Mac EFI Toolkit** on Linux or macOS using Wine, follow these steps:
 3. Download all four required fonts from [here](stream/fonts). After downloading, navigate to `Home\.wine\drive_c\windows\Fonts` and copy the downloaded fonts into this folder.
 
 Once these steps are completed, you should be able to run **Mac EFI Toolkit** under Wine.
+
+## Support
+
+If you encounter any issues or need assistance, here are a few ways you can get help:
+
+#### 1. **GitHub Issues**
+If you're experiencing a bug or issue, please check the [open issues](https://github.com/MuertoGB/MacEfiToolkit/issues) on GitHub. If your problem has not been reported, feel free to create a new issue. Be sure to include as much detail as possible, including:
+ - A clear description of the problem.
+ - Steps to reproduce the issue.
+ - Screenshots or logs (if applicable).
+ - Firmware files (if applicable).
+
+#### 2. **Email Me**
+For more direct support, you can contact me via [email](mailto:muertogb@proton.me).
 
 
 ## Changelog
