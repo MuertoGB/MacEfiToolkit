@@ -2043,89 +2043,28 @@ namespace Mac_EFI_Toolkit.Forms
         #region Remove EFI Lock
         private void RemoveEfiLock()
         {
-            // Check editing terms have been accepted.
-            bool allowOperation = Settings.ReadBool(SettingsBoolType.AcceptedEditingTerms);
-
-            // Allow user to accept editing terms.
-            if (!allowOperation)
-            {
-                using (Form frm = new frmTerms())
-                {
-                    frm.FormClosed += ChildWindowClosed;
-                    DialogResult result = frm.ShowDialog();
-                    allowOperation = (result != DialogResult.No);
-                }
-            }
-
-            // If terms were rejected then disallow operation.
-            if (!allowOperation)
-            {
-                return;
-            }
-
             Logger.WritePatchLine(LOGSTRINGS.PATCH_START);
             Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
-            // Create buffers.
+            // Initialize buffers.
             byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
-            byte[] unlockedPrimaryStore = null;
-            byte[] unlockedBackupStore = null;
 
-            Logger.WritePatchLine(LOGSTRINGS.LOCK_PRIMARY_MAC);
+            // Patch the primary store.
+            byte[] unlockedPrimaryStore = PatchPrimaryStore(binaryBuffer);
 
-            // Create a patched primary store.
-            unlockedPrimaryStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsPrimary.StoreBuffer, EFIROM.EfiPrimaryLockData.LockCrcBase);
+            // Patch the backup store, if necessary.
+            byte[] unlockedBackupStore = PatchBackupStore(binaryBuffer);
 
-            Logger.WritePatchLine(LOGSTRINGS.WRITE_NEW_DATA);
-
-            // Write patched primary store the buffer.
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsPrimary.StoreBase, unlockedPrimaryStore);
-
-            // We should probably patch any Message Authentication Code in the backup SVS store as well.
-            if (EFIROM.EfiBackupLockData.LockCrcBase != -1)
+            // Verify patched stores.
+            if (!VerifyPatchedStores(binaryBuffer, unlockedPrimaryStore, unlockedBackupStore))
             {
-                Logger.WritePatchLine(LOGSTRINGS.LOCK_BACKUP_MAC);
-
-                // A MAC CRC base was found in the backup store so we need to patch it.
-                unlockedBackupStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsSecondary.StoreBuffer, EFIROM.EfiBackupLockData.LockCrcBase);
-
-                Logger.WritePatchLine(LOGSTRINGS.WRITE_NEW_DATA);
-
-                // Write patched backup store to the buffer.
-                BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsSecondary.StoreBase, unlockedBackupStore);
-            }
-
-            Logger.WritePatchLine(LOGSTRINGS.LOCK_LOAD_SVS);
-
-            // Load SVS NVRAM stores from the buffer.
-            int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFIROM.SVS_STORE_SIG, EFIROM.NVRAM_BASE, EFIROM.NVRAM_LIMIT);
-
-            NvramStore svsPrimary = EFIROM.ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
-
-            // Check patched primary store matches the patched buffer.
-            if (!BinaryTools.ByteArraysMatch(svsPrimary.StoreBuffer, unlockedPrimaryStore))
-            {
-                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_PRIM_VERIF_FAIL}");
                 NotifyPatchingFailure();
                 return;
             }
 
-            // Check patched backup store matches the patched buffer (if backup store is ! null).
-            if (unlockedBackupStore != null)
-            {
-                int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFIROM.SVS_STORE_SIG, svsPrimaryBase + EFIROM.HDR_SIZE, EFIROM.NVRAM_LIMIT);
-                NvramStore svsBackup = EFIROM.ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
-
-                if (!BinaryTools.ByteArraysMatch(svsBackup.StoreBuffer, unlockedBackupStore))
-                {
-                    Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_BACK_VERIF_FAIL}");
-                    NotifyPatchingFailure();
-                    return;
-                }
-            }
-
             Logger.WritePatchLine(LOGSTRINGS.PATCH_SUCCESS);
 
+            // Prompt for saving and export if confirmed.
             if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
                 SaveOutputFirmwareEfirom(binaryBuffer);
@@ -2133,6 +2072,61 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
+        }
+
+        private byte[] PatchPrimaryStore(byte[] binaryBuffer)
+        {
+            Logger.WritePatchLine(LOGSTRINGS.LOCK_PRIMARY_MAC);
+            byte[] unlockedPrimaryStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsPrimary.StoreBuffer, EFIROM.EfiPrimaryLockData.LockCrcBase);
+
+            Logger.WritePatchLine(LOGSTRINGS.WRITE_NEW_DATA);
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsPrimary.StoreBase, unlockedPrimaryStore);
+
+            return unlockedPrimaryStore;
+        }
+
+        private byte[] PatchBackupStore(byte[] binaryBuffer)
+        {
+            byte[] unlockedBackupStore = null;
+
+            if (EFIROM.EfiBackupLockData.LockCrcBase != -1)
+            {
+                Logger.WritePatchLine(LOGSTRINGS.LOCK_BACKUP_MAC);
+                unlockedBackupStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsSecondary.StoreBuffer, EFIROM.EfiBackupLockData.LockCrcBase);
+
+                Logger.WritePatchLine(LOGSTRINGS.WRITE_NEW_DATA);
+                BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsSecondary.StoreBase, unlockedBackupStore);
+            }
+
+            return unlockedBackupStore;
+        }
+
+        private bool VerifyPatchedStores(byte[] binaryBuffer, byte[] unlockedPrimaryStore, byte[] unlockedBackupStore)
+        {
+            Logger.WritePatchLine(LOGSTRINGS.LOCK_LOAD_SVS);
+
+            int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFIROM.SVS_STORE_SIG, EFIROM.NVRAM_BASE, EFIROM.NVRAM_LIMIT);
+            NvramStore svsPrimary = EFIROM.ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
+
+            if (!BinaryTools.ByteArraysMatch(svsPrimary.StoreBuffer, unlockedPrimaryStore))
+            {
+                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_PRIM_VERIF_FAIL}");
+                return false;
+            }
+
+            if (unlockedBackupStore != null)
+            {
+                int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFIROM.SVS_STORE_SIG, svsPrimaryBase + EFIROM.HDR_SIZE, EFIROM.NVRAM_LIMIT);
+                NvramStore svsBackup = EFIROM.ParseNvramStore(binaryBuffer, svsBackupBase, NvramStoreType.Secure);
+
+                if (!BinaryTools.ByteArraysMatch(svsBackup.StoreBuffer, unlockedBackupStore))
+                {
+                    Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_BACK_VERIF_FAIL}");
+                    return false;
+                }
+            }
+
+            return true;
         }
         #endregion
 
