@@ -77,10 +77,10 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Check for a new application version.
-            if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
-            {
-                StartupVersionCheck();
-            }
+            //if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
+            //{
+            //    StartupVersionCheck();
+            //}
         }
 
         private void frmStartup_FormClosing(object sender, FormClosingEventArgs e)

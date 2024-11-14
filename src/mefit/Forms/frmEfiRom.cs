@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -59,6 +58,7 @@ namespace Mac_EFI_Toolkit.Forms
             DragDrop += frmEfiRom_DragDrop;
             Deactivate += frmEfiRom_Deactivate;
             Activated += frmEfiRom_Activated;
+            lblFmmEmail.DoubleClick += lblFmmEmail_DoubleClick;
         }
         #endregion
 
@@ -648,6 +648,46 @@ namespace Mac_EFI_Toolkit.Forms
                 UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
             }
         }
+
+        private void exportFmmmobilemeEmailTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = APPSTRINGS.FILTER_TEXT,
+                FileName = $"{EFISTRINGS.FMM_EMAIL}_{EFIROM.FileInfoData.FileName}",
+                OverwritePrompt = true,
+                InitialDirectory = METPath.WORKING_DIR
+            })
+            {
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                stringBuilder.AppendLine("Find My Mac Email:");
+                stringBuilder.AppendLine("----------------------------------");
+                stringBuilder.AppendLine(EFIROM.FmmEmail);
+
+                File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
+
+                stringBuilder.Clear();
+
+                if (!File.Exists(saveFileDialog.FileName))
+                {
+                    METPrompt.Show(
+                        this,
+                        DIALOGSTRINGS.DATA_EXPORT_FAILED,
+                        METPromptType.Error,
+                        METPromptButtons.Okay);
+
+                    return;
+                }
+
+                UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+            }
+        }
         #endregion
 
         #region Patch Toolstrip Events
@@ -862,6 +902,7 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateIntelMeControls();
 
             UpdateLzmaArchiveControls();
+            UpdateFmmEmailControls();
 
             // Apply DISABLED_TEXT to N/A labels.
             UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, Colours.CLR_NATEXT);
@@ -1192,7 +1233,10 @@ namespace Mac_EFI_Toolkit.Forms
             fitVersionToolStripMenuItem.Enabled = !string.IsNullOrEmpty(EFIROM.FitVersion);
 
         private void UpdateLzmaArchiveControls() =>
-            lblLzma.ForeColor = EFIROM.LzmaDecompressedBuffer != null ? Colours.CLR_LZMAFOUND : Colours.CLR_LZMADEFAULT;
+            lblLzma.ForeColor = EFIROM.LzmaDecompressedBuffer != null ? Colours.CLR_SB_FOUND : Colours.CLR_SB_DEFAULT;
+
+        private void UpdateFmmEmailControls() =>
+            lblFmmEmail.ForeColor = EFIROM.FmmEmail != null ? Colours.CLR_SB_FOUND : Colours.CLR_SB_DEFAULT;
         #endregion
 
         #region UI Events
@@ -1241,6 +1285,7 @@ namespace Mac_EFI_Toolkit.Forms
                 exportNVRAMVSSStoresToolStripMenuItem.Enabled = !EFIROM.VssPrimary.IsStoreEmpty || !EFIROM.VssSecondary.IsStoreEmpty;
                 exportNVRAMSVSStoresToolStripMenuItem.Enabled = !EFIROM.SvsPrimary.IsStoreEmpty || !EFIROM.SvsSecondary.IsStoreEmpty;
                 exportLZMADXEArchiveToolStripMenuItem.Enabled = EFIROM.LzmaDecompressedBuffer != null;
+                exportFmmmobilemeEmailTextToolStripMenuItem.Enabled = EFIROM.FmmEmail != null;
 
                 // Patch Menu
                 changeSerialNumberToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1 && EFIROM.FsysStoreData.SerialBase != -1;
@@ -1281,6 +1326,9 @@ namespace Mac_EFI_Toolkit.Forms
 
             lblLzma.Font = Program.FONT_MDL2_REG_10;
             lblLzma.Text = Program.GLYPH_ZIP;
+
+            lblFmmEmail.Font = Program.FONT_MDL2_REG_10;
+            lblFmmEmail.Text = Program.GLYPH_USER;
         }
 
         private void SetTipHandlers()
@@ -1297,7 +1345,12 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdMenuOptions
             };
 
-            Label[] labels = { lblParseTime, lblLzma };
+            Label[] labels =
+            {
+                lblParseTime,
+                lblLzma,
+                lblFmmEmail
+            };
 
             CheckBox[] checkBoxes = { cbxCensor };
 
@@ -1336,8 +1389,9 @@ namespace Mac_EFI_Toolkit.Forms
                     { cmdMenuOptions, $"{EFISTRINGS.MENU_TIP_OPTIONS} (CTRL + T)"},
                     { cmdOpenInExplorer, $"{EFISTRINGS.MENU_TIP_OPENFILELOCATION} (CTRL + SHIFT + L)" },
                     { lblParseTime, APPSTRINGS.FW_PARSE_TIME},
-                    { lblLzma, lzmaFoundString()},
-                    { cbxCensor, cbxCensorTipString() }
+                    { cbxCensor, censorString() },
+                    { lblLzma, lzmaString() },
+                    { lblFmmEmail, emailString() }
                 };
 
                 if (tooltips.TryGetValue(sender, out string value))
@@ -1349,17 +1403,20 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private string cbxCensorTipString() =>
+        private string censorString() =>
             $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER} (CTRL + S)";
 
-        private string lzmaFoundString() =>
+        private string lzmaString() =>
             EFIROM.LzmaDecompressedBuffer != null ? EFISTRINGS.LZMA_VOL_FOUND : string.Empty;
+
+        private string emailString() =>
+            EFIROM.FmmEmail != null ? EFISTRINGS.FMM_EMAIL_FOUND : string.Empty;
 
         private void HandleCheckBoxChanged(object sender, EventArgs e)
         {
             if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
             {
-                lblStatusBarTip.Text = cbxCensorTipString();
+                lblStatusBarTip.Text = censorString();
             }
         }
 
@@ -1385,6 +1442,14 @@ namespace Mac_EFI_Toolkit.Forms
         {
             this.Text = EFIROM.FileInfoData.FileNameExt;
             lblTitle.Text = $"{APPSTRINGS.EFIROM} {Program.GLYPH_RIGHT_ARROW} {EFIROM.FileInfoData.FileNameExt}";
+        }
+
+        private void lblFmmEmail_DoubleClick(object sender, EventArgs e)
+        {
+            if (EFIROM.FmmEmail != null)
+            {
+                METPrompt.Show(this, EFIROM.FmmEmail, METPromptType.Information, METPromptButtons.Okay);
+            }
         }
         #endregion
 
@@ -1439,7 +1504,8 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Reset parse time.
             lblParseTime.Text = "0.00s";
-            lblLzma.ForeColor = Colours.CLR_LZMADEFAULT;
+            lblLzma.ForeColor = Colours.CLR_SB_DEFAULT;
+            lblFmmEmail.ForeColor = Colours.CLR_SB_DEFAULT;
 
             // Reset window text.
             Text = APPSTRINGS.EFIROM;
@@ -1643,26 +1709,19 @@ namespace Mac_EFI_Toolkit.Forms
             // Load current firmware into buffer.
             byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
 
+            // Erase NVRAM sections if required
             if (resetVss)
             {
                 Logger.WritePatchLine(LOGSTRINGS.NVRAM_VSS_ERASE);
-
-                if (!GetAndEraseStore(nameof(EFIROM.VssPrimary), EFIROM.VssPrimary, binaryBuffer) ||
-                    !GetAndEraseStore(nameof(EFIROM.VssSecondary), EFIROM.VssSecondary, binaryBuffer))
-                {
-                    return;
-                }
+                CheckEraseStore(nameof(EFIROM.VssPrimary), EFIROM.VssPrimary, binaryBuffer);
+                CheckEraseStore(nameof(EFIROM.VssSecondary), EFIROM.VssSecondary, binaryBuffer);
             }
 
             if (resetSvs)
             {
                 Logger.WritePatchLine(LOGSTRINGS.NVRAM_SVS_ERASE);
-
-                if (!GetAndEraseStore(nameof(EFIROM.SvsPrimary), EFIROM.SvsPrimary, binaryBuffer) ||
-                    !GetAndEraseStore(nameof(EFIROM.SvsSecondary), EFIROM.SvsSecondary, binaryBuffer))
-                {
-                    return;
-                }
+                CheckEraseStore(nameof(EFIROM.SvsPrimary), EFIROM.SvsPrimary, binaryBuffer);
+                CheckEraseStore(nameof(EFIROM.SvsSecondary), EFIROM.SvsSecondary, binaryBuffer);
             }
 
             Logger.WritePatchLine(LOGSTRINGS.PATCH_SUCCESS);
@@ -1670,26 +1729,31 @@ namespace Mac_EFI_Toolkit.Forms
             if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
                 SaveOutputFirmwareEfirom(binaryBuffer);
+            }
+            else
+            {
+                Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
+            }
+        }
+
+        private void CheckEraseStore(string storeName, NvramStore store, byte[] buffer)
+        {
+            if (store.StoreBase == -1)
+            {
+                Logger.WritePatchLine($"{storeName} {LOGSTRINGS.NVR_BASE_NOT_FOUND}");
+            }
+            else if (store.IsStoreEmpty)
+            {
+                Logger.WritePatchLine($"{storeName} {LOGSTRINGS.NVR_IS_EMPTY}");
+            }
+            else if (!GetAndEraseStore(storeName, store, buffer))
+            {
                 return;
             }
-
-            Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
         }
 
         private bool GetAndEraseStore(string storeName, NvramStore nvramStore, byte[] binaryBuffer)
         {
-            if (nvramStore.StoreBase == -1)
-            {
-                Logger.WritePatchLine($"{storeName} {LOGSTRINGS.NVR_BASE_NOT_FOUND}");
-                return true;
-            }
-
-            if (nvramStore.IsStoreEmpty)
-            {
-                Logger.WritePatchLine($"{storeName} {LOGSTRINGS.NVR_IS_EMPTY}");
-                return true;
-            }
-
             Logger.WritePatchLine($"{storeName} {LOGSTRINGS.AT} {nvramStore.StoreBase:X}h {LOGSTRINGS.NVR_HAS_BODY_ERASING}");
 
             byte[] erasedBuffer = EraseNvramStore(NvramStoreType.Variable, nvramStore);

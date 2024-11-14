@@ -29,11 +29,13 @@
   - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
   - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
   - Added an icon to the status bar which will indicate if a compressed LZMA DXE archive was found within the firmware.
+  - Added an icon to the status bar which indicates whether an email was found in the 'fmm-mobileme-token-FMM' NVRAM variable.
+  - Added an option to the export menu to export decompressed LZMA DXE archives, which can be extracted using 7-Zip.
+  - Added an option to the export menu to save an email address if present in the 'fmm-mobileme-token-FMM' NVRAM variable.
 - Added new settings:
   - "Use Windows Accent Colour for Borders": allowing form borders to match the system's accent color for a more integrated appearance.
   - "Disable Serial Number Validation": Disables the validation process when entering a new serial number for the firmware.
 - Added firmware parse time to status bars.
-- Added an option in the EFIROM window to export decompressed LZMA DXE archives, which can be extracted using 7-Zip.
 - Serial numbers are now censored by default. They can be uncensored by toggling the switch in the status bar.
 - Serial numbers will no longer be displayed in the "Copied to Clipboard" dialogs. Instead, a default message "Serial Number copied to clipboard" will be shown.
 - Updated LZMA SDK to version 24.08.
@@ -60,6 +62,7 @@
 - Fixed broken FIT version strings.
 - Fixed a logic error causing the internal database to be skipped when the Fsys Store was force-found, which led to misleading "not present" messages in the database log.
 - Fixed an issue where the application log file would not open when running under Wine.
+- Fixed an issue with NVRAM limit calculation.
 
 #### Miscellaneous
 - Some settings have been restructured; users will need to reselect the 'EFI Window Default Directory' in settings.

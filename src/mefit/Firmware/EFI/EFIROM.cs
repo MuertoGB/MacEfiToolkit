@@ -28,6 +28,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static bool bResetVss = false;
         internal static bool bResetSvs = false;
         internal static string NewSerial = null;
+        internal static string FmmEmail = null;
         internal static FileInfoStore FileInfoData;
         internal static PdrSection PdrSectionData;
         internal static NvramStore VssPrimary;
@@ -40,12 +41,14 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static AppleRomInformationSection AppleRomInfoSectionData;
         internal static EfiBiosIdSection EfiBiosIdSectionData;
         internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
-        internal static TimeSpan tsParseTime { get; private set; }
+
         internal static int FSYS_RGN_SIZE = 0;
         internal static int NVRAM_BASE = -1;
         internal static int NVRAM_SIZE = -1;
         internal static int NVRAM_LIMIT = -1;
-        internal const int CRC32_SIZE = 4; // 4h
+
+        internal const int CRC32_SIZE = 4;
+        internal static TimeSpan tsParseTime { get; private set; }
         internal static readonly Encoding _utf8 = Encoding.UTF8;
         #endregion
 
@@ -98,6 +101,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Search both NVRAM SVS stores for a Message Authentication Code.
             EfiPrimaryLockData = GetIsEfiLocked(SvsPrimary.StoreBuffer);
             EfiBackupLockData = GetIsEfiLocked(SvsSecondary.StoreBuffer);
+
+            FmmEmail = GetFmmMobilemeEmail();
 
             // Parse Fsys Store data.
             FsysStoreData = GetFsysStoreData(sourceBytes, false);
@@ -153,11 +158,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             ForceFoundFsys = false;
             FitVersion = null;
             MeVersion = null;
-
             bResetVss = false;
             bResetSvs = false;
             NewSerial = null;
-
+            FmmEmail = null;
             FileInfoData = default;
             PdrSectionData = default;
             VssPrimary = default;
@@ -272,47 +276,51 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 return;
             }
 
-            NVRAM_LIMIT = NVRAM_BASE + NVRAM_SIZE -1;
+            NVRAM_LIMIT = NVRAM_BASE + NVRAM_SIZE - 1;
 
-            // Detect and parse Variable Storage Subsystem ($VSS) stores.
+            Console.WriteLine($"NVRAM - Base: {NVRAM_BASE:X}h, Size: {NVRAM_SIZE:X}h, Limit: {NVRAM_LIMIT:X}h");
+
             int vssPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, VSS_STORE_SIG, NVRAM_BASE, NVRAM_LIMIT);
 
+            // Check if the primary VSS store was found
             if (vssPrimaryBase != -1)
             {
                 VssPrimary = ParseNvramStore(binaryBuffer, vssPrimaryBase, NvramStoreType.Variable);
 
+                // Look for the secondary VSS store only if the primary was found
                 int vssBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, VSS_STORE_SIG, vssPrimaryBase + HDR_SIZE, NVRAM_LIMIT);
-
-                if (vssBackupBase != -1)
-                {
-                    VssSecondary = ParseNvramStore(binaryBuffer, vssBackupBase, NvramStoreType.Variable);
-                }
+                VssSecondary = vssBackupBase != -1
+                    ? ParseNvramStore(binaryBuffer, vssBackupBase, NvramStoreType.Variable)
+                    : DefaultNvramSection(); // Set to default if secondary not found
             }
             else
             {
+                // If the primary VSS store is not found, set both to default
                 VssPrimary = DefaultNvramSection();
                 VssSecondary = DefaultNvramSection();
             }
 
-            // Detect and parse Secure Varible Stores ($SVS).
+            // Repeat similar logic for the SVS store
             int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, SVS_STORE_SIG, NVRAM_BASE, NVRAM_LIMIT);
 
+            // Check if the primary SVS store was found
             if (svsPrimaryBase != -1)
             {
                 SvsPrimary = ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
 
+                // Look for the secondary SVS store only if the primary was found
                 int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, SVS_STORE_SIG, svsPrimaryBase + HDR_SIZE, NVRAM_LIMIT);
-
-                if (svsBackupBase != -1)
-                {
-                    SvsSecondary = ParseNvramStore(binaryBuffer, svsBackupBase, NvramStoreType.Secure);
-                }
+                SvsSecondary = svsBackupBase != -1
+                    ? ParseNvramStore(binaryBuffer, svsBackupBase, NvramStoreType.Secure)
+                    : DefaultNvramSection(); // Set to default if secondary not found
             }
             else
             {
+                // If the primary SVS store is not found, set both to default
                 SvsPrimary = DefaultNvramSection();
                 SvsSecondary = DefaultNvramSection();
             }
+
         }
 
         internal static NvramStore ParseNvramStore(byte[] buffer, int storeBase, NvramStoreType storeType)
@@ -327,10 +335,11 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             byte[] hdrBuffer = BinaryTools.GetBytesBaseLength(buffer, storeBase, HDR_SIZE);
 
-            VariableStoreHeader hdr = Helper.DeserializeHeader<VariableStoreHeader>(hdrBuffer);
+            NvramStoreHeader hdr = Helper.DeserializeHeader<NvramStoreHeader>(hdrBuffer);
 
             if (hdr.StoreSize != 0xFFFF && hdr.StoreSize != 0)
             {
+                bodyBase = storeBase + HDR_SIZE;
                 storeSize = hdr.StoreSize;
                 storeFormat = hdr.Format;
                 storeState = hdr.State;
@@ -339,7 +348,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
                 if (storeBuff != null)
                 {
-                    bodyBase = storeBase + HDR_SIZE;
                     bodySize = storeSize - HDR_SIZE;
 
                     byte[] storeBodyBuffer = BinaryTools.GetBytesBaseLength(buffer, bodyBase, bodySize);
@@ -357,7 +365,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 StoreBuffer = storeBuff,
                 StoreFormat = storeFormat,
                 StoreState = storeState,
-                BodyBase = bodyBase,
+                BodyStart = bodyBase,
                 BodySize = bodySize,
                 IsStoreEmpty = bodyEmpty
             };
@@ -373,7 +381,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 StoreBuffer = null,
                 StoreFormat = 0xFF,
                 StoreState = 0xFF,
-                BodyBase = -1,
+                BodyStart = -1,
                 BodySize = -1,
                 IsStoreEmpty = true
             };
@@ -421,6 +429,98 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         internal static readonly byte[] VSS_STORE_SIG = { 0x24, 0x56, 0x53, 0x53 };
         internal static readonly byte[] SVS_STORE_SIG = { 0x24, 0x53, 0x56, 0x53 };
+        #endregion
+
+        #region fmm-mobileme-token-FMM
+        internal static string GetFmmMobilemeEmail()
+        {
+            if (VssPrimary.IsStoreEmpty)
+            {
+                return null; // If the VSS is empty, there will be no token.
+            }
+
+            byte[] buffer = VssPrimary.StoreBuffer;
+            byte[] token = GetToken();
+
+            // Find the token in the buffer.
+            int tokenBase = FindTokenBase(buffer, token);
+            if (tokenBase == -1)
+            {
+                return null; // Token not found.
+            }
+
+            int tokenLimit = FindTokenLimit(buffer, tokenBase);
+            if (tokenLimit == -1)
+            {
+                return null; // Limit not found.
+            }
+
+            return ExtractEmailFromBuffer(buffer, tokenBase, tokenLimit);
+        }
+
+        private static byte[] GetToken()
+        {
+            return new byte[]
+            {
+                0x66, 0x00, 0x6D, 0x00, 0x6D, 0x00, 0x2D, 0x00,
+                0x6D, 0x00, 0x6F, 0x00, 0x62, 0x00, 0x69, 0x00,
+                0x6C, 0x00, 0x65, 0x00, 0x6D, 0x00, 0x65, 0x00,
+                0x2D, 0x00, 0x74, 0x00, 0x6F, 0x00, 0x6B, 0x00,
+                0x65, 0x00, 0x6E, 0x00, 0x2D, 0x00, 0x46, 0x00,
+                0x4D, 0x00, 0x4D, 0x00, 0x00
+            };
+        }
+
+        private static int FindTokenBase(byte[] buffer, byte[] token)
+        {
+            return BinaryTools.GetBaseAddress(buffer, token);
+        }
+
+        private static int FindTokenLimit(byte[] buffer, int tokenBase)
+        {
+            byte[] limitBytes = new byte[] { 0xAA, 0x55 };
+            return BinaryTools.GetBaseAddress(buffer, limitBytes, tokenBase);
+        }
+
+        private static string ExtractEmailFromBuffer(byte[] buffer, int tokenBase, int tokenLimit)
+        {
+            // Step back 1 byte to ensure we're inside the bounds of the NVAR.
+            tokenLimit -= 1;
+
+            for (int i = tokenBase; i < tokenLimit;)
+            {
+                if (IsValidEmailBlock(buffer, i, out string dataString))
+                {
+                    Console.WriteLine($"Email found: {dataString}");
+                    return dataString; // Return the data if it contains '@'.
+                }
+
+                // Move the pointer to the next block.
+                i++;
+            }
+
+            return null; // No valid email found.
+        }
+
+        private static bool IsValidEmailBlock(byte[] buffer, int index, out string dataString)
+        {
+            dataString = string.Empty;
+
+            // Check for the signature (0x5F, 0x10).
+            if (buffer[index] == 0x5F && buffer[index + 1] == 0x10)
+            {
+                int dataSize = buffer[index + 2];
+                byte[] data = new byte[dataSize];
+                Array.Copy(buffer, index + 3, data, 0, dataSize);
+
+                dataString = System.Text.Encoding.UTF8.GetString(data);
+
+                // Check if the data contains '@' and '.' (basic email validation).
+                return dataString.Contains("@") && dataString.Contains(".");
+            }
+
+            return false;
+        }
         #endregion
 
         #region Fsys Store

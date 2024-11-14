@@ -4,23 +4,27 @@
 // Structs.cs
 // Released under the GNU GLP v3.0
 
-using System;
 using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Firmware.EFI
 {
+    #region EfiLock
     internal struct EFILock
     {
         internal EfiLockType LockType { get; set; }
         internal int LockCrcBase { get; set; }
     }
+    #endregion
 
+    #region PdrSection
     internal struct PdrSection
     {
         internal int BoardIdBase { get; set; }
         internal string BoardId { get; set; }
     }
+    #endregion
 
+    #region AppleRomInformationSection
     internal struct AppleRomInformationSection
     {
         internal bool SectionExists { get; set; }
@@ -37,7 +41,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal string BuildType { get; set; }
         internal string Compiler { get; set; }
     }
+    #endregion
 
+    #region EfiBiosIdSection
     internal struct EfiBiosIdSection
     {
         internal string ModelPart { get; set; }
@@ -46,10 +52,11 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal string MinorPart { get; set; }
         internal string DatePart { get; set; }
     }
+    #endregion
 
-
+    #region NvramStore
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct VariableStoreHeader
+    internal struct NvramStoreHeader
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal char[] Signature;
@@ -69,11 +76,13 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal byte[] StoreBuffer { get; set; }
         internal byte StoreFormat { get; set; }
         internal byte StoreState { get; set; }
-        internal int BodyBase { get; set; }
+        internal int BodyStart { get; set; }
         internal int BodySize { get; set; }
         internal bool IsStoreEmpty { get; set; }
     }
+    #endregion
 
+    #region FsysStore
     internal struct FsysStore
     {
         internal byte[] FsysBytes { get; set; }
@@ -87,4 +96,5 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal string CrcCalcString { get; set; }
         internal uint CRC32CalcInt { get; set; }
     }
+    #endregion
 }

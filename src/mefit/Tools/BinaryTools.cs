@@ -50,45 +50,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
         internal static int GetBaseAddress(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
         {
-            // Ensure that maxSearchLength is within the bounds of the sourceBytes array.
-            maxSearchLength = Math.Min(maxSearchLength, sourceBytes.Length - basePosition);
-
-            // Build the partial match table for the pattern using the Knuth-Morris-Pratt algorithm.
-            int[] partialMatchTable = BuildPartialMatchTable(patternBytes);
-
-            // Initialize the source and pattern indices.
-            int sourceIndex = basePosition;
-            int patternIndex = 0;
-
-            // Iterate over the source bytes until the end or until the pattern is found or the maximum search length is reached.
-            while (sourceIndex < sourceBytes.Length && sourceIndex - basePosition < maxSearchLength)
-            {
-                if (sourceBytes[sourceIndex] == patternBytes[patternIndex])
-                {
-                    // If the source byte matches the pattern byte, increment the indices.
-                    sourceIndex++;
-                    patternIndex++;
-
-                    // If the pattern has been fully matched, return the base.
-                    if (patternIndex == patternBytes.Length)
-                    {
-                        return sourceIndex - patternIndex;
-                    }
-                }
-                else if (patternIndex > 0)
-                {
-                    // If the source byte does not match and we have partially matched the pattern, backtrack the pattern index.
-                    patternIndex = partialMatchTable[patternIndex - 1];
-                }
-                else
-                {
-                    // If the source byte does not match and we have not partially matched the pattern, increment the source index.
-                    sourceIndex++;
-                }
-            }
-
-            // If the pattern is not found within the maximum search length, return -1.
-            return -1;
+            return FindPatternBase(sourceBytes, patternBytes, basePosition, maxSearchLength);
         }
 
         /// <summary>
@@ -97,33 +59,37 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="sourceBytes">The byte array to search in.</param>
         /// <param name="patternBytes">The byte pattern to search for.</param>
         /// <param name="basePosition">The base to start the search from.</param>
-        /// <param name="limitAddress">The address at which the search is limited (beyond which no search occurs).</param>
+        /// <param name="limitAddress">The address at which the search is limited.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
         internal static int GetBaseAddressUpToLimit(byte[] sourceBytes, byte[] patternBytes, int basePosition, int limitAddress)
         {
-            // Calculate the maximum search length based on the limit address and the base position
             int maxSearchLength = limitAddress - basePosition;
+            return FindPatternBase(sourceBytes, patternBytes, basePosition, maxSearchLength);
+        }
 
-            // Ensure the search doesn't go out of bounds of the sourceBytes array.
+        /// <summary>
+        /// Common method to find the base of a byte pattern within a byte array, starting at a specified base and limiting the search length.
+        /// </summary>
+        /// <param name="sourceBytes">The byte array to search in.</param>
+        /// <param name="patternBytes">The byte pattern to search for.</param>
+        /// <param name="basePosition">The base to start the search from.</param>
+        /// <param name="maxSearchLength">The maximum length of the search within the byte array.</param>
+        /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
+        private static int FindPatternBase(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
+        {
             maxSearchLength = Math.Min(maxSearchLength, sourceBytes.Length - basePosition);
-
-            // Build the partial match table for the pattern using the Knuth-Morris-Pratt algorithm.
             int[] partialMatchTable = BuildPartialMatchTable(patternBytes);
 
-            // Initialize the source and pattern indices.
             int sourceIndex = basePosition;
             int patternIndex = 0;
 
-            // Iterate over the source bytes until the end or until the pattern is found or the maximum search length is reached.
             while (sourceIndex < sourceBytes.Length && sourceIndex - basePosition < maxSearchLength)
             {
                 if (sourceBytes[sourceIndex] == patternBytes[patternIndex])
                 {
-                    // If the source byte matches the pattern byte, increment the indices.
                     sourceIndex++;
                     patternIndex++;
 
-                    // If the pattern has been fully matched, return the base.
                     if (patternIndex == patternBytes.Length)
                     {
                         return sourceIndex - patternIndex;
@@ -131,17 +97,14 @@ namespace Mac_EFI_Toolkit.Tools
                 }
                 else if (patternIndex > 0)
                 {
-                    // If the source byte does not match and we have partially matched the pattern, backtrack the pattern index.
                     patternIndex = partialMatchTable[patternIndex - 1];
                 }
                 else
                 {
-                    // If the source byte does not match and we have not partially matched the pattern, increment the source index.
                     sourceIndex++;
                 }
             }
 
-            // If the pattern is not found within the maximum search length, return -1.
             return -1;
         }
 

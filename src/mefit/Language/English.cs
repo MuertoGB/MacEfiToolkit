@@ -4,11 +4,6 @@
 // English.cs
 // Released under the GNU GLP v3.0
 
-using static System.Windows.Forms.Design.AxImporter;
-using System.Drawing;
-using System.Dynamic;
-using Microsoft.CSharp.RuntimeBinder;
-
 namespace Mac_EFI_Toolkit
 {
     internal class APPSTRINGS
@@ -519,7 +514,13 @@ namespace Mac_EFI_Toolkit
             "Firmware modified successfully. Would you like to save the output?";
 
         internal const string LZMA_VOL_FOUND =
-            "LZMA DXE Volume Detected in Firmware";
+            "LZMA DXE Archive Detected in Firmware";
+
+        internal const string FMM_EMAIL_FOUND =
+            "Find My Mac Email Detected in NVRAM";
+
+        internal const string FMM_EMAIL =
+            "FMM-EMAIL";
         #endregion
     }
 

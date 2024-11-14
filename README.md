@@ -69,8 +69,10 @@ This section explains the EFIROM Window and its functionality.
   - **Export Intel ME Region**: Exports the Intel Management Engine region.
   - **Export NVRAM VSS Stores**: Exports the VSS (Variable Storage Subsystem) stores within NVRAM.
   - **Export NVRAM SVS Stores**: Exports the SVS (Secure Variable Store) within NVRAM.
+  - **Export LZMA DXE Archive**: Allows exporting of the decompressed LZMA DXE archive, which can be opened with 7-zip.
   - **Backup Firmware (ZIP)**: Compresses and saves the loaded firmware as a ZIP archive.
   - **Export Firmware Information (Text)**: Saves firmware information to a text file.
+  - **Export Find My Mac Email (Text)**: Saves the email found in the NVRAM `FindMyMac` token to a text file, if available.
 
 - **Patch Menu:** (Access to the patching menu requires accepting the editing terms.)
   - **Change Serial Number**: Edits the System Serial Number (SSN) within the Fsys Store.
@@ -89,6 +91,8 @@ This section explains the EFIROM Window and its functionality.
 - **Status Bar:**
   - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
   - **Serial Toggle Switch**: Hides or displays the System Serial Number.
+  - **ZIP Icon**: Indicates if an LZMA DXE archive was found within the firmware.
+  - **User Icon**: Indicates if a Find My Mac email was detected in the NVRAM.
   - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
 
 ## SOCROM Window
@@ -194,6 +198,8 @@ Once these steps are completed, you should be able to run **Mac EFI Toolkit** un
   - View Apple ROM section information
   - Reset NVRAM stores with proper header configuration
   - Detect and remove EFI passwords (EFI lock)
+  - Detect and export decompressed LZMA DXE archives
+  - Detect and export the Find My Mac email address
 
 - **Firmware (T2 SOCROM)**
   - **View firmware details**
