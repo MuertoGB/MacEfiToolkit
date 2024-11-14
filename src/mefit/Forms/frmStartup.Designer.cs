@@ -397,7 +397,7 @@
             this.restartApplicationToolStripMenuItem});
             this.cmsMore.Name = "cmsMore";
             this.cmsMore.ShowImageMargin = false;
-            this.cmsMore.Size = new System.Drawing.Size(227, 330);
+            this.cmsMore.Size = new System.Drawing.Size(227, 302);
             // 
             // changelogToolStripMenuItem
             // 

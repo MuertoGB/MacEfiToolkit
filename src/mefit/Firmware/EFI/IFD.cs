@@ -11,74 +11,8 @@ using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Firmware.EFI
 {
-
-    #region Structs
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DescriptorHeader
-    {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // 10h
-        internal byte[] ReservedVector;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] // 4h
-        internal byte[] Tag;
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DescriptorMap
-    {
-        internal byte ComponentBase;
-        internal byte NumOfFlashChips;
-        internal byte RegionBase;
-        internal byte NumOfRegions;
-        internal byte MasterBase;
-        internal byte NumOfMasters;
-        internal byte PchStrapsBase;
-        internal byte NumOfPchStraps;
-        internal byte ProcStrapsBase;
-        internal byte NumOfProcStraps;
-        internal ushort DescriptorVersion;
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DescriptorRegions
-    {
-        internal ushort DescriptorBase;
-        internal ushort DescriptorLimit;
-        internal ushort BiosBase;
-        internal ushort BiosLimit;
-        internal ushort MeBase;
-        internal ushort MeLimit;
-        internal ushort GbeBase;
-        internal ushort GbeLimit;
-        internal ushort PdrBase;
-        internal ushort PdrLimit;
-        internal ushort DevExp1Base;
-        internal ushort DevExp1Limit;
-        internal ushort Bios2Base;
-        internal ushort Bios2Limit;
-        internal ushort MicrocodeBase;
-        internal ushort MicrocodeLimit;
-        internal ushort EcBase;
-        internal ushort EcLimit;
-        internal ushort DevExp2Base;
-        internal ushort DevExp2Limit;
-        internal ushort IeBase;
-        internal ushort IeLimit;
-        internal ushort Tgbe1Base;
-        internal ushort Tgbe1Limit;
-        internal ushort Tgbe2Base;
-        internal ushort Tgbe2Limit;
-        internal ushort Reserved1Base;
-        internal ushort Reserved1Limit;
-        internal ushort Reserved2Base;
-        internal ushort Reserved2Limit;
-        internal ushort PttBase;
-        internal ushort PttLimit;
-    }
-    #endregion
-
     class IFD
     {
-
         #region Internal Members
         internal const uint DESCRIPTOR_BASE = 0; // 0h
         internal const uint DESCRIPTOR_LENGTH = 4096; // 1000h
@@ -89,6 +23,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static uint PDR_REGION_BASE, PDR_REGION_LIMIT, PDR_REGION_SIZE = 0;
 
         internal static bool IsDescriptorMode = false;
+
+        internal static readonly byte[] FLASH_DESC_SIGNATURE = { 0x5A, 0xA5, 0xF0, 0x0F };
         #endregion
 
         internal static uint CalculateRegionBase(ushort basePosition)
@@ -170,11 +106,5 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             IsDescriptorMode = false;
         }
-
-        internal static readonly byte[] FLASH_DESC_SIGNATURE =
-        {
-            0x5A, 0xA5, 0xF0, 0x0F
-        };
-
     }
 }

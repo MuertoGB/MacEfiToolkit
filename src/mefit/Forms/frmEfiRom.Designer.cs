@@ -1026,25 +1026,28 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblLzma
             // 
+            this.lblLzma.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLzma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.lblLzma.Location = new System.Drawing.Point(78, 0);
             this.lblLzma.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lblLzma.Name = "lblLzma";
-            this.lblLzma.Size = new System.Drawing.Size(21, 36);
+            this.lblLzma.Size = new System.Drawing.Size(23, 36);
             this.lblLzma.TabIndex = 0;
             this.lblLzma.Text = "...";
             this.lblLzma.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblFmmEmail
             // 
+            this.lblFmmEmail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblFmmEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.lblFmmEmail.Location = new System.Drawing.Point(104, 0);
             this.lblFmmEmail.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lblFmmEmail.Name = "lblFmmEmail";
-            this.lblFmmEmail.Size = new System.Drawing.Size(21, 36);
+            this.lblFmmEmail.Size = new System.Drawing.Size(23, 36);
             this.lblFmmEmail.TabIndex = 0;
             this.lblFmmEmail.Text = "...";
             this.lblFmmEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblFmmEmail.Click += new System.EventHandler(this.lblFmmEmail_Click);
             // 
             // cbxCensor
             // 

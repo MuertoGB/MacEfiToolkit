@@ -20,4 +20,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
     {
         Variable, Secure, None
     }
+
+    internal enum ImeVersionType
+    {
+        FlashImageTool, ManagementEngine
+    }
 }

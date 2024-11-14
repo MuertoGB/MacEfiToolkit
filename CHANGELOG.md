@@ -66,7 +66,7 @@
 
 #### Miscellaneous
 - Some settings have been restructured; users will need to reselect the 'EFI Window Default Directory' in settings.
-- Discontinued support for Windows Vista and earlier operating systems. The application will no longer launch on unsupported operating systems.
+- Discontinued support for Windows 8.1 and earlier operating systems. The application will no longer launch on unsupported operating systems.
 - EFI Window Adjustments:
   - Removed single-click copy functionality for labels and reset their cursors to default to better align with UI design best practices.
   - Removed display of private memory usage to improve compatibility with Wine.

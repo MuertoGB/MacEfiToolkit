@@ -97,4 +97,100 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal uint CRC32CalcInt { get; set; }
     }
     #endregion
+
+    #region Flash Descriptor
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct DescriptorHeader
+    {
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // 10h
+        internal byte[] ReservedVector;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)] // 4h
+        internal byte[] Tag;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct DescriptorMap
+    {
+        internal byte ComponentBase;
+        internal byte NumOfFlashChips;
+        internal byte RegionBase;
+        internal byte NumOfRegions;
+        internal byte MasterBase;
+        internal byte NumOfMasters;
+        internal byte PchStrapsBase;
+        internal byte NumOfPchStraps;
+        internal byte ProcStrapsBase;
+        internal byte NumOfProcStraps;
+        internal ushort DescriptorVersion;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct DescriptorRegions
+    {
+        internal ushort DescriptorBase;
+        internal ushort DescriptorLimit;
+        internal ushort BiosBase;
+        internal ushort BiosLimit;
+        internal ushort MeBase;
+        internal ushort MeLimit;
+        internal ushort GbeBase;
+        internal ushort GbeLimit;
+        internal ushort PdrBase;
+        internal ushort PdrLimit;
+        internal ushort DevExp1Base;
+        internal ushort DevExp1Limit;
+        internal ushort Bios2Base;
+        internal ushort Bios2Limit;
+        internal ushort MicrocodeBase;
+        internal ushort MicrocodeLimit;
+        internal ushort EcBase;
+        internal ushort EcLimit;
+        internal ushort DevExp2Base;
+        internal ushort DevExp2Limit;
+        internal ushort IeBase;
+        internal ushort IeLimit;
+        internal ushort Tgbe1Base;
+        internal ushort Tgbe1Limit;
+        internal ushort Tgbe2Base;
+        internal ushort Tgbe2Limit;
+        internal ushort Reserved1Base;
+        internal ushort Reserved1Limit;
+        internal ushort Reserved2Base;
+        internal ushort Reserved2Limit;
+        internal ushort PttBase;
+        internal ushort PttLimit;
+    }
+    #endregion
+
+    #region Management Engine
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct FPTHeader
+    {
+        internal uint Tag;
+        internal uint NumEntries;
+        internal byte HeaderVersion;
+        internal byte EntryVersion;
+        internal byte HeaderLength;
+        internal byte HeaderChecksum;
+        internal ushort FlashCycleLife;
+        internal ushort FlashCycleLimit;
+        internal uint UmaSize;
+        internal uint Flags;
+        internal ushort FitMajor;
+        internal ushort FitMinor;
+        internal ushort FitHotfix;
+        internal ushort FitBuild;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    internal struct MN2Manifest
+    {
+        internal uint Tag;
+        internal uint NumEntries;
+        internal ushort EngineMajor;
+        internal ushort EngineMinor;
+        internal ushort EngineHotfix;
+        internal ushort EngineBuild;
+    }
+    #endregion
 }

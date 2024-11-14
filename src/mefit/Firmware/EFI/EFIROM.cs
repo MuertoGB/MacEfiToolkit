@@ -4,6 +4,7 @@
 // EFIROM.cs - Handles parsing of firmware data
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Collections.Generic;
@@ -138,10 +139,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             FirmwareVersion = MacTools.GetFirmwareVersion();
 
             // Get the Intel ME Flash Image Tool version.
-            FitVersion = IME.GetVersionData(LoadedBinaryBuffer, VersionType.FlashImageTool);
+            FitVersion = IME.GetVersionData(LoadedBinaryBuffer, ImeVersionType.FlashImageTool);
 
             // Get the Intel ME version.
-            MeVersion = IME.GetVersionData(LoadedBinaryBuffer, VersionType.ManagementEngine);
+            MeVersion = IME.GetVersionData(LoadedBinaryBuffer, ImeVersionType.ManagementEngine);
 
             stopwatch.Stop();
             tsParseTime = stopwatch.Elapsed;

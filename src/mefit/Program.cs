@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241114.0240";
+        internal const string APP_BUILD = "241114.2100";
         internal const string APP_CHANNEL = "Stable";
     }
 
@@ -76,7 +76,7 @@ namespace Mac_EFI_Toolkit
         internal const string GLYPH_FILE_EXPLORER = "\uED25";
         internal const string GLYPH_DOWN_ARROW = "\uE74B";
         internal const string GLYPH_RIGHT_ARROW = "\u2192";
-        internal const string GLYPH_ZIP = "\uF012";
+        internal const string GLYPH_REPORT = "\uE9F9";
         internal const string GLYPH_USER = "\uE77B";
         internal const string NOWRAP_SPACE = "\u00A0";
 
@@ -336,17 +336,16 @@ namespace Mac_EFI_Toolkit
 
         private static bool IsSupportedOS()
         {
-            FileVersionInfo version = SystemTools.GetKernelVersion;
+            FileVersionInfo fileVersionInfo = SystemTools.GetKernelVersion;
 
-            // Check for Windows 7 (6.1) or later (Windows 8, 8.1, 10, and 11).
-            if (version.ProductMajorPart > 6 || (version.ProductMajorPart == 6 && version.ProductMinorPart >= 1))
+            if (fileVersionInfo.ProductMajorPart >= 10)
             {
                 return true;
             }
 
             MessageBox.Show(
-                DIALOGSTRINGS.REQUIRES_WIN_7,
-                DIALOGSTRINGS.UNSUPP_OS,
+                DIALOGSTRINGS.REQUIRES_WIN_10,
+                DIALOGSTRINGS.UNSUPPORTED_OS,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
 

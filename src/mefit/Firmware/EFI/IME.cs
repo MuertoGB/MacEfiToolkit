@@ -6,55 +6,21 @@
 
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Tools;
-using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Firmware
 {
-
-    #region Structs
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct FPTHeader
-    {
-        internal uint Tag;
-        internal uint NumEntries;
-        internal byte HeaderVersion;
-        internal byte EntryVersion;
-        internal byte HeaderLength;
-        internal byte HeaderChecksum;
-        internal ushort FlashCycleLife;
-        internal ushort FlashCycleLimit;
-        internal uint UmaSize;
-        internal uint Flags;
-        internal ushort FitMajor;
-        internal ushort FitMinor;
-        internal ushort FitHotfix;
-        internal ushort FitBuild;
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct MN2Manifest
-    {
-        internal uint Tag;
-        internal uint NumEntries;
-        internal ushort EngineMajor;
-        internal ushort EngineMinor;
-        internal ushort EngineHotfix;
-        internal ushort EngineBuild;
-    }
-    #endregion
-
-    #region Enums
-    internal enum VersionType
-    {
-        FlashImageTool, ManagementEngine
-    }
-    #endregion
-
     class IME
     {
-        private static string _default = "0.0.0.0";
+        #region Internal Members
+        internal static readonly byte[] FPT_SIGNATURE = { 0x24, 0x46, 0x50, 0x54 };
+        internal static readonly byte[] MN2_SIGNATURE = { 0x00, 0x00, 0x24, 0x4D, 0x4E, 0x32 };
+        #endregion
 
-        internal static string GetVersionData(byte[] sourceBytes, VersionType versionType)
+        #region Private Members
+        private static string _default = "0.0.0.0";
+        #endregion
+
+        internal static string GetVersionData(byte[] sourceBytes, ImeVersionType versionType)
         {
             int headerPos = -1;
             int dataLength = 0;
@@ -62,12 +28,12 @@ namespace Mac_EFI_Toolkit.Firmware
 
             switch (versionType)
             {
-                case VersionType.FlashImageTool:
+                case ImeVersionType.FlashImageTool:
                     headerPos = BinaryTools.GetBaseAddress(sourceBytes, FPT_SIGNATURE, (int)IFD.ME_REGION_BASE, (int)IFD.ME_REGION_SIZE);
                     dataLength = 0x20;
                     break;
 
-                case VersionType.ManagementEngine:
+                case ImeVersionType.ManagementEngine:
                     headerPos = BinaryTools.GetBaseAddress(sourceBytes, MN2_SIGNATURE, (int)IFD.ME_REGION_BASE, (int)IFD.ME_REGION_SIZE);
                     dataLength = 0x10;
                     break;
@@ -75,7 +41,7 @@ namespace Mac_EFI_Toolkit.Firmware
 
             if (headerPos != -1)
             {
-                if (versionType == VersionType.ManagementEngine)
+                if (versionType == ImeVersionType.ManagementEngine)
                 {
                     headerPos += 2;
                 }
@@ -84,12 +50,12 @@ namespace Mac_EFI_Toolkit.Firmware
 
                 if (headerBytes != null)
                 {
-                    if (versionType == VersionType.FlashImageTool)
+                    if (versionType == ImeVersionType.FlashImageTool)
                     {
                         FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(headerBytes);
                         version = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                     }
-                    else if (versionType == VersionType.ManagementEngine)
+                    else if (versionType == ImeVersionType.ManagementEngine)
                     {
                         MN2Manifest mn2Header = Helper.DeserializeHeader<MN2Manifest>(headerBytes);
                         version = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
@@ -104,16 +70,5 @@ namespace Mac_EFI_Toolkit.Firmware
 
             return version;
         }
-
-        internal static readonly byte[] FPT_SIGNATURE =
-        {
-            0x24, 0x46, 0x50, 0x54
-        };
-
-        internal static readonly byte[] MN2_SIGNATURE =
-        {
-            0x00, 0x00, 0x24,
-            0x4D, 0x4E, 0x32
-        };
     }
 }

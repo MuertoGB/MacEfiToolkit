@@ -58,7 +58,7 @@ namespace Mac_EFI_Toolkit.Forms
             DragDrop += frmEfiRom_DragDrop;
             Deactivate += frmEfiRom_Deactivate;
             Activated += frmEfiRom_Activated;
-            lblFmmEmail.DoubleClick += lblFmmEmail_DoubleClick;
+            lblFmmEmail.MouseEnter += lblFmmEmail_MouseEnter;
         }
         #endregion
 
@@ -251,6 +251,30 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Switch Events
         private void cbxCensor_CheckedChanged(object sender, EventArgs e) => UpdateSerialNumberControls();
+        #endregion
+
+        #region Label Events
+        private void lblFmmEmail_MouseEnter(object sender, EventArgs e)
+        {
+            Label label = (Label)sender;
+
+            if (EFIROM.FmmEmail == null)
+            {
+                label.Cursor = Cursors.Default;
+                return;
+            }
+
+            label.Cursor = Cursors.Hand;
+        }
+
+        private void lblFmmEmail_Click(object sender, EventArgs e)
+        {
+            if (EFIROM.FmmEmail != null)
+            {
+                METPrompt.Show(this, EFIROM.FmmEmail, METPromptType.Information, METPromptButtons.Okay);
+                return;
+            }
+        }
         #endregion
 
         #region Copy Toolstrip Events
@@ -1322,7 +1346,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetLabelFontAndGlyph()
         {
             lblLzma.Font = Program.FONT_MDL2_REG_10;
-            lblLzma.Text = Program.GLYPH_ZIP;
+            lblLzma.Text = Program.GLYPH_REPORT;
 
             lblFmmEmail.Font = Program.FONT_MDL2_REG_10;
             lblFmmEmail.Text = Program.GLYPH_USER;
@@ -1442,14 +1466,6 @@ namespace Mac_EFI_Toolkit.Forms
         {
             this.Text = EFIROM.FileInfoData.FileNameExt;
             lblTitle.Text = $"{APPSTRINGS.EFIROM} {Program.GLYPH_RIGHT_ARROW} {EFIROM.FileInfoData.FileNameExt}";
-        }
-
-        private void lblFmmEmail_DoubleClick(object sender, EventArgs e)
-        {
-            if (EFIROM.FmmEmail != null)
-            {
-                METPrompt.Show(this, EFIROM.FmmEmail, METPromptType.Information, METPromptButtons.Okay);
-            }
         }
         #endregion
 
@@ -2142,7 +2158,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                string imeVersion = IME.GetVersionData(imeBuffer, VersionType.ManagementEngine);
+                string imeVersion = IME.GetVersionData(imeBuffer, ImeVersionType.ManagementEngine);
 
                 Logger.WritePatchLine($"{LOGSTRINGS.IME_VERSION} {imeVersion ?? APPSTRINGS.NOT_FOUND}");
 

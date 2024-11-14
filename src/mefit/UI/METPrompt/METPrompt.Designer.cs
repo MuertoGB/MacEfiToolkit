@@ -38,8 +38,10 @@ namespace Mac_EFI_Toolkit.UI
             this.lblMessage = new System.Windows.Forms.Label();
             this.tlpLabel = new System.Windows.Forms.TableLayoutPanel();
             this.pnlSeperatorBtm = new System.Windows.Forms.Panel();
+            this.pnlBottom = new System.Windows.Forms.Panel();
             this.tlpButtons.SuspendLayout();
             this.tlpLabel.SuspendLayout();
+            this.pnlBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -76,8 +78,8 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpButtons.Controls.Add(this.cmdNo, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdYes, 1, 0);
-            this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 157);
+            this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpButtons.Location = new System.Drawing.Point(0, 0);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
@@ -132,7 +134,7 @@ namespace Mac_EFI_Toolkit.UI
             this.lblMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
-            this.lblMessage.Location = new System.Drawing.Point(157, 42);
+            this.lblMessage.Location = new System.Drawing.Point(157, 41);
             this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Padding = new System.Windows.Forms.Padding(6);
@@ -154,7 +156,7 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpLabel.Name = "tlpLabel";
             this.tlpLabel.RowCount = 1;
             this.tlpLabel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpLabel.Size = new System.Drawing.Size(348, 119);
+            this.tlpLabel.Size = new System.Drawing.Size(348, 118);
             this.tlpLabel.TabIndex = 1;
             // 
             // pnlSeperatorBtm
@@ -167,6 +169,16 @@ namespace Mac_EFI_Toolkit.UI
             this.pnlSeperatorBtm.Size = new System.Drawing.Size(348, 1);
             this.pnlSeperatorBtm.TabIndex = 2;
             // 
+            // pnlBottom
+            // 
+            this.pnlBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.pnlBottom.Controls.Add(this.tlpButtons);
+            this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlBottom.Location = new System.Drawing.Point(1, 157);
+            this.pnlBottom.Name = "pnlBottom";
+            this.pnlBottom.Size = new System.Drawing.Size(348, 42);
+            this.pnlBottom.TabIndex = 3;
+            // 
             // METPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -176,11 +188,11 @@ namespace Mac_EFI_Toolkit.UI
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(350, 200);
             this.ControlBox = false;
-            this.Controls.Add(this.pnlSeperatorBtm);
             this.Controls.Add(this.tlpLabel);
+            this.Controls.Add(this.pnlSeperatorBtm);
+            this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlSeperatorTop);
             this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.tlpButtons);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -196,6 +208,7 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpButtons.ResumeLayout(false);
             this.tlpLabel.ResumeLayout(false);
             this.tlpLabel.PerformLayout();
+            this.pnlBottom.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -210,5 +223,6 @@ namespace Mac_EFI_Toolkit.UI
         private System.Windows.Forms.Button cmdYes;
         private System.Windows.Forms.TableLayoutPanel tlpLabel;
         private System.Windows.Forms.Panel pnlSeperatorBtm;
+        private System.Windows.Forms.Panel pnlBottom;
     }
 }

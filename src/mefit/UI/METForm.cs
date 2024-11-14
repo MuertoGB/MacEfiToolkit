@@ -113,7 +113,6 @@ public class METForm : Form
         }
 
         BackColor = Colours.CLR_DEFAULTBORDER;
-
     }
     #endregion
 }

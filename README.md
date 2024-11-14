@@ -26,8 +26,6 @@ Mac EFI Toolkit (V2.0.0)
 - **Operating System:**
   - Windows 11 (64-bit)
   - Windows 10 (32/64-bit)
-  - Windows 8/8.1 (32/64-bit)
-  - Windows 7 (32/64-bit)
   - **mefit** is compatible with [Wine](https://www.winehq.org/)
 
 - **Internet Connectivity** (optional, only required for specific features):
@@ -91,7 +89,7 @@ This section explains the EFIROM Window and its functionality.
 
 - **Status Bar:**
   - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
-  - **ZIP Icon**: Indicates whether an LZMA DXE archive was found within the firmware.
+  - **File Icon**: Indicates whether an LZMA DXE archive was found within the firmware.
   - **User Icon**: Indicates whether a Find My Mac email was detected in the NVRAM.
   - **Serial Toggle Switch**: Hides or displays the System Serial Number.
   - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
@@ -151,6 +149,7 @@ If you encounter any issues or need assistance, here are a few ways you can get 
 
 #### 1. **GitHub Issues**
 If you're experiencing a bug or issue, please check the [open issues](https://github.com/MuertoGB/MacEfiToolkit/issues) on GitHub. If your problem has not been reported, feel free to create a new issue. Be sure to include as much detail as possible, including:
+ - Application build (Can be found in the about window).
  - A clear description of the problem.
  - Steps to reproduce the issue.
  - Screenshots or logs (if applicable).

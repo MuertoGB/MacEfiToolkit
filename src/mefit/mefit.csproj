@@ -120,7 +120,7 @@
     <Compile Include="Common\SevenZip\Compress\RangeCoder\RangeCoderBitTree.cs" />
     <Compile Include="Common\SevenZip\ICoder.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
-    <Compile Include="Common\Logger.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="AppVersion.cs" />
     <Compile Include="Language\English.cs" />
     <Compile Include="Firmware\SOCROM\Types\Structs.cs" />

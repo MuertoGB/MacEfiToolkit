@@ -64,7 +64,7 @@ namespace Mac_EFI_Toolkit
             "FirmwareInfo";
 
         internal const string ROM_SECTION_INFO =
-            "AppleRomSectionInfo";
+            "AppleRomInformation";
 
         internal const string BASE =
             "Base:";
@@ -325,11 +325,11 @@ namespace Mac_EFI_Toolkit
     internal class DIALOGSTRINGS
     {
         #region Strings
-        internal const string REQUIRES_WIN_7 =
-            "This application requires Windows 7 or later to run.";
+        internal const string REQUIRES_WIN_10 =
+            "This application requires Windows 10 or later to run. The application will now quit.";
 
-        internal const string UNSUPP_OS =
-            "Unsupported OS";
+        internal const string UNSUPPORTED_OS =
+            "Unsupported Operating Sytem";
 
         internal const string UNLOAD_FIRMWARE_RESET =
             "This will unload the firmware and all associated data. Are you sure you want to reset?";
@@ -517,10 +517,10 @@ namespace Mac_EFI_Toolkit
             "LZMA DXE Archive Detected in Firmware";
 
         internal const string FMM_EMAIL_FOUND =
-            "Find My Mac Email Detected in NVRAM";
+            "Find My Mac Email Detected in NVRAM (Click to view)";
 
         internal const string FMM_EMAIL =
-            "FMM-EMAIL";
+            "FindMyMac_Email";
         #endregion
     }
 

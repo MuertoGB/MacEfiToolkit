@@ -7,7 +7,7 @@
 using System;
 using System.IO;
 
-namespace Mac_EFI_Toolkit
+namespace Mac_EFI_Toolkit.Common
 {
     class LzmaCoder
     {
