@@ -23,6 +23,6 @@ namespace Mac_EFI_Toolkit.UI
         internal static readonly Color CLR_SETTINGSPATHTEXT = Color.FromArgb(200, 220, 240);
         internal static readonly Color CLR_DEFAULTBORDER = Color.FromArgb(0, 170, 180);
         internal static readonly Color CLR_SB_DEFAULT = Color.FromArgb(100, 100, 100);
-        internal static readonly Color CLR_SB_FOUND = Color.FromArgb(70, 150, 70);
+        internal static readonly Color CLR_SB_FOUND = Color.FromArgb(50, 170, 180);
     }
 }

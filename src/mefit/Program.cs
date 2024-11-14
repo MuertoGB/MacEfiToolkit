@@ -76,7 +76,6 @@ namespace Mac_EFI_Toolkit
         internal const string GLYPH_FILE_EXPLORER = "\uED25";
         internal const string GLYPH_DOWN_ARROW = "\uE74B";
         internal const string GLYPH_RIGHT_ARROW = "\u2192";
-        internal const string GLYPH_VIEW = "\uE890";
         internal const string GLYPH_ZIP = "\uF012";
         internal const string GLYPH_USER = "\uE77B";
         internal const string NOWRAP_SPACE = "\u00A0";

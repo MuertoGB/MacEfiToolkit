@@ -43,9 +43,6 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Set button properties.
             SetButtonFontAndGlyph();
-
-            // Set label properties.
-            SetLabelFontAndGlyph();
         }
 
         private void WireEventHandlers()
@@ -701,12 +698,6 @@ namespace Mac_EFI_Toolkit.Forms
                 buttonData.Button.Font = buttonData.Font;
                 buttonData.Button.Text = buttonData.Text;
             }
-        }
-
-        private void SetLabelFontAndGlyph()
-        {
-            lblView.Font = Program.FONT_MDL2_REG_10;
-            lblView.Text = Program.GLYPH_VIEW;
         }
 
         private static void SetControlForeColor(Control parentControl, Color foreColor)

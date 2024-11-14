@@ -50,7 +50,7 @@ Mac EFI Toolkit (V2.0.0)
 This section explains the EFIROM Window and its functionality.
 
 <kbd>
-  <img src="stream/images/application/efi.png" width="763" height="492">
+  <img src="stream/images/application/efi.png">
 </kbd>
 
 ### Main Menu
@@ -91,9 +91,9 @@ This section explains the EFIROM Window and its functionality.
 
 - **Status Bar:**
   - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
+  - **ZIP Icon**: Indicates whether an LZMA DXE archive was found within the firmware.
+  - **User Icon**: Indicates whether a Find My Mac email was detected in the NVRAM.
   - **Serial Toggle Switch**: Hides or displays the System Serial Number.
-  - **ZIP Icon**: Indicates if an LZMA DXE archive was found within the firmware.
-  - **User Icon**: Indicates if a Find My Mac email was detected in the NVRAM.
   - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
 
 ## SOCROM Window

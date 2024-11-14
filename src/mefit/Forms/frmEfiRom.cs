@@ -1321,9 +1321,6 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetLabelFontAndGlyph()
         {
-            lblView.Font = Program.FONT_MDL2_REG_10;
-            lblView.Text = Program.GLYPH_VIEW;
-
             lblLzma.Font = Program.FONT_MDL2_REG_10;
             lblLzma.Text = Program.GLYPH_ZIP;
 

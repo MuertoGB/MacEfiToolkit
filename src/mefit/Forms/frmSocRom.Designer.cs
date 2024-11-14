@@ -80,7 +80,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblStatusBarTip = new System.Windows.Forms.Label();
             this.lblParseTime = new System.Windows.Forms.Label();
             this.pnlSplit0 = new System.Windows.Forms.Panel();
-            this.lblView = new System.Windows.Forms.Label();
             this.cbxCensor = new Mac_EFI_Toolkit.UI.METSwitch();
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
             this.cmdOpenInExplorer = new System.Windows.Forms.Button();
@@ -762,20 +761,19 @@ namespace Mac_EFI_Toolkit.Forms
             // tlpStatusBar
             // 
             this.tlpStatusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.tlpStatusBar.ColumnCount = 7;
+            this.tlpStatusBar.ColumnCount = 6;
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpStatusBar.Controls.Add(this.pnlSplit1, 4, 0);
-            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 6, 0);
-            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 5, 0);
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatusBar.Controls.Add(this.pnlSplit1, 3, 0);
+            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 5, 0);
+            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 4, 0);
             this.tlpStatusBar.Controls.Add(this.lblParseTime, 0, 0);
             this.tlpStatusBar.Controls.Add(this.pnlSplit0, 1, 0);
-            this.tlpStatusBar.Controls.Add(this.lblView, 3, 0);
             this.tlpStatusBar.Controls.Add(this.cbxCensor, 2, 0);
             this.tlpStatusBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatusBar.Location = new System.Drawing.Point(0, 370);
@@ -790,7 +788,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.pnlSplit1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pnlSplit1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.pnlSplit1.Location = new System.Drawing.Point(138, 7);
+            this.pnlSplit1.Location = new System.Drawing.Point(114, 7);
             this.pnlSplit1.Name = "pnlSplit1";
             this.pnlSplit1.Size = new System.Drawing.Size(1, 22);
             this.pnlSplit1.TabIndex = 101;
@@ -830,11 +828,11 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblStatusBarTip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblStatusBarTip.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatusBarTip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblStatusBarTip.Location = new System.Drawing.Point(141, 1);
+            this.lblStatusBarTip.Location = new System.Drawing.Point(117, 1);
             this.lblStatusBarTip.Margin = new System.Windows.Forms.Padding(1);
             this.lblStatusBarTip.Name = "lblStatusBarTip";
             this.lblStatusBarTip.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblStatusBarTip.Size = new System.Drawing.Size(430, 34);
+            this.lblStatusBarTip.Size = new System.Drawing.Size(454, 34);
             this.lblStatusBarTip.TabIndex = 0;
             this.lblStatusBarTip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -860,18 +858,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.pnlSplit0.Name = "pnlSplit0";
             this.pnlSplit0.Size = new System.Drawing.Size(1, 22);
             this.pnlSplit0.TabIndex = 0;
-            // 
-            // lblView
-            // 
-            this.lblView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.lblView.Location = new System.Drawing.Point(111, 0);
-            this.lblView.Margin = new System.Windows.Forms.Padding(0);
-            this.lblView.Name = "lblView";
-            this.lblView.Size = new System.Drawing.Size(24, 36);
-            this.lblView.TabIndex = 0;
-            this.lblView.Text = "...";
-            this.lblView.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbxCensor
             // 
@@ -1384,7 +1370,6 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.Label lblStatusBarTip;
         private System.Windows.Forms.Label lblParseTime;
         private System.Windows.Forms.Panel pnlSplit0;
-        private System.Windows.Forms.Label lblView;
         private UI.METSwitch cbxCensor;
         private System.Windows.Forms.Button cmdMenuOptions;
         private UI.METContextMenuStrip cmsOptions;

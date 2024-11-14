@@ -84,17 +84,16 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblSerialNumber = new System.Windows.Forms.Label();
             this.lblMeVersion = new System.Windows.Forms.Label();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
-            this.lblFmmEmail = new System.Windows.Forms.Label();
-            this.lblLzma = new System.Windows.Forms.Label();
+            this.pnlSplit2 = new System.Windows.Forms.Panel();
             this.pnlSplit1 = new System.Windows.Forms.Panel();
             this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLoad = new System.Windows.Forms.PictureBox();
             this.lblStatusBarTip = new System.Windows.Forms.Label();
             this.lblParseTime = new System.Windows.Forms.Label();
             this.pnlSplit0 = new System.Windows.Forms.Panel();
-            this.lblView = new System.Windows.Forms.Label();
+            this.lblLzma = new System.Windows.Forms.Label();
+            this.lblFmmEmail = new System.Windows.Forms.Label();
             this.cbxCensor = new Mac_EFI_Toolkit.UI.METSwitch();
-            this.pnlSplit2 = new System.Windows.Forms.Panel();
             this.pnlTopSplitMain = new System.Windows.Forms.Panel();
             this.tlpMenu = new System.Windows.Forms.TableLayoutPanel();
             this.cmdMenuOpen = new System.Windows.Forms.Button();
@@ -913,27 +912,25 @@ namespace Mac_EFI_Toolkit.Forms
             // tlpStatusBar
             // 
             this.tlpStatusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.tlpStatusBar.ColumnCount = 10;
+            this.tlpStatusBar.ColumnCount = 9;
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpStatusBar.Controls.Add(this.lblFmmEmail, 6, 0);
-            this.tlpStatusBar.Controls.Add(this.lblLzma, 5, 0);
+            this.tlpStatusBar.Controls.Add(this.pnlSplit2, 6, 0);
             this.tlpStatusBar.Controls.Add(this.pnlSplit1, 4, 0);
-            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 9, 0);
-            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 8, 0);
+            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 8, 0);
+            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 7, 0);
             this.tlpStatusBar.Controls.Add(this.lblParseTime, 0, 0);
             this.tlpStatusBar.Controls.Add(this.pnlSplit0, 1, 0);
-            this.tlpStatusBar.Controls.Add(this.lblView, 3, 0);
-            this.tlpStatusBar.Controls.Add(this.cbxCensor, 2, 0);
-            this.tlpStatusBar.Controls.Add(this.pnlSplit2, 7, 0);
+            this.tlpStatusBar.Controls.Add(this.lblLzma, 2, 0);
+            this.tlpStatusBar.Controls.Add(this.lblFmmEmail, 3, 0);
+            this.tlpStatusBar.Controls.Add(this.cbxCensor, 5, 0);
             this.tlpStatusBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatusBar.Location = new System.Drawing.Point(0, 370);
             this.tlpStatusBar.Margin = new System.Windows.Forms.Padding(0);
@@ -943,35 +940,20 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpStatusBar.Size = new System.Drawing.Size(761, 36);
             this.tlpStatusBar.TabIndex = 0;
             // 
-            // lblFmmEmail
+            // pnlSplit2
             // 
-            this.lblFmmEmail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFmmEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.lblFmmEmail.Location = new System.Drawing.Point(167, 0);
-            this.lblFmmEmail.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.lblFmmEmail.Name = "lblFmmEmail";
-            this.lblFmmEmail.Size = new System.Drawing.Size(21, 36);
-            this.lblFmmEmail.TabIndex = 0;
-            this.lblFmmEmail.Text = "...";
-            this.lblFmmEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblLzma
-            // 
-            this.lblLzma.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblLzma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
-            this.lblLzma.Location = new System.Drawing.Point(143, 0);
-            this.lblLzma.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.lblLzma.Name = "lblLzma";
-            this.lblLzma.Size = new System.Drawing.Size(21, 36);
-            this.lblLzma.TabIndex = 0;
-            this.lblLzma.Text = "...";
-            this.lblLzma.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnlSplit2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlSplit2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.pnlSplit2.Location = new System.Drawing.Point(171, 7);
+            this.pnlSplit2.Name = "pnlSplit2";
+            this.pnlSplit2.Size = new System.Drawing.Size(1, 22);
+            this.pnlSplit2.TabIndex = 100;
             // 
             // pnlSplit1
             // 
             this.pnlSplit1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pnlSplit1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.pnlSplit1.Location = new System.Drawing.Point(138, 7);
+            this.pnlSplit1.Location = new System.Drawing.Point(130, 7);
             this.pnlSplit1.Name = "pnlSplit1";
             this.pnlSplit1.Size = new System.Drawing.Size(1, 22);
             this.pnlSplit1.TabIndex = 0;
@@ -1011,11 +993,11 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblStatusBarTip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblStatusBarTip.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatusBarTip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblStatusBarTip.Location = new System.Drawing.Point(194, 1);
+            this.lblStatusBarTip.Location = new System.Drawing.Point(174, 1);
             this.lblStatusBarTip.Margin = new System.Windows.Forms.Padding(1);
             this.lblStatusBarTip.Name = "lblStatusBarTip";
             this.lblStatusBarTip.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblStatusBarTip.Size = new System.Drawing.Size(530, 34);
+            this.lblStatusBarTip.Size = new System.Drawing.Size(550, 34);
             this.lblStatusBarTip.TabIndex = 0;
             this.lblStatusBarTip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1042,17 +1024,27 @@ namespace Mac_EFI_Toolkit.Forms
             this.pnlSplit0.Size = new System.Drawing.Size(1, 22);
             this.pnlSplit0.TabIndex = 0;
             // 
-            // lblView
+            // lblLzma
             // 
-            this.lblView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblView.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.lblView.Location = new System.Drawing.Point(112, 0);
-            this.lblView.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
-            this.lblView.Name = "lblView";
-            this.lblView.Size = new System.Drawing.Size(23, 36);
-            this.lblView.TabIndex = 0;
-            this.lblView.Text = "...";
-            this.lblView.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblLzma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.lblLzma.Location = new System.Drawing.Point(78, 0);
+            this.lblLzma.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lblLzma.Name = "lblLzma";
+            this.lblLzma.Size = new System.Drawing.Size(21, 36);
+            this.lblLzma.TabIndex = 0;
+            this.lblLzma.Text = "...";
+            this.lblLzma.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblFmmEmail
+            // 
+            this.lblFmmEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.lblFmmEmail.Location = new System.Drawing.Point(104, 0);
+            this.lblFmmEmail.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lblFmmEmail.Name = "lblFmmEmail";
+            this.lblFmmEmail.Size = new System.Drawing.Size(21, 36);
+            this.lblFmmEmail.TabIndex = 0;
+            this.lblFmmEmail.Text = "...";
+            this.lblFmmEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cbxCensor
             // 
@@ -1064,21 +1056,13 @@ namespace Mac_EFI_Toolkit.Forms
             this.cbxCensor.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cbxCensor.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.cbxCensor.Enabled = false;
-            this.cbxCensor.Location = new System.Drawing.Point(80, 10);
+            this.cbxCensor.Location = new System.Drawing.Point(137, 10);
+            this.cbxCensor.Margin = new System.Windows.Forms.Padding(0);
             this.cbxCensor.Name = "cbxCensor";
             this.cbxCensor.Size = new System.Drawing.Size(26, 16);
             this.cbxCensor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(160)))));
             this.cbxCensor.TabIndex = 8;
             this.cbxCensor.CheckedChanged += new System.EventHandler(this.cbxCensor_CheckedChanged);
-            // 
-            // pnlSplit2
-            // 
-            this.pnlSplit2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlSplit2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.pnlSplit2.Location = new System.Drawing.Point(191, 7);
-            this.pnlSplit2.Name = "pnlSplit2";
-            this.pnlSplit2.Size = new System.Drawing.Size(1, 22);
-            this.pnlSplit2.TabIndex = 102;
             // 
             // pnlTopSplitMain
             // 
@@ -1395,14 +1379,14 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.helloToolStripMenuItem1.ForeColor = System.Drawing.Color.White;
             this.helloToolStripMenuItem1.Name = "helloToolStripMenuItem1";
-            this.helloToolStripMenuItem1.Size = new System.Drawing.Size(130, 24);
+            this.helloToolStripMenuItem1.Size = new System.Drawing.Size(144, 26);
             this.helloToolStripMenuItem1.Text = "Hello";
             // 
             // testringToolStripMenuItem
             // 
             this.testringToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.testringToolStripMenuItem.Name = "testringToolStripMenuItem";
-            this.testringToolStripMenuItem.Size = new System.Drawing.Size(130, 24);
+            this.testringToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.testringToolStripMenuItem.Text = "Testring";
             // 
             // cmsCopy
@@ -2070,7 +2054,6 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.ToolStripMenuItem openWorkingDirectoryToolStripMenuItem;
         private System.Windows.Forms.Label lblParseTime;
         private System.Windows.Forms.Panel pnlSplit0;
-        private System.Windows.Forms.Label lblView;
         private System.Windows.Forms.Panel pnlSplit1;
         private METSwitch cbxCensor;
         private System.Windows.Forms.Label lblFsysStore;
@@ -2081,8 +2064,8 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.Label lblMeVersion;
         private System.Windows.Forms.ToolStripMenuItem exportLZMADXEArchiveToolStripMenuItem;
         private System.Windows.Forms.Label lblLzma;
-        private System.Windows.Forms.Panel pnlSplit2;
         private System.Windows.Forms.Label lblFmmEmail;
         private System.Windows.Forms.ToolStripMenuItem exportFmmmobilemeEmailTextToolStripMenuItem;
+        private System.Windows.Forms.Panel pnlSplit2;
     }
 }
