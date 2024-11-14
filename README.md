@@ -49,7 +49,7 @@ Mac EFI Toolkit
 This section explains the EFIROM Window and its functionality.
 
 <kbd>
-  <img src="stream/images/application/efi.png">
+  <img src="stream/images/application/efi.png" width="763" height="492">
 </kbd>
 
 ### Main Menu
