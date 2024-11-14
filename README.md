@@ -233,7 +233,7 @@ For more direct support, you can contact me via [email](mailto:muertogb@proton.m
 
 ## Acknowledgements
 
-**This software uses the following third-party libraries and resources:**
+This software uses the following third-party libraries and resources:
 
 - LZMA [v24.08 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.
 - [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and Vaughan Pratt.
