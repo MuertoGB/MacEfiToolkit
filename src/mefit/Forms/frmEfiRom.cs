@@ -1416,7 +1416,10 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
             {
-                lblStatusBarTip.Text = censorString();
+                if (!Settings.ReadBool(SettingsBoolType.DisableTips))
+                {
+                    lblStatusBarTip.Text = censorString();
+                }
             }
         }
 
