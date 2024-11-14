@@ -679,7 +679,10 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
             {
-                lblStatusBarTip.Text = cbxCensorTipString();
+                if (!Settings.ReadBool(SettingsBoolType.DisableTips))
+                {
+                    lblStatusBarTip.Text = cbxCensorTipString();
+                }
             }
         }
 
