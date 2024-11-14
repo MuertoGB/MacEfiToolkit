@@ -1349,7 +1349,7 @@ namespace Mac_EFI_Toolkit.Forms
             lblLzma.Text = Program.GLYPH_REPORT;
 
             lblFmmEmail.Font = Program.FONT_MDL2_REG_10;
-            lblFmmEmail.Text = Program.GLYPH_USER;
+            lblFmmEmail.Text = Program.GLYPH_ACCOUNT;
         }
 
         private void SetTipHandlers()
