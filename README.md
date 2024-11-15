@@ -1,120 +1,244 @@
 <h1 align="center">
-<img width="200" src="files/images/img128px.png" alt="SMCFT Logo">
+<img width="160" src="stream/images/application/icon256.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit V1.1.5
+Mac EFI Toolkit (V2.0.0)
 </h1>
 
-<h4 align="center">A tool for analysis of Mac BIOS/UEFI, with limited editing capabilities.</h4>
-<p align="center">
-  <a href="#about">About</a> •
-  <a href="#features">Features</a> •
-  <a href="#manual">Manual</a> •
-  <a href="#download">Download</a> •
-  <a href="#requirements">Requirements</a> •
-  <a href="#acknowledgements">Acknowledgements</a> •
-  <a href="#donate">Donate</a>
-</p>
+## Table of Contents
+1. [Intoduction](#introduction)
+2. [System Requirements](#system-requirements)
+3. [Getting Started](#getting-started)
+4. [EFIROM Window](#efirom-window)
+5. [SOCROM Window](#socrom-window)
+6. [Wine Instructions](#wine-instructions)
+7. [Support](#support)
+8. [Changelog](#changelog)
+9. [Features](#features)
+10. [Acknowledgements](#acknowledgements)
+11. [Donate](#donate)
 
-## About
+## Introduction
 
-Mac EFI Toolkit, or 'mefit', is a valuable tool built to aid technicians in repairing Mac BIOS/UEFI. Designed to be compact, mefit provides information gathering capabilities and limited editing functionality.
+**Mac EFI Toolkit** (also known as **mefit**) is designed to aid technicians in repair and analysis of Mac EFI and Intel based Mac SOCROM firmwares. Designed to be compact, this application provides information gathering capabilities and limited patching functionality.
 
-Key features of the information gathering capabilities include detecting EFI lock in the NVRAM, identifying if the APFS DXE driver is present; even if located in an LZMA compressed volume, validating file sizes and calculating size discrepancy bytes, and viewing the firmware version.
+## System Requirements
 
-In terms of editing, the application allows users to replace the System Serial Number (SSN) with automatic Hardware Configuration (HWC) matching. It also supports transplanting of exported Fsys stores, as well as the clearing firmware settings, and EFI password lock if a customer has forgotten their password. When editing, Mac EFI Toolkit will automatically check, calculate, and mask the Fsys CRC32 if the checksum is invalid.
+- **Operating System:**
+  - Windows 11 (64-bit)
+  - Windows 10 (32/64-bit)
+  - **mefit** is compatible with [Wine](https://www.winehq.org/)
 
->🛈 **Access to some features requires accepting the editing terms.**
+- **Internet Connectivity** (optional, only required for specific features):
+  - Receiving notifications about new versions (can be disabled in settings).
+  - Fetching device configuration data from Apple’s server if not available in the internal database.
+  - Checking serial numbers on EveryMac.
 
-<img width="550" src="files/images/met.png" alt="MET">
+- **Build Requirements:**
+  - [Visual Studio 2022](https://visualstudio.microsoft.com/vs/), targeting .NET Framework 4.8.
 
-I continue to perform extensive testing on hundreds of firmwares to ensure compatibility and functionality. As new edge cases or exceptions are discovered, the application is updated accordingly to address them. This commitment to testing and updates ensures that the application remains reliable and effective for a wide range of Mac firmware configurations.
+## Getting Started
+
+1. Ensure your system has [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) installed.
+2. Download the [latest version](https://github.com/MuertoGB/MacEfiToolkit/releases/latest) of **mefit**.
+3. If needed, create a dump of your Mac firmware using an SPIROM programmer.
+4. Launch the software (**no installation required**) and open your firmware.
+
+## EFIROM Window
+
+This section explains the EFIROM Window and its functionality.
+
+<kbd>
+  <img src="stream/images/application/efi.png">
+</kbd>
+
+### Main Menu
+
+| Button     | Description                                                                                           |
+|------------|-------------------------------------------------------------------------------------------------------|
+| **Open**   | Opens a file dialog to load a compatible EFI file into the application.                               |
+| **Reset**  | Clears all firmware data and resets the window to its default view.                                   |
+| **Copy**   | Opens the copy menu, allowing you to copy key data to the clipboard.                                  |
+| **Folders**| Opens the folders menu for quick access to essential directories.                                     |
+| **Export** | Opens the export menu with options to save firmware data in different formats.                        |
+| **Patch**  | Opens the patching menu, offering tools to modify and customize firmware data.                        |
+| **Options**| Opens a menu with additional firmware tools. |
+
+- **Export Menu:**
+  - **Export Fsys Store**: Exports the Fsys Store located within NVRAM.
+  - **Export Intel ME Region**: Exports the Intel Management Engine region.
+  - **Export NVRAM VSS Stores**: Exports the VSS (Variable Storage Subsystem) stores within NVRAM.
+  - **Export NVRAM SVS Stores**: Exports the SVS (Secure Variable Store) within NVRAM.
+  - **Export LZMA DXE Archive**: Allows exporting of the decompressed LZMA DXE archive, which can be opened with 7-zip.
+  - **Backup Firmware (ZIP)**: Compresses and saves the loaded firmware as a ZIP archive.
+  - **Export Firmware Information (Text)**: Saves firmware information to a text file.
+  - **Export Find My Mac Email (Text)**: Saves the email found in the NVRAM `FindMyMac` token to a text file, if available.
+
+- **Patch Menu:** (Access to the patching menu requires accepting the editing terms.)
+  - **Change Serial Number**: Edits the System Serial Number (SSN) within the Fsys Store.
+  - **Erase NVRAM**: Opens a window to select and erase the VSS and/or SVS NVRAM stores.
+  - **Replace Fsys Store**: Allows selection and replacement of the Fsys store within NVRAM.
+  - **Fix Fsys Checksum (CRC32)**: Automatically corrects an invalid checksum in the Fsys store.
+  - **Invalidate EFI Lock**: Invalidates the Message Authentication Code in the SVS NVRAM, safely disabling the EFI password.
+
+- **Options Menu:**
+  - **Automatic Filename Generation**: Generates a structured filename for the firmware and copies it to the clipboard.
+  - **Reload File from Disk**: Reloads the firmware file to reflect any changes made on disk.
+  - **View Application Log**: Opens the application log file.
+  - **View ROM Information**: Displays details from the firmware’s AppleRomInformation section.
+  - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup (internet connection required).
+
+- **Status Bar:**
+  - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
+  - **File Glyph**: Indicates whether an LZMA DXE archive was found within the firmware.
+  - **Email Glyph**: Indicates whether a Find My Mac email was detected in the NVRAM.
+  - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
+
+## SOCROM Window
+
+This section explains the SOCROM Window and its functionality.
+
+<kbd>
+  <img src="stream/images/application/socrom.png">
+</kbd>
+
+### Main Menu
+
+| Button     | Description                                                                                           |
+|------------|-------------------------------------------------------------------------------------------------------|
+| **Open**   | Opens a file dialog to load a compatible Intel T2 SOCROM firmware into the application.                               |
+| **Reset**  | Clears all firmware data and resets the window to its default view.                                   |
+| **Copy**   | Opens the copy menu, allowing you to copy key data to the clipboard.                                  |
+| **Folders**| Opens the folders menu for quick access to essential directories.                                     |
+| **Export** | Opens the export menu with options to save firmware data in different formats.                        |
+| **Patch**  | Opens the patching menu, offering tools to modify and customize firmware data.                        |
+| **Options**| Opens a menu with additional firmware tools. |
+
+- **Export Menu:**
+  - **Export Scfg Store**: Exports the Scfg store located in the firmware.
+  - **Backup Firmware (ZIP)**: Compresses and saves the loaded firmware as a ZIP archive.
+  - **Export Firmware Information (Text)**: Saves firmware information to a text file.
+
+- **Patch Menu:** (Access to the patching menu requires accepting the editing terms.)
+  - **Change Serial Number**: Edits the System Serial Number (SSN) within the Scfg Store.
+  - **Write New Scfg Store**: Allows selection and replacement of the Scfg store within firmware.
+ 
+- **Options Menu:**
+  - **Reload File from Disk**: Reloads the firmware file to reflect any changes made on disk.
+  - **View Application Log**: Opens the application log file.
+  - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup (internet connection required).
+
+- **Status Bar:**
+  - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
+  - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
+
+## Wine Instructions
+
+To run **Mac EFI Toolkit** on Linux or macOS using Wine, follow these steps:
+
+1. **Install [Wine](https://gitlab.winehq.org/wine/wine/-/wikis/home)** to your Operating System.
+2. Open the terminal and run the command `winecfg`. This will open the Wine configuration window. Then, navigate to the **'Graphics'** tab and change the **'Screen resolution'** to **120 dpi**.
+3. Download all four required fonts from [here](stream/fonts). After downloading, navigate to `Home\.wine\drive_c\windows\Fonts` and copy the downloaded fonts into this folder.
+
+Once these steps are completed, you should be able to run **Mac EFI Toolkit** under Wine.
+
+## Support
+
+If you encounter any issues or need assistance, here are a few ways you can get help:
+
+#### 1. **GitHub Issues**
+If you're experiencing a bug or issue, please check the [open issues](https://github.com/MuertoGB/MacEfiToolkit/issues) on GitHub. If your problem has not been reported, feel free to create a new issue. Be sure to include as much detail as possible, including:
+ - Application build (Can be found in the about window).
+ - A clear description of the problem.
+ - Steps to reproduce the issue.
+ - Screenshots or logs (if applicable).
+ - Firmware files (if applicable).
+
+#### 2. **Email Me**
+For more direct support, you can contact me via [email](mailto:muertogb@proton.me).
+
+
+## Changelog
+
+> 📋 View the full changelog [here](CHANGELOG.md).
 
 ## Features
 
-**General:**
-- Edit copies of files in memory, preserving original files.
-- Backup loaded firmware to a .zip file.
-- Read Intel Flash Descriptor for UEFI section positions.
-- Knuth–Morris–Pratt algorithm for binary data searching.
-- View the Intel Management Engine version.
-- Export and transplant the Intel Management Engine region.
-- View and validate the binary size.
-- View the firmware CRC32, created and modified date.
+- **Application**
+  - **File Handling**
+    - All files are edited in memory preserving the original
+    - Backup firmwares to a .zip archive for long-term storage
+    - Drag and drop support
+  - **Error Handling and Logging**
+    - Automatic handling of uncaught exceptions
+    - Automatic background logging for errors and key actions
+  - **User Interface**
+    - Automatic DPI scaling
+    - New version notifications
+    - Serial numbers are censored by default
+  - **Search and Verification**
+    - Knuth–Morris–Pratt algorithm for binary data searching
+    - Serial number validation rules
+    - Check serial numbers on EveryMac
+    - View firmware parse time
+  - **Misc**
+    - No installation required
+    - Works with Wine
 
-**Mac Specific:**
-- View if the firmware supports APFS.
-- View the firmware version.
-- View Apple ROM section information.
-- View the configuration code, derived from the System Serial Number (ssn).
+- **Firmware (EFIROM)**
+  - **View firmware details**
+    - Binary size (bytes, hex)
+    - Checksum
+    - Created and modified date
+    - EFI version
+    - EFI lock status
+    - Platform Data Region Board-ID
+    - APFS driver status
+    - Intel ME version
+    - **Model information**
+      - System model
+      - System config code
+      - System serial number
+      - Hardware config code
+      - System order number
+  - Automatic Fsys checksum masking
+  - Edit the system serial number
+  - Export and replace the Fsys region
+  - Export and replace the Intel Management Engine region
+  - Export firmware information to a text file
+  - Detect invalid binary size
+  - Detect and repair invalid Fsys checksums
+  - View Apple ROM section information
+  - Reset NVRAM stores with proper header configuration
+  - Detect and remove EFI passwords (EFI lock)
+  - Detect and export decompressed LZMA DXE archives
+  - Detect and export the Find My Mac email address
 
-**Fsys Store:**
-- View and edit the System Serial Number.
-- Check the System Serial Number with EveryMac.
-- View the Hardware Configuration code (hwc).
-- View the System Order Number (son).
-- Export and replace the Fsys store.
-- Detect and repair invalid Fsys Store CRC32.
-
-**NVRAM:**
-- Clear NVRAM stores (VSS, SVS, NSS) with section header preservation.
-- Identify NVRAM stores with data, empty stores, and missing stores.
-- Detect and remove EFI lock.
-
-**Platform Data Region:**
-- Read the system Board-ID (UEFI version from 2013 onwards).
-
-**Application:**
-- Works with Wine (Better support coming in the future)
-- Automatic handling of uncaught errors.
-- Ability to create a debug log.
-- No installation required.
-- Support for DPI scaling.
-- Drag and drop functionality.
-- Notification when a newer version is available.
-
-| SUGGESTED FEATURES                         | Status                |
-|--------------------------------------------|-----------------------|
-| Batch process files for information        |🟢 Addition planned    |
-| Build clean firmware from FD               |🟢 Addition planned    |
-| Detect email address in the NVRAM          |🟠 Researching         |
-| Detect MDM status                          |🔴 Undecided           |
-
-## Download
-
-| Version| Release Date| Latest | Channel |
-|--------|-------------|--------|---------|
-|[1.1.5](https://github.com/MuertoGB/MacEfiToolkit/releases/latest)| 10th October, 2024 | Yes | Stable |
-|[1.1.3](https://github.com/MuertoGB/MacEfiToolkit/releases/113)| 11th October, 2023 | No | Stable |
-
-> 📋 View the full changelog [here](CHANGELOG.md)
-
-## Manual
-
-Instructions on how to use the application can be viewed in [manual](MANUAL.md).
-
-## Requirements
-
-**Application:**
-- Microsoft [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)
-- Windows 7, 8, 8.1, 10 and 11. 32, or 64-bit
-- Internet connectivity required for:-
-> - Version Checking (Can be disabled in settings).
-> - Fetching config code from the server when not present in the database.
-
-**Build requirements:**
-- [Visual Studio 2022](https:/visualstudio.microsoft.com/vs/), targeting .NET Framework 4.8.
+- **Firmware (T2 SOCROM)**
+  - **View firmware details**
+    - Binary size (bytes, hex)
+    - Checksum
+    - Created and modified date
+    - iBoot version
+    - **Model Information**
+      - Scfg store details
+      - System serial number
+      - System config code
+      - System order number
+  - Edit the serial number
+  - Export and replace the Scfg store
+  - Export firmware information to a text file
 
 ## Acknowledgements
 
-**This software uses the following third party libraries, or resources:-**
+This software uses the following third-party libraries and resources:
 
-LZMA [v22.01 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.\
-The [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and  Vaughan Pratt.\
-[MacModelShelf](https://github.com/MagerValp/MacModelShelf) database, by MagerValp.\
-Application icon by [Creatype](https://www.flaticon.com/free-icon/toolkit_6457096?term=toolkit&page=1&position=38&origin=search&related_id=6457096), menu icons by [afif-fudin](https://www.flaticon.com/authors/afif-fudin).
+- LZMA [v24.08 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.
+- [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and Vaughan Pratt.
+- [MacModelShelf](https://github.com/MagerValp/MacModelShelf) database by MagerValp.
+- Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
 
 ## Donate
 
-All donations go back into improving my software and workspace.
+All donations go back into improving my software and workspace:
 
 <a href="https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ"><img width="160" src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png" alt="PayPal Logo" vspace="5" hspace="5"></a>

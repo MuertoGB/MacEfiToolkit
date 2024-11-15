@@ -1,9 +1,8 @@
 
-.vs/mefit/v16/
-mefit/bin/
-mefit/obj/
-.vs/mefit/v16/.suo
-.vs/mefit/v17/.suo
-.vs/mefit/FileContentIndex/
+/src/.vs
+/src/mefit/bin
+/src/mefit/obj
 CHANGELOG.md.backup
 README.md.backup
+src/mefit/.vs/mefit.csproj.dtbcache.json
+MANUAL.md.backup
