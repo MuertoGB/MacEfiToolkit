@@ -331,7 +331,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = $"{SOCSTRINGS.SCFG}_{SOCROM.FileInfoData.FileName}",
+                FileName = $"{SOCROM.FileInfoData.FileName}_{SOCSTRINGS.SCFG_REGION}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.SCFG_DIR
             })
@@ -395,7 +395,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{APPSTRINGS.FIRMWARE_INFO}_{SOCROM.FileInfoData.FileName}",
+                FileName = $"{SOCROM.FileInfoData.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.WORKING_DIR
             })
@@ -1082,7 +1082,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Create buffers.
             Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
-            byte[] binaryBuffer = (byte[])SOCROM.LoadedBinaryBuffer.Clone();
+            byte[] binaryBuffer = BinaryTools.CloneBuffer(SOCROM.LoadedBinaryBuffer);
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(serial);
 
             // Overwrite serial in the binary buffer.
@@ -1146,7 +1146,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
                 byte[] scfgBuffer = File.ReadAllBytes(openFileDialog.FileName);
-                byte[] binaryBuffer = (byte[])SOCROM.LoadedBinaryBuffer.Clone();
+                byte[] binaryBuffer = BinaryTools.CloneBuffer(SOCROM.LoadedBinaryBuffer);
 
                 if (!ValidateScfgStore(scfgBuffer))
                 {

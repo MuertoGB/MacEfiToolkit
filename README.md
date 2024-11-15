@@ -1,7 +1,7 @@
 <h1 align="center">
 <img width="160" src="stream/images/application/icon256.png" alt="SMCFT Logo">
 <br>
-Mac EFI Toolkit (V2.0.0)
+Mac EFI Toolkit (V2.0.1)
 </h1>
 
 ## Table of Contents

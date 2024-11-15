@@ -288,10 +288,29 @@ namespace Mac_EFI_Toolkit.Tools
         internal static void EraseByteArray(byte[] sourceBytes)
         {
             if (sourceBytes == null)
+            {
                 throw new ArgumentNullException(nameof(sourceBytes));
+            }
 
             for (int i = 0; i < sourceBytes.Length; i++)
+            {
                 sourceBytes[i] = 0xFF;
+            }
+        }
+
+        /// <summary>
+        /// Creates a clone of the specified byte array.
+        /// </summary>
+        /// <param name="inputBuffer">The byte array to clone.</param>
+        /// <returns>A new byte array containing a copy of the elements from the original buffer.</returns>
+        internal static byte[] CloneBuffer(byte[] inputBuffer)
+        {
+            if (inputBuffer == null)
+            {
+                throw new ArgumentNullException(nameof(inputBuffer));
+            }
+
+            return (byte[])inputBuffer.Clone();
         }
         #endregion
     }

@@ -391,7 +391,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = $"{EFISTRINGS.FSYS}_{EFIROM.FsysStoreData.Serial}_{EFIROM.EfiBiosIdSectionData.ModelPart}",
+                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.FSYS_REGION}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.FSYS_DIR
             })
@@ -435,7 +435,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = $"{EFISTRINGS.ME_REGION}_{EFIROM.FsysStoreData.Serial}_{EFIROM.EfiBiosIdSectionData.ModelPart}",
+                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.ME_REGION}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.INTELME_DIR
             })
@@ -517,7 +517,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_LZMA,
-                FileName = $"{EFISTRINGS.DXE_ARCHIVE}_{EFIROM.FileInfoData.FileName}",
+                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.DXE_ARCHIVE}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.LZMA_DIR
             })
@@ -581,7 +581,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{APPSTRINGS.FIRMWARE_INFO}_{EFIROM.FileInfoData.FileName}",
+                FileName = $"{EFIROM.FileInfoData.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.WORKING_DIR
             })
@@ -678,7 +678,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{EFISTRINGS.FMM_EMAIL}_{EFIROM.FileInfoData.FileName}",
+                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.FMM_EMAIL}",
                 OverwritePrompt = true,
                 InitialDirectory = METPath.WORKING_DIR
             })
@@ -924,7 +924,6 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateIntelFitControls();
             UpdateDescriptorModeControls();
             UpdateIntelMeControls();
-
             UpdateLzmaArchiveControls();
             UpdateFmmEmailControls();
 
@@ -1643,7 +1642,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Create buffers.
             Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
-            byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
+            byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(serial);
 
             // Overwrite serial in the binary buffer.
@@ -1723,7 +1722,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WritePatchLine(LOGSTRINGS.PATCH_START);
 
             // Load current firmware into buffer.
-            byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
+            byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
 
             // Erase NVRAM sections if required
             if (resetVss)
@@ -1798,7 +1797,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             try
             {
-                byte[] storeBuffer = (byte[])store.StoreBuffer.Clone();
+                byte[] storeBuffer = BinaryTools.CloneBuffer(store.StoreBuffer);
                 int bodyStart = EFIROM.HDR_SIZE;
                 int bodyEnd = store.StoreBuffer.Length - EFIROM.HDR_SIZE;
 
@@ -1912,7 +1911,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
+                byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
 
                 if (!WriteNewFsysStore(binaryBuffer, newFsysBuffer))
                 {
@@ -2015,7 +2014,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Make binary with patched Fsys crc.
             byte[] binaryBuffer =
                 EFIROM.MakeFsysCrcPatchedBinary(
-                    (byte[])EFIROM.LoadedBinaryBuffer.Clone(),
+                    BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer),
                     EFIROM.FsysStoreData.FsysBase,
                     EFIROM.FsysStoreData.FsysBytes,
                     EFIROM.FsysStoreData.CRC32CalcInt);
@@ -2046,7 +2045,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
             // Initialize buffers.
-            byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
+            byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
 
             // Patch the primary store.
             byte[] unlockedPrimaryStore = PatchPrimaryStore(binaryBuffer);
@@ -2155,7 +2154,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 Logger.WritePatchLine($"{LOGSTRINGS.IME_VERSION} {imeVersion ?? APPSTRINGS.NOT_FOUND}");
 
-                byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
+                byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
 
                 if (!WriteMeRegion(imeBuffer, binaryBuffer))
                 {
