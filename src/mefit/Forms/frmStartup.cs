@@ -407,7 +407,7 @@ namespace Mac_EFI_Toolkit.Forms
             VersionResult result = await AppVersion.CheckForNewVersion(METUrl.VERSION_MANIFEST);
 
             // If a new version is available and update the UI.
-            if (result == VersionResult.UpToDate)
+            if (result == VersionResult.NewVersionAvailable)
             {
                 cmdMore.Text += " (1)";
                 updateAvailableToolStripMenuItem.Visible = true;
