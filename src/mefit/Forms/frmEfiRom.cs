@@ -2197,14 +2197,14 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (newImeBuffer.Length > IFD.ME_REGION_SIZE)
             {
-                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_TOO_LARGE} {newImeBuffer.Length:X2}h > {IFD.ME_REGION_SIZE}h");
+                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_TOO_LARGE} {newImeBuffer.Length:X}h > {IFD.ME_REGION_SIZE:X}h");
                 NotifyPatchingFailure();
                 return false;
             }
 
             if (newImeBuffer.Length < IFD.ME_REGION_SIZE)
             {
-                Logger.WritePatchLine($"{LOGSTRINGS.IME_TOO_SMALL} {newImeBuffer.Length:X2}h > {IFD.ME_REGION_SIZE}h");
+                Logger.WritePatchLine($"{LOGSTRINGS.IME_TOO_SMALL} {newImeBuffer.Length:X}h > {IFD.ME_REGION_SIZE:X}h");
             }
 
             Logger.WritePatchLine(LOGSTRINGS.VALIDATION_PASS);

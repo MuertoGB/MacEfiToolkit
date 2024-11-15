@@ -118,13 +118,14 @@ namespace Mac_EFI_Toolkit.UI
         private void AdjustFormSize()
         {
             lblMessage.MaximumSize = new Size(MaxWidth, MaxHeight);
+            lblMessage.AutoSize = true;
+
+            tlpMain.AutoSize = true;
+            tlpMain.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
             Size preferredSize = lblMessage.PreferredSize;
             int idealWidth = Math.Min(preferredSize.Width, MaxWidth);
             int idealHeight = Math.Min(preferredSize.Height, MaxHeight);
-
-            lblMessage.Size = new Size(idealWidth, idealHeight);
-            tlpLabel.Size = new Size(idealWidth, idealHeight);
 
             this.ClientSize = new Size(
                 idealWidth + PaddingWidth,

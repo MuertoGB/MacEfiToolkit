@@ -32,16 +32,14 @@ namespace Mac_EFI_Toolkit.UI
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(METPrompt));
             this.lblTitle = new System.Windows.Forms.Label();
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
+            this.pnlSeperatorBtm = new System.Windows.Forms.Panel();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
+            this.lblMessage = new System.Windows.Forms.Label();
             this.cmdNo = new System.Windows.Forms.Button();
             this.cmdYes = new System.Windows.Forms.Button();
-            this.lblMessage = new System.Windows.Forms.Label();
-            this.tlpLabel = new System.Windows.Forms.TableLayoutPanel();
-            this.pnlSeperatorBtm = new System.Windows.Forms.Panel();
-            this.pnlBottom = new System.Windows.Forms.Panel();
+            this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButtons.SuspendLayout();
-            this.tlpLabel.SuspendLayout();
-            this.pnlBottom.SuspendLayout();
+            this.tlpMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTitle
@@ -68,6 +66,16 @@ namespace Mac_EFI_Toolkit.UI
             this.pnlSeperatorTop.Size = new System.Drawing.Size(348, 1);
             this.pnlSeperatorTop.TabIndex = 0;
             // 
+            // pnlSeperatorBtm
+            // 
+            this.pnlSeperatorBtm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
+            this.pnlSeperatorBtm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlSeperatorBtm.Location = new System.Drawing.Point(0, 118);
+            this.pnlSeperatorBtm.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlSeperatorBtm.Name = "pnlSeperatorBtm";
+            this.pnlSeperatorBtm.Size = new System.Drawing.Size(348, 1);
+            this.pnlSeperatorBtm.TabIndex = 2;
+            // 
             // tlpButtons
             // 
             this.tlpButtons.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
@@ -79,7 +87,7 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpButtons.Controls.Add(this.cmdNo, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdYes, 1, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButtons.Location = new System.Drawing.Point(0, 0);
+            this.tlpButtons.Location = new System.Drawing.Point(0, 119);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
@@ -87,6 +95,23 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpButtons.Size = new System.Drawing.Size(348, 42);
             this.tlpButtons.TabIndex = 0;
             this.tlpButtons.TabStop = true;
+            // 
+            // lblMessage
+            // 
+            this.lblMessage.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblMessage.AutoEllipsis = true;
+            this.lblMessage.AutoSize = true;
+            this.lblMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.lblMessage.Location = new System.Drawing.Point(157, 41);
+            this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Padding = new System.Windows.Forms.Padding(6);
+            this.lblMessage.Size = new System.Drawing.Size(34, 35);
+            this.lblMessage.TabIndex = 0;
+            this.lblMessage.Text = "...";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // cmdNo
             // 
@@ -126,58 +151,23 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdYes.UseVisualStyleBackColor = false;
             this.cmdYes.Click += new System.EventHandler(this.cmdYes_Click);
             // 
-            // lblMessage
+            // tlpMain
             // 
-            this.lblMessage.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblMessage.AutoEllipsis = true;
-            this.lblMessage.AutoSize = true;
-            this.lblMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
-            this.lblMessage.Location = new System.Drawing.Point(157, 41);
-            this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Padding = new System.Windows.Forms.Padding(6);
-            this.lblMessage.Size = new System.Drawing.Size(34, 35);
-            this.lblMessage.TabIndex = 0;
-            this.lblMessage.Text = "...";
-            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tlpLabel
-            // 
-            this.tlpLabel.AutoSize = true;
-            this.tlpLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.tlpLabel.ColumnCount = 1;
-            this.tlpLabel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpLabel.Controls.Add(this.lblMessage, 0, 0);
-            this.tlpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpLabel.Location = new System.Drawing.Point(1, 38);
-            this.tlpLabel.Margin = new System.Windows.Forms.Padding(5);
-            this.tlpLabel.Name = "tlpLabel";
-            this.tlpLabel.RowCount = 1;
-            this.tlpLabel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpLabel.Size = new System.Drawing.Size(348, 118);
-            this.tlpLabel.TabIndex = 1;
-            // 
-            // pnlSeperatorBtm
-            // 
-            this.pnlSeperatorBtm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
-            this.pnlSeperatorBtm.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlSeperatorBtm.Location = new System.Drawing.Point(1, 156);
-            this.pnlSeperatorBtm.Margin = new System.Windows.Forms.Padding(2);
-            this.pnlSeperatorBtm.Name = "pnlSeperatorBtm";
-            this.pnlSeperatorBtm.Size = new System.Drawing.Size(348, 1);
-            this.pnlSeperatorBtm.TabIndex = 2;
-            // 
-            // pnlBottom
-            // 
-            this.pnlBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
-            this.pnlBottom.Controls.Add(this.tlpButtons);
-            this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(1, 157);
-            this.pnlBottom.Name = "pnlBottom";
-            this.pnlBottom.Size = new System.Drawing.Size(348, 42);
-            this.pnlBottom.TabIndex = 3;
+            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.tlpMain.ColumnCount = 1;
+            this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMain.Controls.Add(this.lblMessage, 0, 0);
+            this.tlpMain.Controls.Add(this.tlpButtons, 0, 2);
+            this.tlpMain.Controls.Add(this.pnlSeperatorBtm, 0, 1);
+            this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpMain.Location = new System.Drawing.Point(1, 38);
+            this.tlpMain.Name = "tlpMain";
+            this.tlpMain.RowCount = 3;
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
+            this.tlpMain.Size = new System.Drawing.Size(348, 161);
+            this.tlpMain.TabIndex = 3;
             // 
             // METPrompt
             // 
@@ -188,9 +178,7 @@ namespace Mac_EFI_Toolkit.UI
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
             this.ClientSize = new System.Drawing.Size(350, 200);
             this.ControlBox = false;
-            this.Controls.Add(this.tlpLabel);
-            this.Controls.Add(this.pnlSeperatorBtm);
-            this.Controls.Add(this.pnlBottom);
+            this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.pnlSeperatorTop);
             this.Controls.Add(this.lblTitle);
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -206,23 +194,20 @@ namespace Mac_EFI_Toolkit.UI
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Message";
             this.tlpButtons.ResumeLayout(false);
-            this.tlpLabel.ResumeLayout(false);
-            this.tlpLabel.PerformLayout();
-            this.pnlBottom.ResumeLayout(false);
+            this.tlpMain.ResumeLayout(false);
+            this.tlpMain.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Panel pnlSeperatorTop;
+        private System.Windows.Forms.Panel pnlSeperatorBtm;
         private System.Windows.Forms.TableLayoutPanel tlpButtons;
         private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.Button cmdNo;
         private System.Windows.Forms.Button cmdYes;
-        private System.Windows.Forms.TableLayoutPanel tlpLabel;
-        private System.Windows.Forms.Panel pnlSeperatorBtm;
-        private System.Windows.Forms.Panel pnlBottom;
+        private System.Windows.Forms.TableLayoutPanel tlpMain;
     }
 }
