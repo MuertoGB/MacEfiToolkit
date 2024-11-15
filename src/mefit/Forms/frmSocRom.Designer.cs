@@ -64,7 +64,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblModified = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.lblScfgText = new System.Windows.Forms.Label();
             this.lblSerialText = new System.Windows.Forms.Label();
-            this.lblSerial = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.lblConfigText = new System.Windows.Forms.Label();
             this.lblConfigCode = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.lblSonText = new System.Windows.Forms.Label();
@@ -72,15 +71,16 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblIbootText = new System.Windows.Forms.Label();
             this.lbliBoot = new System.Windows.Forms.Label();
             this.lblScfg = new System.Windows.Forms.Label();
+            this.tlpSerial = new System.Windows.Forms.TableLayoutPanel();
+            this.lblSerial = new Mac_EFI_Toolkit.UI.Controls.METLabel();
+            this.tlpSerialSwitch = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxCensor = new Mac_EFI_Toolkit.UI.METSwitch();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
-            this.pnlSplit1 = new System.Windows.Forms.Panel();
             this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLoad = new System.Windows.Forms.PictureBox();
             this.lblStatusBarTip = new System.Windows.Forms.Label();
             this.lblParseTime = new System.Windows.Forms.Label();
-            this.pnlSplit0 = new System.Windows.Forms.Panel();
-            this.cbxCensor = new Mac_EFI_Toolkit.UI.METSwitch();
             this.tlpFilename = new System.Windows.Forms.TableLayoutPanel();
             this.cmdOpenInExplorer = new System.Windows.Forms.Button();
             this.lblFilename = new Mac_EFI_Toolkit.UI.Controls.METLabel();
@@ -124,6 +124,8 @@ namespace Mac_EFI_Toolkit.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
             this.tlpFirmware.SuspendLayout();
+            this.tlpSerial.SuspendLayout();
+            this.tlpSerialSwitch.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpStatusBar.SuspendLayout();
             this.tlpStatusBarImage.SuspendLayout();
@@ -427,7 +429,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpFirmware.Controls.Add(this.lblModified, 2, 6);
             this.tlpFirmware.Controls.Add(this.lblScfgText, 0, 10);
             this.tlpFirmware.Controls.Add(this.lblSerialText, 0, 12);
-            this.tlpFirmware.Controls.Add(this.lblSerial, 2, 12);
             this.tlpFirmware.Controls.Add(this.lblConfigText, 0, 14);
             this.tlpFirmware.Controls.Add(this.lblConfigCode, 2, 14);
             this.tlpFirmware.Controls.Add(this.lblSonText, 0, 16);
@@ -435,6 +436,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpFirmware.Controls.Add(this.lblIbootText, 0, 8);
             this.tlpFirmware.Controls.Add(this.lbliBoot, 2, 8);
             this.tlpFirmware.Controls.Add(this.lblScfg, 2, 10);
+            this.tlpFirmware.Controls.Add(this.tlpSerial, 2, 12);
             this.tlpFirmware.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpFirmware.Enabled = false;
             this.tlpFirmware.Location = new System.Drawing.Point(0, 37);
@@ -461,7 +463,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFirmware.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFirmware.Size = new System.Drawing.Size(608, 332);
-            this.tlpFirmware.TabIndex = 0;
+            this.tlpFirmware.TabIndex = 2;
             // 
             // lblFilesizeText
             // 
@@ -615,22 +617,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblSerialText.Text = "SERIAL";
             this.lblSerialText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblSerial
-            // 
-            this.lblSerial.AutoEllipsis = true;
-            this.lblSerial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
-            this.lblSerial.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSerial.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSerial.ForeColor = System.Drawing.Color.White;
-            this.lblSerial.Location = new System.Drawing.Point(131, 222);
-            this.lblSerial.Margin = new System.Windows.Forms.Padding(0);
-            this.lblSerial.Name = "lblSerial";
-            this.lblSerial.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblSerial.Size = new System.Drawing.Size(477, 36);
-            this.lblSerial.TabIndex = 0;
-            this.lblSerial.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblSerial.UseMnemonic = false;
-            // 
             // lblConfigText
             // 
             this.lblConfigText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
@@ -738,6 +724,73 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblScfg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblScfg.UseMnemonic = false;
             // 
+            // tlpSerial
+            // 
+            this.tlpSerial.ColumnCount = 3;
+            this.tlpSerial.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSerial.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tlpSerial.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tlpSerial.Controls.Add(this.lblSerial, 0, 0);
+            this.tlpSerial.Controls.Add(this.tlpSerialSwitch, 2, 0);
+            this.tlpSerial.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSerial.Location = new System.Drawing.Point(131, 222);
+            this.tlpSerial.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSerial.Name = "tlpSerial";
+            this.tlpSerial.RowCount = 1;
+            this.tlpSerial.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSerial.Size = new System.Drawing.Size(477, 36);
+            this.tlpSerial.TabIndex = 2;
+            // 
+            // lblSerial
+            // 
+            this.lblSerial.AutoEllipsis = true;
+            this.lblSerial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
+            this.lblSerial.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblSerial.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSerial.ForeColor = System.Drawing.Color.White;
+            this.lblSerial.Location = new System.Drawing.Point(0, 0);
+            this.lblSerial.Margin = new System.Windows.Forms.Padding(0);
+            this.lblSerial.Name = "lblSerial";
+            this.lblSerial.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.lblSerial.Size = new System.Drawing.Size(440, 36);
+            this.lblSerial.TabIndex = 0;
+            this.lblSerial.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblSerial.UseMnemonic = false;
+            // 
+            // tlpSerialSwitch
+            // 
+            this.tlpSerialSwitch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(50)))));
+            this.tlpSerialSwitch.ColumnCount = 1;
+            this.tlpSerialSwitch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSerialSwitch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSerialSwitch.Controls.Add(this.cbxCensor, 0, 0);
+            this.tlpSerialSwitch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSerialSwitch.Location = new System.Drawing.Point(441, 0);
+            this.tlpSerialSwitch.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSerialSwitch.Name = "tlpSerialSwitch";
+            this.tlpSerialSwitch.RowCount = 1;
+            this.tlpSerialSwitch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSerialSwitch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tlpSerialSwitch.Size = new System.Drawing.Size(36, 36);
+            this.tlpSerialSwitch.TabIndex = 3;
+            // 
+            // cbxCensor
+            // 
+            this.cbxCensor.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cbxCensor.BackColor = System.Drawing.Color.Black;
+            this.cbxCensor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(140)))));
+            this.cbxCensor.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.cbxCensor.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
+            this.cbxCensor.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cbxCensor.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.cbxCensor.Enabled = false;
+            this.cbxCensor.Location = new System.Drawing.Point(5, 10);
+            this.cbxCensor.Name = "cbxCensor";
+            this.cbxCensor.Size = new System.Drawing.Size(26, 16);
+            this.cbxCensor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(160)))));
+            this.cbxCensor.TabIndex = 8;
+            this.cbxCensor.CheckedChanged += new System.EventHandler(this.cbxCensor_CheckedChanged);
+            // 
             // tlpMain
             // 
             this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
@@ -761,20 +814,14 @@ namespace Mac_EFI_Toolkit.Forms
             // tlpStatusBar
             // 
             this.tlpStatusBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.tlpStatusBar.ColumnCount = 6;
+            this.tlpStatusBar.ColumnCount = 3;
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStatusBar.Controls.Add(this.pnlSplit1, 3, 0);
-            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 5, 0);
-            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 4, 0);
+            this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 2, 0);
+            this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 1, 0);
             this.tlpStatusBar.Controls.Add(this.lblParseTime, 0, 0);
-            this.tlpStatusBar.Controls.Add(this.pnlSplit0, 1, 0);
-            this.tlpStatusBar.Controls.Add(this.cbxCensor, 2, 0);
             this.tlpStatusBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpStatusBar.Location = new System.Drawing.Point(0, 370);
             this.tlpStatusBar.Margin = new System.Windows.Forms.Padding(0);
@@ -783,15 +830,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpStatusBar.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.Size = new System.Drawing.Size(608, 36);
             this.tlpStatusBar.TabIndex = 3;
-            // 
-            // pnlSplit1
-            // 
-            this.pnlSplit1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlSplit1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.pnlSplit1.Location = new System.Drawing.Point(114, 7);
-            this.pnlSplit1.Name = "pnlSplit1";
-            this.pnlSplit1.Size = new System.Drawing.Size(1, 22);
-            this.pnlSplit1.TabIndex = 101;
             // 
             // tlpStatusBarImage
             // 
@@ -828,11 +866,11 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblStatusBarTip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblStatusBarTip.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatusBarTip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.lblStatusBarTip.Location = new System.Drawing.Point(117, 1);
+            this.lblStatusBarTip.Location = new System.Drawing.Point(71, 1);
             this.lblStatusBarTip.Margin = new System.Windows.Forms.Padding(1);
             this.lblStatusBarTip.Name = "lblStatusBarTip";
-            this.lblStatusBarTip.Padding = new System.Windows.Forms.Padding(4, 0, 0, 0);
-            this.lblStatusBarTip.Size = new System.Drawing.Size(454, 34);
+            this.lblStatusBarTip.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
+            this.lblStatusBarTip.Size = new System.Drawing.Size(500, 34);
             this.lblStatusBarTip.TabIndex = 0;
             this.lblStatusBarTip.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -849,32 +887,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblParseTime.TabIndex = 0;
             this.lblParseTime.Text = "0.00s";
             this.lblParseTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pnlSplit0
-            // 
-            this.pnlSplit0.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlSplit0.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.pnlSplit0.Location = new System.Drawing.Point(73, 7);
-            this.pnlSplit0.Name = "pnlSplit0";
-            this.pnlSplit0.Size = new System.Drawing.Size(1, 22);
-            this.pnlSplit0.TabIndex = 0;
-            // 
-            // cbxCensor
-            // 
-            this.cbxCensor.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cbxCensor.BackColor = System.Drawing.Color.Black;
-            this.cbxCensor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(140)))), ((int)(((byte)(140)))));
-            this.cbxCensor.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxCensor.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
-            this.cbxCensor.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.cbxCensor.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.cbxCensor.Enabled = false;
-            this.cbxCensor.Location = new System.Drawing.Point(80, 10);
-            this.cbxCensor.Name = "cbxCensor";
-            this.cbxCensor.Size = new System.Drawing.Size(26, 16);
-            this.cbxCensor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(160)))));
-            this.cbxCensor.TabIndex = 8;
-            this.cbxCensor.CheckedChanged += new System.EventHandler(this.cbxCensor_CheckedChanged);
             // 
             // tlpFilename
             // 
@@ -1286,6 +1298,8 @@ namespace Mac_EFI_Toolkit.Forms
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpMenu.ResumeLayout(false);
             this.tlpFirmware.ResumeLayout(false);
+            this.tlpSerial.ResumeLayout(false);
+            this.tlpSerialSwitch.ResumeLayout(false);
             this.tlpMain.ResumeLayout(false);
             this.tlpStatusBar.ResumeLayout(false);
             this.tlpStatusBar.PerformLayout();
@@ -1364,12 +1378,10 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.ToolStripMenuItem backupFirmwareZIPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportFirmwareInformationTextToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tlpStatusBar;
-        private System.Windows.Forms.Panel pnlSplit1;
         private System.Windows.Forms.TableLayoutPanel tlpStatusBarImage;
         private System.Windows.Forms.PictureBox pbxLoad;
         private System.Windows.Forms.Label lblStatusBarTip;
         private System.Windows.Forms.Label lblParseTime;
-        private System.Windows.Forms.Panel pnlSplit0;
         private UI.METSwitch cbxCensor;
         private System.Windows.Forms.Button cmdMenuOptions;
         private UI.METContextMenuStrip cmsOptions;
@@ -1383,5 +1395,7 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.TableLayoutPanel tlpFilename;
         private METLabel lblFilename;
         private System.Windows.Forms.Button cmdOpenInExplorer;
+        private System.Windows.Forms.TableLayoutPanel tlpSerial;
+        private System.Windows.Forms.TableLayoutPanel tlpSerialSwitch;
     }
 }

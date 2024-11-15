@@ -17,8 +17,8 @@
 
 #### New
 - User interface redesigned for improved usability, with a new application icon.
-- The application now supports Intel T2 SOCROM firmware.
 - Added capability to open multiple firmwares simultaneously.
+- The application now supports Intel T2 SOCROM firmware.
 - Startup Window: Introduced a new startup window where users can drag and drop or browse for a compatible EFIROM or T2 SOCROM. The main window is now dedicated to EFIROM, with some functions moved to the startup window.
 - EFI Window Updates:
   - Patcher Relocation: Removed the firmware patcher window; all patching features are now consolidated in the EFI window.
@@ -27,7 +27,7 @@
   - Address Copying: Added options to copy the Fsys store base address and NVRAM VSS and SVS base addresses.
   - NVRAM Data: The window now displays base addresses of primary stores and whether they are empty, or active.
   - Fsys Store: The window now displays the store's base address and indicates whether the store checksum is valid or invalid.
-  - Intel Flash Descriptor: Indicates if the firmware includes an Intel Flash descriptor.
+  - Intel Flash Descriptor: The windows now indicates if the firmware includes an Intel Flash descriptor.
   - Added an icon to the status bar which will indicate if a compressed LZMA DXE archive was found within the firmware.
   - Added an icon to the status bar which indicates whether an email was found in the 'fmm-mobileme-token-FMM' NVRAM variable.
   - Added an option to the export menu to export decompressed LZMA DXE archives, which can be extracted using 7-Zip.
@@ -36,16 +36,14 @@
   - "Use Windows Accent Colour for Borders": allowing form borders to match the system's accent color for a more integrated appearance.
   - "Disable Serial Number Validation": Disables the validation process when entering a new serial number for the firmware.
 - Added firmware parse time to status bars.
-- Serial numbers are now censored by default. They can be uncensored by toggling the switch in the status bar.
+- Serial numbers are now censored by default. They can be uncensored by toggling the switch next to the serial number data.
 - Serial numbers will no longer be displayed in the "Copied to Clipboard" dialogs. Instead, a default message "Serial Number copied to clipboard" will be shown.
 - Updated LZMA SDK to version 24.08.
-- User Privacy Update: Unhandled exception reports now use regular expressions (regex) to sanitize usernames from exception messages and file paths, where possible. However, there may still be some cases where this data could appear. Please review the reports carefully before uploading them to GitHub issues.
+- Unhandled exception reports now use regular expressions (regex) to sanitize usernames from exception messages and file paths, where possible. However, there may still be some cases where this data could appear. Please review the reports carefully before uploading them to GitHub issues.
 - The EFIROM NVRAM parser was rewritten, enhancing functionality and performance.
 
 #### Enhancements
-- Changed the application log filename from 'mefit.log' to 'application.log'.
 - Restricted non-Apple EFI files from being opened.
-- When an NVRAM store base address is found but the size is invalid (0xFFFF), the parser will now treat the store as empty, rather than incorrectly indicating that the store is missing.
 - Enhanced NVRAM reset functionality to simulate an uninitialized factory firmware state.
 - Improved validation process for serial numbers.
 - Updated the internal database with more models.
@@ -55,14 +53,16 @@
 - Modified shortcut keys in the EFI window for improved accessibility.
 - When 'Disable Confirmation Dialogs' is enabled, the EFI window will no longer display a "copied to clipboard" message.
 - Redesigned the logging system to consolidate all entries into a single log file, streamlining log management and improving readability.
+- Changed the application log filename from 'mefit.log' to 'application.log'.
 - If a firmware is loaded (EFIROM, SOCROM) and an incompatible file is opened, the window will no longer reset unnecessarily.
 
 #### Bugs
 - Added missing icon in the ROM Information window.
-- Fixed broken FIT version strings.
+- Fixed broken Flash Image Tool version strings.
 - Fixed a logic error causing the internal database to be skipped when the Fsys Store was force-found, which led to misleading "not present" messages in the database log.
-- Fixed an issue where the application log file would not open when running under Wine.
+- Fixed an issue where the application could not open the log file when running under Wine.
 - Fixed an issue with NVRAM limit calculation.
+- When an NVRAM store base address is found but the size is invalid (0xFFFF), the parser will now treat the store as empty, rather than incorrectly indicating that the store is missing.
 
 #### Miscellaneous
 - Some settings have been restructured; users will need to reselect the 'EFI Window Default Directory' in settings.
