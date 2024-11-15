@@ -33,7 +33,7 @@
   - Added an option to the export menu to export decompressed LZMA DXE archives, which can be extracted using 7-Zip.
   - Added an option to the export menu to save an email address if present in the 'fmm-mobileme-token-FMM' NVRAM variable.
 - Added new settings:
-  - "Use Windows Accent Colour for Borders": allowing form borders to match the system's accent color for a more integrated appearance.
+  - "Use Windows Accent Colour for Borders": Allows form borders to match the system's accent color for a more integrated appearance.
   - "Disable Serial Number Validation": Disables the validation process when entering a new serial number for the firmware.
 - Added firmware parse time to status bars.
 - Serial numbers are now censored by default. They can be uncensored by toggling the switch next to the serial number data.
