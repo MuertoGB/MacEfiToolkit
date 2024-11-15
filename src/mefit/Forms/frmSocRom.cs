@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware;
+using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
@@ -1081,7 +1082,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Create buffers.
             Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
-            byte[] binaryBuffer = SOCROM.LoadedBinaryBuffer;
+            byte[] binaryBuffer = (byte[])SOCROM.LoadedBinaryBuffer.Clone();
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(serial);
 
             // Overwrite serial in the binary buffer.
@@ -1145,7 +1146,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
                 byte[] scfgBuffer = File.ReadAllBytes(openFileDialog.FileName);
-                byte[] binaryBuffer = SOCROM.LoadedBinaryBuffer;
+                byte[] binaryBuffer = (byte[])SOCROM.LoadedBinaryBuffer.Clone();
 
                 if (!ValidateScfgStore(scfgBuffer))
                 {

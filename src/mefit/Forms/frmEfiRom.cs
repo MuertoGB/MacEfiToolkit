@@ -1643,7 +1643,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Create buffers.
             Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
-            byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
+            byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(serial);
 
             // Overwrite serial in the binary buffer.
@@ -1723,7 +1723,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WritePatchLine(LOGSTRINGS.PATCH_START);
 
             // Load current firmware into buffer.
-            byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
+            byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
 
             // Erase NVRAM sections if required
             if (resetVss)
@@ -1745,11 +1745,10 @@ namespace Mac_EFI_Toolkit.Forms
             if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
                 SaveOutputFirmwareEfirom(binaryBuffer);
+                return;
             }
-            else
-            {
-                Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-            }
+
+            Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
         }
 
         private void CheckEraseStore(string storeName, NvramStore store, byte[] buffer)
@@ -1799,7 +1798,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             try
             {
-                byte[] storeBuffer = store.StoreBuffer;
+                byte[] storeBuffer = (byte[])store.StoreBuffer.Clone();
                 int bodyStart = EFIROM.HDR_SIZE;
                 int bodyEnd = store.StoreBuffer.Length - EFIROM.HDR_SIZE;
 
@@ -1913,7 +1912,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
+                byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
 
                 if (!WriteNewFsysStore(binaryBuffer, newFsysBuffer))
                 {
@@ -2016,7 +2015,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Make binary with patched Fsys crc.
             byte[] binaryBuffer =
                 EFIROM.MakeFsysCrcPatchedBinary(
-                    EFIROM.LoadedBinaryBuffer,
+                    (byte[])EFIROM.LoadedBinaryBuffer.Clone(),
                     EFIROM.FsysStoreData.FsysBase,
                     EFIROM.FsysStoreData.FsysBytes,
                     EFIROM.FsysStoreData.CRC32CalcInt);
@@ -2047,7 +2046,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
 
             // Initialize buffers.
-            byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
+            byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
 
             // Patch the primary store.
             byte[] unlockedPrimaryStore = PatchPrimaryStore(binaryBuffer);
@@ -2156,7 +2155,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 Logger.WritePatchLine($"{LOGSTRINGS.IME_VERSION} {imeVersion ?? APPSTRINGS.NOT_FOUND}");
 
-                byte[] binaryBuffer = EFIROM.LoadedBinaryBuffer;
+                byte[] binaryBuffer = (byte[])EFIROM.LoadedBinaryBuffer.Clone();
 
                 if (!WriteMeRegion(imeBuffer, binaryBuffer))
                 {

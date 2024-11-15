@@ -56,7 +56,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlMain.Size = new System.Drawing.Size(573, 226);
+            this.pnlMain.Size = new System.Drawing.Size(573, 316);
             this.pnlMain.TabIndex = 95;
             // 
             // tbxTermsText
@@ -73,7 +73,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tbxTermsText.Name = "tbxTermsText";
             this.tbxTermsText.ReadOnly = true;
             this.tbxTermsText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbxTermsText.Size = new System.Drawing.Size(565, 218);
+            this.tbxTermsText.Size = new System.Drawing.Size(565, 308);
             this.tbxTermsText.TabIndex = 0;
             this.tbxTermsText.TabStop = false;
             // 
@@ -150,7 +150,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.pnlSeperatorBtm.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
             this.pnlSeperatorBtm.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlSeperatorBtm.Location = new System.Drawing.Point(1, 266);
+            this.pnlSeperatorBtm.Location = new System.Drawing.Point(1, 356);
             this.pnlSeperatorBtm.Margin = new System.Windows.Forms.Padding(2);
             this.pnlSeperatorBtm.Name = "pnlSeperatorBtm";
             this.pnlSeperatorBtm.Size = new System.Drawing.Size(573, 1);
@@ -166,7 +166,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpButtons.Controls.Add(this.cmdAccept, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdDecline, 1, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 267);
+            this.tlpButtons.Location = new System.Drawing.Point(1, 357);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
@@ -229,7 +229,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
-            this.ClientSize = new System.Drawing.Size(575, 310);
+            this.ClientSize = new System.Drawing.Size(575, 400);
             this.ControlBox = false;
             this.Controls.Add(this.pnlSeperatorTop);
             this.Controls.Add(this.pnlSeperatorBtm);
@@ -242,9 +242,9 @@ namespace Mac_EFI_Toolkit.Forms
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(575, 310);
+            this.MaximumSize = new System.Drawing.Size(575, 400);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(575, 310);
+            this.MinimumSize = new System.Drawing.Size(575, 400);
             this.Name = "frmTerms";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
