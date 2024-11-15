@@ -1,1 +1,0 @@
-version.xml is kept here for legacy versions to continue receiving update notifications.
