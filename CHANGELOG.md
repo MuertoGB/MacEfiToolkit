@@ -17,7 +17,12 @@
 ## Version 2.0.1
 
 #### Enhancements
-- Improved consistency of filenames when exporting data.
+- Reorganized menu items application wide.
+- Updated shortcut keys application wide (see the [shortcuts file](SHORTCUTS.md)).
+- Improved consistency of file names when exporting data.
+
+#### Bugs
+- Added missing menu item **'Open LZMA DXE Folder'** to the Startup and EFIROM windows.
 
 ## Version 2.0.0
 

@@ -483,9 +483,6 @@ namespace Mac_EFI_Toolkit
         internal const string MENU_TIP_OPEN =
             "Open a Mac EFI/BIOS";
 
-        internal const string MENU_TIP_RESET =
-            "Unload Firmware and Reset Window";
-
         internal const string MENU_TIP_COPY =
             "Open the Copy Menu";
 
@@ -496,10 +493,13 @@ namespace Mac_EFI_Toolkit
             "Open the Export Menu";
 
         internal const string MENU_TIP_PATCH =
-            "Open the Firmware Patching Menu";
+            "Open the Patch Menu";
 
-        internal const string MENU_TIP_OPTIONS =
-            "Open the Options Menu";
+        internal const string MENU_TIP_TOOLS =
+            "Open the Tools Menu";
+
+        internal const string MENU_TIP_HELP =
+            "Open the Help Menu";
 
         internal const string MENU_TIP_OPENFILELOCATION =
             "Open File Location";
@@ -533,9 +533,6 @@ namespace Mac_EFI_Toolkit
         internal const string MENU_TIP_OPEN =
            "Open a T2 SOCROM";
 
-        internal const string MENU_TIP_RESET =
-            "Unload Firmware and Reset Window";
-
         internal const string MENU_TIP_COPY =
             "Open the Copy Menu";
 
@@ -546,10 +543,13 @@ namespace Mac_EFI_Toolkit
             "Open the Export Menu";
 
         internal const string MENU_TIP_PATCH =
-            "Open the Firmware Patching Menu";
+            "Open the Patch Menu";
 
-        internal const string MENU_TIP_OPTIONS =
-            "Open the Options Menu";
+        internal const string MENU_TIP_TOOLS =
+            "Open the Tools Menu";
+
+        internal const string MENU_TIP_HELP =
+            "Open the Help Menu";
 
         internal const string MENU_TIP_OPENFILELOCATION =
             "Open File Location";

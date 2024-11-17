@@ -41,7 +41,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241115.2300";
+        internal const string APP_BUILD = "241117.0420";
         internal const string APP_CHANNEL = "Stable";
     }
 
@@ -142,8 +142,6 @@ namespace Mac_EFI_Toolkit
 
             // Ensure that required application directories exist; create them if they don't.
             EnsureDirectoriesExist();
-
-            Console.WriteLine($"Serial Validation Disabled: {Settings.ReadBool(SettingsBoolType.DisableSerialValidation)}");
 
             // Create the main window instance.
             MAIN_WINDOW = new frmStartup();

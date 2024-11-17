@@ -131,25 +131,42 @@ namespace Mac_EFI_Toolkit.Forms
         #region KeyDown Events
         private void frmStartup_KeyDown(object sender, KeyEventArgs e)
         {
+            // Handle individual keys (F1, F2, F12) without modifiers.
+            switch (e.KeyCode)
+            {
+                case Keys.F2:
+                    newEFIROMSessionToolStripMenuItem.PerformClick();
+                    break;
+                case Keys.F3:
+                    newSOCROMSessionToolStripMenuItem.PerformClick();
+                    break;
+                case Keys.F4:
+                    settingsToolStripMenuItem.PerformClick();
+                    break;
+                case Keys.F12:
+                    viewApplicationLogToolStripMenuItem.PerformClick();
+                    break;
+            }
+
+            // Handle control key + other combinations.
             if (e.Modifiers == Keys.Control)
             {
                 switch (e.KeyCode)
                 {
+                    // Form actions.
                     case Keys.O:
-                    case Keys.B:
                         cmdBrowse.PerformClick();
                         break;
-                    case Keys.S:
-                        cmdSettings.PerformClick();
-                        break;
-                    case Keys.A:
-                        cmdAbout.PerformClick();
-                        break;
+
+                    // Main Menu.
                     case Keys.L:
                         cmdMenuFolders.PerformClick();
                         break;
-                    case Keys.M:
-                        cmdMore.PerformClick();
+                    case Keys.T:
+                        cmdTools.PerformClick();
+                        break;
+                    case Keys.H:
+                        cmdHelp.PerformClick();
                         break;
                 }
             }
@@ -170,42 +187,6 @@ namespace Mac_EFI_Toolkit.Forms
             Program.Exit();
         }
 
-        private void cmdSettings_Click(object sender, EventArgs e)
-        {
-            BlurHelper.ApplyBlur(this);
-
-            using (Form child = new frmSettings())
-            {
-                child.Tag = StartupSenderTag.Other;
-                child.FormClosed += ChildWindowClosed;
-                child.ShowDialog();
-            }
-        }
-
-        private void cmdAbout_Click(object sender, System.EventArgs e)
-        {
-            BlurHelper.ApplyBlur(this);
-
-            using (Form child = new frmAbout())
-            {
-                child.Tag = StartupSenderTag.Other;
-                child.FormClosed += ChildWindowClosed;
-                child.ShowDialog();
-            }
-        }
-
-        private void cmdMenuFolders_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
-                sender,
-                cmsFolders,
-                MenuPosition.BottomLeft);
-
-        private void cmdMore_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
-                sender,
-                cmsMore,
-                MenuPosition.BottomLeft);
-
         private void cmdBrowse_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog
@@ -220,6 +201,24 @@ namespace Mac_EFI_Toolkit.Forms
                 }
             }
         }
+
+        private void cmdTools_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsTools,
+                MenuPosition.BottomLeft);
+
+        private void cmdMenuFolders_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsFolders,
+                MenuPosition.BottomLeft);
+
+        private void cmdHelp_Click(object sender, EventArgs e) =>
+            UITools.ShowContextMenuAtControlPoint(
+                sender,
+                cmsHelp,
+                MenuPosition.BottomLeft);
         #endregion
 
         #region Folders Context Menu Events
@@ -238,6 +237,9 @@ namespace Mac_EFI_Toolkit.Forms
         private void openNVRAMFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
             UITools.OpenFolderInExplorer(METPath.NVRAM_DIR, this);
 
+        private void openLZMADXEFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
+            UITools.OpenFolderInExplorer(METPath.LZMA_DIR, this);
+
         private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
             UITools.OpenFolderInExplorer(METPath.SCFG_DIR, this);
 
@@ -245,7 +247,24 @@ namespace Mac_EFI_Toolkit.Forms
             UITools.OpenFolderInExplorer(METPath.WORKING_DIR, this);
         #endregion
 
-        #region More Context Menu Events
+        #region Tools Context Menu Events
+        private void newEFIROMSessionToolStripMenuItem_Click(object sender, EventArgs e) => InitializeChildForm(new frmEfiRom(), string.Empty);
+
+        private void newSOCROMSessionToolStripMenuItem_Click(object sender, EventArgs e) => InitializeChildForm(new frmSocRom(), string.Empty);
+
+        private void restartApplicationToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (_childWindowCount != 0)
+            {
+                Program.HandleApplicationExit(this, ExitAction.Restart);
+                return;
+            }
+
+            Program.Restart();
+        }
+        #endregion
+
+        #region Help Context Menu Events
         private void changelogToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.CHANGELOG);
 
         private void donateToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.DONATE);
@@ -258,21 +277,30 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_LATEST);
 
-        private void newEFIROMSessionToolStripMenuItem_Click(object sender, EventArgs e) => InitializeChildForm(new frmEfiRom(), string.Empty);
-
-        private void newSOCROMSessionToolStripMenuItem_Click(object sender, EventArgs e) => InitializeChildForm(new frmSocRom(), string.Empty);
-
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
-        private void restartApplicationToolStripMenuItem_Click(object sender, EventArgs e)
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_childWindowCount != 0)
-            {
-                Program.HandleApplicationExit(this, ExitAction.Restart);
-                return;
-            }
+            BlurHelper.ApplyBlur(this);
 
-            Program.Restart();
+            using (Form child = new frmAbout())
+            {
+                child.Tag = StartupSenderTag.Other;
+                child.FormClosed += ChildWindowClosed;
+                child.ShowDialog();
+            }
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BlurHelper.ApplyBlur(this);
+
+            using (Form child = new frmSettings())
+            {
+                child.Tag = StartupSenderTag.Other;
+                child.FormClosed += ChildWindowClosed;
+                child.ShowDialog();
+            }
         }
         #endregion
 
@@ -359,20 +387,6 @@ namespace Mac_EFI_Toolkit.Forms
                 control.ForeColor = foreColor;
             }
         }
-        #endregion
-
-        #region Misc Events
-        private void SetInitialDirectory()
-        {
-            // Get the initial directory from settings.
-            string directory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
-
-            // If the path is not empty check if it exists and set it as the initial directory.
-            if (!string.IsNullOrEmpty(directory))
-            {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
-            }
-        }
 
         private void InitializeChildForm(Form childForm, string filePath)
         {
@@ -409,8 +423,22 @@ namespace Mac_EFI_Toolkit.Forms
             // If a new version is available and update the UI.
             if (result == VersionResult.NewVersionAvailable)
             {
-                cmdMore.Text += " (1)";
+                cmdHelp.Text += " (1)";
                 updateAvailableToolStripMenuItem.Visible = true;
+            }
+        }
+        #endregion
+
+        #region Misc
+        private void SetInitialDirectory()
+        {
+            // Get the initial directory from settings.
+            string directory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
+
+            // If the path is not empty check if it exists and set it as the initial directory.
+            if (!string.IsNullOrEmpty(directory))
+            {
+                _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
             }
         }
         #endregion
