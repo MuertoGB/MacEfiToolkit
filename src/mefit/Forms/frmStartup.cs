@@ -205,10 +205,10 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void cmdTools_Click(object sender, EventArgs e) =>
+        private void cmdOptions_Click(object sender, EventArgs e) =>
             UITools.ShowContextMenuAtControlPoint(
                 sender,
-                cmsTools,
+                cmsOptions,
                 MenuPosition.BottomLeft);
 
         private void cmdMenuFolders_Click(object sender, EventArgs e) =>

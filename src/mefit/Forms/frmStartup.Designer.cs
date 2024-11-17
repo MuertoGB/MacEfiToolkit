@@ -51,6 +51,7 @@
             this.emailMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.updateAvailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewApplicationLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,19 +68,18 @@
             this.openSCFGFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.openWorkingDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsTools = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsOptions = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.newEFIROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newSOCROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.restartApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
             this.tlpDrop.SuspendLayout();
             this.cmsHelp.SuspendLayout();
             this.cmsFolders.SuspendLayout();
-            this.cmsTools.SuspendLayout();
+            this.cmsOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpTitle
@@ -263,9 +263,9 @@
             this.cmdTools.Name = "cmdTools";
             this.cmdTools.Size = new System.Drawing.Size(143, 32);
             this.cmdTools.TabIndex = 1;
-            this.cmdTools.Text = "TOOLS";
+            this.cmdTools.Text = "OPTIONS";
             this.cmdTools.UseVisualStyleBackColor = false;
-            this.cmdTools.Click += new System.EventHandler(this.cmdTools_Click);
+            this.cmdTools.Click += new System.EventHandler(this.cmdOptions_Click);
             // 
             // cmdMenuFolders
             // 
@@ -380,7 +380,7 @@
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsMore";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 324);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 296);
             // 
             // changelogToolStripMenuItem
             // 
@@ -423,6 +423,14 @@
             this.homepageToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.homepageToolStripMenuItem.Text = "Homepage";
             this.homepageToolStripMenuItem.Click += new System.EventHandler(this.homepageToolStripMenuItem_Click);
+            // 
+            // manualToolStripMenuItem
+            // 
+            this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
+            this.manualToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.manualToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
+            this.manualToolStripMenuItem.Text = "Manual";
+            this.manualToolStripMenuItem.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -560,20 +568,20 @@
             this.openWorkingDirectoryToolStripMenuItem.Text = "Open Working Directory";
             this.openWorkingDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openWorkingDirectoryToolStripMenuItem_Click);
             // 
-            // cmsTools
+            // cmsOptions
             // 
-            this.cmsTools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.cmsTools.Font = new System.Drawing.Font("Segoe UI", 10.2F);
-            this.cmsTools.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.cmsTools.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.cmsTools.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsOptions.Font = new System.Drawing.Font("Segoe UI", 10.2F);
+            this.cmsOptions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cmsOptions.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.cmsOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newEFIROMSessionToolStripMenuItem,
             this.newSOCROMSessionToolStripMenuItem,
             this.toolStripSeparator4,
             this.restartApplicationToolStripMenuItem});
-            this.cmsTools.Name = "cmsTools";
-            this.cmsTools.ShowImageMargin = false;
-            this.cmsTools.Size = new System.Drawing.Size(254, 94);
+            this.cmsOptions.Name = "cmsTools";
+            this.cmsOptions.ShowImageMargin = false;
+            this.cmsOptions.Size = new System.Drawing.Size(254, 94);
             // 
             // newEFIROMSessionToolStripMenuItem
             // 
@@ -611,14 +619,6 @@
             this.restartApplicationToolStripMenuItem.Text = "Restart Application";
             this.restartApplicationToolStripMenuItem.Click += new System.EventHandler(this.restartApplicationToolStripMenuItem1_Click);
             // 
-            // manualToolStripMenuItem
-            // 
-            this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
-            this.manualToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.manualToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
-            this.manualToolStripMenuItem.Text = "Manual";
-            this.manualToolStripMenuItem.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
-            // 
             // frmStartup
             // 
             this.AllowDrop = true;
@@ -654,7 +654,7 @@
             this.tlpDrop.PerformLayout();
             this.cmsHelp.ResumeLayout(false);
             this.cmsFolders.ResumeLayout(false);
-            this.cmsTools.ResumeLayout(false);
+            this.cmsOptions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -697,7 +697,7 @@
         private System.Windows.Forms.ToolStripMenuItem openNVRAMFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSCFGFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private UI.METContextMenuStrip cmsTools;
+        private UI.METContextMenuStrip cmsOptions;
         private System.Windows.Forms.ToolStripMenuItem newEFIROMSessionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newSOCROMSessionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
