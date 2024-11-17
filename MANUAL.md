@@ -107,7 +107,7 @@ This section explains the EFIROM Window and its functionality.
 - **Export Find My Mac Email (Text)**: Saves the email found in the NVRAM `FindMyMac` token to a text file, if available.
 
 ### Patch Menu
-(Access to the patching menu requires accepting the editing terms.)
+> Access to the patching menu requires accepting the editing terms.
 - **Change Serial Number**: Opens a window to enter a new System Serial Number.
 - **Erase NVRAM**: Opens a window to select and erase the VSS and/or SVS NVRAM stores.
 - **Replace Fsys Store**: Allows selection and replacement of the Fsys store within NVRAM.
@@ -168,7 +168,7 @@ This section explains the SOCROM Window and its functionality.
 - **Export Firmware Information (Text)**: Saves firmware information to a text file.
 
 ### Patch Menu
-(Access to the patching menu requires accepting the editing terms.)
+> Access to the patching menu requires accepting the editing terms.
 - **Change Serial Number**: Opens a window to enter a new System Serial Number.
 - **Write New Scfg Store**: Allows selection and replacement of the Scfg store within firmware.
 
