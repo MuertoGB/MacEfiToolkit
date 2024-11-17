@@ -17,6 +17,7 @@
 ## Version 2.0.1
 
 #### Enhancements
+- User Interface improvements.
 - Reorganized menu items application wide.
 - Updated shortcut keys application wide (see the [shortcuts file](SHORTCUTS.md)).
 - Improved consistency of file names when exporting data.
