@@ -41,6 +41,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSocRom));
             this.tlpTitle = new System.Windows.Forms.TableLayoutPanel();
+            this.lblPagefile = new System.Windows.Forms.Label();
             this.pbxLogo = new System.Windows.Forms.PictureBox();
             this.lblTitle = new Mac_EFI_Toolkit.UI.Controls.METLabel();
             this.cmdClose = new System.Windows.Forms.Button();
@@ -125,6 +126,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
@@ -148,15 +150,17 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.tlpTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.tlpTitle.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgSprite;
-            this.tlpTitle.ColumnCount = 4;
+            this.tlpTitle.ColumnCount = 5;
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 44F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tlpTitle.Controls.Add(this.lblPagefile, 2, 0);
             this.tlpTitle.Controls.Add(this.pbxLogo, 0, 0);
             this.tlpTitle.Controls.Add(this.lblTitle, 1, 0);
-            this.tlpTitle.Controls.Add(this.cmdClose, 3, 0);
-            this.tlpTitle.Controls.Add(this.cmdMinimize, 2, 0);
+            this.tlpTitle.Controls.Add(this.cmdClose, 4, 0);
+            this.tlpTitle.Controls.Add(this.cmdMinimize, 3, 0);
             this.tlpTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.tlpTitle.Location = new System.Drawing.Point(1, 1);
             this.tlpTitle.Margin = new System.Windows.Forms.Padding(0);
@@ -165,6 +169,23 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpTitle.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTitle.Size = new System.Drawing.Size(608, 50);
             this.tlpTitle.TabIndex = 0;
+            // 
+            // lblPagefile
+            // 
+            this.lblPagefile.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.lblPagefile.AutoSize = true;
+            this.lblPagefile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.lblPagefile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblPagefile.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPagefile.ForeColor = System.Drawing.Color.White;
+            this.lblPagefile.Location = new System.Drawing.Point(479, 14);
+            this.lblPagefile.Margin = new System.Windows.Forms.Padding(0, 0, 6, 0);
+            this.lblPagefile.Name = "lblPagefile";
+            this.lblPagefile.Size = new System.Drawing.Size(23, 22);
+            this.lblPagefile.TabIndex = 101;
+            this.lblPagefile.Text = "...";
+            this.lblPagefile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblPagefile.Visible = false;
             // 
             // pbxLogo
             // 
@@ -188,7 +209,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblTitle.Location = new System.Drawing.Point(44, 0);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(464, 50);
+            this.lblTitle.Size = new System.Drawing.Size(364, 50);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "SOCROM";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1279,13 +1300,14 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmsHelp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cmsHelp.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsHelp.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.manualToolStripMenuItem,
             this.viewApplicationLogToolStripMenuItem,
             this.toolStripSeparator5,
             this.aboutToolStripMenuItem,
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsHelp";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 122);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 150);
             // 
             // viewApplicationLogToolStripMenuItem
             // 
@@ -1319,6 +1341,14 @@ namespace Mac_EFI_Toolkit.Forms
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
+            // manualToolStripMenuItem
+            // 
+            this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
+            this.manualToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.manualToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
+            this.manualToolStripMenuItem.Text = "Manual";
+            this.manualToolStripMenuItem.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
+            // 
             // frmSocRom
             // 
             this.AllowDrop = true;
@@ -1347,6 +1377,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "T2 SOCROM";
             this.tlpTitle.ResumeLayout(false);
+            this.tlpTitle.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).EndInit();
             this.tlpMenu.ResumeLayout(false);
             this.tlpFirmware.ResumeLayout(false);
@@ -1455,5 +1486,7 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.Label lblPagefile;
+        private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
     }
 }

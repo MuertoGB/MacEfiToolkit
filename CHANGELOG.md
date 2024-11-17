@@ -18,8 +18,10 @@
 
 #### Enhancements
 - User Interface improvements.
+- Reintroduced memory usage monitoring to the application.
+- Reintroduced the manual file (see [MANUAL.md](MANUAL.md)).
 - Reorganized menu items application wide.
-- Updated shortcut keys application wide (see the [shortcuts file](SHORTCUTS.md)).
+- Updated shortcut keys application wide.
 - Improved consistency of file names when exporting data.
 
 #### Bugs

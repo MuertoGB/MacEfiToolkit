@@ -134,6 +134,9 @@ namespace Mac_EFI_Toolkit.Forms
             // Handle individual keys (F1, F2, F12) without modifiers.
             switch (e.KeyCode)
             {
+                case Keys.F1:
+                    manualToolStripMenuItem.PerformClick();
+                    break;
                 case Keys.F2:
                     newEFIROMSessionToolStripMenuItem.PerformClick();
                     break;
@@ -274,6 +277,8 @@ namespace Mac_EFI_Toolkit.Forms
         private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_ISSUE);
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.HOMEPAGE);
+
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
 
         private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_LATEST);
 

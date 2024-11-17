@@ -67,9 +67,36 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="size">The number of bytes to format.</param>
         /// <returns>A string representation of the number of bytes with commas.</returns>
-        internal static string FormatFileSize(long size)
+        internal static string FormatBytesWithCommas(long size)
         {
             return string.Format("{0:#,##0}", size);
+        }
+
+        /// <summary>
+        /// Converts a byte size into a human-readable format using appropriate units (e.g., KB, MB).
+        /// </summary>
+        /// <param name="size">The size in bytes to convert.</param>
+        /// <returns>A human-readable string representation of the size with the appropriate unit.</returns>
+        internal static string FormatBytesToReadableUnit(ulong size)
+        {
+            // Define a set of suffixes for file sizes.
+            string[] suffixes = { "bytes", "KB", "MB", "GB", "TB" };
+
+            if (size == 0)
+            {
+                return $"0 {suffixes[0]}";
+            }
+
+            // Calculate the appropriate suffix index based on the size of the input.
+            int suffixIndex = (int)Math.Floor(Math.Log(size, 1024));
+
+            // Ensure the index does not exceed the array bounds (safety measure).
+            suffixIndex = Math.Min(suffixIndex, suffixes.Length - 1);
+
+            // Calculate the size in the chosen suffix and format it.
+            double sizeInSuffix = size / Math.Pow(1024, suffixIndex);
+
+            return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -100,6 +101,21 @@ namespace Mac_EFI_Toolkit.Forms
                 OpenBinary(Program.MAIN_WINDOW.loadedFile);
                 Program.MAIN_WINDOW.loadedFile = null;
             }
+
+            MemoryTracker.Instance.OnMemoryUsageUpdated += MemoryTracker_OnMemoryUsageUpdated;
+        }
+
+        private void MemoryTracker_OnMemoryUsageUpdated(object sender, ulong pagefileUsage)
+        {
+            Invoke(new Action(() =>
+            {
+                if (!lblPagefile.Visible)
+                {
+                    lblPagefile.Visible = true;
+                }
+
+                lblPagefile.Text = FileTools.FormatBytesToReadableUnit(pagefileUsage);
+            }));
         }
 
         private void frmEfiRom_FormClosing(object sender, FormClosingEventArgs e)
@@ -108,6 +124,8 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 _cancellationToken.Cancel();
             }
+
+            MemoryTracker.Instance.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
         }
 
         private void frmEfiRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();
@@ -137,6 +155,9 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 case Keys.Escape:
                     Close();
+                    break;
+                case Keys.F1:
+                    manualToolStripMenuItem.PerformClick();
                     break;
                 case Keys.F4:
                     settingsToolStripMenuItem.PerformClick();
@@ -632,8 +653,8 @@ namespace Mac_EFI_Toolkit.Forms
                 stringBuilder.AppendLine("File");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Filename:        {EFIROM.FileInfoData.FileNameExt}");
-                stringBuilder.AppendLine($"Size (Bytes):    {FileTools.FormatFileSize(EFIROM.FileInfoData.Length)} bytes");
-                stringBuilder.AppendLine($"Size (MB):       {Helper.GetBytesReadableSize(EFIROM.FileInfoData.Length)}");
+                stringBuilder.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(EFIROM.FileInfoData.Length)} bytes");
+                stringBuilder.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)EFIROM.FileInfoData.Length)}");
                 stringBuilder.AppendLine($"Size (Hex):      {EFIROM.FileInfoData.Length:X}h");
                 stringBuilder.AppendLine($"CRC32:           {EFIROM.FileInfoData.CRC32:X}");
                 stringBuilder.AppendLine($"Created:         {EFIROM.FileInfoData.CreationTime}");
@@ -873,6 +894,8 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Help Toolstrip Events
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
+
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1039,7 +1062,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             bool isValidSize = FileTools.GetIsValidBinSize(fileSizeDecimal);
 
-            lblFilesize.Text = $"{FileTools.FormatFileSize(fileSizeDecimal)} {APPSTRINGS.BYTES} ({fileSizeDecimal:X}h)";
+            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(fileSizeDecimal)} {APPSTRINGS.BYTES} ({fileSizeDecimal:X}h)";
 
             if (!isValidSize)
             {
@@ -1645,7 +1668,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetFileSize() =>
             SetClipboardText(
-                $"{FileTools.FormatFileSize(EFIROM.FileInfoData.Length)} " +
+                $"{FileTools.FormatBytesWithCommas(EFIROM.FileInfoData.Length)} " +
                 $"{APPSTRINGS.BYTES} ({EFIROM.FileInfoData.Length:X}h)");
 
         private void ClipboardSetFileCrc32() => SetClipboardText($"{EFIROM.FileInfoData.CRC32:X8}");

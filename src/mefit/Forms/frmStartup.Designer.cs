@@ -72,6 +72,7 @@
             this.newSOCROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.restartApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
@@ -88,7 +89,7 @@
             this.tlpTitle.ColumnCount = 5;
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 44F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
+            this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tlpTitle.Controls.Add(this.lblAppVersion, 2, 0);
@@ -118,7 +119,7 @@
             this.lblAppVersion.Name = "lblAppVersion";
             this.lblAppVersion.Size = new System.Drawing.Size(41, 22);
             this.lblAppVersion.TabIndex = 0;
-            this.lblAppVersion.Text = "1.2.0";
+            this.lblAppVersion.Text = "0.0.0";
             this.lblAppVersion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblWindowTitle
@@ -130,7 +131,7 @@
             this.lblWindowTitle.Location = new System.Drawing.Point(44, 0);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
-            this.lblWindowTitle.Size = new System.Drawing.Size(223, 50);
+            this.lblWindowTitle.Size = new System.Drawing.Size(219, 50);
             this.lblWindowTitle.TabIndex = 0;
             this.lblWindowTitle.Text = "Mac EFI Toolkit";
             this.lblWindowTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -370,6 +371,7 @@
             this.emailMeToolStripMenuItem,
             this.githubIssuesToolStripMenuItem,
             this.homepageToolStripMenuItem,
+            this.manualToolStripMenuItem,
             this.toolStripSeparator2,
             this.updateAvailableToolStripMenuItem,
             this.viewApplicationLogToolStripMenuItem,
@@ -378,7 +380,7 @@
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsMore";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 296);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 324);
             // 
             // changelogToolStripMenuItem
             // 
@@ -609,6 +611,14 @@
             this.restartApplicationToolStripMenuItem.Text = "Restart Application";
             this.restartApplicationToolStripMenuItem.Click += new System.EventHandler(this.restartApplicationToolStripMenuItem1_Click);
             // 
+            // manualToolStripMenuItem
+            // 
+            this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
+            this.manualToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
+            this.manualToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
+            this.manualToolStripMenuItem.Text = "Manual";
+            this.manualToolStripMenuItem.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
+            // 
             // frmStartup
             // 
             this.AllowDrop = true;
@@ -694,5 +704,6 @@
         private System.Windows.Forms.ToolStripMenuItem restartApplicationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openLZMADXEFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
     }
 }

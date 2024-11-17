@@ -11,6 +11,7 @@ using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -95,6 +96,21 @@ namespace Mac_EFI_Toolkit.Forms
                 OpenBinary(Program.MAIN_WINDOW.loadedFile);
                 Program.MAIN_WINDOW.loadedFile = null;
             }
+
+            MemoryTracker.Instance.OnMemoryUsageUpdated += MemoryTracker_OnMemoryUsageUpdated;
+        }
+
+        private void MemoryTracker_OnMemoryUsageUpdated(object sender, ulong pagefileUsage)
+        {
+            Invoke(new Action(() =>
+            {
+                if (!lblPagefile.Visible)
+                {
+                    lblPagefile.Visible = true;
+                }
+
+                lblPagefile.Text = FileTools.FormatBytesToReadableUnit(pagefileUsage);
+            }));
         }
 
         private void frmSocRom_FormClosing(object sender, FormClosingEventArgs e)
@@ -103,6 +119,8 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 _cancellationToken.Cancel();
             }
+
+            MemoryTracker.Instance.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
         }
 
         private void frmSocRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();
@@ -132,6 +150,9 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 case Keys.Escape:
                     Close();
+                    break;
+                case Keys.F1:
+                    manualToolStripMenuItem.PerformClick();
                     break;
                 case Keys.F4:
                     settingsToolStripMenuItem.PerformClick();
@@ -436,8 +457,8 @@ namespace Mac_EFI_Toolkit.Forms
                 stringBuilder.AppendLine("File");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Filename:        {SOCROM.FileInfoData.FileNameExt}");
-                stringBuilder.AppendLine($"Size (Bytes):    {FileTools.FormatFileSize(SOCROM.FileInfoData.Length)} bytes");
-                stringBuilder.AppendLine($"Size (MB):       {Helper.GetBytesReadableSize(SOCROM.FileInfoData.Length)}");
+                stringBuilder.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(SOCROM.FileInfoData.Length)} bytes");
+                stringBuilder.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)SOCROM.FileInfoData.Length)}");
                 stringBuilder.AppendLine($"Size (Hex):      {SOCROM.FileInfoData.Length:X}h");
                 stringBuilder.AppendLine($"CRC32:           {SOCROM.FileInfoData.CRC32:X}");
                 stringBuilder.AppendLine($"Created:         {SOCROM.FileInfoData.CreationTime}");
@@ -566,6 +587,8 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Help Toolstrip Events
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
+
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -921,7 +944,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             bool isValidSize = FileTools.GetIsValidBinSize(fsDecimal);
 
-            lblFilesize.Text = $"{FileTools.FormatFileSize(fsDecimal)} {APPSTRINGS.BYTES} ({fsDecimal:X}h)";
+            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(fsDecimal)} {APPSTRINGS.BYTES} ({fsDecimal:X}h)";
 
             if (!isValidSize)
             {
@@ -1103,7 +1126,7 @@ namespace Mac_EFI_Toolkit.Forms
             SetClipboardText(showExtention ? SOCROM.FileInfoData.FileNameExt : SOCROM.FileInfoData.FileName);
 
         private void ClipboardSetFileSize() =>
-            SetClipboardText($"{FileTools.FormatFileSize(SOCROM.FileInfoData.Length)} {APPSTRINGS.BYTES} ({SOCROM.FileInfoData.Length:X}h)");
+            SetClipboardText($"{FileTools.FormatBytesWithCommas(SOCROM.FileInfoData.Length)} {APPSTRINGS.BYTES} ({SOCROM.FileInfoData.Length:X}h)");
 
         private void ClipboardSetFileCrc32() => SetClipboardText($"{SOCROM.FileInfoData.CRC32:X8}");
 
