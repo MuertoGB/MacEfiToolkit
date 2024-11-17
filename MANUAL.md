@@ -39,7 +39,7 @@ This section explains the Startup Window and its functionality.
 ### Keyboard Shortcuts
 - **Browse for a Firmware**: `CTRL + O`
 - **Open Folders Menu**: `CTRL + L`
-- **Open Tools Menu**: `CTRL + T`
+- **Open Options Menu**: `CTRL + T`
 - **Open Help Menu**: `CTRL + H`
 - **New EFIROM Session**: `F2`
 - **New SOCROM Session**: `F3`
