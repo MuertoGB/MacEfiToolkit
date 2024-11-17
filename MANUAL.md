@@ -84,6 +84,7 @@ This section explains the EFIROM Window and its functionality.
 - **Open Settings Window**: `F4`
 - **Open Loaded File Location**: `CTRL + SHIFT + L`
 - **Toggle Serial Number View**: `CTRL + SHIFT + N`
+- **Close Window**: `ESC`
 
 ### Main Menu
 | Button     | Description                                                                                           |
@@ -150,6 +151,7 @@ This section explains the SOCROM Window and its functionality.
 - **Open Settings Window**: `F4`
 - **Open Loaded File Location**: `CTRL + SHIFT + L`
 - **Toggle Serial Number View**: `CTRL + SHIFT + N`
+- **Close Window**: `ESC`
 
 ### Main Menu
 | Button     | Description                                                                                           |
