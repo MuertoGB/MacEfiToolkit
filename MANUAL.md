@@ -24,7 +24,7 @@
 
 - Mac EFI Toolkit creates its own directories within the working directory to extract and store files. The application is designed to be self-contained, ensuring that all necessary files and data are managed within the application's working environment.
 - The Startup, EFIROM, and SOCROM windows all support drag-and-drop functionality. However, when running the application as an administrator, this feature will be disabled due to Windows security mechanisms and the way it handles file access. There is generally no need to run the application as an administrator.
-- The EFIROM and SOCROM windows display application memory usage in the title bar, and this data will refresh every four seconds. This feature does not work under Wine, as the GetProcessMemoryInfo() API calls are only implemented as a stub method in the Wine compatibility layer.
+- The EFIROM and SOCROM windows display application memory usage in the title bar, and this data will refresh every four seconds. This feature does not work under Wine, as the GetProcessMemoryInfo() API call is only implemented as a stub method in the Wine compatibility layer.
 - In the event of an unhandled exception, the application will automatically capture the error and generate a log file in the working directory. This log can be uploaded to GitHub issues if needed for troubleshooting.
 - In the EFIROM window, the '@' icon in the status bar becomes clickable when an email address is detected within the firmware. Clicking the icon will display the detected email address.
 
