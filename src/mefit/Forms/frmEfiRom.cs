@@ -809,7 +809,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void replaceIntelMERegionToolStripMenuItem_Click(object sender, EventArgs e) => WriteIntelMeRegion();
 
-        private void fixFsysChecksumCRC32ToolStripMenuItem_Click(object sender, EventArgs e) => MaskFsysChecksum();
+        private void fixFsysChecksumToolStripMenuItem_Click(object sender, EventArgs e) => MaskFsysChecksum();
 
         private void invalidateEFILockToolStripMenuItem_Click(object sender, EventArgs e) => RemoveEfiLock();
         #endregion
@@ -1417,7 +1417,7 @@ namespace Mac_EFI_Toolkit.Forms
                 replaceIntelMERegionToolStripMenuItem.Enabled = IFD.IsDescriptorMode && IFD.ME_REGION_BASE != 0 && IFD.ME_REGION_LIMIT != 0;
                 replaceFsysStoreToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1;
                 eraseNVRAMToolStripMenuItem.Enabled = !allNvStoresEmpty;
-                fixFsysChecksumCRC32ToolStripMenuItem.Enabled = fsysCrcMismatch;
+                fixFsysChecksumToolStripMenuItem.Enabled = fsysCrcMismatch;
                 invalidateEFILockToolStripMenuItem.Enabled = EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
 
                 // Options Menu

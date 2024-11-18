@@ -23,6 +23,8 @@
 6. [Erase NVRAM (EFI)](#erase-nvram-efi)
 7. [Replace Fsys Store (EFI)](#replace-fsys-store-efi)
 8. [Replace Intel ME Region (EFI)](#replace-intel-me-region-efi)
+9. [Fix Fsys Checksum (EFI)](#fix-fsys-checksum-efi)
+10. [Invalidate EFI Lock (EFI)](#invalidate-efi-lock-efi)
 
 ## Useful Notes
 
@@ -116,7 +118,7 @@ This section explains the EFIROM Window and its functionality.
 - **Change Serial Number**: Opens a window to enter a new System Serial Number.
 - **Erase NVRAM**: Opens a window to select and erase the VSS and/or SVS NVRAM stores.
 - **Replace Fsys Store**: Allows selection and replacement of the Fsys store within NVRAM.
-- **Fix Fsys Checksum (CRC32)**: Automatically corrects an invalid checksum in the Fsys store.
+- **Fix Fsys Checksum**: Automatically corrects an invalid checksum in the Fsys store.
 - **Invalidate EFI Lock**: Invalidates the Message Authentication Code in the SVS NVRAM, safely disabling the EFI password.
 
 ### Tools Menu
@@ -223,6 +225,18 @@ Both the EFIROM and SOCROM windows follow the same procedure for serial number p
 
 For users who require a higher level of certainty and guidance in replacing the ME region, I recommend referring to resources such as the guide available on [Win-Raid](https://winraid.level1techs.com/t/guide-clean-dumped-intel-engine-cs-me-cs-txe-regions-with-data-initialization/31277) written by platomav, or this post on [Logi.wiki](https://logi.wiki/index.php/Clean_EFI_ME_Region). These resources provide comprehensive instructions and information on performing a clean replacement of the ME Region while ensuring accuracy.
 
-1. From the main menu, select Patch > Replace Intel ME Region. An open file dialog will appear, allowing you to select the new ME region.  
+1. From the main menu, select Patch > Replace Intel ME Region. An open file dialog will appear, allowing you to select the new ME region.
 
-2. After selecting the new Me region, the application will validate the file, and write the new region into the firmware. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
+2. After selecting the new ME region, the application will validate the file, and write the new region into the firmware. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
+
+## Fix Fsys Checksum (EFI)
+
+**Note:** This option is only available when an invalid Fsys CRC32 checksum is detected.
+
+To fix the checksum, go to the main menu and select `Patch > Fix Fsys Checksum`. The application will automatically repair the Fsys checksum and verify that it has been written successfully. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
+
+## Invalidate EFI Lock (EFI)
+
+**Note:** This option is only available when a Message Authentication Code (MAC) is detected in the SVS NVRAM.
+
+To safely disable the EFI lock while retaining the Secure Variable Store (SVS), go to the main menu and select `Patch > Invalidate EFI Lock`. The application will invalidate the Message Authentication Code in each applicable store, write the updated data back to the firmware, and verify the changes were applied successfully. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.

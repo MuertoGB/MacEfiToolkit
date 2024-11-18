@@ -52,7 +52,7 @@ namespace Mac_EFI_Toolkit
         internal const string DONATE = "https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ";
         internal const string EMAILME = "mailto:muertogb@proton.me";
         internal const string HOMEPAGE = "https://github.com/MuertoGB/MacEfiToolkit";
-        internal const string MANUAL = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md";
+        internal const string MANUAL = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md#application-manual";
         internal const string GH_ISSUE = "https://github.com/MuertoGB/MacEfiToolkit/issues";
         internal const string GH_LATEST = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
         internal const string VERSION_MANIFEST = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/stream/manifests/version.xml";
