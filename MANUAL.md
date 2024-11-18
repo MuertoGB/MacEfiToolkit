@@ -19,6 +19,8 @@
     - [Patch Menu](#patch-menu-1)
     - [Tools Menu](#tools-menu-1)
     - [Status Bar](#status-bar-1)
+5. [Serial Number Patching](#serial-number-patching)
+6. [Erase NVRAM (EFI)](#erase-nvram-efi)
 
 ## Useful Notes
 
@@ -182,3 +184,25 @@ This section explains the SOCROM Window and its functionality.
 ### Status Bar
 - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
 - **Tooltips**: The status bar shows important messages and keyboard shortcuts.
+
+## Serial Number Patching
+
+Both the EFIROM and SOCROM windows follow the same procedure for serial number patching.
+
+1. From the main menu, select `Patch > Change Serial Number`. A prompt will appear, asking for the new system serial number. Enter the new serial number and click `OKAY` to proceed.
+
+<kbd>
+  <img src="stream/images/manual/ssn.png">
+</kbd>
+
+2. After confirming the new serial number, the prompt will close. The application will update the Fsys region with the new serial data and automatically correct the CRC32 checksum. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
+
+## Erase NVRAM (EFI)
+
+1. From the main menu, select `Patch > Erase NVRAM`. A prompt will appear, allowing you to choose the desired NVRAM regions (VSS, SVS). Select the regions to be erased and click `OKAY` to proceed.
+
+<kbd>
+  <img src="stream/images/manual/nvram.png">
+</kbd>
+
+2. Once the selected regions are confirmed, the prompt will close. The application will initialize the NVRAM store headers, clear the data (set to 0xFF), and confirm the stores were erased successfully. After completion, a save dialog will appear, allowing you to export the modified firmware binary.
