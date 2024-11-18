@@ -21,6 +21,7 @@
     - [Status Bar](#status-bar-1)
 5. [Serial Number Patching](#serial-number-patching)
 6. [Erase NVRAM (EFI)](#erase-nvram-efi)
+7. [Replace Fsys Store (EFI)](#replace-fsys-store-efi)
 
 ## Useful Notes
 
@@ -206,3 +207,11 @@ Both the EFIROM and SOCROM windows follow the same procedure for serial number p
 </kbd>
 
 2. Once the selected regions are confirmed, the prompt will close. The application will initialize the NVRAM store headers, clear the data (set to 0xFF), and confirm the stores were erased successfully. After completion, a save dialog will appear, allowing you to export the modified firmware binary.
+
+## Replace Fsys Store (EFI)
+
+**Note:** The application can extract the Fsys Store region from any EFI firmware (when available). To do this, open the desired firmware and, from the main menu, select `Export > Fsys Store`. A save dialog will appear, allowing you to export the 800h Fsys Block.
+
+1. From the main menu, select `Patch > Replace Fsys Store`. An open file dialog will appear, allowing you to select the new Fsys Store region.
+
+2. After selecting the new Fsys Store, the application will validate the file, automatically mask the checksum if needed, and write the new region into the firmware. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
