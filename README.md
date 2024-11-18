@@ -44,7 +44,7 @@ Mac EFI Toolkit (V2.0.1)
 
 ## Application Manual
 
-> 📋 View the application manual [here](MAUNAL.md).
+> 📋 View the application manual [here](MANUAL.md).
 
 ## Wine Instructions
 
