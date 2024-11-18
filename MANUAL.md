@@ -248,6 +248,6 @@ To safely disable the EFI lock while retaining the Secure Variable Store (SVS), 
 
 The application can extract the SCfg Store region from any SOC firmware (when available). To do this, open the desired firmware and, from the main menu, select `Export > Export SCfg Store`. A save dialog will appear, allowing you to export the SCfg store.
 
-1. From the main menu, select Patch > `Write new SCfg Store`. An open file dialog will appear, allowing you to select the new SCfg store.
+1. From the main menu, select `Patch > Write new SCfg Store`. An open file dialog will appear, allowing you to select the new SCfg store.
 
 2. After selecting the new SCfg store, the application will validate the file, and write the new region into the firmware. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.

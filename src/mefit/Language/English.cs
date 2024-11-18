@@ -303,19 +303,19 @@ namespace Mac_EFI_Toolkit
             "Backup SVS store verification failed";
 
         internal const string SCFG_IMPORT_CANCELLED =
-            "An Scfg store was not provided";
+            "An SCfg store was not provided";
 
         internal const string SERIAL_LEN_INVALID =
             "Serial length invalid";
 
         internal const string SCFG_REPLACE =
-            "Replace Scfg store";
+            "Replace SCfg store";
 
         internal const string SCFG_BASE_ADJUST =
-            "Scfg base not found - adjusted to";
+            "SCfg base not found - adjusted to";
 
         internal const string SCFG_LFB =
-            "Loading Scfg store from firmware buffer";
+            "Loading SCfg store from firmware buffer";
 
         internal const string SCFG_POS_INITIALIZED =
             "Cannot write to 0x28A000h (Length B8h) because initialized data is present";
@@ -386,7 +386,7 @@ namespace Mac_EFI_Toolkit
             "The provided file was not a valid T2 SOCROM.";
 
         internal const string SCFG_EXPORT_FAIL =
-            "Scfg Store export failed.";
+            "SCfg Store export failed.";
 
         internal const string ARCHIVE_EXPORT_FAIL =
             "Archive export failed.";

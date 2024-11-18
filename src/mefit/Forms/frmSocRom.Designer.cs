@@ -123,11 +123,11 @@ namespace Mac_EFI_Toolkit.Forms
             this.replaceScfgStoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsHelp = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.viewApplicationLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tlpTitle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxLogo)).BeginInit();
             this.tlpMenu.SuspendLayout();
@@ -1276,7 +1276,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.replaceScfgStoreToolStripMenuItem});
             this.cmsPatch.Name = "cmsPatch";
             this.cmsPatch.ShowImageMargin = false;
-            this.cmsPatch.Size = new System.Drawing.Size(229, 60);
+            this.cmsPatch.Size = new System.Drawing.Size(229, 88);
             // 
             // changeSerialNumberToolStripMenuItem
             // 
@@ -1291,7 +1291,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.replaceScfgStoreToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.replaceScfgStoreToolStripMenuItem.Name = "replaceScfgStoreToolStripMenuItem";
             this.replaceScfgStoreToolStripMenuItem.Size = new System.Drawing.Size(228, 28);
-            this.replaceScfgStoreToolStripMenuItem.Text = "Write New Scfg Store";
+            this.replaceScfgStoreToolStripMenuItem.Text = "Write New SCfg Store";
             this.replaceScfgStoreToolStripMenuItem.Click += new System.EventHandler(this.replaceScfgStoreToolStripMenuItem_Click);
             // 
             // cmsHelp
@@ -1309,7 +1309,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsHelp";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 156);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 128);
             // 
             // manualToolStripMenuItem
             // 
@@ -1318,6 +1318,11 @@ namespace Mac_EFI_Toolkit.Forms
             this.manualToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.manualToolStripMenuItem.Text = "Manual";
             this.manualToolStripMenuItem.Click += new System.EventHandler(this.manualToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(248, 6);
             // 
             // viewApplicationLogToolStripMenuItem
             // 
@@ -1350,11 +1355,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(248, 6);
             // 
             // frmSocRom
             // 
