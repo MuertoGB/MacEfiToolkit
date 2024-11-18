@@ -122,6 +122,17 @@ namespace Mac_EFI_Toolkit.WIN32
             IntPtr Process,
             out PROCESS_MEMORY_COUNTERS ppsmemCounters,
             uint cb);
+
+        // https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        internal static extern IntPtr LoadLibrary(
+            string lpLibFileName);
+
+        // https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getprocaddress
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
+        internal static extern IntPtr GetProcAddress(
+            IntPtr hModule,
+            string lpProcName);
         #endregion
     }
 }

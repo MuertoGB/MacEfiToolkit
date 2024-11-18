@@ -16,15 +16,17 @@
 
 ## Version 2.0.1
 
-#### Enhancements
-- User Interface improvements.
-- Reintroduced memory usage monitoring to the application.
+### Enhancements
+- User interface improvements.
+- Reintroduced memory usage monitoring in the application.
 - Reintroduced the manual file (see [MANUAL.md](MANUAL.md)).
-- Reorganized menu items application wide.
-- Updated shortcut keys application wide.
+- Reorganized menu items across the application.
+  - 'Folders' menu buttons will no longer be disabled when no firmware is loaded.
+- Updated shortcut keys throughout the application.
+  - Menus now display available shortcuts where applicable
 - Improved consistency of file names when exporting data.
 
-#### Bugs
+### Misc
 - Added missing menu item **'Open LZMA DXE Folder'** to the Startup and EFIROM windows.
 
 ## Version 2.0.0

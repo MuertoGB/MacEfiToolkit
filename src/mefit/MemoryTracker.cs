@@ -16,6 +16,7 @@ namespace Mac_EFI_Toolkit
         #region Private Members
         private static readonly Lazy<MemoryTracker> _instance = new Lazy<MemoryTracker>(() => new MemoryTracker());
         private readonly Timer _usageTimer;
+        private readonly bool _isWine;
         #endregion
 
         #region Internal Members
@@ -27,11 +28,19 @@ namespace Mac_EFI_Toolkit
         #region Constructor
         private MemoryTracker()
         {
-            _usageTimer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(4));
+            _isWine = Program.IsRunningUnderWine();
+
+            if (!_isWine)
+            {
+                _usageTimer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(4));
+                return;
+            }
         }
 
         private void UpdateMemoryUsage(object state)
         {
+            if (_isWine) return;
+
             IntPtr processHandle = NativeMethods.GetCurrentProcess();
 
             NativeMethods.PROCESS_MEMORY_COUNTERS memoryCounters;

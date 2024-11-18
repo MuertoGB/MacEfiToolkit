@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"LZMA SDK: {METVersion.LZMA_SDK}");
                 builder.AppendLine($"Channel:  {METVersion.APP_CHANNEL}");
                 builder.AppendLine($"Mode:     {SystemTools.GetSystemBitnessMode()}");
-                builder.AppendLine($"Debug:    {Program.GetIsDebugMode()}");
+                builder.AppendLine($"Debug:    {Program.IsDebugMode()}");
                 builder.AppendLine($"Elevated: {SystemTools.GetIsElevated()}");
                 builder.AppendLine($"SHA256:   {FileTools.GetSha256Digest(appBytes)}\r\n");
 

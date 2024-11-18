@@ -9,6 +9,7 @@ using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Forms;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -408,13 +409,26 @@ namespace Mac_EFI_Toolkit
             e.Effect = DragDropEffects.None;
         }
 
-        internal static bool GetIsDebugMode()
+        internal static bool IsDebugMode()
         {
 #if DEBUG
             return true;
 #else
             return false;
 #endif
+        }
+
+        internal static bool IsRunningUnderWine()
+        {
+            IntPtr handle = NativeMethods.LoadLibrary("ntdll.dll");
+
+            if (handle == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            IntPtr wineVersionProc = NativeMethods.GetProcAddress(handle, "wine_get_version");
+            return wineVersionProc != IntPtr.Zero; // If this function exists, we're running under Wine.
         }
         #endregion
     }

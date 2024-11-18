@@ -56,7 +56,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                if (!Program.GetIsDebugMode())
+                if (!Program.IsDebugMode())
                 {
                     Logger.WriteErrorLine(nameof(CheckForNewVersion), e.GetType(), e.Message);
                 }

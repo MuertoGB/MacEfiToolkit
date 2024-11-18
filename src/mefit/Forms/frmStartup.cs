@@ -456,7 +456,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Certainly wasn't me.
             // In would never do such a thing.
 
-            if (Program.GetIsDebugMode())
+            if (Program.IsDebugMode())
             {
                 Graphics g = e.Graphics;
                 int labelHeight = 20;
