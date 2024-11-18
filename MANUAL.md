@@ -22,6 +22,7 @@
 5. [Serial Number Patching](#serial-number-patching)
 6. [Erase NVRAM (EFI)](#erase-nvram-efi)
 7. [Replace Fsys Store (EFI)](#replace-fsys-store-efi)
+8. [Replace Intel ME Region (EFI)](#replace-intel-me-region-efi)
 
 ## Useful Notes
 
@@ -210,8 +211,18 @@ Both the EFIROM and SOCROM windows follow the same procedure for serial number p
 
 ## Replace Fsys Store (EFI)
 
-**Note:** The application can extract the Fsys Store region from any EFI firmware (when available). To do this, open the desired firmware and, from the main menu, select `Export > Fsys Store`. A save dialog will appear, allowing you to export the 800h Fsys Block.
+**Note:** The application can extract the Fsys Store region from any EFI firmware (when available). To do this, open the desired firmware and, from the main menu, select `Export > Export Fsys Store`. A save dialog will appear, allowing you to export the 800h Fsys Block.
 
 1. From the main menu, select `Patch > Replace Fsys Store`. An open file dialog will appear, allowing you to select the new Fsys Store region.
 
 2. After selecting the new Fsys Store, the application will validate the file, automatically mask the checksum if needed, and write the new region into the firmware. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
+
+## Replace Intel ME Region (EFI)
+
+**Note:** It is important for the user to ensure accurate replacement of the ME Region when utilizing the application. The application allows for the transfer of a dumped or configured region but does not provide a guarantee of accuracy. A repository of clean Apple firmware can be found here on [Github](https://github.com/gdbinit/firmware_vault). This repository provides a collection of clean Apple firmware files containing clean and configured ME regions that can be extracted using Mac EFI Toolkit. To do so, open the desired firmware and, from the main menu, select `Export > Export Intel ME Region`. A save dialog will appear, allowing you to export the Intel ME region.
+
+For users who require a higher level of certainty and guidance in replacing the ME region, I recommend referring to resources such as the guide available on [Win-Raid](https://winraid.level1techs.com/t/guide-clean-dumped-intel-engine-cs-me-cs-txe-regions-with-data-initialization/31277) written by platomav, or this post on [Logi.wiki](https://www.logi.wiki/index.php/Clean_EFI_ME_Region). These resources provide comprehensive instructions and information on performing a clean replacement of the ME Region while ensuring accuracy.
+
+1. From the main menu, select Patch > Replace Intel ME Region. An open file dialog will appear, allowing you to select the new ME region.  
+
+2. After selecting the new Me region, the application will validate the file, and write the new region into the firmware. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
