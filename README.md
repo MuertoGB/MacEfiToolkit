@@ -8,12 +8,13 @@ Mac EFI Toolkit (V2.0.1)
 1. [Intoduction](#introduction)
 2. [System Requirements](#system-requirements)
 3. [Getting Started](#getting-started)
-4. [Wine Instructions](#wine-instructions)
-5. [Support](#support)
-6. [Changelog](#changelog)
-7. [Features](#features)
-8. [Acknowledgements](#acknowledgements)
-9. [Donate](#donate)
+4. [Application Manual](#application-manual)
+5. [Wine Instructions](#wine-instructions)
+6. [Support](#support)
+7. [Changelog](#changelog)
+8. [Features](#features)
+9. [Acknowledgements](#acknowledgements)
+10. [Donate](#donate)
 
 ## Introduction
 
@@ -40,6 +41,10 @@ Mac EFI Toolkit (V2.0.1)
 2. Download the [latest version](https://github.com/MuertoGB/MacEfiToolkit/releases/latest) of **mefit**.
 3. If needed, create a dump of your Mac firmware using an SPIROM programmer.
 4. Launch the software (**no installation required**) and open your firmware.
+
+## Application Manual
+
+> 📋 View the application manual [here](MAUNAL.md).
 
 ## Wine Instructions
 
