@@ -25,6 +25,7 @@
 8. [Replace Intel ME Region (EFI)](#replace-intel-me-region-efi)
 9. [Fix Fsys Checksum (EFI)](#fix-fsys-checksum-efi)
 10. [Invalidate EFI Lock (EFI)](#invalidate-efi-lock-efi)
+11. [Write New SCfg Store (SOC)](#write-new-scfg-store-soc)
 
 ## Useful Notes
 
@@ -171,14 +172,14 @@ This section explains the SOCROM Window and its functionality.
 | **Help**   | Opens the help menu.                                                                                 |
 
 ### Export Menu
-- **Export Scfg Store**: Exports the Scfg store located in the firmware.
+- **Export SCfg Store**: Exports the SCfg store located in the firmware.
 - **Backup Firmware (ZIP)**: Compresses and saves the loaded firmware as a ZIP archive.
 - **Export Firmware Information (Text)**: Saves firmware information to a text file.
 
 ### Patch Menu
 > Access to the patching menu requires accepting the editing terms.
 - **Change Serial Number**: Opens a window to enter a new System Serial Number.
-- **Write New Scfg Store**: Allows selection and replacement of the Scfg store within firmware.
+- **Write New SCfg Store**: Allows selection and replacement of the SCfg store within firmware.
 
 ### Tools Menu
 - **Lookup Serial Number**: Opens EveryMac in a browser and auto-inserts the System Serial Number for quick lookup (internet connection required).
@@ -225,7 +226,7 @@ Both the EFIROM and SOCROM windows follow the same procedure for serial number p
 
 For users who require a higher level of certainty and guidance in replacing the ME region, I recommend referring to resources such as the guide available on [Win-Raid](https://winraid.level1techs.com/t/guide-clean-dumped-intel-engine-cs-me-cs-txe-regions-with-data-initialization/31277) written by platomav, or this post on [Logi.wiki](https://logi.wiki/index.php/Clean_EFI_ME_Region). These resources provide comprehensive instructions and information on performing a clean replacement of the ME Region while ensuring accuracy.
 
-1. From the main menu, select Patch > Replace Intel ME Region. An open file dialog will appear, allowing you to select the new ME region.
+1. From the main menu, select `Patch > Replace Intel ME Region`. An open file dialog will appear, allowing you to select the new ME region.
 
 2. After selecting the new ME region, the application will validate the file, and write the new region into the firmware. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
 
@@ -240,3 +241,13 @@ To fix the checksum, go to the main menu and select `Patch > Fix Fsys Checksum`.
 **Note:** This option is only available when a Message Authentication Code (MAC) is detected in the SVS NVRAM.
 
 To safely disable the EFI lock while retaining the Secure Variable Store (SVS), go to the main menu and select `Patch > Invalidate EFI Lock`. The application will invalidate the Message Authentication Code in each applicable store, write the updated data back to the firmware, and verify the changes were applied successfully. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
+
+## Write New SCfg Store (SOC)
+
+**Note:** If no SCfg store is detected in the target firmware, the application will automatically assign a base address of `0x28A000h` for the new store. Before proceeding, the application will verify that this region in the target firmware is clear of data (0xFF). If the region is not empty, the write operation will be refused.
+
+The application can extract the SCfg Store region from any SOC firmware (when available). To do this, open the desired firmware and, from the main menu, select `Export > Export SCfg Store`. A save dialog will appear, allowing you to export the SCfg store.
+
+1. From the main menu, select Patch > `Write new SCfg Store`. An open file dialog will appear, allowing you to select the new SCfg store.
+
+2. After selecting the new SCfg store, the application will validate the file, and write the new region into the firmware. Once the process is complete, a save dialog will appear, allowing you to export the modified firmware binary.
