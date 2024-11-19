@@ -19,7 +19,7 @@
 ### Enhancements
 - User interface improvements.
 - Reintroduced memory usage monitoring in the application.
-- Reintroduced the manual file (see [MANUAL.md](MANUAL.md)).
+- Reintroduced the manual file (see [MANUAL.md](MANUAL.md#application-manual)).
 - Reorganized menu items across the application.
   - 'Folders' menu buttons will no longer be disabled when no firmware is loaded.
 - Updated shortcut keys throughout the application.

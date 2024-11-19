@@ -126,6 +126,9 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             MemoryTracker.Instance.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
+
+            IFD.ClearRegionData();
+            EFIROM.ResetFirmwareBaseData();
         }
 
         private void frmEfiRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();

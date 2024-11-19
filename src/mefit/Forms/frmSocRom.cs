@@ -121,6 +121,8 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             MemoryTracker.Instance.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
+
+            SOCROM.ResetFirmwareBaseData();
         }
 
         private void frmSocRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();
