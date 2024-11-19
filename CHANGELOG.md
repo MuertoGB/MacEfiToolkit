@@ -23,7 +23,8 @@
 - Reorganized menu items across the application.
   - 'Folders' menu buttons will no longer be disabled when no firmware is loaded.
 - Updated shortcut keys throughout the application.
-  - Menus now display available shortcuts where applicable
+  - Menus now display available shortcuts where applicable.
+  - Available window shortcuts can be viewed in the manual.
 - Improved consistency of file names when exporting data.
 
 ### Misc
