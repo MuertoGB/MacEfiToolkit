@@ -88,11 +88,6 @@ namespace Mac_EFI_Toolkit
         internal static Font FONT_MDL2_REG_20;
         #endregion
 
-        #region Private Members
-        internal const int WM_NCLBUTTONDOWN = 0xA1;
-        internal const int HT_CAPTION = 0x2;
-        #endregion
-
         #region Main Entry Point
         [STAThread]
         static void Main(string[] args)
@@ -131,10 +126,9 @@ namespace Mac_EFI_Toolkit
             }
 
             // Assign loaded fonts to corresponding variables.
-            FONT_MDL2_REG_9 = fonts[0];
-            FONT_MDL2_REG_10 = fonts[1];
-            FONT_MDL2_REG_12 = fonts[2];
-            FONT_MDL2_REG_20 = fonts[3];
+            FONT_MDL2_REG_10 = fonts[0];
+            FONT_MDL2_REG_12 = fonts[1];
+            FONT_MDL2_REG_20 = fonts[2];
 
             // Initialize application settings.
             Settings.Initialize();
@@ -160,7 +154,6 @@ namespace Mac_EFI_Toolkit
         private static void HandleOnExitingCleanup()
         {
             // Dispose of memory fonts.
-            FONT_MDL2_REG_9?.Dispose();
             FONT_MDL2_REG_10?.Dispose();
             FONT_MDL2_REG_12?.Dispose();
             FONT_MDL2_REG_20?.Dispose();
@@ -367,7 +360,6 @@ namespace Mac_EFI_Toolkit
 
                 fonts = new[]
                 {
-                    new Font(loadedFont, 9.0F, FontStyle.Regular),
                     new Font(loadedFont, 10.0F, FontStyle.Regular),
                     new Font(loadedFont, 12.0F, FontStyle.Regular),
                     new Font(loadedFont, 20.0F, FontStyle.Regular)
