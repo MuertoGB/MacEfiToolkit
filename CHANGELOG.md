@@ -10,8 +10,25 @@
   <a href="#version-113">V1.1.3</a> •
   <a href="#version-114">V1.1.4</a> •
   <a href="#version-115">V1.1.5</a> •
-  <a href="#version-200">V2.0.0</a>
+  <a href="#version-200">V2.0.0</a> •
+  <a href="#version-201">V2.0.1</a> •
 </p>
+
+## Version 2.0.1
+
+### Enhancements
+- User interface improvements.
+- Reintroduced memory usage monitoring in the application.
+- Reintroduced the manual file (see [MANUAL.md](MANUAL.md#application-manual)).
+- Reorganized menu items across the application.
+  - 'Folders' menu buttons will no longer be disabled when no firmware is loaded.
+- Updated shortcut keys throughout the application.
+  - Menus now display available shortcuts where applicable.
+  - Available window shortcuts can be viewed in the manual.
+- Improved consistency of file names when exporting data.
+
+### Misc
+- Added missing menu item **'Open LZMA DXE Folder'** to the Startup and EFIROM windows.
 
 ## Version 2.0.0
 

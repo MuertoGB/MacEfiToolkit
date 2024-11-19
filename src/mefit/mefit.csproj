@@ -96,6 +96,7 @@
     <Compile Include="Firmware\Serial.cs" />
     <Compile Include="Forms\Prompts\Prompts.cs" />
     <Compile Include="Forms\Types\Enums.cs" />
+    <Compile Include="MemoryTracker.cs" />
     <Compile Include="UI\AccentColorHelper.cs" />
     <Compile Include="UI\BlurHelper.cs" />
     <Compile Include="UI\METForm.cs">

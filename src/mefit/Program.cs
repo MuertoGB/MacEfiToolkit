@@ -9,6 +9,7 @@ using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Forms;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -41,7 +42,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241115.0130";
+        internal const string APP_BUILD = "241119.0030";
         internal const string APP_CHANNEL = "Stable";
     }
 
@@ -51,6 +52,7 @@ namespace Mac_EFI_Toolkit
         internal const string DONATE = "https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ";
         internal const string EMAILME = "mailto:muertogb@proton.me";
         internal const string HOMEPAGE = "https://github.com/MuertoGB/MacEfiToolkit";
+        internal const string MANUAL = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md#application-manual";
         internal const string GH_ISSUE = "https://github.com/MuertoGB/MacEfiToolkit/issues";
         internal const string GH_LATEST = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
         internal const string VERSION_MANIFEST = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/stream/manifests/version.xml";
@@ -84,11 +86,6 @@ namespace Mac_EFI_Toolkit
         internal static Font FONT_MDL2_REG_10;
         internal static Font FONT_MDL2_REG_12;
         internal static Font FONT_MDL2_REG_20;
-        #endregion
-
-        #region Private Members
-        internal const int WM_NCLBUTTONDOWN = 0xA1;
-        internal const int HT_CAPTION = 0x2;
         #endregion
 
         #region Main Entry Point
@@ -129,10 +126,9 @@ namespace Mac_EFI_Toolkit
             }
 
             // Assign loaded fonts to corresponding variables.
-            FONT_MDL2_REG_9 = fonts[0];
-            FONT_MDL2_REG_10 = fonts[1];
-            FONT_MDL2_REG_12 = fonts[2];
-            FONT_MDL2_REG_20 = fonts[3];
+            FONT_MDL2_REG_10 = fonts[0];
+            FONT_MDL2_REG_12 = fonts[1];
+            FONT_MDL2_REG_20 = fonts[2];
 
             // Initialize application settings.
             Settings.Initialize();
@@ -142,8 +138,6 @@ namespace Mac_EFI_Toolkit
 
             // Ensure that required application directories exist; create them if they don't.
             EnsureDirectoriesExist();
-
-            Console.WriteLine($"Serial Validation Disabled: {Settings.ReadBool(SettingsBoolType.DisableSerialValidation)}");
 
             // Create the main window instance.
             MAIN_WINDOW = new frmStartup();
@@ -160,7 +154,6 @@ namespace Mac_EFI_Toolkit
         private static void HandleOnExitingCleanup()
         {
             // Dispose of memory fonts.
-            FONT_MDL2_REG_9?.Dispose();
             FONT_MDL2_REG_10?.Dispose();
             FONT_MDL2_REG_12?.Dispose();
             FONT_MDL2_REG_20?.Dispose();
@@ -367,7 +360,6 @@ namespace Mac_EFI_Toolkit
 
                 fonts = new[]
                 {
-                    new Font(loadedFont, 9.0F, FontStyle.Regular),
                     new Font(loadedFont, 10.0F, FontStyle.Regular),
                     new Font(loadedFont, 12.0F, FontStyle.Regular),
                     new Font(loadedFont, 20.0F, FontStyle.Regular)
@@ -409,13 +401,26 @@ namespace Mac_EFI_Toolkit
             e.Effect = DragDropEffects.None;
         }
 
-        internal static bool GetIsDebugMode()
+        internal static bool IsDebugMode()
         {
 #if DEBUG
             return true;
 #else
             return false;
 #endif
+        }
+
+        internal static bool IsRunningUnderWine()
+        {
+            IntPtr handle = NativeMethods.LoadLibrary("ntdll.dll");
+
+            if (handle == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            IntPtr wineVersionProc = NativeMethods.GetProcAddress(handle, "wine_get_version");
+            return wineVersionProc != IntPtr.Zero; // If this function exists, we're running under Wine.
         }
         #endregion
     }

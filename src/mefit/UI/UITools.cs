@@ -27,6 +27,9 @@ namespace Mac_EFI_Toolkit.UI
 
     class UITools
     {
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HT_CAPTION = 0x2;
+
         #region Flash ForeColor
         internal static async void FlashForecolor(Control control)
         {
@@ -183,7 +186,7 @@ namespace Mac_EFI_Toolkit.UI
         private static void StartDrag(Form form)
         {
             NativeMethods.ReleaseCapture();
-            NativeMethods.SendMessage(new HandleRef(form, form.Handle), Program.WM_NCLBUTTONDOWN, (IntPtr)Program.HT_CAPTION, IntPtr.Zero);
+            NativeMethods.SendMessage(new HandleRef(form, form.Handle), WM_NCLBUTTONDOWN, (IntPtr)HT_CAPTION, IntPtr.Zero);
         }
         #endregion
 

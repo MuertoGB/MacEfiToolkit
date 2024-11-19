@@ -303,19 +303,19 @@ namespace Mac_EFI_Toolkit
             "Backup SVS store verification failed";
 
         internal const string SCFG_IMPORT_CANCELLED =
-            "An Scfg store was not provided";
+            "An SCfg store was not provided";
 
         internal const string SERIAL_LEN_INVALID =
             "Serial length invalid";
 
         internal const string SCFG_REPLACE =
-            "Replace Scfg store";
+            "Replace SCfg store";
 
         internal const string SCFG_BASE_ADJUST =
-            "Scfg base not found - adjusted to";
+            "SCfg base not found - adjusted to";
 
         internal const string SCFG_LFB =
-            "Loading Scfg store from firmware buffer";
+            "Loading SCfg store from firmware buffer";
 
         internal const string SCFG_POS_INITIALIZED =
             "Cannot write to 0x28A000h (Length B8h) because initialized data is present";
@@ -386,7 +386,7 @@ namespace Mac_EFI_Toolkit
             "The provided file was not a valid T2 SOCROM.";
 
         internal const string SCFG_EXPORT_FAIL =
-            "Scfg Store export failed.";
+            "SCfg Store export failed.";
 
         internal const string ARCHIVE_EXPORT_FAIL =
             "Archive export failed.";
@@ -420,8 +420,8 @@ namespace Mac_EFI_Toolkit
         internal const string SVS =
             "SVS";
 
-        internal const string FSYS =
-            "FSYS";
+        internal const string FSYS_REGION =
+            "FSYS_REGION";
 
         internal const string ME_REGION =
             "ME_REGION";
@@ -483,9 +483,6 @@ namespace Mac_EFI_Toolkit
         internal const string MENU_TIP_OPEN =
             "Open a Mac EFI/BIOS";
 
-        internal const string MENU_TIP_RESET =
-            "Unload Firmware and Reset Window";
-
         internal const string MENU_TIP_COPY =
             "Open the Copy Menu";
 
@@ -496,10 +493,13 @@ namespace Mac_EFI_Toolkit
             "Open the Export Menu";
 
         internal const string MENU_TIP_PATCH =
-            "Open the Firmware Patching Menu";
+            "Open the Patch Menu";
 
-        internal const string MENU_TIP_OPTIONS =
-            "Open the Options Menu";
+        internal const string MENU_TIP_TOOLS =
+            "Open the Tools Menu";
+
+        internal const string MENU_TIP_HELP =
+            "Open the Help Menu";
 
         internal const string MENU_TIP_OPENFILELOCATION =
             "Open File Location";
@@ -527,14 +527,11 @@ namespace Mac_EFI_Toolkit
     internal class SOCSTRINGS
     {
         #region Strings
-        internal const string SCFG =
-            "SCFG";
+        internal const string SCFG_REGION =
+            "SCFG_REGION";
 
         internal const string MENU_TIP_OPEN =
            "Open a T2 SOCROM";
-
-        internal const string MENU_TIP_RESET =
-            "Unload Firmware and Reset Window";
 
         internal const string MENU_TIP_COPY =
             "Open the Copy Menu";
@@ -546,10 +543,13 @@ namespace Mac_EFI_Toolkit
             "Open the Export Menu";
 
         internal const string MENU_TIP_PATCH =
-            "Open the Firmware Patching Menu";
+            "Open the Patch Menu";
 
-        internal const string MENU_TIP_OPTIONS =
-            "Open the Options Menu";
+        internal const string MENU_TIP_TOOLS =
+            "Open the Tools Menu";
+
+        internal const string MENU_TIP_HELP =
+            "Open the Help Menu";
 
         internal const string MENU_TIP_OPENFILELOCATION =
             "Open File Location";
