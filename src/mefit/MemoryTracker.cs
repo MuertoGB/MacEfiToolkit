@@ -33,7 +33,6 @@ namespace Mac_EFI_Toolkit
             if (!_isWine)
             {
                 _usageTimer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(4));
-                return;
             }
         }
 
