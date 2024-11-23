@@ -5,9 +5,7 @@ Mac EFI Toolkit
 </h1>
 
 <div style="text-align:center;">
-  <kbd>
-    <img src="stream/images/application/efi.png" alt="EFI Image">
-  </kbd>
+  <img src="stream/images/application/efi.png" alt="EFI Image">
 </div>
 
 ## Table of Contents
