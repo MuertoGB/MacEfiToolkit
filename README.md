@@ -139,12 +139,12 @@ For more direct support, you can contact me via [email](mailto:muertogb@proton.m
     - Created and modified date
     - iBoot version
     - **Model Information**
-      - Scfg store details
+      - SCfg store details
       - System serial number
       - System config code
       - System order number
   - Edit the serial number
-  - Export and replace the Scfg store
+  - Export and replace the SCfg store
   - Export firmware information to a text file
 
 ## Acknowledgements

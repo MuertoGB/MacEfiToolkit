@@ -15,7 +15,7 @@
   <a href="#version-202">V2.0.2</a>
 </p>
 
-## Version 2.0.1
+## Version 2.0.2
 
 ### Enhancements
 - User interface improvements.
