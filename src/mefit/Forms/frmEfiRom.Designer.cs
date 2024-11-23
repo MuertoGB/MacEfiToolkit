@@ -1055,9 +1055,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblParseTime
             // 
             this.lblParseTime.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.lblParseTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.lblParseTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblParseTime.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblParseTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.lblParseTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
             this.lblParseTime.Location = new System.Drawing.Point(10, 7);
             this.lblParseTime.Margin = new System.Windows.Forms.Padding(0, 0, 4, 0);
             this.lblParseTime.Name = "lblParseTime";
@@ -1980,7 +1981,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsHelp";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 156);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 128);
             // 
             // manualToolStripMenuItem
             // 

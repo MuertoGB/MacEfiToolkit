@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.UI;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
@@ -36,11 +37,8 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Window Events
-        private void frmAbout_Load(object sender, EventArgs e)
-        {
-            lblBuild.Text = $"{Application.ProductVersion}.{METVersion.APP_BUILD} ({METVersion.APP_CHANNEL})";
-            lblChannel.Text = $"{APPSTRINGS.LZMA_SDK} {METVersion.LZMA_SDK}";
-        }
+        private void frmAbout_Load(object sender, EventArgs e) =>
+            lblBuild.Text = $"Mac EFI Toolkit v{Application.ProductVersion} by Muerto\r\nBuild {METVersion.APP_BUILD}\r\nLZMA SDK {METVersion.LZMA_SDK}";
         #endregion
 
         #region KeyDown Events
@@ -55,6 +53,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e) => Close();
+        #endregion
+
+        #region LinkLabel Events
+        private void lnkPaypal_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => Process.Start(METUrl.DONATE);
         #endregion
 
         #region UI Events
