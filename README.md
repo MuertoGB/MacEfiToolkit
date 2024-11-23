@@ -4,9 +4,9 @@
 Mac EFI Toolkit
 </h1>
 
-<div style="text-align:center;">
-  <img src="stream/images/application/efi.png" alt="EFI Image">
-</div>
+<p align="center" width="100%">
+    <img width="75%" src="stream/images/application/efi.png">
+</p>
 
 ## Table of Contents
 1. [Intoduction](#introduction)
