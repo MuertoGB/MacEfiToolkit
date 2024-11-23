@@ -12,7 +12,13 @@
   <a href="#version-115">V1.1.5</a> •
   <a href="#version-200">V2.0.0</a> •
   <a href="#version-201">V2.0.1</a> •
+  <a href="#version-202">V2.0.2</a>
 </p>
+
+## Version 2.0.1
+
+### Enhancements
+- User interface improvements.
 
 ## Version 2.0.1
 

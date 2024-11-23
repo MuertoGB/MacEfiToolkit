@@ -42,7 +42,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct METVersion
     {
         internal const string LZMA_SDK = "24.08";
-        internal const string APP_BUILD = "241119.0030";
+        internal const string APP_BUILD = "241123.0210";
         internal const string APP_CHANNEL = "Stable";
     }
 
@@ -51,6 +51,7 @@ namespace Mac_EFI_Toolkit
         internal const string CHANGELOG = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
         internal const string DONATE = "https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ";
         internal const string EMAILME = "mailto:muertogb@proton.me";
+        internal const string FLEXBV5 = "https://pldaniels.com/flexbv5/";
         internal const string HOMEPAGE = "https://github.com/MuertoGB/MacEfiToolkit";
         internal const string MANUAL = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/MANUAL.md#application-manual";
         internal const string GH_ISSUE = "https://github.com/MuertoGB/MacEfiToolkit/issues";
@@ -82,7 +83,6 @@ namespace Mac_EFI_Toolkit
         internal const string GLYPH_ACCOUNT = "\uE910";
         internal const string NOWRAP_SPACE = "\u00A0";
 
-        internal static Font FONT_MDL2_REG_9;
         internal static Font FONT_MDL2_REG_10;
         internal static Font FONT_MDL2_REG_12;
         internal static Font FONT_MDL2_REG_20;

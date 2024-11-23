@@ -4,6 +4,12 @@
 Mac EFI Toolkit
 </h1>
 
+<div style="text-align:center;">
+  <kbd>
+    <img src="stream/images/application/efi.png" alt="EFI Image">
+  </kbd>
+</div>
+
 ## Table of Contents
 1. [Intoduction](#introduction)
 2. [System Requirements](#system-requirements)

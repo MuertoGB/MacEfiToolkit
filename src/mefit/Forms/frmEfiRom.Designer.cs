@@ -1444,7 +1444,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // cmsCopy
             // 
-            this.cmsCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsCopy.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmsCopy.ForeColor = System.Drawing.Color.White;
             this.cmsCopy.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1658,7 +1658,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // cmsTools
             // 
-            this.cmsTools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsTools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsTools.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsTools.ForeColor = System.Drawing.Color.White;
             this.cmsTools.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1724,7 +1724,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // cmsExport
             // 
-            this.cmsExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsExport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsExport.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsExport.ForeColor = System.Drawing.Color.White;
             this.cmsExport.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1814,7 +1814,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // cmsPatch
             // 
-            this.cmsPatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsPatch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsPatch.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsPatch.ForeColor = System.Drawing.Color.White;
             this.cmsPatch.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1828,7 +1828,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.invalidateEFILockToolStripMenuItem});
             this.cmsPatch.Name = "cmsPatch";
             this.cmsPatch.ShowImageMargin = false;
-            this.cmsPatch.Size = new System.Drawing.Size(241, 206);
+            this.cmsPatch.Size = new System.Drawing.Size(241, 178);
             // 
             // changeSerialNumberToolStripMenuItem
             // 
@@ -1886,7 +1886,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // cmsFolders
             // 
-            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsFolders.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsFolders.ForeColor = System.Drawing.Color.White;
             this.cmsFolders.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1967,7 +1967,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // cmsHelp
             // 
-            this.cmsHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsHelp.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsHelp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cmsHelp.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1980,7 +1980,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsHelp";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 128);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 156);
             // 
             // manualToolStripMenuItem
             // 

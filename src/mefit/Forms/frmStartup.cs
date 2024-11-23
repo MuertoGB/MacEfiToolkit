@@ -274,6 +274,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void emailMeToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.EMAILME);
 
+        private void flexBVToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.FLEXBV5);
+
         private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_ISSUE);
 
         private void homepageToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.HOMEPAGE);

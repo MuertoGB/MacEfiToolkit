@@ -20,7 +20,7 @@ namespace Mac_EFI_Toolkit
 
     class Logger
     {
-        public static void Write(string logMessage, LogType logType)
+        public static void WriteLine(string logMessage, LogType logType)
         {
             string logFilePath;
 
@@ -43,10 +43,10 @@ namespace Mac_EFI_Toolkit
         }
 
         internal static void WriteErrorLine(string methodName, Type exceptionType, string message) =>
-            Logger.Write($"{methodName} - {exceptionType.Name}: {message}", LogType.Application);
+            Logger.WriteLine($"{methodName} - {exceptionType.Name}: {message}", LogType.Application);
 
-        internal static void WritePatchLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
-            Logger.Write($"{methodName}: {logText}", LogType.Application);
+        internal static void WriteCallerLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
+            Logger.WriteLine($"{methodName}: {logText}", LogType.Application);
 
         internal static void OpenLogFile(Form owner)
         {

@@ -1154,12 +1154,12 @@ namespace Mac_EFI_Toolkit.Forms
         #region Write Serial
         private void WriteSocromSerialNumber(string serial)
         {
-            Logger.WritePatchLine(LOGSTRINGS.PATCH_START);
+            Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
 
             // Check serial length.
             if (serial.Length != SOCROM.SERIAL_LEN)
             {
-                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SERIAL_LEN_INVALID} ({serial.Length})");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SERIAL_LEN_INVALID} ({serial.Length})");
                 NotifyPatchingFailure();
                 return;
             }
@@ -1167,23 +1167,23 @@ namespace Mac_EFI_Toolkit.Forms
             // Check if the SerialBase exists.
             if (SOCROM.ScfgSectionData.SerialBase == -1)
             {
-                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_BASE_NOT_FOUND}");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_BASE_NOT_FOUND}");
                 NotifyPatchingFailure();
                 return;
             }
 
             // Create buffers.
-            Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
+            Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
             byte[] binaryBuffer = BinaryTools.CloneBuffer(SOCROM.LoadedBinaryBuffer);
             byte[] newSerialBytes = Encoding.UTF8.GetBytes(serial);
 
             // Overwrite serial in the binary buffer.
-            Logger.WritePatchLine(LOGSTRINGS.SSN_WTB);
+            Logger.WriteCallerLine(LOGSTRINGS.SSN_WTB);
 
             BinaryTools.OverwriteBytesAtBase(binaryBuffer, SOCROM.ScfgSectionData.SerialBase, newSerialBytes);
 
-            Logger.WritePatchLine(LOGSTRINGS.SCFG_LFB);
+            Logger.WriteCallerLine(LOGSTRINGS.SCFG_LFB);
 
             // Load patched scfg from the binary buffer.
             ScfgStore scfgStoreFromBuffer = SOCROM.GetSCfgData(binaryBuffer, false);
@@ -1191,15 +1191,15 @@ namespace Mac_EFI_Toolkit.Forms
             // Verify the serial was written correctly.
             if (!string.Equals(serial, scfgStoreFromBuffer.Serial))
             {
-                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_NOT_WRITTEN}");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_NOT_WRITTEN}");
                 NotifyPatchingFailure();
                 return;
             }
 
-            Logger.WritePatchLine(LOGSTRINGS.SSN_WRITE_SUCCESS);
+            Logger.WriteCallerLine(LOGSTRINGS.SSN_WRITE_SUCCESS);
 
             // Log success and prompt for saving the patched firmware.
-            Logger.WritePatchLine(LOGSTRINGS.PATCH_SUCCESS);
+            Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
 
             if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
@@ -1207,20 +1207,20 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
+            Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
         }
         #endregion
 
         #region Write Scfg Store
         private void WriteScfgStore()
         {
-            Logger.WritePatchLine(LOGSTRINGS.PATCH_START);
+            Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
 
             using (OpenFileDialog openFileDialog = CreateScfgOpenFileDialog())
             {
                 if (openFileDialog.ShowDialog() != DialogResult.OK)
                 {
-                    Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SCFG_IMPORT_CANCELLED}");
+                    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SCFG_IMPORT_CANCELLED}");
                     return;
                 }
                 // Check the SOCROM contains a store, otherwise set the base address.
@@ -1232,11 +1232,11 @@ namespace Mac_EFI_Toolkit.Forms
                 if (scfgBase == -1)
                 {
                     bScfgFound = false;
-                    Logger.WritePatchLine($"{LOGSTRINGS.SCFG_BASE_ADJUST} {SOCROM.SCFG_EXPECTED_BASE:X}h");
+                    Logger.WriteCallerLine($"{LOGSTRINGS.SCFG_BASE_ADJUST} {SOCROM.SCFG_EXPECTED_BASE:X}h");
                     scfgBase = SOCROM.SCFG_EXPECTED_BASE;
                 }
 
-                Logger.WritePatchLine(LOGSTRINGS.CREATING_BUFFERS);
+                Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
                 byte[] scfgBuffer = File.ReadAllBytes(openFileDialog.FileName);
                 byte[] binaryBuffer = BinaryTools.CloneBuffer(SOCROM.LoadedBinaryBuffer);
@@ -1255,14 +1255,14 @@ namespace Mac_EFI_Toolkit.Forms
                     {
                         if (writeBuffer[i] != 0xFF)
                         {
-                            Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SCFG_POS_INITIALIZED}");
+                            Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SCFG_POS_INITIALIZED}");
                             NotifyPatchingFailure();
                             return;
                         }
                     }
                 }
 
-                Logger.Write(LOGSTRINGS.WRITE_NEW_DATA, LogType.Application);
+                Logger.WriteLine(LOGSTRINGS.WRITE_NEW_DATA, LogType.Application);
 
                 // Overwrite Scfg store in the binary buffer.
                 BinaryTools.OverwriteBytesAtBase(binaryBuffer, scfgBase, scfgBuffer);
@@ -1273,12 +1273,12 @@ namespace Mac_EFI_Toolkit.Forms
                 // Check store was written successfully.
                 if (!BinaryTools.ByteArraysMatch(scfgTempStore.ScfgBytes, scfgBuffer))
                 {
-                    Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_COMP_FAILED}");
+                    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_COMP_FAILED}");
                     NotifyPatchingFailure();
                     return;
                 }
 
-                Logger.WritePatchLine(LOGSTRINGS.PATCH_SUCCESS);
+                Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
 
                 if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
                 {
@@ -1286,7 +1286,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
+                Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
             }
         }
 
@@ -1306,7 +1306,7 @@ namespace Mac_EFI_Toolkit.Forms
             // A serialized Scfg store should be B8h, 184 bytes length.
             if (scfgBuffer.Length != SOCROM.SCFG_EXPECTED_LEN)
             {
-                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {SOCROM.SCFG_EXPECTED_LEN:X}h ({scfgBuffer.Length:X}h)");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {SOCROM.SCFG_EXPECTED_LEN:X}h ({scfgBuffer.Length:X}h)");
 
                 NotifyPatchingFailure();
                 return false;
@@ -1315,12 +1315,12 @@ namespace Mac_EFI_Toolkit.Forms
             // Expect scfg signature at address 0h.
             if (scfgBase != 0)
             {
-                Logger.WritePatchLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_SIG_MISALIGNED}");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_SIG_MISALIGNED}");
                 NotifyPatchingFailure();
                 return false;
             }
 
-            Logger.WritePatchLine(LOGSTRINGS.VALIDATION_PASS);
+            Logger.WriteCallerLine(LOGSTRINGS.VALIDATION_PASS);
 
             return true;
         }
@@ -1346,13 +1346,13 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
                 {
-                    Logger.WritePatchLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
+                    Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
                     return;
                 }
 
                 if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, binaryBuffer) && File.Exists(saveFileDialog.FileName))
                 {
-                    Logger.WritePatchLine($"{LOGSTRINGS.FILE_SAVE_SUCCESS} {saveFileDialog.FileName}");
+                    Logger.WriteCallerLine($"{LOGSTRINGS.FILE_SAVE_SUCCESS} {saveFileDialog.FileName}");
 
                     DialogResult result =
                         METPrompt.Show(

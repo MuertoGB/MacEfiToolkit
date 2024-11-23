@@ -73,7 +73,7 @@ namespace Mac_EFI_Toolkit.Tools
 
                     if (!string.IsNullOrEmpty(configCode))
                     {
-                        Logger.Write(
+                        Logger.WriteLine(
                             $"'{hwConfig}' not present in local db > support-sp server returned: '{configCode}'",
                             LogType.Database
                         );

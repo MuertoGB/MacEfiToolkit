@@ -49,6 +49,7 @@
             this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.emailMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flexBVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homepageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -361,7 +362,7 @@
             // 
             // cmsHelp
             // 
-            this.cmsHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsHelp.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsHelp.ForeColor = System.Drawing.Color.White;
             this.cmsHelp.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -369,6 +370,7 @@
             this.changelogToolStripMenuItem,
             this.donateToolStripMenuItem,
             this.emailMeToolStripMenuItem,
+            this.flexBVToolStripMenuItem,
             this.githubIssuesToolStripMenuItem,
             this.homepageToolStripMenuItem,
             this.manualToolStripMenuItem,
@@ -380,7 +382,7 @@
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsMore";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 296);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 352);
             // 
             // changelogToolStripMenuItem
             // 
@@ -406,6 +408,13 @@
             this.emailMeToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.emailMeToolStripMenuItem.Text = "Email Me";
             this.emailMeToolStripMenuItem.Click += new System.EventHandler(this.emailMeToolStripMenuItem_Click);
+            // 
+            // flexBVToolStripMenuItem
+            // 
+            this.flexBVToolStripMenuItem.Name = "flexBVToolStripMenuItem";
+            this.flexBVToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
+            this.flexBVToolStripMenuItem.Text = "FlexBV5";
+            this.flexBVToolStripMenuItem.Click += new System.EventHandler(this.flexBVToolStripMenuItem_Click);
             // 
             // githubIssuesToolStripMenuItem
             // 
@@ -480,7 +489,7 @@
             // 
             // cmsFolders
             // 
-            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsFolders.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsFolders.ForeColor = System.Drawing.Color.White;
             this.cmsFolders.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -570,7 +579,7 @@
             // 
             // cmsOptions
             // 
-            this.cmsOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.cmsOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cmsOptions.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsOptions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cmsOptions.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -612,6 +621,7 @@
             // 
             // restartApplicationToolStripMenuItem
             // 
+            this.restartApplicationToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.restartApplicationToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.restartApplicationToolStripMenuItem.Name = "restartApplicationToolStripMenuItem";
             this.restartApplicationToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -705,5 +715,6 @@
         private System.Windows.Forms.ToolStripMenuItem openLZMADXEFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem flexBVToolStripMenuItem;
     }
 }

@@ -181,7 +181,7 @@ namespace Mac_EFI_Toolkit
 
             if (!settingsIni.SectionExists(section))
             {
-                Logger.Write(
+                Logger.WriteLine(
                     $"SettingsGetBool: Section '{section}' was missing and created automatically.",
                     LogType.Application);
 
@@ -197,7 +197,7 @@ namespace Mac_EFI_Toolkit
 
             if (!settingsIni.KeyExists(section, key))
             {
-                Logger.Write(
+                Logger.WriteLine(
                     $"ReadBool (Settings): Key '{key}' was missing and created automatically.",
                     LogType.Application);
 
@@ -237,7 +237,7 @@ namespace Mac_EFI_Toolkit
 
             if (!settingsIni.SectionExists(section))
             {
-                Logger.Write(
+                Logger.WriteLine(
                     $"ReadString (Settings): Section '{section}' was missing and created automatically.",
                     LogType.Application);
 
@@ -253,7 +253,7 @@ namespace Mac_EFI_Toolkit
 
             if (!settingsIni.KeyExists(section, key))
             {
-                Logger.Write(
+                Logger.WriteLine(
                     $"ReadString (Settings): Key '{key}' was missing and created automatically.",
                     LogType.Application);
 
@@ -316,7 +316,7 @@ namespace Mac_EFI_Toolkit
                 }
                 else
                 {
-                    Logger.Write(
+                    Logger.WriteLine(
                         $" SetBool (Settings): {section} > {key} > Key not found, setting was not written.",
                         LogType.Application);
                 }
@@ -360,7 +360,7 @@ namespace Mac_EFI_Toolkit
             }
             else
             {
-                Logger.Write(
+                Logger.WriteLine(
                     $"SetString (Settings): {section} > {key} > Key not found, setting was not written.",
                     LogType.Application);
             }
