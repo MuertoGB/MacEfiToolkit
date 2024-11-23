@@ -56,7 +56,7 @@ To run **Mac EFI Toolkit** on Linux or macOS using Wine, follow these steps:
 
 1. **Install [Wine](https://gitlab.winehq.org/wine/wine/-/wikis/home)** to your Operating System.
 2. Open the terminal and run the command `winecfg`. This will open the Wine configuration window. Then, navigate to the **'Graphics'** tab and change the **'Screen resolution'** to **120 dpi**.
-3. Download all four required fonts from [here](stream/fonts). After downloading, navigate to `Home\.wine\drive_c\windows\Fonts` and copy the downloaded fonts into this folder.
+3. Download the font pack archive from [here](stream/fonts). After downloading, navigate to `Home\.wine\drive_c\windows\Fonts`. Extract the downloaded font pack archive and copy the fonts into this folder.
 
 Once these steps are completed, you should be able to run **Mac EFI Toolkit** under Wine.
 
