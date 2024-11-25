@@ -14,18 +14,18 @@ namespace Mac_EFI_Toolkit.Common
 {
     class IniFile
     {
-        private readonly string _strFilePath;
+        private readonly string _strFilepath;
         private const int MAX_BUFFER = 32767;
 
-        internal IniFile(string filePath) => this._strFilePath = filePath;
+        internal IniFile(string filepath) => this._strFilepath = filepath;
 
-        internal void Write(string section, string key, string value) => NativeMethods.WritePrivateProfileString(section, key, value, _strFilePath);
+        internal void Write(string section, string key, string value) => NativeMethods.WritePrivateProfileString(section, key, value, _strFilepath);
 
         internal void WriteSection(string section)
         {
-            using (StreamWriter writer = new StreamWriter(_strFilePath, true))
+            using (StreamWriter streamWriter = new StreamWriter(_strFilepath, true))
             {
-                writer.WriteLine($"[{section}]");
+                streamWriter.WriteLine($"[{section}]");
             }
         }
 
@@ -33,7 +33,7 @@ namespace Mac_EFI_Toolkit.Common
         {
             StringBuilder stringBuilder = new StringBuilder(255);
 
-            NativeMethods.GetPrivateProfileString(section, key, defaultValue, stringBuilder, 255, _strFilePath);
+            NativeMethods.GetPrivateProfileString(section, key, defaultValue, stringBuilder, 255, _strFilepath);
 
             return stringBuilder.ToString();
         }
@@ -44,13 +44,13 @@ namespace Mac_EFI_Toolkit.Common
 
         internal bool SectionExists(string section)
         {
-            string[] sectionNames = GetSectionNames(_strFilePath);
+            string[] arrSectionNames = GetSectionNames(_strFilepath);
 
-            if (sectionNames != null)
+            if (arrSectionNames != null)
             {
-                foreach (string s in sectionNames)
+                foreach (string strSection in arrSectionNames)
                 {
-                    if (s == section)
+                    if (strSection == section)
                     {
                         return true;
                     }
@@ -62,16 +62,16 @@ namespace Mac_EFI_Toolkit.Common
 
         internal bool KeyExists(string section, string key)
         {
-            string[] keyNames = GetSectionKeys(section, _strFilePath);
+            string[] arrKeyNames = GetSectionKeys(section, _strFilepath);
 
-            if (keyNames == null)
+            if (arrKeyNames == null)
             {
                 return false;
             }
 
-            foreach (string s in keyNames)
+            foreach (string strKey in arrKeyNames)
             {
-                if (s == key)
+                if (strKey == key)
                 {
                     return true;
                 }
@@ -82,78 +82,75 @@ namespace Mac_EFI_Toolkit.Common
 
         internal static string[] GetSectionNames(string lpFileName)
         {
-            IntPtr lpszReturnBuffer = IntPtr.Zero;
-
             try
             {
-                lpszReturnBuffer = Marshal.AllocCoTaskMem(MAX_BUFFER);
+                string strUnicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSectionNames(buffer, MAX_BUFFER, lpFileName));
 
-                uint data = NativeMethods.GetPrivateProfileSectionNames(lpszReturnBuffer, MAX_BUFFER, lpFileName);
-
-                if (data == 0)
+                if (strUnicode == null)
                 {
+                    Logger.WriteCallerLine(nameof(GetSectionNames), "No section names found.");
                     return null;
                 }
 
-                string unicodeString = Marshal.PtrToStringUni(lpszReturnBuffer, (int)data);
-
-                return unicodeString.Substring(0, unicodeString.Length - 1).Split('\0');
+                return strUnicode.Substring(0, strUnicode.Length - 1).Split('\0');
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLine(nameof(GetSectionNames), e.GetType(), e.Message);
                 return null;
             }
-            finally
-            {
-                if (lpszReturnBuffer != IntPtr.Zero)
-                {
-                    Marshal.FreeCoTaskMem(lpszReturnBuffer);
-                }
-            }
         }
 
         internal static string[] GetSectionKeys(string lpAppName, string lpFileName)
         {
-            IntPtr lpReturnedString = IntPtr.Zero;
-
             try
             {
-                lpReturnedString = Marshal.AllocCoTaskMem(MAX_BUFFER);
+                string strUnicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSection(lpAppName, buffer, MAX_BUFFER, lpFileName));
 
-                uint data = NativeMethods.GetPrivateProfileSection(lpAppName, lpReturnedString, MAX_BUFFER, lpFileName);
-
-                if (data == 0)
+                if (strUnicode == null)
                 {
+                    Logger.WriteCallerLine(nameof(GetSectionKeys), "No section keys found.");
                     return null;
                 }
 
-                string unicodeString = Marshal.PtrToStringUni(lpReturnedString, (int)data);
+                string[] arrKeys = strUnicode.Substring(0, strUnicode.Length - 1).Split('\0');
 
-                string[] keys = unicodeString.Substring(0, unicodeString.Length - 1).Split('\0');
-
-                for (int i = 0; i < keys.Length; i++)
+                for (int i = 0; i < arrKeys.Length; i++)
                 {
-                    int separatorIndex = keys[i].IndexOf('=');
-
-                    if (separatorIndex != -1)
-                    {
-                        keys[i] = keys[i].Substring(0, separatorIndex);
-                    }
+                    int iIndex = arrKeys[i].IndexOf('=');
+                    arrKeys[i] = iIndex != -1 ? arrKeys[i].Substring(0, iIndex) : arrKeys[i];
                 }
 
-                return keys;
+                return arrKeys;
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLine(nameof(GetSectionKeys), e.GetType(), e.Message);
                 return null;
             }
+        }
+
+        private static string ReadBuffer(Func<IntPtr, uint> nativeMethod)
+        {
+            IntPtr buffer = IntPtr.Zero;
+
+            try
+            {
+                buffer = Marshal.AllocCoTaskMem(MAX_BUFFER);
+                uint uiData = nativeMethod(buffer);
+
+                if (uiData == 0)
+                {
+                    return null;
+                }
+
+                return Marshal.PtrToStringUni(buffer, (int)uiData);
+            }
             finally
             {
-                if (lpReturnedString != IntPtr.Zero)
+                if (buffer != IntPtr.Zero)
                 {
-                    Marshal.FreeCoTaskMem(lpReturnedString);
+                    Marshal.FreeCoTaskMem(buffer);
                 }
             }
         }

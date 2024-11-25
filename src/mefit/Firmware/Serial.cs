@@ -42,70 +42,69 @@ namespace Mac_EFI_Toolkit.Firmware
         //                              Valid codes are stored in the 'yearAndWeekCodes12' HashSet.
         //    - EEE  = Unique Device Identifier (3 characters): Typically, a unique identifier for the device model.
         //    - FFFF = Hardware Configuration (4 characters): Represents the hardware configuration or variant.
-        internal static bool IsValid(string serialNumber)
+        internal static bool IsValid(string serial)
         {
             // Check for valid length (11 or 12 characters).
-            if (serialNumber.Length != 11 && serialNumber.Length != 12)
+            if (serial.Length != 11 && serial.Length != 12)
             {
                 return false;
             }
 
             // Validate accepted chars.
-            if (!IsValidChars(serialNumber))
+            if (!IsValidChars(serial))
             {
                 return false;
             }
 
             // Validate factory code.
-            if (!IsValidCode(serialNumber.Substring(0, 2), factoryCodes))
+            if (!IsValidCode(serial.Substring(0, 2), _hsFactoryCodes))
             {
                 return false;
             }
 
             // Determine and validate the year and week codes based on serial length.
-            return serialNumber.Length == 11 ? IsValid11CharSerial(serialNumber) : IsValid12CharSerial(serialNumber);
+            return serial.Length == 11 ? IsValid11CharSerial(serial) : IsValid12CharSerial(serial);
         }
 
-        private static bool IsValid11CharSerial(string serialNumber)
+        private static bool IsValid11CharSerial(string serial)
         {
             // Check if the last three digits are the same.
-            if (serialNumber.Substring(8, 3) == new string(serialNumber[8], 3))
+            if (serial.Substring(8, 3) == new string(serial[8], 3))
             {
                 return false;
             }
 
-            string yearCode = serialNumber.Substring(2, 1);
-            string weekCode = serialNumber.Substring(3, 2);
+            string strYearCode = serial.Substring(2, 1);
+            string strWeekCode = serial.Substring(3, 2);
 
-            return IsValidCode(yearCode, yearCodes11) && IsValidCode(weekCode, weekCodes11);
+            return IsValidCode(strYearCode, _hsYearCodes11) && IsValidCode(strWeekCode, _hsWeekCodes11);
         }
 
-        private static bool IsValid12CharSerial(string serialNumber)
+        private static bool IsValid12CharSerial(string serial)
         {
             // Check if the last four digits are the same.
-            if (serialNumber.Substring(8, 4) == new string(serialNumber[8], 4))
+            if (serial.Substring(8, 4) == new string(serial[8], 4))
             {
                 return false;
             }
 
-            string yearCode = serialNumber.Substring(3, 1);
-            string weekCode = serialNumber.Substring(4, 1);
+            string strYearCode = serial.Substring(3, 1);
+            string strWeekCode = serial.Substring(4, 1);
 
-            return IsValidCode(yearCode, yearCodes12) && IsValidCode(weekCode, weekCodes12);
+            return IsValidCode(strYearCode, _hsYearCodes12) && IsValidCode(strWeekCode, _hsWeekCodes12);
         }
 
-        private static bool IsValidCode(string code, HashSet<string> knownCodes)
+        private static bool IsValidCode(string code, HashSet<string> knowncodes)
         {
-            return knownCodes.Contains(code);
+            return knowncodes.Contains(code);
         }
-
         #endregion
 
         #region Hashsets
         // These hashsets were built on information from:
         // https://forums.macrumors.com/threads/decoding-apple-serials-where-when-hardware-was-assembled-1983-2021-and-apple-model-numbers-1977-present.2310423/
         // All credit for the hashsets goes to the author (B S Magnet).
-        private static readonly HashSet<string> factoryCodes = new HashSet<string>
+        private static readonly HashSet<string> _hsFactoryCodes = new HashSet<string>
         {
             "16", "17", "1B", "1C", "1E", "1G", "1L", "1M", "1O", "1P", "1X", "2A", "2C", "2D", "2O", "2Z",
             "32", "3B", "3K", "41", "44", "4H", "4J", "4R", "4X", "5K", "5P", "5U", "6C", "6F", "6U", "7J",
@@ -126,12 +125,12 @@ namespace Mac_EFI_Toolkit.Firmware
             "ZX", "ZZ"
         };
 
-        private static readonly HashSet<string> yearCodes11 = new HashSet<string>
+        private static readonly HashSet<string> _hsYearCodes11 = new HashSet<string>
         {
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
         };
 
-        private static readonly HashSet<string> weekCodes11 = new HashSet<string>
+        private static readonly HashSet<string> _hsWeekCodes11 = new HashSet<string>
         {
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16",
             "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32",
@@ -139,13 +138,13 @@ namespace Mac_EFI_Toolkit.Firmware
             "49", "50", "51", "52", "53"
         };
 
-        private static readonly HashSet<string> yearCodes12 = new HashSet<string>
+        private static readonly HashSet<string> _hsYearCodes12 = new HashSet<string>
         {
             "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y",
             "Z"
         };
 
-        private static readonly HashSet<string> weekCodes12 = new HashSet<string>
+        private static readonly HashSet<string> _hsWeekCodes12 = new HashSet<string>
         {
             "1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N",
             "P", "Q", "R", "T", "V", "W", "X", "Y"

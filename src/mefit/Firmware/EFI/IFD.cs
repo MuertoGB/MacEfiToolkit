@@ -16,58 +16,55 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #region Internal Members
         internal const uint DESCRIPTOR_BASE = 0; // 0h
         internal const uint DESCRIPTOR_LENGTH = 4096; // 1000h
-        internal const int IFD_SIG_LENGTH = 4;
-
-        internal static uint BIOS_REGION_BASE, BIOS_REGION_LIMIT, BIOS_REGION_SIZE = 0;
-        internal static uint ME_REGION_BASE, ME_REGION_LIMIT, ME_REGION_SIZE = 0;
-        internal static uint PDR_REGION_BASE, PDR_REGION_LIMIT, PDR_REGION_SIZE = 0;
-
+        internal const uint IFD_SIG_LENGTH = 4;
+        internal static uint BiosBase, BiosLimit, BiosSize = 0;
+        internal static uint MeBase, MeLimit, MeSize = 0;
+        internal static uint PdrBase, PdrLimit, PdrSize = 0;
         internal static bool IsDescriptorMode = false;
-
-        internal static readonly byte[] FLASH_DESC_SIGNATURE = { 0x5A, 0xA5, 0xF0, 0x0F };
+        internal static readonly byte[] FlashDecriptorMarker = { 0x5A, 0xA5, 0xF0, 0x0F };
         #endregion
 
-        internal static uint CalculateRegionBase(ushort basePosition)
+        internal static uint CalculateRegionBase(ushort baseposition)
         {
             // For example:
             // BIOS Base:  LE: 3701h > 137h * 1000h = A bios base of 137000h.
-            return basePosition * DESCRIPTOR_LENGTH;
+            return baseposition * DESCRIPTOR_LENGTH;
         }
 
-        internal static uint CalculateRegionSize(ushort basePosition, ushort limitPosition)
+        internal static uint CalculateRegionSize(ushort baseposition, ushort limitposition)
         {
             // For example:
             // BIOS Size: LE: FF07h > (7FFh + 1) = 800h * 1000h - LE: 3701h > 137h * 1000h = 6C9000h.
-            if (limitPosition != 0)
+            if (limitposition != 0)
             {
-                return (uint)(limitPosition + 1 - basePosition) * DESCRIPTOR_LENGTH;
+                return (uint)(limitposition + 1 - baseposition) * DESCRIPTOR_LENGTH;
             }
 
             return 0;
         }
 
-        internal static void ParseRegionData(byte[] sourceBytes)
+        internal static void ParseRegionData(byte[] sourcebuffer)
         {
-            byte[] descriptorBytes = BinaryTools.GetBytesBaseLength(sourceBytes, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
-            DescriptorHeader header = DeserializeStruct<DescriptorHeader>(descriptorBytes, 0);
+            byte[] bDescriptor = BinaryTools.GetBytesBaseLength(sourcebuffer, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
+            DescriptorHeader desHeader = DeserializeStruct<DescriptorHeader>(bDescriptor, 0);
 
-            IsDescriptorMode = header.Tag.SequenceEqual(FLASH_DESC_SIGNATURE);
+            IsDescriptorMode = desHeader.Tag.SequenceEqual(FlashDecriptorMarker);
 
             if (IsDescriptorMode)
             {
-                DescriptorMap map = DeserializeStruct<DescriptorMap>(descriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)));
-                DescriptorRegions regions = DeserializeStruct<DescriptorRegions>(descriptorBytes, map.RegionBase << 4);
+                DescriptorMap desMap = DeserializeStruct<DescriptorMap>(bDescriptor, Marshal.SizeOf(typeof(DescriptorHeader)));
+                DescriptorRegions desRegions = DeserializeStruct<DescriptorRegions>(bDescriptor, desMap.RegionBase << 4);
 
-                ParseRegion(regions.BiosBase, regions.BiosLimit, sourceBytes.Length, out BIOS_REGION_BASE, out BIOS_REGION_LIMIT, out BIOS_REGION_SIZE);
-                ParseRegion(regions.MeBase, regions.MeLimit, sourceBytes.Length, out ME_REGION_BASE, out ME_REGION_LIMIT, out ME_REGION_SIZE);
-                ParseRegion(regions.PdrBase, regions.PdrLimit, sourceBytes.Length, out PDR_REGION_BASE, out PDR_REGION_LIMIT, out PDR_REGION_SIZE);
+                ParseRegion(desRegions.BiosBase, desRegions.BiosLimit, sourcebuffer.Length, out BiosBase, out BiosLimit, out BiosSize);
+                ParseRegion(desRegions.MeBase, desRegions.MeLimit, sourcebuffer.Length, out MeBase, out MeLimit, out MeSize);
+                ParseRegion(desRegions.PdrBase, desRegions.PdrLimit, sourcebuffer.Length, out PdrBase, out PdrLimit, out PdrSize);
 
                 return;
             }
 
-            BIOS_REGION_LIMIT = (uint)sourceBytes.Length;
-            ME_REGION_LIMIT = (uint)sourceBytes.Length;
-            PDR_REGION_LIMIT = (uint)sourceBytes.Length;
+            BiosLimit = (uint)sourcebuffer.Length;
+            MeLimit = (uint)sourcebuffer.Length;
+            PdrLimit = (uint)sourcebuffer.Length;
         }
 
         private static T DeserializeStruct<T>(byte[] source, int offset) where T : struct
@@ -77,32 +74,32 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             return Helper.DeserializeHeader<T>(structBytes);
         }
 
-        private static void ParseRegion(ushort basePosition, ushort limitPosition, int sourceLength, out uint regionBase, out uint regionLimit, out uint regionSize)
+        private static void ParseRegion(ushort baseposition, ushort limitposition, int sourcelength, out uint regionbase, out uint regionlimit, out uint regionlength)
         {
-            regionBase = CalculateRegionBase(basePosition);
+            regionbase = CalculateRegionBase(baseposition);
 
-            if (regionBase > sourceLength)
+            if (regionbase > sourcelength)
             {
-                regionBase = 0;
+                regionbase = 0;
             }
 
-            if (limitPosition == 0 || limitPosition > sourceLength)
+            if (limitposition == 0 || limitposition > sourcelength)
             {
-                regionLimit = (uint)sourceLength;
-                regionSize = 0;
+                regionlimit = (uint)sourcelength;
+                regionlength = 0;
             }
             else
             {
-                regionSize = CalculateRegionSize(basePosition, limitPosition);
-                regionLimit = regionBase + regionSize;
+                regionlength = CalculateRegionSize(baseposition, limitposition);
+                regionlimit = regionbase + regionlength;
             }
         }
 
         internal static void ClearRegionData()
         {
-            BIOS_REGION_BASE = 0; BIOS_REGION_LIMIT = 0; BIOS_REGION_SIZE = 0;
-            ME_REGION_BASE = 0; ME_REGION_LIMIT = 0; ME_REGION_SIZE = 0;
-            PDR_REGION_BASE = 0; PDR_REGION_LIMIT = 0; PDR_REGION_SIZE = 0;
+            BiosBase = 0; BiosLimit = 0; BiosSize = 0;
+            MeBase = 0; MeLimit = 0; MeSize = 0;
+            PdrBase = 0; PdrLimit = 0; PdrSize = 0;
 
             IsDescriptorMode = false;
         }

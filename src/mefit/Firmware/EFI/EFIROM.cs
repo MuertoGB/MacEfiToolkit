@@ -26,10 +26,11 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static bool ForceFoundFsys = false;
         internal static string FitVersion = null;
         internal static string MeVersion = null;
-        internal static bool bResetVss = false;
-        internal static bool bResetSvs = false;
+        internal static bool ResetVss = false;
+        internal static bool ResetSvs = false;
         internal static string NewSerial = null;
         internal static string FmmEmail = null;
+
         internal static FileInfoStore FileInfoData;
         internal static PdrSection PdrSectionData;
         internal static NvramStore VssPrimary;
@@ -41,63 +42,67 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal static FsysStore FsysStoreData;
         internal static AppleRomInformationSection AppleRomInfoSectionData;
         internal static EfiBiosIdSection EfiBiosIdSectionData;
+
         internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
 
-        internal static int FSYS_RGN_SIZE = 0;
-        internal static int NVRAM_BASE = -1;
-        internal static int NVRAM_SIZE = -1;
-        internal static int NVRAM_LIMIT = -1;
+        internal static int FsysRegionSize = 0;
+        internal static int NvramBase = -1;
+        internal static int NvramSize = -1;
+        internal static int NvramLimit = -1;
 
-        internal const int CRC32_SIZE = 4;
-        internal static TimeSpan tsParseTime { get; private set; }
-        internal static readonly Encoding _utf8 = Encoding.UTF8;
+        internal static TimeSpan ParseTime { get; private set; }
         #endregion
 
         #region Const Members
-        internal const int GUID_SIZE = 16;          // 10h
-        internal const int RSVD_SIZE = 16;          // 10h
+        internal const int GUID_SIZE = 16;         // 10h
+        internal const int RSVD_SIZE = 16;         // 10h
         internal const int HDR_SIZE = 16;          // 10h
-        internal const int ZERO_VECTOR_SIZE = 16;   // 10h
-        internal const int LITERAL_POS = 2;         // 2h
+        internal const int ZERO_VECTOR_SIZE = 16;  // 10h
+        internal const int LITERAL_POS = 2;        // 2h
+        internal const int CRC32_SIZE = 4;         // 4h
+        #endregion
+
+        #region Private Members
+        private static readonly Encoding utf8Encoding = Encoding.UTF8;
         #endregion
 
         #region Parse Firmware
-        internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
+        internal static void LoadFirmwareBaseData(byte[] sourcebytes, string filename)
         {
             // Start bench.
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            Stopwatch swParseTime = Stopwatch.StartNew();
 
             // Try processing flash descriptor.
-            IFD.ParseRegionData(sourceBytes);
+            IFD.ParseRegionData(sourcebytes);
 
             // Parse file info.
-            FileInfoData = FileTools.GetBinaryFileInfo(fileName);
+            FileInfoData = FileTools.GetBinaryFileInfo(filename);
 
             // Parse Platform Data Region.
-            PdrSectionData = GetPdrData(sourceBytes);
+            PdrSectionData = GetPdrData(sourcebytes);
 
             // Find the NVRAM base address.
-            NVRAM_BASE = BinaryTools.GetBaseAddress(sourceBytes, Guids.NVRAM_SECTION_GUID, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT) - ZERO_VECTOR_SIZE;
+            NvramBase = BinaryTools.GetBaseAddress(sourcebytes, Guids.NVRAM_SECTION_GUID, (int)IFD.BiosBase, (int)IFD.BiosLimit) - ZERO_VECTOR_SIZE;
 
-            if (NVRAM_BASE < 0 || NVRAM_BASE > FileInfoData.Length)
+            if (NvramBase < 0 || NvramBase > FileInfoData.Length)
             {
-                Logger.WriteLine($"Invalid NVRAM base address: {NVRAM_BASE}", LogType.Application);
-                NVRAM_BASE = -1;
+                Logger.WriteLine($"Invalid NVRAM base address: {NvramBase}", LogType.Application);
+                NvramBase = -1;
             }
 
             // Determine size of the NVRAM section.
             // Int32 value is stored at NVRAM_BASE + 0x20 (32 decimal).
-            NVRAM_SIZE = BitConverter.ToInt32(BinaryTools.GetBytesBaseLength(
-                sourceBytes, NVRAM_BASE + (ZERO_VECTOR_SIZE + GUID_SIZE), 4), 0);
+            NvramSize = BitConverter.ToInt32(BinaryTools.GetBytesBaseLength(
+                sourcebytes, NvramBase + (ZERO_VECTOR_SIZE + GUID_SIZE), 4), 0);
 
-            if (NVRAM_SIZE < 0 || NVRAM_SIZE > FileInfoData.Length)
+            if (NvramSize < 0 || NvramSize > FileInfoData.Length)
             {
-                Logger.WriteLine($"Invalid NVRAM size: {NVRAM_SIZE}", LogType.Application);
-                NVRAM_SIZE = -1;
+                Logger.WriteLine($"Invalid NVRAM size: {NvramSize}", LogType.Application);
+                NvramSize = -1;
             }
 
             // Parse NVRAM stores.
-            GetNvramStores(sourceBytes);
+            GetNvramStores(sourcebytes);
 
             // Search both NVRAM SVS stores for a Message Authentication Code.
             EfiPrimaryLockData = GetIsEfiLocked(SvsPrimary.StoreBuffer);
@@ -106,12 +111,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             FmmEmail = GetFmmMobilemeEmail();
 
             // Parse Fsys Store data.
-            FsysStoreData = GetFsysStoreData(sourceBytes, false);
+            FsysStoreData = GetFsysStoreData(sourcebytes, false);
 
             // Try to force find the Fsys store if it wasn't found in the first pass.
             if (FsysStoreData.FsysBytes == null)
             {
-                FsysStoreData = GetFsysStoreData(sourceBytes, false, true);
+                FsysStoreData = GetFsysStoreData(sourcebytes, false, true);
 
                 if (FsysStoreData.FsysBytes != null)
                 {
@@ -127,10 +132,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             ConfigCode = FsysStoreData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(FsysStoreData.HWC) : null;
 
             // Parse AppleRomSectionInformation region data.
-            AppleRomInfoSectionData = GetRomInformationData(sourceBytes);
+            AppleRomInfoSectionData = GetRomInformationData(sourcebytes);
 
             // Parse EfiBiosId section data.
-            EfiBiosIdSectionData = GetEfiBiosIdSectionData(sourceBytes);
+            EfiBiosIdSectionData = GetEfiBiosIdSectionData(sourcebytes);
 
             // Check if the firmware is APFS capable.
             IsApfsCapable = GetIsApfsCapable(LoadedBinaryBuffer);
@@ -144,8 +149,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Get the Intel ME version.
             MeVersion = IME.GetVersionData(LoadedBinaryBuffer, ImeVersionType.ManagementEngine);
 
-            stopwatch.Stop();
-            tsParseTime = stopwatch.Elapsed;
+            swParseTime.Stop();
+            ParseTime = swParseTime.Elapsed;
         }
 
         internal static void ResetFirmwareBaseData()
@@ -159,8 +164,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             ForceFoundFsys = false;
             FitVersion = null;
             MeVersion = null;
-            bResetVss = false;
-            bResetSvs = false;
+            ResetVss = false;
+            ResetSvs = false;
             NewSerial = null;
             FmmEmail = null;
             FileInfoData = default;
@@ -176,26 +181,26 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             EfiBiosIdSectionData = default;
             IsApfsCapable = ApfsCapable.Unknown;
 
-            FSYS_RGN_SIZE = 0;
-            NVRAM_BASE = -1;
-            NVRAM_SIZE = -1;
-            NVRAM_LIMIT = -1;
+            FsysRegionSize = 0;
+            NvramBase = -1;
+            NvramSize = -1;
+            NvramLimit = -1;
         }
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
-            int dxeCore = BinaryTools.GetBaseAddress(sourceBytes, Guids.DXE_CORE, RSVD_SIZE, GUID_SIZE);
-            byte[] fdSignature = BinaryTools.GetBytesBaseLength(sourceBytes, RSVD_SIZE, IFD.IFD_SIG_LENGTH);
+            int iDxeCoreBase = BinaryTools.GetBaseAddress(sourceBytes, Guids.DXE_CORE, RSVD_SIZE, GUID_SIZE);
+            byte[] bDescriptorSignature = BinaryTools.GetBytesBaseLength(sourceBytes, RSVD_SIZE, (int)IFD.IFD_SIG_LENGTH);
 
-            if (!BinaryTools.ByteArraysMatch(fdSignature, IFD.FLASH_DESC_SIGNATURE))
+            if (!BinaryTools.ByteArraysMatch(bDescriptorSignature, IFD.FlashDecriptorMarker))
             {
-                if (dxeCore == -1)
+                if (iDxeCoreBase == -1)
                 {
                     return false;
                 }
             }
 
-            byte[][] appleGuids = new[]
+            byte[][] arrGuids = new[]
             {
                 Guids.APPLE_IMMUTABLE_FV_GUID,
                 Guids.APPLE_AUTH_FV_GUID,
@@ -203,12 +208,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             };
 
             // Check if any of the Apple GUIDs are found within the firmware.
-            return appleGuids.Any(guid => BinaryTools.GetBaseAddress(sourceBytes, guid, 0, sourceBytes.Length) != -1);
+            return arrGuids.Any(guid => BinaryTools.GetBaseAddress(sourceBytes, guid, 0, sourceBytes.Length) != -1);
         }
         #endregion 
 
         #region Platform Data Region
-        internal static PdrSection GetPdrData(byte[] sourceBytes)
+        internal static PdrSection GetPdrData(byte[] sourcebytes)
         {
             // Descriptor mode not set.
             if (!IFD.IsDescriptorMode)
@@ -217,26 +222,26 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             }
 
             // Platform data region is not present.
-            if (IFD.PDR_REGION_BASE == 0)
+            if (IFD.PdrBase == 0)
             {
                 return DefaultPdrSection();
             }
 
             // Look for the board id signature bytes.
-            int baseAddress = BinaryTools.GetBaseAddress(sourceBytes, PDR_BOARD_ID_SIGNATURE, (int)IFD.PDR_REGION_BASE, (int)IFD.PDR_REGION_SIZE);
+            int iBoardIdBase = BinaryTools.GetBaseAddress(sourcebytes, EFISigs.PdrBoardIdMarker, (int)IFD.PdrBase, (int)IFD.PdrSize);
 
             // Board id signature not found.
-            if (baseAddress == -1)
+            if (iBoardIdBase == -1)
             {
                 return DefaultPdrSection();
             }
 
-            int boardIdLength = 8;
-            int dataStartPosition = 5;
+            int iPosition = 5;
+            int iLength = 8;
 
-            byte[] bidBytes = BinaryTools.GetBytesBaseLength(sourceBytes, baseAddress + dataStartPosition, boardIdLength);
+            byte[] bData = BinaryTools.GetBytesBaseLength(sourcebytes, iBoardIdBase + iPosition, iLength);
 
-            if (bidBytes == null)
+            if (bData == null)
             {
                 return DefaultPdrSection();
             }
@@ -244,8 +249,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Return the board id.
             return new PdrSection
             {
-                BoardIdBase = baseAddress,
-                BoardId = $"Mac-{BitConverter.ToString(bidBytes).Replace("-", "")}"
+                BoardIdBase = iBoardIdBase,
+                BoardId = $"Mac-{BitConverter.ToString(bData).Replace("-", "")}"
             };
         }
 
@@ -257,17 +262,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 BoardId = null
             };
         }
-
-        internal static readonly byte[] PDR_BOARD_ID_SIGNATURE =
-        {
-            0xF8, 0x7C, 0x00, 0x00, 0x19
-        };
         #endregion
 
         #region NVRAM / EFI Lock
-        internal static void GetNvramStores(byte[] binaryBuffer)
+        internal static void GetNvramStores(byte[] sourcebytes)
         {
-            if (NVRAM_BASE == -1 || NVRAM_SIZE == -1)
+            if (NvramBase == -1 || NvramSize == -1)
             {
                 VssPrimary = DefaultNvramSection();
                 VssSecondary = DefaultNvramSection();
@@ -277,21 +277,21 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 return;
             }
 
-            NVRAM_LIMIT = NVRAM_BASE + NVRAM_SIZE - 1;
+            NvramLimit = NvramBase + NvramSize - 1;
 
-            Console.WriteLine($"NVRAM - Base: {NVRAM_BASE:X}h, Size: {NVRAM_SIZE:X}h, Limit: {NVRAM_LIMIT:X}h");
+            Console.WriteLine($"NVRAM - Base: {NvramBase:X}h, Size: {NvramSize:X}h, Limit: {NvramLimit:X}h");
 
-            int vssPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, VSS_STORE_SIG, NVRAM_BASE, NVRAM_LIMIT);
+            int iVssPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(sourcebytes, EFISigs.VssStoreMarker, NvramBase, NvramLimit);
 
             // Check if the primary VSS store was found
-            if (vssPrimaryBase != -1)
+            if (iVssPrimaryBase != -1)
             {
-                VssPrimary = ParseNvramStore(binaryBuffer, vssPrimaryBase, NvramStoreType.Variable);
+                VssPrimary = ParseNvramStore(sourcebytes, iVssPrimaryBase, NvramStoreType.Variable);
 
                 // Look for the secondary VSS store only if the primary was found
-                int vssBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, VSS_STORE_SIG, vssPrimaryBase + HDR_SIZE, NVRAM_LIMIT);
-                VssSecondary = vssBackupBase != -1
-                    ? ParseNvramStore(binaryBuffer, vssBackupBase, NvramStoreType.Variable)
+                int iVssSecondaryBase = BinaryTools.GetBaseAddressUpToLimit(sourcebytes, EFISigs.VssStoreMarker, iVssPrimaryBase + HDR_SIZE, NvramLimit);
+                VssSecondary = iVssSecondaryBase != -1
+                    ? ParseNvramStore(sourcebytes, iVssSecondaryBase, NvramStoreType.Variable)
                     : DefaultNvramSection(); // Set to default if secondary not found
             }
             else
@@ -302,17 +302,17 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             }
 
             // Repeat similar logic for the SVS store
-            int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, SVS_STORE_SIG, NVRAM_BASE, NVRAM_LIMIT);
+            int iSvsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(sourcebytes, EFISigs.SvsStoreMarker, NvramBase, NvramLimit);
 
             // Check if the primary SVS store was found
-            if (svsPrimaryBase != -1)
+            if (iSvsPrimaryBase != -1)
             {
-                SvsPrimary = ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
+                SvsPrimary = ParseNvramStore(sourcebytes, iSvsPrimaryBase, NvramStoreType.Secure);
 
                 // Look for the secondary SVS store only if the primary was found
-                int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, SVS_STORE_SIG, svsPrimaryBase + HDR_SIZE, NVRAM_LIMIT);
-                SvsSecondary = svsBackupBase != -1
-                    ? ParseNvramStore(binaryBuffer, svsBackupBase, NvramStoreType.Secure)
+                int iSvsSecondaryBase = BinaryTools.GetBaseAddressUpToLimit(sourcebytes, EFISigs.SvsStoreMarker, iSvsPrimaryBase + HDR_SIZE, NvramLimit);
+                SvsSecondary = iSvsSecondaryBase != -1
+                    ? ParseNvramStore(sourcebytes, iSvsSecondaryBase, NvramStoreType.Secure)
                     : DefaultNvramSection(); // Set to default if secondary not found
             }
             else
@@ -324,51 +324,51 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         }
 
-        internal static NvramStore ParseNvramStore(byte[] buffer, int storeBase, NvramStoreType storeType)
+        internal static NvramStore ParseNvramStore(byte[] buffer, int baseaddress, NvramStoreType storetype)
         {
-            int storeSize = -1;
-            byte storeFormat = 0xFF;
-            byte storeState = 0xFF;
-            byte[] storeBuff = null;
-            int bodyBase = -1;
-            int bodySize = -1;
-            bool bodyEmpty = true;
+            int iStoreLength = -1;
+            byte bFormat = 0xFF;
+            byte bState = 0xFF;
+            byte[] bStoreBuffer = null;
+            int iBodyBase = -1;
+            int iBodyLength = -1;
+            bool isEmpty = true;
 
-            byte[] hdrBuffer = BinaryTools.GetBytesBaseLength(buffer, storeBase, HDR_SIZE);
+            byte[] bHdrBuffer = BinaryTools.GetBytesBaseLength(buffer, baseaddress, HDR_SIZE);
 
-            NvramStoreHeader hdr = Helper.DeserializeHeader<NvramStoreHeader>(hdrBuffer);
+            NvramStoreHeader nvrHeader = Helper.DeserializeHeader<NvramStoreHeader>(bHdrBuffer);
 
-            if (hdr.StoreSize != 0xFFFF && hdr.StoreSize != 0)
+            if (nvrHeader.StoreLength != 0xFFFF && nvrHeader.StoreLength != 0)
             {
-                bodyBase = storeBase + HDR_SIZE;
-                storeSize = hdr.StoreSize;
-                storeFormat = hdr.Format;
-                storeState = hdr.State;
+                iBodyBase = baseaddress + HDR_SIZE;
+                iStoreLength = nvrHeader.StoreLength;
+                bFormat = nvrHeader.Format;
+                bState = nvrHeader.State;
 
-                storeBuff = BinaryTools.GetBytesBaseLength(buffer, storeBase, storeSize);
+                bStoreBuffer = BinaryTools.GetBytesBaseLength(buffer, baseaddress, iStoreLength);
 
-                if (storeBuff != null)
+                if (bStoreBuffer != null)
                 {
-                    bodySize = storeSize - HDR_SIZE;
+                    iBodyLength = iStoreLength - HDR_SIZE;
 
-                    byte[] storeBodyBuffer = BinaryTools.GetBytesBaseLength(buffer, bodyBase, bodySize);
-                    bodyEmpty = BinaryTools.IsByteBlockEmpty(storeBodyBuffer);
+                    byte[] storeBodyBuffer = BinaryTools.GetBytesBaseLength(buffer, iBodyBase, iBodyLength);
+                    isEmpty = BinaryTools.IsByteBlockEmpty(storeBodyBuffer);
                 }
             }
 
-            Console.WriteLine($"NVRAM Store - Base: {storeBase:X}h, Size: {storeSize:X}h, Type: {storeType}, Empty: {bodyEmpty}, Format: {storeFormat:X}h, State: {storeState:X}h");
+            Console.WriteLine($"NVRAM Store - Base: {baseaddress:X}h, Size: {iStoreLength:X}h, Type: {storetype}, Empty: {isEmpty}, Format: {bFormat:X}h, State: {bState:X}h");
 
             return new NvramStore
             {
-                StoreType = storeType,
-                StoreBase = storeBase,
-                StoreSize = storeSize,
-                StoreBuffer = storeBuff,
-                StoreFormat = storeFormat,
-                StoreState = storeState,
-                BodyStart = bodyBase,
-                BodySize = bodySize,
-                IsStoreEmpty = bodyEmpty
+                StoreType = storetype,
+                StoreBase = baseaddress,
+                StoreLength = iStoreLength,
+                StoreBuffer = bStoreBuffer,
+                StoreFormat = bFormat,
+                StoreState = bState,
+                BodyStart = iBodyBase,
+                BodyLength = iBodyLength,
+                IsStoreEmpty = isEmpty
             };
         }
 
@@ -378,29 +378,29 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             {
                 StoreType = NvramStoreType.None,
                 StoreBase = -1,
-                StoreSize = -1,
+                StoreLength = -1,
                 StoreBuffer = null,
                 StoreFormat = 0xFF,
                 StoreState = 0xFF,
                 BodyStart = -1,
-                BodySize = -1,
+                BodyLength = -1,
                 IsStoreEmpty = true
             };
         }
 
-        internal static EFILock GetIsEfiLocked(byte[] nvramStoreBytes)
+        internal static EFILock GetIsEfiLocked(byte[] storebuffer)
         {
             // NVRAM store is empty.
-            if (nvramStoreBytes == null)
+            if (storebuffer == null)
             {
                 return DefaultEfiLockStatus();
             }
 
             // Search store for Message Authentication Code.
-            int crcBaseAddress = BinaryTools.GetBaseAddress(nvramStoreBytes, EFI_LOCK_MAC_SIG);
+            int iBaseAddress = BinaryTools.GetBaseAddress(storebuffer, EFISigs.EfiLockMarker);
 
             // No Message Authentication Code was found.
-            if (crcBaseAddress == -1)
+            if (iBaseAddress == -1)
             {
                 return DefaultEfiLockStatus();
             }
@@ -409,7 +409,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             return new EFILock
             {
                 LockType = EfiLockType.Locked,
-                LockCrcBase = crcBaseAddress
+                LockCrcBase = iBaseAddress
             };
         }
 
@@ -421,15 +421,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 LockCrcBase = -1,
             };
         }
-
-        internal static readonly byte[] EFI_LOCK_MAC_SIG =
-        {
-            0x43, 0x00, 0x42, 0x00, 0x46, 0x00, 0x32, 0x00,
-            0x43, 0x00, 0x43, 0x00, 0x33, 0x00, 0x32
-        };
-
-        internal static readonly byte[] VSS_STORE_SIG = { 0x24, 0x56, 0x53, 0x53 };
-        internal static readonly byte[] SVS_STORE_SIG = { 0x24, 0x53, 0x56, 0x53 };
         #endregion
 
         #region fmm-mobileme-token-FMM
@@ -440,36 +431,22 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 return null; // If the VSS is empty, there will be no token.
             }
 
-            byte[] buffer = VssPrimary.StoreBuffer;
-            byte[] token = GetToken();
+            byte[] bBuffer = VssPrimary.StoreBuffer;
 
             // Find the token in the buffer.
-            int tokenBase = FindTokenBase(buffer, token);
-            if (tokenBase == -1)
+            int iBaseAddress = FindTokenBase(bBuffer, EFISigs.FmmMarker);
+            if (iBaseAddress == -1)
             {
                 return null; // Token not found.
             }
 
-            int tokenLimit = FindTokenLimit(buffer, tokenBase);
-            if (tokenLimit == -1)
+            int iLimitAddress = FindTokenLimit(bBuffer, iBaseAddress);
+            if (iLimitAddress == -1)
             {
                 return null; // Limit not found.
             }
 
-            return ExtractEmailFromBuffer(buffer, tokenBase, tokenLimit);
-        }
-
-        private static byte[] GetToken()
-        {
-            return new byte[]
-            {
-                0x66, 0x00, 0x6D, 0x00, 0x6D, 0x00, 0x2D, 0x00,
-                0x6D, 0x00, 0x6F, 0x00, 0x62, 0x00, 0x69, 0x00,
-                0x6C, 0x00, 0x65, 0x00, 0x6D, 0x00, 0x65, 0x00,
-                0x2D, 0x00, 0x74, 0x00, 0x6F, 0x00, 0x6B, 0x00,
-                0x65, 0x00, 0x6E, 0x00, 0x2D, 0x00, 0x46, 0x00,
-                0x4D, 0x00, 0x4D, 0x00, 0x00
-            };
+            return ExtractEmailFromBuffer(bBuffer, iBaseAddress, iLimitAddress);
         }
 
         private static int FindTokenBase(byte[] buffer, byte[] token)
@@ -479,8 +456,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         private static int FindTokenLimit(byte[] buffer, int tokenBase)
         {
-            byte[] limitBytes = new byte[] { 0xAA, 0x55 };
-            return BinaryTools.GetBaseAddress(buffer, limitBytes, tokenBase);
+            byte[] bLimitBytes = new byte[] { 0xAA, 0x55 };
+            return BinaryTools.GetBaseAddress(buffer, bLimitBytes, tokenBase);
         }
 
         private static string ExtractEmailFromBuffer(byte[] buffer, int tokenBase, int tokenLimit)
@@ -493,7 +470,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 if (IsValidEmailBlock(buffer, i, out string dataString))
                 {
                     Console.WriteLine($"Email found: {dataString}");
-                    return dataString; // Return the data if it contains '@'.
+                    return dataString;
                 }
 
                 // Move the pointer to the next block.
@@ -503,21 +480,21 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             return null; // No valid email found.
         }
 
-        private static bool IsValidEmailBlock(byte[] buffer, int index, out string dataString)
+        private static bool IsValidEmailBlock(byte[] buffer, int index, out string emailstring)
         {
-            dataString = string.Empty;
+            emailstring = string.Empty;
 
             // Check for the signature (0x5F, 0x10).
             if (buffer[index] == 0x5F && buffer[index + 1] == 0x10)
             {
-                int dataSize = buffer[index + 2];
-                byte[] data = new byte[dataSize];
-                Array.Copy(buffer, index + 3, data, 0, dataSize);
+                int iSize = buffer[index + 2];
+                byte[] bData = new byte[iSize];
+                Array.Copy(buffer, index + 3, bData, 0, iSize);
 
-                dataString = System.Text.Encoding.UTF8.GetString(data);
+                emailstring = System.Text.Encoding.UTF8.GetString(bData);
 
                 // Check if the data contains '@' and '.' (basic email validation).
-                return dataString.Contains("@") && dataString.Contains(".");
+                return emailstring.Contains("@") && emailstring.Contains(".");
             }
 
             return false;
@@ -526,77 +503,77 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
         #region Fsys Store
         // Fsys resides in the NVRAM at either base: 0x20000h, or 0x22000h.
-        internal static FsysStore GetFsysStoreData(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFindFsysStore = false)
+        internal static FsysStore GetFsysStoreData(byte[] sourcebytes, bool isfsysonly, bool forcefind = false)
         {
             // Find the base position of Fsys Store.
-            int fsysBaseAddress = FindFsysBaseAddress(sourceBytes, isFsysStoreOnly, forceFindFsysStore);
+            int iBaseAddress = FindFsysBaseAddress(sourcebytes, isfsysonly, forcefind);
 
             // If Fsys Store base is not found, return default data.
-            if (fsysBaseAddress == -1)
+            if (iBaseAddress == -1)
             {
                 return DefaultFsysRegion();
             }
 
             // Retrieve FsysStore bytes.
-            byte[] fsysStoreBytes = GetFsysStoreBytes(sourceBytes, fsysBaseAddress);
+            byte[] bFsysBuffer = GetFsysStoreBytes(sourcebytes, iBaseAddress);
 
             // If FsysStore is invalid, return default data.
-            if (!IsValidFsysStore(fsysStoreBytes))
+            if (!IsValidFsysStore(bFsysBuffer))
             {
                 return DefaultFsysRegion();
             }
 
             // Retrieve CRC bytes and calculate CRC values.
-            byte[] crcBytes = GetCrcBytes(sourceBytes, fsysBaseAddress);
+            byte[] bCrcData = GetCrcBytes(sourcebytes, iBaseAddress);
 
-            string crcString = GetFlippedCrcString(crcBytes);
+            string strCrcString = GetFlippedCrcString(bCrcData);
 
-            uint uiCrcCalc = CalculateFsysCrc(fsysStoreBytes);
+            uint uiActualCrc = CalculateFsysCrc(bFsysBuffer);
 
-            string crcCalcString = $"{uiCrcCalc:X8}";
+            string strActualCrc = $"{uiActualCrc:X8}";
 
             // Find and parse various signatures within FsysStore.
-            int serialDataBaseAddress = FindSignatureAddress(sourceBytes, fsysBaseAddress, FSYS_RGN_SIZE, SSN_LOWER_SIG, SSN_UPPER_SIG, SSNP_LOWER_SIG);
-            string serialString = ParseFsysString(sourceBytes, serialDataBaseAddress);
+            int iSerialBase = FindSignatureAddress(sourcebytes, iBaseAddress, FsysRegionSize, EFISigs.SerialUpperMarker, EFISigs.SerialLowerMarker, EFISigs.SerialPLowerMarker);
+            string strSerial = ParseFsysString(sourcebytes, iSerialBase);
 
-            int hwcDataBaseAddress = FindSignatureAddress(sourceBytes, fsysBaseAddress, FSYS_RGN_SIZE, HWC_LOWER_SIG, HWC_UPPER_SIG);
-            string hwcString = ParseFsysString(sourceBytes, hwcDataBaseAddress);
+            int iHwcBase = FindSignatureAddress(sourcebytes, iBaseAddress, FsysRegionSize, EFISigs.HwcLowerMarker, EFISigs.HwcUpperMarker);
+            string strHwc = ParseFsysString(sourcebytes, iHwcBase);
 
-            int sonDataBaseAddress = FindSignatureAddress(sourceBytes, fsysBaseAddress, FSYS_RGN_SIZE, SON_LOWER_SIG, SON_UPPER_SIG);
-            string sonString = ParseFsysString(sourceBytes, sonDataBaseAddress);
+            int iSonBase = FindSignatureAddress(sourcebytes, iBaseAddress, FsysRegionSize, EFISigs.SonLowerMarker, EFISigs.SonUpperMarker);
+            string strSon = ParseFsysString(sourcebytes, iSonBase);
 
             // Trim trailing '/' from SON string if present.
-            if (sonString != null && sonString.EndsWith("/"))
+            if (strSon != null && strSon.EndsWith("/"))
             {
-                sonString = sonString.TrimEnd('/');
+                strSon = strSon.TrimEnd('/');
             }
 
             // Create and return FsysStore object.
             return new FsysStore
             {
-                FsysBytes = fsysStoreBytes,
-                FsysBase = fsysBaseAddress,
-                Serial = serialString,
-                SerialBase = serialDataBaseAddress != -1 ? serialDataBaseAddress + LITERAL_POS : -1,
-                HWC = hwcString,
-                HWCBase = hwcDataBaseAddress != -1 ? hwcDataBaseAddress + LITERAL_POS : -1,
-                SON = sonString,
-                CrcString = crcString,
-                CrcCalcString = crcCalcString,
-                CRC32CalcInt = uiCrcCalc
+                FsysBytes = bFsysBuffer,
+                FsysBase = iBaseAddress,
+                Serial = strSerial,
+                SerialBase = iSerialBase != -1 ? iSerialBase + LITERAL_POS : -1,
+                HWC = strHwc,
+                HWCBase = iHwcBase != -1 ? iHwcBase + LITERAL_POS : -1,
+                SON = strSon,
+                CrcString = strCrcString,
+                CrcActualString = strActualCrc,
+                CrcActual = uiActualCrc
             };
         }
 
-        private static string ParseFsysString(byte[] sourceBytes, int baseAddress)
+        private static string ParseFsysString(byte[] sourcebytes, int baseaddress)
         {
             // Return null if base position is invalid or data size is zero.
-            if (baseAddress == -1 || sourceBytes[baseAddress] == 0)
+            if (baseaddress == -1 || sourcebytes[baseaddress] == 0)
             {
                 return null;
             }
 
             // Read size of the indicated variable.
-            int dataSizeByte = sourceBytes[baseAddress];
+            int dataSizeByte = sourcebytes[baseaddress];
 
             // Return null if data size is invalid.
             if (dataSizeByte == 0)
@@ -605,97 +582,96 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             }
 
             // Read the variable bytes.
-            byte[] stringBytes = BinaryTools.GetBytesBaseLength(sourceBytes, baseAddress + LITERAL_POS, dataSizeByte);
+            byte[] bStringData = BinaryTools.GetBytesBaseLength(sourcebytes, baseaddress + LITERAL_POS, dataSizeByte);
 
             // Return null if bytes are invalid or exceed the data size.
-            if (stringBytes == null || stringBytes.Length != dataSizeByte)
+            if (bStringData == null || bStringData.Length != dataSizeByte)
             {
                 return null;
             }
 
             // Return string data.
-            return _utf8.GetString(stringBytes);
+            return utf8Encoding.GetString(bStringData);
         }
 
-        private static int FindFsysBaseAddress(byte[] sourceBytes, bool isFsysStoreOnly, bool forceFindFsysStore)
+        private static int FindFsysBaseAddress(byte[] sourcebytes, bool isfsysonly, bool forcefind)
         {
-            if (isFsysStoreOnly)
+            if (isfsysonly)
             {
                 return 0;
             }
 
-            if (forceFindFsysStore)
+            if (forcefind)
             {
-                return BinaryTools.GetBaseAddress(sourceBytes, FSYS_SIG, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT);
+                return BinaryTools.GetBaseAddress(sourcebytes, EFISigs.FsysMarker, (int)IFD.BiosBase, (int)IFD.BiosLimit);
             }
 
-            if (NVRAM_BASE == -1)
-            {
-                return -1;
-            }
-
-            if (NVRAM_SIZE == -1)
+            if (NvramBase == -1)
             {
                 return -1;
             }
 
-            return BinaryTools.GetBaseAddress(sourceBytes, FSYS_SIG, NVRAM_BASE, NVRAM_SIZE);
+            if (NvramSize == -1)
+            {
+                return -1;
+            }
+
+            return BinaryTools.GetBaseAddress(sourcebytes, EFISigs.FsysMarker, NvramBase, NvramSize);
         }
 
-        private static bool IsValidFsysStore(byte[] fsysStoreBytes)
+        private static bool IsValidFsysStore(byte[] storebytes)
         {
-            return fsysStoreBytes != null && fsysStoreBytes.Length == FSYS_RGN_SIZE;
+            return storebytes != null && storebytes.Length == FsysRegionSize;
         }
 
-        private static string GetFlippedCrcString(byte[] crcBytes)
+        private static string GetFlippedCrcString(byte[] crcbytes)
         {
-            byte[] crcEndianBytes = crcBytes.Reverse().ToArray();
-
-            return BitConverter.ToString(crcEndianBytes).Replace("-", "");
+            byte[] bData = crcbytes.Reverse().ToArray();
+            return BitConverter.ToString(bData).Replace("-", "");
         }
 
-        private static uint CalculateFsysCrc(byte[] fsysStoreBytes)
+        private static uint CalculateFsysCrc(byte[] storebytes)
         {
-            return MacTools.GetUintFsysCrc32(fsysStoreBytes);
+            return MacTools.GetUintFsysCrc32(storebytes);
         }
 
-        private static int FindSignatureAddress(byte[] sourceBytes, int baseAddress, int maxSearchLength, params byte[][] signatures)
+        private static int FindSignatureAddress(byte[] sourcebytes, int baseaddress, int maxsearchlength, params byte[][] signatures)
         {
             foreach (byte[] signature in signatures)
             {
-                int signatureBaseAddress = BinaryTools.GetBaseAddress(sourceBytes, signature, baseAddress, maxSearchLength);
+                int iBaseAddress = BinaryTools.GetBaseAddress(sourcebytes, signature, baseaddress, maxsearchlength);
 
-                if (signatureBaseAddress != -1)
+                if (iBaseAddress != -1)
                 {
-                    return signatureBaseAddress + signature.Length;
+                    return iBaseAddress + signature.Length;
                 }
             }
 
             return -1;
         }
 
-        private static byte[] GetFsysStoreBytes(byte[] sourceBytes, int fsysBaseAddress)
+        private static byte[] GetFsysStoreBytes(byte[] sourcebytes, int fsysbaseaddress)
         {
             // Get Fsys Store size bytes - fsys base + 0x09, length 2 bytes (int16).
-            byte[] fsysSizeBytes = BinaryTools.GetBytesBaseLength(sourceBytes, fsysBaseAddress + 9, 2);
+            byte[] bSize = BinaryTools.GetBytesBaseLength(sourcebytes, fsysbaseaddress + 9, 2);
 
             // Convert size to int16 value.
-            FSYS_RGN_SIZE = BitConverter.ToInt16(fsysSizeBytes, 0);
+            FsysRegionSize = BitConverter.ToInt16(bSize, 0);
 
             // Min Fsys rgn size.
-            if (FSYS_RGN_SIZE < 2048)
+            if (FsysRegionSize < 2048)
             {
-                Logger.WriteLine($"Fsys Store size was less than the min expected size: {FSYS_RGN_SIZE}", LogType.Application);
+                Logger.WriteLine($"Fsys Store size was less than the min expected size: {FsysRegionSize}", LogType.Application);
 
                 return null;
             }
 
-            return BinaryTools.GetBytesBaseLength(sourceBytes, fsysBaseAddress, FSYS_RGN_SIZE);
+            return BinaryTools.GetBytesBaseLength(sourcebytes, fsysbaseaddress, FsysRegionSize);
         }
 
-        private static byte[] GetCrcBytes(byte[] sourceBytes, int fsysBaseAddress)
+        private static byte[] GetCrcBytes(byte[] sourcebytes, int fsysbaseaddress)
         {
-            return BinaryTools.GetBytesBaseLength(sourceBytes, fsysBaseAddress + (FSYS_RGN_SIZE - CRC32_SIZE), CRC32_SIZE);
+            return BinaryTools.GetBytesBaseLength(sourcebytes, fsysbaseaddress + (FsysRegionSize - CRC32_SIZE), CRC32_SIZE);
         }
 
         private static FsysStore DefaultFsysRegion()
@@ -710,107 +686,67 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 HWCBase = -1,
                 SON = null,
                 CrcString = null,
-                CrcCalcString = null,
-                CRC32CalcInt = 0xFFFFFFF
+                CrcActualString = null,
+                CrcActual = 0xFFFFFFF
             };
         }
-
-        internal static readonly byte[] FSYS_SIG =
-        {
-            0x46, 0x73, 0x79, 0x73, 0x01
-        };
-
-        internal static readonly byte[] SSN_LOWER_SIG =
-        {
-            0x03, 0x73, 0x73, 0x6E
-        };
-
-        internal static readonly byte[] SSN_UPPER_SIG =
-        {
-            0x03, 0x53, 0x53, 0x4E
-        };
-
-        internal static readonly byte[] SSNP_LOWER_SIG =
-        {
-             0x04, 0x73, 0x73, 0x6E, 0x70
-        };
-
-        internal static readonly byte[] HWC_LOWER_SIG =
-        {
-            0x03, 0x68, 0x77, 0x63
-        };
-
-        internal static readonly byte[] HWC_UPPER_SIG =
-        {
-            0x03, 0x53, 0x53, 0x4E
-        };
-
-        internal static readonly byte[] SON_LOWER_SIG =
-        {
-            0x03, 0x73, 0x6F, 0x6E
-        };
-
-        internal static readonly byte[] SON_UPPER_SIG =
-        {
-            0x03, 0x53, 0x4F, 0x4E
-        };
         #endregion
 
         #region Apple ROM Information Section
-        internal static AppleRomInformationSection GetRomInformationData(byte[] sourceBytes)
+        internal static AppleRomInformationSection GetRomInformationData(byte[] sourcebytes)
         {
             // Define constants for index and termination bytes.
-            const byte indexByte = 0x20;
-            const byte terminationByte = 0x0A;
+            const byte bIndex = 0x20;
+            const byte bTermination = 0x0A;
 
             // Initialize signature-data dictionary.
-            Dictionary<byte[], string> romInfoData = new Dictionary<byte[], string>
+            Dictionary<byte[], string> dictSectionEntires = new Dictionary<byte[], string>
             {
-                { BIOS_ID_SIGNATURE, null },
-                { MODEL_SIGNATURE, null },
-                { EFI_VERSION_SIGNATURE, null },
-                { BUILT_BY_SIGNATURE, null },
-                { DATE_SIGNATURE, null },
-                { REVISION_SIGNATURE, null },
-                { ROM_VERSION_SIGNATURE, null },
-                { BUILDCAVE_ID_SIGNATURE, null },
-                { BUILD_TYPE_SIGNATURE, null },
-                { COMPILER_SIGNATURE, null }
+                { EFISigs.BiosIdMarker, null },
+                { EFISigs.ModelMarker, null },
+                { EFISigs.EfiVersionMarker, null },
+                { EFISigs.BuiltByMarker, null },
+                { EFISigs.DateMarker, null },
+                { EFISigs.RevisionMarker, null },
+                { EFISigs.RomVersionMarker, null },
+                { EFISigs.BuildCaveIdMarker, null },
+                { EFISigs.BuildTypeMarker, null },
+                { EFISigs.CompilerMarker, null }
             };
 
             // Find all GUID locations.
-            List<int> romSectionBaseAddresses = GetRomSectionBaseAddresses(sourceBytes);
+            List<int> lstBaseAddresses = GetRomSectionBaseAddresses(sourcebytes);
 
             // Return default if no AppleRomInformation GUID was found.
-            if (romSectionBaseAddresses.Count == 0)
+            if (lstBaseAddresses.Count == 0)
             {
                 return DefaultRomInformationBase();
             }
 
             // Process each AppleRomInformation section.
-            foreach (int sectionBaseAddress in romSectionBaseAddresses)
+            foreach (int iBaseAddress in lstBaseAddresses)
             {
-                byte[] romSectionBytes = ExtractSectionBytes(sourceBytes, sectionBaseAddress);
+                byte[] bSectionBuffer = ExtractSectionBytes(sourcebytes, iBaseAddress);
 
-                if (romSectionBytes == null)
+                if (bSectionBuffer == null)
                 {
                     return DefaultRomInformationBase();
                 }
 
                 // Extract information based on each signature.
-                foreach (byte[] signature in romInfoData.Keys.ToList())
+                foreach (byte[] bSignature in dictSectionEntires.Keys.ToList())
                 {
-                    int dataBaseAddress = BinaryTools.GetBaseAddress(romSectionBytes, signature);
+                    int iDataBaseAddress = BinaryTools.GetBaseAddress(bSectionBuffer, bSignature);
 
-                    if (dataBaseAddress != -1)
+                    if (iDataBaseAddress != -1)
                     {
-                        int keyLength = signature.Length;
+                        int iKeyLength = bSignature.Length;
 
-                        byte[] infoBytes = BinaryTools.GetBytesDelimited(romSectionBytes, dataBaseAddress + keyLength, indexByte, terminationByte);
+                        byte[] bValue = BinaryTools.GetBytesDelimited(bSectionBuffer, iDataBaseAddress + iKeyLength, bIndex, bTermination);
 
-                        if (infoBytes != null)
+                        if (bValue != null)
                         {
-                            romInfoData[signature] = _utf8.GetString(infoBytes);
+                            dictSectionEntires[bSignature] = utf8Encoding.GetString(bValue);
                         }
                     }
                 }
@@ -818,18 +754,18 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 return new AppleRomInformationSection
                 {
                     SectionExists = true,
-                    SectionBytes = romSectionBytes,
-                    SectionBase = sectionBaseAddress,
-                    BiosId = romInfoData[BIOS_ID_SIGNATURE],
-                    Model = romInfoData[MODEL_SIGNATURE],
-                    EfiVersion = romInfoData[EFI_VERSION_SIGNATURE],
-                    BuiltBy = romInfoData[BUILT_BY_SIGNATURE],
-                    DateStamp = romInfoData[DATE_SIGNATURE],
-                    Revision = romInfoData[REVISION_SIGNATURE],
-                    RomVersion = romInfoData[ROM_VERSION_SIGNATURE],
-                    BuildcaveId = romInfoData[BUILDCAVE_ID_SIGNATURE],
-                    BuildType = romInfoData[BUILD_TYPE_SIGNATURE],
-                    Compiler = romInfoData[COMPILER_SIGNATURE]
+                    SectionBytes = bSectionBuffer,
+                    SectionBase = iBaseAddress,
+                    BiosId = dictSectionEntires[EFISigs.BiosIdMarker],
+                    Model = dictSectionEntires[EFISigs.ModelMarker],
+                    EfiVersion = dictSectionEntires[EFISigs.EfiVersionMarker],
+                    BuiltBy = dictSectionEntires[EFISigs.BuiltByMarker],
+                    DateStamp = dictSectionEntires[EFISigs.DateMarker],
+                    Revision = dictSectionEntires[EFISigs.RevisionMarker],
+                    RomVersion = dictSectionEntires[EFISigs.RomVersionMarker],
+                    BuildcaveId = dictSectionEntires[EFISigs.BuildCaveIdMarker],
+                    BuildType = dictSectionEntires[EFISigs.BuildTypeMarker],
+                    Compiler = dictSectionEntires[EFISigs.CompilerMarker]
                 };
             }
 
@@ -839,29 +775,29 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Local function to locate all AppleRomInformation section GUIDs.
             List<int> GetRomSectionBaseAddresses(byte[] bytes)
             {
-                List<int> addresses = new List<int>();
-                int address = BinaryTools.GetBaseAddress(bytes, Guids.APPLE_ROM_INFO_GUID, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT);
+                List<int> lstAddresses = new List<int>();
+                int iAddress = BinaryTools.GetBaseAddress(bytes, Guids.APPLE_ROM_INFO_GUID, (int)IFD.BiosBase, (int)IFD.BiosLimit);
 
-                while (address != -1)
+                while (iAddress != -1)
                 {
-                    addresses.Add(address);
-                    address = BinaryTools.GetBaseAddress(bytes, Guids.APPLE_ROM_INFO_GUID, address + 1, (int)IFD.BIOS_REGION_LIMIT);
+                    lstAddresses.Add(iAddress);
+                    iAddress = BinaryTools.GetBaseAddress(bytes, Guids.APPLE_ROM_INFO_GUID, iAddress + 1, (int)IFD.BiosLimit);
                 }
 
-                return addresses;
+                return lstAddresses;
             }
 
             // Local function to extract the section bytes.
-            byte[] ExtractSectionBytes(byte[] bytes, int baseAddress)
+            byte[] ExtractSectionBytes(byte[] bytes, int baseaddress)
             {
-                const int headerLength = 24; // 18h
-                const int dataLength = 2; // 2h
+                int iHdrLength = 24; // 18h
+                int iDataLength = 2; // 2h
 
-                byte[] sectionSizeBytes = BinaryTools.GetBytesBaseLength(bytes, baseAddress + headerLength, dataLength);
+                byte[] sectionSizeBytes = BinaryTools.GetBytesBaseLength(bytes, baseaddress + iHdrLength, iDataLength);
 
-                int sectionSize = BitConverter.ToInt16(sectionSizeBytes, 0);
+                int iSize = BitConverter.ToInt16(sectionSizeBytes, 0);
 
-                return sectionSize > 6 ? BinaryTools.GetBytesBaseLength(bytes, baseAddress + headerLength, sectionSize) : null;
+                return iSize > 6 ? BinaryTools.GetBytesBaseLength(bytes, baseaddress + iHdrLength, iSize) : null;
             }
         }
 
@@ -884,119 +820,51 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
                 Compiler = null
             };
         }
-
-        internal static readonly byte[] BIOS_ID_SIGNATURE =
-        {
-            0x42, 0x49, 0x4F, 0x53,
-            0x20, 0x49, 0x44, 0x3A
-        };
-
-        internal static readonly byte[] MODEL_SIGNATURE =
-        {
-            0x4D, 0x6F, 0x64, 0x65,
-            0x6C, 0x3A
-        };
-
-        internal static readonly byte[] EFI_VERSION_SIGNATURE =
-        {
-            0x45, 0x46, 0x49, 0x20,
-            0x56, 0x65, 0x72, 0x73,
-            0x69, 0x6F, 0x6E, 0x3A
-        };
-
-        internal static readonly byte[] BUILT_BY_SIGNATURE =
-        {
-            0x42, 0x75, 0x69, 0x6C,
-            0x74, 0x20, 0x62, 0x79,
-            0x3A
-        };
-
-        internal static readonly byte[] DATE_SIGNATURE =
-        {
-            0x44, 0x61, 0x74, 0x65,
-            0x3A
-        };
-
-        internal static readonly byte[] REVISION_SIGNATURE =
-        {
-            0x52, 0x65, 0x76, 0x69,
-            0x73, 0x69, 0x6F, 0x6E,
-            0x3A
-        };
-
-        internal static readonly byte[] ROM_VERSION_SIGNATURE =
-        {
-            0x52, 0x4F, 0x4D, 0x20,
-            0x56, 0x65, 0x72, 0x73,
-            0x69, 0x6F, 0x6E, 0x3A
-        };
-
-        internal static readonly byte[] BUILDCAVE_ID_SIGNATURE =
-        {
-            0x42, 0x75, 0x69, 0x6C,
-            0x64, 0x63, 0x61, 0x76,
-            0x65, 0x20, 0x49, 0x44,
-            0x3A
-        };
-
-        internal static readonly byte[] BUILD_TYPE_SIGNATURE =
-        {
-            0x42, 0x75, 0x69, 0x6C,
-            0x64, 0x20, 0x54, 0x79,
-            0x70, 0x65, 0x3A
-        };
-
-        internal static readonly byte[] COMPILER_SIGNATURE =
-        {
-            0x43, 0x6F, 0x6D, 0x70,
-            0x69, 0x6C, 0x65, 0x72,
-            0x3A
-        };
         #endregion
 
         #region EFI BIOS ID Section
         internal static EfiBiosIdSection GetEfiBiosIdSectionData(byte[] sourceBytes)
         {
-            int guidBaseAddress = BinaryTools.GetBaseAddress(sourceBytes, Guids.EFI_BIOS_ID_GUID, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT);
+            int iBaseAddress = BinaryTools.GetBaseAddress(sourceBytes, Guids.EFI_BIOS_ID_GUID, (int)IFD.BiosBase, (int)IFD.BiosLimit);
 
-            if (guidBaseAddress == -1)
+            if (iBaseAddress == -1)
             {
                 return DefaultEfiBiosIdSection();
             }
 
 
-            int efiBiosIdBaseAddress = BinaryTools.GetBaseAddress(sourceBytes, EFI_BIOS_ID_SIGNATURE, guidBaseAddress);
+            int iEfiBiosIdBase = BinaryTools.GetBaseAddress(sourceBytes, EFISigs.EfiBiosIdMarker, iBaseAddress);
 
-            if (efiBiosIdBaseAddress == -1)
+            if (iEfiBiosIdBase == -1)
             {
                 return DefaultEfiBiosIdSection();
             }
 
-            int efiBiosIdLimitAddress = BinaryTools.GetBaseAddress(sourceBytes, new byte[] { 0x00, 0x00, 0x00 }, efiBiosIdBaseAddress);
+            int iEfiBiosIdLimit = BinaryTools.GetBaseAddress(sourceBytes, new byte[] { 0x00, 0x00, 0x00 }, iEfiBiosIdBase);
 
-            byte[] efiBiosIdBytes = BinaryTools.GetBytesBaseLimit(sourceBytes, efiBiosIdBaseAddress + EFI_BIOS_ID_SIGNATURE.Length, efiBiosIdLimitAddress);
+            byte[] bEfiBiosIdData = BinaryTools.GetBytesBaseLimit(sourceBytes, iEfiBiosIdBase + EFISigs.EfiBiosIdMarker.Length, iEfiBiosIdLimit);
 
-            if (efiBiosIdBytes == null)
+            if (bEfiBiosIdData == null)
             {
                 return DefaultEfiBiosIdSection();
             }
 
-            efiBiosIdBytes = efiBiosIdBytes.Where(b => b != 0x00 && b != 0x20).ToArray();
-            string efiBiosId = _utf8.GetString(efiBiosIdBytes);
-            string[] parts = efiBiosId.Split((char)0x2E);
+            bEfiBiosIdData = bEfiBiosIdData.Where(b => b != 0x00 && b != 0x20).ToArray();
+            string strEfiBiosId = utf8Encoding.GetString(bEfiBiosIdData);
+            string[] arrEfiBiosIdParts = strEfiBiosId.Split((char)0x2E);
 
-            if (parts.Length != 5)
+            if (arrEfiBiosIdParts.Length != 5)
             {
                 return DefaultEfiBiosIdSection();
             }
 
             return new EfiBiosIdSection
             {
-                ModelPart = parts[0],
-                zzPart = parts[1],
-                MajorPart = parts[2],
-                MinorPart = parts[3],
-                DatePart = parts[4],
+                ModelPart = arrEfiBiosIdParts[0],
+                ZzPart = arrEfiBiosIdParts[1],
+                MajorPart = arrEfiBiosIdParts[2],
+                MinorPart = arrEfiBiosIdParts[3],
+                DatePart = arrEfiBiosIdParts[4],
             };
         }
 
@@ -1005,71 +873,66 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             return new EfiBiosIdSection
             {
                 ModelPart = null,
-                zzPart = null,
+                ZzPart = null,
                 MajorPart = null,
                 MinorPart = null,
                 DatePart = null,
             };
         }
-
-        internal static readonly byte[] EFI_BIOS_ID_SIGNATURE =
-        {
-            0x24, 0x49, 0x42, 0x49,
-            0x4F, 0x53, 0x49, 0x24
-        };
         #endregion
 
         #region APFSJumpStart
-        internal static ApfsCapable GetIsApfsCapable(byte[] sourceBytes)
+        internal static ApfsCapable GetIsApfsCapable(byte[] sourcebytes)
         {
             // APFS DXE GUID found.
-            if (BinaryTools.GetBaseAddress(sourceBytes, Guids.APFS_DXE_GUID, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT) != -1)
+            if (BinaryTools.GetBaseAddress(
+                sourcebytes, Guids.APFS_DXE_GUID, (int)IFD.BiosBase, (int)IFD.BiosLimit) != -1)
             {
                 return ApfsCapable.Yes;
             }
 
             // Look for a compressed volume GUID.
-            int lzmaDxeBaseAddress = BinaryTools.GetBaseAddress(
-                sourceBytes, Guids.LZMA_DXE_VOLUME_IMAGE_1_GUID, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT);
+            int iLzmaDxeBase = BinaryTools.GetBaseAddress(
+                sourcebytes, Guids.LZMA_DXE_VOLUME_IMAGE_1_GUID, (int)IFD.BiosBase, (int)IFD.BiosLimit);
 
-            if (lzmaDxeBaseAddress == -1)
+            if (iLzmaDxeBase == -1)
             {
-                lzmaDxeBaseAddress = BinaryTools.GetBaseAddress(
-                    sourceBytes, Guids.LZMA_DXE_VOLUME_IMAGE_0_GUID, (int)IFD.BIOS_REGION_BASE, (int)IFD.BIOS_REGION_LIMIT);
+                iLzmaDxeBase = BinaryTools.GetBaseAddress(
+                    sourcebytes, Guids.LZMA_DXE_VOLUME_IMAGE_0_GUID, (int)IFD.BiosBase, (int)IFD.BiosLimit);
             }
 
             // No compressed DXE volume was found.
-            if (lzmaDxeBaseAddress == -1)
+            if (iLzmaDxeBase == -1)
             {
                 return ApfsCapable.No;
             }
 
             // Get bytes containing section length (0x3).
-            byte[] dataLengthBytes = BinaryTools.GetBytesBaseLength(sourceBytes, lzmaDxeBaseAddress + 20, 3);
+            byte[] bSectionLength = BinaryTools.GetBytesBaseLength(sourcebytes, iLzmaDxeBase + 20, 3);
 
             // Convert section length bytes to int24.
-            int sectionSize = Helper.ToInt24(dataLengthBytes);
+            int iSectionLength = Helper.ToInt24(bSectionLength);
 
             // Determine the end of the lzma guid section.
-            int lzmaDxeLimitAddress = lzmaDxeBaseAddress + sectionSize;
+            int iLzmaDxeLimit = iLzmaDxeBase + iSectionLength;
 
             // Search for the LZMA signature byte.
-            lzmaDxeBaseAddress = BinaryTools.GetBaseAddress(sourceBytes, new byte[] { 0x5D }, lzmaDxeBaseAddress + GUID_SIZE);
+            iLzmaDxeBase = BinaryTools.GetBaseAddress(sourcebytes, new byte[] { 0x5D }, iLzmaDxeBase + GUID_SIZE);
 
             // Decompress the LZMA volume.
-            byte[] decompressedBytes = LzmaCoder.DecompressBytes(BinaryTools.GetBytesBaseLimit(sourceBytes, lzmaDxeBaseAddress, lzmaDxeLimitAddress));
+            byte[] dDecompressed = LzmaCoder.DecompressBytes(BinaryTools.GetBytesBaseLimit(sourcebytes, iLzmaDxeBase, iLzmaDxeLimit));
 
             // There was an issue decompressing the volume (Error saved to './mefit.log').
-            if (decompressedBytes == null)
+            if (dDecompressed == null)
             {
                 return ApfsCapable.Unknown;
             }
 
             // May as well store the archive buffer here.
-            LzmaDecompressedBuffer = decompressedBytes;
+            LzmaDecompressedBuffer = dDecompressed;
 
             // Search the decompressed volume for the APFS DXE GUID.
-            if (BinaryTools.GetBaseAddress(decompressedBytes, Guids.APFS_DXE_GUID) == -1)
+            if (BinaryTools.GetBaseAddress(dDecompressed, Guids.APFS_DXE_GUID) == -1)
             {
                 // The APFS DXE GUID was not found in the compressed volume.
                 return ApfsCapable.No;
@@ -1084,66 +947,53 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         /// <summary>
         /// Patches the given Fsys store byte array with a new CRC value.
         /// </summary>
-        /// <param name="fsysStore">The byte array representing the Fsys store.</param>
-        /// <param name="newCrc">The new CRC value to be patched.</param>
+        /// <param name="fsysbuffer">The byte array representing the Fsys store.</param>
+        /// <param name="newcrc">The new CRC value to be patched.</param>
         /// <returns>The patched Fsys store byte array.</returns>
-        internal static byte[] PatchFsysCrc(byte[] fsysStore, uint newCrc)
+        internal static byte[] PatchFsysCrc(byte[] fsysbuffer, uint newcrc)
         {
-            int storeLength = fsysStore.Length;
-
-            // Check if the size of the byte array is valid
-            if (storeLength < FSYS_RGN_SIZE)
-            {
-                throw new ArgumentException(nameof(PatchFsysCrc), $"Given byes are too small: {storeLength:X2}h");
-            }
-
-            if (storeLength > FSYS_RGN_SIZE)
-            {
-                throw new ArgumentException(nameof(PatchFsysCrc), $"Given bytes are too large: {storeLength:X2}h");
-            }
-
             // Convert the new CRC value to bytes
-            byte[] newCrcBytes = BitConverter.GetBytes(newCrc);
+            byte[] bCrc = BitConverter.GetBytes(newcrc);
 
             // Write the new bytes back to the Fsys store at the appropriate base
-            BinaryTools.OverwriteBytesAtBase(fsysStore, FSYS_RGN_SIZE - CRC32_SIZE, newCrcBytes);
+            BinaryTools.OverwriteBytesAtBase(fsysbuffer, FsysRegionSize - CRC32_SIZE, bCrc);
 
             // Return the patched data
-            return fsysStore;
+            return fsysbuffer;
         }
 
         /// <summary>
         /// Patches a binaries Fsys store with the correct crc value.
         /// </summary>
-        /// <param name="sourceBytes">The byte array representing the source binary file.</param>
-        /// <param name="fsysBase">The base of the Fsys store within the binary file.</param>
-        /// <param name="fsysStore">The byte array representing the Fsys store.</param>
-        /// <param name="uiNewCrc">The new CRC value to be patched in the Fsys store.</param>
+        /// <param name="sourcebuffer">The byte array representing the source binary file.</param>
+        /// <param name="fsysbase">The base of the Fsys store within the binary file.</param>
+        /// <param name="fsysbuffer">The byte array representing the Fsys store.</param>
+        /// <param name="newcrc">The new CRC value to be patched in the Fsys store.</param>
         /// <returns>The patched file byte array, or null if the new calculated crc does not match the crc in the Fsys store.</returns>
-        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourceBytes, int fsysBase, byte[] fsysStore, uint uiNewCrc)
+        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourcebuffer, int fsysbase, byte[] fsysbuffer, uint newcrc)
         {
             Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
             // Create a new byte array to hold the patched binary.
-            byte[] patchedBytes = new byte[sourceBytes.Length];
+            byte[] bPatchedSource = new byte[sourcebuffer.Length];
 
-            Array.Copy(sourceBytes, patchedBytes, sourceBytes.Length);
+            Array.Copy(sourcebuffer, bPatchedSource, sourcebuffer.Length);
 
             Logger.WriteCallerLine(LOGSTRINGS.CRC_PATCH);
 
             // Patch the Fsys store crc.
-            byte[] patchedStore = PatchFsysCrc(fsysStore, uiNewCrc);
+            byte[] bPatchedFsys = PatchFsysCrc(fsysbuffer, newcrc);
 
             Logger.WriteCallerLine(LOGSTRINGS.CRC_WRITE_TO_FW);
 
             // Overwrite the loaded Fsys crc32 with the newly calculated crc32.
-            BinaryTools.OverwriteBytesAtBase(patchedBytes, fsysBase, patchedStore);
+            BinaryTools.OverwriteBytesAtBase(bPatchedSource, fsysbase, bPatchedFsys);
 
             // Load the Fsys store from the new binary.
-            FsysStore newBinaryFsys = GetFsysStoreData(patchedBytes, false);
+            FsysStore fssNewBinary = GetFsysStoreData(bPatchedSource, false);
 
             // Compare the new checksums.
-            if (newBinaryFsys.CrcString != newBinaryFsys.CrcCalcString)
+            if (fssNewBinary.CrcString != fssNewBinary.CrcActualString)
             {
                 Logger.WriteCallerLine(LOGSTRINGS.CRC_WRITE_FAIL);
 
@@ -1152,27 +1002,27 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             Logger.WriteCallerLine(LOGSTRINGS.CRC_WRITE_SUCCESS);
 
-            return patchedBytes;
+            return bPatchedSource;
         }
 
         /// <summary>
         /// Invalidates an SVS store Message Authentication Code, removing EFI Lock.
         /// </summary>
-        /// <param name="storeData">The SVS store to unlock.</param>
-        /// <param name="lockCrcbase">The Message Authentication Code CRC base</param>
-        internal static byte[] PatchSvsStoreMac(byte[] storeData, int lockCrcbase)
+        /// <param name="svsstorebuffer">The SVS store to unlock.</param>
+        /// <param name="lockbase">The Message Authentication Code base</param>
+        internal static byte[] PatchSvsStoreMac(byte[] svsstorebuffer, int lockbase)
         {
             // Some sanity checks.
-            if (storeData == null || storeData.Length < 16)
+            if (svsstorebuffer == null || svsstorebuffer.Length < 16)
             {
                 return null;
             }
 
             // Write 0xFh length zeros over the MAC CRC from lockBase
-            BinaryTools.OverwriteBytesAtBase(storeData, lockCrcbase, new byte[0x0F]);
+            BinaryTools.OverwriteBytesAtBase(svsstorebuffer, lockbase, new byte[0x0F]);
 
             // Returned the unlocked store
-            return storeData;
+            return svsstorebuffer;
         }
         #endregion
     }

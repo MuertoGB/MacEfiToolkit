@@ -47,7 +47,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
     internal struct EfiBiosIdSection
     {
         internal string ModelPart { get; set; }
-        internal string zzPart { get; set; }
+        internal string ZzPart { get; set; }
         internal string MajorPart { get; set; }
         internal string MinorPart { get; set; }
         internal string DatePart { get; set; }
@@ -60,7 +60,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal char[] Signature;
-        internal ushort StoreSize;
+        internal ushort StoreLength;
         internal ushort Unknown;
         internal byte Format;
         internal byte State;
@@ -72,12 +72,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
     {
         internal NvramStoreType StoreType { get; set; }
         internal int StoreBase { get; set; }
-        internal int StoreSize { get; set; }
+        internal int StoreLength { get; set; }
         internal byte[] StoreBuffer { get; set; }
         internal byte StoreFormat { get; set; }
         internal byte StoreState { get; set; }
         internal int BodyStart { get; set; }
-        internal int BodySize { get; set; }
+        internal int BodyLength { get; set; }
         internal bool IsStoreEmpty { get; set; }
     }
     #endregion
@@ -93,8 +93,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         internal int HWCBase { get; set; }
         internal string SON { get; set; }
         internal string CrcString { get; set; }
-        internal string CrcCalcString { get; set; }
-        internal uint CRC32CalcInt { get; set; }
+        internal string CrcActualString { get; set; }
+        internal uint CrcActual { get; set; }
     }
     #endregion
 

@@ -300,7 +300,7 @@
             // 
             // tlpDrop
             // 
-            this.tlpDrop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tlpDrop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(31)))), ((int)(((byte)(32)))));
             this.tlpDrop.ColumnCount = 1;
             this.tlpDrop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDrop.Controls.Add(this.lblDrag, 0, 1);
@@ -382,7 +382,7 @@
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsMore";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 352);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 324);
             // 
             // changelogToolStripMenuItem
             // 

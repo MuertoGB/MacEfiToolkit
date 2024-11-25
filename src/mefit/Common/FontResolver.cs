@@ -58,9 +58,9 @@ namespace Mac_EFI_Toolkit.Common
         {
             try
             {
-                using (FontFamily family = new FontFamily(fontFamily))
+                using (FontFamily fFamily = new FontFamily(fontFamily))
                 {
-                    if (family.IsStyleAvailable(fontStyle))
+                    if (fFamily.IsStyleAvailable(fontStyle))
                     {
                         return FontStatus.Available;
                     }

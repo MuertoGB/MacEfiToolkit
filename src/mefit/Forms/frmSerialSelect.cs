@@ -51,7 +51,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (Tag is SerialSenderTag.SOCROM)
             {
-                tbSsn.MaxLength = SOCROM.SERIAL_LEN;
+                tbSsn.MaxLength = SOCROM.SERIAL_LENGTH;
                 return;
             }
         }

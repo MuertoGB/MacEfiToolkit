@@ -14,42 +14,43 @@ namespace Mac_EFI_Toolkit.Common
         internal static byte[] DecompressBytes(byte[] sourceBytes)
         {
             // Create a new instance of the Decoder class.
-            SevenZip.Compression.LZMA.Decoder decoder = new SevenZip.Compression.LZMA.Decoder();
+            SevenZip.Compression.LZMA.Decoder lzmaDecoder = new SevenZip.Compression.LZMA.Decoder();
 
             // Create a memory stream to store the decompressed data.
-            MemoryStream decoderStream = new MemoryStream();
+            MemoryStream msBuffer = new MemoryStream();
 
             try
             {
                 // Create a memory stream to hold the compressed input data.
-                using (MemoryStream compressedInput = new MemoryStream(sourceBytes))
+                using (MemoryStream msInput = new MemoryStream(sourceBytes))
                 {
                     // Read the first 5 bytes which contain decoder property data.
-                    byte[] propertyBytes = new byte[5];
-                    compressedInput.Read(propertyBytes, 0, 5);
+                    byte[] bProperties = new byte[5];
+
+                    msInput.Read(bProperties, 0, 5);
 
                     // Read the next 8 bytes which represent the decompressed data length.
-                    byte[] decompressedLength = new byte[8];
-                    compressedInput.Read(decompressedLength, 0, 8);
+                    byte[] bDecompressedLength = new byte[8];
+                    msInput.Read(bDecompressedLength, 0, 8);
 
                     // Convert the 8-byte array to a long, representing the total file length.
-                    long fileLength = BitConverter.ToInt64(decompressedLength, 0);
+                    long lFileLength = BitConverter.ToInt64(bDecompressedLength, 0);
 
                     // Set the decoder properties using the propertyBytes.
-                    decoder.SetDecoderProperties(propertyBytes);
+                    lzmaDecoder.SetDecoderProperties(bProperties);
 
                     // Decode the compressed input stream and write the result to decoderStream.
-                    decoder.Code(compressedInput, decoderStream, compressedInput.Length, fileLength, null);
+                    lzmaDecoder.Code(msInput, msBuffer, msInput.Length, lFileLength, null);
 
                     // Validate the decompressed length.
-                    if (decoderStream.Length != fileLength)
+                    if (msBuffer.Length != lFileLength)
                     {
-                        Logger.WriteLine($"Decompressed length mismatch. Expected: {fileLength}, Actual: {decoderStream.Length}", LogType.Application);
+                        Logger.WriteLine($"Decompressed length mismatch. Expected: {lFileLength}, Actual: {msBuffer.Length}", LogType.Application);
                     }
                 }
 
                 // Return the decompressed data as a byte array.
-                return decoderStream.ToArray();
+                return msBuffer.ToArray();
             }
             catch (Exception e)
             {

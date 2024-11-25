@@ -970,6 +970,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cbxCensor.Size = new System.Drawing.Size(26, 16);
             this.cbxCensor.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(150)))), ((int)(((byte)(160)))));
             this.cbxCensor.TabIndex = 8;
+            this.cbxCensor.UseVisualStyleBackColor = false;
             this.cbxCensor.CheckedChanged += new System.EventHandler(this.cbxCensor_CheckedChanged);
             // 
             // tlpStatusBar
@@ -1433,14 +1434,14 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.helloToolStripMenuItem1.ForeColor = System.Drawing.Color.White;
             this.helloToolStripMenuItem1.Name = "helloToolStripMenuItem1";
-            this.helloToolStripMenuItem1.Size = new System.Drawing.Size(144, 26);
+            this.helloToolStripMenuItem1.Size = new System.Drawing.Size(130, 24);
             this.helloToolStripMenuItem1.Text = "Hello";
             // 
             // testringToolStripMenuItem
             // 
             this.testringToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.testringToolStripMenuItem.Name = "testringToolStripMenuItem";
-            this.testringToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.testringToolStripMenuItem.Size = new System.Drawing.Size(130, 24);
             this.testringToolStripMenuItem.Text = "Testring";
             // 
             // cmsCopy

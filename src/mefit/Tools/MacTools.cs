@@ -98,18 +98,18 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>The calculated Fsys CRC32 uint</returns>
         internal static uint GetUintFsysCrc32(byte[] fsysStore)
         {
-            if (fsysStore.Length < EFIROM.FSYS_RGN_SIZE)
+            if (fsysStore.Length < EFIROM.FsysRegionSize)
                 throw new ArgumentException(
                     nameof(fsysStore),
                     "Given bytes are too small.");
 
-            if (fsysStore.Length > EFIROM.FSYS_RGN_SIZE)
+            if (fsysStore.Length > EFIROM.FsysRegionSize)
                 throw new ArgumentException(
                     nameof(fsysStore),
                     "Given bytes are too large.");
 
             // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes.
-            byte[] fsysTempBuffer = new byte[EFIROM.FSYS_RGN_SIZE - EFIROM.CRC32_SIZE];
+            byte[] fsysTempBuffer = new byte[EFIROM.FsysRegionSize - EFIROM.CRC32_SIZE];
 
             if (fsysStore != null)
             {

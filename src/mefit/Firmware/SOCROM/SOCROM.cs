@@ -17,21 +17,22 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         internal static string LoadedBinaryPath = null;
         internal static byte[] LoadedBinaryBuffer = null;
         internal static bool FirmwareLoaded = false;
-
         internal static string iBootVersion = null;
         internal static string ConfigCode = null;
         internal static string NewSerial = null;
 
         internal static FileInfoStore FileInfoData;
-        internal static ScfgStore ScfgSectionData;
+        internal static SCfgStore SCfgSectionData;
 
         internal const int SCFG_EXPECTED_BASE = 0x28A000;
-        internal const int SCFG_EXPECTED_LEN = 0xB8;
-        internal const int SERIAL_LEN = 12;
+        internal const int SCFG_EXPECTED_LENGTH = 0xB8;
+        internal const int SERIAL_LENGTH = 12;
 
-        internal static readonly byte[] T2_BASE_SIG = { 0x30, 0x83 };
+        internal static TimeSpan ParseTime { get; private set; }
+        #endregion
 
-        internal static TimeSpan tsParseTime { get; private set; }
+        #region Private Members
+        private static readonly byte[] _t2RomMarker = { 0x30, 0x83 };
         #endregion
 
         #region Private Members
@@ -53,13 +54,13 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             iBootVersion = GetIbootVersion(sourceBytes);
 
             // Parse Scfg Store data.
-            ScfgSectionData = GetSCfgData(sourceBytes, false);
+            SCfgSectionData = GetSCfgData(sourceBytes, false);
 
             // Fetch the Config Code.
-            ConfigCode = ScfgSectionData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(ScfgSectionData.HWC) : null;
+            ConfigCode = SCfgSectionData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(SCfgSectionData.HWC) : null;
 
             stopwatch.Start();
-            tsParseTime = stopwatch.Elapsed;
+            ParseTime = stopwatch.Elapsed;
         }
 
         internal static void ResetFirmwareBaseData()
@@ -71,14 +72,14 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             iBootVersion = null;
             ConfigCode = null;
             NewSerial = null;
-            ScfgSectionData = default;
+            SCfgSectionData = default;
         }
 
         internal static bool IsValidImage(byte[] sourceBytes)
         {
-            byte[] socromSignature = BinaryTools.GetBytesBaseLength(sourceBytes, 0, T2_BASE_SIG.Length);
+            byte[] socromSignature = BinaryTools.GetBytesBaseLength(sourceBytes, 0, _t2RomMarker.Length);
 
-            if (!BinaryTools.ByteArraysMatch(socromSignature, T2_BASE_SIG))
+            if (!BinaryTools.ByteArraysMatch(socromSignature, _t2RomMarker))
             {
                 return false;
             }
@@ -111,7 +112,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #endregion
 
         #region Scfg Store
-        internal static ScfgStore GetSCfgData(byte[] sourceBytes, bool isScfgStoreOnly)
+        internal static SCfgStore GetSCfgData(byte[] sourceBytes, bool isScfgStoreOnly)
         {
             int scfgBase = FindScfgBaseAddress(sourceBytes, isScfgStoreOnly);
 
@@ -141,16 +142,16 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             string regno = GetStringFromSigWithLimit(scfgBytes, SCFG_SON_REGN, _limitChars);
             string crc = $"{FileTools.GetCrc32Digest(scfgBytes):X8}";
 
-            return new ScfgStore
+            return new SCfgStore
             {
                 StoreBase = scfgBase,
                 StoreSize = dataSize,
-                ScfgBytes = scfgBytes,
+                StoreBuffer = scfgBytes,
                 Serial = serial,
                 SerialBase = serialBase,
                 HWC = hwc,
                 SON = son,
-                ScfgCrc = crc,
+                StoreCRC = crc,
                 MdlC = null,
                 RegNumText = regno
             };
@@ -214,14 +215,14 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             return _utf8.GetString(bytes);
         }
 
-        private static ScfgStore DefaultScfgData()
+        private static SCfgStore DefaultScfgData()
         {
-            return new ScfgStore
+            return new SCfgStore
             {
                 StoreBase = -1,
                 StoreSize = 0,
-                ScfgBytes = null,
-                ScfgCrc = null,
+                StoreBuffer = null,
+                StoreCRC = null,
                 Serial = null,
                 HWC = null,
                 SON = null,

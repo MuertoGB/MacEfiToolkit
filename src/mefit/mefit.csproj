@@ -88,6 +88,7 @@
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Firmware\EFI\Guids.cs" />
     <Compile Include="Firmware\EFI\EFIROM.cs" />
+    <Compile Include="Firmware\EFI\EFISigs.cs" />
     <Compile Include="Firmware\EFI\Types\Structs.cs" />
     <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
@@ -272,12 +273,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="mefit.ico" />
+    <None Include="Resources\icon64.png" />
     <None Include="Resources\icon24.png" />
     <None Include="Resources\icon32.png" />
     <None Include="Resources\loading.gif" />
     <None Include="Assets\editorterms.txt" />
     <None Include="Resources\modeldb.xml" />
-    <None Include="Resources\imgmuerto64px.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

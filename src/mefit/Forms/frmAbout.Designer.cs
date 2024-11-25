@@ -91,7 +91,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lnkPaypal.AutoSize = true;
             this.lnkPaypal.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lnkPaypal.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lnkPaypal.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(190)))), ((int)(((byte)(180)))));
+            this.lnkPaypal.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(200)))), ((int)(((byte)(250)))));
             this.lnkPaypal.Location = new System.Drawing.Point(9, 9);
             this.lnkPaypal.Margin = new System.Windows.Forms.Padding(9, 0, 0, 0);
             this.lnkPaypal.Name = "lnkPaypal";
@@ -161,7 +161,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.tlpImages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.tlpImages.ColumnCount = 2;
-            this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 102F));
+            this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpImages.Controls.Add(this.pbxMuerto, 0, 0);
             this.tlpImages.Controls.Add(this.tlpTopLabels, 1, 0);
@@ -176,39 +176,39 @@ namespace Mac_EFI_Toolkit.Forms
             // pbxMuerto
             // 
             this.pbxMuerto.BackColor = System.Drawing.Color.Transparent;
-            this.pbxMuerto.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.imgmuerto64px;
-            this.pbxMuerto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pbxMuerto.BackgroundImage = global::Mac_EFI_Toolkit.Properties.Resources.icon64;
+            this.pbxMuerto.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbxMuerto.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbxMuerto.Image = global::Mac_EFI_Toolkit.Properties.Resources.imgmuerto64px;
             this.pbxMuerto.Location = new System.Drawing.Point(0, 0);
             this.pbxMuerto.Margin = new System.Windows.Forms.Padding(0);
             this.pbxMuerto.Name = "pbxMuerto";
-            this.pbxMuerto.Size = new System.Drawing.Size(102, 82);
+            this.pbxMuerto.Size = new System.Drawing.Size(90, 82);
+            this.pbxMuerto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pbxMuerto.TabIndex = 85;
             this.pbxMuerto.TabStop = false;
             // 
             // tlpTopLabels
             // 
-            this.tlpTopLabels.BackColor = System.Drawing.Color.Transparent;
+            this.tlpTopLabels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.tlpTopLabels.ColumnCount = 1;
             this.tlpTopLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTopLabels.Controls.Add(this.lblBuild, 0, 0);
             this.tlpTopLabels.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpTopLabels.Location = new System.Drawing.Point(102, 0);
+            this.tlpTopLabels.Location = new System.Drawing.Point(90, 0);
             this.tlpTopLabels.Margin = new System.Windows.Forms.Padding(0);
             this.tlpTopLabels.Name = "tlpTopLabels";
             this.tlpTopLabels.RowCount = 1;
             this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
             this.tlpTopLabels.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-            this.tlpTopLabels.Size = new System.Drawing.Size(261, 82);
+            this.tlpTopLabels.Size = new System.Drawing.Size(273, 82);
             this.tlpTopLabels.TabIndex = 0;
             // 
             // lblBuild
             // 
             this.lblBuild.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblBuild.AutoSize = true;
-            this.lblBuild.BackColor = System.Drawing.Color.Transparent;
+            this.lblBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.lblBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBuild.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(235)))), ((int)(((byte)(240)))));
             this.lblBuild.Location = new System.Drawing.Point(0, 31);

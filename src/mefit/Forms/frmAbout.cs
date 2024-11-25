@@ -38,7 +38,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Window Events
         private void frmAbout_Load(object sender, EventArgs e) =>
-            lblBuild.Text = $"Mac EFI Toolkit v{Application.ProductVersion} by Muerto\r\nBuild {METVersion.APP_BUILD}\r\nLZMA SDK {METVersion.LZMA_SDK}";
+            lblBuild.Text = $"Mac EFI Toolkit v{Application.ProductVersion} by Muerto\r\nBuild {METVersion.APP_BUILD} ({METVersion.APP_CHANNEL})\r\nLZMA SDK {METVersion.LZMA_SDK}";
         #endregion
 
         #region KeyDown Events

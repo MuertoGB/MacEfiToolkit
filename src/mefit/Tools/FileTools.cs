@@ -266,7 +266,7 @@ namespace Mac_EFI_Toolkit.Tools
                 FileName = Path.GetFileNameWithoutExtension(fileName),
                 CreationTime = fileInfo.CreationTime.ToString(),
                 LastWriteTime = fileInfo.LastWriteTime.ToString(),
-                Length = (int)fileInfo.Length,
+                Length = fileInfo.Length,
                 CRC32 = FileTools.GetCrc32Digest(fileBytes)
             };
         }
