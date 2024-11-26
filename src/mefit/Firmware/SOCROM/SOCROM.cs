@@ -32,35 +32,31 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #endregion
 
         #region Private Members
-        private static readonly byte[] _t2RomMarker = { 0x30, 0x83 };
-        #endregion
-
-        #region Private Members
-        const int _serialLength = 12;
         private static readonly byte[] _limitChars = new byte[] { 0x00, 0x00, 0x00 };
-        private static readonly Encoding _utf8 = Encoding.UTF8;
+        private static readonly Encoding _utf8encoding = Encoding.UTF8;
+        const int _serialLength = 12;
         #endregion
 
         #region Parse Fimware
-        internal static void LoadFirmwareBaseData(byte[] sourceBytes, string fileName)
+        internal static void LoadFirmwareBaseData(byte[] sourcebuffer, string filename)
         {
             // Start bench.
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            Stopwatch swParseTime = Stopwatch.StartNew();
 
             // Parse file info.
-            FileInfoData = FileTools.GetBinaryFileInfo(fileName);
+            FileInfoData = FileTools.GetBinaryFileInfo(filename);
 
             // Parse iBoot version.
-            iBootVersion = GetIbootVersion(sourceBytes);
+            iBootVersion = GetIbootVersion(sourcebuffer);
 
             // Parse Scfg Store data.
-            SCfgSectionData = GetSCfgData(sourceBytes, false);
+            SCfgSectionData = GetSCfgData(sourcebuffer, false);
 
             // Fetch the Config Code.
             ConfigCode = SCfgSectionData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(SCfgSectionData.HWC) : null;
 
-            stopwatch.Start();
-            ParseTime = stopwatch.Elapsed;
+            swParseTime.Start();
+            ParseTime = swParseTime.Elapsed;
         }
 
         internal static void ResetFirmwareBaseData()
@@ -75,144 +71,143 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             SCfgSectionData = default;
         }
 
-        internal static bool IsValidImage(byte[] sourceBytes)
+        internal static bool IsValidImage(byte[] sourcebuffer)
         {
-            byte[] socromSignature = BinaryTools.GetBytesBaseLength(sourceBytes, 0, _t2RomMarker.Length);
+            byte[] bSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, 0, SOCSigs.T2RomMarker.Length);
 
-            if (!BinaryTools.ByteArraysMatch(socromSignature, _t2RomMarker))
+            if (!BinaryTools.ByteArraysMatch(bSignature, SOCSigs.T2RomMarker))
             {
                 return false;
             }
 
-            return (BinaryTools.GetBaseAddress(sourceBytes, IBOOT_VER_SIG, 0) != -1);
+            return (BinaryTools.GetBaseAddress(sourcebuffer, SOCSigs.iBootMarker, 0) != -1);
         }
         #endregion
 
         #region IBoot
-        internal static string GetIbootVersion(byte[] source)
+        internal static string GetIbootVersion(byte[] sourcebytes)
         {
-            int ibootSig = BinaryTools.GetBaseAddress(source, IBOOT_VER_SIG, 0);
+            int iIbootBase = BinaryTools.GetBaseAddress(sourcebytes, SOCSigs.iBootMarker, 0);
+            int iDataStart = 0x6;
 
-            if (ibootSig != -1) // Signature found
+            if (iIbootBase != -1) // Signature found.
             {
-                // Get byte containing data length
-                byte[] lByte = BinaryTools.GetBytesBaseLength(source, ibootSig + IBOOT_VER_SIG.Length + 1, 1);
+                // Get byte containing data length.
+                byte[] bLength = BinaryTools.GetBytesBaseLength(sourcebytes, iIbootBase + SOCSigs.iBootMarker.Length + 1, 1);
+                // Convert data length to unsigned int8.
+                byte iLength = (byte)bLength[0];
+                // Get iboot version data bytes.
+                byte[] strIboot = BinaryTools.GetBytesBaseLength(sourcebytes, iIbootBase + iDataStart, iLength);
 
-                // Convert data length to unsigned int8
-                byte dataSize = (byte)lByte[0];
-
-                // Get iboot version data bytes
-                byte[] stringData = BinaryTools.GetBytesBaseLength(source, ibootSig + 0x6, dataSize);
-
-                return _utf8.GetString(stringData);
+                return _utf8encoding.GetString(strIboot);
             }
 
             return APPSTRINGS.UNKNOWN;
         }
         #endregion
 
-        #region Scfg Store
-        internal static SCfgStore GetSCfgData(byte[] sourceBytes, bool isScfgStoreOnly)
+        #region SCfg Store
+        internal static SCfgStore GetSCfgData(byte[] sourcebuffer, bool isscfgonly)
         {
-            int scfgBase = FindScfgBaseAddress(sourceBytes, isScfgStoreOnly);
+            int iScfgBase = FindScfgBaseAddress(sourcebuffer, isscfgonly);
 
-            if (scfgBase == -1)
+            if (iScfgBase == -1)
             {
                 return DefaultScfgData();
             }
 
-            byte dataSize = BinaryTools.GetBytesBaseLength(sourceBytes, scfgBase + SCFG_HEADER_SIG.Length, 1)[0];
+            byte bLength = BinaryTools.GetBytesBaseLength(sourcebuffer, iScfgBase + SOCSigs.ScfgHeaderMarker.Length, 1)[0];
 
-            if (dataSize == 0)
+            if (bLength == 0)
             {
                 return DefaultScfgData();
             }
 
-            byte[] scfgBytes = BinaryTools.GetBytesBaseLength(sourceBytes, scfgBase, dataSize);
+            byte[] bScfgBuffer = BinaryTools.GetBytesBaseLength(sourcebuffer, iScfgBase, bLength);
 
-            if (scfgBytes == null)
+            if (bScfgBuffer == null)
             {
                 return DefaultScfgData();
             }
 
-            int serialBase = BinaryTools.GetBaseAddress(sourceBytes, SCFG_SSN_SIG) + SCFG_SSN_SIG.Length;
+            int iSerialBase = BinaryTools.GetBaseAddress(sourcebuffer, SOCSigs.ScfgSerialMarker) + SOCSigs.ScfgSerialMarker.Length;
 
-            string serial = GetStringFromSig(scfgBytes, SCFG_SSN_SIG, _serialLength, out string hwc);
-            string son = GetStringFromSigWithLimit(scfgBytes, SCFG_SON_SIG, _limitChars);
-            string regno = GetStringFromSigWithLimit(scfgBytes, SCFG_SON_REGN, _limitChars);
-            string crc = $"{FileTools.GetCrc32Digest(scfgBytes):X8}";
+            string strSerial = GetStringFromSig(bScfgBuffer, SOCSigs.ScfgSerialMarker, _serialLength, out string hwc);
+            string strSystemOrderNumber = GetStringFromSigWithLimit(bScfgBuffer, SOCSigs.ScfgSonMarker, _limitChars);
+            string strRegistrationNumber = GetStringFromSigWithLimit(bScfgBuffer, SOCSigs.ScfgRegnMarker, _limitChars);
+            string strCrc32 = $"{FileTools.GetCrc32Digest(bScfgBuffer):X8}";
 
             return new SCfgStore
             {
-                StoreBase = scfgBase,
-                StoreSize = dataSize,
-                StoreBuffer = scfgBytes,
-                Serial = serial,
-                SerialBase = serialBase,
+                StoreBase = iScfgBase,
+                StoreLength = bLength,
+                StoreBuffer = bScfgBuffer,
+                Serial = strSerial,
+                SerialBase = iSerialBase,
                 HWC = hwc,
-                SON = son,
-                StoreCRC = crc,
+                SON = strSystemOrderNumber,
+                StoreCRC = strCrc32,
                 MdlC = null,
-                RegNumText = regno
+                RegNumText = strRegistrationNumber
             };
         }
 
-        private static int FindScfgBaseAddress(byte[] sourceBytes, bool isScfgStoreOnly)
+        private static int FindScfgBaseAddress(byte[] sourcebuffer, bool isscfgonly)
         {
-            if (isScfgStoreOnly)
+            if (isscfgonly)
             {
                 return 0;
             }
 
-            return BinaryTools.GetBaseAddress(sourceBytes, SCFG_HEADER_SIG);
+            return BinaryTools.GetBaseAddress(sourcebuffer, SOCSigs.ScfgHeaderMarker);
         }
 
-        private static string GetStringFromSig(byte[] scfgBytes, byte[] sig, int expectedLength, out string hwc)
+        private static string GetStringFromSig(byte[] sourcebuffer, byte[] marker, int expectedlength, out string hwc)
         {
             hwc = null;
 
-            int baseAddress = BinaryTools.GetBaseAddress(scfgBytes, sig);
+            int iBase = BinaryTools.GetBaseAddress(sourcebuffer, marker);
 
-            if (baseAddress == -1)
+            if (iBase == -1)
             {
                 return null;
             }
 
-            byte[] bytes = BinaryTools.GetBytesBaseLength(scfgBytes, baseAddress + sig.Length, expectedLength);
+            byte[] bDataBuffer = BinaryTools.GetBytesBaseLength(sourcebuffer, iBase + marker.Length, expectedlength);
 
-            if (bytes?.Length != expectedLength)
+            if (bDataBuffer?.Length != expectedlength)
             {
                 return null;
             }
 
-            string serial = _utf8.GetString(bytes);
+            string strSerial = _utf8encoding.GetString(bDataBuffer);
 
-            hwc = serial.Length >= 4 ? serial.Substring(serial.Length - 4, 4) : null;
+            hwc = strSerial.Length >= 4 ? strSerial.Substring(strSerial.Length - 4, 4) : null;
 
-            return serial;
+            return strSerial;
         }
 
-        private static string GetStringFromSigWithLimit(byte[] scfgBytes, byte[] sig, byte[] limitChars)
+        private static string GetStringFromSigWithLimit(byte[] sourcebuffer, byte[] marker, byte[] limitchars)
         {
-            int baseAddress = BinaryTools.GetBaseAddress(scfgBytes, sig);
+            int iBase = BinaryTools.GetBaseAddress(sourcebuffer, marker);
 
-            if (baseAddress == -1)
+            if (iBase == -1)
             {
                 return null;
             }
 
-            baseAddress += sig.Length;
+            iBase += marker.Length;
 
-            int limit = BinaryTools.GetBaseAddress(scfgBytes, limitChars, baseAddress);
+            int iLimit = BinaryTools.GetBaseAddress(sourcebuffer, limitchars, iBase);
 
-            if (limit == -1)
+            if (iLimit == -1)
             {
                 return null;
             }
 
-            byte[] bytes = BinaryTools.GetBytesBaseLimit(scfgBytes, baseAddress, limit);
+            byte[] bOutput = BinaryTools.GetBytesBaseLimit(sourcebuffer, iBase, iLimit);
 
-            return _utf8.GetString(bytes);
+            return _utf8encoding.GetString(bOutput);
         }
 
         private static SCfgStore DefaultScfgData()
@@ -220,7 +215,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             return new SCfgStore
             {
                 StoreBase = -1,
-                StoreSize = 0,
+                StoreLength = 0,
                 StoreBuffer = null,
                 StoreCRC = null,
                 Serial = null,
@@ -230,36 +225,6 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 RegNumText = null
             };
         }
-
-        // iBoot version signature, byte 5 is validity byte?, byte 6 is var size.
-        internal static readonly byte[] IBOOT_VER_SIG =
-        {
-            0x69, 0x6C, 0X6C, 0X62
-        };
-
-        // Header.
-        internal static readonly byte[] SCFG_HEADER_SIG =
-        {
-            0x67, 0x66, 0x43, 0x53
-        };
-
-        // System Serial Number.
-        internal static readonly byte[] SCFG_SSN_SIG =
-        {
-            0x6D, 0x4E, 0x72, 0x53
-        };
-
-        // System Order Number.
-        internal static readonly byte[] SCFG_SON_SIG =
-        {
-            0x23, 0x64, 0x6F, 0x4D
-        };
-
-        // Registration Number?
-        internal static readonly byte[] SCFG_SON_REGN =
-        {
-            0x6E, 0x67, 0x65, 0x52
-        };
         #endregion
     }
 }

@@ -469,8 +469,8 @@ namespace Mac_EFI_Toolkit.Forms
                 stringBuilder.AppendLine("SCfg");
                 stringBuilder.AppendLine("----------------------------------");
                 stringBuilder.AppendLine($"Base:            {SOCROM.SCfgSectionData.StoreBase:X}h");
-                stringBuilder.AppendLine($"Size (Bytes):    {SOCROM.SCfgSectionData.StoreSize} bytes");
-                stringBuilder.AppendLine($"Size (Hex):      {SOCROM.SCfgSectionData.StoreSize:X}h");
+                stringBuilder.AppendLine($"Size (Bytes):    {SOCROM.SCfgSectionData.StoreLength} bytes");
+                stringBuilder.AppendLine($"Size (Hex):      {SOCROM.SCfgSectionData.StoreLength:X}h");
                 stringBuilder.AppendLine($"CRC32:           {SOCROM.SCfgSectionData.StoreCRC ?? APPSTRINGS.NA}");
                 stringBuilder.AppendLine($"Serial:          {SOCROM.SCfgSectionData.Serial ?? APPSTRINGS.NA}\r\n");
 
@@ -986,7 +986,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             string scfgBase = $"{SOCROM.SCfgSectionData.StoreBase:X}h";
             string crc = SOCROM.SCfgSectionData.StoreCRC;
-            int scfgSize = SOCROM.SCfgSectionData.StoreSize;
+            int scfgSize = SOCROM.SCfgSectionData.StoreLength;
 
             lblScfg.Text = $"{scfgBase}, {scfgSize:X}h ({scfgSize} bytes), {crc}";
 
@@ -1139,9 +1139,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetScfgBaseAddress() => SetClipboardText($"{SOCROM.SCfgSectionData.StoreBase:X}");
 
-        private void ClipboardSetScfgSizeDecimal() => SetClipboardText($"{SOCROM.SCfgSectionData.StoreSize} {APPSTRINGS.BYTES}");
+        private void ClipboardSetScfgSizeDecimal() => SetClipboardText($"{SOCROM.SCfgSectionData.StoreLength} {APPSTRINGS.BYTES}");
 
-        private void ClipboardSetScfgSizeHex() => SetClipboardText($"{SOCROM.SCfgSectionData.StoreSize:X}h");
+        private void ClipboardSetScfgSizeHex() => SetClipboardText($"{SOCROM.SCfgSectionData.StoreLength:X}h");
 
         private void ClipboardSetScfgCrc32() => SetClipboardText(SOCROM.SCfgSectionData.StoreCRC);
 
@@ -1300,7 +1300,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private bool ValidateScfgStore(byte[] scfgBuffer)
         {
-            int scfgBase = BinaryTools.GetBaseAddress(scfgBuffer, SOCROM.SCFG_HEADER_SIG);
+            int scfgBase = BinaryTools.GetBaseAddress(scfgBuffer, SOCSigs.ScfgHeaderMarker);
 
             // A serialized Scfg store should be B8h, 184 bytes length.
             if (scfgBuffer.Length != SOCROM.SCFG_EXPECTED_LENGTH)
