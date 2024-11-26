@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// IFD.cs
+// FlashDescriptor.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Tools;
@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Firmware.EFI
 {
-    class IFD
+    class FlashDescriptor
     {
         #region Internal Members
         internal const uint DESCRIPTOR_BASE = 0; // 0h

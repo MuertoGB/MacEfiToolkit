@@ -12,7 +12,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
     internal struct EFILock
     {
         internal EfiLockType LockType { get; set; }
-        internal int LockCrcBase { get; set; }
+        internal int LockBase { get; set; }
     }
     #endregion
 

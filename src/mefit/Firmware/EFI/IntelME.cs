@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// IME.cs
+// IntelME.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Firmware.EFI;
@@ -9,7 +9,7 @@ using Mac_EFI_Toolkit.Tools;
 
 namespace Mac_EFI_Toolkit.Firmware
 {
-    class IME
+    class IntelME
     {
         #region Internal Members
         internal static readonly byte[] FPTMarker = { 0x24, 0x46, 0x50, 0x54 };
@@ -29,12 +29,12 @@ namespace Mac_EFI_Toolkit.Firmware
             switch (versiontype)
             {
                 case ImeVersionType.FlashImageTool:
-                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, FPTMarker, (int)IFD.MeBase, (int)IFD.MeSize);
+                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, FPTMarker, (int)FlashDescriptor.MeBase, (int)FlashDescriptor.MeSize);
                     iLength = 0x20;
                     break;
 
                 case ImeVersionType.ManagementEngine:
-                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, MN2Marker, (int)IFD.MeBase, (int)IFD.MeSize);
+                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, MN2Marker, (int)FlashDescriptor.MeBase, (int)FlashDescriptor.MeSize);
                     iLength = 0x10;
                     break;
             }

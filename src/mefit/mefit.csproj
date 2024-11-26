@@ -84,7 +84,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Firmware\EFI\IFD.cs" />
+    <Compile Include="Firmware\EFI\FlashDescriptor.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Firmware\EFI\Guids.cs" />
     <Compile Include="Firmware\EFI\EFIROM.cs" />
@@ -92,7 +92,7 @@
     <Compile Include="Firmware\EFI\Types\Structs.cs" />
     <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
-    <Compile Include="Firmware\EFI\IME.cs" />
+    <Compile Include="Firmware\EFI\IntelME.cs" />
     <Compile Include="Firmware\FirmwareVars.cs" />
     <Compile Include="Firmware\Serial.cs" />
     <Compile Include="Forms\Prompts\Prompts.cs" />
