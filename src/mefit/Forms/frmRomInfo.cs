@@ -90,7 +90,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_TEXT,
                 FileName = $"{APPSTRINGS.ROM_SECTION_INFO}_{EFIROM.FileInfoData.FileName}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.WORKING_DIR
+                InitialDirectory = ApplicationPaths.WorkingDirectory
             })
             {
                 // Action was cancelled
@@ -137,7 +137,7 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void SetButtonProperties()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Font = Program.FontSegMdl2Regular12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion

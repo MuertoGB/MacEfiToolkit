@@ -33905,6 +33905,10 @@
 		<configCode>MacBook Air (Retina, 13-inch, 2019)</configCode>
 	</section>
 	<section>
+		<hwc>MD6M</hwc>
+		<configCode>MacBook Pro (16-inch, 2019)</configCode>
+	</section>
+	<section>
 		<hwc>MD6P</hwc>
 		<configCode>MacBook Pro (16-inch, 2019)</configCode>
 	</section>

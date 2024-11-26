@@ -5,6 +5,7 @@
 // frmStartup.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
@@ -24,7 +25,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Private Members
-        private string _strInitialDirectory = METPath.WORKING_DIR;
+        private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private int _childWindowCount = 0;
         #endregion
 
@@ -69,11 +70,11 @@ namespace Mac_EFI_Toolkit.Forms
             SetInitialDirectory();
 
             // Open dragged file is the arg path is ! null or ! empty.
-            if (!string.IsNullOrEmpty(Program.draggedFilePath))
+            if (!string.IsNullOrEmpty(Program.DraggedFile))
             {
-                OpenBinary(Program.draggedFilePath);
+                OpenBinary(Program.DraggedFile);
                 // Clear the path so restarting does not cause the initially dragged file to be loaded.
-                Program.draggedFilePath = string.Empty;
+                Program.DraggedFile = string.Empty;
             }
 
             // Check for a new application version.
@@ -226,28 +227,28 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Folders Context Menu Events
         private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.BACKUPS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.BackupsDirectory, this);
 
         private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.BUILDS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.BuildsDirectory, this);
 
         private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.FSYS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.FsysDirectory, this);
 
         private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.INTELME_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.IntelMeDirectory, this);
 
         private void openNVRAMFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.NVRAM_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.NvramDirectory, this);
 
         private void openLZMADXEFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.LZMA_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.LzmaDirectory, this);
 
         private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.SCFG_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.ScfgDirectory, this);
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.WORKING_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
         #endregion
 
         #region Tools Context Menu Events
@@ -268,21 +269,21 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Help Context Menu Events
-        private void changelogToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.CHANGELOG);
+        private void changelogToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.Changelog);
 
-        private void donateToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.DONATE);
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.PaypalDonate);
 
-        private void emailMeToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.EMAILME);
+        private void emailMeToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.Email);
 
-        private void flexBVToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.FLEXBV5);
+        private void flexBVToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.FlexBv5);
 
-        private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_ISSUE);
+        private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubIssues);
 
-        private void homepageToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.HOMEPAGE);
+        private void homepageToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubHomepage);
 
-        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubManual);
 
-        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_LATEST);
+        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubLatestVersion);
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
@@ -314,7 +315,7 @@ namespace Mac_EFI_Toolkit.Forms
         #region Open Binary
         private void OpenBinary(string filePath)
         {
-            if (!FileTools.IsValidMinMaxSize(filePath, this))
+            if (!FileTools.IsValidMinMaxSize(filePath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
             {
                 return;
             }
@@ -373,13 +374,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Font = Program.FontSegMdl2Regular12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
 
         private void SetLabelGlyphAndText()
         {
-            lblGlyph.Font = Program.FONT_MDL2_REG_20;
+            lblGlyph.Font = Program.FontSegMdl2Regular20;
             lblGlyph.Text = Program.GLYPH_DOWN_ARROW;
         }
 
@@ -424,11 +425,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         internal async void StartupVersionCheck()
         {
-            // Check for a new version using the specified URL.
-            VersionResult result = await AppVersion.CheckForNewVersion(METUrl.VERSION_MANIFEST);
+            // Check for a new version.
+            VersionResult verResult = await Program.CheckForNewVersion();
 
-            // If a new version is available and update the UI.
-            if (result == VersionResult.NewVersionAvailable)
+            // If a new version is available update the UI.
+            if (verResult == VersionResult.NewVersionAvailable)
             {
                 cmdHelp.Text += " (1)";
                 updateAvailableToolStripMenuItem.Visible = true;
@@ -445,7 +446,7 @@ namespace Mac_EFI_Toolkit.Forms
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
+                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
             }
         }
         #endregion

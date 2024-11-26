@@ -105,7 +105,7 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 dialog.SelectedPath =
                     string.IsNullOrEmpty(Settings.ReadString(settingsType))
-                        ? METPath.WORKING_DIR
+                        ? ApplicationPaths.WorkingDirectory
                         : Settings.ReadString(settingsType);
 
                 dialog.Description = APPSTRINGS.SELECT_FOLDER;
@@ -180,9 +180,9 @@ namespace Mac_EFI_Toolkit.Forms
             Settings.SetBool(SettingsBoolType.DisableMessageSounds, false);
             Settings.SetBool(SettingsBoolType.DisableTips, false);
             Settings.SetBool(SettingsBoolType.DisableConfDiag, false);
-            Settings.SetString(SettingsStringType.StartupInitialDirectory, METPath.WORKING_DIR);
-            Settings.SetString(SettingsStringType.EfiInitialDirectory, METPath.WORKING_DIR);
-            Settings.SetString(SettingsStringType.SocInitialDirectory, METPath.WORKING_DIR);
+            Settings.SetString(SettingsStringType.StartupInitialDirectory, ApplicationPaths.WorkingDirectory);
+            Settings.SetString(SettingsStringType.EfiInitialDirectory, ApplicationPaths.WorkingDirectory);
+            Settings.SetString(SettingsStringType.SocInitialDirectory, ApplicationPaths.WorkingDirectory);
 
             METForm.UpdateAccentColor();
 
@@ -250,7 +250,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonProperties()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Font = Program.FontSegMdl2Regular12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion

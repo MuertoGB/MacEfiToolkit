@@ -23,7 +23,7 @@ namespace Mac_EFI_Toolkit.Forms
     public partial class frmEfiRom : METForm
     {
         #region Private Members
-        private string _strInitialDirectory = METPath.WORKING_DIR;
+        private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private Thread _tLoadFirmware = null;
         private CancellationTokenSource _cancellationToken;
         private Button[] _menuButtons;
@@ -96,10 +96,10 @@ namespace Mac_EFI_Toolkit.Forms
 
             _cancellationToken = new CancellationTokenSource();
 
-            if (!string.IsNullOrEmpty(Program.MAIN_WINDOW.loadedFile))
+            if (!string.IsNullOrEmpty(Program.MainWindow.loadedFile))
             {
-                OpenBinary(Program.MAIN_WINDOW.loadedFile);
-                Program.MAIN_WINDOW.loadedFile = null;
+                OpenBinary(Program.MainWindow.loadedFile);
+                Program.MainWindow.loadedFile = null;
             }
 
             MemoryTracker.Instance.OnMemoryUsageUpdated += MemoryTracker_OnMemoryUsageUpdated;
@@ -422,25 +422,25 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Folders Context Menu Events
         private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.BACKUPS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.BackupsDirectory, this);
 
         private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.BUILDS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.BuildsDirectory, this);
 
         private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.FSYS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.FsysDirectory, this);
 
         private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.INTELME_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.IntelMeDirectory, this);
 
         private void openNVRAMFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.NVRAM_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.NvramDirectory, this);
 
         private void openLZMADXEFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.LZMA_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.LzmaDirectory, this);
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.WORKING_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
         #endregion
 
         #region Export Toolstrip Events
@@ -453,7 +453,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_BIN,
                 FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.FSYS_REGION}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.FSYS_DIR
+                InitialDirectory = ApplicationPaths.FsysDirectory
             })
             {
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
@@ -497,7 +497,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_BIN,
                 FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.ME_REGION}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.INTELME_DIR
+                InitialDirectory = ApplicationPaths.IntelMeDirectory
             })
             {
                 // Action was cancelled.
@@ -548,7 +548,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (var folderDialog = new FolderBrowserDialog
             {
                 Description = APPSTRINGS.SELECT_FOLDER,
-                SelectedPath = METPath.NVRAM_DIR
+                SelectedPath = ApplicationPaths.NvramDirectory
             })
             {
                 if (folderDialog.ShowDialog() == DialogResult.OK)
@@ -579,7 +579,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_LZMA,
                 FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.DXE_ARCHIVE}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.LZMA_DIR
+                InitialDirectory = ApplicationPaths.LzmaDirectory
             })
             {
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
@@ -608,7 +608,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                InitialDirectory = METPath.BACKUPS_DIR,
+                InitialDirectory = ApplicationPaths.BackupsDirectory,
                 Filter = APPSTRINGS.FILTER_ZIP,
                 FileName = $"{EFIROM.FileInfoData.FileName}_{APPSTRINGS.EFIROM}_{APPSTRINGS.BACKUP}",
                 OverwritePrompt = true
@@ -643,7 +643,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_TEXT,
                 FileName = $"{EFIROM.FileInfoData.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.WORKING_DIR
+                InitialDirectory = ApplicationPaths.WorkingDirectory
             })
             {
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
@@ -740,7 +740,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_TEXT,
                 FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.FMM_EMAIL}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.WORKING_DIR
+                InitialDirectory = ApplicationPaths.WorkingDirectory
             })
             {
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
@@ -897,7 +897,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Help Toolstrip Events
-        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubManual);
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
@@ -930,7 +930,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void OpenBinary(string filePath)
         {
             // Check the filesize
-            if (!FileTools.IsValidMinMaxSize(filePath, this))
+            if (!FileTools.IsValidMinMaxSize(filePath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
             {
                 return;
             }
@@ -1437,8 +1437,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Program.GLYPH_EXIT_CROSS },
-                new { Button = cmdOpenInExplorer, Font = Program.FONT_MDL2_REG_12, Text = Program.GLYPH_FILE_EXPLORER },
+                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_EXIT_CROSS },
+                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_FILE_EXPLORER },
             };
 
             foreach (var buttonData in buttons)
@@ -1450,10 +1450,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetLabelFontAndGlyph()
         {
-            lblLzma.Font = Program.FONT_MDL2_REG_10;
+            lblLzma.Font = Program.FontSegMdl2Regular10;
             lblLzma.Text = Program.GLYPH_REPORT;
 
-            lblFmmEmail.Font = Program.FONT_MDL2_REG_10;
+            lblFmmEmail.Font = Program.FontSegMdl2Regular10;
             lblFmmEmail.Text = Program.GLYPH_ACCOUNT;
         }
 
@@ -1583,7 +1583,7 @@ namespace Mac_EFI_Toolkit.Forms
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
+                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
             }
         }
 
@@ -2040,7 +2040,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             return new OpenFileDialog
             {
-                InitialDirectory = METPath.FSYS_DIR,
+                InitialDirectory = ApplicationPaths.FsysDirectory,
                 Filter = APPSTRINGS.FILTER_BIN
             };
         }
@@ -2283,7 +2283,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             return new OpenFileDialog
             {
-                InitialDirectory = METPath.INTELME_DIR,
+                InitialDirectory = ApplicationPaths.IntelMeDirectory,
                 Filter = APPSTRINGS.FILTER_BIN
             };
         }
@@ -2347,7 +2347,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_BIN,
                 FileName = EFIROM.FileInfoData.FileName,
                 OverwritePrompt = true,
-                InitialDirectory = METPath.BUILDS_DIR
+                InitialDirectory = ApplicationPaths.BuildsDirectory
             };
         }
 

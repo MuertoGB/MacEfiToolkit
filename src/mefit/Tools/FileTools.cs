@@ -27,39 +27,39 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Calculates the SHA256 hash of a byte array.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to calculate the hash for.</param>
+        /// <param name="sourcebuffer">The byte array to calculate the hash for.</param>
         /// <returns>The SHA256 checksum of the byte array.</returns>
-        internal static string GetSha256Digest(byte[] sourceBytes)
+        internal static string GetSha256Digest(byte[] sourcebuffer)
         {
-            using (SHA256 provider = SHA256.Create())
+            using (SHA256 shaProvider = SHA256.Create())
             {
-                byte[] digestBytes = provider.ComputeHash(sourceBytes);
+                byte[] bDigest = shaProvider.ComputeHash(sourcebuffer);
 
-                return BitConverter.ToString(digestBytes).Replace("-", "").ToLower();
+                return BitConverter.ToString(bDigest).Replace("-", "").ToLower();
             }
         }
 
         /// <summary>
         /// Calculates the CRC32 checksum of a byte array. 
         /// </summary>
-        /// <param name="sourceBytes">The byte array to calculate the checksum for.</param>
+        /// <param name="sourcebuffer">The byte array to calculate the checksum for.</param>
         /// <returns>The CRC32 checksum of the byte array.</returns>
-        internal static uint GetCrc32Digest(byte[] sourceBytes)
+        internal static uint GetCrc32Digest(byte[] sourcebuffer)
         {
-            const uint polynomial = 0xEDB88320;
-            uint crc = 0xFFFFFFFF;
+            const uint uiPolynomial = 0xEDB88320;
+            uint uiCrc = 0xFFFFFFFF;
 
-            for (int i = 0; i < sourceBytes.Length; i++)
+            for (int i = 0; i < sourcebuffer.Length; i++)
             {
-                crc ^= sourceBytes[i];
+                uiCrc ^= sourcebuffer[i];
 
                 for (int j = 0; j < 8; j++)
                 {
-                    crc = (uint)((crc >> 1) ^ (polynomial & -(crc & 1)));
+                    uiCrc = (uint)((uiCrc >> 1) ^ (uiPolynomial & -(uiCrc & 1)));
                 }
             }
 
-            return crc ^ 0xFFFFFFFF;
+            return uiCrc ^ 0xFFFFFFFF;
         }
 
         /// <summary>
@@ -80,23 +80,23 @@ namespace Mac_EFI_Toolkit.Tools
         internal static string FormatBytesToReadableUnit(ulong size)
         {
             // Define a set of suffixes for file sizes.
-            string[] suffixes = { "bytes", "KB", "MB", "GB", "TB" };
+            string[] arrSuffixes = { "bytes", "KB", "MB", "GB", "TB" };
 
             if (size == 0)
             {
-                return $"0 {suffixes[0]}";
+                return $"0 {arrSuffixes[0]}";
             }
 
             // Calculate the appropriate suffix index based on the size of the input.
-            int suffixIndex = (int)Math.Floor(Math.Log(size, 1024));
+            int iIndex = (int)Math.Floor(Math.Log(size, 1024));
 
             // Ensure the index does not exceed the array bounds (safety measure).
-            suffixIndex = Math.Min(suffixIndex, suffixes.Length - 1);
+            iIndex = Math.Min(iIndex, arrSuffixes.Length - 1);
 
             // Calculate the size in the chosen suffix and format it.
-            double sizeInSuffix = size / Math.Pow(1024, suffixIndex);
+            double dblSize = size / Math.Pow(1024, iIndex);
 
-            return $"{sizeInSuffix:N2} {suffixes[suffixIndex]}";
+            return $"{dblSize:N2} {arrSuffixes[iIndex]}";
         }
 
         /// <summary>
@@ -106,17 +106,17 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>True if the size is valid, otherwise false.</returns>
         internal static bool GetIsValidBinSize(long size)
         {
-            int expectedSize = FirmwareVars.MIN_IMAGE_SIZE;
-            int maxSize = FirmwareVars.MAX_IMAGE_SIZE;
+            int iExpectedSize = FirmwareVars.MIN_IMAGE_SIZE;
+            int iMaxSize = FirmwareVars.MAX_IMAGE_SIZE;
 
-            while (expectedSize <= maxSize)
+            while (iExpectedSize <= iMaxSize)
             {
-                if (size == expectedSize)
+                if (size == iExpectedSize)
                 {
                     return true;
                 }
 
-                expectedSize *= 2;
+                iExpectedSize *= 2;
             }
 
             return false;
@@ -133,24 +133,24 @@ namespace Mac_EFI_Toolkit.Tools
         internal static string GetSizeDifference(long size)
         {
             // Initialize the closest size with the minimum image size
-            long closestSize = FirmwareVars.MIN_IMAGE_SIZE;
+            long lClosestSize = FirmwareVars.MIN_IMAGE_SIZE;
 
             // Calculate the initial difference between the input size and the closest size
-            long difference = Math.Abs(size - closestSize);
+            long lDifference = Math.Abs(size - lClosestSize);
 
             // Iterate through the valid sizes to find the closest size
-            while (closestSize <= FirmwareVars.MAX_IMAGE_SIZE)
+            while (lClosestSize <= FirmwareVars.MAX_IMAGE_SIZE)
             {
                 // Calculate the doubled size and its difference from the input size
-                long doubledSize = closestSize * 2;
+                long lDoubledSize = lClosestSize * 2;
 
-                long doubledDifference = Math.Abs(size - doubledSize);
+                long lDoubledDifference = Math.Abs(size - lDoubledSize);
 
                 // If the doubled difference is smaller, update the closest size and difference
-                if (doubledDifference < difference)
+                if (lDoubledDifference < lDifference)
                 {
-                    closestSize = doubledSize;
-                    difference = doubledDifference;
+                    lClosestSize = lDoubledSize;
+                    lDifference = lDoubledDifference;
                 }
                 else
                 {
@@ -160,16 +160,16 @@ namespace Mac_EFI_Toolkit.Tools
             }
 
             // Check if the input size is smaller than the closest size
-            if (size < closestSize)
+            if (size < lClosestSize)
             {
                 // Return a formatted string indicating the size is too small
-                return $"<{difference}";
+                return $"<{lDifference}";
             }
             // Check if the input size is larger than the closest size
-            else if (size > closestSize)
+            else if (size > lClosestSize)
             {
                 // Return a formatted string indicating the size is too large
-                return $">{difference}";
+                return $">{lDifference}";
             }
             else
             {
@@ -181,18 +181,18 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Writes the specified byte array to the file at the given path and verifies the integrity of the written data.
         /// </summary>
-        /// <param name="path">The path of the file to write.</param>
-        /// <param name="sourceBytes">The byte array containing the data to be written.</param>
+        /// <param name="filepath">The path of the file to write.</param>
+        /// <param name="sourcebuffer">The byte array containing the data to be written.</param>
         /// <returns>True if the data was written successfully and integrity is verified; otherwise, false.</returns>
-        internal static bool WriteAllBytesEx(string path, byte[] sourceBytes)
+        internal static bool WriteAllBytesEx(string filepath, byte[] sourcebuffer)
         {
             try
             {
-                File.WriteAllBytes(path, sourceBytes);
+                File.WriteAllBytes(filepath, sourcebuffer);
 
-                byte[] fileBytes = File.ReadAllBytes(path);
+                byte[] bFileBytes = File.ReadAllBytes(filepath);
 
-                return BinaryTools.ByteArraysMatch(sourceBytes, fileBytes);
+                return BinaryTools.ByteArraysMatch(sourcebuffer, bFileBytes);
             }
             catch (Exception e)
             {
@@ -200,7 +200,6 @@ namespace Mac_EFI_Toolkit.Tools
                 return false;
             }
         }
-
 
         /// <summary>
         /// Creates a directory at the specified path.
@@ -215,7 +214,9 @@ namespace Mac_EFI_Toolkit.Tools
             Directory.CreateDirectory(directory);
 
             if (Directory.Exists(directory))
+            {
                 return Status.SUCCESS;
+            }
 
             return Status.FAILED;
         }
@@ -223,21 +224,21 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Backs up a byte array to a zip file.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to be backed up.</param>
-        /// <param name="entryName">The name of the entry to be created within the zip archive.</param>
-        /// <param name="path">The path of the zip file to be created.</param>
-        internal static void BackupFileToZip(byte[] sourceBytes, string entryName, string path)
+        /// <param name="sourcebuffer">The byte array to be backed up.</param>
+        /// <param name="entryname">The name of the entry to be created within the zip archive.</param>
+        /// <param name="filepath">The path of the zip file to be created.</param>
+        internal static void BackupFileToZip(byte[] sourcebuffer, string entryname, string filepath)
         {
             try
             {
-                using (FileStream zipStream = new FileStream(path, FileMode.Create))
-                using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+                using (FileStream fsZipFile = new FileStream(filepath, FileMode.Create))
+                using (ZipArchive zipArchive = new ZipArchive(fsZipFile, ZipArchiveMode.Create))
                 {
-                    ZipArchiveEntry fileEntry = archive.CreateEntry(entryName);
+                    ZipArchiveEntry fileEntry = zipArchive.CreateEntry(entryname);
 
-                    using (Stream fileStream = fileEntry.Open())
+                    using (Stream streamBuffer = fileEntry.Open())
                     {
-                        fileStream.Write(sourceBytes, 0, sourceBytes.Length);
+                        streamBuffer.Write(sourcebuffer, 0, sourcebuffer.Length);
                     }
                 }
             }
@@ -250,36 +251,36 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Retrieves file information and calculates the CRC32 checksum of a specified file.
         /// </summary>
-        /// <param name="fileName">The full path to the file to be analyzed.</param>
+        /// <param name="filename">The full path to the file to be analyzed.</param>
         /// <returns>
         /// A Binary object containing the file's name, name without extension, creation time, last write time, file length, and CRC32 checksum.
         /// </returns>
-        internal static FileInfoStore GetBinaryFileInfo(string fileName)
+        internal static FileInfoStore GetBinaryFileInfo(string filename)
         {
-            FileInfo fileInfo = new FileInfo(fileName);
+            FileInfo fileInfo = new FileInfo(filename);
 
-            byte[] fileBytes = File.ReadAllBytes(fileInfo.FullName);
+            byte[] bFileBytes = File.ReadAllBytes(fileInfo.FullName);
 
             return new FileInfoStore
             {
                 FileNameExt = fileInfo.Name,
-                FileName = Path.GetFileNameWithoutExtension(fileName),
+                FileName = Path.GetFileNameWithoutExtension(filename),
                 CreationTime = fileInfo.CreationTime.ToString(),
                 LastWriteTime = fileInfo.LastWriteTime.ToString(),
                 Length = fileInfo.Length,
-                CRC32 = FileTools.GetCrc32Digest(fileBytes)
+                CRC32 = FileTools.GetCrc32Digest(bFileBytes)
             };
         }
 
-        internal static bool IsValidMinMaxSize(string filePath, Form owner)
+        internal static bool IsValidMinMaxSize(string filepath, Form owner, int minsize, int maxsize)
         {
-            long fileSize = new FileInfo(filePath).Length;
+            long lSize = new FileInfo(filepath).Length;
 
-            if (fileSize < FirmwareVars.MIN_IMAGE_SIZE || fileSize > FirmwareVars.MAX_IMAGE_SIZE)
+            if (lSize < minsize || lSize > maxsize)
             {
-                string message = fileSize < FirmwareVars.MIN_IMAGE_SIZE
-                    ? $"The selected file does not meet the minimum size requirement of {FirmwareVars.MIN_IMAGE_SIZE:X}h."
-                    : $"The selected file exceeds the maximum size limit of {FirmwareVars.MAX_IMAGE_SIZE:X}h.";
+                string message = lSize < minsize
+                    ? $"The selected file does not meet the minimum size requirement of {minsize:X}h."
+                    : $"The selected file exceeds the maximum size limit of {maxsize:X}h.";
 
                 METPrompt.Show(
                     owner,

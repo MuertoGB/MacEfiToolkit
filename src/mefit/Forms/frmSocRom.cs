@@ -23,7 +23,7 @@ namespace Mac_EFI_Toolkit.Forms
     public partial class frmSocRom : METForm
     {
         #region Private Members
-        private string _strInitialDirectory = METPath.WORKING_DIR;
+        private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private Thread _tLoadFirmware = null;
         private CancellationTokenSource _cancellationToken;
         private Button[] _menuButtons;
@@ -91,10 +91,10 @@ namespace Mac_EFI_Toolkit.Forms
 
             _cancellationToken = new CancellationTokenSource();
 
-            if (!string.IsNullOrEmpty(Program.MAIN_WINDOW.loadedFile))
+            if (!string.IsNullOrEmpty(Program.MainWindow.loadedFile))
             {
-                OpenBinary(Program.MAIN_WINDOW.loadedFile);
-                Program.MAIN_WINDOW.loadedFile = null;
+                OpenBinary(Program.MainWindow.loadedFile);
+                Program.MainWindow.loadedFile = null;
             }
 
             MemoryTracker.Instance.OnMemoryUsageUpdated += MemoryTracker_OnMemoryUsageUpdated;
@@ -360,16 +360,16 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Folders Toolstrip Events
         private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.BACKUPS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.BackupsDirectory, this);
 
         private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.BUILDS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.BuildsDirectory, this);
 
         private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.SCFG_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.ScfgDirectory, this);
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.WORKING_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
         #endregion
 
         #region Export Toolstrip Events
@@ -382,7 +382,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_BIN,
                 FileName = $"{SOCROM.FileInfoData.FileName}_{SOCSTRINGS.SCFG_REGION}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.SCFG_DIR
+                InitialDirectory = ApplicationPaths.ScfgDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
@@ -411,7 +411,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                InitialDirectory = METPath.BACKUPS_DIR,
+                InitialDirectory = ApplicationPaths.BackupsDirectory,
                 Filter = APPSTRINGS.FILTER_ZIP,
                 FileName = $"{SOCROM.FileInfoData.FileName}_{APPSTRINGS.SOCROM}_{APPSTRINGS.BACKUP}",
                 OverwritePrompt = true
@@ -446,7 +446,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_TEXT,
                 FileName = $"{SOCROM.FileInfoData.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
                 OverwritePrompt = true,
-                InitialDirectory = METPath.WORKING_DIR
+                InitialDirectory = ApplicationPaths.WorkingDirectory
             })
             {
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
@@ -589,7 +589,7 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Help Toolstrip Events
-        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubManual);
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
@@ -622,7 +622,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void OpenBinary(string filePath)
         {
             // Check filesize.
-            if (!FileTools.IsValidMinMaxSize(filePath, this))
+            if (!FileTools.IsValidMinMaxSize(filePath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
             {
                 return;
             }
@@ -789,8 +789,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FONT_MDL2_REG_12, Text = Program.GLYPH_EXIT_CROSS },
-                new { Button = cmdOpenInExplorer, Font = Program.FONT_MDL2_REG_12, Text = Program.GLYPH_FILE_EXPLORER },
+                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_EXIT_CROSS },
+                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_FILE_EXPLORER },
             };
 
             foreach (var buttonData in buttons)
@@ -826,7 +826,7 @@ namespace Mac_EFI_Toolkit.Forms
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
+                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
             }
         }
 
@@ -1293,7 +1293,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             return new OpenFileDialog
             {
-                InitialDirectory = METPath.SCFG_DIR,
+                InitialDirectory = ApplicationPaths.ScfgDirectory,
                 Filter = APPSTRINGS.FILTER_BIN
             };
         }
@@ -1335,7 +1335,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Filter = APPSTRINGS.FILTER_BIN,
                 FileName = SOCROM.FileInfoData.FileName,
                 OverwritePrompt = true,
-                InitialDirectory = METPath.BUILDS_DIR
+                InitialDirectory = ApplicationPaths.BuildsDirectory
             };
         }
 

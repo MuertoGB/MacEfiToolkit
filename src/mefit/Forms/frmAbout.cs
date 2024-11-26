@@ -38,7 +38,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Window Events
         private void frmAbout_Load(object sender, EventArgs e) =>
-            lblBuild.Text = $"Mac EFI Toolkit v{Application.ProductVersion} by Muerto\r\nBuild {METVersion.APP_BUILD} ({METVersion.APP_CHANNEL})\r\nLZMA SDK {METVersion.LZMA_SDK}";
+            lblBuild.Text = $"Mac EFI Toolkit v{Application.ProductVersion} by Muerto\r\nBuild {ApplicationVersions.CURRENT_BUILD} ({ApplicationVersions.CURRENT_CHANNEL})\r\nLZMA SDK {ApplicationVersions.LZMA_SDK_VERSION}";
         #endregion
 
         #region KeyDown Events
@@ -56,13 +56,13 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region LinkLabel Events
-        private void lnkPaypal_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => Process.Start(METUrl.DONATE);
+        private void lnkPaypal_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => Process.Start(ApplicationUrls.PaypalDonate);
         #endregion
 
         #region UI Events
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_10;
+            cmdClose.Font = Program.FontSegMdl2Regular10;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion

@@ -63,7 +63,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
         #endregion
 
         #region Private Members
-        private static readonly Encoding utf8Encoding = Encoding.UTF8;
+        private static readonly Encoding _utf8Encoding = Encoding.UTF8;
         #endregion
 
         #region Parse Firmware
@@ -454,23 +454,23 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             return BinaryTools.GetBaseAddress(buffer, token);
         }
 
-        private static int FindTokenLimit(byte[] buffer, int tokenBase)
+        private static int FindTokenLimit(byte[] buffer, int tokenbase)
         {
             byte[] bLimitBytes = new byte[] { 0xAA, 0x55 };
-            return BinaryTools.GetBaseAddress(buffer, bLimitBytes, tokenBase);
+            return BinaryTools.GetBaseAddress(buffer, bLimitBytes, tokenbase);
         }
 
-        private static string ExtractEmailFromBuffer(byte[] buffer, int tokenBase, int tokenLimit)
+        private static string ExtractEmailFromBuffer(byte[] buffer, int tokenbase, int tokenlimit)
         {
             // Step back 1 byte to ensure we're inside the bounds of the NVAR.
-            tokenLimit -= 1;
+            tokenlimit -= 1;
 
-            for (int i = tokenBase; i < tokenLimit;)
+            for (int i = tokenbase; i < tokenlimit;)
             {
-                if (IsValidEmailBlock(buffer, i, out string dataString))
+                if (IsValidEmailBlock(buffer, i, out string strData))
                 {
-                    Console.WriteLine($"Email found: {dataString}");
-                    return dataString;
+                    Console.WriteLine($"Email found: {strData}");
+                    return strData;
                 }
 
                 // Move the pointer to the next block.
@@ -591,7 +591,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             }
 
             // Return string data.
-            return utf8Encoding.GetString(bStringData);
+            return _utf8Encoding.GetString(bStringData);
         }
 
         private static int FindFsysBaseAddress(byte[] sourcebytes, bool isfsysonly, bool forcefind)
@@ -746,7 +746,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
                         if (bValue != null)
                         {
-                            dictSectionEntires[bSignature] = utf8Encoding.GetString(bValue);
+                            dictSectionEntires[bSignature] = _utf8Encoding.GetString(bValue);
                         }
                     }
                 }
@@ -850,7 +850,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             }
 
             bEfiBiosIdData = bEfiBiosIdData.Where(b => b != 0x00 && b != 0x20).ToArray();
-            string strEfiBiosId = utf8Encoding.GetString(bEfiBiosIdData);
+            string strEfiBiosId = _utf8Encoding.GetString(bEfiBiosIdData);
             string[] arrEfiBiosIdParts = strEfiBiosId.Split((char)0x2E);
 
             if (arrEfiBiosIdParts.Length != 5)

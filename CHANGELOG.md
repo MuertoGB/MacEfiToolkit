@@ -19,6 +19,7 @@
 
 ### Enhancements
 - User interface improvements.
+- Updated the internal database with more models.
 
 ## Version 2.0.1
 
