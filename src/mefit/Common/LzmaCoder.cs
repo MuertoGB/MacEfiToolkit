@@ -58,5 +58,43 @@ namespace Mac_EFI_Toolkit.Common
                 return null;
             }
         }
+
+        internal static bool IsValidLzmaHeader(byte[] buffer)
+        {
+            if (buffer.Length < 5)
+            {
+                // Header is too short to be valid.
+                return false;
+            }
+
+            byte properties = buffer[0];
+            int lc = properties % 9;        // Literal context bits
+            int remainder = properties / 9;
+            int lp = remainder % 5;         // Literal position bits.
+            int pb = remainder / 5;         // Position bits.
+
+            if (lc < 0 || lc > 8 || lp < 0 || lp > 4 || pb < 0 || pb > 4)
+            {
+                // Invalid properties byte.
+                Console.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid properties byte: lc={lc}, lp={lp}, pb={pb}");
+                return false;
+            }
+
+            int iDictSize = BitConverter.ToInt32(buffer, 1);
+
+            bool IsPow2(int i)
+            { 
+                return (i > 0) && ((i & (i - 1)) == 0);
+            }
+
+            if (iDictSize <= 0 || iDictSize > 0x800000 || !IsPow2(iDictSize))
+            {
+                // Invalid dictionary size.
+                Console.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {iDictSize}");
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -68,7 +68,7 @@ namespace Mac_EFI_Toolkit.Forms
             lblSectionData.Text = $"{APPSTRINGS.BASE.ToUpper()} {EFIROM.AppleRomInfoSectionData.SectionBase:X}h" ?? APPSTRINGS.NA;
             lblSectionData.Text += $", {APPSTRINGS.SIZE.ToUpper()} {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h" ?? APPSTRINGS.NA;
 
-            UITools.ApplyNestedPanelLabelForeColor(tlpInfo, Colours.CLR_NATEXT);
+            UITools.ApplyNestedPanelLabelForeColor(tlpInfo, Colours.ClrDisabledText);
         }
         #endregion
 

@@ -385,7 +385,7 @@ namespace Mac_EFI_Toolkit
                 return AccentColorHelper.GetWindowsAccentColor();
             }
 
-            return Colours.CLR_DEFAULTBORDER;
+            return Colours.ClrAppBorderDefault;
         }
         #endregion
     }

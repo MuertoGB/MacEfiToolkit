@@ -73,7 +73,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strStartupInitialPath, lblStartupDirectory.Text))
             {
                 lblStartupDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strStartupInitialPath}";
-                lblStartupDirectory.ForeColor = Colours.CLR_GOOD;
+                lblStartupDirectory.ForeColor = Colours.ClrOkay;
             }
         }
 
@@ -84,7 +84,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strEfiInitialPath, lblEfiDirectory.Text))
             {
                 lblEfiDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strEfiInitialPath}";
-                lblEfiDirectory.ForeColor = Colours.CLR_GOOD;
+                lblEfiDirectory.ForeColor = Colours.ClrOkay;
             }
         }
 
@@ -95,7 +95,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strSocInitialPath, lblSocDirectory))
             {
                 lblSocDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strSocInitialPath}";
-                lblSocDirectory.ForeColor = Colours.CLR_GOOD;
+                lblSocDirectory.ForeColor = Colours.ClrOkay;
             }
         }
 
@@ -241,11 +241,11 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateLabel(lblSocDirectory, SettingsStringType.SocInitialDirectory);
         }
 
-        private static void UpdateLabel(Label label, SettingsStringType settingsType)
+        private static void UpdateLabel(Label control, SettingsStringType setting)
         {
-            string path = Settings.ReadString(settingsType);
-            label.Text = path;
-            label.ForeColor = Directory.Exists(path) ? Colours.CLR_SETTINGSPATHTEXT : Colours.CLR_WARNING;
+            string strPath = Settings.ReadString(setting);
+            control.Text = strPath;
+            control.ForeColor = Directory.Exists(strPath) ? Colours.ClrSettingsDefault : Colours.ClrWarn;
         }
 
         private void SetButtonProperties()

@@ -897,35 +897,40 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             }
 
             // Look for a compressed volume GUID.
-            int iLzmaDxeBase = BinaryTools.GetBaseAddress(
-                sourcebuffer, Guids.DxeCoreLzmaVolumeGuid, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit);
-
-            if (iLzmaDxeBase == -1)
-            {
-                iLzmaDxeBase = BinaryTools.GetBaseAddress(
-                    sourcebuffer, Guids.DxeMainLzmaVolumeGuid, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit);
-            }
+            int iLzmaBase = FindLzmaBase(
+                sourcebuffer,
+                new[] { Guids.DxeCoreLzmaVolumeGuid, Guids.DxeMainLzmaVolumeGuid },
+                (int)FlashDescriptor.BiosBase,
+                (int)FlashDescriptor.BiosLimit
+            );
 
             // No compressed DXE volume was found.
-            if (iLzmaDxeBase == -1)
+            if (iLzmaBase == -1)
             {
                 return ApfsCapable.No;
             }
 
             // Get bytes containing section length (0x3).
-            byte[] bSectionLength = BinaryTools.GetBytesBaseLength(sourcebuffer, iLzmaDxeBase + 20, 3);
+            byte[] bLength = BinaryTools.GetBytesBaseLength(sourcebuffer, iLzmaBase + 20, 3);
 
             // Convert section length bytes to int24.
-            int iSectionLength = Helper.ToInt24(bSectionLength);
+            int iLength = Helper.ToInt24(bLength);
 
-            // Determine the end of the lzma guid section.
-            int iLzmaDxeLimit = iLzmaDxeBase + iSectionLength;
+            // Determine the end of the LZMA GUID section.
+            int iLzmaLimit = iLzmaBase + iLength;
 
-            // Search for the LZMA signature byte.
-            iLzmaDxeBase = BinaryTools.GetBaseAddress(sourcebuffer, new byte[] { 0x5D }, iLzmaDxeBase + GUID_SIZE);
+            // Search for a valid LZMA header (with 3 attempts).
+            int iLzmaSignatureBase = FindValidLzmaHeader(sourcebuffer, iLzmaBase, iLzmaLimit, maxattempts: 3);
+
+            if (iLzmaSignatureBase == -1)
+            {
+                // Couldn't locate a valid LZMA header.
+                return ApfsCapable.No;
+            }
 
             // Decompress the LZMA volume.
-            byte[] dDecompressed = LzmaCoder.DecompressBytes(BinaryTools.GetBytesBaseLimit(sourcebuffer, iLzmaDxeBase, iLzmaDxeLimit));
+            byte[] dDecompressed = LzmaCoder.DecompressBytes(
+                BinaryTools.GetBytesBaseLimit(sourcebuffer, iLzmaSignatureBase, iLzmaLimit));
 
             // There was an issue decompressing the volume (Error saved to './mefit.log').
             if (dDecompressed == null)
@@ -945,6 +950,52 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
 
             // The APFS DXE GUID was present in the compressed volume.
             return ApfsCapable.Yes;
+        }
+
+        private static int FindValidLzmaHeader(byte[] sourcebuffer, int lzmabase, int lzmalimit, int maxattempts)
+        {
+            int nAttempts = 0;
+            int iCurrent = lzmabase;
+
+            while (nAttempts < maxattempts)
+            {
+                // Search for the next occurrence of the LZMA signature (0x5D).
+                iCurrent = BinaryTools.GetBaseAddress(sourcebuffer, new byte[] { 0x5D }, iCurrent + 1);
+
+                if (iCurrent == -1 || iCurrent >= lzmalimit)
+                {
+                    // No more valid positions or out of bounds.
+                    return -1;
+                }
+
+                // Validate the potential LZMA header.
+                byte[] bBuffer = BinaryTools.GetBytesBaseLength(sourcebuffer, iCurrent, 5);
+
+                if (LzmaCoder.IsValidLzmaHeader(bBuffer))
+                {
+                    // Found a valid header.
+                    return iCurrent;
+                }
+
+                // Increment attempts if the header isn't valid.
+                nAttempts++;
+            }
+
+            // Failed to find a valid header within the allowed attempts.
+            return -1;
+        }
+
+        private static int FindLzmaBase(byte[] sourcebuffer, byte[][] possibleguids, int searchbase, int searchlimit)
+        {
+            foreach (byte[] guid in possibleguids)
+            {
+                int iBase = BinaryTools.GetBaseAddress(sourcebuffer, guid, searchbase, searchlimit);
+                if (iBase != -1)
+                {
+                    return iBase; // Return the first matching address.
+                }
+            }
+            return -1; // No GUID matched.
         }
         #endregion
 

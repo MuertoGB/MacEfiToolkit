@@ -33,13 +33,13 @@ namespace Mac_EFI_Toolkit
                 sbReport.AppendLine($"Version:  {Application.ProductVersion}.{ApplicationVersions.CURRENT_BUILD}");
                 sbReport.AppendLine($"LZMA SDK: {ApplicationVersions.LZMA_SDK_VERSION}");
                 sbReport.AppendLine($"Channel:  {ApplicationVersions.CURRENT_CHANNEL}");
-                sbReport.AppendLine($"Mode:     {SystemTools.GetSystemBitnessMode()}");
+                sbReport.AppendLine($"Mode:     {SystemTools.GetSystemArchitectureMode()}");
                 sbReport.AppendLine($"Debug:    {Program.IsDebugMode()}");
-                sbReport.AppendLine($"Elevated: {SystemTools.GetIsElevated()}");
+                sbReport.AppendLine($"Elevated: {SystemTools.IsUserAdmin()}");
                 sbReport.AppendLine($"SHA256:   {FileTools.GetSha256Digest(appBytes)}\r\n");
                 sbReport.AppendLine("<== Operating System ==>\r\n");
-                sbReport.AppendLine($"Name:     {SystemTools.GetName}");
-                sbReport.AppendLine($"Bitness:  {SystemTools.GetBitness()}");
+                sbReport.AppendLine($"Name:     {SystemTools.GetOperatingSystemName}");
+                sbReport.AppendLine($"Bitness:  {SystemTools.GetOperatingSystemArchitecture()}");
                 sbReport.AppendLine($"Kernel:   {SystemTools.GetKernelVersion.ProductVersion}\r\n");
                 sbReport.AppendLine("<== Fonts ==>\r\n");
                 sbReport.AppendLine($"Segoe UI Reg: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Regular)}");

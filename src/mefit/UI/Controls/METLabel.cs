@@ -14,47 +14,48 @@ namespace Mac_EFI_Toolkit.UI.Controls
     public class METLabel : Label
     {
         #region Private Members
-        private ToolTip toolTip;
-        private TextFormatFlags flags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
+        private ToolTip _tooltip;
+        private TextFormatFlags _tfFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
         #endregion
 
         #region Constructor
-        public METLabel() => toolTip = new ToolTip { AutoPopDelay = 15000 };
+        public METLabel() => _tooltip = new ToolTip { AutoPopDelay = 15000 };
         #endregion
 
         #region Paint Methods
-        protected override void OnPaint(PaintEventArgs e) => DrawText(e.Graphics, flags, ForeColor);
+        protected override void OnPaint(PaintEventArgs e) => DrawText(e.Graphics, _tfFlags, ForeColor);
 
-        protected virtual void OnPaintForeground(PaintEventArgs e) => DrawText(e.Graphics, flags, ForeColor);
+        protected virtual void OnPaintForeground(PaintEventArgs e) => DrawText(e.Graphics, _tfFlags, ForeColor);
         #endregion
 
         #region Custom Methods
-        private void DrawText(Graphics graphics, TextFormatFlags flags, Color textColor)
+        private void DrawText(Graphics graphics, TextFormatFlags textformatflags, Color textcolour)
         {
             Rectangle textRect =
                 new Rectangle(
                     ClientRectangle.Left + Padding.Left,
                     ClientRectangle.Top + Padding.Top,
                     ClientRectangle.Width - Padding.Horizontal,
-                    ClientRectangle.Height - Padding.Vertical);
+                    ClientRectangle.Height - Padding.Vertical
+                );
 
             // Override text color when the control is !enabled.
-            textColor = !Enabled ? Color.FromArgb(14, 14, 14) : ForeColor;
+            textcolour = !Enabled ? Color.FromArgb(14, 14, 14) : ForeColor;
 
-            TextRenderer.DrawText(graphics, Text, Font, textRect, textColor, flags);
+            TextRenderer.DrawText(graphics, Text, Font, textRect, textcolour, textformatflags);
         }
 
         protected override void OnMouseEnter(EventArgs e)
         {
             base.OnMouseEnter(e);
 
-            if (IsTextEllipsized() && Text != toolTip.GetToolTip(this))
+            if (IsTextEllipsized() && Text != _tooltip.GetToolTip(this))
             {
-                toolTip.SetToolTip(this, Text);
+                _tooltip.SetToolTip(this, Text);
             }
             else if (!IsTextEllipsized())
             {
-                toolTip.SetToolTip(this, string.Empty);
+                _tooltip.SetToolTip(this, string.Empty);
             }
         }
 
@@ -62,8 +63,8 @@ namespace Mac_EFI_Toolkit.UI.Controls
         {
             using (Graphics g = CreateGraphics())
             {
-                Size textSize = TextRenderer.MeasureText(Text, Font);
-                return textSize.Width > ClientSize.Width;
+                Size szText = TextRenderer.MeasureText(Text, Font);
+                return szText.Width > ClientSize.Width;
             }
         }
         #endregion
@@ -85,7 +86,7 @@ namespace Mac_EFI_Toolkit.UI.Controls
         {
             if (disposing)
             {
-                toolTip?.Dispose();
+                _tooltip?.Dispose();
             }
 
             base.Dispose(disposing);

@@ -1,4 +1,10 @@
-﻿using Mac_EFI_Toolkit.UI;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// Prompts.cs
+// Released under the GNU GLP v3.0
+
+using Mac_EFI_Toolkit.UI;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms

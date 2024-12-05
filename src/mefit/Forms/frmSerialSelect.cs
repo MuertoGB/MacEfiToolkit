@@ -43,13 +43,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetSerialLength()
         {
-            if (Tag is SerialSenderTag.EFIROM)
+            if (Tag is SerialSenderTag.EFIROMWindow)
             {
                 tbSsn.MaxLength = EFIROM.FsysStoreData.Serial.Length;
                 return;
             }
 
-            if (Tag is SerialSenderTag.SOCROM)
+            if (Tag is SerialSenderTag.SOCROMWindow)
             {
                 tbSsn.MaxLength = SOCROM.SERIAL_LENGTH;
                 return;
@@ -72,11 +72,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
-            if (Tag is SerialSenderTag.EFIROM)
+            if (Tag is SerialSenderTag.EFIROMWindow)
             {
                 EFIROM.NewSerial = tbSsn.Text;
             }
-            else if (Tag is SerialSenderTag.SOCROM)
+            else if (Tag is SerialSenderTag.SOCROMWindow)
             {
                 SOCROM.NewSerial = tbSsn.Text;
             }
@@ -108,12 +108,12 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 if (Serial.IsValid(textBox.Text))
                 {
-                    UpdateTextBoxColour(textBox, Colours.CLR_GOOD);
+                    UpdateTextBoxColour(textBox, Colours.ClrOkay);
                     cmdOkay.Enabled = true;
                 }
                 else
                 {
-                    UpdateTextBoxColour(textBox, Colours.CLR_ERROR);
+                    UpdateTextBoxColour(textBox, Colours.ClrError);
                     lblValidity.Text += $" - {APPSTRINGS.INVALID}";
                     cmdOkay.Enabled = false;
                 }

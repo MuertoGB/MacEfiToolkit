@@ -35,13 +35,13 @@ namespace Mac_EFI_Toolkit.UI
         {
             if (!Settings.ReadBool(SettingsBoolType.DisableFlashingUI))
             {
-                Color originalColor = control.ForeColor;
+                Color clrOriginal = control.ForeColor;
 
                 for (int i = 0; i < 3; i++)
                 {
                     control.ForeColor = Color.FromArgb(control.ForeColor.A, 130, 130, 130);
                     await Task.Delay(70);
-                    control.ForeColor = originalColor;
+                    control.ForeColor = clrOriginal;
                     await Task.Delay(70);
                 }
             }
@@ -49,129 +49,129 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Explorer
-        internal static void ShowExplorerFileHighlightPrompt(Form owner, string path)
+        internal static void ShowExplorerFileHighlightPrompt(Form owner, string filepath)
         {
-            DialogResult result =
+            DialogResult dlgResult =
                 METPrompt.Show(
                         owner,
                         $"{APPSTRINGS.FILE_SAVE_SUCCESS_NAV}",
                         METPromptType.Information,
                         METPromptButtons.YesNo);
 
-            if (result == DialogResult.Yes)
+            if (dlgResult == DialogResult.Yes)
             {
-                HighlightPathInExplorer(path, owner);
+                HighlightPathInExplorer(filepath, owner);
             }
         }
 
-        internal static void ShowOpenFolderInExplorerPromt(Form owner, string path)
+        internal static void ShowOpenFolderInExplorerPromt(Form owner, string folderpath)
         {
-            DialogResult result =
+            DialogResult dlgResult =
                 METPrompt.Show(
                         owner,
                         $"{APPSTRINGS.FILES_SAVE_SUCCESS_NAV}",
                         METPromptType.Information,
                         METPromptButtons.YesNo);
 
-            if (result == DialogResult.Yes)
+            if (dlgResult == DialogResult.Yes)
             {
-                Process.Start("explorer.exe", path);
+                Process.Start("explorer.exe", folderpath);
             }
         }
 
         /// <summary>
         /// Navigate to, and highlight a file in Windows Explorer.
         /// </summary>
-        /// <param name="path">The path of the file to open and highlight in Windows Explorer.</param>
-        /// <param name="form">The form instance used to display prompts to the user.</param>
-        internal static void HighlightPathInExplorer(string path, Form form)
+        /// <param name="filepath">The path of the file to open and highlight in Windows Explorer.</param>
+        /// <param name="owner">The form instance used to display prompts to the user.</param>
+        internal static void HighlightPathInExplorer(string filepath, Form owner)
         {
-            if (!File.Exists(path))
+            if (!File.Exists(filepath))
             {
                 METPrompt.Show(
-                    form,
-                    $"File does not exist: {path}",
+                    owner,
+                    $"File does not exist: {filepath}",
                     METPromptType.Warning,
                     METPromptButtons.Okay);
 
                 return;
             }
 
-            Process.Start("explorer.exe", $"/select,\"{path}\"");
+            Process.Start("explorer.exe", $"/select,\"{filepath}\"");
         }
 
-        internal static void OpenFolderInExplorer(string path, Form form)
+        internal static void OpenFolderInExplorer(string folderpath, Form owner)
         {
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(folderpath))
             {
                 METPrompt.Show(
-                    form,
-                    $"Directory does not exist: {path}",
+                    owner,
+                    $"Directory does not exist: {folderpath}",
                     METPromptType.Warning,
                     METPromptButtons.Okay);
 
                 return;
             }
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(path);
+            DirectoryInfo dirInfo = new DirectoryInfo(folderpath);
 
-            if (!directoryInfo.Attributes.HasFlag(FileAttributes.Directory))
+            if (!dirInfo.Attributes.HasFlag(FileAttributes.Directory))
             {
                 METPrompt.Show(
-                    form,
-                    $"The path is not a directory: {path}",
+                    owner,
+                    $"The path is not a directory: {folderpath}",
                     METPromptType.Warning,
                     METPromptButtons.Okay);
 
                 return;
             }
 
-            Process.Start("explorer.exe", path);
+            Process.Start("explorer.exe", folderpath);
         }
         #endregion
 
         #region Context Menu Position
-        internal static void ShowContextMenuAtControlPoint(object sender, ContextMenuStrip menu, MenuPosition menuPosition)
+        internal static void ShowContextMenuAtControlPoint(object sender, ContextMenuStrip contextmenu, MenuPosition menuposition)
         {
-            Control control = sender as Control;
+            Control ctrlContextMenu = sender as Control;
 
-            if (control == null)
+            if (ctrlContextMenu == null)
             {
                 throw new ArgumentException("Invalid sender object type. Expected a Control.");
             }
 
-            Point position;
+            Point ptPosition;
 
-            switch (menuPosition)
+            switch (menuposition)
             {
                 case MenuPosition.TopRight:
-                    position = control.PointToScreen(new Point(control.Width + 1, -1));
+                    ptPosition = ctrlContextMenu.PointToScreen(new Point(ctrlContextMenu.Width + 1, -1));
                     break;
                 case MenuPosition.BottomLeft:
-                    position = control.PointToScreen(new Point(0, control.Height + 1));
+                    ptPosition = ctrlContextMenu.PointToScreen(new Point(0, ctrlContextMenu.Height + 1));
                     break;
                 default:
                     throw new ArgumentException("Invalid MenuPosition value.");
             }
 
-            menu.Show(position);
+            contextmenu.Show(ptPosition);
         }
 
-        internal static void ShowContextMenuAtCursor(object sender, EventArgs e, ContextMenuStrip menu, bool showOnLeftClick)
+        internal static void ShowContextMenuAtCursor(object sender, EventArgs e, ContextMenuStrip contextmenu, bool showonleftclick)
         {
             MouseEventArgs mouseEventArgs = e as MouseEventArgs;
 
-            if (mouseEventArgs != null && (mouseEventArgs.Button == MouseButtons.Right || (showOnLeftClick && mouseEventArgs.Button == MouseButtons.Left)))
+            if (mouseEventArgs != null && (mouseEventArgs.Button == MouseButtons.Right || (showonleftclick && mouseEventArgs.Button == MouseButtons.Left)))
             {
-                menu.Show(Cursor.Position);
+                contextmenu.Show(Cursor.Position);
             }
         }
         #endregion
 
         #region Form Drag
-        public static void EnableFormDrag(Form form, params Control[] dragControls)
+        public static void EnableFormDrag(Form form, params Control[] controls)
         {
-            foreach (var control in dragControls)
+            foreach (Control control in controls)
             {
                 control.MouseMove += (sender, e) =>
                 {
@@ -191,9 +191,9 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Nested panel text color setter
-        internal static void ApplyNestedPanelLabelForeColor(TableLayoutPanel tableLayoutPanel, Color color)
+        internal static void ApplyNestedPanelLabelForeColor(TableLayoutPanel tablelayoutpanel, Color color)
         {
-            foreach (Control control in tableLayoutPanel.Controls)
+            foreach (Control control in tablelayoutpanel.Controls)
             {
                 if (control is Label label && label.Text == APPSTRINGS.NA)
                 {

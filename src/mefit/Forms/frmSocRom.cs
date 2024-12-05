@@ -139,9 +139,9 @@ namespace Mac_EFI_Toolkit.Forms
             OpenBinary(draggedFilename);
         }
 
-        private void frmSocRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.CLR_INACTIVEFORM);
+        private void frmSocRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrInactiveFormText);
 
-        private void frmSocRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.CLR_ACTIVEFORM);
+        private void frmSocRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -511,7 +511,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             using (frmSerialSelect child = new frmSerialSelect())
             {
-                child.Tag = SerialSenderTag.SOCROM;
+                child.Tag = SerialSenderTag.SOCROMWindow;
                 child.FormClosed += ChildWindowClosed;
                 child.ShowDialog();
 
@@ -924,7 +924,7 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateModelControls();
 
             // Apply DISABLED_TEXT to N/A labels.
-            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, Colours.CLR_NATEXT);
+            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, Colours.ClrDisabledText);
 
             // Update window title.
             UpdateWindowTitle();
@@ -949,7 +949,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!bValidSize)
             {
-                lblFilesize.ForeColor = Colours.CLR_ERROR;
+                lblFilesize.ForeColor = Colours.ClrError;
                 lblFilesize.Text += $" ({FileTools.GetSizeDifference(lSize)})";
             }
         }
@@ -1027,7 +1027,7 @@ namespace Mac_EFI_Toolkit.Forms
                 // Prototype in testing
                 if (!Serial.IsValid(serialNumber))
                 {
-                    lblSerial.ForeColor = Colours.CLR_WARNING;
+                    lblSerial.ForeColor = Colours.ClrWarn;
                 }
 
                 cbxCensor.Enabled = true;
@@ -1054,7 +1054,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
-            lblConfigCode.ForeColor = Colours.CLR_INFO;
+            lblConfigCode.ForeColor = Colours.ClrInfo;
 
             GetConfigCodeAsync(SOCROM.ConfigCode);
         }
@@ -1068,7 +1068,7 @@ namespace Mac_EFI_Toolkit.Forms
                 SOCROM.ConfigCode = configcode;
 
                 lblConfigCode.Text = configcode;
-                lblConfigCode.ForeColor = Colours.CLR_NORMALTEXT;
+                lblConfigCode.ForeColor = Colours.ClrNormalText;
 
                 configToolStripMenuItem.Enabled = true;
 
@@ -1078,7 +1078,7 @@ namespace Mac_EFI_Toolkit.Forms
             configToolStripMenuItem.Enabled = false;
 
             lblConfigCode.Text = APPSTRINGS.NA;
-            lblConfigCode.ForeColor = Colours.CLR_DISABLEDTEXT;
+            lblConfigCode.ForeColor = Colours.ClrDisabledText;
         }
 
         private void UpdateModelControls()
