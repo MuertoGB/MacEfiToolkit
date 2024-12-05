@@ -1048,7 +1048,7 @@ namespace Mac_EFI_Toolkit.Forms
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
             lblConfigCode.ForeColor = Colours.ClrInfo;
 
-            GetConfigCodeAsync(SOCROM.ConfigCode);
+            GetConfigCodeAsync(SOCROM.SCfgSectionData.HWC);
         }
 
         internal async void GetConfigCodeAsync(string hwc)

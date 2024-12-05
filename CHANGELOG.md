@@ -22,6 +22,9 @@
 - Updated the internal database with more models.
 - Improved reliability when detecting LZMA DXE archives.
 
+### Bugs
+- Fixed a bug where the SOCROM window failed to fetch config codes from the server. This issue occurred as incorrect parameter value was being passed to the GetConfigCodeAsync() function.
+
 ## Version 2.0.1
 
 ### Enhancements
