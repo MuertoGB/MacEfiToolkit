@@ -20,6 +20,7 @@
 ### Enhancements
 - User interface improvements.
 - Updated the internal database with more models.
+- Improved reliability when detecting LZMA DXE archives.
 
 ## Version 2.0.1
 
