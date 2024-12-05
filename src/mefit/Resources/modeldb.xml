@@ -33873,6 +33873,10 @@
 		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
 	</section>
 	<section>
+		<hwc>LVDF</hwc>
+		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
+	</section>
+	<section>
 		<hwc>LVDH</hwc>
 		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
 	</section>
