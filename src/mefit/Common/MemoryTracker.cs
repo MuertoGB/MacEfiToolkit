@@ -9,7 +9,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace Mac_EFI_Toolkit
+namespace Mac_EFI_Toolkit.Common
 {
     internal class MemoryTracker
     {

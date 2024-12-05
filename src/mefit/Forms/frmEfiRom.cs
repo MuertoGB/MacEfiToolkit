@@ -5,6 +5,7 @@
 // frmEfiRom.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Tools;
