@@ -34,7 +34,7 @@
             this.cmdOkay = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.tlpSsn = new System.Windows.Forms.TableLayoutPanel();
-            this.tbSsn = new System.Windows.Forms.TextBox();
+            this.tbxSerial = new System.Windows.Forms.TextBox();
             this.lblValidity = new System.Windows.Forms.Label();
             this.lblWindowTitle = new System.Windows.Forms.Label();
             this.pnlSeperatorTip = new System.Windows.Forms.Panel();
@@ -125,7 +125,7 @@
             this.tlpSsn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.tlpSsn.ColumnCount = 1;
             this.tlpSsn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpSsn.Controls.Add(this.tbSsn, 0, 0);
+            this.tlpSsn.Controls.Add(this.tbxSerial, 0, 0);
             this.tlpSsn.Controls.Add(this.lblValidity, 0, 1);
             this.tlpSsn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSsn.Location = new System.Drawing.Point(0, 0);
@@ -137,23 +137,23 @@
             this.tlpSsn.Size = new System.Drawing.Size(308, 77);
             this.tlpSsn.TabIndex = 2;
             // 
-            // tbSsn
+            // tbxSerial
             // 
-            this.tbSsn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.tbSsn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.tbSsn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tbSsn.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.tbSsn.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbSsn.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.tbSsn.Location = new System.Drawing.Point(70, 14);
-            this.tbSsn.Margin = new System.Windows.Forms.Padding(0);
-            this.tbSsn.MaxLength = 12;
-            this.tbSsn.Multiline = true;
-            this.tbSsn.Name = "tbSsn";
-            this.tbSsn.Size = new System.Drawing.Size(167, 27);
-            this.tbSsn.TabIndex = 0;
-            this.tbSsn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.tbSsn.TextChanged += new System.EventHandler(this.tbSsn_TextChanged);
+            this.tbxSerial.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.tbxSerial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.tbxSerial.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbxSerial.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.tbxSerial.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbxSerial.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.tbxSerial.Location = new System.Drawing.Point(70, 14);
+            this.tbxSerial.Margin = new System.Windows.Forms.Padding(0);
+            this.tbxSerial.MaxLength = 12;
+            this.tbxSerial.Multiline = true;
+            this.tbxSerial.Name = "tbxSerial";
+            this.tbxSerial.Size = new System.Drawing.Size(167, 27);
+            this.tbxSerial.TabIndex = 0;
+            this.tbxSerial.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tbxSerial.TextChanged += new System.EventHandler(this.tbxSerial_TextChanged);
             // 
             // lblValidity
             // 
@@ -226,7 +226,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpMain;
-        private System.Windows.Forms.TextBox tbSsn;
+        private System.Windows.Forms.TextBox tbxSerial;
         internal System.Windows.Forms.Label lblWindowTitle;
         private System.Windows.Forms.TableLayoutPanel tlpButtons;
         private System.Windows.Forms.Button cmdOkay;

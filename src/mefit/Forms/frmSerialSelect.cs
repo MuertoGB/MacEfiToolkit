@@ -38,20 +38,19 @@ namespace Mac_EFI_Toolkit.Forms
         {
             SetSerialLength();
             UpdateValidityLabel();
-            tbSsn.Select();
+            tbxSerial.Select();
         }
 
         private void SetSerialLength()
         {
             if (Tag is SerialSenderTag.EFIROMWindow)
             {
-                tbSsn.MaxLength = EFIROM.FsysStoreData.Serial.Length;
+                tbxSerial.MaxLength = EFIROM.FsysStoreData.Serial.Length;
                 return;
             }
-
-            if (Tag is SerialSenderTag.SOCROMWindow)
+            else if (Tag is SerialSenderTag.SOCROMWindow)
             {
-                tbSsn.MaxLength = SOCROM.SERIAL_LENGTH;
+                tbxSerial.MaxLength = SOCROM.SERIAL_LENGTH;
                 return;
             }
         }
@@ -74,11 +73,11 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (Tag is SerialSenderTag.EFIROMWindow)
             {
-                EFIROM.NewSerial = tbSsn.Text;
+                EFIROM.NewSerial = tbxSerial.Text;
             }
             else if (Tag is SerialSenderTag.SOCROMWindow)
             {
-                SOCROM.NewSerial = tbSsn.Text;
+                SOCROM.NewSerial = tbxSerial.Text;
             }
 
             DialogResult = DialogResult.OK;
@@ -86,17 +85,17 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region TextBox Events
-        private void tbSsn_TextChanged(object sender, EventArgs e)
+        private void tbxSerial_TextChanged(object sender, EventArgs e)
         {
             TextBox textBox = (TextBox)sender;
-            int charLength = textBox.Text.Length;
+            int nCharCount = textBox.Text.Length;
 
             // Update the validity label each time the text changes
             UpdateValidityLabel();
 
             if (Settings.ReadBool(SettingsBoolType.DisableSerialValidation))
             {
-                if (charLength == tbSsn.MaxLength)
+                if (nCharCount == textBox.MaxLength)
                 {
                     cmdOkay.Enabled = true;
                     return;
@@ -104,7 +103,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Check if the character length matches the expected serial length
-            if (charLength == tbSsn.MaxLength)
+            if (nCharCount == textBox.MaxLength)
             {
                 if (Serial.IsValid(textBox.Text))
                 {
@@ -123,7 +122,6 @@ namespace Mac_EFI_Toolkit.Forms
                 UpdateTextBoxColour(textBox, Color.FromArgb(235, 235, 235));
                 cmdOkay.Enabled = false;
             }
-
         }
         #endregion
 
@@ -132,7 +130,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateValidityLabel()
         {
-            lblValidity.Text = $"{tbSsn.Text.Length}/{tbSsn.MaxLength}";
+            lblValidity.Text = $"{tbxSerial.Text.Length}/{tbxSerial.MaxLength}";
         }
         #endregion
     }

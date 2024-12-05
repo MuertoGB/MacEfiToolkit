@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 public static class BlurHelper
 {
-    public static void ApplyBlur(Form form)
+    internal static void ApplyBlur(Form form)
     {
         NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
         {
@@ -37,7 +37,7 @@ public static class BlurHelper
         form.BackColor = Colours.ClrAppBorderDefault;
     }
 
-    public static void RemoveBlur(Form form)
+    internal static void RemoveBlur(Form form)
     {
         NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
         {

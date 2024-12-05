@@ -101,19 +101,19 @@ namespace Mac_EFI_Toolkit.Forms
 
         private static void OpenFolderDialog(SettingsStringType settingsType, ref string path)
         {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
             {
-                dialog.SelectedPath =
+                folderBrowserDialog.SelectedPath =
                     string.IsNullOrEmpty(Settings.ReadString(settingsType))
                         ? ApplicationPaths.WorkingDirectory
                         : Settings.ReadString(settingsType);
 
-                dialog.Description = APPSTRINGS.SELECT_FOLDER;
-                dialog.ShowNewFolderButton = true;
+                folderBrowserDialog.Description = APPSTRINGS.SELECT_FOLDER;
+                folderBrowserDialog.ShowNewFolderButton = true;
 
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
-                    path = dialog.SelectedPath;
+                    path = folderBrowserDialog.SelectedPath;
                 }
             }
         }
@@ -161,14 +161,14 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
-            DialogResult result =
+            DialogResult dlgResult =
                 METPrompt.Show(
                     this,
                     APPSTRINGS.RESET_SETTINGS_DEFAULT,
                     METPromptType.Warning,
                     METPromptButtons.YesNo);
 
-            if (result != DialogResult.Yes)
+            if (dlgResult != DialogResult.Yes)
             {
                 return;
             }
@@ -243,9 +243,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private static void UpdateLabel(Label control, SettingsStringType setting)
         {
-            string strPath = Settings.ReadString(setting);
-            control.Text = strPath;
-            control.ForeColor = Directory.Exists(strPath) ? Colours.ClrSettingsDefault : Colours.ClrWarn;
+            string strDirectory = Settings.ReadString(setting);
+            control.Text = strDirectory;
+            control.ForeColor = Directory.Exists(strDirectory) ? Colours.ClrSettingsDefault : Colours.ClrWarn;
         }
 
         private void SetButtonProperties()

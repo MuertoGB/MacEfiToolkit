@@ -11,7 +11,7 @@ namespace Mac_EFI_Toolkit.Common
 {
     class LzmaCoder
     {
-        internal static byte[] DecompressBytes(byte[] sourceBytes)
+        internal static byte[] DecompressBytes(byte[] sourcebuffer)
         {
             // Create a new instance of the Decoder class.
             SevenZip.Compression.LZMA.Decoder lzmaDecoder = new SevenZip.Compression.LZMA.Decoder();
@@ -22,7 +22,7 @@ namespace Mac_EFI_Toolkit.Common
             try
             {
                 // Create a memory stream to hold the compressed input data.
-                using (MemoryStream msInput = new MemoryStream(sourceBytes))
+                using (MemoryStream msInput = new MemoryStream(sourcebuffer))
                 {
                     // Read the first 5 bytes which contain decoder property data.
                     byte[] bProperties = new byte[5];
@@ -59,15 +59,15 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        internal static bool IsValidLzmaHeader(byte[] buffer)
+        internal static bool IsValidLzmaHeader(byte[] sourcebuffer)
         {
-            if (buffer.Length < 5)
+            if (sourcebuffer.Length < 5)
             {
                 // Header is too short to be valid.
                 return false;
             }
 
-            byte properties = buffer[0];
+            byte properties = sourcebuffer[0];
             int lc = properties % 9;        // Literal context bits
             int remainder = properties / 9;
             int lp = remainder % 5;         // Literal position bits.
@@ -80,7 +80,7 @@ namespace Mac_EFI_Toolkit.Common
                 return false;
             }
 
-            int iDictSize = BitConverter.ToInt32(buffer, 1);
+            int iDictSize = BitConverter.ToInt32(sourcebuffer, 1);
 
             bool IsPow2(int i)
             { 

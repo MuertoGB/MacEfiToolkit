@@ -21,7 +21,7 @@ namespace Mac_EFI_Toolkit.Forms
     public partial class frmStartup : METForm
     {
         #region Public Members
-        public string loadedFile = string.Empty;
+        public string LoadedFirmware = string.Empty;
         #endregion
 
         #region Private Members
@@ -114,12 +114,12 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmStartup_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
-            string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-            string draggedFilename = draggedFiles[0];
+            string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string strFileName = arrDraggedFiles[0];
 
             ApplyDragLeaveColours();
 
-            OpenBinary(draggedFilename);
+            OpenBinary(strFileName);
         }
 
         private void frmStartup_DragLeave(object sender, EventArgs e) => ApplyDragLeaveColours();
@@ -193,15 +193,15 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdBrowse_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dialog = new OpenFileDialog
+            using (OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
                 Filter = APPSTRINGS.FILTER_STARTUP_WINDOW
             })
             {
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    OpenBinary(dialog.FileName);
+                    OpenBinary(openFileDialog.FileName);
                 }
             }
         }
@@ -291,11 +291,11 @@ namespace Mac_EFI_Toolkit.Forms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form child = new frmAbout())
+            using (Form form = new frmAbout())
             {
-                child.Tag = StartupSenderTag.Other;
-                child.FormClosed += ChildWindowClosed;
-                child.ShowDialog();
+                form.Tag = StartupSenderTag.Other;
+                form.FormClosed += ChildWindowClosed;
+                form.ShowDialog();
             }
         }
 
@@ -303,32 +303,32 @@ namespace Mac_EFI_Toolkit.Forms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form child = new frmSettings())
+            using (Form form = new frmSettings())
             {
-                child.Tag = StartupSenderTag.Other;
-                child.FormClosed += ChildWindowClosed;
-                child.ShowDialog();
+                form.Tag = StartupSenderTag.Other;
+                form.FormClosed += ChildWindowClosed;
+                form.ShowDialog();
             }
         }
         #endregion
 
         #region Open Binary
-        private void OpenBinary(string filePath)
+        private void OpenBinary(string filepath)
         {
-            if (!FileTools.IsValidMinMaxSize(filePath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
+            if (!FileTools.IsValidMinMaxSize(filepath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
             {
                 return;
             }
 
-            byte[] fileBytes = File.ReadAllBytes(filePath);
+            byte[] bFileBuffer = File.ReadAllBytes(filepath);
 
             // Identify and open the correct window based on the firmware type.
-            Form childForm = GetChildFormForImage(fileBytes);
+            Form form = GetChildFormForImage(bFileBuffer);
 
-            if (childForm != null)
+            if (form != null)
             {
-                _strInitialDirectory = Path.GetDirectoryName(filePath);
-                InitializeChildForm(childForm, filePath);
+                _strInitialDirectory = Path.GetDirectoryName(filepath);
+                InitializeChildForm(form, filepath);
                 return;
             }
 
@@ -357,9 +357,9 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void ChildWindowClosed(object sender, EventArgs e)
         {
-            if (sender is Form closedForm)
+            if (sender is Form closedChild)
             {
-                if (closedForm.Tag is StartupSenderTag formTag && formTag == StartupSenderTag.Firmware)
+                if (closedChild.Tag is StartupSenderTag formTag && formTag == StartupSenderTag.Firmware)
                 {
                     if (_childWindowCount > 0)
                     {
@@ -388,28 +388,31 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ApplyDragLeaveColours() => lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
 
-        private void SetControlForeColor(Control parentControl, Color foreColor)
+        private void SetControlForeColor(Control parentcontrol, Color forecolor)
         {
-            foreach (Control control in parentControl.Controls)
+            foreach (Control control in parentcontrol.Controls)
             {
-                control.ForeColor = foreColor;
+                control.ForeColor = forecolor;
             }
         }
 
-        private void InitializeChildForm(Form childForm, string filePath)
+        private void InitializeChildForm(Form child, string filepath)
         {
-            this.loadedFile = filePath;
+            // Set the loaded firmware path.
+            this.LoadedFirmware = filepath;
 
             // Increment child count and update window text.
             _childWindowCount++;
+
+            // Update window title.
             UpdateWindowTitle();
 
             // Configure child.
-            childForm.Tag = StartupSenderTag.Firmware;
-            childForm.FormClosed += ChildWindowClosed;
-            childForm.Location = new Point(this.Location.X + (this.Width - childForm.Width) / 2, this.Location.Y + (this.Height - childForm.Height) / 2);
-            childForm.Owner = this;
-            childForm.Show();
+            child.Tag = StartupSenderTag.Firmware;
+            child.FormClosed += ChildWindowClosed;
+            child.Location = new Point(this.Location.X + (this.Width - child.Width) / 2, this.Location.Y + (this.Height - child.Height) / 2);
+            child.Owner = this;
+            child.Show();
         }
 
         private void UpdateWindowTitle()
@@ -441,12 +444,12 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string directory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
+            string strDirectory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
-            if (!string.IsNullOrEmpty(directory))
+            if (!string.IsNullOrEmpty(strDirectory))
             {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
+                _strInitialDirectory = Directory.Exists(strDirectory) ? strDirectory : ApplicationPaths.WorkingDirectory;
             }
         }
         #endregion

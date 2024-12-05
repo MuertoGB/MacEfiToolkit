@@ -96,10 +96,10 @@ namespace Mac_EFI_Toolkit.Forms
 
             _cancellationToken = new CancellationTokenSource();
 
-            if (!string.IsNullOrEmpty(Program.MainWindow.loadedFile))
+            if (!string.IsNullOrEmpty(Program.MainWindow.LoadedFirmware))
             {
-                OpenBinary(Program.MainWindow.loadedFile);
-                Program.MainWindow.loadedFile = null;
+                OpenBinary(Program.MainWindow.LoadedFirmware);
+                Program.MainWindow.LoadedFirmware = null;
             }
 
             MemoryTracker.Instance.OnMemoryUsageUpdated += MemoryTracker_OnMemoryUsageUpdated;
@@ -138,11 +138,11 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmEfiRom_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
-            string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-            string draggedFilename = draggedFiles[0];
+            string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string strFileName = arrDraggedFiles[0];
 
             // Open the binary file.
-            OpenBinary(draggedFilename);
+            OpenBinary(strFileName);
         }
 
         private void frmEfiRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrInactiveFormText);
