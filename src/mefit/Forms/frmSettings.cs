@@ -73,7 +73,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strStartupInitialPath, lblStartupDirectory.Text))
             {
                 lblStartupDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strStartupInitialPath}";
-                lblStartupDirectory.ForeColor = Colours.CLR_GOOD;
+                lblStartupDirectory.ForeColor = Colours.ClrOkay;
             }
         }
 
@@ -84,7 +84,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strEfiInitialPath, lblEfiDirectory.Text))
             {
                 lblEfiDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strEfiInitialPath}";
-                lblEfiDirectory.ForeColor = Colours.CLR_GOOD;
+                lblEfiDirectory.ForeColor = Colours.ClrOkay;
             }
         }
 
@@ -95,25 +95,25 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strSocInitialPath, lblSocDirectory))
             {
                 lblSocDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strSocInitialPath}";
-                lblSocDirectory.ForeColor = Colours.CLR_GOOD;
+                lblSocDirectory.ForeColor = Colours.ClrOkay;
             }
         }
 
         private static void OpenFolderDialog(SettingsStringType settingsType, ref string path)
         {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
             {
-                dialog.SelectedPath =
+                folderBrowserDialog.SelectedPath =
                     string.IsNullOrEmpty(Settings.ReadString(settingsType))
-                        ? METPath.WORKING_DIR
+                        ? ApplicationPaths.WorkingDirectory
                         : Settings.ReadString(settingsType);
 
-                dialog.Description = APPSTRINGS.SELECT_FOLDER;
-                dialog.ShowNewFolderButton = true;
+                folderBrowserDialog.Description = APPSTRINGS.SELECT_FOLDER;
+                folderBrowserDialog.ShowNewFolderButton = true;
 
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                 {
-                    path = dialog.SelectedPath;
+                    path = folderBrowserDialog.SelectedPath;
                 }
             }
         }
@@ -161,14 +161,14 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
-            DialogResult result =
+            DialogResult dlgResult =
                 METPrompt.Show(
                     this,
                     APPSTRINGS.RESET_SETTINGS_DEFAULT,
                     METPromptType.Warning,
                     METPromptButtons.YesNo);
 
-            if (result != DialogResult.Yes)
+            if (dlgResult != DialogResult.Yes)
             {
                 return;
             }
@@ -180,9 +180,9 @@ namespace Mac_EFI_Toolkit.Forms
             Settings.SetBool(SettingsBoolType.DisableMessageSounds, false);
             Settings.SetBool(SettingsBoolType.DisableTips, false);
             Settings.SetBool(SettingsBoolType.DisableConfDiag, false);
-            Settings.SetString(SettingsStringType.StartupInitialDirectory, METPath.WORKING_DIR);
-            Settings.SetString(SettingsStringType.EfiInitialDirectory, METPath.WORKING_DIR);
-            Settings.SetString(SettingsStringType.SocInitialDirectory, METPath.WORKING_DIR);
+            Settings.SetString(SettingsStringType.StartupInitialDirectory, ApplicationPaths.WorkingDirectory);
+            Settings.SetString(SettingsStringType.EfiInitialDirectory, ApplicationPaths.WorkingDirectory);
+            Settings.SetString(SettingsStringType.SocInitialDirectory, ApplicationPaths.WorkingDirectory);
 
             METForm.UpdateAccentColor();
 
@@ -241,16 +241,16 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateLabel(lblSocDirectory, SettingsStringType.SocInitialDirectory);
         }
 
-        private static void UpdateLabel(Label label, SettingsStringType settingsType)
+        private static void UpdateLabel(Label control, SettingsStringType setting)
         {
-            string path = Settings.ReadString(settingsType);
-            label.Text = path;
-            label.ForeColor = Directory.Exists(path) ? Colours.CLR_SETTINGSPATHTEXT : Colours.CLR_WARNING;
+            string strDirectory = Settings.ReadString(setting);
+            control.Text = strDirectory;
+            control.ForeColor = Directory.Exists(strDirectory) ? Colours.ClrSettingsDefault : Colours.ClrWarn;
         }
 
         private void SetButtonProperties()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Font = Program.FontSegMdl2Regular12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion

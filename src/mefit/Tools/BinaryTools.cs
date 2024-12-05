@@ -18,90 +18,90 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Finds the base of a byte pattern within a byte array.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to search in.</param>
+        /// <param name="sourcebuffer">The byte array to search in.</param>
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBaseAddress(byte[] sourceBytes, byte[] pattern)
+        internal static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern)
         {
             // Call the overload that takes a basePos parameter and sets it to 0.
-            return GetBaseAddress(sourceBytes, pattern, 0);
+            return GetBaseAddress(sourcebuffer, pattern, 0);
         }
 
         /// <summary>
         /// Finds the base of a byte pattern within a byte array, starting at a specified base base.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to search in.</param>
+        /// <param name="sourcebuffer">The byte array to search in.</param>
         /// <param name="pattern">The byte pattern to search for.</param>
-        /// <param name="basePosition">The base to start the search from.</param>
+        /// <param name="baseposition">The base to start the search from.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBaseAddress(byte[] sourceBytes, byte[] pattern, int basePosition)
+        internal static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern, int baseposition)
         {
             // Call the overload that takes a basePosition and maxSearchLength parameters and sets maxSearchLength to the remaining length of the sourceBytes array.
-            return GetBaseAddress(sourceBytes, pattern, basePosition, sourceBytes.Length - basePosition);
+            return GetBaseAddress(sourcebuffer, pattern, baseposition, sourcebuffer.Length - baseposition);
         }
 
         /// <summary>
         /// Finds the base of a byte pattern within a byte array, starting at a specified base and limiting the search length.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to search in.</param>
-        /// <param name="patternBytes">The byte pattern to search for.</param>
-        /// <param name="basePosition">The base to start the search from.</param>
-        /// <param name="maxSearchLength">The maximum length of the search within the byte array.</param>
+        /// <param name="sourcebuffer">The byte array to search in.</param>
+        /// <param name="pattern">The byte pattern to search for.</param>
+        /// <param name="baseposition">The base to start the search from.</param>
+        /// <param name="maxsearchlength">The maximum length of the search within the byte array.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBaseAddress(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
+        internal static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern, int baseposition, int maxsearchlength)
         {
-            return FindPatternBase(sourceBytes, patternBytes, basePosition, maxSearchLength);
+            return FindPatternBase(sourcebuffer, pattern, baseposition, maxsearchlength);
         }
 
         /// <summary>
         /// Finds the base of a byte pattern within a byte array, starting at a specified base and limiting the search to the predefined limit address.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to search in.</param>
-        /// <param name="patternBytes">The byte pattern to search for.</param>
-        /// <param name="basePosition">The base to start the search from.</param>
-        /// <param name="limitAddress">The address at which the search is limited.</param>
+        /// <param name="sourcebuffer">The byte array to search in.</param>
+        /// <param name="pattern">The byte pattern to search for.</param>
+        /// <param name="baseposition">The base to start the search from.</param>
+        /// <param name="limitposition">The address at which the search is limited.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBaseAddressUpToLimit(byte[] sourceBytes, byte[] patternBytes, int basePosition, int limitAddress)
+        internal static int GetBaseAddressUpToLimit(byte[] sourcebuffer, byte[] pattern, int baseposition, int limitposition)
         {
-            int maxSearchLength = limitAddress - basePosition;
-            return FindPatternBase(sourceBytes, patternBytes, basePosition, maxSearchLength);
+            int maxSearchLength = limitposition - baseposition;
+            return FindPatternBase(sourcebuffer, pattern, baseposition, maxSearchLength);
         }
 
         /// <summary>
         /// Common method to find the base of a byte pattern within a byte array, starting at a specified base and limiting the search length.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to search in.</param>
-        /// <param name="patternBytes">The byte pattern to search for.</param>
-        /// <param name="basePosition">The base to start the search from.</param>
-        /// <param name="maxSearchLength">The maximum length of the search within the byte array.</param>
+        /// <param name="sourcebuffer">The byte array to search in.</param>
+        /// <param name="pattern">The byte pattern to search for.</param>
+        /// <param name="baseposition">The base to start the search from.</param>
+        /// <param name="maxsearchlength">The maximum length of the search within the byte array.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        private static int FindPatternBase(byte[] sourceBytes, byte[] patternBytes, int basePosition, int maxSearchLength)
+        private static int FindPatternBase(byte[] sourcebuffer, byte[] pattern, int baseposition, int maxsearchlength)
         {
-            maxSearchLength = Math.Min(maxSearchLength, sourceBytes.Length - basePosition);
-            int[] partialMatchTable = BuildPartialMatchTable(patternBytes);
+            maxsearchlength = Math.Min(maxsearchlength, sourcebuffer.Length - baseposition);
+            int[] iPartialMatchTable = BuildPartialMatchTable(pattern);
 
-            int sourceIndex = basePosition;
-            int patternIndex = 0;
+            int iSourceIndex = baseposition;
+            int iPatternIndex = 0;
 
-            while (sourceIndex < sourceBytes.Length && sourceIndex - basePosition < maxSearchLength)
+            while (iSourceIndex < sourcebuffer.Length && iSourceIndex - baseposition < maxsearchlength)
             {
-                if (sourceBytes[sourceIndex] == patternBytes[patternIndex])
+                if (sourcebuffer[iSourceIndex] == pattern[iPatternIndex])
                 {
-                    sourceIndex++;
-                    patternIndex++;
+                    iSourceIndex++;
+                    iPatternIndex++;
 
-                    if (patternIndex == patternBytes.Length)
+                    if (iPatternIndex == pattern.Length)
                     {
-                        return sourceIndex - patternIndex;
+                        return iSourceIndex - iPatternIndex;
                     }
                 }
-                else if (patternIndex > 0)
+                else if (iPatternIndex > 0)
                 {
-                    patternIndex = partialMatchTable[patternIndex - 1];
+                    iPatternIndex = iPartialMatchTable[iPatternIndex - 1];
                 }
                 else
                 {
-                    sourceIndex++;
+                    iSourceIndex++;
                 }
             }
 
@@ -111,34 +111,34 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Builds the partial match table for a byte pattern using the Knuth-Morris-Pratt algorithm.
         /// </summary>
-        /// <param name="patternBytes">The byte pattern to build the table for.</param>
+        /// <param name="pattern">The byte pattern to build the table for.</param>
         /// <returns>An array of integers representing the partial match table.</returns>
-        private static int[] BuildPartialMatchTable(byte[] patternBytes)
+        private static int[] BuildPartialMatchTable(byte[] pattern)
         {
-            int[] table = new int[patternBytes.Length];
+            int[] arrTable = new int[pattern.Length];
             int i = 0;
             int j = 1;
 
-            while (j < patternBytes.Length)
+            while (j < pattern.Length)
             {
-                if (patternBytes[i] == patternBytes[j])
+                if (pattern[i] == pattern[j])
                 {
                     i++;
-                    table[j] = i;
+                    arrTable[j] = i;
                     j++;
                 }
                 else if (i > 0)
                 {
-                    i = table[i - 1];
+                    i = arrTable[i - 1];
                 }
                 else
                 {
-                    table[j] = 0;
+                    arrTable[j] = 0;
                     j++;
                 }
             }
 
-            return table;
+            return arrTable;
         }
         #endregion
 
@@ -146,19 +146,19 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Reads a specified number of bytes from a byte array at a given base.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to read from.</param>
-        /// <param name="basePosition">The base in the byte array to read from.</param>
-        /// <param name="length">The number of bytes to read.</param>
+        /// <param name="sourcebuffer">The byte array to read from.</param>
+        /// <param name="baseposition">The base in the byte array to read from.</param>
+        /// <param name="readlength">The number of bytes to read.</param>
         /// <returns>The bytes read from the byte array.</returns>
-        internal static byte[] GetBytesBaseLength(byte[] sourceBytes, int basePosition, int length)
+        internal static byte[] GetBytesBaseLength(byte[] sourcebuffer, int baseposition, int readlength)
         {
-            if (basePosition < 0 || basePosition + length > sourceBytes.Length)
+            if (baseposition < 0 || baseposition + readlength > sourcebuffer.Length)
             {
                 return null;
             }
 
-            byte[] buffer = new byte[length];
-            Buffer.BlockCopy(sourceBytes, basePosition, buffer, 0, length);
+            byte[] buffer = new byte[readlength];
+            Buffer.BlockCopy(sourcebuffer, baseposition, buffer, 0, readlength);
 
             return buffer;
         }
@@ -166,74 +166,74 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Reads a specified number of bytes from a byte array at a given base.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to read from.</param>
-        /// <param name="basePosition">The starting base in the byte array to read from.</param>
-        /// <param name="limitPosition">The ending base in the byte array to read from.</param>
+        /// <param name="sourcebuffer">The byte array to read from.</param>
+        /// <param name="baseposition">The starting base in the byte array to read from.</param>
+        /// <param name="limitposition">The ending base in the byte array to read from.</param>
         /// <returns>The bytes read from the byte array.</returns>
-        internal static byte[] GetBytesBaseLimit(byte[] sourceBytes, int basePosition, int limitPosition)
+        internal static byte[] GetBytesBaseLimit(byte[] sourcebuffer, int baseposition, int limitposition)
         {
-            if (limitPosition <= basePosition)
+            if (limitposition <= baseposition)
             {
                 return new byte[0];
             }
 
-            int length = limitPosition - basePosition;
-            ArraySegment<byte> segment = new ArraySegment<byte>(sourceBytes, basePosition, length);
+            int iLength = limitposition - baseposition;
+            ArraySegment<byte> arrBufferSegment = new ArraySegment<byte>(sourcebuffer, baseposition, iLength);
 
-            return segment.ToArray();
+            return arrBufferSegment.ToArray();
         }
 
         /// <summary>
         /// Reads bytes from a byte array starting from a specified base and up to a specified terminating byte.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to read from.</param>
-        /// <param name="basePosition">The base in the byte array to start reading from.</param>
-        /// <param name="startByte">The starting byte to read from.</param>
-        /// <param name="terminationBytes">The terminating byte params to stop reading at.</param>
+        /// <param name="sourcebuffer">The byte array to read from.</param>
+        /// <param name="baseposition">The base in the byte array to start reading from.</param>
+        /// <param name="initialbyte">The starting byte to read from.</param>
+        /// <param name="terminationbytes">The terminating byte params to stop reading at.</param>
         /// <returns>The bytes read from the byte array up to the terminating byte.</returns>
-        internal static byte[] GetBytesDelimited(byte[] sourceBytes, int basePosition, byte startByte, params byte[] terminationBytes)
+        internal static byte[] GetBytesDelimited(byte[] sourcebuffer, int baseposition, byte initialbyte, params byte[] terminationbytes)
         {
-            int startIndex = Array.IndexOf(sourceBytes, startByte, basePosition);
+            int iIndex = Array.IndexOf(sourcebuffer, initialbyte, baseposition);
 
-            if (startIndex < 0 || startIndex == sourceBytes.Length - 1)
+            if (iIndex < 0 || iIndex == sourcebuffer.Length - 1)
             {
                 return null;
             }
 
-            startIndex++;
+            iIndex++;
 
-            while (startIndex < sourceBytes.Length && sourceBytes[startIndex] == startByte)
+            while (iIndex < sourcebuffer.Length && sourcebuffer[iIndex] == initialbyte)
             {
-                startIndex++;
+                iIndex++;
             }
 
-            using (MemoryStream memoryStream = new MemoryStream())
+            using (MemoryStream msBuffer = new MemoryStream())
             {
-                while (startIndex < sourceBytes.Length && !terminationBytes.Contains(sourceBytes[startIndex]))
+                while (iIndex < sourcebuffer.Length && !terminationbytes.Contains(sourcebuffer[iIndex]))
                 {
-                    memoryStream.WriteByte(sourceBytes[startIndex]);
-                    startIndex++;
+                    msBuffer.WriteByte(sourcebuffer[iIndex]);
+                    iIndex++;
                 }
 
-                return memoryStream.ToArray();
+                return msBuffer.ToArray();
             }
         }
 
         /// <summary>
         /// Checks if a byte array is empty (0xFF).
         /// </summary>
-        /// <param name="sourceBytes">The byte array to check.</param>
+        /// <param name="sourcebuffer">The byte array to check.</param>
         /// <returns>True if the byte array is empty or contains only 0xFF values; otherwise, false.</returns>
-        internal static bool IsByteBlockEmpty(byte[] sourceBytes)
+        internal static bool IsByteBlockEmpty(byte[] sourcebuffer)
         {
-            if (sourceBytes == null)
+            if (sourcebuffer == null)
             {
-                throw new ArgumentNullException(nameof(sourceBytes));
+                throw new ArgumentNullException(nameof(sourcebuffer));
             }
 
-            for (int i = 0; i < sourceBytes.Length; i++)
+            for (int i = 0; i < sourcebuffer.Length; i++)
             {
-                if (sourceBytes[i] != 0xFF)
+                if (sourcebuffer[i] != 0xFF)
                 {
                     return false;
                 }
@@ -268,49 +268,49 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Overwrites a sequence of bytes in a byte array at a given base with new bytes.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to overwrite.</param>
-        /// <param name="basePosition">The base in the byte array to overwrite at.</param>
-        /// <param name="newBytes">The new bytes to write.</param>
-        internal static void OverwriteBytesAtBase(byte[] sourceBytes, int basePosition, byte[] newBytes)
+        /// <param name="sourcebuffer">The byte array to overwrite.</param>
+        /// <param name="baseposition">The base in the byte array to overwrite at.</param>
+        /// <param name="newbytedata">The new bytes to write.</param>
+        internal static void OverwriteBytesAtBase(byte[] sourcebuffer, int baseposition, byte[] newbytedata)
         {
-            if (basePosition < 0 || basePosition + newBytes.Length > sourceBytes.Length)
+            if (baseposition < 0 || baseposition + newbytedata.Length > sourcebuffer.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(basePosition), "Base position is out of range.");
-            }            
+                throw new ArgumentOutOfRangeException(nameof(baseposition), "Base position is out of range.");
+            }
 
-            Buffer.BlockCopy(newBytes, 0, sourceBytes, basePosition, newBytes.Length);
+            Buffer.BlockCopy(newbytedata, 0, sourcebuffer, baseposition, newbytedata.Length);
         }
 
         /// <summary>
         /// Fills a byte array with 0xFF values.
         /// </summary>
-        /// <param name="sourceBytes">The byte array to fill with 0xFF values.</param>
-        internal static void EraseByteArray(byte[] sourceBytes)
+        /// <param name="sourcebuffer">The byte array to fill with 0xFF values.</param>
+        internal static void EraseByteArray(byte[] sourcebuffer)
         {
-            if (sourceBytes == null)
+            if (sourcebuffer == null)
             {
-                throw new ArgumentNullException(nameof(sourceBytes));
+                throw new ArgumentNullException(nameof(sourcebuffer));
             }
 
-            for (int i = 0; i < sourceBytes.Length; i++)
+            for (int i = 0; i < sourcebuffer.Length; i++)
             {
-                sourceBytes[i] = 0xFF;
+                sourcebuffer[i] = 0xFF;
             }
         }
 
         /// <summary>
         /// Creates a clone of the specified byte array.
         /// </summary>
-        /// <param name="inputBuffer">The byte array to clone.</param>
+        /// <param name="sourcebuffer">The byte array to clone.</param>
         /// <returns>A new byte array containing a copy of the elements from the original buffer.</returns>
-        internal static byte[] CloneBuffer(byte[] inputBuffer)
+        internal static byte[] CloneBuffer(byte[] sourcebuffer)
         {
-            if (inputBuffer == null)
+            if (sourcebuffer == null)
             {
-                throw new ArgumentNullException(nameof(inputBuffer));
+                throw new ArgumentNullException(nameof(sourcebuffer));
             }
 
-            return (byte[])inputBuffer.Clone();
+            return (byte[])sourcebuffer.Clone();
         }
         #endregion
     }

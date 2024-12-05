@@ -12,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -27,22 +26,22 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static string GetDeviceConfigCodeLocal(string hardwareCode)
+        internal static string GetDeviceConfigCodeLocal(string hwc)
         {
             try
             {
                 // Load data from the embedded XML database.
-                byte[] xmlData = Encoding.UTF8.GetBytes(Properties.Resources.modeldb);
+                byte[] bXmlBuffer = Encoding.UTF8.GetBytes(Properties.Resources.modeldb);
 
-                using (MemoryStream stream = new MemoryStream(xmlData))
+                using (MemoryStream msBuffer = new MemoryStream(bXmlBuffer))
                 {
-                    XDocument xmlDoc = XDocument.Load(stream);
+                    XDocument xDoc = XDocument.Load(msBuffer);
 
-                    string configCode = xmlDoc.Descendants("section")
-                                           .FirstOrDefault(e => e.Element("hwc")?.Value == hardwareCode)?
-                                           .Element("configCode")?.Value;
+                    string strConfigCode =
+                        xDoc.Descendants("section").FirstOrDefault(
+                            e => e.Element("hwc")?.Value == hwc)?.Element("configCode")?.Value;
 
-                    return string.IsNullOrEmpty(configCode) ? null : configCode;
+                    return string.IsNullOrEmpty(strConfigCode) ? null : strConfigCode;
                 }
             }
             catch (Exception e)
@@ -57,29 +56,32 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static async Task<string> GetDeviceConfigCodeSupportRemote(string hwConfig)
+        internal static async Task<string> GetDeviceConfigCodeSupportRemote(string hwc)
         {
+            string strUrlSupportSp = "http://support-sp.apple.com/sp/product?cc=";
+            string strLangPart = "&lang=en_GB";
+            string xmlNode = "/root/configCode";
+
             try
             {
-                string supportSp = $"http://support-sp.apple.com/sp/product?cc={hwConfig}&lang=en_GB";
+                string strFullUrl = $"{strUrlSupportSp}{hwc}{strLangPart}";
 
-                if (!NetworkTools.IsWebsiteAvailable(supportSp))
-                    return null;
-
-                using (WebClient client = new WebClient())
+                if (!NetworkTools.IsWebsiteAvailable(strFullUrl))
                 {
-                    string xmlContent = await client.DownloadStringTaskAsync(supportSp);
-                    string configCode = XDocument.Parse(xmlContent).XPathSelectElement("/root/configCode")?.Value;
+                    return null;
+                }
 
-                    if (!string.IsNullOrEmpty(configCode))
+                using (WebClient wClient = new WebClient())
+                {
+                    string strXmlContent = await wClient.DownloadStringTaskAsync(strFullUrl);
+                    string strConfigCode = XDocument.Parse(strXmlContent).XPathSelectElement(xmlNode)?.Value;
+
+                    if (!string.IsNullOrEmpty(strConfigCode))
                     {
-                        Logger.Write(
-                            $"'{hwConfig}' not present in local db > support-sp server returned: '{configCode}'",
-                            LogType.Database
-                        );
+                        Logger.WriteLine($"'{hwc}' not present in local db > support-sp server returned: '{strConfigCode}'", LogType.Database);
                     }
 
-                    return configCode;
+                    return strConfigCode;
                 }
             }
             catch (Exception e)
@@ -94,28 +96,28 @@ namespace Mac_EFI_Toolkit.Tools
         /// <summary>
         /// Calculates an Fsys region CRC32 checksum.
         /// </summary>
-        /// /// <param name="fsysStore">The Fsys region to calcuate the CRC32 for.</param>
+        /// /// <param name="sourcebuffer">The Fsys region to calcuate the CRC32 for.</param>
         /// <returns>The calculated Fsys CRC32 uint</returns>
-        internal static uint GetUintFsysCrc32(byte[] fsysStore)
+        internal static uint GetUintFsysCrc32(byte[] sourcebuffer)
         {
-            if (fsysStore.Length < EFIROM.FSYS_RGN_SIZE)
-                throw new ArgumentException(
-                    nameof(fsysStore),
-                    "Given bytes are too small.");
+            if (sourcebuffer.Length < EFIROM.FsysRegionSize)
+            {
+                throw new ArgumentException(nameof(sourcebuffer), "Given bytes are too small.");
+            }
 
-            if (fsysStore.Length > EFIROM.FSYS_RGN_SIZE)
-                throw new ArgumentException(
-                    nameof(fsysStore),
-                    "Given bytes are too large.");
+            if (sourcebuffer.Length > EFIROM.FsysRegionSize)
+            {
+                throw new ArgumentException(nameof(sourcebuffer), "Given bytes are too large.");
+            }
 
             // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes.
-            byte[] fsysTempBuffer = new byte[EFIROM.FSYS_RGN_SIZE - EFIROM.CRC32_SIZE];
+            byte[] bFsysTempBuffer = new byte[EFIROM.FsysRegionSize - EFIROM.CRC32_SIZE];
 
-            if (fsysStore != null)
+            if (sourcebuffer != null)
             {
-                Array.Copy(fsysStore, 0, fsysTempBuffer, 0, fsysTempBuffer.Length);
+                Array.Copy(sourcebuffer, 0, bFsysTempBuffer, 0, bFsysTempBuffer.Length);
 
-                return FileTools.GetCrc32Digest(fsysTempBuffer);
+                return FileTools.GetCrc32Digest(bFsysTempBuffer);
             }
 
             return 0xFFFFFFFF;
@@ -132,43 +134,43 @@ namespace Mac_EFI_Toolkit.Tools
         {
             // Example MBP121 becomes MacBookPro12,1.
             if (string.IsNullOrEmpty(model))
+            {
                 return null;
+            }
 
-            string letters = new string(model.Where(char.IsLetter).ToArray());
+            string strLetters = new string(model.Where(char.IsLetter).ToArray());
+            string strNumbers = new string(model.Where(char.IsDigit).ToArray());
 
-            string numbers = new string(model.Where(char.IsDigit).ToArray());
+            int iMinLength = 2;
+            int iMaxLength = 3;
 
-            int minLength = 2;
-            int maxLength = 3;
-
-            if (letters.Length < minLength || letters.Length > maxLength ||
-                numbers.Length < minLength || numbers.Length > maxLength)
+            if (strLetters.Length < iMinLength || strLetters.Length > iMaxLength ||
+                strNumbers.Length < iMinLength || strNumbers.Length > iMaxLength)
+            {
                 return model;
+            }
 
-            if (model.Contains("MBP"))
-                letters = "MacBookPro";
-            else if (model.Contains("MBA"))
-                letters = "MacBookAir";
-            else if (model.Contains("MB"))
-                letters = "MacBook";
-            else if (model.Contains("IM"))
-                letters = "iMac";
-            else if (model.Contains("IMP"))
-                letters = "iMacPro";
-            else if (model.Contains("MM"))
-                letters = "MacMini";
-            else if (model.Contains("MP"))
-                letters = "MacPro";
-            else if (model.Contains("XS"))
-                letters = "Xserve";
+            Dictionary<string, string> dictModelMap = new Dictionary<string, string>
+            {
+                { "MBP", "MacBookPro" },
+                { "MBA", "MacBookAir" },
+                { "MB", "MacBook" },
+                { "IM", "iMac" },
+                { "IMP", "iMacPro" },
+                { "MM", "MacMini" },
+                { "MP", "MacPro" },
+                { "XS", "Xserve" }
+            };
 
-            if (numbers.Length == 2)
-                numbers = $"{numbers[0]},{numbers[1]}";
-            else if (numbers.Length == 3)
-                numbers = $"{numbers.Substring(0, 2)},{numbers.Substring(2)}";
+            strLetters = dictModelMap.FirstOrDefault(kvPair => model.Contains(kvPair.Key)).Value;
+
+            if (strNumbers.Length == 2 || strNumbers.Length == 3)
+            {
+                strNumbers = $"{strNumbers.Substring(0, 2)},{strNumbers.Substring(2)}".TrimEnd(',');
+            }
 
             // Return the generated full model, otherwise what was passed in will be returned.
-            return $"{letters}{numbers}";
+            return $"{strLetters}{strNumbers}";
         }
         #endregion
 
@@ -176,42 +178,37 @@ namespace Mac_EFI_Toolkit.Tools
         internal static string GetFirmwareVersion()
         {
             if (EFIROM.AppleRomInfoSectionData.EfiVersion != null)
-                return EFIROM.AppleRomInfoSectionData.EfiVersion;
-
-            string modelPart = EFIROM.EfiBiosIdSectionData.ModelPart;
-            string majorPart = EFIROM.EfiBiosIdSectionData.MajorPart;
-            string minorPart = EFIROM.EfiBiosIdSectionData.MinorPart;
-
-            string romVersion = EFIROM.AppleRomInfoSectionData.RomVersion;
-
-            string[] ignoredVersions = { "F000_B00", "Official Build" };
-
-            if (!string.IsNullOrWhiteSpace(romVersion) &&
-                !ignoredVersions.Contains(romVersion, StringComparer.OrdinalIgnoreCase))
-                return $"{modelPart}.{romVersion.Replace("_", ".")}";
-
-            string biosId = EFIROM.AppleRomInfoSectionData.BiosId;
-
-            string notSet = "F000.B00";
-
-            if (!string.IsNullOrWhiteSpace(biosId) &&
-                biosId.IndexOf(notSet, StringComparison.OrdinalIgnoreCase) == -1)
             {
-                string[] parts = biosId.Split('.');
-                if (parts.Length != 5)
-                    return GetFormattedEfiVersion(
-                        parts[0],
-                        parts[2],
-                        parts[3]);
+                return EFIROM.AppleRomInfoSectionData.EfiVersion;
             }
 
-            if (!string.IsNullOrWhiteSpace(modelPart) &&
-                !string.IsNullOrWhiteSpace(majorPart) &&
-                !string.IsNullOrWhiteSpace(minorPart))
-                return GetFormattedEfiVersion(
-                    modelPart,
-                    majorPart,
-                    minorPart);
+            string strModelPart = EFIROM.EfiBiosIdSectionData.ModelPart;
+            string strMajorPart = EFIROM.EfiBiosIdSectionData.MajorPart;
+            string strMinorPart = EFIROM.EfiBiosIdSectionData.MinorPart;
+            string strRomVersion = EFIROM.AppleRomInfoSectionData.RomVersion;
+            string strBiosId = EFIROM.AppleRomInfoSectionData.BiosId;
+
+            string strNotSet = "F000.B00";
+            string[] arrIgnored = { strNotSet, "Official Build" };
+
+            if (!string.IsNullOrWhiteSpace(strRomVersion) && !arrIgnored.Contains(strRomVersion, StringComparer.OrdinalIgnoreCase))
+            {
+                return $"{strModelPart}.{strRomVersion.Replace("_", ".")}";
+            }
+
+            if (!string.IsNullOrWhiteSpace(strBiosId) && strBiosId.IndexOf(strNotSet, StringComparison.OrdinalIgnoreCase) == -1)
+            {
+                string[] arrParts = strBiosId.Split('.');
+                if (arrParts.Length != 5)
+                {
+                    return GetFormattedEfiVersion(arrParts[0], arrParts[2], arrParts[3]);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(strModelPart) && !string.IsNullOrWhiteSpace(strMajorPart) && !string.IsNullOrWhiteSpace(strMinorPart))
+            {
+                return GetFormattedEfiVersion(strModelPart, strMajorPart, strMinorPart);
+            }
 
             return null;
         }

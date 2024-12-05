@@ -14,7 +14,7 @@ namespace Mac_EFI_Toolkit.UI.Design
     {
         protected override void PreFilterProperties(IDictionary properties)
         {
-            string[] propList = new string[]
+            string[] arrProperties = new string[]
             {
                 "Appearance",
                 "BackgroundImage",
@@ -40,9 +40,9 @@ namespace Mac_EFI_Toolkit.UI.Design
 
             if (properties != null)
             {
-                foreach (string item in propList)
+                foreach (string strProperty in arrProperties)
                 {
-                    properties.Remove(item);
+                    properties.Remove(strProperty);
                 }
             }
 

@@ -15,17 +15,16 @@ namespace Mac_EFI_Toolkit.Firmware
         {
             // Initialize a pointer to IntPtr with a default value.
             IntPtr ptr = IntPtr.Zero;
-
             try
             {
                 // Determine the size of the structure 'T' in bytes.
-                int size = Marshal.SizeOf(typeof(T));
+                int iSize = Marshal.SizeOf(typeof(T));
 
                 // Allocate unmanaged memory to hold the binary data.
-                ptr = Marshal.AllocHGlobal(size);
+                ptr = Marshal.AllocHGlobal(iSize);
 
                 // Copy the binary data from the byte array to the allocated memory.
-                Marshal.Copy(binary, 0, ptr, size);
+                Marshal.Copy(binary, 0, ptr, iSize);
 
                 // Convert the memory back to the original structure type and return it.
                 return (T)Marshal.PtrToStructure(ptr, typeof(T));
@@ -40,14 +39,14 @@ namespace Mac_EFI_Toolkit.Firmware
             }
         }
 
-        public static int ToInt24(byte[] bytes)
+        public static int ToInt24(byte[] inputbytes)
         {
-            if (bytes.Length != 3)
+            if (inputbytes.Length != 3)
             {
-                throw new ArgumentException("Byte data must be 3 bytes long.", nameof(bytes));
+                throw new ArgumentException("Byte data must be 3 bytes long.", nameof(inputbytes));
             }
 
-            return (bytes[2] << 16) | (bytes[1] << 8) | bytes[0];
+            return (inputbytes[2] << 16) | (inputbytes[1] << 8) | inputbytes[0];
         }
     }
 }

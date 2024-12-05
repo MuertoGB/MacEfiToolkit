@@ -100,9 +100,9 @@ namespace Mac_EFI_Toolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap imgmuerto64px {
+        internal static System.Drawing.Bitmap icon64 {
             get {
-                object obj = ResourceManager.GetObject("imgmuerto64px", resourceCulture);
+                object obj = ResourceManager.GetObject("icon64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -13,16 +13,16 @@ using System.Windows.Forms;
 
 public static class BlurHelper
 {
-    public static void ApplyBlur(Form form)
+    internal static void ApplyBlur(Form form)
     {
-        NativeMethods.DWM_BLURBEHIND blurBehind = new NativeMethods.DWM_BLURBEHIND
+        NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
         {
             dwFlags = NativeMethods.DwmBlurBehindFlags.DWM_BB_ENABLE,
             fEnable = true,
             hRgnBlur = IntPtr.Zero
         };
 
-        NativeMethods.DwmEnableBlurBehindWindow(form.Handle, ref blurBehind);
+        NativeMethods.DwmEnableBlurBehindWindow(form.Handle, ref dwmBlurBehind);
 
         form.AllowTransparency = true;
         form.BackColor = System.Drawing.Color.Green;
@@ -34,18 +34,18 @@ public static class BlurHelper
             return;
         }
 
-        form.BackColor = Colours.CLR_DEFAULTBORDER;
+        form.BackColor = Colours.ClrAppBorderDefault;
     }
 
-    public static void RemoveBlur(Form form)
+    internal static void RemoveBlur(Form form)
     {
-        NativeMethods.DWM_BLURBEHIND blurBehind = new NativeMethods.DWM_BLURBEHIND
+        NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
         {
             dwFlags = NativeMethods.DwmBlurBehindFlags.DWM_BB_ENABLE,
             fEnable = false
         };
 
-        NativeMethods.DwmEnableBlurBehindWindow(form.Handle, ref blurBehind);
+        NativeMethods.DwmEnableBlurBehindWindow(form.Handle, ref dwmBlurBehind);
 
         form.AllowTransparency = false;
     }

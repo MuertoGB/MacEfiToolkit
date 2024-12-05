@@ -7,6 +7,7 @@
 
 using Mac_EFI_Toolkit.UI;
 using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
@@ -38,8 +39,10 @@ namespace Mac_EFI_Toolkit.Forms
         #region Window Events
         private void frmAbout_Load(object sender, EventArgs e)
         {
-            lblBuild.Text = $"{Application.ProductVersion}.{METVersion.APP_BUILD} ({METVersion.APP_CHANNEL})";
-            lblChannel.Text = $"{APPSTRINGS.LZMA_SDK} {METVersion.LZMA_SDK}";
+            lblBuild.Text =
+                $"Mac EFI Toolkit v{Application.ProductVersion} by Muerto{Environment.NewLine}" +
+                $"Build {ApplicationVersions.CURRENT_BUILD} ({ApplicationVersions.CURRENT_CHANNEL}){Environment.NewLine}" +
+                $"LZMA SDK {ApplicationVersions.LZMA_SDK_VERSION}";
         }
         #endregion
 
@@ -57,10 +60,14 @@ namespace Mac_EFI_Toolkit.Forms
         private void cmdClose_Click(object sender, EventArgs e) => Close();
         #endregion
 
+        #region LinkLabel Events
+        private void lnkPaypal_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => Process.Start(ApplicationUrls.PaypalDonate);
+        #endregion
+
         #region UI Events
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_10;
+            cmdClose.Font = Program.FontSegMdl2Regular10;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
         #endregion

@@ -27,7 +27,9 @@ namespace Mac_EFI_Toolkit.Tools
                 webRequest.Timeout = 5000;
                 webRequest.Method = "HEAD";
                 using (WebResponse webResponse = webRequest.GetResponse())
+                {
                     return true;
+                }
             }
             catch (Exception e)
             {

@@ -6,12 +6,12 @@
 
 namespace Mac_EFI_Toolkit.Firmware.SOCROM
 {
-    internal struct ScfgStore
+    internal struct SCfgStore
     {
         internal int StoreBase { get; set; }
-        internal int StoreSize { get; set; }
-        internal byte[] ScfgBytes { get; set; }
-        internal string ScfgCrc {  get; set; }
+        internal int StoreLength { get; set; }
+        internal byte[] StoreBuffer { get; set; }
+        internal string StoreCRC {  get; set; }
         internal string Serial { get; set; }
         internal int SerialBase { get; set; }
         internal string HWC { get; set; }

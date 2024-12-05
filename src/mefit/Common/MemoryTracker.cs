@@ -9,7 +9,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace Mac_EFI_Toolkit
+namespace Mac_EFI_Toolkit.Common
 {
     internal class MemoryTracker
     {
@@ -40,13 +40,13 @@ namespace Mac_EFI_Toolkit
         {
             if (_isWine) return;
 
-            IntPtr processHandle = NativeMethods.GetCurrentProcess();
+            IntPtr ptrHandle = NativeMethods.GetCurrentProcess();
 
-            NativeMethods.PROCESS_MEMORY_COUNTERS memoryCounters;
+            NativeMethods.PROCESS_MEMORY_COUNTERS pmCounters;
 
-            if (NativeMethods.GetProcessMemoryInfo(processHandle, out memoryCounters, (uint)Marshal.SizeOf(typeof(NativeMethods.PROCESS_MEMORY_COUNTERS))))
+            if (NativeMethods.GetProcessMemoryInfo(ptrHandle, out pmCounters, (uint)Marshal.SizeOf(typeof(NativeMethods.PROCESS_MEMORY_COUNTERS))))
             {
-                OnMemoryUsageUpdated?.Invoke(this, memoryCounters.PagefileUsage);
+                OnMemoryUsageUpdated?.Invoke(this, pmCounters.PagefileUsage);
             }
         }
         #endregion

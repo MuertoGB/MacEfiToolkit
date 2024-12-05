@@ -20,44 +20,39 @@ namespace Mac_EFI_Toolkit
     {
         internal static string GenerateReport(Exception unhandled)
         {
-            StringBuilder builder = new StringBuilder();
-            string exePath = Path.Combine(METPath.WORKING_DIR, METPath.FRIENDLY_NAME);
+            StringBuilder sbReport = new StringBuilder();
+            string strAppPath = Path.Combine(ApplicationPaths.WorkingDirectory, ApplicationPaths.FriendlyName);
 
             try
             {
-                byte[] appBytes = File.ReadAllBytes(exePath);
+                byte[] appBytes = File.ReadAllBytes(strAppPath);
 
-                builder.AppendLine($"Mac EFI Toolkit Unhandled Exception: {DateTime.Now}\r\n");
+                sbReport.AppendLine($"Mac EFI Toolkit Unhandled Exception: {DateTime.Now}\r\n");
+                sbReport.AppendLine("<== Application ==>\r\n");
+                sbReport.AppendLine($"Name:     {Application.ProductName}");
+                sbReport.AppendLine($"Version:  {Application.ProductVersion}.{ApplicationVersions.CURRENT_BUILD}");
+                sbReport.AppendLine($"LZMA SDK: {ApplicationVersions.LZMA_SDK_VERSION}");
+                sbReport.AppendLine($"Channel:  {ApplicationVersions.CURRENT_CHANNEL}");
+                sbReport.AppendLine($"Mode:     {SystemTools.GetSystemArchitectureMode()}");
+                sbReport.AppendLine($"Debug:    {Program.IsDebugMode()}");
+                sbReport.AppendLine($"Elevated: {SystemTools.IsUserAdmin()}");
+                sbReport.AppendLine($"SHA256:   {FileTools.GetSha256Digest(appBytes)}\r\n");
+                sbReport.AppendLine("<== Operating System ==>\r\n");
+                sbReport.AppendLine($"Name:     {SystemTools.GetOperatingSystemName}");
+                sbReport.AppendLine($"Bitness:  {SystemTools.GetOperatingSystemArchitecture()}");
+                sbReport.AppendLine($"Kernel:   {SystemTools.GetKernelVersion.ProductVersion}\r\n");
+                sbReport.AppendLine("<== Fonts ==>\r\n");
+                sbReport.AppendLine($"Segoe UI Reg: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Regular)}");
+                sbReport.AppendLine($"Segoe UI Bol: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Bold)}");
+                sbReport.AppendLine($"Segoe UI Sem: {FontResolver.IsFontStyleAvailable("Segoe UI Semibold", FontStyle.Regular)}");
+                sbReport.AppendLine($"Consolas Reg: {FontResolver.IsFontStyleAvailable("Consolas", FontStyle.Bold)}\r\n");
+                sbReport.AppendLine("<== Exception Data ==>\r\n");
+                sbReport.AppendLine(GetExceptionData(unhandled));
+                sbReport.AppendLine("<== Modules ==>\r\n");
+                sbReport.AppendLine(GetProcessModules());
+                sbReport.AppendLine("// End of file //");
 
-                builder.AppendLine("<== Application ==>\r\n");
-                builder.AppendLine($"Name:     {Application.ProductName}");
-                builder.AppendLine($"Version:  {Application.ProductVersion}.{METVersion.APP_BUILD}");
-                builder.AppendLine($"LZMA SDK: {METVersion.LZMA_SDK}");
-                builder.AppendLine($"Channel:  {METVersion.APP_CHANNEL}");
-                builder.AppendLine($"Mode:     {SystemTools.GetSystemBitnessMode()}");
-                builder.AppendLine($"Debug:    {Program.IsDebugMode()}");
-                builder.AppendLine($"Elevated: {SystemTools.GetIsElevated()}");
-                builder.AppendLine($"SHA256:   {FileTools.GetSha256Digest(appBytes)}\r\n");
-
-                builder.AppendLine("<== Operating System ==>\r\n");
-                builder.AppendLine($"Name:     {SystemTools.GetName}");
-                builder.AppendLine($"Bitness:  {SystemTools.GetBitness()}");
-                builder.AppendLine($"Kernel:   {SystemTools.GetKernelVersion.ProductVersion}\r\n");
-
-                builder.AppendLine("<== Fonts ==>\r\n");
-                builder.AppendLine($"Segoe UI Reg: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Regular)}");
-                builder.AppendLine($"Segoe UI Bol: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Bold)}");
-                builder.AppendLine($"Segoe UI Sem: {FontResolver.IsFontStyleAvailable("Segoe UI Semibold", FontStyle.Regular)}");
-                builder.AppendLine($"Consolas Reg: {FontResolver.IsFontStyleAvailable("Consolas", FontStyle.Bold)}\r\n");
-
-                builder.AppendLine("<== Exception Data ==>\r\n");
-                builder.AppendLine(GetExceptionData(unhandled));
-
-                builder.AppendLine("<== Modules ==>\r\n");
-                builder.AppendLine(GetProcessModules());
-                builder.AppendLine("// End of file //");
-
-                return builder.ToString();
+                return sbReport.ToString();
             }
             catch (Exception e)
             {
@@ -73,43 +68,43 @@ namespace Mac_EFI_Toolkit
                 return $"Exception data was null.\r\n";
             }
 
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine("Message -->");
-            builder.AppendLine($"{CensorUsernameInPath(e.Message)}\r\n");
-            builder.AppendLine("Exception -->");
+            StringBuilder sbException = new StringBuilder();
+            sbException.AppendLine("Message -->");
+            sbException.AppendLine($"{CensorUsernameInPath(e.Message)}\r\n");
+            sbException.AppendLine("Exception -->");
 
             // Process each line of the exception details separately
-            foreach (string line in e.ToString().Split(new[] { "\r\n", "\n" }, StringSplitOptions.None))
+            foreach (string strLine in e.ToString().Split(new[] { "\r\n", "\n" }, StringSplitOptions.None))
             {
-                builder.AppendLine(CensorUsernameInPath(line));
+                sbException.AppendLine(CensorUsernameInPath(strLine));
             }
 
-            return builder.ToString();
+            return sbException.ToString();
         }
 
         private static string GetProcessModules()
         {
-            int moduleNumber = 0;
-            StringBuilder builder = new StringBuilder();
+            StringBuilder sbModules = new StringBuilder();
+            int iModule = 0;
 
             try
             {
                 foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
                 {
-                    moduleNumber++;
+                    iModule++;
 
-                    string censoredPath = CensorUsernameInPath(module.FileName);
+                    string strCensoredPath = CensorUsernameInPath(module.FileName);
 
-                    builder.AppendLine($"Module {moduleNumber}: --> '{module.ModuleName}'\r\n");
-                    builder.AppendLine($" Path:         {censoredPath}");
-                    builder.AppendLine($" Version:      {module.FileVersionInfo.FileVersion}");
-                    builder.AppendLine($" Description:  {module.FileVersionInfo.FileDescription}");
-                    builder.AppendLine($" Size (Bytes): {module.ModuleMemorySize}");
-                    builder.AppendLine($" Base Address: {module.BaseAddress}");
-                    builder.AppendLine($" Entry Point:  {module.EntryPointAddress}\r\n");
+                    sbModules.AppendLine($"Module {iModule}: --> '{module.ModuleName}'\r\n");
+                    sbModules.AppendLine($" Path:         {strCensoredPath}");
+                    sbModules.AppendLine($" Version:      {module.FileVersionInfo.FileVersion}");
+                    sbModules.AppendLine($" Description:  {module.FileVersionInfo.FileDescription}");
+                    sbModules.AppendLine($" Size (Bytes): {module.ModuleMemorySize}");
+                    sbModules.AppendLine($" Base Address: {module.BaseAddress}");
+                    sbModules.AppendLine($" Entry Point:  {module.EntryPointAddress}\r\n");
                 }
 
-                return builder.ToString();
+                return sbModules.ToString();
             }
             catch (Exception e)
             {
@@ -120,11 +115,11 @@ namespace Mac_EFI_Toolkit
 
         private static string CensorUsernameInPath(string path)
         {
-            string userProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string driveLetter = Regex.Escape(userProfilePath.Substring(0, userProfilePath.IndexOf("\\Users\\") + 1));
-            string userPathPattern = $@"({driveLetter}Users\\)([^\\]+)";
+            string strUserProfilePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            string strDriveLetter = Regex.Escape(strUserProfilePath.Substring(0, strUserProfilePath.IndexOf("\\Users\\") + 1));
+            string strPathPattern = $@"({strDriveLetter}Users\\)([^\\]+)";
 
-            return Regex.Replace(path, userPathPattern, @"$1****", RegexOptions.IgnoreCase);
+            return Regex.Replace(path, strPathPattern, @"$1****", RegexOptions.IgnoreCase);
         }
     }
 }

@@ -20,46 +20,46 @@ namespace Mac_EFI_Toolkit
 
     class Logger
     {
-        public static void Write(string logMessage, LogType logType)
+        public static void WriteLine(string message, LogType logtype)
         {
-            string logFilePath;
+            string strLogPath;
 
-            switch (logType)
+            switch (logtype)
             {
                 case LogType.Application:
-                    logFilePath = METPath.APP_LOG;
+                    strLogPath = ApplicationPaths.ApplicationLog;
                     break;
                 case LogType.Database:
-                    logFilePath = METPath.DATABASE_LOG;
+                    strLogPath = ApplicationPaths.DatabaseLog;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
+                    throw new ArgumentOutOfRangeException(nameof(logtype), logtype, null);
             }
 
-            using (StreamWriter writer = new StreamWriter(logFilePath, true))
+            using (StreamWriter swLog = new StreamWriter(strLogPath, true))
             {
-                writer.WriteLine($"{DateTime.Now} : {logMessage}");
+                swLog.WriteLine($"{DateTime.Now} : {message}");
             }
         }
 
-        internal static void WriteErrorLine(string methodName, Type exceptionType, string message) =>
-            Logger.Write($"{methodName} - {exceptionType.Name}: {message}", LogType.Application);
+        internal static void WriteErrorLine(string methodname, Type exceptiontype, string message) =>
+            Logger.WriteLine($"{methodname} - {exceptiontype.Name}: {message}", LogType.Application);
 
-        internal static void WritePatchLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
-            Logger.Write($"{methodName}: {logText}", LogType.Application);
+        internal static void WriteCallerLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
+            Logger.WriteLine($"{methodName}: {logText}", LogType.Application);
 
         internal static void OpenLogFile(Form owner)
         {
-            string logPath = METPath.APP_LOG;
+            string strLogPath = ApplicationPaths.ApplicationLog;
 
             // Check if the log file exists
-            if (!File.Exists(logPath))
+            if (!File.Exists(strLogPath))
             {
                 ShowLogFileNotFoundError(owner);
                 return;
             }
 
-            Process.Start("notepad.exe", logPath);
+            Process.Start("notepad.exe", strLogPath);
         }
 
         private static void ShowLogFileNotFoundError(Form owner) =>

@@ -36,7 +36,7 @@ namespace Mac_EFI_Toolkit
 
     class Settings
     {
-        #region Private Members
+        #region Const Members
         private const string SEC_STARTUP = "Startup";
         private const string KEY_DISABLE_VERSION_CHECK = "DisableVersionCheck";
 
@@ -58,49 +58,50 @@ namespace Mac_EFI_Toolkit
         #region Initialize
         internal static void Initialize()
         {
-            IniFile ini = new IniFile(METPath.SETTINGS_FILE);
-
-            WriteSections(ini);
-            WriteStartupKeys(ini);
-            WriteApplicationKeys(ini);
-            WriteFirmwareKeys(ini);
+            IniFile iniFile = new IniFile(ApplicationPaths.SettingsFile);
+            WriteSections(iniFile);
+            WriteStartupKeys(iniFile);
+            WriteApplicationKeys(iniFile);
+            WriteFirmwareKeys(iniFile);
         }
 
         #endregion
 
         #region Write Sections
-        private static void WriteSections(IniFile ini)
+        private static void WriteSections(IniFile inifile)
         {
-            if (!ini.SectionExists(SEC_STARTUP))
+            if (!inifile.SectionExists(SEC_STARTUP))
             {
-                ini.WriteSection(SEC_STARTUP);
+                inifile.WriteSection(SEC_STARTUP);
             }
-            if (!ini.SectionExists(SEC_APPLICATION))
+
+            if (!inifile.SectionExists(SEC_APPLICATION))
             {
-                ini.WriteSection(SEC_APPLICATION);
+                inifile.WriteSection(SEC_APPLICATION);
             }
-            if (!ini.SectionExists(SEC_FIRMWARE))
+
+            if (!inifile.SectionExists(SEC_FIRMWARE))
             {
-                ini.WriteSection(SEC_FIRMWARE);
+                inifile.WriteSection(SEC_FIRMWARE);
             }
         }
         #endregion
 
         #region Write Keys
-        private static void WriteStartupKeys(IniFile ini)
+        private static void WriteStartupKeys(IniFile inifile)
         {
-            if (!ini.KeyExists(SEC_STARTUP, KEY_DISABLE_VERSION_CHECK))
+            if (!inifile.KeyExists(SEC_STARTUP, KEY_DISABLE_VERSION_CHECK))
             {
-                ini.Write(SEC_STARTUP, KEY_DISABLE_VERSION_CHECK, "False");
+                inifile.Write(SEC_STARTUP, KEY_DISABLE_VERSION_CHECK, "False");
             }
         }
 
-        private static void WriteApplicationKeys(IniFile ini)
+        private static void WriteApplicationKeys(IniFile inifile)
         {
-            string defaultPath = METPath.WORKING_DIR;
+            string strDefaultPath = ApplicationPaths.WorkingDirectory;
 
             // Define default values for application settings.
-            var applicationDefaults = new Dictionary<string, string>
+            Dictionary<string, string> dictDefaults = new Dictionary<string, string>
             {
                 { KEY_USE_ACCENT_COLOR, "False" },
                 { KEY_DISABLE_FLASHING_UI, "False" },
@@ -108,105 +109,101 @@ namespace Mac_EFI_Toolkit
                 { KEY_DISABLE_TIPS, "False" },
                 { KEY_DISABLE_CONF_DIAG, "False" },
                 { KEY_DISABLE_SN_VALIDATION, "False"},
-                { KEY_STARTUP_INIT_DIR, defaultPath },
-                { KEY_EFI_INIT_DIR, defaultPath },
-                { KEY_SOC_INIT_DIR, defaultPath }
+                { KEY_STARTUP_INIT_DIR, strDefaultPath },
+                { KEY_EFI_INIT_DIR, strDefaultPath },
+                { KEY_SOC_INIT_DIR, strDefaultPath }
             };
 
             // Apply application defaults.
-            EnsureKeysWithDefaults(ini, SEC_APPLICATION, applicationDefaults);
+            EnsureKeysWithDefaults(inifile, SEC_APPLICATION, dictDefaults);
         }
 
-        private static void EnsureKeysWithDefaults(IniFile ini, string section, Dictionary<string, string> defaults)
+        private static void EnsureKeysWithDefaults(IniFile inifile, string section, Dictionary<string, string> dictdefault)
         {
-            foreach (var entry in defaults)
+            foreach (KeyValuePair<string, string> kvpDefaultEntry in dictdefault)
             {
-                if (!ini.KeyExists(section, entry.Key))
+                if (!inifile.KeyExists(section, kvpDefaultEntry.Key))
                 {
-                    ini.Write(section, entry.Key, entry.Value);
+                    inifile.Write(section, kvpDefaultEntry.Key, kvpDefaultEntry.Value);
                 }
             }
         }
 
-        private static void WriteFirmwareKeys(IniFile ini)
+        private static void WriteFirmwareKeys(IniFile inifile)
         {
-            if (!ini.SectionExists(SEC_FIRMWARE) || !ini.KeyExists(SEC_FIRMWARE, KEY_ACCEPTED_TERMS))
+            if (!inifile.SectionExists(SEC_FIRMWARE) || !inifile.KeyExists(SEC_FIRMWARE, KEY_ACCEPTED_TERMS))
             {
-                ini.Write(SEC_FIRMWARE, KEY_ACCEPTED_TERMS, "False");
+                inifile.Write(SEC_FIRMWARE, KEY_ACCEPTED_TERMS, "False");
             }
         }
         #endregion
 
         #region Read Values
-        internal static bool ReadBool(SettingsBoolType settingType)
+        internal static bool ReadBool(SettingsBoolType settingtype)
         {
             if (!SettingsFileExists())
             {
                 return false;
             }
 
-            string section, key;
+            string strSection, strKey;
 
-            switch (settingType)
+            switch (settingtype)
             {
                 case SettingsBoolType.DisableVersionCheck:
-                    section = SEC_STARTUP; key = KEY_DISABLE_VERSION_CHECK;
+                    strSection = SEC_STARTUP; strKey = KEY_DISABLE_VERSION_CHECK;
                     break;
                 case SettingsBoolType.DisableFlashingUI:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_FLASHING_UI;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_FLASHING_UI;
                     break;
                 case SettingsBoolType.DisableMessageSounds:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_MESSAGE_SOUNDS;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_MESSAGE_SOUNDS;
                     break;
                 case SettingsBoolType.DisableTips:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_TIPS;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_TIPS;
                     break;
                 case SettingsBoolType.DisableConfDiag:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_CONF_DIAG;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_CONF_DIAG;
                     break;
                 case SettingsBoolType.UseAccentColor:
-                    section = SEC_APPLICATION; key = KEY_USE_ACCENT_COLOR;
+                    strSection = SEC_APPLICATION; strKey = KEY_USE_ACCENT_COLOR;
                     break;
                 case SettingsBoolType.DisableSerialValidation:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_SN_VALIDATION;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_SN_VALIDATION;
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
-                    section = SEC_FIRMWARE; key = KEY_ACCEPTED_TERMS;
+                    strSection = SEC_FIRMWARE; strKey = KEY_ACCEPTED_TERMS;
                     break;
                 default:
                     return false;
             }
 
-            IniFile settingsIni = new IniFile(METPath.SETTINGS_FILE);
+            IniFile iniFile = new IniFile(ApplicationPaths.SettingsFile);
 
-            if (!settingsIni.SectionExists(section))
+            if (!iniFile.SectionExists(strSection))
             {
-                Logger.Write(
-                    $"SettingsGetBool: Section '{section}' was missing and created automatically.",
-                    LogType.Application);
+                Logger.WriteCallerLine($"{nameof(ReadBool)} Section '{strSection}' was missing and created automatically.");
 
-                using (StreamWriter writer = new StreamWriter(METPath.SETTINGS_FILE, true))
+                using (StreamWriter swSection = new StreamWriter(ApplicationPaths.SettingsFile, true))
                 {
-                    writer.WriteLine($"[{section}]");
+                    swSection.WriteLine($"[{strSection}]");
                 }
 
-                settingsIni.Write(section, key, "False");
+                iniFile.Write(strSection, strKey, "False");
 
                 return false;
             }
 
-            if (!settingsIni.KeyExists(section, key))
+            if (!iniFile.KeyExists(strSection, strKey))
             {
-                Logger.Write(
-                    $"ReadBool (Settings): Key '{key}' was missing and created automatically.",
-                    LogType.Application);
+                Logger.WriteCallerLine($"{nameof(ReadBool)} Key '{strKey}' was missing and created automatically.");
 
-                settingsIni.Write(section, key, "False");
+                iniFile.Write(strSection, strKey, "False");
 
                 return false;
             }
 
-            return bool.Parse(settingsIni.Read(section, key));
+            return bool.Parse(iniFile.Read(strSection, strKey));
         }
 
         internal static string ReadString(SettingsStringType settingType)
@@ -216,153 +213,145 @@ namespace Mac_EFI_Toolkit
                 return string.Empty;
             }
 
-            string section, key;
+            string strSection, strKey;
 
             switch (settingType)
             {
                 case SettingsStringType.StartupInitialDirectory:
-                    section = SEC_APPLICATION; key = KEY_STARTUP_INIT_DIR;
+                    strSection = SEC_APPLICATION; strKey = KEY_STARTUP_INIT_DIR;
                     break;
                 case SettingsStringType.EfiInitialDirectory:
-                    section = SEC_APPLICATION; key = KEY_EFI_INIT_DIR;
+                    strSection = SEC_APPLICATION; strKey = KEY_EFI_INIT_DIR;
                     break;
                 case SettingsStringType.SocInitialDirectory:
-                    section = SEC_APPLICATION; key = KEY_SOC_INIT_DIR;
+                    strSection = SEC_APPLICATION; strKey = KEY_SOC_INIT_DIR;
                     break;
                 default:
                     return string.Empty;
             }
 
-            IniFile settingsIni = new IniFile(METPath.SETTINGS_FILE);
+            IniFile iniFile = new IniFile(ApplicationPaths.SettingsFile);
 
-            if (!settingsIni.SectionExists(section))
+            if (!iniFile.SectionExists(strSection))
             {
-                Logger.Write(
-                    $"ReadString (Settings): Section '{section}' was missing and created automatically.",
-                    LogType.Application);
+                Logger.WriteCallerLine($"{nameof(ReadString)} Section '{strSection}' was missing and created automatically.");
 
-                using (StreamWriter writer = new StreamWriter(METPath.SETTINGS_FILE, true))
+                using (StreamWriter swSection = new StreamWriter(ApplicationPaths.SettingsFile, true))
                 {
-                    writer.WriteLine($"[{section}]");
+                    swSection.WriteLine($"[{strSection}]");
                 }
 
-                settingsIni.Write(section, key, "False");
+                iniFile.Write(strSection, strKey, "False");
 
                 return string.Empty;
             }
 
-            if (!settingsIni.KeyExists(section, key))
+            if (!iniFile.KeyExists(strSection, strKey))
             {
-                Logger.Write(
-                    $"ReadString (Settings): Key '{key}' was missing and created automatically.",
-                    LogType.Application);
+                Logger.WriteCallerLine($"{nameof(ReadString)} Key '{strKey}' was missing and created automatically.");
 
-                settingsIni.Write(section, key, "False");
+                iniFile.Write(strSection, strKey, "False");
 
                 return string.Empty;
             }
 
-            return settingsIni.Read(section, key);
+            return iniFile.Read(strSection, strKey);
         }
         #endregion
 
         #region Write Values
-        internal static void SetBool(SettingsBoolType settingType, bool value)
+        internal static void SetBool(SettingsBoolType settingtype, bool value)
         {
             if (!SettingsFileExists())
             {
                 return;
             }
 
-            string section, key;
+            string strSection, strKey;
 
-            switch (settingType)
+            switch (settingtype)
             {
                 case SettingsBoolType.DisableVersionCheck:
-                    section = SEC_STARTUP; key = KEY_DISABLE_VERSION_CHECK;
+                    strSection = SEC_STARTUP; strKey = KEY_DISABLE_VERSION_CHECK;
                     break;
                 case SettingsBoolType.DisableFlashingUI:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_FLASHING_UI;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_FLASHING_UI;
                     break;
                 case SettingsBoolType.DisableMessageSounds:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_MESSAGE_SOUNDS;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_MESSAGE_SOUNDS;
                     break;
                 case SettingsBoolType.DisableTips:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_TIPS;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_TIPS;
                     break;
                 case SettingsBoolType.DisableConfDiag:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_CONF_DIAG;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_CONF_DIAG;
                     break;
                 case SettingsBoolType.UseAccentColor:
-                    section = SEC_APPLICATION; key = KEY_USE_ACCENT_COLOR;
+                    strSection = SEC_APPLICATION; strKey = KEY_USE_ACCENT_COLOR;
                     break;
                 case SettingsBoolType.DisableSerialValidation:
-                    section = SEC_APPLICATION; key = KEY_DISABLE_SN_VALIDATION;
+                    strSection = SEC_APPLICATION; strKey = KEY_DISABLE_SN_VALIDATION;
                     break;
                 case SettingsBoolType.AcceptedEditingTerms:
-                    section = SEC_FIRMWARE; key = KEY_ACCEPTED_TERMS;
+                    strSection = SEC_FIRMWARE; strKey = KEY_ACCEPTED_TERMS;
                     break;
                 default:
                     return;
             }
 
-            IniFile settingsIni = new IniFile(METPath.SETTINGS_FILE);
+            IniFile iniFile = new IniFile(ApplicationPaths.SettingsFile);
 
-            if (settingsIni.SectionExists(section))
+            if (iniFile.SectionExists(strSection))
             {
-                if (settingsIni.KeyExists(section, key))
+                if (iniFile.KeyExists(strSection, strKey))
                 {
-                    settingsIni.Write(section, key, value.ToString());
+                    iniFile.Write(strSection, strKey, value.ToString());
                 }
                 else
                 {
-                    Logger.Write(
-                        $" SetBool (Settings): {section} > {key} > Key not found, setting was not written.",
-                        LogType.Application);
+                    Logger.WriteCallerLine($"{nameof(SetBool)} {strSection} > {strKey} > Key not found, setting was not written.");
                 }
             }
         }
 
-        internal static void SetString(SettingsStringType settingType, string value)
+        internal static void SetString(SettingsStringType settingtype, string value)
         {
             if (!SettingsFileExists())
             {
                 return;
             }
 
-            string section, key;
+            string strSection, strKey;
 
-            switch (settingType)
+            switch (settingtype)
             {
                 case SettingsStringType.StartupInitialDirectory:
-                    section = SEC_APPLICATION; key = KEY_STARTUP_INIT_DIR;
+                    strSection = SEC_APPLICATION; strKey = KEY_STARTUP_INIT_DIR;
                     break;
                 case SettingsStringType.EfiInitialDirectory:
-                    section = SEC_APPLICATION; key = KEY_EFI_INIT_DIR;
+                    strSection = SEC_APPLICATION; strKey = KEY_EFI_INIT_DIR;
                     break;
                 case SettingsStringType.SocInitialDirectory:
-                    section = SEC_APPLICATION; key = KEY_SOC_INIT_DIR;
+                    strSection = SEC_APPLICATION; strKey = KEY_SOC_INIT_DIR;
                     break;
                 default:
                     return;
             }
 
-            IniFile ini = new IniFile(METPath.SETTINGS_FILE);
+            IniFile iniFile = new IniFile(ApplicationPaths.SettingsFile);
 
-            if (!ini.SectionExists(section))
+            if (!iniFile.SectionExists(strSection))
             {
-                ini.Write(section, string.Empty, null);
+                iniFile.Write(strSection, string.Empty, null);
             }
 
-            if (ini.KeyExists(section, key))
+            if (iniFile.KeyExists(strSection, strKey))
             {
-                ini.Write(section, key, value);
+                iniFile.Write(strSection, strKey, value);
             }
             else
             {
-                Logger.Write(
-                    $"SetString (Settings): {section} > {key} > Key not found, setting was not written.",
-                    LogType.Application);
+                Logger.WriteCallerLine($"{nameof(SetString)} {strSection} > {strKey} > Key not found, setting was not written.");
             }
         }
         #endregion
@@ -370,33 +359,33 @@ namespace Mac_EFI_Toolkit
         #region Bools
         private static bool SettingsFileExists()
         {
-            return File.Exists(METPath.SETTINGS_FILE);
+            return File.Exists(ApplicationPaths.SettingsFile);
         }
 
-        internal static bool Delete()
+        internal static bool DeleteSettings()
         {
             try
             {
-                File.Delete(METPath.SETTINGS_FILE);
+                File.Delete(ApplicationPaths.SettingsFile);
                 return SettingsFileExists();
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(Delete), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(DeleteSettings), e.GetType(), e.Message);
                 return false;
             }
         }
         #endregion
 
         #region Functions
-        internal static Color GetBorderColor()
+        internal static Color GetBorderColorValue()
         {
             if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
             {
                 return AccentColorHelper.GetWindowsAccentColor();
             }
 
-            return Colours.CLR_DEFAULTBORDER;
+            return Colours.ClrAppBorderDefault;
         }
         #endregion
     }

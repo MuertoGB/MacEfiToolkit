@@ -33873,6 +33873,10 @@
 		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
 	</section>
 	<section>
+		<hwc>LVDF</hwc>
+		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
+	</section>
+	<section>
 		<hwc>LVDH</hwc>
 		<configCode>MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports)</configCode>
 	</section>
@@ -33903,6 +33907,10 @@
 	<section>
 		<hwc>LYWR</hwc>
 		<configCode>MacBook Air (Retina, 13-inch, 2019)</configCode>
+	</section>
+	<section>
+		<hwc>MD6M</hwc>
+		<configCode>MacBook Pro (16-inch, 2019)</configCode>
 	</section>
 	<section>
 		<hwc>MD6P</hwc>

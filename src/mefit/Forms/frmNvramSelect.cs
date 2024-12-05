@@ -40,8 +40,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
-            EFIROM.bResetVss = cbxResetVss.Checked;
-            EFIROM.bResetSvs = cbxResetSvs.Checked;
+            EFIROM.ResetVss = cbxResetVss.Checked;
+            EFIROM.ResetSvs = cbxResetSvs.Checked;
 
             DialogResult = DialogResult.OK;
         }

@@ -12,7 +12,18 @@
   <a href="#version-115">V1.1.5</a> •
   <a href="#version-200">V2.0.0</a> •
   <a href="#version-201">V2.0.1</a> •
+  <a href="#version-202">V2.0.2</a>
 </p>
+
+## Version 2.0.2
+
+### Enhancements
+- User interface improvements.
+- Updated the internal database with more models.
+- Improved reliability when detecting LZMA DXE archives.
+
+### Bugs
+- Fixed a bug where the SOCROM window failed to fetch config codes from the server. This issue occurred as incorrect parameter value was being passed to the GetConfigCodeAsync() function.
 
 ## Version 2.0.1
 

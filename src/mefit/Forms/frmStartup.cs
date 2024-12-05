@@ -5,6 +5,7 @@
 // frmStartup.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
@@ -20,11 +21,11 @@ namespace Mac_EFI_Toolkit.Forms
     public partial class frmStartup : METForm
     {
         #region Public Members
-        public string loadedFile = string.Empty;
+        public string LoadedFirmware = string.Empty;
         #endregion
 
         #region Private Members
-        private string _strInitialDirectory = METPath.WORKING_DIR;
+        private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private int _childWindowCount = 0;
         #endregion
 
@@ -69,11 +70,11 @@ namespace Mac_EFI_Toolkit.Forms
             SetInitialDirectory();
 
             // Open dragged file is the arg path is ! null or ! empty.
-            if (!string.IsNullOrEmpty(Program.draggedFilePath))
+            if (!string.IsNullOrEmpty(Program.DraggedFile))
             {
-                OpenBinary(Program.draggedFilePath);
+                OpenBinary(Program.DraggedFile);
                 // Clear the path so restarting does not cause the initially dragged file to be loaded.
-                Program.draggedFilePath = string.Empty;
+                Program.DraggedFile = string.Empty;
             }
 
             // Check for a new application version.
@@ -113,19 +114,19 @@ namespace Mac_EFI_Toolkit.Forms
         private void frmStartup_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
-            string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-            string draggedFilename = draggedFiles[0];
+            string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string strFileName = arrDraggedFiles[0];
 
             ApplyDragLeaveColours();
 
-            OpenBinary(draggedFilename);
+            OpenBinary(strFileName);
         }
 
         private void frmStartup_DragLeave(object sender, EventArgs e) => ApplyDragLeaveColours();
 
-        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.CLR_INACTIVEFORM);
+        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrInactiveFormText);
 
-        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.CLR_ACTIVEFORM);
+        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -192,15 +193,15 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdBrowse_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dialog = new OpenFileDialog
+            using (OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
                 Filter = APPSTRINGS.FILTER_STARTUP_WINDOW
             })
             {
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    OpenBinary(dialog.FileName);
+                    OpenBinary(openFileDialog.FileName);
                 }
             }
         }
@@ -226,28 +227,28 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Folders Context Menu Events
         private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.BACKUPS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.BackupsDirectory, this);
 
         private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.BUILDS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.BuildsDirectory, this);
 
         private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.FSYS_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.FsysDirectory, this);
 
         private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.INTELME_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.IntelMeDirectory, this);
 
         private void openNVRAMFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.NVRAM_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.NvramDirectory, this);
 
         private void openLZMADXEFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.LZMA_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.LzmaDirectory, this);
 
         private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.SCFG_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.ScfgDirectory, this);
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(METPath.WORKING_DIR, this);
+            UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
         #endregion
 
         #region Tools Context Menu Events
@@ -268,19 +269,21 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Help Context Menu Events
-        private void changelogToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.CHANGELOG);
+        private void changelogToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.Changelog);
 
-        private void donateToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.DONATE);
+        private void donateToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.PaypalDonate);
 
-        private void emailMeToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.EMAILME);
+        private void emailMeToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.Email);
 
-        private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_ISSUE);
+        private void flexBVToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.FlexBv5);
 
-        private void homepageToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.HOMEPAGE);
+        private void githubIssuesToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubIssues);
 
-        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.MANUAL);
+        private void homepageToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubHomepage);
 
-        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(METUrl.GH_LATEST);
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubManual);
+
+        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubLatestVersion);
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
@@ -288,11 +291,11 @@ namespace Mac_EFI_Toolkit.Forms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form child = new frmAbout())
+            using (Form form = new frmAbout())
             {
-                child.Tag = StartupSenderTag.Other;
-                child.FormClosed += ChildWindowClosed;
-                child.ShowDialog();
+                form.Tag = StartupSenderTag.Other;
+                form.FormClosed += ChildWindowClosed;
+                form.ShowDialog();
             }
         }
 
@@ -300,32 +303,32 @@ namespace Mac_EFI_Toolkit.Forms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form child = new frmSettings())
+            using (Form form = new frmSettings())
             {
-                child.Tag = StartupSenderTag.Other;
-                child.FormClosed += ChildWindowClosed;
-                child.ShowDialog();
+                form.Tag = StartupSenderTag.Other;
+                form.FormClosed += ChildWindowClosed;
+                form.ShowDialog();
             }
         }
         #endregion
 
         #region Open Binary
-        private void OpenBinary(string filePath)
+        private void OpenBinary(string filepath)
         {
-            if (!FileTools.IsValidMinMaxSize(filePath, this))
+            if (!FileTools.IsValidMinMaxSize(filepath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
             {
                 return;
             }
 
-            byte[] fileBytes = File.ReadAllBytes(filePath);
+            byte[] bFileBuffer = File.ReadAllBytes(filepath);
 
             // Identify and open the correct window based on the firmware type.
-            Form childForm = GetChildFormForImage(fileBytes);
+            Form form = GetChildFormForImage(bFileBuffer);
 
-            if (childForm != null)
+            if (form != null)
             {
-                _strInitialDirectory = Path.GetDirectoryName(filePath);
-                InitializeChildForm(childForm, filePath);
+                _strInitialDirectory = Path.GetDirectoryName(filepath);
+                InitializeChildForm(form, filepath);
                 return;
             }
 
@@ -354,9 +357,9 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void ChildWindowClosed(object sender, EventArgs e)
         {
-            if (sender is Form closedForm)
+            if (sender is Form closedChild)
             {
-                if (closedForm.Tag is StartupSenderTag formTag && formTag == StartupSenderTag.Firmware)
+                if (closedChild.Tag is StartupSenderTag formTag && formTag == StartupSenderTag.Firmware)
                 {
                     if (_childWindowCount > 0)
                     {
@@ -371,13 +374,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FONT_MDL2_REG_12;
+            cmdClose.Font = Program.FontSegMdl2Regular12;
             cmdClose.Text = Program.GLYPH_EXIT_CROSS;
         }
 
         private void SetLabelGlyphAndText()
         {
-            lblGlyph.Font = Program.FONT_MDL2_REG_20;
+            lblGlyph.Font = Program.FontSegMdl2Regular20;
             lblGlyph.Text = Program.GLYPH_DOWN_ARROW;
         }
 
@@ -385,28 +388,31 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ApplyDragLeaveColours() => lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
 
-        private void SetControlForeColor(Control parentControl, Color foreColor)
+        private void SetControlForeColor(Control parentcontrol, Color forecolor)
         {
-            foreach (Control control in parentControl.Controls)
+            foreach (Control control in parentcontrol.Controls)
             {
-                control.ForeColor = foreColor;
+                control.ForeColor = forecolor;
             }
         }
 
-        private void InitializeChildForm(Form childForm, string filePath)
+        private void InitializeChildForm(Form child, string filepath)
         {
-            this.loadedFile = filePath;
+            // Set the loaded firmware path.
+            this.LoadedFirmware = filepath;
 
             // Increment child count and update window text.
             _childWindowCount++;
+
+            // Update window title.
             UpdateWindowTitle();
 
             // Configure child.
-            childForm.Tag = StartupSenderTag.Firmware;
-            childForm.FormClosed += ChildWindowClosed;
-            childForm.Location = new Point(this.Location.X + (this.Width - childForm.Width) / 2, this.Location.Y + (this.Height - childForm.Height) / 2);
-            childForm.Owner = this;
-            childForm.Show();
+            child.Tag = StartupSenderTag.Firmware;
+            child.FormClosed += ChildWindowClosed;
+            child.Location = new Point(this.Location.X + (this.Width - child.Width) / 2, this.Location.Y + (this.Height - child.Height) / 2);
+            child.Owner = this;
+            child.Show();
         }
 
         private void UpdateWindowTitle()
@@ -422,11 +428,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         internal async void StartupVersionCheck()
         {
-            // Check for a new version using the specified URL.
-            VersionResult result = await AppVersion.CheckForNewVersion(METUrl.VERSION_MANIFEST);
+            // Check for a new version.
+            VersionResult verResult = await Program.CheckForNewVersion();
 
-            // If a new version is available and update the UI.
-            if (result == VersionResult.NewVersionAvailable)
+            // If a new version is available update the UI.
+            if (verResult == VersionResult.NewVersionAvailable)
             {
                 cmdHelp.Text += " (1)";
                 updateAvailableToolStripMenuItem.Visible = true;
@@ -438,12 +444,12 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string directory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
+            string strDirectory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
-            if (!string.IsNullOrEmpty(directory))
+            if (!string.IsNullOrEmpty(strDirectory))
             {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : METPath.WORKING_DIR;
+                _strInitialDirectory = Directory.Exists(strDirectory) ? strDirectory : ApplicationPaths.WorkingDirectory;
             }
         }
         #endregion

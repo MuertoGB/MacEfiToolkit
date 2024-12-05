@@ -19,19 +19,19 @@ namespace Mac_EFI_Toolkit.UI
             {
                 if (NativeMethods.DwmGetColorizationColor(out uint color, out bool opaque) == 0)
                 {
-                    byte red = (byte)((color >> 16) & 0xff);
-                    byte green = (byte)((color >> 8) & 0xff);
-                    byte blue = (byte)(color & 0xff);
+                    byte bRed = (byte)((color >> 16) & 0xff);
+                    byte bGreen = (byte)((color >> 8) & 0xff);
+                    byte bBlue = (byte)(color & 0xff);
 
-                    return Color.FromArgb(red, green, blue);
+                    return Color.FromArgb(bRed, bGreen, bBlue);
                 }
 
-                return Colours.CLR_DEFAULTBORDER;
+                return Colours.ClrAppBorderDefault;
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(NativeMethods.DwmGetColorizationColor), e.GetType(), e.Message);
-                return Colours.CLR_DEFAULTBORDER;
+                Logger.WriteErrorLine(nameof(GetWindowsAccentColor), e.GetType(), e.Message);
+                return Colours.ClrAppBorderDefault;
             }
         }
     }

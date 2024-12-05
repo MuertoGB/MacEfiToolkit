@@ -4,6 +4,10 @@
 Mac EFI Toolkit
 </h1>
 
+<p align="center" width="100%">
+    <img width="75%" src="stream/images/application/efi.png">
+</p>
+
 ## Table of Contents
 1. [Intoduction](#introduction)
 2. [System Requirements](#system-requirements)
@@ -52,7 +56,7 @@ To run **Mac EFI Toolkit** on Linux or macOS using Wine, follow these steps:
 
 1. **Install [Wine](https://gitlab.winehq.org/wine/wine/-/wikis/home)** to your Operating System.
 2. Open the terminal and run the command `winecfg`. This will open the Wine configuration window. Then, navigate to the **'Graphics'** tab and change the **'Screen resolution'** to **120 dpi**.
-3. Download all four required fonts from [here](stream/fonts). After downloading, navigate to `Home\.wine\drive_c\windows\Fonts` and copy the downloaded fonts into this folder.
+3. Download the font pack archive from [here](stream/fonts). After downloading, navigate to `Home\.wine\drive_c\windows\Fonts`. Extract the downloaded font pack archive and copy the fonts into this folder.
 
 Once these steps are completed, you should be able to run **Mac EFI Toolkit** under Wine.
 
@@ -135,12 +139,12 @@ For more direct support, you can contact me via [email](mailto:muertogb@proton.m
     - Created and modified date
     - iBoot version
     - **Model Information**
-      - Scfg store details
+      - SCfg store details
       - System serial number
       - System config code
       - System order number
   - Edit the serial number
-  - Export and replace the Scfg store
+  - Export and replace the SCfg store
   - Export firmware information to a text file
 
 ## Acknowledgements
