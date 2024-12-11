@@ -132,6 +132,14 @@ namespace Mac_EFI_Toolkit.Forms
         #region KeyDown Events
         private void frmStartup_KeyDown(object sender, KeyEventArgs e)
         {
+            // Check if the Alt key is pressed
+            if (e.Alt && e.KeyCode == Keys.F4)
+            {
+                // Let the system handle Alt+F4 to close the window
+                e.Handled = false;
+                return;
+            }
+
             // Handle individual keys (F1, F2, F12) without modifiers.
             switch (e.KeyCode)
             {

@@ -17,8 +17,8 @@ namespace Mac_EFI_Toolkit.UI
         public METContextMenuStrip()
         {
             Renderer = new METMenuRenderer();
-            BackColor = Color.FromArgb(20, 20, 20);
-            ForeColor = Color.FromArgb(255, 255, 255);
+            BackColor = Color.FromArgb(10, 10, 10);
+            ForeColor = Color.White;
             Font = new Font("Segoe UI", 10.2f, FontStyle.Regular);
             ShowImageMargin = false;
         }
