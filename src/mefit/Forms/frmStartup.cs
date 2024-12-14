@@ -258,7 +258,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
             UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
         #endregion
-         
+
         #region Tools Context Menu Events
         private void newEFIROMSessionToolStripMenuItem_Click(object sender, EventArgs e) => InitializeChildForm(new frmEfiRom(), string.Empty);
 

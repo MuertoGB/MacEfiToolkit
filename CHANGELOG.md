@@ -21,7 +21,7 @@
 ### Bugs
 
 - Resolved an issue where pressing `Alt + F4` would incorrectly open the settings window before closing the application or active window as expected.
-- Resolved an issue where certain APFS capable firmware incorrectly reported the driver as not found. This was caused by an oversight in LZMA header verification logic.
+- Resolved an issue where certain APFS capable firmware incorrectly reported the driver as not found. This was caused by an oversight in LZMA header verification logic (thanks reformatt @ badcaps).
 
 ## Version 2.0.2
 
