@@ -893,8 +893,11 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             if (BinaryTools.GetBaseAddress(
                 sourcebuffer, Guids.ApfsDxeGuid, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit) != -1)
             {
+                Console.Write(" > Standard LZMA GUID found");
                 return ApfsCapable.Yes;
             }
+
+            Console.WriteLine(" > Looking for a compressed LZMA DXE GUID");
 
             // Look for a compressed volume GUID.
             int iLzmaBase = FindLzmaBase(
@@ -907,6 +910,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // No compressed DXE volume was found.
             if (iLzmaBase == -1)
             {
+                Console.WriteLine(" > No compressed LZMA DXE GUID was found");
                 return ApfsCapable.No;
             }
 
@@ -919,14 +923,19 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Determine the end of the LZMA GUID section.
             int iLzmaLimit = iLzmaBase + iLength;
 
+            Console.WriteLine(" > Looking for a valid LZMA header");
+
             // Search for a valid LZMA header (with 3 attempts).
             int iLzmaSignatureBase = FindValidLzmaHeader(sourcebuffer, iLzmaBase, iLzmaLimit, maxattempts: 3);
 
             if (iLzmaSignatureBase == -1)
             {
+                Console.WriteLine(" > Valid LZMA header not found");
                 // Couldn't locate a valid LZMA header.
                 return ApfsCapable.No;
             }
+
+            Console.WriteLine(" > Decompressing LZMA DXE archive");
 
             // Decompress the LZMA volume.
             byte[] dDecompressed = LzmaCoder.DecompressBytes(
@@ -935,6 +944,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // There was an issue decompressing the volume (Error saved to './mefit.log').
             if (dDecompressed == null)
             {
+                Console.WriteLine(" > bDecompressed was empty.");
                 return ApfsCapable.Unknown;
             }
 
@@ -944,10 +954,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFI
             // Search the decompressed volume for the APFS DXE GUID.
             if (BinaryTools.GetBaseAddress(dDecompressed, Guids.ApfsDxeGuid) == -1)
             {
+                Console.WriteLine(" > No APFS GUID found in decompressed archive");
                 // The APFS DXE GUID was not found in the compressed volume.
                 return ApfsCapable.No;
             }
 
+            Console.WriteLine(" > An APFS GUID was found in the decompressed archive");
             // The APFS DXE GUID was present in the compressed volume.
             return ApfsCapable.Yes;
         }
