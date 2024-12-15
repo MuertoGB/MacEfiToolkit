@@ -111,10 +111,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblPagefile = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
             this.cmdMinimize = new System.Windows.Forms.Button();
-            this.helloToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rESETToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helloToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.testringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsCopy = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
             this.filenameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sizeBytesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1412,37 +1408,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdMinimize.UseVisualStyleBackColor = false;
             this.cmdMinimize.Click += new System.EventHandler(this.cmdMinimize_Click);
             // 
-            // helloToolStripMenuItem
-            // 
-            this.helloToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.helloToolStripMenuItem.Name = "helloToolStripMenuItem";
-            this.helloToolStripMenuItem.Size = new System.Drawing.Size(63, 24);
-            this.helloToolStripMenuItem.Text = "OPEN";
-            // 
-            // rESETToolStripMenuItem
-            // 
-            this.rESETToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helloToolStripMenuItem1,
-            this.testringToolStripMenuItem});
-            this.rESETToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.rESETToolStripMenuItem.Name = "rESETToolStripMenuItem";
-            this.rESETToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
-            this.rESETToolStripMenuItem.Text = "RESET";
-            // 
-            // helloToolStripMenuItem1
-            // 
-            this.helloToolStripMenuItem1.ForeColor = System.Drawing.Color.White;
-            this.helloToolStripMenuItem1.Name = "helloToolStripMenuItem1";
-            this.helloToolStripMenuItem1.Size = new System.Drawing.Size(130, 24);
-            this.helloToolStripMenuItem1.Text = "Hello";
-            // 
-            // testringToolStripMenuItem
-            // 
-            this.testringToolStripMenuItem.ForeColor = System.Drawing.Color.White;
-            this.testringToolStripMenuItem.Name = "testringToolStripMenuItem";
-            this.testringToolStripMenuItem.Size = new System.Drawing.Size(130, 24);
-            this.testringToolStripMenuItem.Text = "Testring";
-            // 
             // cmsCopy
             // 
             this.cmsCopy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
@@ -2146,10 +2111,6 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.Label lblConfigCodeText;
         private System.Windows.Forms.Label lblModelText;
         private METLabel lblConfigCode;
-        private System.Windows.Forms.ToolStripMenuItem helloToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem rESETToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helloToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem testringToolStripMenuItem;
         private System.Windows.Forms.Panel pnlTopSplitMain;
         internal System.Windows.Forms.Button cmdMenuTools;
         internal System.Windows.Forms.Button cmdMenuExport;

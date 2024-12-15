@@ -12,8 +12,16 @@
   <a href="#version-115">V1.1.5</a> •
   <a href="#version-200">V2.0.0</a> •
   <a href="#version-201">V2.0.1</a> •
-  <a href="#version-202">V2.0.2</a>
+  <a href="#version-202">V2.0.2</a> •
+  <a href="#version-203">V2.0.3</a>
 </p>
+
+## Version 2.0.3
+
+### Bugs
+
+- Resolved an issue where pressing `Alt + F4` would incorrectly open the settings window before closing the application or active window as expected.
+- Resolved an issue where certain APFS capable firmware incorrectly reported the driver as not found. This was caused by an oversight in LZMA header verification logic (thanks reformatt @ badcaps).
 
 ## Version 2.0.2
 

@@ -80,17 +80,17 @@ namespace Mac_EFI_Toolkit.Common
                 return false;
             }
 
-            int iDictSize = BitConverter.ToInt32(sourcebuffer, 1);
+            int nDictSize = BitConverter.ToInt32(sourcebuffer, 1);
 
             bool IsPow2(int i)
-            { 
+            {
                 return (i > 0) && ((i & (i - 1)) == 0);
             }
 
-            if (iDictSize <= 0 || iDictSize > 0x800000 || !IsPow2(iDictSize))
+            if (nDictSize <= 0 || !IsPow2(nDictSize))
             {
-                // Invalid dictionary size.
-                Console.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {iDictSize}");
+                // Invalid dictionary size <= 0 or not a power of 2.
+                Console.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {nDictSize}");
                 return false;
             }
 
