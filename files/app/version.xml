@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
  <MET>
-    <VersionString>2.0.2</VersionString>
-    <Build>241205.2155</Build>
-    <ReleaseDate>20241205</ReleaseDate>
+    <VersionString>2.0.3</VersionString>
+    <Build>241215.0400</Build>
+    <ReleaseDate>20241215</ReleaseDate>
     <Channel>Stable</Channel>
-    <SHA256>e7a75a8a4c0b0b8afceb9cfb29375b58685290e817323f51d3fad3bf09df8721</SHA256>
+    <SHA256>1f890b94b6f9cc03d5dbb44980a473f5353cef3afd236af05bb5fb886c1666a6</SHA256>
  </MET>
 </data>
