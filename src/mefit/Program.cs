@@ -471,52 +471,5 @@ namespace Mac_EFI_Toolkit
 #endif
         }
         #endregion
-
-        internal static byte[] GetNewKey(string input)
-        {
-            byte[] tempKey = new byte[8]; // Initialize tempKey array for char 
-            byte[] finalKey = new byte[8]; // Array for the final key
-
-            // XOR processing: Generate the tempKey based on the input string
-            if (!string.IsNullOrEmpty(input))
-            {
-                tempKey[0] = (byte)input[0];
-                for (int i = 1; i < input.Length; i++)
-                {
-                    tempKey[i % 7] ^= (byte)input[i];
-                    Console.WriteLine($"After XOR with {input[i]} ({(byte)input[i]:X2}): TempKey[{i % 7}] = {tempKey[i % 7]:X2}");
-                }
-            }
-
-            Console.WriteLine("\nTempKey after XOR processing:");
-            foreach (byte b in tempKey)
-            {
-                Console.Write($"{b:X2} ");
-            }
-            Console.WriteLine();
-
-            // Transform tempKey into finalKey with bit manipulations
-            for (int i = 0; i < 8; i++)
-            {
-                byte original = tempKey[i];
-                byte nibbleSwapped = (byte)((original << 4) | (original >> 4)); // Nibble swap
-                byte pairSwapped = (byte)(((nibbleSwapped & 0xCC) >> 2) | ((nibbleSwapped & 0x33) << 2)); // Pair swap
-                byte bitSwapped = (byte)(((pairSwapped & 0xAA) >> 1) | ((pairSwapped & 0x55) << 1)); // Bit swap
-
-                finalKey[i] = bitSwapped;
-
-                Console.WriteLine($"Byte {i}: Original={original:X2}, Nibble={nibbleSwapped:X2}, Pair={pairSwapped:X2}, Final={bitSwapped:X2}");
-            }
-
-            Console.Write("\nGetNewKey: ");
-            foreach (byte b in finalKey)
-            {
-                Console.Write($"{b:X2}");
-            }
-
-            Console.WriteLine();
-
-            return finalKey;
-        }
     }
 }
