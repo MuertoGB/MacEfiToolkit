@@ -9,7 +9,7 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.Firmware.EFI
+namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
     class FlashDescriptor
     {

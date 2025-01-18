@@ -5,7 +5,7 @@
 // frmNvramSelect.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Firmware.EFI;
+using Mac_EFI_Toolkit.Firmware.EFIROM;
 using System;
 using System.Windows.Forms;
 

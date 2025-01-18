@@ -6,7 +6,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.Firmware.EFI
+namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
     #region EfiLock
     internal struct EFILock

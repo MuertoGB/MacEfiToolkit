@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace Mac_EFI_Toolkit.Firmware.EFI
+namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
     class EFIROM
     {
