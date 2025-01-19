@@ -96,6 +96,7 @@
     <Compile Include="Firmware\FirmwareVars.cs" />
     <Compile Include="Firmware\Serial.cs" />
     <Compile Include="Firmware\SOCROM\SOCSigs.cs" />
+    <Compile Include="Firmware\SOCROM\Types\Enums.cs" />
     <Compile Include="Forms\Prompts\Prompts.cs" />
     <Compile Include="Forms\Types\Enums.cs" />
     <Compile Include="Common\MemoryTracker.cs" />

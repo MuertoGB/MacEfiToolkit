@@ -56,7 +56,7 @@ namespace Mac_EFI_Toolkit
     internal readonly struct ApplicationVersions
     {
         internal const string LZMA_SDK_VERSION = "24.08";
-        internal const string CURRENT_BUILD = "250118.0120";
+        internal const string CURRENT_BUILD = "250119.0355";
         internal const string CURRENT_CHANNEL = "Stable";
     }
     #endregion

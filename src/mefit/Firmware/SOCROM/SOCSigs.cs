@@ -8,7 +8,8 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 {
     internal class SOCSigs
     {
-        internal static readonly byte[] T2RomMarker = { 0x30, 0x83 };
+        internal static readonly byte[] SocRomMarker = { 0x30, 0x83 };
+        internal static readonly byte[] AppleSiliconSocRomMarker = { 0x48, 0x55, 0x46, 0x41 };
         internal static readonly byte[] iBootMarker = { 0x69, 0x6C, 0X6C, 0X62 };
         internal static readonly byte[] ScfgHeaderMarker = { 0x67, 0x66, 0x43, 0x53 };
         internal static readonly byte[] ScfgSerialMarker = { 0x6D, 0x4E, 0x72, 0x53 };
