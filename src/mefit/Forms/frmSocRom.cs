@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -970,8 +971,9 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (!string.IsNullOrEmpty(SOCROM.iBootVersion))
             {
-                lbliBoot.Text = SOCROM.iBootVersion;
+                lbliBoot.Text = $"{SOCROM.iBootVersion} {SOCSTRINGS.ON} {(SOCROM.RomType == 0 ? SOCSTRINGS.T2 : SOCSTRINGS.SILICON)}";
                 iBootVersionToolStripMenuItem.Enabled = true;
+
                 return;
             }
 

@@ -35,9 +35,12 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #region Private Members
         private static readonly byte[] _limitChars = new byte[] { 0x00, 0x00, 0x00 };
         private static readonly Encoding _utf8encoding = Encoding.UTF8;
-        internal const int _serialLength = 12;
-        internal const int _absoluteRomBase = 0x0;
-        internal const int _siliconRomBase = 0x20000;
+        private const int _serialLength = 12;
+        private const int _absoluteRomBase = 0x0;
+        private const int _siliconRomBase = 0x20000;
+
+        private const int _t2NvramBase = 0x300000;
+        private const int _siliconNvramBase = 0x700000;
         #endregion
 
         #region Parse Fimware
@@ -66,7 +69,6 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         {
             LoadedBinaryPath = null;
             LoadedBinaryBuffer = null;
-            RomType = default;
             FirmwareLoaded = false;
             FileInfoData = default;
             iBootVersion = null;
@@ -75,24 +77,24 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             SCfgSectionData = default;
         }
 
-        internal static bool IsValidImage(byte[] sourceBuffer)
+        internal static bool IsValidImage(byte[] sourcebuffer)
         {
             // Check for ROM signature at 0x0h (T2ROM).
-            byte[] bT2RomSignature = BinaryTools.GetBytesBaseLength(sourceBuffer, _absoluteRomBase, SOCSigs.SocRomMarker.Length);
+            byte[] bT2RomSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, _absoluteRomBase, SOCSigs.SocRomMarker.Length);
 
             if (BinaryTools.ByteArraysMatch(bT2RomSignature, SOCSigs.SocRomMarker))
             {
-                RomType = SocRomType.T2;
+                RomType = SocRomType.AppleT2;
                 return true;
             }
 
             // Check Apple Silicon HUFA signature.
-            byte[] bAppleSiliconHufaSignature = BinaryTools.GetBytesBaseLength(sourceBuffer, _absoluteRomBase, SOCSigs.AppleSiliconSocRomMarker.Length);
+            byte[] bAppleSiliconHufaSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, _absoluteRomBase, SOCSigs.AppleSiliconSocRomMarker.Length);
 
             if (BinaryTools.ByteArraysMatch(bAppleSiliconHufaSignature, SOCSigs.AppleSiliconSocRomMarker))
             {
                 // Check SOCROM marker at a 0x20000h.
-                byte[] bSocRomSignature = BinaryTools.GetBytesBaseLength(sourceBuffer, _siliconRomBase, SOCSigs.SocRomMarker.Length);
+                byte[] bSocRomSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, _siliconRomBase, SOCSigs.SocRomMarker.Length);
                 if (BinaryTools.ByteArraysMatch(bSocRomSignature, SOCSigs.SocRomMarker))
                 {
                     RomType = SocRomType.AppleSilicon;

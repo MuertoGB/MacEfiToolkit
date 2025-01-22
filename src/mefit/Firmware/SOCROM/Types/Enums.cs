@@ -8,7 +8,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 {
     internal enum SocRomType
     {
-        T2 = 0,
+        AppleT2 = 0,
         AppleSilicon = 1    
     }
 }
