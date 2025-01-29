@@ -902,7 +902,7 @@ namespace Mac_EFI_Toolkit.Forms
                 exportScfgStoreToolStripMenuItem.Enabled = SOCROM.SCfgSectionData.StoreBase != -1;
                 lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(SOCROM.SCfgSectionData.Serial);
 
-                cmdMenuPatch.Enabled = SOCROM.RomType == 0; // Apple Silicon ROM patching is not supported.
+                cmdMenuPatch.Enabled = SOCROM.RomType == SocRomType.AppleT2; // Apple Silicon ROM patching is not supported.
                 changeSerialNumberToolStripMenuItem.Enabled = SOCROM.SCfgSectionData.StoreBase != -1;
             }
 
