@@ -23,6 +23,9 @@
 - Enabled support for opening Apple Silicon SOCROM firmware.
 - Added SoC type to the SOCROM window iBoot version label.
 
+### Bugs
+Fixed: EFIROM window model text now correctly displays a comma when the string contains only two numeric digits at the end.
+
 ## Version 2.0.3
 
 ### Bugs

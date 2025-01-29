@@ -164,9 +164,13 @@ namespace Mac_EFI_Toolkit.Tools
 
             strLetters = dictModelMap.FirstOrDefault(kvPair => model.Contains(kvPair.Key)).Value;
 
-            if (strNumbers.Length == 2 || strNumbers.Length == 3)
+            if (strNumbers.Length == 2)
             {
-                strNumbers = $"{strNumbers.Substring(0, 2)},{strNumbers.Substring(2)}".TrimEnd(',');
+                strNumbers = $"{strNumbers[0]},{strNumbers[1]}"; // Format X,Y.
+            }
+            else if (strNumbers.Length == 3)
+            {
+                strNumbers = $"{strNumbers.Substring(0, 2)},{strNumbers.Substring(2)}"; // Format XX,Y.
             }
 
             // Return the generated full model, otherwise what was passed in will be returned.
