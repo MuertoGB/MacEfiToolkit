@@ -108,7 +108,7 @@ public class METForm : Form
     {
         if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
         {
-            BackColor = AccentColorHelper.GetWindowsAccentColor();
+            BackColor = AccentColorHelper.GetSystemAccentColor();
             return;
         }
 

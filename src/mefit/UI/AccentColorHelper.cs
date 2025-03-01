@@ -13,7 +13,7 @@ namespace Mac_EFI_Toolkit.UI
 {
     internal class AccentColorHelper
     {
-        internal static Color GetWindowsAccentColor()
+        internal static Color GetSystemAccentColor()
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Mac_EFI_Toolkit.UI
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetWindowsAccentColor), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(GetSystemAccentColor), e.GetType(), e.Message);
                 return Colours.ClrAppBorderDefault;
             }
         }

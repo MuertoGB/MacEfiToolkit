@@ -30,7 +30,7 @@ namespace Mac_EFI_Toolkit.UI
 
             if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
             {
-                form.BackColor = AccentColorHelper.GetWindowsAccentColor();
+                form.BackColor = AccentColorHelper.GetSystemAccentColor();
                 return;
             }
 
