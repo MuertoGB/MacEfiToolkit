@@ -27,6 +27,9 @@
 - Older 2MB EFI files now open correctly instead of being incorrectly flagged as invalid.
 - EFIROM window model text now correctly displays a comma when the string contains only two numeric digits at the end.
 
+### Misc
+- Updated Segoe MDL2 font resource to version 1.86 for improved compatibility and appearance.
+
 ## Version 2.0.3
 
 ### Bugs
