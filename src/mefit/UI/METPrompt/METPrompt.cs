@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
 {
-    public partial class METPrompt : METForm
+    public partial class METPrompt : FormEx
     {
         #region Static Members
         static SystemSound PromtSound;

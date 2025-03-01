@@ -102,7 +102,7 @@
     <Compile Include="Common\MemoryTracker.cs" />
     <Compile Include="UI\AccentColorHelper.cs" />
     <Compile Include="UI\BlurHelper.cs" />
-    <Compile Include="UI\METForm.cs">
+    <Compile Include="UI\FormEx.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Unhandled.cs" />
@@ -210,8 +210,8 @@
     <Compile Include="Forms\frmTerms.Designer.cs">
       <DependentUpon>frmTerms.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\METForm.resx">
-      <DependentUpon>METForm.cs</DependentUpon>
+    <EmbeddedResource Include="UI\FormEx.resx">
+      <DependentUpon>FormEx.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\METPrompt\METPrompt.resx">
       <DependentUpon>METPrompt.cs</DependentUpon>

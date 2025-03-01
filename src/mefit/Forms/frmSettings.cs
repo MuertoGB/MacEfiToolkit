@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmSettings : METForm
+    public partial class frmSettings : FormEx
     {
         #region Private Members
         private static string _strStartupInitialPath = string.Empty;
@@ -150,7 +150,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Settings.SetString(SettingsStringType.SocInitialDirectory, _strSocInitialPath);
             }
 
-            METForm.UpdateAccentColor();
+            FormEx.UpdateAccentColor();
 
             if (_updateUI)
             {
@@ -184,7 +184,7 @@ namespace Mac_EFI_Toolkit.Forms
             Settings.SetString(SettingsStringType.EfiInitialDirectory, ApplicationPaths.WorkingDirectory);
             Settings.SetString(SettingsStringType.SocInitialDirectory, ApplicationPaths.WorkingDirectory);
 
-            METForm.UpdateAccentColor();
+            FormEx.UpdateAccentColor();
 
             UpdateCheckBoxControls();
             UpdatePathLabel();

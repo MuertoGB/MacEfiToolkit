@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmStartup : METForm
+    public partial class frmStartup : FormEx
     {
         #region Public Members
         public string LoadedFirmware = string.Empty;

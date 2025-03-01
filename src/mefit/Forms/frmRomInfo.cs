@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmRominfo : METForm
+    public partial class frmRominfo : FormEx
     {
         #region Constructor
         public frmRominfo()

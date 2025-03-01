@@ -56,8 +56,8 @@ namespace Mac_EFI_Toolkit
     internal readonly struct ApplicationVersions
     {
         internal const string LZMA_SDK_VERSION = "24.08";
-        internal const string CURRENT_BUILD = "250122.2245";
-        internal const string CURRENT_CHANNEL = "Dev";
+        internal const string CURRENT_BUILD = "250301.2345";
+        internal const string CURRENT_CHANNEL = "Stable";
     }
     #endregion
 
@@ -126,7 +126,7 @@ namespace Mac_EFI_Toolkit
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Load custom fonts into memory.
-            if (!TryLoadCustomFont(Properties.Resources.segmdl2, out Font[] fonts))
+            if (!LoadCustomFont(Properties.Resources.segmdl2, out Font[] fonts))
             {
                 return;
             }
@@ -348,7 +348,7 @@ namespace Mac_EFI_Toolkit
             return false;
         }
 
-        private static bool TryLoadCustomFont(byte[] fontbuffer, out Font[] fonts)
+        private static bool LoadCustomFont(byte[] fontbuffer, out Font[] fonts)
         {
             fonts = null;
 
@@ -372,7 +372,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(TryLoadCustomFont), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(LoadCustomFont), e.GetType(), e.Message);
                 return false;
             }
         }

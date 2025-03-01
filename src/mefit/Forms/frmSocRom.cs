@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmSocRom : METForm
+    public partial class frmSocRom : FormEx
     {
         #region Private Members
         private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmNvramSelect : METForm
+    public partial class frmNvramSelect : FormEx
     {
         #region Contructor
         public frmNvramSelect()

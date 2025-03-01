@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmSerialSelect : METForm
+    public partial class frmSerialSelect : FormEx
     {
         #region Constructor
         public frmSerialSelect()
