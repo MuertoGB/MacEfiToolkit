@@ -189,11 +189,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         internal static bool IsValidImage(byte[] sourcebuffer)
         {
-            int iDxeCoreBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.EfiFirmwareFsGuid, RSVD_SIZE, GUID_SIZE);
             byte[] bDescriptorSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, RSVD_SIZE, (int)FlashDescriptor.IFD_SIG_LENGTH);
 
             if (!BinaryTools.ByteArraysMatch(bDescriptorSignature, FlashDescriptor.FlashDecriptorMarker))
             {
+                int iDxeCoreBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.EfiFirmwareFsGuid, RSVD_SIZE, GUID_SIZE);
+
                 if (iDxeCoreBase == -1)
                 {
                     return false;
@@ -208,7 +209,25 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             };
 
             // Check if any of the Apple GUIDs are found within the firmware.
-            return arrGuids.Any(guid => BinaryTools.GetBaseAddress(sourcebuffer, guid, 0, sourcebuffer.Length) != -1);
+            if (arrGuids.Any(guid => BinaryTools.GetBaseAddress(sourcebuffer, guid, 0, sourcebuffer.Length) != -1))
+            {
+                return true;
+            }
+
+            // Check for old 2MB image.
+            byte[] bFvMainSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, RSVD_SIZE, GUID_SIZE);
+
+            if (BinaryTools.ByteArraysMatch(bFvMainSignature, Guids.FvMainGuid))
+            {
+                int iSmcDxeBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.AppleSmcDxeGuid);
+
+                if (iSmcDxeBase != -1)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
         #endregion 
 
