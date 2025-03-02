@@ -26,6 +26,7 @@
 ### Bugs
 - Older 2MB EFI files now open correctly instead of being incorrectly flagged as invalid.
 - EFIROM window model text now correctly displays a comma when the string contains only two numeric digits at the end.
+- Fixed an issue where the SOCROM iBoot version label displayed invalid data when the length byte was incorrect or corrupt.
 
 ### Misc
 - Updated Segoe MDL2 font resource to version 1.86 for improved compatibility and appearance.
