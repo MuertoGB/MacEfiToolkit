@@ -35,11 +35,11 @@
             this.cmdCancel = new System.Windows.Forms.Button();
             this.tlpStores = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.cbxResetVss = new Mac_EFI_Toolkit.UI.METSwitch();
+            this.cbxResetVss = new Mac_EFI_Toolkit.UI.Controls.METSwitch();
             this.lblEraseVss = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.lblEraseSvs = new System.Windows.Forms.Label();
-            this.cbxResetSvs = new Mac_EFI_Toolkit.UI.METSwitch();
+            this.cbxResetSvs = new Mac_EFI_Toolkit.UI.Controls.METSwitch();
             this.lblWindowTitle = new System.Windows.Forms.Label();
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.tlpMain.SuspendLayout();
@@ -303,8 +303,8 @@
         private System.Windows.Forms.Panel pnlSeperatorTop;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private UI.METSwitch cbxResetVss;
-        private UI.METSwitch cbxResetSvs;
+        private UI.Controls.METSwitch cbxResetVss;
+        private UI.Controls.METSwitch cbxResetSvs;
         private System.Windows.Forms.Label lblEraseVss;
         private System.Windows.Forms.Label lblEraseSvs;
     }

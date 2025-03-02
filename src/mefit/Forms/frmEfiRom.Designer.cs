@@ -85,7 +85,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpSerial = new System.Windows.Forms.TableLayoutPanel();
             this.lblSerialNumber = new System.Windows.Forms.Label();
             this.tlpSerialSwitch = new System.Windows.Forms.TableLayoutPanel();
-            this.cbxCensor = new Mac_EFI_Toolkit.UI.METSwitch();
+            this.cbxCensor = new Mac_EFI_Toolkit.UI.Controls.METSwitch();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
             this.pnlSplit1 = new System.Windows.Forms.Panel();
             this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
@@ -111,7 +111,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblPagefile = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
             this.cmdMinimize = new System.Windows.Forms.Button();
-            this.cmsCopy = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsCopy = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.filenameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sizeBytesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.crc32ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -135,14 +135,14 @@ namespace Mac_EFI_Toolkit.Forms
             this.pdrBaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.meBaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.biosBaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsTools = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsTools = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.generateFilenameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lookupSerialNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewRomInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.resetWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadFileFromDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsExport = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsExport = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.exportFsysStoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportIntelMERegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportNVRAMVSSStoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -152,7 +152,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.backupFirmwareZIPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportFirmwareInformationTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportFmmmobilemeEmailTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsPatch = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsPatch = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.changeSerialNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eraseNVRAMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.replaceFsysStoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -160,7 +160,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.fixFsysChecksumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.invalidateEFILockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsFolders = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsFolders = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.openBackupsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBuildsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFsysStoresFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -169,7 +169,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.openLZMADXEFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.openWorkingDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsHelp = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsHelp = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.viewApplicationLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();

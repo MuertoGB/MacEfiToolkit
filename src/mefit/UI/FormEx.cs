@@ -2,7 +2,7 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // UI Components
-// METForm.cs
+// FormEx.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit;
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-public class METForm : Form
+public class FormEx : Form
 {
     #region Internal Members
     private const int WM_SETTINGCHANGE = 0x001A;
@@ -22,16 +22,16 @@ public class METForm : Form
     private const int CS_DBLCLKS = 0x8;
     private const int CS_DROP = 0x20000;
 
-    private static List<METForm> openForms = new List<METForm>();
+    private static List<FormEx> openForms = new List<FormEx>();
     #endregion
 
     #region Constructor
-    public METForm()
+    public FormEx()
     {
-        // Wire event handlerS.
+        // Wire event handlers.
         Load += METForm_Load;
 
-        // Resister this instaNCE.
+        // Resister this instance.
         openForms.Add(this);
     }
     #endregion
@@ -39,18 +39,18 @@ public class METForm : Form
     #region Window Events
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
-        // Remove this instance from the list when closed
+        // Remove this instance from the list when closed.
         openForms.Remove(this);
         base.OnFormClosed(e);
     }
 
     private void METForm_Load(object sender, EventArgs e)
     {
-        // Ensure the form is within screen bounds
+        // Ensure the form is within screen bounds.
         AdjustFormToScreenBounds();
 
         // Set accent color.
-        SetBorderAccent();
+        SetAccentColor();
     }
 
     private void AdjustFormToScreenBounds()
@@ -92,23 +92,23 @@ public class METForm : Form
     }
     #endregion
 
-    #region UpdateAccentColor
+    #region Accent Colour
     public static void UpdateAccentColor()
     {
         lock (openForms)
         {
-            foreach (METForm form in openForms)
+            foreach (FormEx form in openForms)
             {
-                form.Invoke((MethodInvoker)(() => form.SetBorderAccent()));
+                form.Invoke((MethodInvoker)(() => form.SetAccentColor()));
             }
         }
     }
 
-    private void SetBorderAccent()
+    private void SetAccentColor()
     {
         if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
         {
-            BackColor = AccentColorHelper.GetWindowsAccentColor();
+            BackColor = AccentColorHelper.GetSystemAccentColor();
             return;
         }
 

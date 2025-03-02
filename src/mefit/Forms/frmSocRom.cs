@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmSocRom : METForm
+    public partial class frmSocRom : FormEx
     {
         #region Private Members
         private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
@@ -902,6 +902,7 @@ namespace Mac_EFI_Toolkit.Forms
                 exportScfgStoreToolStripMenuItem.Enabled = SOCROM.SCfgSectionData.StoreBase != -1;
                 lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(SOCROM.SCfgSectionData.Serial);
 
+                cmdMenuPatch.Enabled = SOCROM.RomType == SocRomType.AppleT2; // Apple Silicon ROM patching is not supported.
                 changeSerialNumberToolStripMenuItem.Enabled = SOCROM.SCfgSectionData.StoreBase != -1;
             }
 
@@ -970,8 +971,9 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (!string.IsNullOrEmpty(SOCROM.iBootVersion))
             {
-                lbliBoot.Text = SOCROM.iBootVersion;
+                lbliBoot.Text = $"{SOCROM.iBootVersion} {SOCSTRINGS.ON} {(SOCROM.RomType == 0 ? SOCSTRINGS.T2 : SOCSTRINGS.SILICON)}";
                 iBootVersionToolStripMenuItem.Enabled = true;
+
                 return;
             }
 

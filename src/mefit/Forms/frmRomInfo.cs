@@ -5,7 +5,7 @@
 // frmRomInfo.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Firmware.EFI;
+using Mac_EFI_Toolkit.Firmware.EFIROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
 using System;
@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmRominfo : METForm
+    public partial class frmRominfo : FormEx
     {
         #region Constructor
         public frmRominfo()

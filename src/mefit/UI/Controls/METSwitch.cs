@@ -11,7 +11,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.UI
+namespace Mac_EFI_Toolkit.UI.Controls
 {
     [DefaultBindingProperty("CheckState")]
     [DefaultProperty("Checked")]

@@ -382,7 +382,7 @@ namespace Mac_EFI_Toolkit
         {
             if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
             {
-                return AccentColorHelper.GetWindowsAccentColor();
+                return AccentColorHelper.GetSystemAccentColor();
             }
 
             return Colours.ClrAppBorderDefault;

@@ -45,7 +45,7 @@
             this.lblDrag = new System.Windows.Forms.Label();
             this.lblGlyph = new System.Windows.Forms.Label();
             this.cmdBrowse = new System.Windows.Forms.Button();
-            this.cmsHelp = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsHelp = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.changelogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.emailMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +59,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsFolders = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsFolders = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.openBackupsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBuildsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFsysStoresFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,7 +69,7 @@
             this.openSCFGFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.openWorkingDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsOptions = new Mac_EFI_Toolkit.UI.METContextMenuStrip();
+            this.cmsOptions = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.newEFIROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newSOCROMSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -690,14 +690,14 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem viewApplicationLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private UI.METContextMenuStrip cmsHelp;
+        private UI.Controls.METContextMenuStrip cmsHelp;
         private System.Windows.Forms.Panel pnlSeperatorBtm;
         private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem githubIssuesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem emailMeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem updateAvailableToolStripMenuItem;
         internal System.Windows.Forms.Button cmdMenuFolders;
-        private UI.METContextMenuStrip cmsFolders;
+        private UI.Controls.METContextMenuStrip cmsFolders;
         private System.Windows.Forms.ToolStripMenuItem openBackupsFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openBuildsFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFsysStoresFolderToolStripMenuItem;
@@ -707,7 +707,7 @@
         private System.Windows.Forms.ToolStripMenuItem openNVRAMFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSCFGFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private UI.METContextMenuStrip cmsOptions;
+        private UI.Controls.METContextMenuStrip cmsOptions;
         private System.Windows.Forms.ToolStripMenuItem newEFIROMSessionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newSOCROMSessionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

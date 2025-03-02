@@ -36,17 +36,17 @@ namespace Mac_EFI_Toolkit
                     throw new ArgumentOutOfRangeException(nameof(logtype), logtype, null);
             }
 
-            using (StreamWriter swLog = new StreamWriter(strLogPath, true))
+            using (StreamWriter streamWriter = new StreamWriter(strLogPath, true))
             {
-                swLog.WriteLine($"{DateTime.Now} : {message}");
+                streamWriter.WriteLine($"{DateTime.Now} : {message}");
             }
         }
 
         internal static void WriteErrorLine(string methodname, Type exceptiontype, string message) =>
-            Logger.WriteLine($"{methodname} - {exceptiontype.Name}: {message}", LogType.Application);
+            WriteLine($"{methodname} - {exceptiontype.Name}: {message}", LogType.Application);
 
         internal static void WriteCallerLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
-            Logger.WriteLine($"{methodName}: {logText}", LogType.Application);
+            WriteLine($"{methodName}: {logText}", LogType.Application);
 
         internal static void OpenLogFile(Form owner)
         {

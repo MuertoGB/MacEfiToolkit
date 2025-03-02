@@ -4,10 +4,9 @@
 // IntelME.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Firmware.EFI;
 using Mac_EFI_Toolkit.Tools;
 
-namespace Mac_EFI_Toolkit.Firmware
+namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
     class IntelME
     {

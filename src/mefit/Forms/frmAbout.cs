@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmAbout : METForm
+    public partial class frmAbout : FormEx
     {
         #region Constructor
         public frmAbout()

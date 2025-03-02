@@ -13,13 +13,27 @@
   <a href="#version-200">V2.0.0</a> •
   <a href="#version-201">V2.0.1</a> •
   <a href="#version-202">V2.0.2</a> •
-  <a href="#version-203">V2.0.3</a>
+  <a href="#version-203">V2.0.3</a> •
+  <a href="#version-204">V2.0.4</a>
 </p>
+
+## Version 2.0.4
+
+### Enhancements
+- Enabled support for opening Apple Silicon SOCROM firmware.
+- Added SoC type to the SOCROM window iBoot version label.
+
+### Bugs
+- Older 2MB EFI files now open correctly instead of being incorrectly flagged as invalid.
+- EFIROM window model text now correctly displays a comma when the string contains only two numeric digits at the end.
+- Fixed an issue where the SOCROM iBoot version label displayed invalid data when the length byte was incorrect or corrupt.
+
+### Misc
+- Updated Segoe MDL2 font resource to version 1.86 for improved compatibility and appearance.
 
 ## Version 2.0.3
 
 ### Bugs
-
 - Resolved an issue where pressing `Alt + F4` would incorrectly open the settings window before closing the application or active window as expected.
 - Resolved an issue where certain APFS capable firmware incorrectly reported the driver as not found. This was caused by an oversight in LZMA header verification logic (thanks reformatt @ badcaps).
 
@@ -54,7 +68,7 @@
 #### New
 - User interface redesigned for improved usability, with a new application icon.
 - Added capability to open multiple firmwares simultaneously.
-- The application now supports Intel T2 SOCROM firmware.
+- The application now supports T2 SOCROM firmware.
 - Startup Window: Introduced a new startup window where users can drag and drop or browse for a compatible EFIROM or T2 SOCROM. The main window is now dedicated to EFIROM, with some functions moved to the startup window.
 - EFI Window Updates:
   - Patcher Relocation: Removed the firmware patcher window; all patching features are now consolidated in the EFI window.

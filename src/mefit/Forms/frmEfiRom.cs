@@ -7,7 +7,7 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Firmware;
-using Mac_EFI_Toolkit.Firmware.EFI;
+using Mac_EFI_Toolkit.Firmware.EFIROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
 using System;
@@ -21,7 +21,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmEfiRom : METForm
+    public partial class frmEfiRom : FormEx
     {
         #region Private Members
         private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;

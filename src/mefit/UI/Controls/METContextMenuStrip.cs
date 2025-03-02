@@ -9,7 +9,7 @@ using Mac_EFI_Toolkit.UI.Renderers;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.UI
+namespace Mac_EFI_Toolkit.UI.Controls
 {
     internal class METContextMenuStrip : ContextMenuStrip
     {

@@ -5,48 +5,49 @@
 // BlurHelper.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit;
-using Mac_EFI_Toolkit.UI;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Windows.Forms;
 
-public static class BlurHelper
+namespace Mac_EFI_Toolkit.UI
 {
-    internal static void ApplyBlur(Form form)
+    public static class BlurHelper
     {
-        NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
+        internal static void ApplyBlur(Form form)
         {
-            dwFlags = NativeMethods.DwmBlurBehindFlags.DWM_BB_ENABLE,
-            fEnable = true,
-            hRgnBlur = IntPtr.Zero
-        };
+            NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
+            {
+                dwFlags = NativeMethods.DwmBlurBehindFlags.DWM_BB_ENABLE,
+                fEnable = true,
+                hRgnBlur = IntPtr.Zero
+            };
 
-        NativeMethods.DwmEnableBlurBehindWindow(form.Handle, ref dwmBlurBehind);
+            NativeMethods.DwmEnableBlurBehindWindow(form.Handle, ref dwmBlurBehind);
 
-        form.AllowTransparency = true;
-        form.BackColor = System.Drawing.Color.Green;
-        form.TransparencyKey = System.Drawing.Color.Green;
+            form.AllowTransparency = true;
+            form.BackColor = System.Drawing.Color.Green;
+            form.TransparencyKey = System.Drawing.Color.Green;
 
-        if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
-        {
-            form.BackColor = AccentColorHelper.GetWindowsAccentColor();
-            return;
+            if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
+            {
+                form.BackColor = AccentColorHelper.GetSystemAccentColor();
+                return;
+            }
+
+            form.BackColor = Colours.ClrAppBorderDefault;
         }
 
-        form.BackColor = Colours.ClrAppBorderDefault;
-    }
-
-    internal static void RemoveBlur(Form form)
-    {
-        NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
+        internal static void RemoveBlur(Form form)
         {
-            dwFlags = NativeMethods.DwmBlurBehindFlags.DWM_BB_ENABLE,
-            fEnable = false
-        };
+            NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
+            {
+                dwFlags = NativeMethods.DwmBlurBehindFlags.DWM_BB_ENABLE,
+                fEnable = false
+            };
 
-        NativeMethods.DwmEnableBlurBehindWindow(form.Handle, ref dwmBlurBehind);
+            NativeMethods.DwmEnableBlurBehindWindow(form.Handle, ref dwmBlurBehind);
 
-        form.AllowTransparency = false;
+            form.AllowTransparency = false;
+        }
     }
 }

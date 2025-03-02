@@ -84,28 +84,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Firmware\EFI\FlashDescriptor.cs" />
+    <Compile Include="Firmware\EFIROM\FlashDescriptor.cs" />
     <Compile Include="Common\FontResolver.cs" />
-    <Compile Include="Firmware\EFI\Guids.cs" />
-    <Compile Include="Firmware\EFI\EFIROM.cs" />
-    <Compile Include="Firmware\EFI\EFISigs.cs" />
-    <Compile Include="Firmware\EFI\Types\Structs.cs" />
+    <Compile Include="Firmware\EFIROM\Guids.cs" />
+    <Compile Include="Firmware\EFIROM\EFIROM.cs" />
+    <Compile Include="Firmware\EFIROM\EFISigs.cs" />
+    <Compile Include="Firmware\EFIROM\Types\Structs.cs" />
     <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
-    <Compile Include="Firmware\EFI\IntelME.cs" />
+    <Compile Include="Firmware\EFIROM\IntelME.cs" />
     <Compile Include="Firmware\FirmwareVars.cs" />
     <Compile Include="Firmware\Serial.cs" />
     <Compile Include="Firmware\SOCROM\SOCSigs.cs" />
+    <Compile Include="Firmware\SOCROM\Types\Enums.cs" />
     <Compile Include="Forms\Prompts\Prompts.cs" />
     <Compile Include="Forms\Types\Enums.cs" />
     <Compile Include="Common\MemoryTracker.cs" />
     <Compile Include="UI\AccentColorHelper.cs" />
     <Compile Include="UI\BlurHelper.cs" />
-    <Compile Include="UI\METForm.cs">
+    <Compile Include="UI\FormEx.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Unhandled.cs" />
-    <Compile Include="Firmware\EFI\Types\Enums.cs" />
+    <Compile Include="Firmware\EFIROM\Types\Enums.cs" />
     <Compile Include="Tools\Types\Structs.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="Firmware\SOCROM\Types\Structs.cs" />
     <Compile Include="Firmware\SOCROM\SOCROM.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
-    <Compile Include="UI\METPrompt\Enums.cs" />
+    <Compile Include="UI\Types\Enums.cs" />
     <Compile Include="UI\UITools.cs" />
     <Compile Include="UI\Controls\METContextMenuStrip.cs">
       <SubType>Component</SubType>
@@ -209,8 +210,8 @@
     <Compile Include="Forms\frmTerms.Designer.cs">
       <DependentUpon>frmTerms.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="UI\METForm.resx">
-      <DependentUpon>METForm.cs</DependentUpon>
+    <EmbeddedResource Include="UI\FormEx.resx">
+      <DependentUpon>FormEx.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\METPrompt\METPrompt.resx">
       <DependentUpon>METPrompt.cs</DependentUpon>

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    public partial class frmTerms : METForm
+    public partial class frmTerms : FormEx
     {
         #region Constructor
         public frmTerms()

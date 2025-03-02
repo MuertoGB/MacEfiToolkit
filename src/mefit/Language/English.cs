@@ -553,6 +553,15 @@ namespace Mac_EFI_Toolkit
 
         internal const string MENU_TIP_OPENFILELOCATION =
             "Open File Location";
+
+        internal const string ON =
+            "on";
+
+        internal const string T2 =
+            "Apple T2";
+
+        internal const string SILICON =
+            "Apple Silicon";
         #endregion
     }
 }
