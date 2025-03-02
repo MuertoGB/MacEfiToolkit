@@ -120,6 +120,13 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 // Convert data length to unsigned int8.
                 byte iLength = (byte)bLength[0];
                 // Get iboot version data bytes.
+
+                // Fix invalid length byte.
+                if (iLength <= 0x0 || iLength >= 0x20) // Too short / Too long
+                {
+                    return APPSTRINGS.UNKNOWN;
+                }
+
                 byte[] strIboot = BinaryTools.GetBytesBaseLength(sourcebytes, iIbootBase + iDataStart, iLength);
 
                 return _utf8encoding.GetString(strIboot);
