@@ -4,6 +4,7 @@
 // MemoryTracker.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Runtime.InteropServices;
@@ -28,7 +29,7 @@ namespace Mac_EFI_Toolkit.Common
         #region Constructor
         private MemoryTracker()
         {
-            _isWine = Program.IsRunningUnderWine();
+            _isWine = SystemTools.IsRunningUnderWine();
 
             if (!_isWine)
             {
@@ -38,7 +39,10 @@ namespace Mac_EFI_Toolkit.Common
 
         private void UpdateMemoryUsage(object state)
         {
-            if (_isWine) return;
+            if (_isWine)
+            {
+                return;
+            }
 
             IntPtr ptrHandle = NativeMethods.GetCurrentProcess();
 

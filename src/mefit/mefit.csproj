@@ -84,6 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants\ApplicationPaths.cs" />
+    <Compile Include="Common\Constants\ApplicationUrls.cs" />
+    <Compile Include="Common\Constants\ApplicationVersions.cs" />
     <Compile Include="Firmware\EFIROM\FlashDescriptor.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Firmware\EFIROM\Guids.cs" />
@@ -288,5 +291,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
