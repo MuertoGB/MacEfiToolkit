@@ -572,7 +572,7 @@ namespace Mac_EFI_Toolkit.Forms
                     if (primarystore != null) SaveFile(Path.Combine(folderPath, $"{nvramstoretype}_{EFISTRINGS.PRIMARY_REGION}_{EFIROM.FileInfoData.FileName}.bin"), primarystore);
                     if (secondarystore != null) SaveFile(Path.Combine(folderPath, $"{nvramstoretype}_{EFISTRINGS.BACKUP_REGION}_{EFIROM.FileInfoData.FileName}.bin"), secondarystore);
 
-                    UITools.ShowOpenFolderInExplorerPromt(owner, folderPath);
+                    UITools.ShowOpenFolderInExplorerPrompt(owner, folderPath);
                 }
             }
         }
@@ -596,7 +596,6 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                // Save the Fsys stores bytes to disk.
                 if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, EFIROM.LzmaDecompressedBuffer) && File.Exists(saveFileDialog.FileName))
                 {
                     UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);

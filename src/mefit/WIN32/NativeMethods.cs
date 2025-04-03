@@ -32,7 +32,7 @@ namespace Mac_EFI_Toolkit.WIN32
         }
 
         // https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters
-        [StructLayout(LayoutKind.Sequential, Size = 40)]
+        [StructLayout(LayoutKind.Sequential)]
         internal struct PROCESS_MEMORY_COUNTERS
         {
             public uint cb;
