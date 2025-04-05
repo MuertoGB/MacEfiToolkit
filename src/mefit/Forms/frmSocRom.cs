@@ -710,7 +710,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateWindowTitle()
         {
             this.Text = SOCROM.FileInfoData.FileNameExt;
-            lblTitle.Text = $"{APPSTRINGS.SOCROM} {Program.GLYPH_RIGHT_ARROW} {SOCROM.FileInfoData.FileNameExt}";
+            lblTitle.Text = $"{APPSTRINGS.SOCROM} {Program.MDL2_RIGHT_ARROW} {SOCROM.FileInfoData.FileNameExt}";
         }
 
         private void SetTipHandlers()
@@ -796,8 +796,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_EXIT_CROSS },
-                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_FILE_EXPLORER },
+                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_EXIT_CROSS },
+                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_FILE_EXPLORER },
             };
 
             foreach (var property in buttons)

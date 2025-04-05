@@ -17,6 +17,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
         internal const string GithubIssues = "https://github.com/MuertoGB/MacEfiToolkit/issues";
         internal const string GithubLatestVersion = "https://github.com/MuertoGB/MacEfiToolkit/releases/latest";
         internal const string VersionManifest = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/main/stream/manifests/version.xml";
+        internal const string LatestBuild = "https://raw.githubusercontent.com/MuertoGB/MacEfiToolkit/tree/main/stream/build/latest/mefit.exe";
 
     }
 }

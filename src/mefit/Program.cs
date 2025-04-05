@@ -28,14 +28,8 @@ namespace Mac_EFI_Toolkit
         Restart,
         Exit
     }
-
-    public enum VersionResult
-    {
-        UpToDate,
-        NewVersionAvailable,
-        Error
-    }
     #endregion
+
     static class Program
     {
         #region Internal Members
@@ -45,12 +39,13 @@ namespace Mac_EFI_Toolkit
         internal static Font FontSegMdl2Regular12;
         internal static Font FontSegMdl2Regular20;
 
-        internal const string GLYPH_EXIT_CROSS = "\uE947";
-        internal const string GLYPH_FILE_EXPLORER = "\uED25";
-        internal const string GLYPH_DOWN_ARROW = "\uE74B";
-        internal const string GLYPH_RIGHT_ARROW = "\u2192";
-        internal const string GLYPH_REPORT = "\uE9F9";
-        internal const string GLYPH_ACCOUNT = "\uE910";
+        internal const string MDL2_EXIT_CROSS = "\uE947";
+        internal const string MDL2_FILE_EXPLORER = "\uED25";
+        internal const string MDL2_DOWN_ARROW = "\uE74B";
+        internal const string MDL2_RIGHT_ARROW = "\u2192";
+        internal const string MDL2_REPORT = "\uE9F9";
+        internal const string MDL2_ACCOUNT = "\uE910";
+        internal const string SEGUI_DINGBAT1 = "\u2776";
         internal const string NOWRAP_SPACE = "\u00A0";
         #endregion
 
@@ -317,49 +312,6 @@ namespace Mac_EFI_Toolkit
 
             // Disable the drop operation.
             e.Effect = DragDropEffects.None;
-        }
-
-        internal static async Task<VersionResult> CheckForNewVersion()
-        {
-            string strVersionManifest = ApplicationUrls.VersionManifest;
-            string strNode = "data/MET/VersionString";
-
-            try
-            {
-                using (WebClient wClient = new WebClient())
-                {
-                    byte[] bResponseData = await wClient.DownloadDataTaskAsync(strVersionManifest);
-
-                    using (MemoryStream msResponseData = new MemoryStream(bResponseData))
-                    using (XmlReader xmlReader = XmlReader.Create(msResponseData))
-                    {
-                        XmlDocument xmlDoc = new XmlDocument();
-
-                        xmlDoc.Load(xmlReader);
-
-                        XmlNode xmlNode = xmlDoc.SelectSingleNode(strNode);
-
-                        if (xmlNode == null)
-                        {
-                            return VersionResult.Error;
-                        }
-
-                        Version verRemote = new Version(xmlNode.InnerText);
-                        Version verLocal = new Version(Application.ProductVersion);
-
-                        return verRemote > verLocal ? VersionResult.NewVersionAvailable : VersionResult.UpToDate;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                if (!Program.IsDebugMode())
-                {
-                    Logger.WriteErrorLine(nameof(CheckForNewVersion), e.GetType(), e.Message);
-                }
-
-                return VersionResult.Error;
-            }
         }
 
         internal static bool IsDebugMode()

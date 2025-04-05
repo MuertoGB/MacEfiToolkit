@@ -15,10 +15,14 @@
   <a href="#version-202">V2.0.2</a> •
   <a href="#version-203">V2.0.3</a> •
   <a href="#version-204">V2.0.4</a> •
-  <a href="#version-205">V2.0.5</a>
+  <a href="#version-210">V2.1.0</a>
 </p>
 
-## Version 2.0.5
+## Version 2.1.0
+
+### New
+- Introduced an updater to automatically download new application versions.
+- Added an option in the SOCROM window to reset firmware NVRAM.
 
 ### Enhancements
 - Improved formatting of the Order No. string in the SOCROM window.

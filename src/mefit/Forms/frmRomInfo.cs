@@ -138,7 +138,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
+            cmdClose.Text = Program.MDL2_EXIT_CROSS;
         }
         #endregion
     }

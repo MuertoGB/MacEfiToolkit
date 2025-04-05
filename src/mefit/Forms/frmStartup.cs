@@ -292,7 +292,17 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubManual);
 
-        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubLatestVersion);
+        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BlurHelper.ApplyBlur(this);
+
+            using (Form form = new frmUpdate())
+            {
+                form.Tag = StartupSenderTag.Other;
+                form.FormClosed += ChildWindowClosed;
+                form.ShowDialog();
+            }
+        }
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
@@ -384,13 +394,13 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetButtonGlyphAndText()
         {
             cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
+            cmdClose.Text = Program.MDL2_EXIT_CROSS;
         }
 
         private void SetLabelGlyphAndText()
         {
             lblGlyph.Font = Program.FontSegMdl2Regular20;
-            lblGlyph.Text = Program.GLYPH_DOWN_ARROW;
+            lblGlyph.Text = Program.MDL2_DOWN_ARROW;
         }
 
         private void ApplyDragEnterColours() => lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
@@ -438,12 +448,12 @@ namespace Mac_EFI_Toolkit.Forms
         internal async void StartupVersionCheck()
         {
             // Check for a new version.
-            VersionResult verResult = await Program.CheckForNewVersion();
+            Updater.VersionResult versionResult = await Updater.CheckForNewVersion();
 
             // If a new version is available update the UI.
-            if (verResult == VersionResult.NewVersionAvailable)
+            if (versionResult == Updater.VersionResult.UpToDate)
             {
-                cmdHelp.Text += " (1)";
+                cmdHelp.Text += $" {Program.SEGUI_DINGBAT1}";
                 updateAvailableToolStripMenuItem.Visible = true;
             }
         }
