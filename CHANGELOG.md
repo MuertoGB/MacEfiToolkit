@@ -15,7 +15,16 @@
   <a href="#version-202">V2.0.2</a> •
   <a href="#version-203">V2.0.3</a> •
   <a href="#version-204">V2.0.4</a>
+  <a href="#version-205">V2.0.5</a>
 </p>
+
+## Version 2.0.5
+
+### Enhancements
+- Improved formatting of the Order No. string in the SOCROM window.
+
+### Bugs
+- Fixed memory usage displaying as 0 bytes on Windows by addressing memory mapping issues in PROCESS_MEMORY_COUNTERS.
 
 ## Version 2.0.4
 
