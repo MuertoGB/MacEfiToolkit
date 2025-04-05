@@ -25,6 +25,7 @@
 
 ### Bugs
 - Fixed memory usage displaying as 0 bytes on Windows by addressing memory mapping issues in PROCESS_MEMORY_COUNTERS.
+- Fixed a bug where the SOCROM parser assumed all SCfg stores had a length of B8h, causing failed store writes when the data length differed.
 
 ## Version 2.0.4
 

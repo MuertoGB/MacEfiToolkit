@@ -26,8 +26,11 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         internal static SCfgStore SCfgSectionData;
 
         internal const int SCFG_EXPECTED_BASE = 0x28A000;
-        internal const int SCFG_EXPECTED_LENGTH = 0xB8;
+        //internal const int SCFG_EXPECTED_LENGTH = 0xB8;
         internal const int SERIAL_LENGTH = 12;
+        internal const int NVRAM_T2_BASE = 0x300000;
+        internal const int NVRAM_SILICON_BASE = 0x700000;
+        internal const int NVRAM_LENGTH = 0x100000;
 
         internal static TimeSpan ParseTime { get; private set; }
         #endregion

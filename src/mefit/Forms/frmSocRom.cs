@@ -1245,7 +1245,7 @@ namespace Mac_EFI_Toolkit.Forms
                 // Check were not writing over data we shouldn't be.
                 if (!isScfgFound)
                 {
-                    byte[] bWriteBuffer = BinaryTools.GetBytesBaseLength(bFirmwareBuffer, SOCROM.SCFG_EXPECTED_BASE, SOCROM.SCFG_EXPECTED_LENGTH);
+                    byte[] bWriteBuffer = BinaryTools.GetBytesBaseLength(bFirmwareBuffer, SOCROM.SCFG_EXPECTED_BASE, bScfgBuffer.Length);
 
                     for (int i = 0; i < bWriteBuffer.Length; i++)
                     {
@@ -1295,18 +1295,18 @@ namespace Mac_EFI_Toolkit.Forms
             };
         }
 
-        private bool ValidateScfgStore(byte[] sourcebuffer)
+        private bool ValidateScfgStore(byte[] scfgbuffer)
         {
-            int iScfgBase = BinaryTools.GetBaseAddress(sourcebuffer, SOCSigs.ScfgHeaderMarker);
+            int iScfgBase = BinaryTools.GetBaseAddress(scfgbuffer, SOCSigs.ScfgHeaderMarker);
 
-            // A serialized Scfg store should be B8h, 184 bytes length.
-            if (sourcebuffer.Length != SOCROM.SCFG_EXPECTED_LENGTH)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {SOCROM.SCFG_EXPECTED_LENGTH:X}h ({sourcebuffer.Length:X}h)");
+            // A serialized Scfg store should be B8h, 184 bytes length (incorrect)
+            //if (sourcebuffer.Length != SOCROM.SCFG_EXPECTED_LENGTH)
+            //{
+            //    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {SOCROM.SCFG_EXPECTED_LENGTH:X}h ({sourcebuffer.Length:X}h)");
 
-                NotifyPatchingFailure();
-                return false;
-            }
+            //    NotifyPatchingFailure();
+            //    return false;
+            //}
 
             // Expect scfg signature at address 0h.
             if (iScfgBase != 0)
