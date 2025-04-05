@@ -1095,7 +1095,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!string.IsNullOrEmpty(SOCROM.SCfgSectionData.RegNumText))
             {
-                lblSon.Text += SOCROM.SCfgSectionData.RegNumText;
+                lblSon.Text += $" ({SOCROM.SCfgSectionData.RegNumText})";
             }
         }
         #endregion
