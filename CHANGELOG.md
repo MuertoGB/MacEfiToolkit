@@ -14,7 +14,7 @@
   <a href="#version-201">V2.0.1</a> •
   <a href="#version-202">V2.0.2</a> •
   <a href="#version-203">V2.0.3</a> •
-  <a href="#version-204">V2.0.4</a>
+  <a href="#version-204">V2.0.4</a> •
   <a href="#version-205">V2.0.5</a>
 </p>
 
