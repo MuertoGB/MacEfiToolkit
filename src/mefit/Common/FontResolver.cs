@@ -75,5 +75,34 @@ namespace Mac_EFI_Toolkit.Common
             return FontStatus.Missing;
         }
 
+        internal static bool LoadCustomFont(byte[] fontbuffer, out Font[] fonts)
+        {
+            fonts = null;
+
+            if (fontbuffer == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                FontFamily ffLoadFont = FontResolver.LoadFont(fontbuffer);
+
+                fonts = new[]
+                {
+                    new Font(ffLoadFont, 10.0F, FontStyle.Regular),
+                    new Font(ffLoadFont, 12.0F, FontStyle.Regular),
+                    new Font(ffLoadFont, 20.0F, FontStyle.Regular)
+                };
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Logger.WriteErrorLine(nameof(LoadCustomFont), e.GetType(), e.Message);
+                return false;
+            }
+        }
+
     }
 }

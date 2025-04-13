@@ -382,7 +382,7 @@
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsMore";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 324);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 352);
             // 
             // changelogToolStripMenuItem
             // 
@@ -451,7 +451,7 @@
             this.updateAvailableToolStripMenuItem.ForeColor = System.Drawing.Color.SpringGreen;
             this.updateAvailableToolStripMenuItem.Name = "updateAvailableToolStripMenuItem";
             this.updateAvailableToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
-            this.updateAvailableToolStripMenuItem.Text = "Update Available (1)";
+            this.updateAvailableToolStripMenuItem.Text = "New Version Available";
             this.updateAvailableToolStripMenuItem.Visible = false;
             this.updateAvailableToolStripMenuItem.Click += new System.EventHandler(this.updateAvailableToolStripMenuItem_Click);
             // 

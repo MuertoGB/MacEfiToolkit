@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFIROM;
 using Mac_EFI_Toolkit.Tools;
@@ -571,7 +572,7 @@ namespace Mac_EFI_Toolkit.Forms
                     if (primarystore != null) SaveFile(Path.Combine(folderPath, $"{nvramstoretype}_{EFISTRINGS.PRIMARY_REGION}_{EFIROM.FileInfoData.FileName}.bin"), primarystore);
                     if (secondarystore != null) SaveFile(Path.Combine(folderPath, $"{nvramstoretype}_{EFISTRINGS.BACKUP_REGION}_{EFIROM.FileInfoData.FileName}.bin"), secondarystore);
 
-                    UITools.ShowOpenFolderInExplorerPromt(owner, folderPath);
+                    UITools.ShowOpenFolderInExplorerPrompt(owner, folderPath);
                 }
             }
         }
@@ -595,7 +596,6 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                // Save the Fsys stores bytes to disk.
                 if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, EFIROM.LzmaDecompressedBuffer) && File.Exists(saveFileDialog.FileName))
                 {
                     UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
@@ -1422,8 +1422,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_EXIT_CROSS },
-                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_FILE_EXPLORER },
+                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_EXIT_CROSS },
+                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_FILE_EXPLORER },
             };
 
             foreach (var buttonData in buttons)
@@ -1436,10 +1436,10 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetLabelFontAndGlyph()
         {
             lblLzma.Font = Program.FontSegMdl2Regular10;
-            lblLzma.Text = Program.GLYPH_REPORT;
+            lblLzma.Text = Program.MDL2_REPORT;
 
             lblFmmEmail.Font = Program.FontSegMdl2Regular10;
-            lblFmmEmail.Text = Program.GLYPH_ACCOUNT;
+            lblFmmEmail.Text = Program.MDL2_ACCOUNT;
         }
 
         private void SetTipHandlers()
@@ -1555,7 +1555,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateWindowTitle()
         {
             this.Text = EFIROM.FileInfoData.FileNameExt;
-            lblTitle.Text = $"{APPSTRINGS.EFIROM} {Program.GLYPH_RIGHT_ARROW} {EFIROM.FileInfoData.FileNameExt}";
+            lblTitle.Text = $"{APPSTRINGS.EFIROM} {Program.MDL2_RIGHT_ARROW} {EFIROM.FileInfoData.FileNameExt}";
         }
         #endregion
 

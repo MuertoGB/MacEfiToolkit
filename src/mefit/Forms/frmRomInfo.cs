@@ -5,6 +5,7 @@
 // frmRomInfo.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Firmware.EFIROM;
 using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
@@ -137,7 +138,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
+            cmdClose.Text = Program.MDL2_EXIT_CROSS;
         }
         #endregion
     }

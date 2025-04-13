@@ -564,4 +564,48 @@ namespace Mac_EFI_Toolkit
             "Apple Silicon";
         #endregion
     }
+
+    internal class UPDATSTRINGS
+    {
+        #region Strings
+        internal const string WAIT =
+            "Please wait...";
+
+        internal const string UPD_STARTED =
+            "Update started";
+
+        internal const string DOWNLOADING_VERSION =
+            "Downloading version";
+
+        internal const string DOWNLOADED =
+            "Downloaded";
+
+        internal const string VERIFY_SHA256 =
+            "Verifying sha256 checksum";
+
+        internal const string EXPECTED =
+            "Expected";
+
+        internal const string ACTUAL =
+            "Actual";
+
+        internal const string CHECKSUM_MISMATCH =
+            "Checksum mismatch. Cannot continue.";
+
+        internal const string SAVING_EXE =
+            "Saving executable to";
+
+        internal const string SAVE_FAIL =
+            "File save failed. Cannot continue.";
+
+        internal const string LAUNCH_VERSION =
+            "Launching version";
+
+        internal const string EXITING =
+            "Exiting version";
+
+        internal const string ERROR =
+            "An error occured. See application log.";
+        #endregion
+    }
 }

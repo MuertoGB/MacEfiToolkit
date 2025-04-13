@@ -12,16 +12,16 @@ using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 
-#region Enum
-enum Status
-{
-    SUCCESS,
-    FAILED
-}
-#endregion
-
 namespace Mac_EFI_Toolkit.Tools
 {
+    #region Enum
+    enum DirectoryStatus
+    {
+        SUCCESS,
+        FAILED
+    }
+    #endregion
+
     class FileTools
     {
         /// <summary>
@@ -206,19 +206,19 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="directory">The path of the directory to create.</param>
         /// <returns>
-        /// The status of the directory creation operation. Returns <see cref="Status.SUCCESS"/> if the directory is successfully created,
-        /// or <see cref="Status.FAILED"/> if the creation fails.
+        /// The status of the directory creation operation. Returns <see cref="DirectoryStatus.SUCCESS"/> if the directory is successfully created,
+        /// or <see cref="DirectoryStatus.FAILED"/> if the creation fails.
         /// </returns>
-        internal static Status CreateDirectory(string directory)
+        internal static DirectoryStatus CreateDirectory(string directory)
         {
             Directory.CreateDirectory(directory);
 
             if (Directory.Exists(directory))
             {
-                return Status.SUCCESS;
+                return DirectoryStatus.SUCCESS;
             }
 
-            return Status.FAILED;
+            return DirectoryStatus.FAILED;
         }
 
         /// <summary>

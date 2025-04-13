@@ -87,7 +87,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpSerialSwitch = new System.Windows.Forms.TableLayoutPanel();
             this.cbxCensor = new Mac_EFI_Toolkit.UI.Controls.METSwitch();
             this.tlpStatusBar = new System.Windows.Forms.TableLayoutPanel();
-            this.pnlSplit1 = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tlpStatusBarImage = new System.Windows.Forms.TableLayoutPanel();
             this.pbxLoad = new System.Windows.Forms.PictureBox();
             this.lblStatusBarTip = new System.Windows.Forms.Label();
@@ -980,7 +980,8 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpStatusBar.Controls.Add(this.pnlSplit1, 4, 0);
+            this.tlpStatusBar.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpStatusBar.Controls.Add(this.panel1, 4, 0);
             this.tlpStatusBar.Controls.Add(this.tlpStatusBarImage, 6, 0);
             this.tlpStatusBar.Controls.Add(this.lblStatusBarTip, 5, 0);
             this.tlpStatusBar.Controls.Add(this.lblParseTime, 0, 0);
@@ -996,14 +997,14 @@ namespace Mac_EFI_Toolkit.Forms
             this.tlpStatusBar.Size = new System.Drawing.Size(761, 36);
             this.tlpStatusBar.TabIndex = 0;
             // 
-            // pnlSplit1
+            // panel1
             // 
-            this.pnlSplit1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pnlSplit1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.pnlSplit1.Location = new System.Drawing.Point(130, 7);
-            this.pnlSplit1.Name = "pnlSplit1";
-            this.pnlSplit1.Size = new System.Drawing.Size(1, 22);
-            this.pnlSplit1.TabIndex = 0;
+            this.panel1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.panel1.Location = new System.Drawing.Point(130, 7);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1, 22);
+            this.panel1.TabIndex = 101;
             // 
             // tlpStatusBarImage
             // 
@@ -2153,7 +2154,6 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.ToolStripMenuItem openWorkingDirectoryToolStripMenuItem;
         private System.Windows.Forms.Label lblParseTime;
         private System.Windows.Forms.Panel pnlSplit0;
-        private System.Windows.Forms.Panel pnlSplit1;
         private METSwitch cbxCensor;
         private System.Windows.Forms.Label lblFsysStore;
         private System.Windows.Forms.Label lblVss;
@@ -2177,5 +2177,6 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.Label lblPagefile;
         private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.Panel panel1;
     }
 }

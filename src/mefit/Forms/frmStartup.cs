@@ -5,6 +5,7 @@
 // frmStartup.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFIROM;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
@@ -291,7 +292,17 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubManual);
 
-        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubLatestVersion);
+        private void updateAvailableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BlurHelper.ApplyBlur(this);
+
+            using (Form form = new frmUpdate())
+            {
+                form.Tag = StartupSenderTag.Other;
+                form.FormClosed += ChildWindowClosed;
+                form.ShowDialog();
+            }
+        }
 
         private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
 
@@ -383,13 +394,13 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetButtonGlyphAndText()
         {
             cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
+            cmdClose.Text = Program.MDL2_EXIT_CROSS;
         }
 
         private void SetLabelGlyphAndText()
         {
             lblGlyph.Font = Program.FontSegMdl2Regular20;
-            lblGlyph.Text = Program.GLYPH_DOWN_ARROW;
+            lblGlyph.Text = Program.MDL2_DOWN_ARROW;
         }
 
         private void ApplyDragEnterColours() => lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
@@ -437,12 +448,12 @@ namespace Mac_EFI_Toolkit.Forms
         internal async void StartupVersionCheck()
         {
             // Check for a new version.
-            VersionResult verResult = await Program.CheckForNewVersion();
+            Updater.VersionResult versionResult = await Updater.CheckForNewVersion();
 
             // If a new version is available update the UI.
-            if (verResult == VersionResult.NewVersionAvailable)
+            if (versionResult == Updater.VersionResult.NewVersionAvailable)
             {
-                cmdHelp.Text += " (1)";
+                cmdHelp.Text += $" {Program.SEGUI_DINGBAT1}";
                 updateAvailableToolStripMenuItem.Visible = true;
             }
         }
@@ -465,38 +476,32 @@ namespace Mac_EFI_Toolkit.Forms
         #region Debug Warn
         private void tlpDrop_Paint(object sender, PaintEventArgs e)
         {
-            // This is to stop some stupid dumbass releasing debug builds.
-            // No idea who that could be.
-            // Certainly wasn't me.
-            // In would never do such a thing.
-
-            if (Program.IsDebugMode())
+            if (!Program.IsDebugMode())
             {
-                Graphics g = e.Graphics;
-                int labelHeight = 20;
+                return;
+            }
 
-                TableLayoutPanel tlp = sender as TableLayoutPanel;
+            Graphics g = e.Graphics;
+            int labelHeight = 20;
 
-                if (tlp == null)
-                {
-                    return;
-                }
+            TableLayoutPanel tlp = sender as TableLayoutPanel;
 
-                Rectangle labelRectangle = new Rectangle(2, tlp.Height - labelHeight, tlp.Width - 4, labelHeight - 2);
+            if (tlp == null) return;
 
-                using (Brush backgroundBrush = new SolidBrush(Color.Tomato))
-                {
-                    g.FillRectangle(backgroundBrush, labelRectangle);
-                }
+            Rectangle labelRectangle = new Rectangle(2, tlp.Height - labelHeight, tlp.Width - 4, labelHeight - 2);
 
-                string labelText = "==== Debug Mode - Do not Release ====";
-                using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
-                using (Brush textBrush = new SolidBrush(Color.Black))
-                {
-                    SizeF textSize = g.MeasureString(labelText, font);
-                    PointF textPosition = new PointF((labelRectangle.Width - textSize.Width) / 2, labelRectangle.Top + (labelRectangle.Height - textSize.Height) / 2);
-                    g.DrawString(labelText, font, textBrush, textPosition);
-                }
+            using (Brush backgroundBrush = new SolidBrush(Color.Tomato))
+            {
+                g.FillRectangle(backgroundBrush, labelRectangle);
+            }
+
+            string labelText = "==== Debug Mode ====";
+            using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
+            using (Brush textBrush = new SolidBrush(Color.Black))
+            {
+                SizeF textSize = g.MeasureString(labelText, font);
+                PointF textPosition = new PointF((labelRectangle.Width - textSize.Width) / 2, labelRectangle.Top + (labelRectangle.Height - textSize.Height) / 2);
+                g.DrawString(labelText, font, textBrush, textPosition);
             }
         }
         #endregion

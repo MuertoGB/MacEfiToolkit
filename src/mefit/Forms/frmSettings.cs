@@ -5,6 +5,7 @@
 // frmSettings.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.IO;
@@ -72,7 +73,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!string.Equals(_strStartupInitialPath, lblStartupDirectory.Text))
             {
-                lblStartupDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strStartupInitialPath}";
+                lblStartupDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strStartupInitialPath}";
                 lblStartupDirectory.ForeColor = Colours.ClrOkay;
             }
         }
@@ -83,7 +84,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!string.Equals(_strEfiInitialPath, lblEfiDirectory.Text))
             {
-                lblEfiDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strEfiInitialPath}";
+                lblEfiDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strEfiInitialPath}";
                 lblEfiDirectory.ForeColor = Colours.ClrOkay;
             }
         }
@@ -94,7 +95,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!string.Equals(_strSocInitialPath, lblSocDirectory))
             {
-                lblSocDirectory.Text = $"{Program.GLYPH_RIGHT_ARROW} {_strSocInitialPath}";
+                lblSocDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strSocInitialPath}";
                 lblSocDirectory.ForeColor = Colours.ClrOkay;
             }
         }
@@ -251,7 +252,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetButtonProperties()
         {
             cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.GLYPH_EXIT_CROSS;
+            cmdClose.Text = Program.MDL2_EXIT_CROSS;
         }
         #endregion
     }

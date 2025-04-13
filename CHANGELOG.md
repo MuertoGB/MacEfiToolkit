@@ -14,8 +14,23 @@
   <a href="#version-201">V2.0.1</a> •
   <a href="#version-202">V2.0.2</a> •
   <a href="#version-203">V2.0.3</a> •
-  <a href="#version-204">V2.0.4</a>
+  <a href="#version-204">V2.0.4</a> •
+  <a href="#version-210">V2.1.0</a>
 </p>
+
+## Version 2.1.0
+
+### New
+- Introduced an updater to automatically download new application versions.
+
+### Enhancements
+- Improved formatting of the Order No. string in the SOCROM window.
+- Updated the internal database.
+- Added SoC controller type to the SOCROM window export information.
+
+### Bugs
+- Fixed memory usage displaying as 0 bytes on Windows by addressing memory mapping issues in PROCESS_MEMORY_COUNTERS.
+- Fixed a bug where the SOCROM parser assumed all SCfg stores had a length of B8h, causing failed store writes when the data length differed.
 
 ## Version 2.0.4
 

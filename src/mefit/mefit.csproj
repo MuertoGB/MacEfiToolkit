@@ -84,6 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants\ApplicationPaths.cs" />
+    <Compile Include="Common\Constants\ApplicationUrls.cs" />
+    <Compile Include="Common\Constants\ApplicationVersions.cs" />
     <Compile Include="Firmware\EFIROM\FlashDescriptor.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Firmware\EFIROM\Guids.cs" />
@@ -97,6 +100,12 @@
     <Compile Include="Firmware\Serial.cs" />
     <Compile Include="Firmware\SOCROM\SOCSigs.cs" />
     <Compile Include="Firmware\SOCROM\Types\Enums.cs" />
+    <Compile Include="Forms\frmUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmUpdate.Designer.cs">
+      <DependentUpon>frmUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Prompts\Prompts.cs" />
     <Compile Include="Forms\Types\Enums.cs" />
     <Compile Include="Common\MemoryTracker.cs" />
@@ -210,6 +219,10 @@
     <Compile Include="Forms\frmTerms.Designer.cs">
       <DependentUpon>frmTerms.cs</DependentUpon>
     </Compile>
+    <Compile Include="Updater.cs" />
+    <EmbeddedResource Include="Forms\frmUpdate.resx">
+      <DependentUpon>frmUpdate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FormEx.resx">
       <DependentUpon>FormEx.cs</DependentUpon>
     </EmbeddedResource>
@@ -281,12 +294,13 @@
     <None Include="Assets\editorterms.txt" />
     <None Include="Resources\modeldb.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
+<ItemGroup>
+  <BootstrapperPackage Include="Microsoft.Net.Framework.4.8">
+    <Visible>False</Visible>
+    <ProductName>.NET Framework 4.8 (x86 and x64)</ProductName>
+    <Install>true</Install>
+  </BootstrapperPackage>
+</ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

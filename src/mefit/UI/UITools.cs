@@ -64,7 +64,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        internal static void ShowOpenFolderInExplorerPromt(Form owner, string folderpath)
+        internal static void ShowOpenFolderInExplorerPrompt(Form owner, string folderpath)
         {
             DialogResult dlgResult =
                 METPrompt.Show(

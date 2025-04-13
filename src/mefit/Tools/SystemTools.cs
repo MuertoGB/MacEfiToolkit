@@ -4,14 +4,15 @@
 // SystemTools.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Principal;
+using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Tools
 {
-
     #region Enum
     enum FontStatus
     {
@@ -40,6 +41,37 @@ namespace Mac_EFI_Toolkit.Tools
         internal static string GetSystemArchitectureMode()
         {
             return IntPtr.Size == 8 ? "x64" : "x86";
+        }
+
+        internal static bool IsSupportedOS()
+        {
+            if (SystemTools.GetKernelVersion.ProductMajorPart >= 10)
+            {
+                return true;
+            }
+
+            MessageBox.Show(
+                DIALOGSTRINGS.REQUIRES_WIN_10,
+                DIALOGSTRINGS.UNSUPPORTED_OS,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+            return false;
+        }
+
+        internal static bool IsRunningUnderWine()
+        {
+            string strNtdll = "ntdll.dll";
+            string strWineGetVersion = "wine_get_version";
+            IntPtr ptrHandle = NativeMethods.LoadLibrary(strNtdll);
+
+            if (ptrHandle == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            IntPtr ptrWineHandle = NativeMethods.GetProcAddress(ptrHandle, strWineGetVersion);
+            return ptrWineHandle != IntPtr.Zero; // If this function exists, we're running under Wine.
         }
     }
 }

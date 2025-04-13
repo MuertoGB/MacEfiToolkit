@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
 using Mac_EFI_Toolkit.Tools;
@@ -475,6 +476,10 @@ namespace Mac_EFI_Toolkit.Forms
                 sbFirmwareInfo.AppendLine($"Created:         {SOCROM.FileInfoData.CreationTime}");
                 sbFirmwareInfo.AppendLine($"Modified:        {SOCROM.FileInfoData.LastWriteTime}\r\n");
 
+                sbFirmwareInfo.AppendLine("Controller");
+                sbFirmwareInfo.AppendLine("----------------------------------");
+                sbFirmwareInfo.AppendLine($"Type:            {SOCROM.RomType}\r\n");
+
                 sbFirmwareInfo.AppendLine("SCfg");
                 sbFirmwareInfo.AppendLine("----------------------------------");
                 sbFirmwareInfo.AppendLine($"Base:            {SOCROM.SCfgSectionData.StoreBase:X}h");
@@ -709,7 +714,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateWindowTitle()
         {
             this.Text = SOCROM.FileInfoData.FileNameExt;
-            lblTitle.Text = $"{APPSTRINGS.SOCROM} {Program.GLYPH_RIGHT_ARROW} {SOCROM.FileInfoData.FileNameExt}";
+            lblTitle.Text = $"{APPSTRINGS.SOCROM} {Program.MDL2_RIGHT_ARROW} {SOCROM.FileInfoData.FileNameExt}";
         }
 
         private void SetTipHandlers()
@@ -795,8 +800,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_EXIT_CROSS },
-                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.GLYPH_FILE_EXPLORER },
+                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_EXIT_CROSS },
+                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_FILE_EXPLORER },
             };
 
             foreach (var property in buttons)
@@ -1094,7 +1099,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!string.IsNullOrEmpty(SOCROM.SCfgSectionData.RegNumText))
             {
-                lblSon.Text += SOCROM.SCfgSectionData.RegNumText;
+                lblSon.Text += $" ({SOCROM.SCfgSectionData.RegNumText})";
             }
         }
         #endregion
@@ -1244,7 +1249,7 @@ namespace Mac_EFI_Toolkit.Forms
                 // Check were not writing over data we shouldn't be.
                 if (!isScfgFound)
                 {
-                    byte[] bWriteBuffer = BinaryTools.GetBytesBaseLength(bFirmwareBuffer, SOCROM.SCFG_EXPECTED_BASE, SOCROM.SCFG_EXPECTED_LENGTH);
+                    byte[] bWriteBuffer = BinaryTools.GetBytesBaseLength(bFirmwareBuffer, SOCROM.SCFG_EXPECTED_BASE, bScfgBuffer.Length);
 
                     for (int i = 0; i < bWriteBuffer.Length; i++)
                     {
@@ -1294,18 +1299,18 @@ namespace Mac_EFI_Toolkit.Forms
             };
         }
 
-        private bool ValidateScfgStore(byte[] sourcebuffer)
+        private bool ValidateScfgStore(byte[] scfgbuffer)
         {
-            int iScfgBase = BinaryTools.GetBaseAddress(sourcebuffer, SOCSigs.ScfgHeaderMarker);
+            int iScfgBase = BinaryTools.GetBaseAddress(scfgbuffer, SOCSigs.ScfgHeaderMarker);
 
-            // A serialized Scfg store should be B8h, 184 bytes length.
-            if (sourcebuffer.Length != SOCROM.SCFG_EXPECTED_LENGTH)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {SOCROM.SCFG_EXPECTED_LENGTH:X}h ({sourcebuffer.Length:X}h)");
+            // A serialized Scfg store should be B8h, 184 bytes length (incorrect)
+            //if (sourcebuffer.Length != SOCROM.SCFG_EXPECTED_LENGTH)
+            //{
+            //    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {SOCROM.SCFG_EXPECTED_LENGTH:X}h ({sourcebuffer.Length:X}h)");
 
-                NotifyPatchingFailure();
-                return false;
-            }
+            //    NotifyPatchingFailure();
+            //    return false;
+            //}
 
             // Expect scfg signature at address 0h.
             if (iScfgBase != 0)
