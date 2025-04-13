@@ -92,7 +92,7 @@ For more direct support, you can contact me via [email](mailto:muertogb@proton.m
     - Automatic background logging for errors and key actions
   - **User Interface**
     - Automatic DPI scaling
-    - New version notifications
+    - New version notifications with automatic updates
     - Serial numbers are censored by default
   - **Search and Verification**
     - Knuth–Morris–Pratt algorithm for binary data searching
@@ -132,12 +132,13 @@ For more direct support, you can contact me via [email](mailto:muertogb@proton.m
   - Detect and export decompressed LZMA DXE archives
   - Detect and export the Find My Mac email address
 
-- **Firmware (T2 SOCROM)**
+- **Firmware (SOCROM)**
   - **View firmware details**
     - Binary size (bytes, hex)
     - Checksum
     - Created and modified date
     - iBoot version
+    - View SoC type
     - **Model Information**
       - SCfg store details
       - System serial number
