@@ -22,7 +22,6 @@
 
 ### New
 - Introduced an updater to automatically download new application versions.
-- Added an option in the SOCROM window to reset firmware NVRAM.
 
 ### Enhancements
 - Improved formatting of the Order No. string in the SOCROM window.
