@@ -81,7 +81,10 @@ namespace Mac_EFI_Toolkit
 
         internal static async Task DownloadAsync(Label label)
         {
-            string finalPath = Path.Combine(
+            UpdateStatus(label, "Please wait...");
+            Logger.WriteCallerLine("Update started");
+
+            string savePath = Path.Combine(
                 ApplicationPaths.WorkingDirectory,
                 $"mefit_{NewVersion.Replace(".", string.Empty)}.exe"
             );
@@ -90,36 +93,49 @@ namespace Mac_EFI_Toolkit
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    UpdateStatus(label, "Getting new executable...");
+                    Logger.WriteCallerLine($"Downloading version {NewVersion}");
                     byte[] exeBuffer = await webClient.DownloadDataTaskAsync(ApplicationUrls.LatestBuild);
 
-                    UpdateStatus(label, "Verifying checksum...");
+                    Logger.WriteCallerLine($"Fetched {exeBuffer.Length} bytes");
+                    Logger.WriteCallerLine("Verifying sha256 checksum");
                     string hash = FileTools.GetSha256Digest(exeBuffer);
 
-                    if (!string.Equals(hash, ExpectedSHA256))
+                    Logger.WriteCallerLine($"Expected: {ExpectedSHA256}");
+                    Logger.WriteCallerLine($"Actual: {hash}");
+
+                    if (!string.Equals(hash, ExpectedSHA256, StringComparison.OrdinalIgnoreCase))
                     {
-                        UpdateStatus(label, "Checksum mismatch.");
+                        UpdateStatus(label, "An error occured. See application log.");
                         return;
                     }
 
                     Program.EnsureDirectoriesExist();
 
-                    UpdateStatus(label, "Saving update...");
-                    await Task.Run(() => File.WriteAllBytes(finalPath, exeBuffer));
+                    Logger.WriteCallerLine($"Saving executable to {savePath}");
+                    await Task.Run(() => File.WriteAllBytes(savePath, exeBuffer));
 
-                    UpdateStatus(label, "Launching new version...");
+                    if (!File.Exists(savePath))
+                    {
+                        Logger.WriteCallerLine("File export failed.");
+                        return;
+                    }
+
+                    Logger.WriteCallerLine("Launching update");
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = finalPath,
+                        FileName = savePath,
                         UseShellExecute = true
                     });
 
+                    Logger.WriteCallerLine($"Exiting version {Application.ProductVersion}");
+                    await Task.Delay(500);
                     Application.Exit();
                 }
             }
             catch (Exception e)
             {
-                UpdateStatus(label, "An error occured.");
+                Logger.WriteErrorLine(nameof(CheckForNewVersion), e.GetType(), e.Message);
+                UpdateStatus(label, "An error occured. See application log.");
             }
         }
 

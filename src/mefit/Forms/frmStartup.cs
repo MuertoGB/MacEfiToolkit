@@ -451,7 +451,7 @@ namespace Mac_EFI_Toolkit.Forms
             Updater.VersionResult versionResult = await Updater.CheckForNewVersion();
 
             // If a new version is available update the UI.
-            if (versionResult == Updater.VersionResult.UpToDate)
+            if (versionResult == Updater.VersionResult.NewVersionAvailable)
             {
                 cmdHelp.Text += $" {Program.SEGUI_DINGBAT1}";
                 updateAvailableToolStripMenuItem.Visible = true;
@@ -476,38 +476,32 @@ namespace Mac_EFI_Toolkit.Forms
         #region Debug Warn
         private void tlpDrop_Paint(object sender, PaintEventArgs e)
         {
-            // This is to stop some stupid dumbass releasing debug builds.
-            // No idea who that could be.
-            // Certainly wasn't me.
-            // In would never do such a thing.
-
-            if (Program.IsDebugMode())
+            if (!Program.IsDebugMode())
             {
-                Graphics g = e.Graphics;
-                int labelHeight = 20;
+                return;
+            }
 
-                TableLayoutPanel tlp = sender as TableLayoutPanel;
+            Graphics g = e.Graphics;
+            int labelHeight = 20;
 
-                if (tlp == null)
-                {
-                    return;
-                }
+            TableLayoutPanel tlp = sender as TableLayoutPanel;
 
-                Rectangle labelRectangle = new Rectangle(2, tlp.Height - labelHeight, tlp.Width - 4, labelHeight - 2);
+            if (tlp == null) return;
 
-                using (Brush backgroundBrush = new SolidBrush(Color.Tomato))
-                {
-                    g.FillRectangle(backgroundBrush, labelRectangle);
-                }
+            Rectangle labelRectangle = new Rectangle(2, tlp.Height - labelHeight, tlp.Width - 4, labelHeight - 2);
 
-                string labelText = "==== Debug Mode - Do not Release ====";
-                using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
-                using (Brush textBrush = new SolidBrush(Color.Black))
-                {
-                    SizeF textSize = g.MeasureString(labelText, font);
-                    PointF textPosition = new PointF((labelRectangle.Width - textSize.Width) / 2, labelRectangle.Top + (labelRectangle.Height - textSize.Height) / 2);
-                    g.DrawString(labelText, font, textBrush, textPosition);
-                }
+            using (Brush backgroundBrush = new SolidBrush(Color.Tomato))
+            {
+                g.FillRectangle(backgroundBrush, labelRectangle);
+            }
+
+            string labelText = "==== Debug Mode ====";
+            using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
+            using (Brush textBrush = new SolidBrush(Color.Black))
+            {
+                SizeF textSize = g.MeasureString(labelText, font);
+                PointF textPosition = new PointF((labelRectangle.Width - textSize.Width) / 2, labelRectangle.Top + (labelRectangle.Height - textSize.Height) / 2);
+                g.DrawString(labelText, font, textBrush, textPosition);
             }
         }
         #endregion
