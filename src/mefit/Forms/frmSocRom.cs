@@ -476,6 +476,10 @@ namespace Mac_EFI_Toolkit.Forms
                 sbFirmwareInfo.AppendLine($"Created:         {SOCROM.FileInfoData.CreationTime}");
                 sbFirmwareInfo.AppendLine($"Modified:        {SOCROM.FileInfoData.LastWriteTime}\r\n");
 
+                sbFirmwareInfo.AppendLine("Controller");
+                sbFirmwareInfo.AppendLine("----------------------------------");
+                sbFirmwareInfo.AppendLine($"Type:            {SOCROM.RomType}\r\n");
+
                 sbFirmwareInfo.AppendLine("SCfg");
                 sbFirmwareInfo.AppendLine("----------------------------------");
                 sbFirmwareInfo.AppendLine($"Base:            {SOCROM.SCfgSectionData.StoreBase:X}h");
