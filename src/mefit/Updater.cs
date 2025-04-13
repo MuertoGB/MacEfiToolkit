@@ -32,8 +32,8 @@ namespace Mac_EFI_Toolkit
         internal static async Task<VersionResult> CheckForNewVersion()
         {
             string versionManifestUrl = ApplicationUrls.VersionManifest;
-            string versionNodeXPath = "data/MET/VersionString";
-            string sha256NodeXPath = "data/MET/SHA256";
+            const string versionNodeXPath = "data/MET/VersionString";
+            const string sha256NodeXPath = "data/MET/SHA256";
 
             try
             {
@@ -81,61 +81,67 @@ namespace Mac_EFI_Toolkit
 
         internal static async Task DownloadAsync(Label label)
         {
-            UpdateStatus(label, "Please wait...");
-            Logger.WriteCallerLine("Update started");
+            UpdateStatus(label, UPDATSTRINGS.WAIT);
+            Logger.WriteCallerLine(UPDATSTRINGS.UPD_STARTED);
 
-            string savePath = Path.Combine(
-                ApplicationPaths.WorkingDirectory,
-                $"mefit_{NewVersion.Replace(".", string.Empty)}.exe"
-            );
+            string version = string.IsNullOrEmpty(NewVersion) ? string.Empty : NewVersion.Replace(".", string.Empty);
+            string savePath = Path.Combine(ApplicationPaths.WorkingDirectory, $"mefit_{version}.exe");
 
             try
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    Logger.WriteCallerLine($"Downloading version {NewVersion}");
+                    Logger.WriteCallerLine($"{UPDATSTRINGS.DOWNLOADING_VERSION} {NewVersion}");
                     byte[] exeBuffer = await webClient.DownloadDataTaskAsync(ApplicationUrls.LatestBuild);
 
-                    Logger.WriteCallerLine($"Fetched {exeBuffer.Length} bytes");
-                    Logger.WriteCallerLine("Verifying sha256 checksum");
+                    Logger.WriteCallerLine($"{UPDATSTRINGS.DOWNLOADED} {exeBuffer.Length} {APPSTRINGS.BYTES}");
+
+                    Logger.WriteCallerLine(UPDATSTRINGS.VERIFY_SHA256);
                     string hash = FileTools.GetSha256Digest(exeBuffer);
 
-                    Logger.WriteCallerLine($"Expected: {ExpectedSHA256}");
-                    Logger.WriteCallerLine($"Actual: {hash}");
+                    Logger.WriteCallerLine($"{UPDATSTRINGS.EXPECTED}: {ExpectedSHA256}");
+                    Logger.WriteCallerLine($"{UPDATSTRINGS.ACTUAL}: {hash}");
 
                     if (!string.Equals(hash, ExpectedSHA256, StringComparison.OrdinalIgnoreCase))
                     {
-                        UpdateStatus(label, "An error occured. See application log.");
+                        // Destroy the buffer data.
+                        exeBuffer = null;
+                        Logger.WriteCallerLine(UPDATSTRINGS.CHECKSUM_MISMATCH);
+                        UpdateStatus(label, UPDATSTRINGS.CHECKSUM_MISMATCH);
                         return;
                     }
 
                     Program.EnsureDirectoriesExist();
 
-                    Logger.WriteCallerLine($"Saving executable to {savePath}");
+                    Logger.WriteCallerLine($"{UPDATSTRINGS.SAVING_EXE} {savePath}");
                     await Task.Run(() => File.WriteAllBytes(savePath, exeBuffer));
 
+                    // Check file exists.
                     if (!File.Exists(savePath))
                     {
-                        Logger.WriteCallerLine("File export failed.");
+                        Logger.WriteCallerLine(UPDATSTRINGS.SAVE_FAIL);
+                        UpdateStatus(label, UPDATSTRINGS.SAVE_FAIL);
                         return;
                     }
 
-                    Logger.WriteCallerLine("Launching update");
+                    FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(savePath);
+                    Logger.WriteCallerLine($"{UPDATSTRINGS.LAUNCH_VERSION} {fileVersionInfo.ProductVersion}");
+
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = savePath,
                         UseShellExecute = true
                     });
 
-                    Logger.WriteCallerLine($"Exiting version {Application.ProductVersion}");
+                    Logger.WriteCallerLine($"{UPDATSTRINGS.EXITING} {Application.ProductVersion}");
                     await Task.Delay(500);
                     Application.Exit();
                 }
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(CheckForNewVersion), e.GetType(), e.Message);
-                UpdateStatus(label, "An error occured. See application log.");
+                Logger.WriteErrorLine(nameof(DownloadAsync), e.GetType(), e.Message);
+                UpdateStatus(label, UPDATSTRINGS.ERROR);
             }
         }
 
