@@ -16,9 +16,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace Mac_EFI_Toolkit
 {

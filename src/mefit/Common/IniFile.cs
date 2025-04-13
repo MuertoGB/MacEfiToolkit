@@ -88,7 +88,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 if (strUnicode == null)
                 {
-                    Logger.WriteCallerLine(nameof(GetSectionNames), "No section names found.");
+                    Logger.WriteCallerLine(nameof(GetSectionNames), "No section names found");
                     return null;
                 }
 
@@ -109,7 +109,7 @@ namespace Mac_EFI_Toolkit.Common
 
                 if (strUnicode == null)
                 {
-                    Logger.WriteCallerLine(nameof(GetSectionKeys), "No section keys found.");
+                    Logger.WriteCallerLine(nameof(GetSectionKeys), "No section keys found");
                     return null;
                 }
 

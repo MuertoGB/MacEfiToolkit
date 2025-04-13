@@ -7,7 +7,6 @@
 using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Tools;
 using System;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
