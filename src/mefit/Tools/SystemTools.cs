@@ -13,7 +13,6 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Tools
 {
-
     #region Enum
     enum FontStatus
     {
