@@ -25,6 +25,7 @@
 
 ### Enhancements
 - Improved formatting of the Order No. string in the SOCROM window.
+- Updated the internal database.
 
 ### Bugs
 - Fixed memory usage displaying as 0 bytes on Windows by addressing memory mapping issues in PROCESS_MEMORY_COUNTERS.
