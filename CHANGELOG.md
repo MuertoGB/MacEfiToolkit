@@ -15,8 +15,14 @@
   <a href="#version-202">V2.0.2</a> •
   <a href="#version-203">V2.0.3</a> •
   <a href="#version-204">V2.0.4</a> •
-  <a href="#version-210">V2.1.0</a>
+  <a href="#version-210">V2.1.0</a> •
+  <a href="#version-211">V2.1.1</a>
 </p>
+
+## Version 2.1.1
+
+### Hotfix
+- Temporarily disabled opening multiple firmware windows to prevent shared state conflicts present since version 2.0.0. **Users still on older versions should avoid opening more than one EFIROM or SOCROM window at a time**, as doing so may result in incorrect values being written to firmware files. A permanent fix is in progress.
 
 ## Version 2.1.0
 

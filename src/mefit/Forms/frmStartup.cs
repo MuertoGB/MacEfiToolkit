@@ -120,7 +120,10 @@ namespace Mac_EFI_Toolkit.Forms
 
             ApplyDragLeaveColours();
 
-            OpenBinary(strFileName);
+            this.BeginInvoke(new Action(() =>
+            {
+                OpenBinary(strFileName);
+            }));
         }
 
         private void frmStartup_DragLeave(object sender, EventArgs e) => ApplyDragLeaveColours();
@@ -431,7 +434,7 @@ namespace Mac_EFI_Toolkit.Forms
             child.FormClosed += ChildWindowClosed;
             child.Location = new Point(this.Location.X + (this.Width - child.Width) / 2, this.Location.Y + (this.Height - child.Height) / 2);
             child.Owner = this;
-            child.Show();
+            child.ShowDialog();
         }
 
         private void UpdateWindowTitle()
