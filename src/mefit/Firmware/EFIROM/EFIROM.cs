@@ -14,43 +14,43 @@ using System.Text;
 
 namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
-    class EFIROM
+    public class EFIROM
     {
-        #region Internal Members
-        internal static string LoadedBinaryPath = null;
-        internal static byte[] LoadedBinaryBuffer = null;
-        internal static byte[] LzmaDecompressedBuffer = null;
-        internal static bool FirmwareLoaded = false;
-        internal static string FirmwareVersion = null;
-        internal static string ConfigCode = null;
-        internal static bool ForceFoundFsys = false;
-        internal static string FitVersion = null;
-        internal static string MeVersion = null;
-        internal static bool ResetVss = false;
-        internal static bool ResetSvs = false;
-        internal static string NewSerial = null;
-        internal static string FmmEmail = null;
+        #region Public Members
+        public string LoadedBinaryPath { get; set; }
+        public byte[] LoadedBinaryBuffer { get; set; }
+        public byte[] LzmaDecompressedBuffer { get; set; }
+        public bool FirmwareLoaded { get; set; }
+        public string FirmwareVersion { get; set; }
+        public string ConfigCode { get; set; }
+        public bool ForceFoundFsys { get; set; }
+        public string FitVersion { get; set; }
+        public string MeVersion { get; set; }
+        public bool ResetVss { get; set; }
+        public bool ResetSvs { get; set; }
+        public string NewSerial { get; set; }
+        public string FmmEmail { get; set; }
 
-        internal static FileInfoStore FileInfoData;
-        internal static PdrSection PdrSectionData;
-        internal static NvramStore VssPrimary;
-        internal static NvramStore VssSecondary;
-        internal static NvramStore SvsPrimary;
-        internal static NvramStore SvsSecondary;
-        internal static EFILock EfiPrimaryLockData;
-        internal static EFILock EfiBackupLockData;
-        internal static FsysStore FsysStoreData;
-        internal static AppleRomInformationSection AppleRomInfoSectionData;
-        internal static EfiBiosIdSection EfiBiosIdSectionData;
+        public FileInfoStore FileInfoData { get; set; }
+        public PdrSection PdrSectionData { get; set; }
+        public NvramStore VssPrimary { get; set; }
+        public NvramStore VssSecondary { get; set; }
+        public NvramStore SvsPrimary { get; set; }
+        public NvramStore SvsSecondary { get; set; }
+        public EFILock EfiPrimaryLockData { get; set; }
+        public EFILock EfiBackupLockData { get; set; }
+        public FsysStore FsysStoreData { get; set; }
+        public AppleRomInformationSection AppleRomInfoSectionData { get; set; }
+        public EfiBiosIdSection EfiBiosIdSectionData { get; set; }
 
-        internal static ApfsCapable IsApfsCapable = ApfsCapable.Unknown;
+        public ApfsCapable IsApfsCapable { get; set; } = ApfsCapable.Unknown;
 
-        internal static int FsysRegionSize = 0;
-        internal static int NvramBase = -1;
-        internal static int NvramSize = -1;
-        internal static int NvramLimit = -1;
+        public int FsysRegionSize { get; private set; }
+        public int NvramBase { get; private set; } = -1;
+        public int NvramSize { get; private set; } = -1;
+        public int NvramLimit { get; private set; } = -1;
 
-        internal static TimeSpan ParseTime { get; private set; }
+        public TimeSpan ParseTime { get; private set; }
         #endregion
 
         #region Const Members
@@ -67,7 +67,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region Parse Firmware
-        internal static void LoadFirmwareBaseData(byte[] sourcebuffer, string filename)
+        public void LoadFirmwareBaseData(byte[] sourcebuffer, string filename)
         {
             // Start bench.
             Stopwatch swParseTime = Stopwatch.StartNew();
@@ -141,7 +141,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             IsApfsCapable = GetIsApfsCapable(LoadedBinaryBuffer);
 
             // Generate a proper EFI version string.
-            FirmwareVersion = MacTools.GetFirmwareVersion();
+            FirmwareVersion = GetFirmwareVersion();
 
             // Get the Intel ME Flash Image Tool version.
             FitVersion = IntelME.GetVersionData(LoadedBinaryBuffer, ImeVersionType.FlashImageTool);
@@ -153,41 +153,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             ParseTime = swParseTime.Elapsed;
         }
 
-        internal static void ResetFirmwareBaseData()
-        {
-            LoadedBinaryPath = null;
-            LoadedBinaryBuffer = null;
-            LzmaDecompressedBuffer = null;
-            FirmwareLoaded = false;
-            FirmwareVersion = null;
-            ConfigCode = null;
-            ForceFoundFsys = false;
-            FitVersion = null;
-            MeVersion = null;
-            ResetVss = false;
-            ResetSvs = false;
-            NewSerial = null;
-            FmmEmail = null;
-            FileInfoData = default;
-            PdrSectionData = default;
-            VssPrimary = default;
-            VssSecondary = default;
-            SvsPrimary = default;
-            SvsSecondary = default;
-            EfiPrimaryLockData = default;
-            EfiBackupLockData = default;
-            FsysStoreData = default;
-            AppleRomInfoSectionData = default;
-            EfiBiosIdSectionData = default;
-            IsApfsCapable = ApfsCapable.Unknown;
-
-            FsysRegionSize = 0;
-            NvramBase = -1;
-            NvramSize = -1;
-            NvramLimit = -1;
-        }
-
-        internal static bool IsValidImage(byte[] sourcebuffer)
+        public bool IsValidImage(byte[] sourcebuffer)
         {
             byte[] bDescriptorSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, RSVD_SIZE, (int)FlashDescriptor.IFD_SIG_LENGTH);
 
@@ -232,7 +198,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion 
 
         #region Platform Data Region
-        internal static PdrSection GetPdrData(byte[] sourcebuffer)
+        public PdrSection GetPdrData(byte[] sourcebuffer)
         {
             // Descriptor mode not set.
             if (!FlashDescriptor.IsDescriptorMode)
@@ -273,7 +239,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             };
         }
 
-        private static PdrSection DefaultPdrSection()
+        private PdrSection DefaultPdrSection()
         {
             return new PdrSection
             {
@@ -284,7 +250,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region NVRAM / EFI Lock
-        internal static void GetNvramStores(byte[] sourcebuffer)
+        public void GetNvramStores(byte[] sourcebuffer)
         {
             if (NvramBase == -1 || NvramSize == -1)
             {
@@ -345,7 +311,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         }
 
-        internal static NvramStore ParseNvramStore(byte[] sourcebuffer, int baseposition, NvramStoreType nvramstoretype)
+        public NvramStore ParseNvramStore(byte[] sourcebuffer, int baseposition, NvramStoreType nvramstoretype)
         {
             int iStoreLength = -1;
             byte bFormat = 0xFF;
@@ -393,7 +359,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             };
         }
 
-        private static NvramStore DefaultNvramSection()
+        private NvramStore DefaultNvramSection()
         {
             return new NvramStore
             {
@@ -409,7 +375,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             };
         }
 
-        internal static EFILock GetIsEfiLocked(byte[] sourcebuffer)
+        public EFILock GetIsEfiLocked(byte[] sourcebuffer)
         {
             // NVRAM store is empty.
             if (sourcebuffer == null)
@@ -434,7 +400,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             };
         }
 
-        private static EFILock DefaultEfiLockStatus()
+        private EFILock DefaultEfiLockStatus()
         {
             return new EFILock
             {
@@ -445,7 +411,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region fmm-mobileme-token-FMM
-        internal static string GetFmmMobilemeEmail()
+        public string GetFmmMobilemeEmail()
         {
             if (VssPrimary.IsStoreEmpty)
             {
@@ -472,18 +438,18 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return ExtractEmailFromBuffer(bVssBuffer, iBaseAddress, iLimitAddress);
         }
 
-        private static int FindTokenBase(byte[] sourcebuffer, byte[] token)
+        private int FindTokenBase(byte[] sourcebuffer, byte[] token)
         {
             return BinaryTools.GetBaseAddress(sourcebuffer, token);
         }
 
-        private static int FindTokenLimit(byte[] sourcebuffer, int tokenbase)
+        private int FindTokenLimit(byte[] sourcebuffer, int tokenbase)
         {
             byte[] bLimitBytes = new byte[] { 0xAA, 0x55 };
             return BinaryTools.GetBaseAddress(sourcebuffer, bLimitBytes, tokenbase);
         }
 
-        private static string ExtractEmailFromBuffer(byte[] buffer, int tokenbase, int tokenlimit)
+        private string ExtractEmailFromBuffer(byte[] buffer, int tokenbase, int tokenlimit)
         {
             // Step back 1 byte to ensure we're inside the bounds of the NVAR.
             tokenlimit -= 1;
@@ -503,7 +469,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return null; // No valid email found.
         }
 
-        private static bool IsValidEmailBlock(byte[] sourcebuffer, int index, out string emailstring)
+        private bool IsValidEmailBlock(byte[] sourcebuffer, int index, out string emailstring)
         {
             emailstring = string.Empty;
 
@@ -526,7 +492,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         #region Fsys Store
         // Fsys resides in the NVRAM at either base: 0x20000h, or 0x22000h.
-        internal static FsysStore GetFsysStoreData(byte[] sourcebuffer, bool isfsysonly, bool forcefind = false)
+        internal FsysStore GetFsysStoreData(byte[] sourcebuffer, bool isfsysonly, bool forcefind = false)
         {
             // Find the base position of Fsys Store.
             int iFsysBase = FindFsysBaseAddress(sourcebuffer, isfsysonly, forcefind);
@@ -549,7 +515,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             // Retrieve CRC bytes and calculate CRC values.
             byte[] bCrcData = GetCrcBytes(sourcebuffer, iFsysBase);
             string strCrcString = GetFlippedCrcString(bCrcData);
-            uint uiActualCrc = CalculateFsysCrc(bFsysBuffer);
+            uint uiActualCrc = GetUintFsysCrc32(bFsysBuffer);
             string strActualCrc = $"{uiActualCrc:X8}";
 
             // Find and parse various signatures within FsysStore.
@@ -584,7 +550,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             };
         }
 
-        private static string ParseFsysString(byte[] sourcebuffer, int baseposition)
+        private string ParseFsysString(byte[] sourcebuffer, int baseposition)
         {
             // Return null if base position is invalid or data size is zero.
             if (baseposition == -1 || sourcebuffer[baseposition] == 0)
@@ -614,7 +580,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return _utf8Encoding.GetString(bStringData);
         }
 
-        private static int FindFsysBaseAddress(byte[] sourcebuffer, bool isfsysonly, bool forcefind)
+        private int FindFsysBaseAddress(byte[] sourcebuffer, bool isfsysonly, bool forcefind)
         {
             if (isfsysonly)
             {
@@ -639,23 +605,18 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return BinaryTools.GetBaseAddress(sourcebuffer, EFISigs.FsysMarker, NvramBase, NvramSize);
         }
 
-        private static bool IsValidFsysStore(byte[] sourcebuffer)
+        private bool IsValidFsysStore(byte[] sourcebuffer)
         {
             return sourcebuffer != null && sourcebuffer.Length == FsysRegionSize;
         }
 
-        private static string GetFlippedCrcString(byte[] sourcebuffer)
+        private string GetFlippedCrcString(byte[] sourcebuffer)
         {
             byte[] bData = sourcebuffer.Reverse().ToArray();
             return BitConverter.ToString(bData).Replace("-", "");
         }
 
-        private static uint CalculateFsysCrc(byte[] sourcebuffer)
-        {
-            return MacTools.GetUintFsysCrc32(sourcebuffer);
-        }
-
-        private static int FindSignatureAddress(byte[] sourcebuffer, int baseposition, int maxsearchlength, params byte[][] signatures)
+        private int FindSignatureAddress(byte[] sourcebuffer, int baseposition, int maxsearchlength, params byte[][] signatures)
         {
             foreach (byte[] bSignature in signatures)
             {
@@ -670,7 +631,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return -1;
         }
 
-        private static byte[] GetFsysStoreBytes(byte[] sourcebuffer, int baseposition)
+        private byte[] GetFsysStoreBytes(byte[] sourcebuffer, int baseposition)
         {
             // Get Fsys Store size bytes - fsys base + 0x09, length 2 bytes (int16).
             byte[] bSize = BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition + 9, 2);
@@ -689,12 +650,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition, FsysRegionSize);
         }
 
-        private static byte[] GetCrcBytes(byte[] sourcebuffer, int baseposition)
+        private byte[] GetCrcBytes(byte[] sourcebuffer, int baseposition)
         {
             return BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition + (FsysRegionSize - CRC32_SIZE), CRC32_SIZE);
         }
 
-        private static FsysStore DefaultFsysRegion()
+        private FsysStore DefaultFsysRegion()
         {
             return new FsysStore
             {
@@ -713,7 +674,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region Apple ROM Information Section
-        internal static AppleRomInformationSection GetRomInformationData(byte[] sourcebuffer)
+        internal AppleRomInformationSection GetRomInformationData(byte[] sourcebuffer)
         {
             // Define constants for index and termination bytes.
             const byte bIndex = 0x20;
@@ -843,7 +804,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region EFI BIOS ID Section
-        internal static EfiBiosIdSection GetEfiBiosIdSectionData(byte[] sourcebuffer)
+        internal EfiBiosIdSection GetEfiBiosIdSectionData(byte[] sourcebuffer)
         {
             int iGuidBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.EfiBiosIdGuid, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit);
 
@@ -906,7 +867,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region APFSJumpStart
-        internal static ApfsCapable GetIsApfsCapable(byte[] sourcebuffer)
+        internal ApfsCapable GetIsApfsCapable(byte[] sourcebuffer)
         {
             // APFS DXE GUID found.
             if (BinaryTools.GetBaseAddress(
@@ -1037,7 +998,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         /// <param name="sourcebuffer">The byte array representing the Fsys store.</param>
         /// <param name="newcrc">The new CRC value to be patched.</param>
         /// <returns>The patched Fsys store byte array.</returns>
-        internal static byte[] PatchFsysCrc(byte[] sourcebuffer, uint newcrc)
+        internal byte[] PatchFsysCrc(byte[] sourcebuffer, uint newcrc)
         {
             // Convert the new CRC value to bytes
             byte[] bCrc = BitConverter.GetBytes(newcrc);
@@ -1057,7 +1018,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         /// <param name="fsysbuffer">The byte array representing the Fsys store.</param>
         /// <param name="newcrc">The new CRC value to be patched in the Fsys store.</param>
         /// <returns>The patched file byte array, or null if the new calculated crc does not match the crc in the Fsys store.</returns>
-        internal static byte[] MakeFsysCrcPatchedBinary(byte[] sourcebuffer, int baseposition, byte[] fsysbuffer, uint newcrc)
+        internal byte[] MakeFsysCrcPatchedBinary(byte[] sourcebuffer, int baseposition, byte[] fsysbuffer, uint newcrc)
         {
             Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
@@ -1110,6 +1071,79 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
             // Returned the unlocked store
             return sourcebuffer;
+        }
+
+        internal string GetFirmwareVersion()
+        {
+            if (AppleRomInfoSectionData.EfiVersion != null)
+            {
+                return AppleRomInfoSectionData.EfiVersion;
+            }
+
+            string strModelPart = EfiBiosIdSectionData.ModelPart;
+            string strMajorPart = EfiBiosIdSectionData.MajorPart;
+            string strMinorPart = EfiBiosIdSectionData.MinorPart;
+            string strRomVersion = AppleRomInfoSectionData.RomVersion;
+            string strBiosId = AppleRomInfoSectionData.BiosId;
+
+            string strNotSet = "F000.B00";
+            string[] arrIgnored = { strNotSet, "Official Build" };
+
+            if (!string.IsNullOrWhiteSpace(strRomVersion) && !arrIgnored.Contains(strRomVersion, StringComparer.OrdinalIgnoreCase))
+            {
+                return $"{strModelPart}.{strRomVersion.Replace("_", ".")}";
+            }
+
+            if (!string.IsNullOrWhiteSpace(strBiosId) && strBiosId.IndexOf(strNotSet, StringComparison.OrdinalIgnoreCase) == -1)
+            {
+                string[] arrParts = strBiosId.Split('.');
+                if (arrParts.Length != 5)
+                {
+                    return GetFormattedEfiVersion(arrParts[0], arrParts[2], arrParts[3]);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(strModelPart) && !string.IsNullOrWhiteSpace(strMajorPart) && !string.IsNullOrWhiteSpace(strMinorPart))
+            {
+                return GetFormattedEfiVersion(strModelPart, strMajorPart, strMinorPart);
+            }
+
+            return null;
+        }
+
+        private static string GetFormattedEfiVersion(string modelPart, string majorPart, string minorPart)
+        {
+            return $"{modelPart}.{majorPart}.{minorPart}";
+        }
+
+        /// <summary>
+        /// Calculates an Fsys region CRC32 checksum.
+        /// </summary>
+        /// /// <param name="sourcebuffer">The Fsys region to calcuate the CRC32 for.</param>
+        /// <returns>The calculated Fsys CRC32 uint</returns>
+        internal uint GetUintFsysCrc32(byte[] sourcebuffer)
+        {
+            if (sourcebuffer.Length < FsysRegionSize)
+            {
+                throw new ArgumentException(nameof(sourcebuffer), "Given bytes are too small.");
+            }
+
+            if (sourcebuffer.Length > FsysRegionSize)
+            {
+                throw new ArgumentException(nameof(sourcebuffer), "Given bytes are too large.");
+            }
+
+            // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes.
+            byte[] bFsysTempBuffer = new byte[FsysRegionSize - EFIROM.CRC32_SIZE];
+
+            if (sourcebuffer != null)
+            {
+                Array.Copy(sourcebuffer, 0, bFsysTempBuffer, 0, bFsysTempBuffer.Length);
+
+                return FileTools.GetCrc32Digest(bFsysTempBuffer);
+            }
+
+            return 0xFFFFFFFF;
         }
         #endregion
     }

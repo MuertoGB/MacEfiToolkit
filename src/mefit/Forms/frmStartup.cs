@@ -363,7 +363,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private Form GetChildFormForImage(byte[] sourceBytes)
         {
-            if (EFIROM.IsValidImage(sourceBytes))
+            EFIROM _parser = new EFIROM();
+
+            if (_parser.IsValidImage(sourceBytes))
             {
                 return new frmEfiRom();
             }
@@ -434,7 +436,7 @@ namespace Mac_EFI_Toolkit.Forms
             child.FormClosed += ChildWindowClosed;
             child.Location = new Point(this.Location.X + (this.Width - child.Width) / 2, this.Location.Y + (this.Height - child.Height) / 2);
             child.Owner = this;
-            child.ShowDialog();
+            child.Show();
         }
 
         private void UpdateWindowTitle()

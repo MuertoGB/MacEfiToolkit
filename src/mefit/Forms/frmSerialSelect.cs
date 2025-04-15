@@ -17,10 +17,16 @@ namespace Mac_EFI_Toolkit.Forms
 {
     public partial class frmSerialSelect : FormEx
     {
+        #region Private Members
+        private readonly EFIROM _efirom;
+        #endregion
+
         #region Constructor
-        public frmSerialSelect()
+        public frmSerialSelect(EFIROM efiromInstance)
         {
             InitializeComponent();
+
+            _efirom = efiromInstance;
 
             // Attach event handlers.
             WireEventHandlers();
@@ -45,7 +51,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (Tag is SerialSenderTag.EFIROMWindow)
             {
-                tbxSerial.MaxLength = EFIROM.FsysStoreData.Serial.Length;
+                tbxSerial.MaxLength = _efirom.FsysStoreData.Serial.Length;
                 return;
             }
             else if (Tag is SerialSenderTag.SOCROMWindow)
@@ -73,7 +79,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (Tag is SerialSenderTag.EFIROMWindow)
             {
-                EFIROM.NewSerial = tbxSerial.Text;
+                _efirom.NewSerial = tbxSerial.Text;
             }
             else if (Tag is SerialSenderTag.SOCROMWindow)
             {

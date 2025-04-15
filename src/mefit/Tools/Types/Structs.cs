@@ -6,7 +6,7 @@
 
 namespace Mac_EFI_Toolkit.Tools
 {
-    internal struct FileInfoStore
+    public struct FileInfoStore
     {
         internal string FileNameExt { get; set; }
         internal string FileName { get; set; }

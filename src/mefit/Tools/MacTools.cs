@@ -4,7 +4,6 @@
 // MacTools.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Firmware.EFIROM;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -92,38 +91,6 @@ namespace Mac_EFI_Toolkit.Tools
         }
         #endregion
 
-        #region Fsys CRC32 Calculation
-        /// <summary>
-        /// Calculates an Fsys region CRC32 checksum.
-        /// </summary>
-        /// /// <param name="sourcebuffer">The Fsys region to calcuate the CRC32 for.</param>
-        /// <returns>The calculated Fsys CRC32 uint</returns>
-        internal static uint GetUintFsysCrc32(byte[] sourcebuffer)
-        {
-            if (sourcebuffer.Length < EFIROM.FsysRegionSize)
-            {
-                throw new ArgumentException(nameof(sourcebuffer), "Given bytes are too small.");
-            }
-
-            if (sourcebuffer.Length > EFIROM.FsysRegionSize)
-            {
-                throw new ArgumentException(nameof(sourcebuffer), "Given bytes are too large.");
-            }
-
-            // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes.
-            byte[] bFsysTempBuffer = new byte[EFIROM.FsysRegionSize - EFIROM.CRC32_SIZE];
-
-            if (sourcebuffer != null)
-            {
-                Array.Copy(sourcebuffer, 0, bFsysTempBuffer, 0, bFsysTempBuffer.Length);
-
-                return FileTools.GetCrc32Digest(bFsysTempBuffer);
-            }
-
-            return 0xFFFFFFFF;
-        }
-        #endregion
-
         #region EFI Model Code
         /// <summary>
         /// Converts the EFI model code to a full model identifier.
@@ -175,51 +142,6 @@ namespace Mac_EFI_Toolkit.Tools
 
             // Return the generated full model, otherwise what was passed in will be returned.
             return $"{strLetters}{strNumbers}";
-        }
-        #endregion
-
-        #region Firmware Version
-        internal static string GetFirmwareVersion()
-        {
-            if (EFIROM.AppleRomInfoSectionData.EfiVersion != null)
-            {
-                return EFIROM.AppleRomInfoSectionData.EfiVersion;
-            }
-
-            string strModelPart = EFIROM.EfiBiosIdSectionData.ModelPart;
-            string strMajorPart = EFIROM.EfiBiosIdSectionData.MajorPart;
-            string strMinorPart = EFIROM.EfiBiosIdSectionData.MinorPart;
-            string strRomVersion = EFIROM.AppleRomInfoSectionData.RomVersion;
-            string strBiosId = EFIROM.AppleRomInfoSectionData.BiosId;
-
-            string strNotSet = "F000.B00";
-            string[] arrIgnored = { strNotSet, "Official Build" };
-
-            if (!string.IsNullOrWhiteSpace(strRomVersion) && !arrIgnored.Contains(strRomVersion, StringComparer.OrdinalIgnoreCase))
-            {
-                return $"{strModelPart}.{strRomVersion.Replace("_", ".")}";
-            }
-
-            if (!string.IsNullOrWhiteSpace(strBiosId) && strBiosId.IndexOf(strNotSet, StringComparison.OrdinalIgnoreCase) == -1)
-            {
-                string[] arrParts = strBiosId.Split('.');
-                if (arrParts.Length != 5)
-                {
-                    return GetFormattedEfiVersion(arrParts[0], arrParts[2], arrParts[3]);
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(strModelPart) && !string.IsNullOrWhiteSpace(strMajorPart) && !string.IsNullOrWhiteSpace(strMinorPart))
-            {
-                return GetFormattedEfiVersion(strModelPart, strMajorPart, strMinorPart);
-            }
-
-            return null;
-        }
-
-        private static string GetFormattedEfiVersion(string modelPart, string majorPart, string minorPart)
-        {
-            return $"{modelPart}.{majorPart}.{minorPart}";
         }
         #endregion
 

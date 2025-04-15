@@ -521,19 +521,19 @@ namespace Mac_EFI_Toolkit.Forms
         #region Patch Toolstrip Events
         private void changeSerialNumberToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            BlurHelper.ApplyBlur(this);
+            //BlurHelper.ApplyBlur(this);
 
-            using (frmSerialSelect form = new frmSerialSelect())
-            {
-                form.Tag = SerialSenderTag.SOCROMWindow;
-                form.FormClosed += ChildWindowClosed;
-                form.ShowDialog();
+            //using (frmSerialSelect form = new frmSerialSelect(_parser))
+            //{
+            //    form.Tag = SerialSenderTag.SOCROMWindow;
+            //    form.FormClosed += ChildWindowClosed;
+            //    form.ShowDialog();
 
-                if (form.DialogResult == DialogResult.OK)
-                {
-                    WriteSocromSerialNumber(SOCROM.NewSerial);
-                }
-            }
+            //    if (form.DialogResult == DialogResult.OK)
+            //    {
+            //        WriteSocromSerialNumber(SOCROM.NewSerial);
+            //    }
+            //}
         }
 
         private void replaceScfgStoreToolStripMenuItem_Click(object sender, EventArgs e) => WriteScfgStore();

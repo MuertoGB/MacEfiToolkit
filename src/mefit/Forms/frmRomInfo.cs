@@ -18,10 +18,16 @@ namespace Mac_EFI_Toolkit.Forms
 {
     public partial class frmRominfo : FormEx
     {
+        #region Private Members
+        private readonly EFIROM _efirom;
+        #endregion
+
         #region Constructor
-        public frmRominfo()
+        public frmRominfo(EFIROM efiromInstance)
         {
             InitializeComponent();
+
+            _efirom = efiromInstance;
 
             // Attach event handlers.
             WireEventHandlers();
@@ -45,29 +51,29 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void LoadRomInformation()
         {
-            lblBiosId.Text = EFIROM.AppleRomInfoSectionData.BiosId ?? APPSTRINGS.NA;
+            lblBiosId.Text = _efirom.AppleRomInfoSectionData.BiosId ?? APPSTRINGS.NA;
 
-            lblModel.Text = EFIROM.AppleRomInfoSectionData.Model != null ?
-                $"{EFIROM.AppleRomInfoSectionData.Model} ({MacTools.ConvertEfiModelCode(EFIROM.AppleRomInfoSectionData.Model)})" : APPSTRINGS.NA;
+            lblModel.Text = _efirom.AppleRomInfoSectionData.Model != null ?
+                $"{_efirom.AppleRomInfoSectionData.Model} ({MacTools.ConvertEfiModelCode(_efirom.AppleRomInfoSectionData.Model)})" : APPSTRINGS.NA;
 
-            lblEfiVersion.Text = EFIROM.AppleRomInfoSectionData.EfiVersion ?? APPSTRINGS.NA;
+            lblEfiVersion.Text = _efirom.AppleRomInfoSectionData.EfiVersion ?? APPSTRINGS.NA;
 
-            lblBuiltBy.Text = EFIROM.AppleRomInfoSectionData.BuiltBy ?? APPSTRINGS.NA;
+            lblBuiltBy.Text = _efirom.AppleRomInfoSectionData.BuiltBy ?? APPSTRINGS.NA;
 
-            lblDateStamp.Text = EFIROM.AppleRomInfoSectionData.DateStamp ?? APPSTRINGS.NA;
+            lblDateStamp.Text = _efirom.AppleRomInfoSectionData.DateStamp ?? APPSTRINGS.NA;
 
-            lblRevision.Text = EFIROM.AppleRomInfoSectionData.Revision ?? APPSTRINGS.NA;
+            lblRevision.Text = _efirom.AppleRomInfoSectionData.Revision ?? APPSTRINGS.NA;
 
-            lblBootRom.Text = EFIROM.AppleRomInfoSectionData.RomVersion ?? APPSTRINGS.NA;
+            lblBootRom.Text = _efirom.AppleRomInfoSectionData.RomVersion ?? APPSTRINGS.NA;
 
-            lblBuildcaveId.Text = EFIROM.AppleRomInfoSectionData.BuildcaveId ?? APPSTRINGS.NA;
+            lblBuildcaveId.Text = _efirom.AppleRomInfoSectionData.BuildcaveId ?? APPSTRINGS.NA;
 
-            lblBuildType.Text = EFIROM.AppleRomInfoSectionData.BuildType ?? APPSTRINGS.NA;
+            lblBuildType.Text = _efirom.AppleRomInfoSectionData.BuildType ?? APPSTRINGS.NA;
 
-            lblCompiler.Text = EFIROM.AppleRomInfoSectionData.Compiler ?? APPSTRINGS.NA;
+            lblCompiler.Text = _efirom.AppleRomInfoSectionData.Compiler ?? APPSTRINGS.NA;
 
-            lblSectionData.Text = $"{APPSTRINGS.BASE.ToUpper()} {EFIROM.AppleRomInfoSectionData.SectionBase:X}h" ?? APPSTRINGS.NA;
-            lblSectionData.Text += $", {APPSTRINGS.SIZE.ToUpper()} {EFIROM.AppleRomInfoSectionData.SectionBytes.Length:X}h" ?? APPSTRINGS.NA;
+            lblSectionData.Text = $"{APPSTRINGS.BASE.ToUpper()} {_efirom.AppleRomInfoSectionData.SectionBase:X}h" ?? APPSTRINGS.NA;
+            lblSectionData.Text += $", {APPSTRINGS.SIZE.ToUpper()} {_efirom.AppleRomInfoSectionData.SectionBytes.Length:X}h" ?? APPSTRINGS.NA;
 
             UITools.ApplyNestedPanelLabelForeColor(tlpInfo, Colours.DisabledText);
         }
@@ -89,7 +95,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{APPSTRINGS.ROM_SECTION_INFO}_{EFIROM.FileInfoData.FileName}",
+                FileName = $"{APPSTRINGS.ROM_SECTION_INFO}_{_efirom.FileInfoData.FileName}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.WorkingDirectory
             })
@@ -101,16 +107,16 @@ namespace Mac_EFI_Toolkit.Forms
 
                 StringBuilder sbRomInfo = new StringBuilder();
 
-                sbRomInfo.AppendLine($"Bios ID:       {EFIROM.AppleRomInfoSectionData.BiosId ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"Model:         {EFIROM.AppleRomInfoSectionData.Model ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"EFI Version:   {EFIROM.AppleRomInfoSectionData.EfiVersion ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"Built By:      {EFIROM.AppleRomInfoSectionData.BuiltBy ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"Date Stamp:    {EFIROM.AppleRomInfoSectionData.DateStamp ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"Revision:      {EFIROM.AppleRomInfoSectionData.Revision ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"Boot ROM:      {EFIROM.AppleRomInfoSectionData.RomVersion ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"Buildcave ID:  {EFIROM.AppleRomInfoSectionData.BuildcaveId ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"Built Type:    {EFIROM.AppleRomInfoSectionData.BuildType ?? APPSTRINGS.NA}");
-                sbRomInfo.AppendLine($"Compiler:      {EFIROM.AppleRomInfoSectionData.Compiler ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Bios ID:       {_efirom.AppleRomInfoSectionData.BiosId ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Model:         {_efirom.AppleRomInfoSectionData.Model ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"EFI Version:   {_efirom.AppleRomInfoSectionData.EfiVersion ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Built By:      {_efirom.AppleRomInfoSectionData.BuiltBy ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Date Stamp:    {_efirom.AppleRomInfoSectionData.DateStamp ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Revision:      {_efirom.AppleRomInfoSectionData.Revision ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Boot ROM:      {_efirom.AppleRomInfoSectionData.RomVersion ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Buildcave ID:  {_efirom.AppleRomInfoSectionData.BuildcaveId ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Built Type:    {_efirom.AppleRomInfoSectionData.BuildType ?? APPSTRINGS.NA}");
+                sbRomInfo.AppendLine($"Compiler:      {_efirom.AppleRomInfoSectionData.Compiler ?? APPSTRINGS.NA}");
 
                 File.WriteAllText(saveFileDialog.FileName, sbRomInfo.ToString());
 

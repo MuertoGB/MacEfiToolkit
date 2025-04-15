@@ -13,10 +13,16 @@ namespace Mac_EFI_Toolkit.Forms
 {
     public partial class frmNvramSelect : FormEx
     {
+        #region Private Members
+        private readonly EFIROM _efirom;
+        #endregion
+
         #region Contructor
-        public frmNvramSelect()
+        public frmNvramSelect(EFIROM efiromInstance)
         {
             InitializeComponent();
+
+            _efirom = efiromInstance;
 
             // Attach event handlers.
             WireEventHandlers();
@@ -40,8 +46,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
-            EFIROM.ResetVss = cbxResetVss.Checked;
-            EFIROM.ResetSvs = cbxResetSvs.Checked;
+            _efirom.ResetVss = cbxResetVss.Checked;
+            _efirom.ResetSvs = cbxResetSvs.Checked;
 
             DialogResult = DialogResult.OK;
         }
