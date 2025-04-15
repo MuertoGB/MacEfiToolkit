@@ -1,23 +1,23 @@
-<h4 align="center">Version History</h4>
-<p align="center">
-  <a href="#version-100">V1.0.0</a> •
-  <a href="#version-101">V1.0.1</a> •
-  <a href="#version-102">V1.0.2</a> •
-  <a href="#version-103">V1.0.3</a> •
-  <a href="#version-110">V1.1.0</a> •
-  <a href="#version-111">V1.1.1</a> •
-  <a href="#version-112">V1.1.2</a> •
-  <a href="#version-113">V1.1.3</a> •
-  <a href="#version-114">V1.1.4</a> •
-  <a href="#version-115">V1.1.5</a> •
-  <a href="#version-200">V2.0.0</a> •
-  <a href="#version-201">V2.0.1</a> •
-  <a href="#version-202">V2.0.2</a> •
-  <a href="#version-203">V2.0.3</a> •
-  <a href="#version-204">V2.0.4</a> •
-  <a href="#version-210">V2.1.0</a> •
-  <a href="#version-211">V2.1.1</a>
-</p>
+### Version History
+
+| Major 1.x     | Major 2.x     |
+|---------------|---------------|
+| [V1.0.0](#version-100) | [V2.0.0](#version-200) |
+| [V1.0.1](#version-101) | [V2.0.1](#version-201) |
+| [V1.0.2](#version-102) | [V2.0.2](#version-202) |
+| [V1.0.3](#version-103) | [V2.0.3](#version-203) |
+| [V1.1.0](#version-110) | [V2.0.4](#version-204) |
+| [V1.1.1](#version-111) | [V2.1.0](#version-210) |
+| [V1.1.2](#version-112) | [V2.1.1](#version-211) |
+| [V1.1.3](#version-113) | [V2.1.2](#version-212) |
+| [V1.1.4](#version-114) |               |
+| [V1.1.5](#version-115) |               |
+
+
+## Version 2.1.2
+
+### Enhancements
+- Updated CREATED and MODIFIED timestamps to use a consistent, simplified format for improved readability.
 
 ## Version 2.1.1
 

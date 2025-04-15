@@ -260,13 +260,14 @@ namespace Mac_EFI_Toolkit.Tools
             FileInfo fileInfo = new FileInfo(filename);
 
             byte[] bFileBytes = File.ReadAllBytes(fileInfo.FullName);
+            string dateFormat = "MMM dd, yyyy - hh:mm tt";
 
             return new FileInfoStore
             {
                 FileNameExt = fileInfo.Name,
                 FileName = Path.GetFileNameWithoutExtension(filename),
-                CreationTime = fileInfo.CreationTime.ToString(),
-                LastWriteTime = fileInfo.LastWriteTime.ToString(),
+                CreationTime = fileInfo.CreationTime.ToString(dateFormat),
+                LastWriteTime = fileInfo.LastWriteTime.ToString(dateFormat),
                 Length = fileInfo.Length,
                 CRC32 = GetCrc32Digest(bFileBytes)
             };
