@@ -65,7 +65,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.tbxTermsText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbxTermsText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbxTermsText.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbxTermsText.ForeColor = System.Drawing.Color.Gainsboro;
+            this.tbxTermsText.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.tbxTermsText.Location = new System.Drawing.Point(4, 4);
             this.tbxTermsText.Margin = new System.Windows.Forms.Padding(0);
             this.tbxTermsText.MaxLength = 5000;
@@ -183,7 +183,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdAccept.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdAccept.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdAccept.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdAccept.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdAccept.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdAccept.Location = new System.Drawing.Point(468, 4);
             this.cmdAccept.Margin = new System.Windows.Forms.Padding(0);
             this.cmdAccept.Name = "cmdAccept";
@@ -202,7 +202,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdDecline.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(80)))));
             this.cmdDecline.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDecline.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdDecline.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdDecline.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdDecline.Location = new System.Drawing.Point(363, 4);
             this.cmdDecline.Margin = new System.Windows.Forms.Padding(0);
             this.cmdDecline.Name = "cmdDecline";
@@ -248,7 +248,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.Name = "frmTerms";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Terms";
+            this.Text = "Terms of Use";
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
             this.tlpTitle.ResumeLayout(false);

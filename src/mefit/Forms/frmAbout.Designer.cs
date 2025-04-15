@@ -72,7 +72,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // tlpBottom
             // 
-            this.tlpBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.tlpBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tlpBottom.ColumnCount = 1;
             this.tlpBottom.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpBottom.Controls.Add(this.lnkPaypal, 0, 0);
@@ -103,10 +103,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblInfo
             // 
-            this.lblInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.lblInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblInfo.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblInfo.Location = new System.Drawing.Point(0, 149);
             this.lblInfo.Margin = new System.Windows.Forms.Padding(0);
             this.lblInfo.Name = "lblInfo";
@@ -119,7 +119,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // tlpMid
             // 
-            this.tlpMid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.tlpMid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tlpMid.ColumnCount = 1;
             this.tlpMid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpMid.Controls.Add(this.lblDonationsText, 0, 0);
@@ -138,7 +138,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblDonationsText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDonationsText.AutoSize = true;
             this.lblDonationsText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDonationsText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblDonationsText.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblDonationsText.Location = new System.Drawing.Point(8, 4);
             this.lblDonationsText.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.lblDonationsText.Name = "lblDonationsText";
@@ -159,7 +159,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // tlpImages
             // 
-            this.tlpImages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.tlpImages.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tlpImages.ColumnCount = 2;
             this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tlpImages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -189,7 +189,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // tlpTopLabels
             // 
-            this.tlpTopLabels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.tlpTopLabels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tlpTopLabels.ColumnCount = 1;
             this.tlpTopLabels.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpTopLabels.Controls.Add(this.lblBuild, 0, 0);
@@ -208,9 +208,9 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.lblBuild.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblBuild.AutoSize = true;
-            this.lblBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.lblBuild.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblBuild.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuild.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(235)))), ((int)(((byte)(240)))));
+            this.lblBuild.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblBuild.Location = new System.Drawing.Point(0, 31);
             this.lblBuild.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuild.Name = "lblBuild";

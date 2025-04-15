@@ -238,7 +238,7 @@
             this.cmdHelp.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdHelp.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.cmdHelp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.cmdHelp.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdHelp.Location = new System.Drawing.Point(288, 0);
             this.cmdHelp.Margin = new System.Windows.Forms.Padding(0);
             this.cmdHelp.Name = "cmdHelp";
@@ -258,7 +258,7 @@
             this.cmdTools.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdTools.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdTools.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.cmdTools.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdTools.Location = new System.Drawing.Point(144, 0);
             this.cmdTools.Margin = new System.Windows.Forms.Padding(0);
             this.cmdTools.Name = "cmdTools";
@@ -278,7 +278,7 @@
             this.cmdMenuFolders.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdMenuFolders.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdMenuFolders.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.cmdMenuFolders.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdMenuFolders.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdMenuFolders.Location = new System.Drawing.Point(0, 0);
             this.cmdMenuFolders.Margin = new System.Windows.Forms.Padding(0);
             this.cmdMenuFolders.Name = "cmdMenuFolders";
@@ -300,7 +300,7 @@
             // 
             // tlpDrop
             // 
-            this.tlpDrop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(31)))), ((int)(((byte)(32)))));
+            this.tlpDrop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tlpDrop.ColumnCount = 1;
             this.tlpDrop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpDrop.Controls.Add(this.lblDrag, 0, 1);
@@ -322,7 +322,7 @@
             this.lblDrag.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblDrag.AutoSize = true;
             this.lblDrag.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDrag.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblDrag.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblDrag.Location = new System.Drawing.Point(108, 74);
             this.lblDrag.Name = "lblDrag";
             this.lblDrag.Size = new System.Drawing.Size(217, 46);
@@ -334,7 +334,7 @@
             // 
             this.lblGlyph.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lblGlyph.AutoSize = true;
-            this.lblGlyph.ForeColor = System.Drawing.Color.White;
+            this.lblGlyph.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblGlyph.Location = new System.Drawing.Point(208, 45);
             this.lblGlyph.Name = "lblGlyph";
             this.lblGlyph.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
@@ -351,7 +351,7 @@
             this.cmdBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdBrowse.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdBrowse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdBrowse.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdBrowse.Location = new System.Drawing.Point(166, 128);
             this.cmdBrowse.Name = "cmdBrowse";
             this.cmdBrowse.Size = new System.Drawing.Size(100, 36);
@@ -362,7 +362,7 @@
             // 
             // cmsHelp
             // 
-            this.cmsHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cmsHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.cmsHelp.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsHelp.ForeColor = System.Drawing.Color.White;
             this.cmsHelp.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -387,7 +387,7 @@
             // changelogToolStripMenuItem
             // 
             this.changelogToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.changelogToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.changelogToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.changelogToolStripMenuItem.Name = "changelogToolStripMenuItem";
             this.changelogToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.changelogToolStripMenuItem.Text = "Changelog";
@@ -395,7 +395,7 @@
             // 
             // donateToolStripMenuItem
             // 
-            this.donateToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.donateToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
             this.donateToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.donateToolStripMenuItem.Text = "Donate";
@@ -403,7 +403,7 @@
             // 
             // emailMeToolStripMenuItem
             // 
-            this.emailMeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.emailMeToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.emailMeToolStripMenuItem.Name = "emailMeToolStripMenuItem";
             this.emailMeToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.emailMeToolStripMenuItem.Text = "Email Me";
@@ -411,6 +411,7 @@
             // 
             // flexBVToolStripMenuItem
             // 
+            this.flexBVToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.flexBVToolStripMenuItem.Name = "flexBVToolStripMenuItem";
             this.flexBVToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.flexBVToolStripMenuItem.Text = "FlexBV5";
@@ -418,7 +419,7 @@
             // 
             // githubIssuesToolStripMenuItem
             // 
-            this.githubIssuesToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.githubIssuesToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.githubIssuesToolStripMenuItem.Name = "githubIssuesToolStripMenuItem";
             this.githubIssuesToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.githubIssuesToolStripMenuItem.Text = "Github Issues";
@@ -427,7 +428,7 @@
             // homepageToolStripMenuItem
             // 
             this.homepageToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.homepageToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.homepageToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.homepageToolStripMenuItem.Name = "homepageToolStripMenuItem";
             this.homepageToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.homepageToolStripMenuItem.Text = "Homepage";
@@ -435,6 +436,7 @@
             // 
             // manualToolStripMenuItem
             // 
+            this.manualToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
             this.manualToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.manualToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
@@ -448,7 +450,7 @@
             // 
             // updateAvailableToolStripMenuItem
             // 
-            this.updateAvailableToolStripMenuItem.ForeColor = System.Drawing.Color.SpringGreen;
+            this.updateAvailableToolStripMenuItem.ForeColor = System.Drawing.Color.Turquoise;
             this.updateAvailableToolStripMenuItem.Name = "updateAvailableToolStripMenuItem";
             this.updateAvailableToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.updateAvailableToolStripMenuItem.Text = "New Version Available";
@@ -458,7 +460,7 @@
             // viewApplicationLogToolStripMenuItem
             // 
             this.viewApplicationLogToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.viewApplicationLogToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.viewApplicationLogToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.viewApplicationLogToolStripMenuItem.Name = "viewApplicationLogToolStripMenuItem";
             this.viewApplicationLogToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
             this.viewApplicationLogToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
@@ -472,7 +474,7 @@
             // 
             // aboutToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
             this.aboutToolStripMenuItem.Text = "About";
@@ -480,7 +482,7 @@
             // 
             // settingsToolStripMenuItem
             // 
-            this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.settingsToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4;
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(251, 28);
@@ -489,7 +491,7 @@
             // 
             // cmsFolders
             // 
-            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.cmsFolders.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsFolders.ForeColor = System.Drawing.Color.White;
             this.cmsFolders.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -509,7 +511,7 @@
             // 
             // openBackupsFolderToolStripMenuItem
             // 
-            this.openBackupsFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openBackupsFolderToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.openBackupsFolderToolStripMenuItem.Name = "openBackupsFolderToolStripMenuItem";
             this.openBackupsFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openBackupsFolderToolStripMenuItem.Text = "Open Backups Folder";
@@ -517,7 +519,7 @@
             // 
             // openBuildsFolderToolStripMenuItem
             // 
-            this.openBuildsFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openBuildsFolderToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.openBuildsFolderToolStripMenuItem.Name = "openBuildsFolderToolStripMenuItem";
             this.openBuildsFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openBuildsFolderToolStripMenuItem.Text = "Open Builds Folder";
@@ -525,7 +527,7 @@
             // 
             // openFsysStoresFolderToolStripMenuItem
             // 
-            this.openFsysStoresFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openFsysStoresFolderToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.openFsysStoresFolderToolStripMenuItem.Name = "openFsysStoresFolderToolStripMenuItem";
             this.openFsysStoresFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openFsysStoresFolderToolStripMenuItem.Text = "Open Fsys Stores Folder";
@@ -533,7 +535,7 @@
             // 
             // openIntelMEFolderToolStripMenuItem
             // 
-            this.openIntelMEFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openIntelMEFolderToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.openIntelMEFolderToolStripMenuItem.Name = "openIntelMEFolderToolStripMenuItem";
             this.openIntelMEFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openIntelMEFolderToolStripMenuItem.Text = "Open Intel ME Folder";
@@ -541,7 +543,7 @@
             // 
             // openNVRAMFolderToolStripMenuItem
             // 
-            this.openNVRAMFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openNVRAMFolderToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.openNVRAMFolderToolStripMenuItem.Name = "openNVRAMFolderToolStripMenuItem";
             this.openNVRAMFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openNVRAMFolderToolStripMenuItem.Text = "Open NVRAM Folder";
@@ -549,7 +551,7 @@
             // 
             // openLZMADXEFolderToolStripMenuItem
             // 
-            this.openLZMADXEFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openLZMADXEFolderToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.openLZMADXEFolderToolStripMenuItem.Name = "openLZMADXEFolderToolStripMenuItem";
             this.openLZMADXEFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openLZMADXEFolderToolStripMenuItem.Text = "Open LZMA DXE Folder";
@@ -557,7 +559,7 @@
             // 
             // openSCFGFolderToolStripMenuItem
             // 
-            this.openSCFGFolderToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openSCFGFolderToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.openSCFGFolderToolStripMenuItem.Name = "openSCFGFolderToolStripMenuItem";
             this.openSCFGFolderToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openSCFGFolderToolStripMenuItem.Text = "Open SCFG Folder";
@@ -571,7 +573,7 @@
             // 
             // openWorkingDirectoryToolStripMenuItem
             // 
-            this.openWorkingDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.openWorkingDirectoryToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.openWorkingDirectoryToolStripMenuItem.Name = "openWorkingDirectoryToolStripMenuItem";
             this.openWorkingDirectoryToolStripMenuItem.Size = new System.Drawing.Size(239, 28);
             this.openWorkingDirectoryToolStripMenuItem.Text = "Open Working Directory";
@@ -579,7 +581,7 @@
             // 
             // cmsOptions
             // 
-            this.cmsOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cmsOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.cmsOptions.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsOptions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.cmsOptions.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -594,7 +596,7 @@
             // 
             // newEFIROMSessionToolStripMenuItem
             // 
-            this.newEFIROMSessionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.newEFIROMSessionToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.newEFIROMSessionToolStripMenuItem.Name = "newEFIROMSessionToolStripMenuItem";
             this.newEFIROMSessionToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.newEFIROMSessionToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
@@ -604,7 +606,7 @@
             // 
             // newSOCROMSessionToolStripMenuItem
             // 
-            this.newSOCROMSessionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.newSOCROMSessionToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.newSOCROMSessionToolStripMenuItem.Name = "newSOCROMSessionToolStripMenuItem";
             this.newSOCROMSessionToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.newSOCROMSessionToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F3;
@@ -622,7 +624,7 @@
             // restartApplicationToolStripMenuItem
             // 
             this.restartApplicationToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.restartApplicationToolStripMenuItem.ForeColor = System.Drawing.Color.White;
+            this.restartApplicationToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.restartApplicationToolStripMenuItem.Name = "restartApplicationToolStripMenuItem";
             this.restartApplicationToolStripMenuItem.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.restartApplicationToolStripMenuItem.Size = new System.Drawing.Size(253, 28);

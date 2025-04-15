@@ -265,10 +265,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblBiosIdText
             // 
-            this.lblBiosIdText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblBiosIdText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblBiosIdText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBiosIdText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBiosIdText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblBiosIdText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblBiosIdText.Location = new System.Drawing.Point(0, 0);
             this.lblBiosIdText.Margin = new System.Windows.Forms.Padding(0);
             this.lblBiosIdText.Name = "lblBiosIdText";
@@ -280,10 +280,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblModelText
             // 
-            this.lblModelText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblModelText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblModelText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblModelText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblModelText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblModelText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblModelText.Location = new System.Drawing.Point(0, 34);
             this.lblModelText.Margin = new System.Windows.Forms.Padding(0);
             this.lblModelText.Name = "lblModelText";
@@ -295,10 +295,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblEfiVersionText
             // 
-            this.lblEfiVersionText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblEfiVersionText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblEfiVersionText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEfiVersionText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEfiVersionText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblEfiVersionText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblEfiVersionText.Location = new System.Drawing.Point(0, 68);
             this.lblEfiVersionText.Margin = new System.Windows.Forms.Padding(0);
             this.lblEfiVersionText.Name = "lblEfiVersionText";
@@ -310,10 +310,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblBuiltByText
             // 
-            this.lblBuiltByText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblBuiltByText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblBuiltByText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuiltByText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuiltByText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblBuiltByText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblBuiltByText.Location = new System.Drawing.Point(0, 102);
             this.lblBuiltByText.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuiltByText.Name = "lblBuiltByText";
@@ -325,10 +325,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblDateStamptext
             // 
-            this.lblDateStamptext.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblDateStamptext.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblDateStamptext.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDateStamptext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDateStamptext.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblDateStamptext.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblDateStamptext.Location = new System.Drawing.Point(0, 136);
             this.lblDateStamptext.Margin = new System.Windows.Forms.Padding(0);
             this.lblDateStamptext.Name = "lblDateStamptext";
@@ -340,10 +340,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblRevisionText
             // 
-            this.lblRevisionText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblRevisionText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblRevisionText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblRevisionText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRevisionText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblRevisionText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblRevisionText.Location = new System.Drawing.Point(0, 170);
             this.lblRevisionText.Margin = new System.Windows.Forms.Padding(0);
             this.lblRevisionText.Name = "lblRevisionText";
@@ -355,10 +355,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblBootromText
             // 
-            this.lblBootromText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblBootromText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblBootromText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBootromText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBootromText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblBootromText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblBootromText.Location = new System.Drawing.Point(0, 204);
             this.lblBootromText.Margin = new System.Windows.Forms.Padding(0);
             this.lblBootromText.Name = "lblBootromText";
@@ -370,10 +370,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblBuildcaveText
             // 
-            this.lblBuildcaveText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblBuildcaveText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblBuildcaveText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuildcaveText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuildcaveText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblBuildcaveText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblBuildcaveText.Location = new System.Drawing.Point(0, 238);
             this.lblBuildcaveText.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuildcaveText.Name = "lblBuildcaveText";
@@ -385,10 +385,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblBuildTypeText
             // 
-            this.lblBuildTypeText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblBuildTypeText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblBuildTypeText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuildTypeText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuildTypeText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblBuildTypeText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblBuildTypeText.Location = new System.Drawing.Point(0, 272);
             this.lblBuildTypeText.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuildTypeText.Name = "lblBuildTypeText";
@@ -400,10 +400,10 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // lblCompilerText
             // 
-            this.lblCompilerText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblCompilerText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblCompilerText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCompilerText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCompilerText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(225)))), ((int)(((byte)(240)))));
+            this.lblCompilerText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(230)))));
             this.lblCompilerText.Location = new System.Drawing.Point(0, 306);
             this.lblCompilerText.Margin = new System.Windows.Forms.Padding(0);
             this.lblCompilerText.Name = "lblCompilerText";
@@ -416,10 +416,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblBiosId
             // 
             this.lblBiosId.AutoEllipsis = true;
-            this.lblBiosId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
+            this.lblBiosId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(57)))), ((int)(((byte)(57)))));
             this.lblBiosId.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBiosId.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBiosId.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblBiosId.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblBiosId.Location = new System.Drawing.Point(131, 0);
             this.lblBiosId.Margin = new System.Windows.Forms.Padding(0);
             this.lblBiosId.Name = "lblBiosId";
@@ -432,10 +432,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblModel
             // 
             this.lblModel.AutoEllipsis = true;
-            this.lblModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
+            this.lblModel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.lblModel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblModel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblModel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblModel.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblModel.Location = new System.Drawing.Point(131, 34);
             this.lblModel.Margin = new System.Windows.Forms.Padding(0);
             this.lblModel.Name = "lblModel";
@@ -448,10 +448,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblEfiVersion
             // 
             this.lblEfiVersion.AutoEllipsis = true;
-            this.lblEfiVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
+            this.lblEfiVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(57)))), ((int)(((byte)(57)))));
             this.lblEfiVersion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEfiVersion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEfiVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblEfiVersion.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblEfiVersion.Location = new System.Drawing.Point(131, 68);
             this.lblEfiVersion.Margin = new System.Windows.Forms.Padding(0);
             this.lblEfiVersion.Name = "lblEfiVersion";
@@ -464,10 +464,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblBuiltBy
             // 
             this.lblBuiltBy.AutoEllipsis = true;
-            this.lblBuiltBy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
+            this.lblBuiltBy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.lblBuiltBy.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuiltBy.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuiltBy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblBuiltBy.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblBuiltBy.Location = new System.Drawing.Point(131, 102);
             this.lblBuiltBy.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuiltBy.Name = "lblBuiltBy";
@@ -480,10 +480,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblDateStamp
             // 
             this.lblDateStamp.AutoEllipsis = true;
-            this.lblDateStamp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
+            this.lblDateStamp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(57)))), ((int)(((byte)(57)))));
             this.lblDateStamp.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDateStamp.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDateStamp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblDateStamp.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblDateStamp.Location = new System.Drawing.Point(131, 136);
             this.lblDateStamp.Margin = new System.Windows.Forms.Padding(0);
             this.lblDateStamp.Name = "lblDateStamp";
@@ -496,10 +496,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblRevision
             // 
             this.lblRevision.AutoEllipsis = true;
-            this.lblRevision.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
+            this.lblRevision.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.lblRevision.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblRevision.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblRevision.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblRevision.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblRevision.Location = new System.Drawing.Point(131, 170);
             this.lblRevision.Margin = new System.Windows.Forms.Padding(0);
             this.lblRevision.Name = "lblRevision";
@@ -512,10 +512,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblBootRom
             // 
             this.lblBootRom.AutoEllipsis = true;
-            this.lblBootRom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
+            this.lblBootRom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(57)))), ((int)(((byte)(57)))));
             this.lblBootRom.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBootRom.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBootRom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblBootRom.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblBootRom.Location = new System.Drawing.Point(131, 204);
             this.lblBootRom.Margin = new System.Windows.Forms.Padding(0);
             this.lblBootRom.Name = "lblBootRom";
@@ -528,10 +528,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblBuildcaveId
             // 
             this.lblBuildcaveId.AutoEllipsis = true;
-            this.lblBuildcaveId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
+            this.lblBuildcaveId.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.lblBuildcaveId.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuildcaveId.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuildcaveId.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblBuildcaveId.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblBuildcaveId.Location = new System.Drawing.Point(131, 238);
             this.lblBuildcaveId.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuildcaveId.Name = "lblBuildcaveId";
@@ -544,10 +544,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblBuildType
             // 
             this.lblBuildType.AutoEllipsis = true;
-            this.lblBuildType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(62)))));
+            this.lblBuildType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(57)))), ((int)(((byte)(57)))), ((int)(((byte)(57)))));
             this.lblBuildType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuildType.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuildType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblBuildType.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblBuildType.Location = new System.Drawing.Point(131, 272);
             this.lblBuildType.Margin = new System.Windows.Forms.Padding(0);
             this.lblBuildType.Name = "lblBuildType";
@@ -560,10 +560,10 @@ namespace Mac_EFI_Toolkit.Forms
             // lblCompiler
             // 
             this.lblCompiler.AutoEllipsis = true;
-            this.lblCompiler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
+            this.lblCompiler.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.lblCompiler.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCompiler.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCompiler.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblCompiler.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblCompiler.Location = new System.Drawing.Point(131, 306);
             this.lblCompiler.Margin = new System.Windows.Forms.Padding(0);
             this.lblCompiler.Name = "lblCompiler";
@@ -598,7 +598,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.cmdExport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdExport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdExport.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.cmdExport.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdExport.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdExport.Location = new System.Drawing.Point(0, 0);
             this.cmdExport.Margin = new System.Windows.Forms.Padding(0);
             this.cmdExport.Name = "cmdExport";

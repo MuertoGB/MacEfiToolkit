@@ -90,6 +90,20 @@ public class FormEx : Form
             UpdateAccentColor();
         }
     }
+
+    protected override void OnActivated(EventArgs e)
+    {
+        base.OnActivated(e);
+
+        UpdateAccentColor();
+    }
+
+    protected override void OnDeactivate(EventArgs e)
+    {
+        base.OnDeactivate(e);
+
+        UpdateAccentColor();
+    }
     #endregion
 
     #region Accent Colour
@@ -99,7 +113,14 @@ public class FormEx : Form
         {
             foreach (FormEx form in openForms)
             {
-                form.Invoke((MethodInvoker)(() => form.SetAccentColor()));
+                if (form == Form.ActiveForm)
+                {
+                    form.SetAccentColor(); // Active form gets accent color
+                }
+                else
+                {
+                    form.BackColor = Colours.InactiveWindow; // Inactive forms get the inactive color
+                }
             }
         }
     }
@@ -112,7 +133,7 @@ public class FormEx : Form
             return;
         }
 
-        BackColor = Colours.ClrAppBorderDefault;
+        BackColor = Colours.AppBorderDefault;
     }
     #endregion
 }

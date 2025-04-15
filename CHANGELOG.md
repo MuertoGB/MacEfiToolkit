@@ -17,6 +17,7 @@
 ## Version 2.1.2
 
 ### Enhancements
+- User interface improvements.
 - Updated CREATED and MODIFIED timestamps to use a consistent, simplified format for improved readability.
 
 ## Version 2.1.1

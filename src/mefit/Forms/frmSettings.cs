@@ -74,7 +74,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strStartupInitialPath, lblStartupDirectory.Text))
             {
                 lblStartupDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strStartupInitialPath}";
-                lblStartupDirectory.ForeColor = Colours.ClrOkay;
+                lblStartupDirectory.ForeColor = Colours.Okay;
             }
         }
 
@@ -85,7 +85,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strEfiInitialPath, lblEfiDirectory.Text))
             {
                 lblEfiDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strEfiInitialPath}";
-                lblEfiDirectory.ForeColor = Colours.ClrOkay;
+                lblEfiDirectory.ForeColor = Colours.Okay;
             }
         }
 
@@ -96,7 +96,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (!string.Equals(_strSocInitialPath, lblSocDirectory))
             {
                 lblSocDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strSocInitialPath}";
-                lblSocDirectory.ForeColor = Colours.ClrOkay;
+                lblSocDirectory.ForeColor = Colours.Okay;
             }
         }
 
@@ -246,7 +246,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             string strDirectory = Settings.ReadString(setting);
             control.Text = strDirectory;
-            control.ForeColor = Directory.Exists(strDirectory) ? Colours.ClrSettingsDefault : Colours.ClrWarn;
+            control.ForeColor = Directory.Exists(strDirectory) ? Colours.SettingsDefault : Colours.Warning;
         }
 
         private void SetButtonProperties()

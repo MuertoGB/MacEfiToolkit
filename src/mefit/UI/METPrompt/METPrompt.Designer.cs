@@ -34,9 +34,9 @@ namespace Mac_EFI_Toolkit.UI
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.pnlSeperatorBtm = new System.Windows.Forms.Panel();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
-            this.lblMessage = new System.Windows.Forms.Label();
             this.cmdNo = new System.Windows.Forms.Button();
             this.cmdYes = new System.Windows.Forms.Button();
+            this.lblMessage = new System.Windows.Forms.Label();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
             this.tlpButtons.SuspendLayout();
             this.tlpMain.SuspendLayout();
@@ -96,23 +96,6 @@ namespace Mac_EFI_Toolkit.UI
             this.tlpButtons.TabIndex = 0;
             this.tlpButtons.TabStop = true;
             // 
-            // lblMessage
-            // 
-            this.lblMessage.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblMessage.AutoEllipsis = true;
-            this.lblMessage.AutoSize = true;
-            this.lblMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
-            this.lblMessage.Location = new System.Drawing.Point(157, 41);
-            this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
-            this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Padding = new System.Windows.Forms.Padding(6);
-            this.lblMessage.Size = new System.Drawing.Size(34, 35);
-            this.lblMessage.TabIndex = 0;
-            this.lblMessage.Text = "...";
-            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // cmdNo
             // 
             this.cmdNo.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -122,7 +105,7 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdNo.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdNo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdNo.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdNo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdNo.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdNo.Location = new System.Drawing.Point(243, 5);
             this.cmdNo.Margin = new System.Windows.Forms.Padding(0);
             this.cmdNo.Name = "cmdNo";
@@ -141,7 +124,7 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdYes.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdYes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdYes.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdYes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.cmdYes.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdYes.Location = new System.Drawing.Point(138, 5);
             this.cmdYes.Margin = new System.Windows.Forms.Padding(0);
             this.cmdYes.Name = "cmdYes";
@@ -150,6 +133,23 @@ namespace Mac_EFI_Toolkit.UI
             this.cmdYes.Text = "YES";
             this.cmdYes.UseVisualStyleBackColor = false;
             this.cmdYes.Click += new System.EventHandler(this.cmdYes_Click);
+            // 
+            // lblMessage
+            // 
+            this.lblMessage.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblMessage.AutoEllipsis = true;
+            this.lblMessage.AutoSize = true;
+            this.lblMessage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.lblMessage.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMessage.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblMessage.Location = new System.Drawing.Point(157, 41);
+            this.lblMessage.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Padding = new System.Windows.Forms.Padding(6);
+            this.lblMessage.Size = new System.Drawing.Size(34, 35);
+            this.lblMessage.TabIndex = 0;
+            this.lblMessage.Text = "...";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tlpMain
             // 
