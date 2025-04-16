@@ -102,19 +102,19 @@ namespace Mac_EFI_Toolkit.Forms
 
         private static void OpenFolderDialog(Settings.StringKey settingsType, ref string path)
         {
-            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                folderBrowserDialog.SelectedPath =
+                dialog.SelectedPath =
                     string.IsNullOrEmpty(Settings.ReadString(settingsType))
                         ? ApplicationPaths.WorkingDirectory
                         : Settings.ReadString(settingsType);
 
-                folderBrowserDialog.Description = APPSTRINGS.SELECT_FOLDER;
-                folderBrowserDialog.ShowNewFolderButton = true;
+                dialog.Description = APPSTRINGS.SELECT_FOLDER;
+                dialog.ShowNewFolderButton = true;
 
-                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    path = folderBrowserDialog.SelectedPath;
+                    path = dialog.SelectedPath;
                 }
             }
         }
@@ -162,14 +162,14 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdDefaults_Click(object sender, EventArgs e)
         {
-            DialogResult dlgResult =
+            DialogResult result =
                 METPrompt.Show(
                     this,
                     APPSTRINGS.RESET_SETTINGS_DEFAULT,
                     METPrompt.PType.Warning,
                     METPrompt.PButtons.YesNo);
 
-            if (dlgResult != DialogResult.Yes)
+            if (result != DialogResult.Yes)
             {
                 return;
             }

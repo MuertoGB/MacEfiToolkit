@@ -238,15 +238,15 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdMenuOpen_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog
+            using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
                 Filter = APPSTRINGS.FILTER_SOCROM_SUPPORTED_FIRMWARE
             })
             {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    OpenBinary(openFileDialog.FileName);
+                    OpenBinary(dialog.FileName);
                 }
             }
         }
@@ -277,9 +277,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdMenuPatch_Click(object sender, EventArgs e)
         {
-            bool bOpenEditor = Settings.ReadBoolean(Settings.BooleanKey.AcceptedEditingTerms);
+            bool openEditor = Settings.ReadBoolean(Settings.BooleanKey.AcceptedEditingTerms);
 
-            if (!bOpenEditor)
+            if (!openEditor)
             {
                 BlurHelper.ApplyBlur(this);
 
@@ -287,11 +287,11 @@ namespace Mac_EFI_Toolkit.Forms
                 {
                     form.FormClosed += ChildWindowClosed;
                     DialogResult result = form.ShowDialog();
-                    bOpenEditor = (result != DialogResult.No);
+                    openEditor = (result != DialogResult.No);
                 }
             }
 
-            if (bOpenEditor)
+            if (openEditor)
             {
                 UITools.ShowContextMenuAtControlPoint(
                     sender,
@@ -346,14 +346,14 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string strSerial = _socrom.SCfgSectionData.Serial;
+            string serial = _socrom.SCfgSectionData.Serial;
 
-            if (string.IsNullOrEmpty(strSerial))
+            if (string.IsNullOrEmpty(serial))
             {
                 return;
             }
 
-            Clipboard.SetText(strSerial);
+            Clipboard.SetText(serial);
 
             if (!Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
@@ -392,7 +392,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Program.EnsureDirectoriesExist();
 
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
                 FileName = $"{_socrom.FirmwareInfo.FileName}_{SOCSTRINGS.SCFG_REGION}",
@@ -400,15 +400,15 @@ namespace Mac_EFI_Toolkit.Forms
                 InitialDirectory = ApplicationPaths.ScfgDirectory
             })
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
                 // Save the Scfg stores bytes to disk.
-                if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, _socrom.SCfgSectionData.StoreBuffer))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, _socrom.SCfgSectionData.StoreBuffer))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
                 }
 
@@ -424,7 +424,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Program.EnsureDirectoriesExist();
 
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 InitialDirectory = ApplicationPaths.BackupsDirectory,
                 Filter = APPSTRINGS.FILTER_ZIP,
@@ -433,16 +433,16 @@ namespace Mac_EFI_Toolkit.Forms
             })
             {
                 // Action was cancelled
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
-                FileTools.BackupFileToZip(_socrom.LoadedBinaryBuffer, _socrom.FirmwareInfo.FileNameExt, saveFileDialog.FileName);
+                FileTools.BackupFileToZip(_socrom.LoadedBinaryBuffer, _socrom.FirmwareInfo.FileNameExt, dialog.FileName);
 
-                if (File.Exists(saveFileDialog.FileName))
+                if (File.Exists(dialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
                 }
 
@@ -456,7 +456,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void exportFirmwareInformationTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
                 FileName = $"{_socrom.FirmwareInfo.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
@@ -464,50 +464,50 @@ namespace Mac_EFI_Toolkit.Forms
                 InitialDirectory = ApplicationPaths.WorkingDirectory
             })
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
-                StringBuilder sbFirmwareInfo = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
 
-                sbFirmwareInfo.AppendLine("File");
-                sbFirmwareInfo.AppendLine("----------------------------------");
-                sbFirmwareInfo.AppendLine($"Filename:        {_socrom.FirmwareInfo.FileNameExt}");
-                sbFirmwareInfo.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} bytes");
-                sbFirmwareInfo.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)_socrom.FirmwareInfo.Length)}");
-                sbFirmwareInfo.AppendLine($"Size (Hex):      {_socrom.FirmwareInfo.Length:X}h");
-                sbFirmwareInfo.AppendLine($"CRC32:           {_socrom.FirmwareInfo.CRC32:X}");
-                sbFirmwareInfo.AppendLine($"Created:         {_socrom.FirmwareInfo.CreationTime}");
-                sbFirmwareInfo.AppendLine($"Modified:        {_socrom.FirmwareInfo.LastWriteTime}\r\n");
+                builder.AppendLine("File");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"Filename:        {_socrom.FirmwareInfo.FileNameExt}");
+                builder.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} bytes");
+                builder.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)_socrom.FirmwareInfo.Length)}");
+                builder.AppendLine($"Size (Hex):      {_socrom.FirmwareInfo.Length:X}h");
+                builder.AppendLine($"CRC32:           {_socrom.FirmwareInfo.CRC32:X}");
+                builder.AppendLine($"Created:         {_socrom.FirmwareInfo.CreationTime}");
+                builder.AppendLine($"Modified:        {_socrom.FirmwareInfo.LastWriteTime}\r\n");
 
-                sbFirmwareInfo.AppendLine("Controller");
-                sbFirmwareInfo.AppendLine("----------------------------------");
-                sbFirmwareInfo.AppendLine($"Type:            {_socrom.RomType}\r\n");
+                builder.AppendLine("Controller");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"Type:            {_socrom.RomType}\r\n");
 
-                sbFirmwareInfo.AppendLine("SCfg");
-                sbFirmwareInfo.AppendLine("----------------------------------");
-                sbFirmwareInfo.AppendLine($"Base:            {_socrom.SCfgSectionData.StoreBase:X}h");
-                sbFirmwareInfo.AppendLine($"Size (Bytes):    {_socrom.SCfgSectionData.StoreLength} bytes");
-                sbFirmwareInfo.AppendLine($"Size (Hex):      {_socrom.SCfgSectionData.StoreLength:X}h");
-                sbFirmwareInfo.AppendLine($"CRC32:           {_socrom.SCfgSectionData.StoreCRC ?? APPSTRINGS.NA}");
-                sbFirmwareInfo.AppendLine($"Serial:          {_socrom.SCfgSectionData.Serial ?? APPSTRINGS.NA}\r\n");
+                builder.AppendLine("SCfg");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"Base:            {_socrom.SCfgSectionData.StoreBase:X}h");
+                builder.AppendLine($"Size (Bytes):    {_socrom.SCfgSectionData.StoreLength} bytes");
+                builder.AppendLine($"Size (Hex):      {_socrom.SCfgSectionData.StoreLength:X}h");
+                builder.AppendLine($"CRC32:           {_socrom.SCfgSectionData.StoreCRC ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Serial:          {_socrom.SCfgSectionData.Serial ?? APPSTRINGS.NA}\r\n");
 
-                sbFirmwareInfo.AppendLine("Model");
-                sbFirmwareInfo.AppendLine("----------------------------------");
-                sbFirmwareInfo.AppendLine($"Config:          {_socrom.ConfigCode ?? APPSTRINGS.NA}");
-                sbFirmwareInfo.AppendLine($"Order No:        {_socrom.SCfgSectionData.SON ?? APPSTRINGS.NA}");
-                sbFirmwareInfo.AppendLine($"Reg No:          {_socrom.SCfgSectionData.RegNum ?? APPSTRINGS.NA}\r\n");
+                builder.AppendLine("Model");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"Config:          {_socrom.ConfigCode ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Order No:        {_socrom.SCfgSectionData.SON ?? APPSTRINGS.NA}");
+                builder.AppendLine($"Reg No:          {_socrom.SCfgSectionData.RegNum ?? APPSTRINGS.NA}\r\n");
 
-                sbFirmwareInfo.AppendLine("Firmware");
-                sbFirmwareInfo.AppendLine("----------------------------------");
-                sbFirmwareInfo.AppendLine($"iBoot Version:   {_socrom.iBootVersion ?? APPSTRINGS.NA}");
+                builder.AppendLine("Firmware");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"iBoot Version:   {_socrom.iBootVersion ?? APPSTRINGS.NA}");
 
-                File.WriteAllText(saveFileDialog.FileName, sbFirmwareInfo.ToString());
+                File.WriteAllText(dialog.FileName, builder.ToString());
 
-                sbFirmwareInfo.Clear();
+                builder.Clear();
 
-                if (!File.Exists(saveFileDialog.FileName))
+                if (!File.Exists(dialog.FileName))
                 {
                     METPrompt.Show(
                         this,
@@ -518,7 +518,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
             }
         }
         #endregion
@@ -557,14 +557,14 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            DialogResult dlgResult =
+            DialogResult result =
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.UNLOAD_FIRMWARE_RESET,
                     METPrompt.PType.Warning,
                     METPrompt.PButtons.YesNo);
 
-            if (dlgResult == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 ToggleControlEnable(false);
                 ResetWindow();
@@ -585,10 +585,10 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Load bytes from loaded binary file.
-            byte[] bFirmwareBuffer = File.ReadAllBytes(_socrom.LoadedBinaryPath);
+            byte[] binaryBuffer = File.ReadAllBytes(_socrom.LoadedBinaryPath);
 
             // Check if the binaries match in size and data.
-            if (BinaryTools.ByteArraysMatch(bFirmwareBuffer, _socrom.LoadedBinaryBuffer))
+            if (BinaryTools.ByteArraysMatch(binaryBuffer, _socrom.LoadedBinaryBuffer))
             {
                 // Loaded binaries match.
                 METPrompt.Show(
@@ -724,7 +724,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetTipHandlers()
         {
-            Button[] arrButtons =
+            Button[] buttons =
             {
                 cmdMenuOpen,
                 cmdMenuFolders,
@@ -736,23 +736,23 @@ namespace Mac_EFI_Toolkit.Forms
                 cmdOpenInExplorer
             };
 
-            Label[] arrLabels = { lblParseTime };
+            Label[] labels = { lblParseTime };
 
-            CheckBox[] arrCheckboxes = { cbxCensor };
+            CheckBox[] checkboxes = { cbxCensor };
 
-            foreach (Button button in arrButtons)
+            foreach (Button button in buttons)
             {
                 button.MouseEnter += HandleMouseEnterTip;
                 button.MouseLeave += HandleMouseLeaveTip;
             }
 
-            foreach (Label label in arrLabels)
+            foreach (Label label in labels)
             {
                 label.MouseEnter += HandleMouseEnterTip;
                 label.MouseLeave += HandleMouseLeaveTip;
             }
 
-            foreach (CheckBox checkBox in arrCheckboxes)
+            foreach (CheckBox checkBox in checkboxes)
             {
                 checkBox.MouseEnter += HandleMouseEnterTip;
                 checkBox.MouseLeave += HandleMouseLeaveTip;
@@ -764,7 +764,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
             {
-                Dictionary<object, string> dictTooltips = new Dictionary<object, string>
+                Dictionary<object, string> tooltips = new Dictionary<object, string>
                 {
                     { cmdMenuOpen, $"{SOCSTRINGS.MENU_TIP_OPEN} (CTRL + O)" },
                     { cmdMenuCopy, $"{SOCSTRINGS.MENU_TIP_COPY} (CTRL + C)" },
@@ -778,7 +778,7 @@ namespace Mac_EFI_Toolkit.Forms
                     { cbxCensor, cbxCensorTipString() }
                 };
 
-                if (dictTooltips.TryGetValue(sender, out string value))
+                if (tooltips.TryGetValue(sender, out string value))
                 {
                     lblStatusBarTip.Text = value;
                 }
@@ -959,15 +959,15 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateFileSizeControls()
         {
-            long lSize = _socrom.FirmwareInfo.Length;
-            bool bValidSize = FileTools.GetIsValidBinSize(lSize);
+            long length = _socrom.FirmwareInfo.Length;
+            bool validSize = FileTools.GetIsValidBinSize(length);
 
-            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(lSize)} {APPSTRINGS.BYTES} ({lSize:X}h)";
+            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(length)} {APPSTRINGS.BYTES} ({length:X}h)";
 
-            if (!bValidSize)
+            if (!validSize)
             {
                 lblFilesize.ForeColor = Colours.Error;
-                lblFilesize.Text += $" ({FileTools.GetSizeDifference(lSize)})";
+                lblFilesize.Text += $" ({FileTools.GetSizeDifference(length)})";
             }
         }
 
@@ -983,7 +983,6 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 lbliBoot.Text = $"{_socrom.iBootVersion} {SOCSTRINGS.ON} {(_socrom.RomType == 0 ? SOCSTRINGS.T2 : SOCSTRINGS.SILICON)}";
                 iBootVersionToolStripMenuItem.Enabled = true;
-
                 return;
             }
 
@@ -1027,20 +1026,20 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateSerialControls()
         {
-            string strSerial = _socrom.SCfgSectionData.Serial;
+            string serial = _socrom.SCfgSectionData.Serial;
 
-            if (!string.IsNullOrEmpty(strSerial))
+            if (!string.IsNullOrEmpty(serial))
             {
                 if (cbxCensor.Checked)
                 {
-                    lblSerial.Text = strSerial;
+                    lblSerial.Text = serial;
                 }
                 else
                 {
-                    lblSerial.Text = $"{strSerial.Substring(0, 2)}******{strSerial.Substring(8, 4)}";
+                    lblSerial.Text = $"{serial.Substring(0, 2)}******{serial.Substring(8, 4)}";
                 }
 
-                if (!Serial.IsValid(strSerial))
+                if (!Serial.IsValid(serial))
                 {
                     lblSerial.ForeColor = Colours.Warning;
                 }
@@ -1073,12 +1072,12 @@ namespace Mac_EFI_Toolkit.Forms
 
         internal async void GetConfigCodeAsync(string hwc)
         {
-            string strConfigCode = await MacTools.GetDeviceConfigCodeSupportRemote(hwc);
+            string configCode = await MacTools.GetDeviceConfigCodeSupportRemote(hwc);
 
-            if (!string.IsNullOrEmpty(strConfigCode))
+            if (!string.IsNullOrEmpty(configCode))
             {
-                _socrom.ConfigCode = strConfigCode;
-                lblConfigCode.Text = strConfigCode;
+                _socrom.ConfigCode = configCode;
+                lblConfigCode.Text = configCode;
                 lblConfigCode.ForeColor = Colours.NormalText;
                 configToolStripMenuItem.Enabled = true;
                 return;
@@ -1180,18 +1179,18 @@ namespace Mac_EFI_Toolkit.Forms
             // Create buffers.
             Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
-            byte[] bFirmwareBuffer = BinaryTools.CloneBuffer(_socrom.LoadedBinaryBuffer);
-            byte[] bNewSerial = Encoding.UTF8.GetBytes(serial);
+            byte[] binaryBuffer = BinaryTools.CloneBuffer(_socrom.LoadedBinaryBuffer);
+            byte[] serialBuffer = Encoding.UTF8.GetBytes(serial);
 
             // Overwrite serial in the binary buffer.
             Logger.WriteCallerLine(LOGSTRINGS.SSN_WTB);
 
-            BinaryTools.OverwriteBytesAtBase(bFirmwareBuffer, _socrom.SCfgSectionData.SerialBase, bNewSerial);
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _socrom.SCfgSectionData.SerialBase, serialBuffer);
 
             Logger.WriteCallerLine(LOGSTRINGS.SCFG_LFB);
 
             // Load patched scfg from the binary buffer.
-            SCfgStore scfgStore = _socrom.GetSCfgData(bFirmwareBuffer, false);
+            SCfgStore scfgStore = _socrom.GetSCfgData(binaryBuffer, false);
 
             // Verify the serial was written correctly.
             if (!string.Equals(serial, scfgStore.Serial))
@@ -1208,7 +1207,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
             {
-                SaveOutputFirmwareSocrom(bFirmwareBuffer);
+                SaveOutputFirmwareSocrom(binaryBuffer);
                 return;
             }
 
@@ -1221,44 +1220,44 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
 
-            using (OpenFileDialog openFileDialog = CreateScfgOpenFileDialog())
+            using (OpenFileDialog dialog = CreateScfgOpenFileDialog())
             {
-                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SCFG_IMPORT_CANCELLED}");
                     return;
                 }
 
                 // Check the SOCROM contains a store, otherwise set the base address.
-                int iScfgBase = _socrom.SCfgSectionData.StoreBase;
-                bool isScfgFound = true;
+                int scfgBase = _socrom.SCfgSectionData.StoreBase;
+                bool scfgExists = true;
 
                 // Set the Scfg base manually.
-                if (iScfgBase == -1)
+                if (scfgBase == -1)
                 {
-                    isScfgFound = false;
+                    scfgExists = false;
                     Logger.WriteCallerLine($"{LOGSTRINGS.SCFG_BASE_ADJUST} {SOCROM.SCFG_EXPECTED_BASE:X}h");
-                    iScfgBase = SOCROM.SCFG_EXPECTED_BASE;
+                    scfgBase = SOCROM.SCFG_EXPECTED_BASE;
                 }
 
                 Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
-                byte[] bFirmwareBuffer = BinaryTools.CloneBuffer(_socrom.LoadedBinaryBuffer);
-                byte[] bScfgBuffer = File.ReadAllBytes(openFileDialog.FileName);
+                byte[] binaryBuffer = BinaryTools.CloneBuffer(_socrom.LoadedBinaryBuffer);
+                byte[] scfgBuffer = File.ReadAllBytes(dialog.FileName);
 
-                if (!ValidateScfgStore(bScfgBuffer))
+                if (!ValidateScfgStore(scfgBuffer))
                 {
                     return;
                 }
 
                 // Check were not writing over data we shouldn't be.
-                if (!isScfgFound)
+                if (!scfgExists)
                 {
-                    byte[] bWriteBuffer = BinaryTools.GetBytesBaseLength(bFirmwareBuffer, SOCROM.SCFG_EXPECTED_BASE, bScfgBuffer.Length);
+                    byte[] emptyBuffer = BinaryTools.GetBytesBaseLength(binaryBuffer, SOCROM.SCFG_EXPECTED_BASE, scfgBuffer.Length);
 
-                    for (int i = 0; i < bWriteBuffer.Length; i++)
+                    for (int i = 0; i < emptyBuffer.Length; i++)
                     {
-                        if (bWriteBuffer[i] != 0xFF)
+                        if (emptyBuffer[i] != 0xFF)
                         {
                             Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SCFG_POS_INITIALIZED}");
                             NotifyPatchingFailure();
@@ -1270,13 +1269,13 @@ namespace Mac_EFI_Toolkit.Forms
                 Logger.WriteLine(LOGSTRINGS.WRITE_NEW_DATA, Logger.LogType.Application);
 
                 // Overwrite Scfg store in the binary buffer.
-                BinaryTools.OverwriteBytesAtBase(bFirmwareBuffer, iScfgBase, bScfgBuffer);
+                BinaryTools.OverwriteBytesAtBase(binaryBuffer, scfgBase, scfgBuffer);
 
                 // Load Scfg store from the binary buffer.
-                SCfgStore scfgStore = _socrom.GetSCfgData(bFirmwareBuffer, false);
+                SCfgStore scfgStore = _socrom.GetSCfgData(binaryBuffer, false);
 
                 // Check store was written successfully.
-                if (!BinaryTools.ByteArraysMatch(scfgStore.StoreBuffer, bScfgBuffer))
+                if (!BinaryTools.ByteArraysMatch(scfgStore.StoreBuffer, scfgBuffer))
                 {
                     Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_COMP_FAILED}");
                     NotifyPatchingFailure();
@@ -1287,7 +1286,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
                 {
-                    SaveOutputFirmwareSocrom(bFirmwareBuffer);
+                    SaveOutputFirmwareSocrom(binaryBuffer);
                     return;
                 }
 
@@ -1306,10 +1305,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         private bool ValidateScfgStore(byte[] scfgbuffer)
         {
-            int iScfgBase = BinaryTools.GetBaseAddress(scfgbuffer, Signatures.Scfg.HeaderMarker);
+            int scfgBase = BinaryTools.GetBaseAddress(scfgbuffer, Signatures.Scfg.HeaderMarker);
 
             // Expect scfg signature at address 0h.
-            if (iScfgBase != 0)
+            if (scfgBase != 0)
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_SIG_MISALIGNED}");
                 NotifyPatchingFailure();
@@ -1338,28 +1337,28 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SaveOutputFirmwareSocrom(byte[] binaryBuffer)
         {
-            using (SaveFileDialog saveFileDialog = CreateFirmwareSaveFileDialog())
+            using (SaveFileDialog dialog = CreateFirmwareSaveFileDialog())
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
                     return;
                 }
 
-                if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, binaryBuffer) && File.Exists(saveFileDialog.FileName))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, binaryBuffer) && File.Exists(dialog.FileName))
                 {
-                    Logger.WriteCallerLine($"{LOGSTRINGS.FILE_SAVE_SUCCESS} {saveFileDialog.FileName}");
+                    Logger.WriteCallerLine($"{LOGSTRINGS.FILE_SAVE_SUCCESS} {dialog.FileName}");
 
-                    DialogResult dlgResult =
+                    DialogResult result =
                         METPrompt.Show(
                             this,
                             DIALOGSTRINGS.FW_SAVED_SUCCESS_LOAD,
                             METPrompt.PType.Question,
                             METPrompt.PButtons.YesNo);
 
-                    if (dlgResult == DialogResult.Yes)
+                    if (result == DialogResult.Yes)
                     {
-                        OpenBinary(saveFileDialog.FileName);
+                        OpenBinary(dialog.FileName);
                     }
                 }
             }

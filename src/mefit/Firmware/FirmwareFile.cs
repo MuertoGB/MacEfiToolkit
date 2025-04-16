@@ -1,4 +1,10 @@
-﻿using Mac_EFI_Toolkit.Tools;
+﻿// Mac EFI Toolkit
+// https://github.com/MuertoGB/MacEfiToolkit
+
+// FirmwareFile.cs
+// Released under the GNU GLP v3.0
+
+using Mac_EFI_Toolkit.Tools;
 using System.IO;
 
 namespace Mac_EFI_Toolkit.Firmware

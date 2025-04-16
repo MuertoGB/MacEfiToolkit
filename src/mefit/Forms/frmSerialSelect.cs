@@ -96,39 +96,39 @@ namespace Mac_EFI_Toolkit.Forms
         #region TextBox Events
         private void tbxSerial_TextChanged(object sender, EventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
-            int nCharCount = textBox.Text.Length;
+            TextBox control = (TextBox)sender;
+            int charCount = control.Text.Length;
 
-            // Update the validity label each time the text changes
+            // Update the validity label each time the text changes.
             UpdateValidityLabel();
 
             if (Settings.ReadBoolean(Settings.BooleanKey.DisableSerialValidation))
             {
-                if (nCharCount == textBox.MaxLength)
+                if (charCount == control.MaxLength)
                 {
                     cmdOkay.Enabled = true;
                     return;
                 }
             }
 
-            // Check if the character length matches the expected serial length
-            if (nCharCount == textBox.MaxLength)
+            // Check if the character length matches the expected serial length.
+            if (charCount == control.MaxLength)
             {
-                if (Serial.IsValid(textBox.Text))
+                if (Serial.IsValid(control.Text))
                 {
-                    UpdateTextBoxColour(textBox, Colours.Okay);
+                    UpdateTextBoxColour(control, Colours.Okay);
                     cmdOkay.Enabled = true;
                 }
                 else
                 {
-                    UpdateTextBoxColour(textBox, Colours.Error);
+                    UpdateTextBoxColour(control, Colours.Error);
                     lblValidity.Text += $" - {APPSTRINGS.INVALID}";
                     cmdOkay.Enabled = false;
                 }
             }
             else
             {
-                UpdateTextBoxColour(textBox, Color.FromArgb(235, 235, 235));
+                UpdateTextBoxColour(control, Color.FromArgb(235, 235, 235));
                 cmdOkay.Enabled = false;
             }
         }
@@ -137,10 +137,7 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void UpdateTextBoxColour(TextBox control, Color color) => control.ForeColor = color;
 
-        private void UpdateValidityLabel()
-        {
-            lblValidity.Text = $"{tbxSerial.Text.Length}/{tbxSerial.MaxLength}";
-        }
+        private void UpdateValidityLabel() => lblValidity.Text = $"{tbxSerial.Text.Length}/{tbxSerial.MaxLength}";
         #endregion
     }
 }
