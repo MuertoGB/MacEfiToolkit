@@ -21,7 +21,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         public string iBootVersion { get; private set; }
         public string ConfigCode { get; set; }
         public string NewSerial { get; set; }
-        public FileInfoStore FileInfoData { get; private set; }
+        public FirmwareFile.Information FirmwareInfo { get; private set; }
         public SCfgStore SCfgSectionData { get; private set; }
 
         public TimeSpan ParseTime { get; private set; }
@@ -46,7 +46,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             Stopwatch parseTimer = Stopwatch.StartNew();
 
             // Parse file info.
-            FileInfoData = FileTools.GetBinaryFileInfo(filename);
+            FirmwareInfo = FirmwareFile.GetFileInfo(filename);
 
             // Parse iBoot version.
             iBootVersion = GetiBootVersion(sourcebuffer);
@@ -75,7 +75,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             // Check Apple Silicon HUFA signature.
             byte[] hufaSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, T2_ROM_BASE, Signatures.SocRom.AppleSiliconSocRomMarker.Length);
 
-            if (BinaryTools.ByteArraysMatch(hufaSignature, Signatures.Scfg.HeaderMarker))
+            if (BinaryTools.ByteArraysMatch(hufaSignature, Signatures.SocRom.AppleSiliconSocRomMarker))
             {
                 // Check SOCROM marker at a 0x20000h.
                 byte[] romSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, SILICON_ROM_BASE, Signatures.SocRom.SocRomMarker.Length);
@@ -89,6 +89,20 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
             // No valid signature found.
             return false;
+        }
+
+        public void ResetFirmwareBaseData()
+        {
+            LoadedBinaryPath = null;
+            iBootVersion = null;
+            ConfigCode = null;
+            NewSerial = null;
+            LoadedBinaryBuffer = null;
+            FirmwareLoaded = false;
+            FirmwareInfo = new FirmwareFile.Information();
+            SCfgSectionData = new SCfgStore();
+            RomType = new SocRomType();
+            ParseTime = TimeSpan.Zero;
         }
         #endregion
 

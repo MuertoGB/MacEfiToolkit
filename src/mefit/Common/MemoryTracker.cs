@@ -44,24 +44,17 @@ namespace Mac_EFI_Toolkit.Common
                 return;
             }
 
-            IntPtr ptrHandle = NativeMethods.GetCurrentProcess();
+            IntPtr ptr = NativeMethods.GetCurrentProcess();
 
-            NativeMethods.PROCESS_MEMORY_COUNTERS pmCounters = new NativeMethods.PROCESS_MEMORY_COUNTERS
+            NativeMethods.PROCESS_MEMORY_COUNTERS counters = new NativeMethods.PROCESS_MEMORY_COUNTERS
             {
                 cb = (uint)Marshal.SizeOf(typeof(NativeMethods.PROCESS_MEMORY_COUNTERS))
             };
 
-            if (NativeMethods.GetProcessMemoryInfo(ptrHandle, out pmCounters, pmCounters.cb))
+            if (NativeMethods.GetProcessMemoryInfo(ptr, out counters, counters.cb))
             {
-                OnMemoryUsageUpdated?.Invoke(this, pmCounters.PagefileUsage);
+                OnMemoryUsageUpdated?.Invoke(this, counters.PagefileUsage);
             }
-
-            //NativeMethods.PROCESS_MEMORY_COUNTERS pmCounters;
-
-            //if (NativeMethods.GetProcessMemoryInfo(ptrHandle, out pmCounters, (uint)Marshal.SizeOf(typeof(NativeMethods.PROCESS_MEMORY_COUNTERS))))
-            //{
-            //    OnMemoryUsageUpdated?.Invoke(this, pmCounters.PagefileUsage);
-            //}
         }
         #endregion
     }

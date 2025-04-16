@@ -18,13 +18,10 @@ namespace Mac_EFI_Toolkit.UI.Controls
     [Designer(typeof(METSwitchDesigner))]
     public class METSwitch : CheckBox
     {
-        #region Private Members
-        private readonly Color clrControlDisabled = Color.FromArgb(80, 80, 80);
-        internal static readonly Color clrSwitchHeadDisabled = Color.FromArgb(100, 100, 100);
-        #endregion
-
         #region Fields
         private bool _mouseHovered = false;
+        private readonly Color _disabledControl = Color.FromArgb(80, 80, 80);
+        private readonly Color _disabledHead = Color.FromArgb(100, 100, 100);
         private Color _borderColorInactive = Color.FromArgb(120, 120, 120);
         private Color _borderColorActive = Color.FromArgb(200, 200, 200);
         private Color _clientColorInactive = Color.FromArgb(10, 10, 10);
@@ -130,7 +127,7 @@ namespace Mac_EFI_Toolkit.UI.Controls
 
         private Color GetBorderColor()
         {
-            return Enabled ? (Focused ? BorderColorActive : BorderColor) : clrControlDisabled;
+            return Enabled ? (Focused ? BorderColorActive : BorderColor) : _disabledControl;
         }
 
         private Color GetClientColor()
@@ -140,23 +137,23 @@ namespace Mac_EFI_Toolkit.UI.Controls
 
         private Color GetSwitchHeadColor()
         {
-            return Enabled ? SwitchHeadColor : clrSwitchHeadDisabled;
+            return Enabled ? SwitchHeadColor : _disabledHead;
         }
 
         private void DrawSwitchBorder(Graphics g, Color borderColor)
         {
-            using (var pen = new Pen(borderColor, 2.0F))
+            using (Pen pen = new Pen(borderColor, 2.0F))
             {
-                var rect = new Rectangle(1, 1, Width - 2, ClientRectangle.Height - 2);
+                Rectangle rect = new Rectangle(1, 1, Width - 2, ClientRectangle.Height - 2);
                 g.DrawRectangle(pen, rect);
             }
         }
 
         private void FillSwitchClientArea(Graphics g, Color clientColor)
         {
-            using (var brush = new SolidBrush(clientColor))
+            using (Brush brush = new SolidBrush(clientColor))
             {
-                var innerRect = new Rectangle(2, 2, Width - 4, Height - 4);
+                Rectangle innerRect = new Rectangle(2, 2, Width - 4, Height - 4);
                 innerRect.Inflate(-2, -2);
                 g.FillRectangle(brush, innerRect);
             }
@@ -164,10 +161,10 @@ namespace Mac_EFI_Toolkit.UI.Controls
 
         private void DrawSwitchGap(Graphics g)
         {
-            using (var pen = new Pen(BackColor, 2))
+            using (Pen pen = new Pen(BackColor, 2))
             {
                 int gapWidth = (int)(Checked ? Width - Width / 3 - 1 : 1);
-                var gapRect = new Rectangle(gapWidth, 0, (int)(Width / 3), Height);
+                Rectangle gapRect = new Rectangle(gapWidth, 0, (int)(Width / 3), Height);
                 g.DrawRectangle(pen, gapRect);
             }
         }
@@ -176,9 +173,9 @@ namespace Mac_EFI_Toolkit.UI.Controls
         {
             int switchHeadWidth = (int)(Width / 3);
             int switchHeadLeft = (int)(Checked ? Width - switchHeadWidth : 0);
-            var rect = new Rectangle(switchHeadLeft, 0, switchHeadWidth, Height);
+            Rectangle rect = new Rectangle(switchHeadLeft, 0, switchHeadWidth, Height);
 
-            using (var brush = new SolidBrush(switchHeadColor))
+            using (Brush brush = new SolidBrush(switchHeadColor))
             {
                 g.FillRectangle(brush, rect);
             }

@@ -48,7 +48,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdAccept_Click(object sender, EventArgs e)
         {
-            Settings.SetBool(SettingsBoolType.AcceptedEditingTerms, true);
+            Settings.SetBool(Settings.BooleanKey.AcceptedEditingTerms, true);
 
             DialogResult = DialogResult.Yes;
             Close();

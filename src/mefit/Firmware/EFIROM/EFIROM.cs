@@ -31,7 +31,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         public string NewSerial { get; set; }
         public string FmmEmail { get; private set; }
 
-        public FileInfoStore FileInfoData { get; private set; }
+        public FirmwareFile.Information FirmwareInfo { get; private set; }
         public PdrSection PdrSectionData { get; private set; }
         public NvramStore VssPrimary { get; private set; }
         public NvramStore VssSecondary { get; private set; }
@@ -78,7 +78,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             Descriptor.ParseRegionData(sourcebuffer);
 
             // Parse file info.
-            FileInfoData = FileTools.GetBinaryFileInfo(filename);
+            FirmwareInfo = FirmwareFile.GetFileInfo(filename);
 
             // Parse Platform Data Region.
             PdrSectionData = GetPdrData(sourcebuffer);
@@ -86,9 +86,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             // Find the NVRAM base address.
             NvramBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.NvramSectionGuid, (int)Descriptor.BiosBase, (int)Descriptor.BiosLimit) - ZERO_VECTOR_SIZE;
 
-            if (NvramBase < 0 || NvramBase > FileInfoData.Length)
+            if (NvramBase < 0 || NvramBase > FirmwareInfo.Length)
             {
-                Logger.WriteLine($"Invalid NVRAM base address: {NvramBase}", LogType.Application);
+                Logger.WriteLine($"Invalid NVRAM base address: {NvramBase}", Logger.LogType.Application);
                 NvramBase = -1;
             }
 
@@ -97,9 +97,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             NvramSize = BitConverter.ToInt32(BinaryTools.GetBytesBaseLength(
                 sourcebuffer, NvramBase + (ZERO_VECTOR_SIZE + GUID_SIZE), 4), 0);
 
-            if (NvramSize < 0 || NvramSize > FileInfoData.Length)
+            if (NvramSize < 0 || NvramSize > FirmwareInfo.Length)
             {
-                Logger.WriteLine($"Invalid NVRAM size: {NvramSize}", LogType.Application);
+                Logger.WriteLine($"Invalid NVRAM size: {NvramSize}", Logger.LogType.Application);
                 NvramSize = -1;
             }
 
@@ -126,7 +126,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                     ForceFoundFsys = true;
 
                     Logger.WriteLine($"Force found Fsys Store at {FsysStoreData.FsysBase:X}h. " +
-                        $"The image may be misaligned or corrupt ({FileInfoData.FileNameExt}).", LogType.Application
+                        $"The image may be misaligned or corrupt ({FirmwareInfo.FileNameExt}).", Logger.LogType.Application
                     );
                 }
             }
@@ -197,6 +197,47 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             }
 
             return false;
+        }
+
+        public void ResetFirmwareBaseData()
+        {
+            LoadedBinaryPath = null;
+            ConfigCode = null;
+            FitVersion = null;
+            MeVersion = null;
+            NewSerial = null;
+            FmmEmail = null;
+
+            LoadedBinaryBuffer = null;
+            LzmaDecompressedBuffer = null;
+
+            FirmwareLoaded = false;
+            ForceFoundFsys = false;
+            ResetVss = false;
+            ResetSvs = false;
+
+            FirmwareInfo = new FirmwareFile.Information();
+            PdrSectionData = new PdrSection();
+            VssPrimary = new NvramStore();
+            VssSecondary = new NvramStore();
+            SvsPrimary = new NvramStore();
+            SvsSecondary = new NvramStore();
+            EfiPrimaryLockData = new EFILock();
+            EfiBackupLockData = new EFILock();
+            FsysStoreData = new FsysStore();
+            AppleRomInfoSectionData = new AppleRomInformationSection();
+            EfiBiosIdSectionData = new EfiBiosIdSection();
+
+            IsApfsCapable = ApfsCapableType.Unknown;
+
+            FsysRegionSize = 0;
+            NvramBase = -1;
+            NvramSize = -1;
+            NvramLimit = -1;
+
+            Descriptor = new FlashDescriptor();
+
+            ParseTime = TimeSpan.Zero;
         }
         #endregion 
 
@@ -651,7 +692,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             // Min Fsys rgn size.
             if (FsysRegionSize < 2048)
             {
-                Logger.WriteLine($"Fsys Store size was less than the min expected size: {FsysRegionSize}", LogType.Application);
+                Logger.WriteLine($"Fsys Store size was less than the min expected size: {FsysRegionSize}", Logger.LogType.Application);
 
                 return null;
             }

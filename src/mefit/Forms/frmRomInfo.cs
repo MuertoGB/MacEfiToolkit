@@ -95,7 +95,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{APPSTRINGS.ROM_SECTION_INFO}_{_efirom.FileInfoData.FileName}",
+                FileName = $"{APPSTRINGS.ROM_SECTION_INFO}_{_efirom.FirmwareInfo.FileName}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.WorkingDirectory
             })
@@ -127,8 +127,8 @@ namespace Mac_EFI_Toolkit.Forms
                     METPrompt.Show(
                         this,
                         DIALOGSTRINGS.DATA_EXPORT_FAILED,
-                        METPromptType.Error,
-                        METPromptButtons.Okay);
+                        METPrompt.PType.Error,
+                        METPrompt.PButtons.Okay);
 
                     return;
                 }

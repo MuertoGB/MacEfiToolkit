@@ -129,30 +129,30 @@ namespace Mac_EFI_Toolkit
 
         internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Exception ex = (Exception)e.ExceptionObject;
+            Exception exception = (Exception)e.ExceptionObject;
 
-            if (ex != null)
+            if (exception != null)
             {
-                ExceptionHandler(ex);
+                ExceptionHandler(exception);
             }
         }
 
         internal static void ExceptionHandler(Exception e)
         {
-            DialogResult dlgResult;
+            DialogResult result;
 
-            string strWorkingDirectory = ApplicationPaths.WorkingDirectory;
-            string strDatestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            string strFilename = $"unhandled_{strDatestamp}.log";
-            string strFinalPath = Path.Combine(strWorkingDirectory, strFilename);
+            string workingDirectory = ApplicationPaths.WorkingDirectory;
+            string dateStamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            string fileName = $"unhandled_{dateStamp}.log";
+            string fullPath = Path.Combine(workingDirectory, fileName);
 
-            File.WriteAllText(strFinalPath, Unhandled.GenerateReport(e));
+            File.WriteAllText(fullPath, Unhandled.GenerateReport(e));
 
-            if (File.Exists(strFinalPath))
+            if (File.Exists(fullPath))
             {
-                dlgResult =
+                result =
                     MessageBox.Show(
-                        $"{e.Message}\r\n\r\nDetails were saved to {strFinalPath.Replace(" ", Program.NOWRAP_SPACE)}" +
+                        $"{e.Message}\r\n\r\nDetails were saved to {fullPath.Replace(" ", Program.NOWRAP_SPACE)}" +
                         $"'\r\n\r\nForce quit application?",
                         $"MET Exception Handler",
                         MessageBoxButtons.YesNo,
@@ -160,7 +160,7 @@ namespace Mac_EFI_Toolkit
             }
             else
             {
-                dlgResult =
+                result =
                     MessageBox.Show(
                         $"{e.Message}\r\n\r\n{e}\r\n\r\nForce quit application?",
                         $"{e.GetType()}",
@@ -168,7 +168,7 @@ namespace Mac_EFI_Toolkit
                         MessageBoxIcon.Error);
             }
 
-            if (dlgResult == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
                 HandleOnExitingCleanup();
@@ -183,21 +183,21 @@ namespace Mac_EFI_Toolkit
         internal static void HandleApplicationExit(Form owner, ExitAction action)
         {
             // Check if confirmation dialogs are disabled
-            if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
                 ExecuteExitAction(action);
                 return;
             }
 
-            string strTitle = action ==
+            string title = action ==
                 ExitAction.Restart ? "Restart" : "Quit";
 
-            string strMessage = action ==
+            string message = action ==
                 ExitAction.Restart
                     ? $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_RESTART}"
                     : $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_EXIT}";
 
-            if (ShowConfirmationDialog(owner, strTitle, strMessage))
+            if (ShowConfirmationDialog(owner, title, message))
             {
                 ExecuteExitAction(action);
             }
@@ -218,14 +218,14 @@ namespace Mac_EFI_Toolkit
 
         private static bool ShowConfirmationDialog(Form owner, string title, string message)
         {
-            DialogResult dlgResult =
+            DialogResult result =
                 METPrompt.Show(
                     owner,
                     message,
-                    METPromptType.Question,
-                    METPromptButtons.YesNo);
+                    METPrompt.PType.Question,
+                    METPrompt.PButtons.YesNo);
 
-            return dlgResult == DialogResult.Yes;
+            return result == DialogResult.Yes;
         }
 
         internal static void Restart()
@@ -285,24 +285,25 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        public static void HandleDragEnter(object sender, DragEventArgs e)
+        public static void HandleDragEnter(object sender, DragEventArgs e, Action applycolor)
         {
             // Check if the dragged data is a file.
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
                 // Check if only one file is being dragged.
-                if (arrDraggedFiles.Length == 1)
+                if (draggedFiles.Length == 1)
                 {
                     // Check if the dragged item is a file and not a folder.
-                    string strFile = arrDraggedFiles[0];
-                    FileAttributes fAttribues = File.GetAttributes(strFile);
+                    string file = draggedFiles[0];
+                    FileAttributes attributes = File.GetAttributes(file);
 
                     // If it's a file (not a folder) then allow the copy operation.
-                    if ((fAttribues & FileAttributes.Directory) == 0)
+                    if ((attributes & FileAttributes.Directory) == 0)
                     {
                         e.Effect = DragDropEffects.Copy;
+                        applycolor?.Invoke();
                         return;
                     }
                 }

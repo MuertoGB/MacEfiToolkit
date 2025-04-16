@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 public class FormEx : Form
 {
-    #region Internal Members
+    #region Private Members
     private const int WM_SETTINGCHANGE = 0x001A;
     private const int WM_DWMCOMPOSITIONCHANGED = 0x031E;
 
@@ -22,7 +22,7 @@ public class FormEx : Form
     private const int CS_DBLCLKS = 0x8;
     private const int CS_DROP = 0x20000;
 
-    private static List<FormEx> openForms = new List<FormEx>();
+    private static List<FormEx> _openForms = new List<FormEx>();
     #endregion
 
     #region Constructor
@@ -32,7 +32,7 @@ public class FormEx : Form
         Load += METForm_Load;
 
         // Resister this instance.
-        openForms.Add(this);
+        _openForms.Add(this);
     }
     #endregion
 
@@ -40,7 +40,7 @@ public class FormEx : Form
     protected override void OnFormClosed(FormClosedEventArgs e)
     {
         // Remove this instance from the list when closed.
-        openForms.Remove(this);
+        _openForms.Remove(this);
         base.OnFormClosed(e);
     }
 
@@ -56,14 +56,14 @@ public class FormEx : Form
     private void AdjustFormToScreenBounds()
     {
         // Get the screen where the form is currently displayed.
-        Screen currentScreen = Screen.FromControl(this);
-        Rectangle screenBounds = currentScreen.WorkingArea;
+        Screen screen = Screen.FromControl(this);
+        Rectangle rect = screen.WorkingArea;
 
         // Adjust edges if they're outside the screen bounds.
-        Top = Top < screenBounds.Top ? screenBounds.Top : Top; // Top
-        Left = Left < screenBounds.Left ? screenBounds.Left : Left; // Left
-        Left = Right > screenBounds.Right ? screenBounds.Right - Width : Left; // Right
-        Top = Bottom > screenBounds.Bottom ? screenBounds.Bottom - Height : Top; // Bottom
+        Top = Top < rect.Top ? rect.Top : Top; // Top
+        Left = Left < rect.Left ? rect.Left : Left; // Left
+        Left = Right > rect.Right ? rect.Right - Width : Left; // Right
+        Top = Bottom > rect.Bottom ? rect.Bottom - Height : Top; // Bottom
     }
     #endregion
 
@@ -109,9 +109,9 @@ public class FormEx : Form
     #region Accent Colour
     public static void UpdateAccentColor()
     {
-        lock (openForms)
+        lock (_openForms)
         {
-            foreach (FormEx form in openForms)
+            foreach (FormEx form in _openForms)
             {
                 if (form == Form.ActiveForm)
                 {
@@ -127,7 +127,7 @@ public class FormEx : Form
 
     private void SetAccentColor()
     {
-        if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
+        if (Settings.ReadBoolean(Settings.BooleanKey.UseAccentColor))
         {
             BackColor = AccentColorHelper.GetSystemAccentColor();
             return;

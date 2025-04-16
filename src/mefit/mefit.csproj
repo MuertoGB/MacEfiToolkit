@@ -93,6 +93,7 @@
     <Compile Include="Firmware\EFIROM\EFIROM.cs" />
     <Compile Include="Firmware\EFIROM\Signatures.cs" />
     <Compile Include="Firmware\EFIROM\Types\Structs.cs" />
+    <Compile Include="Firmware\FirmwareFile.cs" />
     <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Firmware\EFIROM\IntelME.cs" />
@@ -116,7 +117,6 @@
     </Compile>
     <Compile Include="Unhandled.cs" />
     <Compile Include="Firmware\EFIROM\Types\Enums.cs" />
-    <Compile Include="Tools\Types\Structs.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />
     <Compile Include="Common\SevenZip\Common\CRC.cs" />
@@ -138,7 +138,6 @@
     <Compile Include="Firmware\SOCROM\Types\Structs.cs" />
     <Compile Include="Firmware\SOCROM\SOCROM.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
-    <Compile Include="UI\Types\Enums.cs" />
     <Compile Include="UI\UITools.cs" />
     <Compile Include="UI\Controls\METContextMenuStrip.cs">
       <SubType>Component</SubType>

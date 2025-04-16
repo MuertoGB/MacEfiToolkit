@@ -17,40 +17,40 @@ namespace Mac_EFI_Toolkit.Common
             SevenZip.Compression.LZMA.Decoder lzmaDecoder = new SevenZip.Compression.LZMA.Decoder();
 
             // Create a memory stream to store the decompressed data.
-            MemoryStream msBuffer = new MemoryStream();
+            MemoryStream streamBuffer = new MemoryStream();
 
             try
             {
                 // Create a memory stream to hold the compressed input data.
-                using (MemoryStream msInput = new MemoryStream(sourcebuffer))
+                using (MemoryStream streamInput = new MemoryStream(sourcebuffer))
                 {
                     // Read the first 5 bytes which contain decoder property data.
-                    byte[] bProperties = new byte[5];
+                    byte[] propertyBytes = new byte[5];
 
-                    msInput.Read(bProperties, 0, 5);
+                    streamInput.Read(propertyBytes, 0, 5);
 
                     // Read the next 8 bytes which represent the decompressed data length.
-                    byte[] bDecompressedLength = new byte[8];
-                    msInput.Read(bDecompressedLength, 0, 8);
+                    byte[] decompressedLength = new byte[8];
+                    streamInput.Read(decompressedLength, 0, 8);
 
                     // Convert the 8-byte array to a long, representing the total file length.
-                    long lFileLength = BitConverter.ToInt64(bDecompressedLength, 0);
+                    long fileLength = BitConverter.ToInt64(decompressedLength, 0);
 
                     // Set the decoder properties using the propertyBytes.
-                    lzmaDecoder.SetDecoderProperties(bProperties);
+                    lzmaDecoder.SetDecoderProperties(propertyBytes);
 
                     // Decode the compressed input stream and write the result to decoderStream.
-                    lzmaDecoder.Code(msInput, msBuffer, msInput.Length, lFileLength, null);
+                    lzmaDecoder.Code(streamInput, streamBuffer, streamInput.Length, fileLength, null);
 
                     // Validate the decompressed length.
-                    if (msBuffer.Length != lFileLength)
+                    if (streamBuffer.Length != fileLength)
                     {
-                        Logger.WriteLine($"Decompressed length mismatch. Expected: {lFileLength}, Actual: {msBuffer.Length}", LogType.Application);
+                        Logger.WriteLine($"Decompressed length mismatch. Expected: {fileLength}, Actual: {streamBuffer.Length}", Logger.LogType.Application);
                     }
                 }
 
                 // Return the decompressed data as a byte array.
-                return msBuffer.ToArray();
+                return streamBuffer.ToArray();
             }
             catch (Exception e)
             {
@@ -80,17 +80,17 @@ namespace Mac_EFI_Toolkit.Common
                 return false;
             }
 
-            int nDictSize = BitConverter.ToInt32(sourcebuffer, 1);
+            int dictSize = BitConverter.ToInt32(sourcebuffer, 1);
 
             bool IsPow2(int i)
             {
                 return (i > 0) && ((i & (i - 1)) == 0);
             }
 
-            if (nDictSize <= 0 || !IsPow2(nDictSize))
+            if (dictSize <= 0 || !IsPow2(dictSize))
             {
                 // Invalid dictionary size <= 0 or not a power of 2.
-                Console.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {nDictSize}");
+                Console.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {dictSize}");
                 return false;
             }
 

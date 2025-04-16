@@ -26,6 +26,7 @@ namespace Mac_EFI_Toolkit.Tools
                 webRequest = WebRequest.Create(url);
                 webRequest.Timeout = 5000;
                 webRequest.Method = "HEAD";
+
                 using (WebResponse webResponse = webRequest.GetResponse())
                 {
                     return true;

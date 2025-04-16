@@ -14,16 +14,14 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Tools
 {
-    #region Enum
-    enum DirectoryStatus
+    public class FileTools
     {
-        SUCCESS,
-        FAILED
-    }
-    #endregion
+        public enum CreationStatus
+        {
+            SUCCESS,
+            FAILED
+        }
 
-    class FileTools
-    {
         /// <summary>
         /// Calculates the SHA256 hash of a byte array.
         /// </summary>
@@ -31,11 +29,11 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>The SHA256 checksum of the byte array.</returns>
         internal static string GetSha256Digest(byte[] sourcebuffer)
         {
-            using (SHA256 shaProvider = SHA256.Create())
+            using (SHA256 provider = SHA256.Create())
             {
-                byte[] bDigest = shaProvider.ComputeHash(sourcebuffer);
+                byte[] digest = provider.ComputeHash(sourcebuffer);
 
-                return BitConverter.ToString(bDigest).Replace("-", "").ToLower();
+                return BitConverter.ToString(digest).Replace("-", "").ToLower();
             }
         }
 
@@ -46,57 +44,57 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>The CRC32 checksum of the byte array.</returns>
         internal static uint GetCrc32Digest(byte[] sourcebuffer)
         {
-            const uint uiPolynomial = 0xEDB88320;
-            uint uiCrc = 0xFFFFFFFF;
+            const uint poly = 0xEDB88320;
+            uint crc = 0xFFFFFFFF;
 
             for (int i = 0; i < sourcebuffer.Length; i++)
             {
-                uiCrc ^= sourcebuffer[i];
+                crc ^= sourcebuffer[i];
 
                 for (int j = 0; j < 8; j++)
                 {
-                    uiCrc = (uint)((uiCrc >> 1) ^ (uiPolynomial & -(uiCrc & 1)));
+                    crc = (uint)((crc >> 1) ^ (poly & -(crc & 1)));
                 }
             }
 
-            return uiCrc ^ 0xFFFFFFFF;
+            return crc ^ 0xFFFFFFFF;
         }
 
         /// <summary>
         /// Formats a number of bytes as a string with commas.
         /// </summary>
-        /// <param name="size">The number of bytes to format.</param>
+        /// <param name="input">The number of bytes to format.</param>
         /// <returns>A string representation of the number of bytes with commas.</returns>
-        internal static string FormatBytesWithCommas(long size)
+        internal static string FormatBytesWithCommas(long input)
         {
-            return string.Format("{0:#,##0}", size);
+            return string.Format("{0:#,##0}", input);
         }
 
         /// <summary>
         /// Converts a byte size into a human-readable format using appropriate units (e.g., KB, MB).
         /// </summary>
-        /// <param name="size">The size in bytes to convert.</param>
+        /// <param name="input">The size in bytes to convert.</param>
         /// <returns>A human-readable string representation of the size with the appropriate unit.</returns>
-        internal static string FormatBytesToReadableUnit(ulong size)
+        internal static string FormatBytesToReadableUnit(ulong input)
         {
             // Define a set of suffixes for file sizes.
-            string[] arrSuffixes = { "bytes", "KB", "MB", "GB", "TB" };
+            string[] suffixes = { "bytes", "KB", "MB", "GB", "TB" };
 
-            if (size == 0)
+            if (input == 0)
             {
-                return $"0 {arrSuffixes[0]}";
+                return $"0 {suffixes[0]}";
             }
 
             // Calculate the appropriate suffix index based on the size of the input.
-            int iIndex = (int)Math.Floor(Math.Log(size, 1024));
+            int index = (int)Math.Floor(Math.Log(input, 1024));
 
             // Ensure the index does not exceed the array bounds (safety measure).
-            iIndex = Math.Min(iIndex, arrSuffixes.Length - 1);
+            index = Math.Min(index, suffixes.Length - 1);
 
             // Calculate the size in the chosen suffix and format it.
-            double dblSize = size / Math.Pow(1024, iIndex);
+            double size = input / Math.Pow(1024, index);
 
-            return $"{dblSize:N2} {arrSuffixes[iIndex]}";
+            return $"{size:N2} {suffixes[index]}";
         }
 
         /// <summary>
@@ -106,17 +104,17 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>True if the size is valid, otherwise false.</returns>
         internal static bool GetIsValidBinSize(long size)
         {
-            int iExpectedSize = FirmwareVars.MIN_IMAGE_SIZE;
-            int iMaxSize = FirmwareVars.MAX_IMAGE_SIZE;
+            int minSize = FirmwareVars.MIN_IMAGE_SIZE;
+            int maxSize = FirmwareVars.MAX_IMAGE_SIZE;
 
-            while (iExpectedSize <= iMaxSize)
+            while (minSize <= maxSize)
             {
-                if (size == iExpectedSize)
+                if (size == minSize)
                 {
                     return true;
                 }
 
-                iExpectedSize *= 2;
+                minSize *= 2;
             }
 
             return false;
@@ -127,30 +125,30 @@ namespace Mac_EFI_Toolkit.Tools
         /// and returns a formatted string indicating whether the size is too large or too small,
         /// along with the byte difference.
         /// </summary>
-        /// <param name="size">The input size to compare against valid sizes.</param>
+        /// <param name="input">The input size to compare against valid sizes.</param>
         /// <returns>A formatted string indicating whether the size is too large or too small,
         /// along with the byte difference.</returns>
-        internal static string GetSizeDifference(long size)
+        internal static string GetSizeDifference(long input)
         {
             // Initialize the closest size with the minimum image size
-            long lClosestSize = FirmwareVars.MIN_IMAGE_SIZE;
+            long closestSize = FirmwareVars.MIN_IMAGE_SIZE;
 
             // Calculate the initial difference between the input size and the closest size
-            long lDifference = Math.Abs(size - lClosestSize);
+            long difference = Math.Abs(input - closestSize);
 
             // Iterate through the valid sizes to find the closest size
-            while (lClosestSize <= FirmwareVars.MAX_IMAGE_SIZE)
+            while (closestSize <= FirmwareVars.MAX_IMAGE_SIZE)
             {
                 // Calculate the doubled size and its difference from the input size
-                long lDoubledSize = lClosestSize * 2;
+                long doubledSize = closestSize * 2;
 
-                long lDoubledDifference = Math.Abs(size - lDoubledSize);
+                long doubledDifference = Math.Abs(input - doubledSize);
 
                 // If the doubled difference is smaller, update the closest size and difference
-                if (lDoubledDifference < lDifference)
+                if (doubledDifference < difference)
                 {
-                    lClosestSize = lDoubledSize;
-                    lDifference = lDoubledDifference;
+                    closestSize = doubledSize;
+                    difference = doubledDifference;
                 }
                 else
                 {
@@ -160,16 +158,16 @@ namespace Mac_EFI_Toolkit.Tools
             }
 
             // Check if the input size is smaller than the closest size
-            if (size < lClosestSize)
+            if (input < closestSize)
             {
                 // Return a formatted string indicating the size is too small
-                return $"<{lDifference}";
+                return $"<{difference}";
             }
             // Check if the input size is larger than the closest size
-            else if (size > lClosestSize)
+            else if (input > closestSize)
             {
                 // Return a formatted string indicating the size is too large
-                return $">{lDifference}";
+                return $">{difference}";
             }
             else
             {
@@ -190,9 +188,9 @@ namespace Mac_EFI_Toolkit.Tools
             {
                 File.WriteAllBytes(filepath, sourcebuffer);
 
-                byte[] bFileBytes = File.ReadAllBytes(filepath);
+                byte[] fileBuffer = File.ReadAllBytes(filepath);
 
-                return BinaryTools.ByteArraysMatch(sourcebuffer, bFileBytes);
+                return BinaryTools.ByteArraysMatch(sourcebuffer, fileBuffer);
             }
             catch (Exception e)
             {
@@ -206,19 +204,19 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="directory">The path of the directory to create.</param>
         /// <returns>
-        /// The status of the directory creation operation. Returns <see cref="DirectoryStatus.SUCCESS"/> if the directory is successfully created,
-        /// or <see cref="DirectoryStatus.FAILED"/> if the creation fails.
+        /// The status of the directory creation operation. Returns <see cref="CreationStatus.SUCCESS"/> if the directory is successfully created,
+        /// or <see cref="CreationStatus.FAILED"/> if the creation fails.
         /// </returns>
-        internal static DirectoryStatus CreateDirectory(string directory)
+        public static CreationStatus CreateDirectory(string directory)
         {
             Directory.CreateDirectory(directory);
 
             if (Directory.Exists(directory))
             {
-                return DirectoryStatus.SUCCESS;
+                return CreationStatus.SUCCESS;
             }
 
-            return DirectoryStatus.FAILED;
+            return CreationStatus.FAILED;
         }
 
         /// <summary>
@@ -231,14 +229,14 @@ namespace Mac_EFI_Toolkit.Tools
         {
             try
             {
-                using (FileStream fsZipFile = new FileStream(filepath, FileMode.Create))
-                using (ZipArchive zipArchive = new ZipArchive(fsZipFile, ZipArchiveMode.Create))
+                using (FileStream stream = new FileStream(filepath, FileMode.Create))
+                using (ZipArchive archive = new ZipArchive(stream, ZipArchiveMode.Create))
                 {
-                    ZipArchiveEntry fileEntry = zipArchive.CreateEntry(entryname);
+                    ZipArchiveEntry archiveEntry = archive.CreateEntry(entryname);
 
-                    using (Stream streamBuffer = fileEntry.Open())
+                    using (Stream archiveBuffer = archiveEntry.Open())
                     {
-                        streamBuffer.Write(sourcebuffer, 0, sourcebuffer.Length);
+                        archiveBuffer.Write(sourcebuffer, 0, sourcebuffer.Length);
                     }
                 }
             }
@@ -248,46 +246,21 @@ namespace Mac_EFI_Toolkit.Tools
             }
         }
 
-        /// <summary>
-        /// Retrieves file information and calculates the CRC32 checksum of a specified file.
-        /// </summary>
-        /// <param name="filename">The full path to the file to be analyzed.</param>
-        /// <returns>
-        /// A Binary object containing the file's name, name without extension, creation time, last write time, file length, and CRC32 checksum.
-        /// </returns>
-        internal static FileInfoStore GetBinaryFileInfo(string filename)
-        {
-            FileInfo fileInfo = new FileInfo(filename);
-
-            byte[] bFileBytes = File.ReadAllBytes(fileInfo.FullName);
-            string dateFormat = "MMM dd, yyyy - hh:mm tt";
-
-            return new FileInfoStore
-            {
-                FileNameExt = fileInfo.Name,
-                FileName = Path.GetFileNameWithoutExtension(filename),
-                CreationTime = fileInfo.CreationTime.ToString(dateFormat),
-                LastWriteTime = fileInfo.LastWriteTime.ToString(dateFormat),
-                Length = fileInfo.Length,
-                CRC32 = GetCrc32Digest(bFileBytes)
-            };
-        }
-
         internal static bool IsValidMinMaxSize(string filepath, Form owner, int minsize, int maxsize)
         {
-            long lSize = new FileInfo(filepath).Length;
+            long size = new FileInfo(filepath).Length;
 
-            if (lSize < minsize || lSize > maxsize)
+            if (size < minsize || size > maxsize)
             {
-                string message = lSize < minsize
+                string message = size < minsize
                     ? $"The selected file does not meet the minimum size requirement of {minsize:X}h."
                     : $"The selected file exceeds the maximum size limit of {maxsize:X}h.";
 
                 METPrompt.Show(
                     owner,
                     message,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
 
                 return false;
             }

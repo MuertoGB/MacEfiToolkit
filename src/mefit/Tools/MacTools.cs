@@ -30,17 +30,17 @@ namespace Mac_EFI_Toolkit.Tools
             try
             {
                 // Load data from the embedded XML database.
-                byte[] bXmlBuffer = Encoding.UTF8.GetBytes(Properties.Resources.modeldb);
+                byte[] xmlBuffer = Encoding.UTF8.GetBytes(Properties.Resources.modeldb);
 
-                using (MemoryStream msBuffer = new MemoryStream(bXmlBuffer))
+                using (MemoryStream stream = new MemoryStream(xmlBuffer))
                 {
-                    XDocument xDoc = XDocument.Load(msBuffer);
+                    XDocument document = XDocument.Load(stream);
 
-                    string strConfigCode =
-                        xDoc.Descendants("section").FirstOrDefault(
+                    string configCode =
+                        document.Descendants("section").FirstOrDefault(
                             e => e.Element("hwc")?.Value == hwc)?.Element("configCode")?.Value;
 
-                    return string.IsNullOrEmpty(strConfigCode) ? null : strConfigCode;
+                    return string.IsNullOrEmpty(configCode) ? null : configCode;
                 }
             }
             catch (Exception e)
@@ -57,30 +57,30 @@ namespace Mac_EFI_Toolkit.Tools
         /// <returns>The model string.</returns>
         internal static async Task<string> GetDeviceConfigCodeSupportRemote(string hwc)
         {
-            string strUrlSupportSp = "http://support-sp.apple.com/sp/product?cc=";
-            string strLangPart = "&lang=en_GB";
+            string supportUrl = "http://support-sp.apple.com/sp/product?cc=";
+            string langPart = "&lang=en_GB";
             string xmlNode = "/root/configCode";
 
             try
             {
-                string strFullUrl = $"{strUrlSupportSp}{hwc}{strLangPart}";
+                string fullUrl = $"{supportUrl}{hwc}{langPart}";
 
-                if (!NetworkTools.IsWebsiteAvailable(strFullUrl))
+                if (!NetworkTools.IsWebsiteAvailable(fullUrl))
                 {
                     return null;
                 }
 
-                using (WebClient wClient = new WebClient())
+                using (WebClient webClient = new WebClient())
                 {
-                    string strXmlContent = await wClient.DownloadStringTaskAsync(strFullUrl);
-                    string strConfigCode = XDocument.Parse(strXmlContent).XPathSelectElement(xmlNode)?.Value;
+                    string xmlContent = await webClient.DownloadStringTaskAsync(fullUrl);
+                    string configCode = XDocument.Parse(xmlContent).XPathSelectElement(xmlNode)?.Value;
 
-                    if (!string.IsNullOrEmpty(strConfigCode))
+                    if (!string.IsNullOrEmpty(configCode))
                     {
-                        Logger.WriteLine($"'{hwc}' not present in local db > support-sp server returned: '{strConfigCode}'", LogType.Database);
+                        Logger.WriteLine($"'{hwc}' not present in local db > support-sp server returned: '{configCode}'", Logger.LogType.Database);
                     }
 
-                    return strConfigCode;
+                    return configCode;
                 }
             }
             catch (Exception e)
@@ -105,19 +105,19 @@ namespace Mac_EFI_Toolkit.Tools
                 return null;
             }
 
-            string strLetters = new string(model.Where(char.IsLetter).ToArray());
-            string strNumbers = new string(model.Where(char.IsDigit).ToArray());
+            string letters = new string(model.Where(char.IsLetter).ToArray());
+            string numbers = new string(model.Where(char.IsDigit).ToArray());
 
-            int iMinLength = 2;
-            int iMaxLength = 3;
+            int minLength = 2;
+            int maxLength = 3;
 
-            if (strLetters.Length < iMinLength || strLetters.Length > iMaxLength ||
-                strNumbers.Length < iMinLength || strNumbers.Length > iMaxLength)
+            if (letters.Length < minLength || letters.Length > maxLength ||
+                numbers.Length < minLength || numbers.Length > maxLength)
             {
                 return model;
             }
 
-            Dictionary<string, string> dictModelMap = new Dictionary<string, string>
+            Dictionary<string, string> modelDict = new Dictionary<string, string>
             {
                 { "MBP", "MacBookPro" },
                 { "MBA", "MacBookAir" },
@@ -129,19 +129,19 @@ namespace Mac_EFI_Toolkit.Tools
                 { "XS", "Xserve" }
             };
 
-            strLetters = dictModelMap.FirstOrDefault(kvPair => model.Contains(kvPair.Key)).Value;
+            letters = modelDict.FirstOrDefault(kvPair => model.Contains(kvPair.Key)).Value;
 
-            if (strNumbers.Length == 2)
+            if (numbers.Length == 2)
             {
-                strNumbers = $"{strNumbers[0]},{strNumbers[1]}"; // Format X,Y.
+                numbers = $"{numbers[0]},{numbers[1]}"; // Format X,Y.
             }
-            else if (strNumbers.Length == 3)
+            else if (numbers.Length == 3)
             {
-                strNumbers = $"{strNumbers.Substring(0, 2)},{strNumbers.Substring(2)}"; // Format XX,Y.
+                numbers = $"{numbers.Substring(0, 2)},{numbers.Substring(2)}"; // Format XX,Y.
             }
 
             // Return the generated full model, otherwise what was passed in will be returned.
-            return $"{strLetters}{strNumbers}";
+            return $"{letters}{numbers}";
         }
         #endregion
 

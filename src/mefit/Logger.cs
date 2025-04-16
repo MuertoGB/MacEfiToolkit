@@ -13,33 +13,33 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    public enum LogType
-    {
-        Application,
-        Database
-    }
-
     class Logger
     {
+        public enum LogType
+        {
+            Application,
+            Database
+        }
+
         public static void WriteLine(string message, LogType logtype)
         {
-            string strLogPath;
+            string logPath;
 
             switch (logtype)
             {
                 case LogType.Application:
-                    strLogPath = ApplicationPaths.ApplicationLog;
+                    logPath = ApplicationPaths.ApplicationLog;
                     break;
                 case LogType.Database:
-                    strLogPath = ApplicationPaths.DatabaseLog;
+                    logPath = ApplicationPaths.DatabaseLog;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(logtype), logtype, null);
             }
 
-            using (StreamWriter streamWriter = new StreamWriter(strLogPath, true))
+            using (StreamWriter writer = new StreamWriter(logPath, true))
             {
-                streamWriter.WriteLine($"{DateTime.Now} : {message}");
+                writer.WriteLine($"{DateTime.Now} : {message}");
             }
         }
 
@@ -51,23 +51,23 @@ namespace Mac_EFI_Toolkit
 
         internal static void OpenLogFile(Form owner)
         {
-            string strLogPath = ApplicationPaths.ApplicationLog;
+            string logPath = ApplicationPaths.ApplicationLog;
 
             // Check if the log file exists
-            if (!File.Exists(strLogPath))
+            if (!File.Exists(logPath))
             {
                 ShowLogFileNotFoundError(owner);
                 return;
             }
 
-            Process.Start("notepad.exe", strLogPath);
+            Process.Start("notepad.exe", logPath);
         }
 
         private static void ShowLogFileNotFoundError(Form owner) =>
             METPrompt.Show(
                 owner,
                 DIALOGSTRINGS.LOG_NOT_FOUND,
-                METPromptType.Error,
-                METPromptButtons.Okay);
+                METPrompt.PType.Error,
+                METPrompt.PButtons.Okay);
     }
 }

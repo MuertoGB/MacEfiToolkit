@@ -30,7 +30,7 @@ namespace Mac_EFI_Toolkit
 
         internal static async Task<VersionResult> CheckForNewVersion()
         {
-            string versionManifestUrl = ApplicationUrls.VersionManifest;
+            string manifestUrl = ApplicationUrls.VersionManifest;
             const string versionNodeXPath = "data/MET/VersionString";
             const string sha256NodeXPath = "data/MET/SHA256";
 
@@ -38,16 +38,16 @@ namespace Mac_EFI_Toolkit
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    byte[] bResponseData = await webClient.DownloadDataTaskAsync(versionManifestUrl);
+                    byte[] responseBuffer = await webClient.DownloadDataTaskAsync(manifestUrl);
 
-                    using (MemoryStream msResponseData = new MemoryStream(bResponseData))
-                    using (XmlReader xmlReader = XmlReader.Create(msResponseData))
+                    using (MemoryStream responseStream = new MemoryStream(responseBuffer))
+                    using (XmlReader reader = XmlReader.Create(responseStream))
                     {
-                        XmlDocument xmlDoc = new XmlDocument();
-                        xmlDoc.Load(xmlReader);
+                        XmlDocument document = new XmlDocument();
+                        document.Load(reader);
 
-                        XmlNode xmlVersionNode = xmlDoc.SelectSingleNode(versionNodeXPath);
-                        XmlNode xmlSha256Node = xmlDoc.SelectSingleNode(sha256NodeXPath);
+                        XmlNode xmlVersionNode = document.SelectSingleNode(versionNodeXPath);
+                        XmlNode xmlSha256Node = document.SelectSingleNode(sha256NodeXPath);
 
                         if (xmlVersionNode == null || xmlSha256Node == null)
                         {
@@ -60,10 +60,10 @@ namespace Mac_EFI_Toolkit
                         Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(NewVersion)} '{xmlVersionNode.InnerText}'");
                         Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(ExpectedSHA256)} '{xmlSha256Node.InnerText}'");
 
-                        Version verRemote = new Version(NewVersion);
-                        Version verLocal = new Version(Application.ProductVersion);
+                        Version remoteVersion = new Version(NewVersion);
+                        Version thisVersion = new Version(Application.ProductVersion);
 
-                        return verRemote > verLocal ? VersionResult.NewVersionAvailable : VersionResult.UpToDate;
+                        return remoteVersion > thisVersion ? VersionResult.NewVersionAvailable : VersionResult.UpToDate;
                     }
                 }
             }

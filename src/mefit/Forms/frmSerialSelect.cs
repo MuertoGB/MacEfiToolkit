@@ -102,7 +102,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Update the validity label each time the text changes
             UpdateValidityLabel();
 
-            if (Settings.ReadBool(SettingsBoolType.DisableSerialValidation))
+            if (Settings.ReadBoolean(Settings.BooleanKey.DisableSerialValidation))
             {
                 if (nCharCount == textBox.MaxLength)
                 {

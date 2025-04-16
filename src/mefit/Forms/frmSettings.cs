@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdEditStartupDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(SettingsStringType.StartupInitialDirectory, ref _strStartupInitialPath);
+            OpenFolderDialog(Settings.StringKey.StartupInitialDirectory, ref _strStartupInitialPath);
 
             if (!string.Equals(_strStartupInitialPath, lblStartupDirectory.Text))
             {
@@ -80,7 +80,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdEditEfiDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(SettingsStringType.EfiInitialDirectory, ref _strEfiInitialPath);
+            OpenFolderDialog(Settings.StringKey.EfiInitialDirectory, ref _strEfiInitialPath);
 
             if (!string.Equals(_strEfiInitialPath, lblEfiDirectory.Text))
             {
@@ -91,7 +91,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdEditSocDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(SettingsStringType.SocInitialDirectory, ref _strSocInitialPath);
+            OpenFolderDialog(Settings.StringKey.SocInitialDirectory, ref _strSocInitialPath);
 
             if (!string.Equals(_strSocInitialPath, lblSocDirectory))
             {
@@ -100,7 +100,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private static void OpenFolderDialog(SettingsStringType settingsType, ref string path)
+        private static void OpenFolderDialog(Settings.StringKey settingsType, ref string path)
         {
             using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
             {
@@ -128,27 +128,27 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdApply_Click(object sender, EventArgs e)
         {
-            Settings.SetBool(SettingsBoolType.DisableVersionCheck, swDisableVersionCheck.Checked);
-            Settings.SetBool(SettingsBoolType.UseAccentColor, swUseAccentColor.Checked);
-            Settings.SetBool(SettingsBoolType.DisableSerialValidation, swDisableSnValidation.Checked);
-            Settings.SetBool(SettingsBoolType.DisableFlashingUI, swDisableFlashingUiElements.Checked);
-            Settings.SetBool(SettingsBoolType.DisableMessageSounds, swDisableMessageWindowSounds.Checked);
-            Settings.SetBool(SettingsBoolType.DisableTips, swDisableStatusBarTips.Checked);
-            Settings.SetBool(SettingsBoolType.DisableConfDiag, swDisableConfirmationDialogs.Checked);
+            Settings.SetBool(Settings.BooleanKey.DisableVersionCheck, swDisableVersionCheck.Checked);
+            Settings.SetBool(Settings.BooleanKey.UseAccentColor, swUseAccentColor.Checked);
+            Settings.SetBool(Settings.BooleanKey.DisableSerialValidation, swDisableSnValidation.Checked);
+            Settings.SetBool(Settings.BooleanKey.DisableFlashingUI, swDisableFlashingUiElements.Checked);
+            Settings.SetBool(Settings.BooleanKey.DisableMessageSounds, swDisableMessageWindowSounds.Checked);
+            Settings.SetBool(Settings.BooleanKey.DisableTips, swDisableStatusBarTips.Checked);
+            Settings.SetBool(Settings.BooleanKey.DisableConfDiag, swDisableConfirmationDialogs.Checked);
 
             if (_strStartupInitialPath != string.Empty)
             {
-                Settings.SetString(SettingsStringType.StartupInitialDirectory, _strStartupInitialPath);
+                Settings.SetString(Settings.StringKey.StartupInitialDirectory, _strStartupInitialPath);
             }
 
             if (_strEfiInitialPath != string.Empty)
             {
-                Settings.SetString(SettingsStringType.EfiInitialDirectory, _strEfiInitialPath);
+                Settings.SetString(Settings.StringKey.EfiInitialDirectory, _strEfiInitialPath);
             }
 
             if (_strSocInitialPath != string.Empty)
             {
-                Settings.SetString(SettingsStringType.SocInitialDirectory, _strSocInitialPath);
+                Settings.SetString(Settings.StringKey.SocInitialDirectory, _strSocInitialPath);
             }
 
             FormEx.UpdateAccentColor();
@@ -166,24 +166,24 @@ namespace Mac_EFI_Toolkit.Forms
                 METPrompt.Show(
                     this,
                     APPSTRINGS.RESET_SETTINGS_DEFAULT,
-                    METPromptType.Warning,
-                    METPromptButtons.YesNo);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.YesNo);
 
             if (dlgResult != DialogResult.Yes)
             {
                 return;
             }
 
-            Settings.SetBool(SettingsBoolType.DisableVersionCheck, false);
-            Settings.SetBool(SettingsBoolType.UseAccentColor, false);
-            Settings.SetBool(SettingsBoolType.DisableSerialValidation, false);
-            Settings.SetBool(SettingsBoolType.DisableFlashingUI, false);
-            Settings.SetBool(SettingsBoolType.DisableMessageSounds, false);
-            Settings.SetBool(SettingsBoolType.DisableTips, false);
-            Settings.SetBool(SettingsBoolType.DisableConfDiag, false);
-            Settings.SetString(SettingsStringType.StartupInitialDirectory, ApplicationPaths.WorkingDirectory);
-            Settings.SetString(SettingsStringType.EfiInitialDirectory, ApplicationPaths.WorkingDirectory);
-            Settings.SetString(SettingsStringType.SocInitialDirectory, ApplicationPaths.WorkingDirectory);
+            Settings.SetBool(Settings.BooleanKey.DisableVersionCheck, false);
+            Settings.SetBool(Settings.BooleanKey.UseAccentColor, false);
+            Settings.SetBool(Settings.BooleanKey.DisableSerialValidation, false);
+            Settings.SetBool(Settings.BooleanKey.DisableFlashingUI, false);
+            Settings.SetBool(Settings.BooleanKey.DisableMessageSounds, false);
+            Settings.SetBool(Settings.BooleanKey.DisableTips, false);
+            Settings.SetBool(Settings.BooleanKey.DisableConfDiag, false);
+            Settings.SetString(Settings.StringKey.StartupInitialDirectory, ApplicationPaths.WorkingDirectory);
+            Settings.SetString(Settings.StringKey.EfiInitialDirectory, ApplicationPaths.WorkingDirectory);
+            Settings.SetString(Settings.StringKey.SocInitialDirectory, ApplicationPaths.WorkingDirectory);
 
             FormEx.UpdateAccentColor();
 
@@ -224,25 +224,25 @@ namespace Mac_EFI_Toolkit.Forms
         #region METSwitch Events
         private void UpdateCheckBoxControls()
         {
-            swDisableVersionCheck.Checked = Settings.ReadBool(SettingsBoolType.DisableVersionCheck) ? true : false;
-            swUseAccentColor.Checked = Settings.ReadBool(SettingsBoolType.UseAccentColor) ? true : false;
-            swDisableSnValidation.Checked = Settings.ReadBool(SettingsBoolType.DisableSerialValidation) ? true : false;
-            swDisableFlashingUiElements.Checked = Settings.ReadBool(SettingsBoolType.DisableFlashingUI) ? true : false;
-            swDisableMessageWindowSounds.Checked = Settings.ReadBool(SettingsBoolType.DisableMessageSounds) ? true : false;
-            swDisableStatusBarTips.Checked = Settings.ReadBool(SettingsBoolType.DisableTips) ? true : false;
-            swDisableConfirmationDialogs.Checked = Settings.ReadBool(SettingsBoolType.DisableConfDiag) ? true : false;
+            swDisableVersionCheck.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableVersionCheck) ? true : false;
+            swUseAccentColor.Checked = Settings.ReadBoolean(Settings.BooleanKey.UseAccentColor) ? true : false;
+            swDisableSnValidation.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableSerialValidation) ? true : false;
+            swDisableFlashingUiElements.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableFlashingUI) ? true : false;
+            swDisableMessageWindowSounds.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableMessageSounds) ? true : false;
+            swDisableStatusBarTips.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableTips) ? true : false;
+            swDisableConfirmationDialogs.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag) ? true : false;
         }
         #endregion
 
         #region UI Events
         private void UpdatePathLabel()
         {
-            UpdateLabel(lblStartupDirectory, SettingsStringType.StartupInitialDirectory);
-            UpdateLabel(lblEfiDirectory, SettingsStringType.EfiInitialDirectory);
-            UpdateLabel(lblSocDirectory, SettingsStringType.SocInitialDirectory);
+            UpdateLabel(lblStartupDirectory, Settings.StringKey.StartupInitialDirectory);
+            UpdateLabel(lblEfiDirectory, Settings.StringKey.EfiInitialDirectory);
+            UpdateLabel(lblSocDirectory, Settings.StringKey.SocInitialDirectory);
         }
 
-        private static void UpdateLabel(Label control, SettingsStringType setting)
+        private static void UpdateLabel(Label control, Settings.StringKey setting)
         {
             string strDirectory = Settings.ReadString(setting);
             control.Text = strDirectory;

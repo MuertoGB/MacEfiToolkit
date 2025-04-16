@@ -28,7 +28,7 @@ namespace Mac_EFI_Toolkit.UI
             form.BackColor = System.Drawing.Color.Green;
             form.TransparencyKey = System.Drawing.Color.Green;
 
-            if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
+            if (Settings.ReadBoolean(Settings.BooleanKey.UseAccentColor))
             {
                 form.BackColor = AccentColorHelper.GetSystemAccentColor();
                 return;

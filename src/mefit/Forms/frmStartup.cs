@@ -82,7 +82,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Check for a new application version.
-            if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableVersionCheck))
             {
                 StartupVersionCheck();
             }
@@ -94,7 +94,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
                 // We need to cancel the original request to close if confirmation dialogs are not disabled.
-                if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+                if (!Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
                 {
                     if (_childWindowCount != 0)
                     {
@@ -111,21 +111,20 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void frmStartup_DragEnter(object sender, DragEventArgs e)
         {
-            ApplyDragEnterColours();
-            Program.HandleDragEnter(sender, e);
+            Program.HandleDragEnter(sender, e, ApplyDragEnterColours);
         }
 
         private void frmStartup_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
-            string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-            string strFileName = arrDraggedFiles[0];
+            string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string file = draggedFiles[0];
 
             ApplyDragLeaveColours();
 
             this.BeginInvoke(new Action(() =>
             {
-                OpenBinary(strFileName);
+                OpenBinary(file);
             }));
         }
 
@@ -360,8 +359,8 @@ namespace Mac_EFI_Toolkit.Forms
             METPrompt.Show(
                 this,
                 DIALOGSTRINGS.NOT_VALID_FIRMWARE,
-                METPromptType.Warning,
-                METPromptButtons.Okay);
+                METPrompt.PType.Warning,
+                METPrompt.PButtons.Okay);
         }
 
         private Form GetChildFormForImage(byte[] sourceBytes)
@@ -469,7 +468,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string strDirectory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
+            string strDirectory = Settings.ReadString(Settings.StringKey.StartupInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(strDirectory))

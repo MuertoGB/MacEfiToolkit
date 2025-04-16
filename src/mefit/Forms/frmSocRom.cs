@@ -25,7 +25,7 @@ namespace Mac_EFI_Toolkit.Forms
     public partial class frmSocRom : FormEx
     {
         #region Private Members
-        private readonly SOCROM _socrom = new SOCROM();
+        private SOCROM _socrom = new SOCROM();
 
         private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private Thread _tLoadFirmware = null;
@@ -125,20 +125,25 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             MemoryTracker.Instance.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
+
+            _socrom = null;
         }
 
         private void frmSocRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();
 
-        private void frmSocRom_DragEnter(object sender, DragEventArgs e) => Program.HandleDragEnter(sender, e);
+        private void frmSocRom_DragEnter(object sender, DragEventArgs e) => Program.HandleDragEnter(sender, e, null);
 
         private void frmSocRom_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
-            string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-            string strFileName = arrDraggedFiles[0];
+            string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string file = draggedFiles[0];
 
             // Open the binary file.
-            OpenBinary(strFileName);
+            this.BeginInvoke(new Action(() =>
+            {
+                OpenBinary(file);
+            }));
         }
 
         private void frmSocRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.InactiveFormText);
@@ -272,7 +277,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdMenuPatch_Click(object sender, EventArgs e)
         {
-            bool bOpenEditor = Settings.ReadBool(SettingsBoolType.AcceptedEditingTerms);
+            bool bOpenEditor = Settings.ReadBoolean(Settings.BooleanKey.AcceptedEditingTerms);
 
             if (!bOpenEditor)
             {
@@ -350,14 +355,14 @@ namespace Mac_EFI_Toolkit.Forms
 
             Clipboard.SetText(strSerial);
 
-            if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
                 METPrompt.Show(
                     this,
                     $"{APPSTRINGS.SERIAL_NUMBER} " +
                     $"{EFISTRINGS.COPIED_TO_CB_LC}",
-                    METPromptType.Information,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Information,
+                    METPrompt.PButtons.Okay);
             }
         }
 
@@ -390,7 +395,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = $"{_socrom.FileInfoData.FileName}_{SOCSTRINGS.SCFG_REGION}",
+                FileName = $"{_socrom.FirmwareInfo.FileName}_{SOCSTRINGS.SCFG_REGION}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.ScfgDirectory
             })
@@ -410,8 +415,8 @@ namespace Mac_EFI_Toolkit.Forms
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.SCFG_EXPORT_FAIL,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
             }
         }
 
@@ -423,7 +428,7 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 InitialDirectory = ApplicationPaths.BackupsDirectory,
                 Filter = APPSTRINGS.FILTER_ZIP,
-                FileName = $"{_socrom.FileInfoData.FileName}_{APPSTRINGS.SOCROM}_{APPSTRINGS.BACKUP}",
+                FileName = $"{_socrom.FirmwareInfo.FileName}_{APPSTRINGS.SOCROM}_{APPSTRINGS.BACKUP}",
                 OverwritePrompt = true
             })
             {
@@ -433,7 +438,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                FileTools.BackupFileToZip(_socrom.LoadedBinaryBuffer, _socrom.FileInfoData.FileNameExt, saveFileDialog.FileName);
+                FileTools.BackupFileToZip(_socrom.LoadedBinaryBuffer, _socrom.FirmwareInfo.FileNameExt, saveFileDialog.FileName);
 
                 if (File.Exists(saveFileDialog.FileName))
                 {
@@ -444,8 +449,8 @@ namespace Mac_EFI_Toolkit.Forms
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.ARCHIVE_CREATE_FAILED,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
             }
         }
 
@@ -454,7 +459,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{_socrom.FileInfoData.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
+                FileName = $"{_socrom.FirmwareInfo.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.WorkingDirectory
             })
@@ -468,13 +473,13 @@ namespace Mac_EFI_Toolkit.Forms
 
                 sbFirmwareInfo.AppendLine("File");
                 sbFirmwareInfo.AppendLine("----------------------------------");
-                sbFirmwareInfo.AppendLine($"Filename:        {_socrom.FileInfoData.FileNameExt}");
-                sbFirmwareInfo.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(_socrom.FileInfoData.Length)} bytes");
-                sbFirmwareInfo.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)_socrom.FileInfoData.Length)}");
-                sbFirmwareInfo.AppendLine($"Size (Hex):      {_socrom.FileInfoData.Length:X}h");
-                sbFirmwareInfo.AppendLine($"CRC32:           {_socrom.FileInfoData.CRC32:X}");
-                sbFirmwareInfo.AppendLine($"Created:         {_socrom.FileInfoData.CreationTime}");
-                sbFirmwareInfo.AppendLine($"Modified:        {_socrom.FileInfoData.LastWriteTime}\r\n");
+                sbFirmwareInfo.AppendLine($"Filename:        {_socrom.FirmwareInfo.FileNameExt}");
+                sbFirmwareInfo.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} bytes");
+                sbFirmwareInfo.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)_socrom.FirmwareInfo.Length)}");
+                sbFirmwareInfo.AppendLine($"Size (Hex):      {_socrom.FirmwareInfo.Length:X}h");
+                sbFirmwareInfo.AppendLine($"CRC32:           {_socrom.FirmwareInfo.CRC32:X}");
+                sbFirmwareInfo.AppendLine($"Created:         {_socrom.FirmwareInfo.CreationTime}");
+                sbFirmwareInfo.AppendLine($"Modified:        {_socrom.FirmwareInfo.LastWriteTime}\r\n");
 
                 sbFirmwareInfo.AppendLine("Controller");
                 sbFirmwareInfo.AppendLine("----------------------------------");
@@ -507,8 +512,8 @@ namespace Mac_EFI_Toolkit.Forms
                     METPrompt.Show(
                         this,
                         DIALOGSTRINGS.DATA_EXPORT_FAILED,
-                        METPromptType.Error,
-                        METPromptButtons.Okay);
+                        METPrompt.PType.Error,
+                        METPrompt.PButtons.Okay);
 
                     return;
                 }
@@ -545,7 +550,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void resetWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
                 ToggleControlEnable(false);
                 ResetWindow();
@@ -556,8 +561,8 @@ namespace Mac_EFI_Toolkit.Forms
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.UNLOAD_FIRMWARE_RESET,
-                    METPromptType.Warning,
-                    METPromptButtons.YesNo);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.YesNo);
 
             if (dlgResult == DialogResult.Yes)
             {
@@ -573,8 +578,8 @@ namespace Mac_EFI_Toolkit.Forms
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.COULD_NOT_RELOAD,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
@@ -589,8 +594,8 @@ namespace Mac_EFI_Toolkit.Forms
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.WARN_DATA_MATCHES_BUFF,
-                    METPromptType.Warning,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
@@ -644,8 +649,8 @@ namespace Mac_EFI_Toolkit.Forms
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.NOT_VALID_SOCROM,
-                    METPromptType.Warning,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
@@ -713,8 +718,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateWindowTitle()
         {
-            this.Text = _socrom.FileInfoData.FileNameExt;
-            lblTitle.Text = $"{APPSTRINGS.SOCROM} {Program.MDL2_RIGHT_ARROW} {_socrom.FileInfoData.FileNameExt}";
+            this.Text = _socrom.FirmwareInfo.FileNameExt;
+            lblTitle.Text = $"{APPSTRINGS.SOCROM} {Program.MDL2_RIGHT_ARROW} {_socrom.FirmwareInfo.FileNameExt}";
         }
 
         private void SetTipHandlers()
@@ -757,7 +762,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void HandleMouseEnterTip(object sender, EventArgs e)
         {
-            if (!Settings.ReadBool(SettingsBoolType.DisableTips))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
             {
                 Dictionary<object, string> dictTooltips = new Dictionary<object, string>
                 {
@@ -787,7 +792,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
             {
-                if (!Settings.ReadBool(SettingsBoolType.DisableTips))
+                if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
                 {
                     lblStatusBarTip.Text = cbxCensorTipString();
                 }
@@ -832,7 +837,7 @@ namespace Mac_EFI_Toolkit.Forms
         internal void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string directory = Settings.ReadString(SettingsStringType.SocInitialDirectory);
+            string directory = Settings.ReadString(Settings.StringKey.SocInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
@@ -877,6 +882,8 @@ namespace Mac_EFI_Toolkit.Forms
             // Reset window text.
             Text = APPSTRINGS.SOCROM;
             lblTitle.Text = APPSTRINGS.SOCROM;
+
+            _socrom = default;
         }
 
         private void EnableButtons(bool enable, params Button[] buttons)
@@ -948,11 +955,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateParseTimeControls() => lblParseTime.Text = $"{_socrom.ParseTime.TotalSeconds:F2}s";
 
-        private void UpdateFilenameControls() => lblFilename.Text = $"{APPSTRINGS.FILE}: '{_socrom.FileInfoData.FileNameExt}'";
+        private void UpdateFilenameControls() => lblFilename.Text = $"{APPSTRINGS.FILE}: '{_socrom.FirmwareInfo.FileNameExt}'";
 
         private void UpdateFileSizeControls()
         {
-            long lSize = _socrom.FileInfoData.Length;
+            long lSize = _socrom.FirmwareInfo.Length;
             bool bValidSize = FileTools.GetIsValidBinSize(lSize);
 
             lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(lSize)} {APPSTRINGS.BYTES} ({lSize:X}h)";
@@ -964,11 +971,11 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void UpdateFileCrc32Controls() => lblCrc.Text = $"{_socrom.FileInfoData.CRC32:X8}";
+        private void UpdateFileCrc32Controls() => lblCrc.Text = $"{_socrom.FirmwareInfo.CRC32:X8}";
 
-        private void UpdateFileCreationDateControls() => lblCreated.Text = _socrom.FileInfoData.CreationTime;
+        private void UpdateFileCreationDateControls() => lblCreated.Text = _socrom.FirmwareInfo.CreationTime;
 
-        private void UpdateFileModifiedDateControls() => lblModified.Text = _socrom.FileInfoData.LastWriteTime;
+        private void UpdateFileModifiedDateControls() => lblModified.Text = _socrom.FirmwareInfo.LastWriteTime;
 
         private void UpdateIbootControls()
         {
@@ -1112,27 +1119,27 @@ namespace Mac_EFI_Toolkit.Forms
 
             Clipboard.SetText(text);
 
-            if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
                 METPrompt.Show(
                     this,
                     $"'{text}' {EFISTRINGS.COPIED_TO_CB_LC}",
-                    METPromptType.Information,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Information,
+                    METPrompt.PButtons.Okay);
             }
         }
 
         private void ClipboardSetFilename(bool showExtention) =>
-            SetClipboardText(showExtention ? _socrom.FileInfoData.FileNameExt : _socrom.FileInfoData.FileName);
+            SetClipboardText(showExtention ? _socrom.FirmwareInfo.FileNameExt : _socrom.FirmwareInfo.FileName);
 
         private void ClipboardSetFileSize() =>
-            SetClipboardText($"{FileTools.FormatBytesWithCommas(_socrom.FileInfoData.Length)} {APPSTRINGS.BYTES} ({_socrom.FileInfoData.Length:X}h)");
+            SetClipboardText($"{FileTools.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} {APPSTRINGS.BYTES} ({_socrom.FirmwareInfo.Length:X}h)");
 
-        private void ClipboardSetFileCrc32() => SetClipboardText($"{_socrom.FileInfoData.CRC32:X8}");
+        private void ClipboardSetFileCrc32() => SetClipboardText($"{_socrom.FirmwareInfo.CRC32:X8}");
 
-        private void ClipboardSetFileCreationTime() => SetClipboardText(_socrom.FileInfoData.CreationTime);
+        private void ClipboardSetFileCreationTime() => SetClipboardText(_socrom.FirmwareInfo.CreationTime);
 
-        private void ClipboardSetFileModifiedTime() => SetClipboardText(_socrom.FileInfoData.LastWriteTime);
+        private void ClipboardSetFileModifiedTime() => SetClipboardText(_socrom.FirmwareInfo.LastWriteTime);
 
         private void ClipboardSetIbootVersion() => SetClipboardText(_socrom.iBootVersion);
 
@@ -1260,7 +1267,7 @@ namespace Mac_EFI_Toolkit.Forms
                     }
                 }
 
-                Logger.WriteLine(LOGSTRINGS.WRITE_NEW_DATA, LogType.Application);
+                Logger.WriteLine(LOGSTRINGS.WRITE_NEW_DATA, Logger.LogType.Application);
 
                 // Overwrite Scfg store in the binary buffer.
                 BinaryTools.OverwriteBytesAtBase(bFirmwareBuffer, iScfgBase, bScfgBuffer);
@@ -1323,7 +1330,7 @@ namespace Mac_EFI_Toolkit.Forms
             return new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = _socrom.FileInfoData.FileName,
+                FileName = _socrom.FirmwareInfo.FileName,
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.BuildsDirectory
             };
@@ -1347,8 +1354,8 @@ namespace Mac_EFI_Toolkit.Forms
                         METPrompt.Show(
                             this,
                             DIALOGSTRINGS.FW_SAVED_SUCCESS_LOAD,
-                            METPromptType.Question,
-                            METPromptButtons.YesNo);
+                            METPrompt.PType.Question,
+                            METPrompt.PButtons.YesNo);
 
                     if (dlgResult == DialogResult.Yes)
                     {

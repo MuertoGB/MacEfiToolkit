@@ -54,13 +54,13 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        internal static FontStatus IsFontStyleAvailable(string fontFamily, FontStyle fontStyle)
+        internal static FontStatus IsFontStyleAvailable(string fontfamily, FontStyle fontstyle)
         {
             try
             {
-                using (FontFamily fFamily = new FontFamily(fontFamily))
+                using (FontFamily family = new FontFamily(fontfamily))
                 {
-                    if (fFamily.IsStyleAvailable(fontStyle))
+                    if (family.IsStyleAvailable(fontstyle))
                     {
                         return FontStatus.Available;
                     }
@@ -86,13 +86,13 @@ namespace Mac_EFI_Toolkit.Common
 
             try
             {
-                FontFamily ffLoadFont = FontResolver.LoadFont(fontbuffer);
+                FontFamily resolvedFont = FontResolver.LoadFont(fontbuffer);
 
                 fonts = new[]
                 {
-                    new Font(ffLoadFont, 10.0F, FontStyle.Regular),
-                    new Font(ffLoadFont, 12.0F, FontStyle.Regular),
-                    new Font(ffLoadFont, 20.0F, FontStyle.Regular)
+                    new Font(resolvedFont, 10.0F, FontStyle.Regular),
+                    new Font(resolvedFont, 12.0F, FontStyle.Regular),
+                    new Font(resolvedFont, 20.0F, FontStyle.Regular)
                 };
 
                 return true;
@@ -103,6 +103,5 @@ namespace Mac_EFI_Toolkit.Common
                 return false;
             }
         }
-
     }
 }
