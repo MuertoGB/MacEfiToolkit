@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
-    public class EFIROM : ISerialTarget
+    public class EFIROM
     {
         #region Public Members
         public string LoadedBinaryPath { get; set; }

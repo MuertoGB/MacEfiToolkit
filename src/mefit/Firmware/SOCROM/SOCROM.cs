@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Mac_EFI_Toolkit.Firmware.SOCROM
 {
-    public class SOCROM : ISerialTarget
+    public class SOCROM
     {
         #region Public Members
         public string LoadedBinaryPath { get; set; }
