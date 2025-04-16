@@ -131,8 +131,6 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             MemoryTracker.Instance.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
-
-            FlashDescriptor.ClearRegionData();
         }
 
         private void frmEfiRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();
@@ -489,7 +487,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void exportIntelMERegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (FlashDescriptor.MeBase == 0 || FlashDescriptor.MeLimit == 0)
+            if (_efirom.Descriptor.MeBase == 0 || _efirom.Descriptor.MeLimit == 0)
             {
                 METPrompt.Show(
                     this,
@@ -517,7 +515,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                byte[] bMeBuffer = BinaryTools.GetBytesBaseLength(_efirom.LoadedBinaryBuffer, (int)FlashDescriptor.MeBase, (int)FlashDescriptor.MeSize);
+                byte[] bMeBuffer = BinaryTools.GetBytesBaseLength(_efirom.LoadedBinaryBuffer, (int)_efirom.Descriptor.MeBase, (int)_efirom.Descriptor.MeSize);
 
                 if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, bMeBuffer) && File.Exists(saveFileDialog.FileName))
                 {
@@ -675,20 +673,20 @@ namespace Mac_EFI_Toolkit.Forms
 
                 sbFirmware.AppendLine("Descriptor");
                 sbFirmware.AppendLine("----------------------------------");
-                if (FlashDescriptor.IsDescriptorMode)
+                if (_efirom.Descriptor.IsDescriptorMode)
                 {
                     sbFirmware.AppendLine(
-                        $"PDR Region:      Base: {FlashDescriptor.PdrBase:X}h, " +
-                        $"Limit: {FlashDescriptor.PdrLimit:X}h, " +
-                        $"Size: {FlashDescriptor.PdrSize:X}h");
+                        $"PDR Region:      Base: {_efirom.Descriptor.PdrBase:X}h, " +
+                        $"Limit: {_efirom.Descriptor.PdrLimit:X}h, " +
+                        $"Size: {_efirom.Descriptor.PdrSize:X}h");
                     sbFirmware.AppendLine(
-                        $"ME Region:       Base: {FlashDescriptor.MeBase:X}h, " +
-                        $"Limit: {FlashDescriptor.MeLimit:X}h, " +
-                        $"Size: {FlashDescriptor.MeSize:X}h");
+                        $"ME Region:       Base: {_efirom.Descriptor.MeBase:X}h, " +
+                        $"Limit: {_efirom.Descriptor.MeLimit:X}h, " +
+                        $"Size: {_efirom.Descriptor.MeSize:X}h");
                     sbFirmware.AppendLine(
-                        $"BIOS Region:     Base: {FlashDescriptor.BiosBase:X}h, " +
-                        $"Limit: {FlashDescriptor.BiosLimit:X}h, " +
-                        $"Size: {FlashDescriptor.BiosSize:X}h\r\n");
+                        $"BIOS Region:     Base: {_efirom.Descriptor.BiosBase:X}h, " +
+                        $"Limit: {_efirom.Descriptor.BiosLimit:X}h, " +
+                        $"Size: {_efirom.Descriptor.BiosSize:X}h\r\n");
                 }
                 else
                 {
@@ -1051,9 +1049,9 @@ namespace Mac_EFI_Toolkit.Forms
             UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, Colours.DisabledText);
 
             // Check which descriptor copy menu items should be enabled.
-            pdrBaseToolStripMenuItem.Enabled = FlashDescriptor.PdrBase != 0;
-            meBaseToolStripMenuItem.Enabled = FlashDescriptor.MeBase != 0;
-            biosBaseToolStripMenuItem.Enabled = FlashDescriptor.BiosBase != 0;
+            pdrBaseToolStripMenuItem.Enabled = _efirom.Descriptor.PdrBase != 0;
+            meBaseToolStripMenuItem.Enabled = _efirom.Descriptor.MeBase != 0;
+            biosBaseToolStripMenuItem.Enabled = _efirom.Descriptor.BiosBase != 0;
 
             // Update window title.
             UpdateWindowTitle();
@@ -1324,7 +1322,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void UpdateDescriptorModeControls() => lblDescriptorMode.Text = $"{FlashDescriptor.IsDescriptorMode}";
+        private void UpdateDescriptorModeControls() => lblDescriptorMode.Text = $"{_efirom.Descriptor.IsDescriptorMode}";
 
         private void UpdateIntelMeControls()
         {
@@ -1334,11 +1332,11 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!string.IsNullOrEmpty(strIntelMeVersion))
             {
-                if (FlashDescriptor.MeBase != 0)
+                if (_efirom.Descriptor.MeBase != 0)
                 {
                     if (!string.IsNullOrEmpty(strIntelMeVersion))
                     {
-                        lblMeVersion.Text += $" ({FlashDescriptor.MeBase:X}h)";
+                        lblMeVersion.Text += $" ({_efirom.Descriptor.MeBase:X}h)";
                     }
                 }
 
@@ -1396,7 +1394,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 // Export Menu
                 exportFsysStoreToolStripMenuItem.Enabled = isFsysBufferNull;
-                exportIntelMERegionToolStripMenuItem.Enabled = FlashDescriptor.IsDescriptorMode && FlashDescriptor.MeBase != 0 && FlashDescriptor.MeLimit != 0;
+                exportIntelMERegionToolStripMenuItem.Enabled = _efirom.Descriptor.IsDescriptorMode && _efirom.Descriptor.MeBase != 0 && _efirom.Descriptor.MeLimit != 0;
                 exportNVRAMVSSStoresToolStripMenuItem.Enabled = !_efirom.VssPrimary.IsStoreEmpty || !_efirom.VssSecondary.IsStoreEmpty;
                 exportNVRAMSVSStoresToolStripMenuItem.Enabled = !_efirom.SvsPrimary.IsStoreEmpty || !_efirom.SvsSecondary.IsStoreEmpty;
                 exportLZMADXEArchiveToolStripMenuItem.Enabled = _efirom.LzmaDecompressedBuffer != null;
@@ -1404,7 +1402,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 // Patch Menu
                 changeSerialNumberToolStripMenuItem.Enabled = _efirom.FsysStoreData.FsysBase != -1 && _efirom.FsysStoreData.SerialBase != -1;
-                replaceIntelMERegionToolStripMenuItem.Enabled = FlashDescriptor.IsDescriptorMode && FlashDescriptor.MeBase != 0 && FlashDescriptor.MeLimit != 0;
+                replaceIntelMERegionToolStripMenuItem.Enabled = _efirom.Descriptor.IsDescriptorMode && _efirom.Descriptor.MeBase != 0 && _efirom.Descriptor.MeLimit != 0;
                 replaceFsysStoreToolStripMenuItem.Enabled = _efirom.FsysStoreData.FsysBase != -1;
                 eraseNVRAMToolStripMenuItem.Enabled = !areNvramStoresEmpty;
                 fixFsysChecksumToolStripMenuItem.Enabled = doesCrcMatch;
@@ -1621,9 +1619,6 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Reset initial directory.
             SetInitialDirectory();
-
-            // Reset Intel FD.
-            FlashDescriptor.ClearRegionData();
         }
         #endregion
 
@@ -1691,21 +1686,21 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetPdrRegionOffsets() =>
             SetClipboardText(
-                $"{APPSTRINGS.BASE} {FlashDescriptor.PdrBase:X}h, " +
-                $"{APPSTRINGS.LIMIT} {FlashDescriptor.PdrLimit:X}h, " +
-                $"{APPSTRINGS.SIZE} {FlashDescriptor.PdrSize:X}h");
+                $"{APPSTRINGS.BASE} {_efirom.Descriptor.PdrBase:X}h, " +
+                $"{APPSTRINGS.LIMIT} {_efirom.Descriptor.PdrLimit:X}h, " +
+                $"{APPSTRINGS.SIZE} {_efirom.Descriptor.PdrSize:X}h");
 
         private void ClipboardSetMeRegionOffsets() =>
             SetClipboardText(
-                $"{APPSTRINGS.BASE} {FlashDescriptor.MeBase:X}h, " +
-                $"{APPSTRINGS.LIMIT} {FlashDescriptor.MeLimit:X}h, " +
-                $"{APPSTRINGS.SIZE} {FlashDescriptor.MeSize:X}h");
+                $"{APPSTRINGS.BASE} {_efirom.Descriptor.MeBase:X}h, " +
+                $"{APPSTRINGS.LIMIT} {_efirom.Descriptor.MeLimit:X}h, " +
+                $"{APPSTRINGS.SIZE} {_efirom.Descriptor.MeSize:X}h");
 
         private void ClipboardSetBiosRegionOffsets() =>
             SetClipboardText(
-                $"{APPSTRINGS.BASE} {FlashDescriptor.BiosBase:X}h, " +
-                $"{APPSTRINGS.LIMIT} {FlashDescriptor.BiosLimit:X}h, " +
-                $"{APPSTRINGS.SIZE} {FlashDescriptor.BiosSize:X}h");
+                $"{APPSTRINGS.BASE} {_efirom.Descriptor.BiosBase:X}h, " +
+                $"{APPSTRINGS.LIMIT} {_efirom.Descriptor.BiosLimit:X}h, " +
+                $"{APPSTRINGS.SIZE} {_efirom.Descriptor.BiosSize:X}h");
         #endregion
 
         #region Write Serial
@@ -2240,7 +2235,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                string imeVersion = IntelME.GetVersionData(imeBuffer, ImeVersionType.ManagementEngine);
+                string imeVersion = IntelME.GetVersionData(imeBuffer, ImeVersionType.ManagementEngine, _efirom.Descriptor);
 
                 Logger.WriteCallerLine($"{LOGSTRINGS.IME_VERSION} {imeVersion ?? APPSTRINGS.NOT_FOUND}");
 
@@ -2283,16 +2278,16 @@ namespace Mac_EFI_Toolkit.Forms
                 return false;
             }
 
-            if (newImeBuffer.Length > FlashDescriptor.MeSize)
+            if (newImeBuffer.Length > _efirom.Descriptor.MeSize)
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_TOO_LARGE} {newImeBuffer.Length:X}h > {FlashDescriptor.MeSize:X}h");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_TOO_LARGE} {newImeBuffer.Length:X}h > {_efirom.Descriptor.MeSize:X}h");
                 NotifyPatchingFailure();
                 return false;
             }
 
-            if (newImeBuffer.Length < FlashDescriptor.MeSize)
+            if (newImeBuffer.Length < _efirom.Descriptor.MeSize)
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.IME_TOO_SMALL} {newImeBuffer.Length:X}h > {FlashDescriptor.MeSize:X}h");
+                Logger.WriteCallerLine($"{LOGSTRINGS.IME_TOO_SMALL} {newImeBuffer.Length:X}h > {_efirom.Descriptor.MeSize:X}h");
             }
 
             Logger.WriteCallerLine(LOGSTRINGS.VALIDATION_PASS);
@@ -2302,13 +2297,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private bool WriteMeRegion(byte[] newImeBuffer, byte[] binaryBuffer)
         {
-            byte[] ffBuffer = new byte[FlashDescriptor.MeSize];
+            byte[] ffBuffer = new byte[_efirom.Descriptor.MeSize];
             BinaryTools.EraseByteArray(ffBuffer);
 
             Array.Copy(newImeBuffer, 0, ffBuffer, 0, newImeBuffer.Length);
-            Array.Copy(ffBuffer, 0, binaryBuffer, FlashDescriptor.MeBase, ffBuffer.Length);
+            Array.Copy(ffBuffer, 0, binaryBuffer, _efirom.Descriptor.MeBase, ffBuffer.Length);
 
-            byte[] patchedMeBuffer = BinaryTools.GetBytesBaseLimit(binaryBuffer, (int)FlashDescriptor.MeBase, (int)FlashDescriptor.MeLimit);
+            byte[] patchedMeBuffer = BinaryTools.GetBytesBaseLimit(binaryBuffer, (int)_efirom.Descriptor.MeBase, (int)_efirom.Descriptor.MeLimit);
 
             if (!BinaryTools.ByteArraysMatch(patchedMeBuffer, ffBuffer))
             {

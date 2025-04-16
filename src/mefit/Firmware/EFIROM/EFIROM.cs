@@ -21,34 +21,36 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         public byte[] LoadedBinaryBuffer { get; set; }
         public byte[] LzmaDecompressedBuffer { get; set; }
         public bool FirmwareLoaded { get; set; }
-        public string FirmwareVersion { get; set; }
+        public string FirmwareVersion { get; private set; }
         public string ConfigCode { get; set; }
-        public bool ForceFoundFsys { get; set; }
-        public string FitVersion { get; set; }
-        public string MeVersion { get; set; }
+        public bool ForceFoundFsys { get; private set; }
+        public string FitVersion { get; private set; }
+        public string MeVersion { get; private set; }
         public bool ResetVss { get; set; }
         public bool ResetSvs { get; set; }
         public string NewSerial { get; set; }
-        public string FmmEmail { get; set; }
+        public string FmmEmail { get; private set; }
 
-        public FileInfoStore FileInfoData { get; set; }
-        public PdrSection PdrSectionData { get; set; }
-        public NvramStore VssPrimary { get; set; }
-        public NvramStore VssSecondary { get; set; }
-        public NvramStore SvsPrimary { get; set; }
-        public NvramStore SvsSecondary { get; set; }
-        public EFILock EfiPrimaryLockData { get; set; }
-        public EFILock EfiBackupLockData { get; set; }
-        public FsysStore FsysStoreData { get; set; }
-        public AppleRomInformationSection AppleRomInfoSectionData { get; set; }
-        public EfiBiosIdSection EfiBiosIdSectionData { get; set; }
+        public FileInfoStore FileInfoData { get; private set; }
+        public PdrSection PdrSectionData { get; private set; }
+        public NvramStore VssPrimary { get; private set; }
+        public NvramStore VssSecondary { get; private set; }
+        public NvramStore SvsPrimary { get; private set; }
+        public NvramStore SvsSecondary { get; private set; }
+        public EFILock EfiPrimaryLockData { get; private set; }
+        public EFILock EfiBackupLockData { get; private set; }
+        public FsysStore FsysStoreData { get; private set; }
+        public AppleRomInformationSection AppleRomInfoSectionData { get; private set; }
+        public EfiBiosIdSection EfiBiosIdSectionData { get; private set; }
 
-        public ApfsCapable IsApfsCapable { get; set; } = ApfsCapable.Unknown;
+        public ApfsCapable IsApfsCapable { get; private set; } = ApfsCapable.Unknown;
 
         public int FsysRegionSize { get; private set; }
         public int NvramBase { get; private set; } = -1;
         public int NvramSize { get; private set; } = -1;
         public int NvramLimit { get; private set; } = -1;
+
+        public FlashDescriptor Descriptor { get; private set; } = new FlashDescriptor();
 
         public TimeSpan ParseTime { get; private set; }
         #endregion
@@ -73,7 +75,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             Stopwatch swParseTime = Stopwatch.StartNew();
 
             // Try processing flash descriptor.
-            FlashDescriptor.ParseRegionData(sourcebuffer);
+            Descriptor.ParseRegionData(sourcebuffer);
 
             // Parse file info.
             FileInfoData = FileTools.GetBinaryFileInfo(filename);
@@ -82,7 +84,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             PdrSectionData = GetPdrData(sourcebuffer);
 
             // Find the NVRAM base address.
-            NvramBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.NvramSectionGuid, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit) - ZERO_VECTOR_SIZE;
+            NvramBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.NvramSectionGuid, (int)Descriptor.BiosBase, (int)Descriptor.BiosLimit) - ZERO_VECTOR_SIZE;
 
             if (NvramBase < 0 || NvramBase > FileInfoData.Length)
             {
@@ -144,10 +146,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             FirmwareVersion = GetFirmwareVersion();
 
             // Get the Intel ME Flash Image Tool version.
-            FitVersion = IntelME.GetVersionData(LoadedBinaryBuffer, ImeVersionType.FlashImageTool);
+            FitVersion = IntelME.GetVersionData(LoadedBinaryBuffer, ImeVersionType.FlashImageTool, Descriptor);
 
             // Get the Intel ME version.
-            MeVersion = IntelME.GetVersionData(LoadedBinaryBuffer, ImeVersionType.ManagementEngine);
+            MeVersion = IntelME.GetVersionData(LoadedBinaryBuffer, ImeVersionType.ManagementEngine, Descriptor);
 
             swParseTime.Stop();
             ParseTime = swParseTime.Elapsed;
@@ -157,7 +159,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         {
             byte[] bDescriptorSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, RSVD_SIZE, (int)FlashDescriptor.IFD_SIG_LENGTH);
 
-            if (!BinaryTools.ByteArraysMatch(bDescriptorSignature, FlashDescriptor.FlashDecriptorMarker))
+            if (!BinaryTools.ByteArraysMatch(bDescriptorSignature, Descriptor.FlashDecriptorMarker))
             {
                 int iDxeCoreBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.EfiFirmwareFsGuid, RSVD_SIZE, GUID_SIZE);
 
@@ -201,19 +203,19 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         public PdrSection GetPdrData(byte[] sourcebuffer)
         {
             // Descriptor mode not set.
-            if (!FlashDescriptor.IsDescriptorMode)
+            if (!Descriptor.IsDescriptorMode)
             {
                 return DefaultPdrSection();
             }
 
             // Platform data region is not present.
-            if (FlashDescriptor.PdrBase == 0)
+            if (Descriptor.PdrBase == 0)
             {
                 return DefaultPdrSection();
             }
 
             // Look for the board id signature bytes.
-            int iBoardIdBase = BinaryTools.GetBaseAddress(sourcebuffer, EFISigs.PdrBoardIdMarker, (int)FlashDescriptor.PdrBase, (int)FlashDescriptor.PdrSize);
+            int iBoardIdBase = BinaryTools.GetBaseAddress(sourcebuffer, EFISigs.PdrBoardIdMarker, (int)Descriptor.PdrBase, (int)Descriptor.PdrSize);
 
             // Board id signature not found.
             if (iBoardIdBase == -1)
@@ -589,7 +591,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
             if (forcefind)
             {
-                return BinaryTools.GetBaseAddress(sourcebuffer, EFISigs.FsysMarker, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit);
+                return BinaryTools.GetBaseAddress(sourcebuffer, EFISigs.FsysMarker, (int)Descriptor.BiosBase, (int)Descriptor.BiosLimit);
             }
 
             if (NvramBase == -1)
@@ -757,12 +759,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             List<int> GetRomSectionBaseAddresses(byte[] bytes)
             {
                 List<int> lstAddresses = new List<int>();
-                int iRomInfoBase = BinaryTools.GetBaseAddress(bytes, Guids.AppleRomInformationGuid, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit);
+                int iRomInfoBase = BinaryTools.GetBaseAddress(bytes, Guids.AppleRomInformationGuid, (int)Descriptor.BiosBase, (int)Descriptor.BiosLimit);
 
                 while (iRomInfoBase != -1)
                 {
                     lstAddresses.Add(iRomInfoBase);
-                    iRomInfoBase = BinaryTools.GetBaseAddress(bytes, Guids.AppleRomInformationGuid, iRomInfoBase + 1, (int)FlashDescriptor.BiosLimit);
+                    iRomInfoBase = BinaryTools.GetBaseAddress(bytes, Guids.AppleRomInformationGuid, iRomInfoBase + 1, (int)Descriptor.BiosLimit);
                 }
 
                 return lstAddresses;
@@ -806,7 +808,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #region EFI BIOS ID Section
         internal EfiBiosIdSection GetEfiBiosIdSectionData(byte[] sourcebuffer)
         {
-            int iGuidBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.EfiBiosIdGuid, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit);
+            int iGuidBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.EfiBiosIdGuid, (int)Descriptor.BiosBase, (int)Descriptor.BiosLimit);
 
             if (iGuidBase == -1)
             {
@@ -871,7 +873,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         {
             // APFS DXE GUID found.
             if (BinaryTools.GetBaseAddress(
-                sourcebuffer, Guids.ApfsDxeGuid, (int)FlashDescriptor.BiosBase, (int)FlashDescriptor.BiosLimit) != -1)
+                sourcebuffer, Guids.ApfsDxeGuid, (int)Descriptor.BiosBase, (int)Descriptor.BiosLimit) != -1)
             {
                 Console.Write(" > Standard LZMA GUID found");
                 return ApfsCapable.Yes;
@@ -883,8 +885,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             int iLzmaBase = FindLzmaBase(
                 sourcebuffer,
                 new[] { Guids.DxeCoreLzmaVolumeGuid, Guids.DxeMainLzmaVolumeGuid },
-                (int)FlashDescriptor.BiosBase,
-                (int)FlashDescriptor.BiosLimit
+                (int)Descriptor.BiosBase,
+                (int)Descriptor.BiosLimit
             );
 
             // No compressed DXE volume was found.

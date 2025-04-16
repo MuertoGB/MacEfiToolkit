@@ -19,7 +19,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         private static string _default = "0.0.0.0";
         #endregion
 
-        internal static string GetVersionData(byte[] sourcebytes, ImeVersionType versiontype)
+        internal static string GetVersionData(byte[] sourcebytes, ImeVersionType versiontype, FlashDescriptor flashDescriptor)
         {
             int iHeaderPosition = -1;
             int iLength = 0;
@@ -28,12 +28,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             switch (versiontype)
             {
                 case ImeVersionType.FlashImageTool:
-                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, FPTMarker, (int)FlashDescriptor.MeBase, (int)FlashDescriptor.MeSize);
+                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, FPTMarker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
                     iLength = 0x20;
                     break;
 
                 case ImeVersionType.ManagementEngine:
-                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, MN2Marker, (int)FlashDescriptor.MeBase, (int)FlashDescriptor.MeSize);
+                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, MN2Marker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
                     iLength = 0x10;
                     break;
             }
