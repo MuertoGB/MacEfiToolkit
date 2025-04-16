@@ -2339,6 +2339,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SaveOutputFirmwareEfirom(byte[] binarybuffer)
         {
+            using (SaveFileDialog dialog = CreateFirmwareSaveFileDialog())
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
