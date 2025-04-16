@@ -6,7 +6,7 @@
 
 namespace Mac_EFI_Toolkit.Firmware.SOCROM
 {
-    internal struct SCfgStore
+    public struct SCfgStore
     {
         internal int StoreBase { get; set; }
         internal int StoreLength { get; set; }

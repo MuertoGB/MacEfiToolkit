@@ -19,16 +19,21 @@ namespace Mac_EFI_Toolkit.Forms
     {
         #region Private Members
         private readonly EFIROM _efirom;
+        private readonly SOCROM _socrom;
         #endregion
 
         #region Constructor
         public frmSerialSelect(EFIROM efiromInstance)
         {
             InitializeComponent();
-
             _efirom = efiromInstance;
+            WireEventHandlers();
+        }
 
-            // Attach event handlers.
+        public frmSerialSelect(SOCROM socromInstance)
+        {
+            InitializeComponent();
+            _socrom = socromInstance;
             WireEventHandlers();
         }
 
@@ -49,15 +54,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetSerialLength()
         {
-            if (Tag is SerialSenderTag.EFIROMWindow)
+            if (Tag is SerialSenderTag.EFIROMWindow && _efirom != null)
             {
                 tbxSerial.MaxLength = _efirom.FsysStoreData.Serial.Length;
-                return;
             }
-            else if (Tag is SerialSenderTag.SOCROMWindow)
+            else if (Tag is SerialSenderTag.SOCROMWindow && _socrom != null)
             {
                 tbxSerial.MaxLength = SOCROM.SERIAL_LENGTH;
-                return;
             }
         }
         #endregion
@@ -77,13 +80,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
-            if (Tag is SerialSenderTag.EFIROMWindow)
+            if (Tag is SerialSenderTag.EFIROMWindow && _efirom != null)
             {
                 _efirom.NewSerial = tbxSerial.Text;
             }
-            else if (Tag is SerialSenderTag.SOCROMWindow)
+            else if (Tag is SerialSenderTag.SOCROMWindow && _socrom != null)
             {
-                SOCROM.NewSerial = tbxSerial.Text;
+                _socrom.NewSerial = tbxSerial.Text;
             }
 
             DialogResult = DialogResult.OK;

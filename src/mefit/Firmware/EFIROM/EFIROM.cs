@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
-    public class EFIROM
+    public class EFIROM : ISerialTarget
     {
         #region Public Members
         public string LoadedBinaryPath { get; set; }
@@ -45,7 +45,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         public ApfsCapable IsApfsCapable { get; private set; } = ApfsCapable.Unknown;
 
-        public int FsysRegionSize { get; private set; }
+        public int FsysRegionSize { get; private set; } = 0;
         public int NvramBase { get; private set; } = -1;
         public int NvramSize { get; private set; } = -1;
         public int NvramLimit { get; private set; } = -1;

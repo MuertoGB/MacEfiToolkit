@@ -26,6 +26,9 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Private Members
+        private readonly EFIROM _efirom = new EFIROM();
+        private readonly SOCROM _socrom = new SOCROM();
+
         private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private int _childWindowCount = 0;
         #endregion
@@ -363,13 +366,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         private Form GetChildFormForImage(byte[] sourceBytes)
         {
-            EFIROM _parser = new EFIROM();
-
-            if (_parser.IsValidImage(sourceBytes))
+            if (_efirom.IsValidImage(sourceBytes))
             {
                 return new frmEfiRom();
             }
-            else if (SOCROM.IsValidImage(sourceBytes))
+            else if (_socrom.IsValidImage(sourceBytes))
             {
                 return new frmSocRom();
             }
