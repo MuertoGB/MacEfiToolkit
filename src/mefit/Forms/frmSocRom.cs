@@ -492,7 +492,7 @@ namespace Mac_EFI_Toolkit.Forms
                 sbFirmwareInfo.AppendLine("----------------------------------");
                 sbFirmwareInfo.AppendLine($"Config:          {_socrom.ConfigCode ?? APPSTRINGS.NA}");
                 sbFirmwareInfo.AppendLine($"Order No:        {_socrom.SCfgSectionData.SON ?? APPSTRINGS.NA}");
-                sbFirmwareInfo.AppendLine($"Reg No:          {_socrom.SCfgSectionData.RegNumText ?? APPSTRINGS.NA}\r\n");
+                sbFirmwareInfo.AppendLine($"Reg No:          {_socrom.SCfgSectionData.RegNum ?? APPSTRINGS.NA}\r\n");
 
                 sbFirmwareInfo.AppendLine("Firmware");
                 sbFirmwareInfo.AppendLine("----------------------------------");
@@ -946,7 +946,7 @@ namespace Mac_EFI_Toolkit.Forms
             ToggleControlEnable(true);
         }
 
-        private void UpdateParseTimeControls() => lblParseTime.Text = $"{SOCROM.ParseTime.TotalSeconds:F2}s";
+        private void UpdateParseTimeControls() => lblParseTime.Text = $"{_socrom.ParseTime.TotalSeconds:F2}s";
 
         private void UpdateFilenameControls() => lblFilename.Text = $"{APPSTRINGS.FILE}: '{_socrom.FileInfoData.FileNameExt}'";
 
@@ -1095,9 +1095,9 @@ namespace Mac_EFI_Toolkit.Forms
 
             lblSon.Text = _socrom.SCfgSectionData.SON;
 
-            if (!string.IsNullOrEmpty(_socrom.SCfgSectionData.RegNumText))
+            if (!string.IsNullOrEmpty(_socrom.SCfgSectionData.RegNum))
             {
-                lblSon.Text += $" ({_socrom.SCfgSectionData.RegNumText})";
+                lblSon.Text += $" ({_socrom.SCfgSectionData.RegNum})";
             }
         }
         #endregion
@@ -1146,7 +1146,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetScfgConfig() => SetClipboardText(_socrom.ConfigCode);
 
-        private void ClipboardSetScfgOrderNo() => SetClipboardText($"{_socrom.SCfgSectionData.SON}{_socrom.SCfgSectionData.RegNumText ?? string.Empty}");
+        private void ClipboardSetScfgOrderNo() => SetClipboardText($"{_socrom.SCfgSectionData.SON}{_socrom.SCfgSectionData.RegNum ?? string.Empty}");
         #endregion
 
         #region Write Serial
@@ -1299,16 +1299,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private bool ValidateScfgStore(byte[] scfgbuffer)
         {
-            int iScfgBase = BinaryTools.GetBaseAddress(scfgbuffer, SOCSigs.ScfgHeaderMarker);
-
-            // A serialized Scfg store should be B8h, 184 bytes length (incorrect)
-            //if (sourcebuffer.Length != SOCROM.SCFG_EXPECTED_LENGTH)
-            //{
-            //    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {SOCROM.SCFG_EXPECTED_LENGTH:X}h ({sourcebuffer.Length:X}h)");
-
-            //    NotifyPatchingFailure();
-            //    return false;
-            //}
+            int iScfgBase = BinaryTools.GetBaseAddress(scfgbuffer, Signatures.Scfg.HeaderMarker);
 
             // Expect scfg signature at address 0h.
             if (iScfgBase != 0)

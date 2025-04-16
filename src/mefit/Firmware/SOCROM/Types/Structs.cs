@@ -17,6 +17,6 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         internal string HWC { get; set; }
         internal string SON { get; set; }
         internal string MdlC { get; set; } // What is this? Model codename?
-        internal string RegNumText { get; set; }
+        internal string RegNum { get; set; }
     }
 }

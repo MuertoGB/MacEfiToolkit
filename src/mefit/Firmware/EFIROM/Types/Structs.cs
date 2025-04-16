@@ -76,7 +76,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         internal byte[] StoreBuffer { get; set; }
         internal byte StoreFormat { get; set; }
         internal byte StoreState { get; set; }
-        internal int BodyStart { get; set; }
+        internal int BodyBase { get; set; }
         internal int BodyLength { get; set; }
         internal bool IsStoreEmpty { get; set; }
     }
@@ -183,7 +183,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct MN2Manifest
+    public struct MN2Header
     {
         internal uint Tag;
         internal uint NumEntries;

@@ -21,53 +21,53 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         internal static string GetVersionData(byte[] sourcebytes, ImeVersionType versiontype, FlashDescriptor flashDescriptor)
         {
-            int iHeaderPosition = -1;
-            int iLength = 0;
-            string strVersion = null;
+            int headerBase = -1;
+            int length = 0;
+            string version = null;
 
             switch (versiontype)
             {
-                case ImeVersionType.FlashImageTool:
-                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, FPTMarker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
-                    iLength = 0x20;
+                case ImeVersionType.FIT:
+                    headerBase = BinaryTools.GetBaseAddress(sourcebytes, FPTMarker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
+                    length = 0x20;
                     break;
 
-                case ImeVersionType.ManagementEngine:
-                    iHeaderPosition = BinaryTools.GetBaseAddress(sourcebytes, MN2Marker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
-                    iLength = 0x10;
+                case ImeVersionType.ME:
+                    headerBase = BinaryTools.GetBaseAddress(sourcebytes, MN2Marker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
+                    length = 0x10;
                     break;
             }
 
-            if (iHeaderPosition != -1)
+            if (headerBase != -1)
             {
-                if (versiontype == ImeVersionType.ManagementEngine)
+                if (versiontype == ImeVersionType.ME)
                 {
-                    iHeaderPosition += 2;
+                    headerBase += 2;
                 }
 
-                byte[] bHeaderData = BinaryTools.GetBytesBaseLength(sourcebytes, iHeaderPosition, iLength);
+                byte[] headerBuffer = BinaryTools.GetBytesBaseLength(sourcebytes, headerBase, length);
 
-                if (bHeaderData != null)
+                if (headerBuffer != null)
                 {
-                    if (versiontype == ImeVersionType.FlashImageTool)
+                    if (versiontype == ImeVersionType.FIT)
                     {
-                        FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(bHeaderData);
-                        strVersion = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
+                        FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(headerBuffer);
+                        version = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                     }
-                    else if (versiontype == ImeVersionType.ManagementEngine)
+                    else if (versiontype == ImeVersionType.ME)
                     {
-                        MN2Manifest mn2Header = Helper.DeserializeHeader<MN2Manifest>(bHeaderData);
-                        strVersion = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
+                        MN2Header mn2Header = Helper.DeserializeHeader<MN2Header>(headerBuffer);
+                        version = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
                     }
                 }
             }
 
-            if (string.IsNullOrEmpty(strVersion) || strVersion == _default)
+            if (string.IsNullOrEmpty(version) || version == _default)
             {
                 return null;
             }
 
-            return strVersion;
+            return version;
         }
     }
 }

@@ -6,7 +6,7 @@
 
 namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
-    public enum ApfsCapable
+    public enum ApfsCapableType
     {
         Yes, No, Unknown
     }
@@ -23,6 +23,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
     public enum ImeVersionType
     {
-        FlashImageTool, ManagementEngine
+        FIT, ME
     }
 }

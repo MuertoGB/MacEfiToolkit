@@ -60,36 +60,38 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
             IsDescriptorMode = header.Tag.SequenceEqual(FlashDecriptorMarker);
 
-            if (IsDescriptorMode)
+            if (!IsDescriptorMode)
             {
-                DescriptorMap desMap = DeserializeStruct<DescriptorMap>(descriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)));
-                DescriptorRegions desRegions = DeserializeStruct<DescriptorRegions>(descriptorBytes, desMap.RegionBase << 4);
-
-                uint biosBase, biosLimit, biosSize;
-                uint meBase, meLimit, meSize;
-                uint pdrBase, pdrLimit, pdrSize;
-
-                ParseRegion(desRegions.BiosBase, desRegions.BiosLimit, sourcebuffer.Length, out biosBase, out biosLimit, out biosSize);
-                ParseRegion(desRegions.MeBase, desRegions.MeLimit, sourcebuffer.Length, out meBase, out meLimit, out meSize);
-                ParseRegion(desRegions.PdrBase, desRegions.PdrLimit, sourcebuffer.Length, out pdrBase, out pdrLimit, out pdrSize);
-
-                BiosBase = biosBase;
-                BiosLimit = biosLimit;
-                BiosSize = biosSize;
-
-                MeBase = meBase;
-                MeLimit = meLimit;
-                MeSize = meSize;
-
-                PdrBase = pdrBase;
-                PdrLimit = pdrLimit;
-                PdrSize = pdrSize;
+                uint length = (uint)sourcebuffer.Length;
+                BiosLimit = MeLimit = PdrLimit = length;
 
                 return;
             }
 
-            uint length = (uint)sourcebuffer.Length;
-            BiosLimit = MeLimit = PdrLimit = length;
+            DescriptorMap map = DeserializeStruct<DescriptorMap>(descriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)));
+            DescriptorRegions regions = DeserializeStruct<DescriptorRegions>(descriptorBytes, map.RegionBase << 4);
+
+            uint biosBase, biosLimit, biosSize;
+            uint meBase, meLimit, meSize;
+            uint pdrBase, pdrLimit, pdrSize;
+
+            ParseRegion(regions.BiosBase, regions.BiosLimit, sourcebuffer.Length, out biosBase, out biosLimit, out biosSize);
+            ParseRegion(regions.MeBase, regions.MeLimit, sourcebuffer.Length, out meBase, out meLimit, out meSize);
+            ParseRegion(regions.PdrBase, regions.PdrLimit, sourcebuffer.Length, out pdrBase, out pdrLimit, out pdrSize);
+
+            BiosBase = biosBase;
+            BiosLimit = biosLimit;
+            BiosSize = biosSize;
+
+            MeBase = meBase;
+            MeLimit = meLimit;
+            MeSize = meSize;
+
+            PdrBase = pdrBase;
+            PdrLimit = pdrLimit;
+            PdrSize = pdrSize;
+
+            return;
         }
 
         private static T DeserializeStruct<T>(byte[] source, int offset) where T : struct

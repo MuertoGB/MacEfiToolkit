@@ -1308,14 +1308,14 @@ namespace Mac_EFI_Toolkit.Forms
         {
             switch (_efirom.IsApfsCapable)
             {
-                case ApfsCapable.Yes:
+                case ApfsCapableType.Yes:
                     lblApfsCapable.Text = EFISTRINGS.APFS_DRIVER_FOUND;
                     break;
-                case ApfsCapable.No:
+                case ApfsCapableType.No:
                     lblApfsCapable.Text = EFISTRINGS.APFS_DRIVER_NOT_FOUND;
                     lblApfsCapable.ForeColor = Colours.Warning;
                     break;
-                case ApfsCapable.Unknown:
+                case ApfsCapableType.Unknown:
                     lblApfsCapable.Text = APPSTRINGS.UNKNOWN.ToUpper();
                     lblApfsCapable.ForeColor = Colours.Warning;
                     break;
@@ -1813,15 +1813,15 @@ namespace Mac_EFI_Toolkit.Forms
             if (resetVss)
             {
                 Logger.WriteCallerLine(LOGSTRINGS.NVRAM_VSS_ERASE);
-                CheckEraseStore(nameof(EFIROM.VssPrimary), _efirom.VssPrimary, binaryBuffer);
-                CheckEraseStore(nameof(EFIROM.VssSecondary), _efirom.VssSecondary, binaryBuffer);
+                CheckEraseStore(nameof(_efirom.VssPrimary), _efirom.VssPrimary, binaryBuffer);
+                CheckEraseStore(nameof(_efirom.VssSecondary), _efirom.VssSecondary, binaryBuffer);
             }
 
             if (resetSvs)
             {
                 Logger.WriteCallerLine(LOGSTRINGS.NVRAM_SVS_ERASE);
-                CheckEraseStore(nameof(EFIROM.SvsPrimary), _efirom.SvsPrimary, binaryBuffer);
-                CheckEraseStore(nameof(EFIROM.SvsSecondary), _efirom.SvsSecondary, binaryBuffer);
+                CheckEraseStore(nameof(_efirom.SvsPrimary), _efirom.SvsPrimary, binaryBuffer);
+                CheckEraseStore(nameof(_efirom.SvsSecondary), _efirom.SvsSecondary, binaryBuffer);
             }
 
             Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
@@ -2026,7 +2026,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private bool ValidateFsysStore(byte[] fsysBuffer)
         {
-            int fsysBase = BinaryTools.GetBaseAddress(fsysBuffer, EFISigs.FsysMarker);
+            int fsysBase = BinaryTools.GetBaseAddress(fsysBuffer, Signatures.FsysStore.FsysMarker);
 
             // Fsys store length should equal 800h, 2048 bytes.
             if (fsysBuffer.Length != _efirom.FsysRegionSize)
@@ -2160,7 +2160,7 @@ namespace Mac_EFI_Toolkit.Forms
         private byte[] PatchPrimaryStore(byte[] binaryBuffer)
         {
             Logger.WriteCallerLine(LOGSTRINGS.LOCK_PRIMARY_MAC);
-            byte[] unlockedPrimaryStore = EFIROM.PatchSvsStoreMac(_efirom.SvsPrimary.StoreBuffer, _efirom.EfiPrimaryLockData.LockBase);
+            byte[] unlockedPrimaryStore = _efirom.PatchSvsStoreMac(_efirom.SvsPrimary.StoreBuffer, _efirom.EfiPrimaryLockData.LockBase);
 
             Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
             BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.SvsPrimary.StoreBase, unlockedPrimaryStore);
@@ -2175,7 +2175,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (_efirom.EfiBackupLockData.LockBase != -1)
             {
                 Logger.WriteCallerLine(LOGSTRINGS.LOCK_BACKUP_MAC);
-                unlockedBackupStore = EFIROM.PatchSvsStoreMac(_efirom.SvsSecondary.StoreBuffer, _efirom.EfiBackupLockData.LockBase);
+                unlockedBackupStore = _efirom.PatchSvsStoreMac(_efirom.SvsSecondary.StoreBuffer, _efirom.EfiBackupLockData.LockBase);
 
                 Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
                 BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.SvsSecondary.StoreBase, unlockedBackupStore);
@@ -2188,7 +2188,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Logger.WriteCallerLine(LOGSTRINGS.LOCK_LOAD_SVS);
 
-            int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFISigs.SvsStoreMarker, _efirom.NvramBase, _efirom.NvramLimit);
+            int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, Signatures.Nvram.SvsStoreMarker, _efirom.NvramBase, _efirom.NvramLimit);
             NvramStore svsPrimary = _efirom.ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
 
             if (!BinaryTools.ByteArraysMatch(svsPrimary.StoreBuffer, unlockedPrimaryStore))
@@ -2199,7 +2199,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (unlockedBackupStore != null)
             {
-                int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFISigs.SvsStoreMarker, svsPrimaryBase + EFIROM.HDR_SIZE, _efirom.NvramLimit);
+                int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, Signatures.Nvram.SvsStoreMarker, svsPrimaryBase + EFIROM.HDR_SIZE, _efirom.NvramLimit);
                 NvramStore svsBackup = _efirom.ParseNvramStore(binaryBuffer, svsBackupBase, NvramStoreType.Secure);
 
                 if (!BinaryTools.ByteArraysMatch(svsBackup.StoreBuffer, unlockedBackupStore))
@@ -2235,7 +2235,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                string imeVersion = IntelME.GetVersionData(imeBuffer, ImeVersionType.ManagementEngine, _efirom.Descriptor);
+                string imeVersion = IntelME.GetVersionData(imeBuffer, ImeVersionType.ME, _efirom.Descriptor);
 
                 Logger.WriteCallerLine($"{LOGSTRINGS.IME_VERSION} {imeVersion ?? APPSTRINGS.NOT_FOUND}");
 
