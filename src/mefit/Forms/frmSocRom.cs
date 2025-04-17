@@ -896,7 +896,7 @@ namespace Mac_EFI_Toolkit.Forms
             Text = APPSTRINGS.SOCROM;
             lblTitle.Text = APPSTRINGS.SOCROM;
 
-            _socrom = default;
+            _socrom.ResetFirmwareBaseData();
         }
 
         private void EnableButtons(bool enable, params Button[] buttons)
