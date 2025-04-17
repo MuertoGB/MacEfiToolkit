@@ -339,7 +339,7 @@ namespace Mac_EFI_Toolkit.Forms
         #region Open Binary
         private void OpenBinary(string filepath)
         {
-            if (!FileTools.IsValidMinMaxSize(filepath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
+            if (!FirmwareFile.IsValidMinMaxSize(filepath, this, FirmwareFile.MIN_IMAGE_SIZE, FirmwareFile.MAX_IMAGE_SIZE))
             {
                 return;
             }

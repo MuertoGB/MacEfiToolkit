@@ -4,13 +4,9 @@
 // FileTools.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Firmware;
-using Mac_EFI_Toolkit.UI;
 using System;
 using System.IO;
 using System.IO.Compression;
-using System.Security.Cryptography;
-using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Tools
 {
@@ -20,44 +16,6 @@ namespace Mac_EFI_Toolkit.Tools
         {
             SUCCESS,
             FAILED
-        }
-
-        /// <summary>
-        /// Calculates the SHA256 hash of a byte array.
-        /// </summary>
-        /// <param name="sourcebuffer">The byte array to calculate the hash for.</param>
-        /// <returns>The SHA256 checksum of the byte array.</returns>
-        internal static string GetSha256Digest(byte[] sourcebuffer)
-        {
-            using (SHA256 provider = SHA256.Create())
-            {
-                byte[] digest = provider.ComputeHash(sourcebuffer);
-
-                return BitConverter.ToString(digest).Replace("-", "").ToLower();
-            }
-        }
-
-        /// <summary>
-        /// Calculates the CRC32 checksum of a byte array. 
-        /// </summary>
-        /// <param name="sourcebuffer">The byte array to calculate the checksum for.</param>
-        /// <returns>The CRC32 checksum of the byte array.</returns>
-        internal static uint GetCrc32Digest(byte[] sourcebuffer)
-        {
-            const uint poly = 0xEDB88320;
-            uint crc = 0xFFFFFFFF;
-
-            for (int i = 0; i < sourcebuffer.Length; i++)
-            {
-                crc ^= sourcebuffer[i];
-
-                for (int j = 0; j < 8; j++)
-                {
-                    crc = (uint)((crc >> 1) ^ (poly & -(crc & 1)));
-                }
-            }
-
-            return crc ^ 0xFFFFFFFF;
         }
 
         /// <summary>
@@ -95,85 +53,6 @@ namespace Mac_EFI_Toolkit.Tools
             double size = input / Math.Pow(1024, index);
 
             return $"{size:N2} {suffixes[index]}";
-        }
-
-        /// <summary>
-        /// Checks if a given integer size is a valid size for a firmware image.
-        /// </summary>
-        /// <param name="size">The integer size to check.</param>
-        /// <returns>True if the size is valid, otherwise false.</returns>
-        internal static bool GetIsValidBinSize(long size)
-        {
-            int minSize = FirmwareVars.MIN_IMAGE_SIZE;
-            int maxSize = FirmwareVars.MAX_IMAGE_SIZE;
-
-            while (minSize <= maxSize)
-            {
-                if (size == minSize)
-                {
-                    return true;
-                }
-
-                minSize *= 2;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Calculates the difference between the input size and the closest valid size,
-        /// and returns a formatted string indicating whether the size is too large or too small,
-        /// along with the byte difference.
-        /// </summary>
-        /// <param name="input">The input size to compare against valid sizes.</param>
-        /// <returns>A formatted string indicating whether the size is too large or too small,
-        /// along with the byte difference.</returns>
-        internal static string GetSizeDifference(long input)
-        {
-            // Initialize the closest size with the minimum image size
-            long closestSize = FirmwareVars.MIN_IMAGE_SIZE;
-
-            // Calculate the initial difference between the input size and the closest size
-            long difference = Math.Abs(input - closestSize);
-
-            // Iterate through the valid sizes to find the closest size
-            while (closestSize <= FirmwareVars.MAX_IMAGE_SIZE)
-            {
-                // Calculate the doubled size and its difference from the input size
-                long doubledSize = closestSize * 2;
-
-                long doubledDifference = Math.Abs(input - doubledSize);
-
-                // If the doubled difference is smaller, update the closest size and difference
-                if (doubledDifference < difference)
-                {
-                    closestSize = doubledSize;
-                    difference = doubledDifference;
-                }
-                else
-                {
-                    // Exit the loop if the doubled difference becomes larger
-                    break;
-                }
-            }
-
-            // Check if the input size is smaller than the closest size
-            if (input < closestSize)
-            {
-                // Return a formatted string indicating the size is too small
-                return $"<{difference}";
-            }
-            // Check if the input size is larger than the closest size
-            else if (input > closestSize)
-            {
-                // Return a formatted string indicating the size is too large
-                return $">{difference}";
-            }
-            else
-            {
-                // Return a string indicating an exact match
-                return "Valid";
-            }
         }
 
         /// <summary>
@@ -244,28 +123,6 @@ namespace Mac_EFI_Toolkit.Tools
             {
                 Logger.WriteErrorLine(nameof(BackupFileToZip), e.GetType(), e.Message);
             }
-        }
-
-        internal static bool IsValidMinMaxSize(string filepath, Form owner, int minsize, int maxsize)
-        {
-            long size = new FileInfo(filepath).Length;
-
-            if (size < minsize || size > maxsize)
-            {
-                string message = size < minsize
-                    ? $"The selected file does not meet the minimum size requirement of {minsize:X}h."
-                    : $"The selected file exceeds the maximum size limit of {maxsize:X}h.";
-
-                METPrompt.Show(
-                    owner,
-                    message,
-                    METPrompt.PType.Error,
-                    METPrompt.PButtons.Okay);
-
-                return false;
-            }
-
-            return true;
         }
     }
 }

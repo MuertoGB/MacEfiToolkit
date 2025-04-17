@@ -87,6 +87,7 @@
     <Compile Include="Common\Constants\ApplicationPaths.cs" />
     <Compile Include="Common\Constants\ApplicationUrls.cs" />
     <Compile Include="Common\Constants\ApplicationVersions.cs" />
+    <Compile Include="Common\Cryptography.cs" />
     <Compile Include="Firmware\EFIROM\FlashDescriptor.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Firmware\EFIROM\Guids.cs" />
@@ -97,7 +98,6 @@
     <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Firmware\EFIROM\IntelME.cs" />
-    <Compile Include="Firmware\FirmwareVars.cs" />
     <Compile Include="Firmware\Serial.cs" />
     <Compile Include="Firmware\SOCROM\Signatures.cs" />
     <Compile Include="Firmware\SOCROM\Types\Enums.cs" />

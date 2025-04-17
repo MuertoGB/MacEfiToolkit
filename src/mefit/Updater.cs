@@ -4,6 +4,7 @@
 // Updater.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Tools;
 using System;
@@ -96,7 +97,7 @@ namespace Mac_EFI_Toolkit
                     Logger.WriteCallerLine($"{UPDATSTRINGS.DOWNLOADED} {exeBuffer.Length} {APPSTRINGS.BYTES}");
 
                     Logger.WriteCallerLine(UPDATSTRINGS.VERIFY_SHA256);
-                    string hash = FileTools.GetSha256Digest(exeBuffer);
+                    string hash = Cryptography.GetSha256Digest(exeBuffer);
 
                     Logger.WriteCallerLine($"{UPDATSTRINGS.EXPECTED}: {ExpectedSHA256}");
                     Logger.WriteCallerLine($"{UPDATSTRINGS.ACTUAL}: {hash}");

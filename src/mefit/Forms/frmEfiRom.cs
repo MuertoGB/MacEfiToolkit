@@ -942,7 +942,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void OpenBinary(string filepath)
         {
             // Check the filesize
-            if (!FileTools.IsValidMinMaxSize(filepath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
+            if (!FirmwareFile.IsValidMinMaxSize(filepath, this, FirmwareFile.MIN_IMAGE_SIZE, FirmwareFile.MAX_IMAGE_SIZE))
             {
                 return;
             }
@@ -1074,14 +1074,14 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateFileSizeControls()
         {
             long length = _efirom.FirmwareInfo.Length;
-            bool validSize = FileTools.GetIsValidBinSize(length);
+            bool validSize = FirmwareFile.IsValidBinSize(length);
 
             lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(length)} {APPSTRINGS.BYTES} ({length:X}h)";
 
             if (!validSize)
             {
                 lblFilesize.ForeColor = Colours.Error;
-                lblFilesize.Text += validSize ? string.Empty : $" ({FileTools.GetSizeDifference(length)})";
+                lblFilesize.Text += validSize ? string.Empty : $" ({FirmwareFile.CalculateInvalidSize(length)})";
             }
         }
 

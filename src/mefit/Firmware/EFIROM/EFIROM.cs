@@ -524,7 +524,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                 byte[] data = new byte[size];
                 Array.Copy(sourcebuffer, index + 3, data, 0, size);
 
-                emailstring = System.Text.Encoding.UTF8.GetString(data);
+                emailstring = _utf8Encoding.GetString(data);
 
                 // Check if the data contains '@' and '.' (basic email validation).
                 return emailstring.Contains("@") && emailstring.Contains(".");
@@ -819,8 +819,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             // Local function to extract the section bytes.
             byte[] ExtractSectionBytes(byte[] sectionbuffer, int baseposition)
             {
-                int headerLength = 24; // 18h
-                int dataLength = 2; // 2h
+                const int headerLength = 24; // 18h
+                const int dataLength = 2; // 2h
 
                 byte[] sizeBuffer = BinaryTools.GetBytesBaseLength(sectionbuffer, baseposition + headerLength, dataLength);
                 int sectionSize = BitConverter.ToInt16(sizeBuffer, 0);
@@ -1188,7 +1188,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             {
                 Array.Copy(sourcebuffer, 0, fsysBuffer, 0, fsysBuffer.Length);
 
-                return FileTools.GetCrc32Digest(fsysBuffer);
+                return Cryptography.GetCrc32Digest(fsysBuffer);
             }
 
             return 0xFFFFFFFF;

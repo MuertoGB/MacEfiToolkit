@@ -37,7 +37,7 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"Mode:     {SystemTools.GetSystemArchitectureMode()}");
                 builder.AppendLine($"Debug:    {Program.IsDebugMode()}");
                 builder.AppendLine($"Elevated: {SystemTools.IsUserAdmin()}");
-                builder.AppendLine($"SHA256:   {FileTools.GetSha256Digest(appBuffer)}\r\n");
+                builder.AppendLine($"SHA256:   {Cryptography.GetSha256Digest(appBuffer)}\r\n");
                 builder.AppendLine("<== Operating System ==>\r\n");
                 builder.AppendLine($"Name:     {SystemTools.GetOperatingSystemName}");
                 builder.AppendLine($"Bitness:  {SystemTools.GetOperatingSystemArchitecture()}");

@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// SOCSigs.cs
+// Signatures.cs
 // Released under the GNU GPL v3.0
 
 namespace Mac_EFI_Toolkit.Firmware.SOCROM

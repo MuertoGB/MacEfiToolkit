@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// LzmaCoder.cs - Handles LZMA decompression
+// LzmaCoder.cs
 // Released under the GNU GLP v3.0
 
 using System;
@@ -14,7 +14,8 @@ namespace Mac_EFI_Toolkit.Common
         internal static byte[] DecompressBytes(byte[] sourcebuffer)
         {
             // Create a new instance of the Decoder class.
-            SevenZip.Compression.LZMA.Decoder lzmaDecoder = new SevenZip.Compression.LZMA.Decoder();
+            SevenZip.Compression.LZMA.Decoder lzmaDecoder =
+                new SevenZip.Compression.LZMA.Decoder();
 
             // Create a memory stream to store the decompressed data.
             MemoryStream streamBuffer = new MemoryStream();
@@ -68,7 +69,7 @@ namespace Mac_EFI_Toolkit.Common
             }
 
             byte properties = sourcebuffer[0];
-            int lc = properties % 9;        // Literal context bits
+            int lc = properties % 9;        // Literal context bits.
             int remainder = properties / 9;
             int lp = remainder % 5;         // Literal position bits.
             int pb = remainder / 5;         // Position bits.

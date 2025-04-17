@@ -4,6 +4,7 @@
 // SOCROM.cs - Handles parsing of T2 SOCROM data
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Diagnostics;
@@ -110,7 +111,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         public string GetiBootVersion(byte[] sourcebytes)
         {
             int ibootBase = BinaryTools.GetBaseAddress(sourcebytes, Signatures.IBoot.iBootMarker, 0);
-            int dataStart = 0x6;
+            const int dataStart = 0x6;
 
             if (ibootBase != -1) // Signature found.
             {
@@ -162,7 +163,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             string serialString = GetStringFromSig(scfgBuffer, Signatures.Scfg.SerialMarker, SERIAL_LENGTH, out string hwcString);
             string sonString = GetStringFromSigWithLimit(scfgBuffer, Signatures.Scfg.SonMarker, _limitChars);
             string regString = GetStringFromSigWithLimit(scfgBuffer, Signatures.Scfg.RegNoMarker, _limitChars);
-            string crcString = $"{FileTools.GetCrc32Digest(scfgBuffer):X8}";
+            string crcString = $"{Cryptography.GetCrc32Digest(scfgBuffer):X8}";
 
             return new SCfgStore
             {

@@ -130,14 +130,14 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        private static string ReadBuffer(Func<IntPtr, uint> nativeMethod)
+        private static string ReadBuffer(Func<IntPtr, uint> nativemethod)
         {
             IntPtr ptr = IntPtr.Zero;
 
             try
             {
                 ptr = Marshal.AllocCoTaskMem(MAX_BUFFER);
-                uint data = nativeMethod(ptr);
+                uint data = nativemethod(ptr);
 
                 if (data == 0)
                 {
