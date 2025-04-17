@@ -383,7 +383,7 @@ namespace Mac_EFI_Toolkit
             "The provided file was not a valid EFIROM.";
 
         internal const string NOT_VALID_SOCROM =
-            "The provided file was not a valid T2 SOCROM.";
+            "The provided file was not a valid SOCROM.";
 
         internal const string SCFG_EXPORT_FAIL =
             "SCfg Store export failed.";
