@@ -1853,7 +1853,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             // cmsFolders
             // 
-            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.cmsFolders.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.cmsFolders.Font = new System.Drawing.Font("Segoe UI", 10.2F);
             this.cmsFolders.ForeColor = System.Drawing.Color.White;
             this.cmsFolders.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -1868,7 +1868,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.openWorkingDirectoryToolStripMenuItem});
             this.cmsFolders.Name = "cmsFolders";
             this.cmsFolders.ShowImageMargin = false;
-            this.cmsFolders.Size = new System.Drawing.Size(240, 206);
+            this.cmsFolders.Size = new System.Drawing.Size(240, 234);
             // 
             // openBackupsFolderToolStripMenuItem
             // 
