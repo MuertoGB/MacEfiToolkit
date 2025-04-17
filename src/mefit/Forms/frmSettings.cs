@@ -69,38 +69,29 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdEditStartupDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(Settings.StringKey.StartupInitialDirectory, ref _strStartupInitialPath);
-
-            if (!string.Equals(_strStartupInitialPath, lblStartupDirectory.Text))
-            {
-                lblStartupDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strStartupInitialPath}";
-                lblStartupDirectory.ForeColor = Colours.Okay;
-            }
+            EditDirectory(Settings.StringKey.StartupInitialDirectory, ref _strStartupInitialPath, lblStartupDirectory);
         }
 
         private void cmdEditEfiDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(Settings.StringKey.EfiInitialDirectory, ref _strEfiInitialPath);
-
-            if (!string.Equals(_strEfiInitialPath, lblEfiDirectory.Text))
-            {
-                lblEfiDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strEfiInitialPath}";
-                lblEfiDirectory.ForeColor = Colours.Okay;
-            }
+            EditDirectory(Settings.StringKey.EfiInitialDirectory, ref _strEfiInitialPath, lblEfiDirectory);
         }
 
         private void cmdEditSocDir_Click(object sender, EventArgs e)
         {
-            OpenFolderDialog(Settings.StringKey.SocInitialDirectory, ref _strSocInitialPath);
+            EditDirectory(Settings.StringKey.SocInitialDirectory, ref _strSocInitialPath, lblSocDirectory);
+        }
 
-            if (!string.Equals(_strSocInitialPath, lblSocDirectory))
+        private void EditDirectory(Settings.StringKey settingsKey, ref string pathField, Label labelToUpdate)
+        {
+            if (OpenFolderDialog(settingsKey, ref pathField))
             {
-                lblSocDirectory.Text = $"{Program.MDL2_RIGHT_ARROW} {_strSocInitialPath}";
-                lblSocDirectory.ForeColor = Colours.Okay;
+                labelToUpdate.Text = $"{Program.MDL2_RIGHT_ARROW} {pathField}";
+                labelToUpdate.ForeColor = Colours.Okay;
             }
         }
 
-        private static void OpenFolderDialog(Settings.StringKey settingsType, ref string path)
+        private static bool OpenFolderDialog(Settings.StringKey settingsType, ref string path)
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
@@ -112,11 +103,14 @@ namespace Mac_EFI_Toolkit.Forms
                 dialog.Description = APPSTRINGS.SELECT_FOLDER;
                 dialog.ShowNewFolderButton = true;
 
-                if (dialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath))
                 {
                     path = dialog.SelectedPath;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private void cmdOkay_Click(object sender, EventArgs e)

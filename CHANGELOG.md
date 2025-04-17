@@ -22,6 +22,7 @@
 
 ### Bugs
 - **Reworked firmware parser architecture:** Replaced the hotfix from version 2.1.1 with a permanent solution. Firmware parsing logic is now fully decoupled from form UI logic. Each window now operates on its own parser instance, preventing shared state issues when multiple windows are opened or closed. Support for using multiple firmware windows simultaneously has been restored.
+- Fixed an issue in the Settings window where an empty path could be displayed if the folder selection dialog was cancelled. The UI now only updates when a valid path is selected.
 
 ## Version 2.1.1
 
