@@ -21,6 +21,7 @@ namespace Mac_EFI_Toolkit.Firmware
             internal string CreationTime { get; set; }
             internal string LastWriteTime { get; set; }
             internal long Length { get; set; }
+            internal string SHA256 { get; set; }
             internal uint CRC32 { get; set; }
         }
 
@@ -48,7 +49,8 @@ namespace Mac_EFI_Toolkit.Firmware
                 CreationTime = fileInfo.CreationTime.ToString(dateFormat),
                 LastWriteTime = fileInfo.LastWriteTime.ToString(dateFormat),
                 Length = fileInfo.Length,
-                CRC32 = Cryptography.GetCrc32Digest(fileBuffer)
+                CRC32 = Cryptography.GetCrc32Digest(fileBuffer),
+                SHA256 = Cryptography.GetSha256Digest(fileBuffer)
             };
         }
 

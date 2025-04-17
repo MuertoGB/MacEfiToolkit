@@ -671,7 +671,8 @@ namespace Mac_EFI_Toolkit.Forms
                 builder.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(_efirom.FirmwareInfo.Length)} bytes");
                 builder.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)_efirom.FirmwareInfo.Length)}");
                 builder.AppendLine($"Size (Hex):      {_efirom.FirmwareInfo.Length:X}h");
-                builder.AppendLine($"CRC32:           {_efirom.FirmwareInfo.CRC32:X}");
+                builder.AppendLine($"SHA256:          {_efirom.FirmwareInfo.SHA256}");
+                builder.AppendLine($"CRC32:           {_efirom.FirmwareInfo.CRC32:X8}");
                 builder.AppendLine($"Created:         {_efirom.FirmwareInfo.CreationTime}");
                 builder.AppendLine($"Modified:        {_efirom.FirmwareInfo.LastWriteTime}\r\n");
 
