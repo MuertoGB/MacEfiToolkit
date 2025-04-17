@@ -19,6 +19,7 @@
 ### Enhancements
 - User interface improvements.
 - Updated CREATED and MODIFIED timestamps to use a consistent, simplified format for improved readability.
+- Updated the layout of the output text file when exporting SOCROM firmware information, specifically for cases where the SCfg store is not present.
 
 ### Bugs
 - **Reworked firmware parser architecture:** Replaced the hotfix from version 2.1.1 with a permanent solution. Firmware parsing logic is now fully decoupled from form UI logic. Each window now operates on its own parser instance, preventing shared state issues when multiple windows are opened or closed. Support for using multiple firmware windows simultaneously has been restored.

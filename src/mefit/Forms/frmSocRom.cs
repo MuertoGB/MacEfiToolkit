@@ -485,19 +485,32 @@ namespace Mac_EFI_Toolkit.Forms
                 builder.AppendLine("----------------------------------");
                 builder.AppendLine($"Type:            {_socrom.RomType}\r\n");
 
-                builder.AppendLine("SCfg");
-                builder.AppendLine("----------------------------------");
-                builder.AppendLine($"Base:            {_socrom.SCfgSectionData.StoreBase:X}h");
-                builder.AppendLine($"Size (Bytes):    {_socrom.SCfgSectionData.StoreLength} bytes");
-                builder.AppendLine($"Size (Hex):      {_socrom.SCfgSectionData.StoreLength:X}h");
-                builder.AppendLine($"CRC32:           {_socrom.SCfgSectionData.StoreCRC ?? APPSTRINGS.NA}");
-                builder.AppendLine($"Serial:          {_socrom.SCfgSectionData.Serial ?? APPSTRINGS.NA}\r\n");
+                if (_socrom.SCfgSectionData.StoreBase != -1)
+                {
+                    builder.AppendLine("SCfg");
+                    builder.AppendLine("----------------------------------");
+                    builder.AppendLine($"Base:            {_socrom.SCfgSectionData.StoreBase:X}h");
+                    builder.AppendLine($"Size (Bytes):    {_socrom.SCfgSectionData.StoreLength} bytes");
+                    builder.AppendLine($"Size (Hex):      {_socrom.SCfgSectionData.StoreLength:X}h");
+                    builder.AppendLine($"CRC32:           {_socrom.SCfgSectionData.StoreCRC ?? APPSTRINGS.NA}");
+                    builder.AppendLine($"Serial:          {_socrom.SCfgSectionData.Serial ?? APPSTRINGS.NA}\r\n");
 
-                builder.AppendLine("Model");
-                builder.AppendLine("----------------------------------");
-                builder.AppendLine($"Config:          {_socrom.ConfigCode ?? APPSTRINGS.NA}");
-                builder.AppendLine($"Order No:        {_socrom.SCfgSectionData.SON ?? APPSTRINGS.NA}");
-                builder.AppendLine($"Reg No:          {_socrom.SCfgSectionData.RegNum ?? APPSTRINGS.NA}\r\n");
+                    builder.AppendLine("Model");
+                    builder.AppendLine("----------------------------------");
+                    builder.AppendLine($"Config:          {_socrom.ConfigCode ?? APPSTRINGS.NA}");
+                    builder.AppendLine($"Order No:        {_socrom.SCfgSectionData.SON ?? APPSTRINGS.NA}");
+                    builder.AppendLine($"Reg No:          {_socrom.SCfgSectionData.RegNum ?? APPSTRINGS.NA}\r\n");
+                }
+                else
+                {
+                    builder.AppendLine("SCfg");
+                    builder.AppendLine("----------------------------------");
+                    builder.AppendLine($"Not found\r\n");
+
+                    builder.AppendLine("Model");
+                    builder.AppendLine("----------------------------------");
+                    builder.AppendLine($"Not found\r\n");
+                }
 
                 builder.AppendLine("Firmware");
                 builder.AppendLine("----------------------------------");
