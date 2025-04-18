@@ -328,7 +328,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Label control = (Label)sender;
 
-            if (_efirom.FmmEmail == null)
+            if (_efirom.MobileMeEmail == null)
             {
                 control.Cursor = Cursors.Default;
                 return;
@@ -339,9 +339,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void lblFmmEmail_Click(object sender, EventArgs e)
         {
-            if (_efirom.FmmEmail != null)
+            if (_efirom.MobileMeEmail != null)
             {
-                METPrompt.Show(this, _efirom.FmmEmail, METPrompt.PType.Information, METPrompt.PButtons.Okay);
+                METPrompt.Show(this, _efirom.MobileMeEmail, METPrompt.PType.Information, METPrompt.PButtons.Okay);
                 return;
             }
         }
@@ -724,7 +724,7 @@ namespace Mac_EFI_Toolkit.Forms
                 builder.AppendLine("Firmware");
                 builder.AppendLine("----------------------------------");
                 builder.AppendLine($"EFI Version:     {_efirom.FirmwareVersion ?? "N/A"}");
-                builder.AppendLine($"EFI Lock:        {_efirom.EfiPrimaryLockData.LockType.ToString() ?? "N/A"}");
+                builder.AppendLine($"EFI Lock:        {_efirom.EfiPrimaryLockStatus.LockType.ToString() ?? "N/A"}");
                 builder.AppendLine($"APFS Capable:    {_efirom.IsApfsCapable.ToString() ?? "N/A"}\r\n");
 
                 File.WriteAllText(dialog.FileName, builder.ToString());
@@ -765,7 +765,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 builder.AppendLine("Find My Mac Email:");
                 builder.AppendLine("----------------------------------");
-                builder.AppendLine(_efirom.FmmEmail);
+                builder.AppendLine(_efirom.MobileMeEmail);
 
                 File.WriteAllText(dialog.FileName, builder.ToString());
 
@@ -1293,7 +1293,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateEfiLockControls()
         {
-            switch (_efirom.EfiPrimaryLockData.LockType)
+            switch (_efirom.EfiPrimaryLockStatus.LockType)
             {
                 case EfiLockType.Locked:
                     lblEfiLock.Text = EFISTRINGS.LOCKED.ToUpper();
@@ -1360,7 +1360,7 @@ namespace Mac_EFI_Toolkit.Forms
             lblLzma.ForeColor = _efirom.LzmaDecompressedBuffer != null ? Colours.GlyphActive : Colours.GlyphDefault;
 
         private void UpdateFmmEmailControls() =>
-            lblFmmEmail.ForeColor = _efirom.FmmEmail != null ? Colours.GlyphActive : Colours.GlyphDefault;
+            lblFmmEmail.ForeColor = _efirom.MobileMeEmail != null ? Colours.GlyphActive : Colours.GlyphDefault;
         #endregion
 
         #region UI Events
@@ -1404,7 +1404,7 @@ namespace Mac_EFI_Toolkit.Forms
                 exportNVRAMVSSStoresToolStripMenuItem.Enabled = !_efirom.VssPrimary.IsStoreEmpty || !_efirom.VssSecondary.IsStoreEmpty;
                 exportNVRAMSVSStoresToolStripMenuItem.Enabled = !_efirom.SvsPrimary.IsStoreEmpty || !_efirom.SvsSecondary.IsStoreEmpty;
                 exportLZMADXEArchiveToolStripMenuItem.Enabled = _efirom.LzmaDecompressedBuffer != null;
-                exportFmmmobilemeEmailTextToolStripMenuItem.Enabled = _efirom.FmmEmail != null;
+                exportFmmmobilemeEmailTextToolStripMenuItem.Enabled = _efirom.MobileMeEmail != null;
 
                 // Patch Menu
                 changeSerialNumberToolStripMenuItem.Enabled = _efirom.FsysStoreData.FsysBase != -1 && _efirom.FsysStoreData.SerialBase != -1;
@@ -1412,7 +1412,7 @@ namespace Mac_EFI_Toolkit.Forms
                 replaceFsysStoreToolStripMenuItem.Enabled = _efirom.FsysStoreData.FsysBase != -1;
                 eraseNVRAMToolStripMenuItem.Enabled = !allNvramStoresEmpty;
                 fixFsysChecksumToolStripMenuItem.Enabled = fsysCrcMatch;
-                invalidateEFILockToolStripMenuItem.Enabled = _efirom.EfiPrimaryLockData.LockType == EfiLockType.Locked;
+                invalidateEFILockToolStripMenuItem.Enabled = _efirom.EfiPrimaryLockStatus.LockType == EfiLockType.Locked;
 
                 // Options Menu
                 viewRomInformationToolStripMenuItem.Enabled = _efirom.AppleRomInfoSectionData.SectionExists;
@@ -1527,7 +1527,7 @@ namespace Mac_EFI_Toolkit.Forms
             _efirom.LzmaDecompressedBuffer != null ? EFISTRINGS.LZMA_VOL_FOUND : string.Empty;
 
         private string emailString() =>
-            _efirom.FmmEmail != null ? EFISTRINGS.FMM_EMAIL_FOUND : string.Empty;
+            _efirom.MobileMeEmail != null ? EFISTRINGS.FMM_EMAIL_FOUND : string.Empty;
 
         private void HandleCheckBoxChanged(object sender, EventArgs e)
         {
@@ -1761,7 +1761,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.FSYS_LFB);
 
             // Load patched fsys from the binary buffer.
-            FsysStore fsysStore = _efirom.GetFsysStoreData(binaryBuffer, false);
+            FsysStore fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
 
             // Verify the serial was written correctly.
             if (!string.Equals(serial, fsysStore.Serial))
@@ -1787,7 +1787,7 @@ namespace Mac_EFI_Toolkit.Forms
             binaryBuffer = _efirom.MakeFsysCrcPatchedBinary(binaryBuffer, fsysStore.FsysBase, fsysStore.FsysBytes, fsysStore.CrcActual);
 
             // Reload fsys store from the binary buffer and verify CRC masking success.
-            fsysStore = _efirom.GetFsysStoreData(binaryBuffer, false);
+            fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
 
             if (!string.Equals(fsysStore.CrcString, fsysStore.CrcActualString))
             {
@@ -1997,7 +1997,7 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                FsysStore fsysStore = _efirom.GetFsysStoreData(fsysBuffer, true);
+                FsysStore fsysStore = _efirom.ParseFsysStoreData(fsysBuffer, true);
 
                 if (!ValidateFsysCrc(fsysStore, ref fsysBuffer))
                 {
@@ -2066,7 +2066,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Logger.WriteCallerLine(LOGSTRINGS.MASKING_SUM);
 
                 fsysbuffer = _efirom.PatchFsysCrc(fsysDataBuffer.FsysBytes, fsysDataBuffer.CrcActual);
-                fsysDataBuffer = _efirom.GetFsysStoreData(fsysbuffer, true);
+                fsysDataBuffer = _efirom.ParseFsysStoreData(fsysbuffer, true);
 
                 if (!string.Equals(fsysDataBuffer.CrcString, fsysDataBuffer.CrcActualString))
                 {
@@ -2086,7 +2086,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
 
             BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.FsysStoreData.FsysBase, newFsysBuffer);
-            FsysStore fsysStore = _efirom.GetFsysStoreData(binaryBuffer, false);
+            FsysStore fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
 
             if (!BinaryTools.ByteArraysMatch(fsysStore.FsysBytes, newFsysBuffer))
             {
@@ -2168,7 +2168,7 @@ namespace Mac_EFI_Toolkit.Forms
         private byte[] PatchPrimaryStore(byte[] binarybuffer)
         {
             Logger.WriteCallerLine(LOGSTRINGS.LOCK_PRIMARY_MAC);
-            byte[] unlockedBuffer = _efirom.PatchSvsStoreMac(_efirom.SvsPrimary.StoreBuffer, _efirom.EfiPrimaryLockData.LockBase);
+            byte[] unlockedBuffer = _efirom.PatchSvsStoreMac(_efirom.SvsPrimary.StoreBuffer, _efirom.EfiPrimaryLockStatus.LockBase);
 
             Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
             BinaryTools.OverwriteBytesAtBase(binarybuffer, _efirom.SvsPrimary.StoreBase, unlockedBuffer);
@@ -2180,10 +2180,10 @@ namespace Mac_EFI_Toolkit.Forms
         {
             byte[] unlockedBuffer = null;
 
-            if (_efirom.EfiBackupLockData.LockBase != -1)
+            if (_efirom.EfiBackupLockStatus.LockBase != -1)
             {
                 Logger.WriteCallerLine(LOGSTRINGS.LOCK_BACKUP_MAC);
-                unlockedBuffer = _efirom.PatchSvsStoreMac(_efirom.SvsSecondary.StoreBuffer, _efirom.EfiBackupLockData.LockBase);
+                unlockedBuffer = _efirom.PatchSvsStoreMac(_efirom.SvsSecondary.StoreBuffer, _efirom.EfiBackupLockStatus.LockBase);
 
                 Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
                 BinaryTools.OverwriteBytesAtBase(binarybuffer, _efirom.SvsSecondary.StoreBase, unlockedBuffer);
@@ -2197,7 +2197,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.LOCK_LOAD_SVS);
 
             int primaryBase = BinaryTools.GetBaseAddressUpToLimit(binarybuffer, Signatures.Nvram.SvsStoreMarker, _efirom.NvramBase, _efirom.NvramLimit);
-            NvramStore svsPrimary = _efirom.ParseNvramStore(binarybuffer, primaryBase, NvramStoreType.Secure);
+            NvramStore svsPrimary = _efirom.ParseSingleNvramStore(binarybuffer, primaryBase, NvramStoreType.Secure);
 
             if (!BinaryTools.ByteArraysMatch(svsPrimary.StoreBuffer, primaryunlockedbuffer))
             {
@@ -2208,7 +2208,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (backupunlockedbuffer != null)
             {
                 int backupBase = BinaryTools.GetBaseAddressUpToLimit(binarybuffer, Signatures.Nvram.SvsStoreMarker, primaryBase + EFIROM.HDR_SIZE, _efirom.NvramLimit);
-                NvramStore svsBackup = _efirom.ParseNvramStore(binarybuffer, backupBase, NvramStoreType.Secure);
+                NvramStore svsBackup = _efirom.ParseSingleNvramStore(binarybuffer, backupBase, NvramStoreType.Secure);
 
                 if (!BinaryTools.ByteArraysMatch(svsBackup.StoreBuffer, backupunlockedbuffer))
                 {

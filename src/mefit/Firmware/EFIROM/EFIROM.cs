@@ -29,7 +29,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         public bool ResetVss { get; set; }
         public bool ResetSvs { get; set; }
         public string NewSerial { get; set; }
-        public string FmmEmail { get; private set; }
+        public string MobileMeEmail { get; private set; }
 
         public FirmwareFile.Information FirmwareInfo { get; private set; }
         public PdrSection PdrSectionData { get; private set; }
@@ -37,8 +37,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         public NvramStore VssSecondary { get; private set; }
         public NvramStore SvsPrimary { get; private set; }
         public NvramStore SvsSecondary { get; private set; }
-        public EFILock EfiPrimaryLockData { get; private set; }
-        public EFILock EfiBackupLockData { get; private set; }
+        public EFILock EfiPrimaryLockStatus { get; private set; }
+        public EFILock EfiBackupLockStatus { get; private set; }
         public FsysStore FsysStoreData { get; private set; }
         public AppleRomInformationSection AppleRomInfoSectionData { get; private set; }
         public EfiBiosIdSection EfiBiosIdSectionData { get; private set; }
@@ -81,7 +81,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             FirmwareInfo = FirmwareFile.GetFileInfo(filename);
 
             // Parse Platform Data Region.
-            PdrSectionData = GetPdrData(sourcebuffer);
+            PdrSectionData = ParsePdrSectionData(sourcebuffer);
 
             // Find the NVRAM base address.
             NvramBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.NvramSectionGuid, (int)Descriptor.BiosBase, (int)Descriptor.BiosLimit) - ZERO_VECTOR_SIZE;
@@ -104,22 +104,22 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             }
 
             // Parse NVRAM stores.
-            GetNvramStores(sourcebuffer);
+            ParseNvramStores(sourcebuffer);
 
             // Search both NVRAM SVS stores for a Message Authentication Code.
-            EfiPrimaryLockData = GetIsEfiLocked(SvsPrimary.StoreBuffer);
-            EfiBackupLockData = GetIsEfiLocked(SvsSecondary.StoreBuffer);
+            EfiPrimaryLockStatus = GetEfiLockStatus(SvsPrimary.StoreBuffer);
+            EfiBackupLockStatus = GetEfiLockStatus(SvsSecondary.StoreBuffer);
 
             // Get Find my Mac email.
-            FmmEmail = GetFmmMobilemeEmail();
+            MobileMeEmail = ParseFmmMobileMeEmail();
 
             // Parse Fsys Store data.
-            FsysStoreData = GetFsysStoreData(sourcebuffer, false);
+            FsysStoreData = ParseFsysStoreData(sourcebuffer, false);
 
             // Try to force find the Fsys store if it wasn't found in the first pass.
             if (FsysStoreData.FsysBytes == null)
             {
-                FsysStoreData = GetFsysStoreData(sourcebuffer, false, true);
+                FsysStoreData = ParseFsysStoreData(sourcebuffer, false, true);
 
                 if (FsysStoreData.FsysBytes != null)
                 {
@@ -135,10 +135,10 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             ConfigCode = FsysStoreData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(FsysStoreData.HWC) : null;
 
             // Parse AppleRomSectionInformation region data.
-            AppleRomInfoSectionData = GetRomInformationData(sourcebuffer);
+            AppleRomInfoSectionData = ParseAppleRomInformationData(sourcebuffer);
 
             // Parse EfiBiosId section data.
-            EfiBiosIdSectionData = GetEfiBiosIdSectionData(sourcebuffer);
+            EfiBiosIdSectionData = ParseEfiBiosIdSectionData(sourcebuffer);
 
             // Check if the firmware is APFS capable.
             IsApfsCapable = GetIsApfsCapable(LoadedBinaryBuffer);
@@ -206,7 +206,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             FitVersion = null;
             MeVersion = null;
             NewSerial = null;
-            FmmEmail = null;
+            MobileMeEmail = null;
 
             LoadedBinaryBuffer = null;
             LzmaDecompressedBuffer = null;
@@ -222,8 +222,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             VssSecondary = new NvramStore();
             SvsPrimary = new NvramStore();
             SvsSecondary = new NvramStore();
-            EfiPrimaryLockData = new EFILock();
-            EfiBackupLockData = new EFILock();
+            EfiPrimaryLockStatus = new EFILock();
+            EfiBackupLockStatus = new EFILock();
             FsysStoreData = new FsysStore();
             AppleRomInfoSectionData = new AppleRomInformationSection();
             EfiBiosIdSectionData = new EfiBiosIdSection();
@@ -242,7 +242,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion 
 
         #region Platform Data Region
-        public PdrSection GetPdrData(byte[] sourcebuffer)
+        public PdrSection ParsePdrSectionData(byte[] sourcebuffer)
         {
             // Descriptor mode not set.
             if (!Descriptor.IsDescriptorMode)
@@ -294,7 +294,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region NVRAM / EFI Lock
-        public void GetNvramStores(byte[] sourcebuffer)
+        public void ParseNvramStores(byte[] sourcebuffer)
         {
             if (NvramBase == -1 || NvramSize == -1)
             {
@@ -315,13 +315,13 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             // Check if the primary VSS store was found
             if (vssPrimaryBase != -1)
             {
-                VssPrimary = ParseNvramStore(sourcebuffer, vssPrimaryBase, NvramStoreType.Variable);
+                VssPrimary = ParseSingleNvramStore(sourcebuffer, vssPrimaryBase, NvramStoreType.Variable);
 
                 // Look for the secondary VSS store only if the primary was found
                 int vssSecondaryBase = BinaryTools.GetBaseAddressUpToLimit(sourcebuffer, Signatures.Nvram.VssStoreMarker, vssPrimaryBase + HDR_SIZE, NvramLimit);
 
                 VssSecondary = vssSecondaryBase != -1
-                    ? ParseNvramStore(sourcebuffer, vssSecondaryBase, NvramStoreType.Variable)
+                    ? ParseSingleNvramStore(sourcebuffer, vssSecondaryBase, NvramStoreType.Variable)
                     : DefaultNvramSection(); // Set to default if secondary not found
             }
             else
@@ -337,13 +337,13 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             // Check if the primary SVS store was found
             if (svsPrimaryBase != -1)
             {
-                SvsPrimary = ParseNvramStore(sourcebuffer, svsPrimaryBase, NvramStoreType.Secure);
+                SvsPrimary = ParseSingleNvramStore(sourcebuffer, svsPrimaryBase, NvramStoreType.Secure);
 
                 // Look for the secondary SVS store only if the primary was found
                 int svsSecondaryBase = BinaryTools.GetBaseAddressUpToLimit(sourcebuffer, Signatures.Nvram.SvsStoreMarker, svsPrimaryBase + HDR_SIZE, NvramLimit);
 
                 SvsSecondary = svsSecondaryBase != -1
-                    ? ParseNvramStore(sourcebuffer, svsSecondaryBase, NvramStoreType.Secure)
+                    ? ParseSingleNvramStore(sourcebuffer, svsSecondaryBase, NvramStoreType.Secure)
                     : DefaultNvramSection(); // Set to default if secondary not found
             }
             else
@@ -355,7 +355,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         }
 
-        public NvramStore ParseNvramStore(byte[] sourcebuffer, int baseposition, NvramStoreType nvramstoretype)
+        public NvramStore ParseSingleNvramStore(byte[] sourcebuffer, int baseposition, NvramStoreType nvramstoretype)
         {
             int storeLength = -1;
             byte format = 0xFF;
@@ -419,7 +419,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             };
         }
 
-        public EFILock GetIsEfiLocked(byte[] sourcebuffer)
+        public EFILock GetEfiLockStatus(byte[] sourcebuffer)
         {
             // NVRAM store is empty.
             if (sourcebuffer == null)
@@ -455,7 +455,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region fmm-mobileme-token-FMM
-        public string GetFmmMobilemeEmail()
+        public string ParseFmmMobileMeEmail()
         {
             if (VssPrimary.IsStoreEmpty)
             {
@@ -536,7 +536,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         #region Fsys Store
         // Fsys resides in the NVRAM at either base: 0x20000h, or 0x22000h.
-        internal FsysStore GetFsysStoreData(byte[] sourcebuffer, bool isfsysonly, bool forcefind = false)
+        internal FsysStore ParseFsysStoreData(byte[] sourcebuffer, bool isfsysonly, bool forcefind = false)
         {
             // Find the base position of Fsys Store.
             int fsysBase = FindFsysBaseAddress(sourcebuffer, isfsysonly, forcefind);
@@ -733,7 +733,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region Apple ROM Information Section
-        internal AppleRomInformationSection GetRomInformationData(byte[] sourcebuffer)
+        internal AppleRomInformationSection ParseAppleRomInformationData(byte[] sourcebuffer)
         {
             // Define constants for index and termination bytes.
             const byte indexByte = 0x20;
@@ -860,7 +860,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         #endregion
 
         #region EFI BIOS ID Section
-        internal EfiBiosIdSection GetEfiBiosIdSectionData(byte[] sourcebuffer)
+        internal EfiBiosIdSection ParseEfiBiosIdSectionData(byte[] sourcebuffer)
         {
             int biosIdBase = BinaryTools.GetBaseAddress(sourcebuffer, Guids.EfiBiosIdGuid, (int)Descriptor.BiosBase, (int)Descriptor.BiosLimit);
 
@@ -1094,7 +1094,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             BinaryTools.OverwriteBytesAtBase(patchedSource, baseposition, patchedBuffer);
 
             // Load the Fsys store from the new binary.
-            FsysStore fsysStore = GetFsysStoreData(patchedSource, false);
+            FsysStore fsysStore = ParseFsysStoreData(patchedSource, false);
 
             // Compare the new checksums.
             if (fsysStore.CrcString != fsysStore.CrcActualString)

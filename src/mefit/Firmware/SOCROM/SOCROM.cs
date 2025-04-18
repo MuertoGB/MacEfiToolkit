@@ -17,13 +17,13 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #region Public Members
         public string LoadedBinaryPath { get; set; }
         public byte[] LoadedBinaryBuffer { get; set; }
-        public SocRomType RomType { get; private set; }
+        public ControllerType Controller { get; private set; }
         public bool FirmwareLoaded { get; set; }
         public string iBootVersion { get; private set; }
         public string ConfigCode { get; set; }
         public string NewSerial { get; set; }
         public FirmwareFile.Information FirmwareInfo { get; private set; }
-        public SCfgStore SCfgSectionData { get; private set; }
+        public SCfgStore SCfgStoreData { get; private set; }
 
         public TimeSpan ParseTime { get; private set; }
         #endregion
@@ -53,10 +53,10 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             iBootVersion = GetiBootVersion(sourcebuffer);
 
             // Parse Scfg Store data.
-            SCfgSectionData = GetSCfgData(sourcebuffer, false);
+            SCfgStoreData = ParseSCfgStoreData(sourcebuffer, false);
 
             // Fetch the Config Code.
-            ConfigCode = SCfgSectionData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(SCfgSectionData.HWC) : null;
+            ConfigCode = SCfgStoreData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(SCfgStoreData.HWC) : null;
 
             parseTimer.Start();
             ParseTime = parseTimer.Elapsed;
@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
             if (BinaryTools.ByteArraysMatch(signature, Signatures.SocRom.SocRomMarker))
             {
-                RomType = SocRomType.AppleT2;
+                Controller = ControllerType.AppleT2;
                 return true;
             }
 
@@ -83,7 +83,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
                 if (BinaryTools.ByteArraysMatch(romSignature, Signatures.SocRom.SocRomMarker))
                 {
-                    RomType = SocRomType.AppleSilicon;
+                    Controller = ControllerType.AppleSilicon;
                     return true;
                 }
             }
@@ -101,8 +101,8 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             LoadedBinaryBuffer = null;
             FirmwareLoaded = false;
             FirmwareInfo = new FirmwareFile.Information();
-            SCfgSectionData = new SCfgStore();
-            RomType = new SocRomType();
+            SCfgStoreData = new SCfgStore();
+            Controller = new ControllerType();
             ParseTime = TimeSpan.Zero;
         }
         #endregion
@@ -135,7 +135,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #endregion
 
         #region SCfg Store
-        public SCfgStore GetSCfgData(byte[] sourcebuffer, bool isscfgonly)
+        public SCfgStore ParseSCfgStoreData(byte[] sourcebuffer, bool isscfgonly)
         {
             int scfgBase = FindScfgBaseAddress(sourcebuffer, isscfgonly);
 

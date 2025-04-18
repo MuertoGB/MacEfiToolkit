@@ -346,7 +346,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string serial = _socrom.SCfgSectionData.Serial;
+            string serial = _socrom.SCfgStoreData.Serial;
 
             if (string.IsNullOrEmpty(serial))
             {
@@ -406,7 +406,7 @@ namespace Mac_EFI_Toolkit.Forms
                 }
 
                 // Save the Scfg stores bytes to disk.
-                if (FileTools.WriteAllBytesEx(dialog.FileName, _socrom.SCfgSectionData.StoreBuffer))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, _socrom.SCfgStoreData.StoreBuffer))
                 {
                     UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
@@ -484,23 +484,23 @@ namespace Mac_EFI_Toolkit.Forms
 
                 builder.AppendLine("Controller");
                 builder.AppendLine("----------------------------------");
-                builder.AppendLine($"Type:            {_socrom.RomType}\r\n");
+                builder.AppendLine($"Type:            {_socrom.Controller}\r\n");
 
-                if (_socrom.SCfgSectionData.StoreBase != -1)
+                if (_socrom.SCfgStoreData.StoreBase != -1)
                 {
                     builder.AppendLine("SCfg");
                     builder.AppendLine("----------------------------------");
-                    builder.AppendLine($"Base:            {_socrom.SCfgSectionData.StoreBase:X}h");
-                    builder.AppendLine($"Size (Bytes):    {_socrom.SCfgSectionData.StoreLength} bytes");
-                    builder.AppendLine($"Size (Hex):      {_socrom.SCfgSectionData.StoreLength:X}h");
-                    builder.AppendLine($"CRC32:           {_socrom.SCfgSectionData.StoreCRC ?? APPSTRINGS.NA}");
-                    builder.AppendLine($"Serial:          {_socrom.SCfgSectionData.Serial ?? APPSTRINGS.NA}\r\n");
+                    builder.AppendLine($"Base:            {_socrom.SCfgStoreData.StoreBase:X}h");
+                    builder.AppendLine($"Size (Bytes):    {_socrom.SCfgStoreData.StoreLength} bytes");
+                    builder.AppendLine($"Size (Hex):      {_socrom.SCfgStoreData.StoreLength:X}h");
+                    builder.AppendLine($"CRC32:           {_socrom.SCfgStoreData.StoreCRC ?? APPSTRINGS.NA}");
+                    builder.AppendLine($"Serial:          {_socrom.SCfgStoreData.Serial ?? APPSTRINGS.NA}\r\n");
 
                     builder.AppendLine("Model");
                     builder.AppendLine("----------------------------------");
                     builder.AppendLine($"Config:          {_socrom.ConfigCode ?? APPSTRINGS.NA}");
-                    builder.AppendLine($"Order No:        {_socrom.SCfgSectionData.SON ?? APPSTRINGS.NA}");
-                    builder.AppendLine($"Reg No:          {_socrom.SCfgSectionData.RegNum ?? APPSTRINGS.NA}\r\n");
+                    builder.AppendLine($"Order No:        {_socrom.SCfgStoreData.SON ?? APPSTRINGS.NA}");
+                    builder.AppendLine($"Reg No:          {_socrom.SCfgStoreData.RegNum ?? APPSTRINGS.NA}\r\n");
                 }
                 else
                 {
@@ -560,7 +560,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Tools Toolstrip Events
         private void lookupSerialNumberToolStripMenuItem_Click(object sender, EventArgs e) =>
-            MacTools.LookupSerialOnEveryMac(_socrom.SCfgSectionData.Serial);
+            MacTools.LookupSerialOnEveryMac(_socrom.SCfgStoreData.Serial);
 
         private void resetWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -923,11 +923,11 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (enable)
             {
-                exportScfgStoreToolStripMenuItem.Enabled = _socrom.SCfgSectionData.StoreBase != -1;
-                lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_socrom.SCfgSectionData.Serial);
+                exportScfgStoreToolStripMenuItem.Enabled = _socrom.SCfgStoreData.StoreBase != -1;
+                lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_socrom.SCfgStoreData.Serial);
 
-                cmdMenuPatch.Enabled = _socrom.RomType == SocRomType.AppleT2; // Apple Silicon ROM patching is not supported.
-                changeSerialNumberToolStripMenuItem.Enabled = _socrom.SCfgSectionData.StoreBase != -1;
+                cmdMenuPatch.Enabled = _socrom.Controller == SocRomType.AppleT2; // Apple Silicon ROM patching is not supported.
+                changeSerialNumberToolStripMenuItem.Enabled = _socrom.SCfgStoreData.StoreBase != -1;
             }
 
             tlpFirmware.Enabled = enable;
@@ -995,7 +995,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (!string.IsNullOrEmpty(_socrom.iBootVersion))
             {
-                lbliBoot.Text = $"{_socrom.iBootVersion} {SOCSTRINGS.ON} {(_socrom.RomType == 0 ? SOCSTRINGS.T2 : SOCSTRINGS.SILICON)}";
+                lbliBoot.Text = $"{_socrom.iBootVersion} {SOCSTRINGS.ON} {(_socrom.Controller == 0 ? SOCSTRINGS.T2 : SOCSTRINGS.SILICON)}";
                 iBootVersionToolStripMenuItem.Enabled = true;
                 return;
             }
@@ -1006,16 +1006,16 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateScfgControls()
         {
-            if (_socrom.SCfgSectionData.StoreBase == -1)
+            if (_socrom.SCfgStoreData.StoreBase == -1)
             {
                 DisableScfgMenuItems();
                 lblScfg.Text = APPSTRINGS.NA;
                 return;
             }
 
-            string scfgBase = $"{_socrom.SCfgSectionData.StoreBase:X}h";
-            string crc = _socrom.SCfgSectionData.StoreCRC;
-            int scfgSize = _socrom.SCfgSectionData.StoreLength;
+            string scfgBase = $"{_socrom.SCfgStoreData.StoreBase:X}h";
+            string crc = _socrom.SCfgStoreData.StoreCRC;
+            int scfgSize = _socrom.SCfgStoreData.StoreLength;
 
             lblScfg.Text = $"{scfgBase}, {scfgSize:X}h ({scfgSize} bytes), {crc}";
 
@@ -1040,7 +1040,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateSerialControls()
         {
-            string serial = _socrom.SCfgSectionData.Serial;
+            string serial = _socrom.SCfgStoreData.Serial;
 
             if (!string.IsNullOrEmpty(serial))
             {
@@ -1081,7 +1081,7 @@ namespace Mac_EFI_Toolkit.Forms
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
             lblConfigCode.ForeColor = Colours.Information;
 
-            GetConfigCodeAsync(_socrom.SCfgSectionData.HWC);
+            GetConfigCodeAsync(_socrom.SCfgStoreData.HWC);
         }
 
         internal async void GetConfigCodeAsync(string hwc)
@@ -1104,7 +1104,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateModelControls()
         {
-            if (string.IsNullOrEmpty(_socrom.SCfgSectionData.SON))
+            if (string.IsNullOrEmpty(_socrom.SCfgStoreData.SON))
             {
                 lblSon.Text = APPSTRINGS.NA;
                 orderNoToolStripMenuItem.Enabled = false;
@@ -1113,11 +1113,11 @@ namespace Mac_EFI_Toolkit.Forms
 
             orderNoToolStripMenuItem.Enabled = true;
 
-            lblSon.Text = _socrom.SCfgSectionData.SON;
+            lblSon.Text = _socrom.SCfgStoreData.SON;
 
-            if (!string.IsNullOrEmpty(_socrom.SCfgSectionData.RegNum))
+            if (!string.IsNullOrEmpty(_socrom.SCfgStoreData.RegNum))
             {
-                lblSon.Text += $" ({_socrom.SCfgSectionData.RegNum})";
+                lblSon.Text += $" ({_socrom.SCfgStoreData.RegNum})";
             }
         }
         #endregion
@@ -1156,17 +1156,17 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetIbootVersion() => SetClipboardText(_socrom.iBootVersion);
 
-        private void ClipboardSetScfgBaseAddress() => SetClipboardText($"{_socrom.SCfgSectionData.StoreBase:X}");
+        private void ClipboardSetScfgBaseAddress() => SetClipboardText($"{_socrom.SCfgStoreData.StoreBase:X}");
 
-        private void ClipboardSetScfgSizeDecimal() => SetClipboardText($"{_socrom.SCfgSectionData.StoreLength} {APPSTRINGS.BYTES}");
+        private void ClipboardSetScfgSizeDecimal() => SetClipboardText($"{_socrom.SCfgStoreData.StoreLength} {APPSTRINGS.BYTES}");
 
-        private void ClipboardSetScfgSizeHex() => SetClipboardText($"{_socrom.SCfgSectionData.StoreLength:X}h");
+        private void ClipboardSetScfgSizeHex() => SetClipboardText($"{_socrom.SCfgStoreData.StoreLength:X}h");
 
-        private void ClipboardSetScfgCrc32() => SetClipboardText(_socrom.SCfgSectionData.StoreCRC);
+        private void ClipboardSetScfgCrc32() => SetClipboardText(_socrom.SCfgStoreData.StoreCRC);
 
         private void ClipboardSetScfgConfig() => SetClipboardText(_socrom.ConfigCode);
 
-        private void ClipboardSetScfgOrderNo() => SetClipboardText($"{_socrom.SCfgSectionData.SON}{_socrom.SCfgSectionData.RegNum ?? string.Empty}");
+        private void ClipboardSetScfgOrderNo() => SetClipboardText($"{_socrom.SCfgStoreData.SON}{_socrom.SCfgStoreData.RegNum ?? string.Empty}");
         #endregion
 
         #region Write Serial
@@ -1183,7 +1183,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Check if the SerialBase exists.
-            if (_socrom.SCfgSectionData.SerialBase == -1)
+            if (_socrom.SCfgStoreData.SerialBase == -1)
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_BASE_NOT_FOUND}");
                 NotifyPatchingFailure();
@@ -1199,12 +1199,12 @@ namespace Mac_EFI_Toolkit.Forms
             // Overwrite serial in the binary buffer.
             Logger.WriteCallerLine(LOGSTRINGS.SSN_WTB);
 
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _socrom.SCfgSectionData.SerialBase, serialBuffer);
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _socrom.SCfgStoreData.SerialBase, serialBuffer);
 
             Logger.WriteCallerLine(LOGSTRINGS.SCFG_LFB);
 
             // Load patched scfg from the binary buffer.
-            SCfgStore scfgStore = _socrom.GetSCfgData(binaryBuffer, false);
+            SCfgStore scfgStore = _socrom.ParseSCfgStoreData(binaryBuffer, false);
 
             // Verify the serial was written correctly.
             if (!string.Equals(serial, scfgStore.Serial))
@@ -1243,7 +1243,7 @@ namespace Mac_EFI_Toolkit.Forms
                 }
 
                 // Check the SOCROM contains a store, otherwise set the base address.
-                int scfgBase = _socrom.SCfgSectionData.StoreBase;
+                int scfgBase = _socrom.SCfgStoreData.StoreBase;
                 bool scfgExists = true;
 
                 // Set the Scfg base manually.
@@ -1286,7 +1286,7 @@ namespace Mac_EFI_Toolkit.Forms
                 BinaryTools.OverwriteBytesAtBase(binaryBuffer, scfgBase, scfgBuffer);
 
                 // Load Scfg store from the binary buffer.
-                SCfgStore scfgStore = _socrom.GetSCfgData(binaryBuffer, false);
+                SCfgStore scfgStore = _socrom.ParseSCfgStoreData(binaryBuffer, false);
 
                 // Check store was written successfully.
                 if (!BinaryTools.ByteArraysMatch(scfgStore.StoreBuffer, scfgBuffer))
