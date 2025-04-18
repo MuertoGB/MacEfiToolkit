@@ -134,7 +134,7 @@
     <Compile Include="Common\SevenZip\ICoder.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Language\English.cs" />
+    <Compile Include="Common\Strings.cs" />
     <Compile Include="Firmware\SOCROM\Types\Structs.cs" />
     <Compile Include="Firmware\SOCROM\SOCROM.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
