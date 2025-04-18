@@ -584,6 +584,15 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                 sonString = sonString.TrimEnd('/');
             }
 
+            // Fallback: If HWC is not found, try deriving it from Serial.
+            if (string.IsNullOrEmpty(hwcString) && Serial.IsValid(serialString))
+            {
+                if (serialString.Length == 11 || serialString.Length == 12)
+                {
+                    hwcString = serialString.Substring(8, serialString.Length - 8);
+                }
+            }
+
             // Create and return FsysStore object.
             return new FsysStore
             {
