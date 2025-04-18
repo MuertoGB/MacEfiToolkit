@@ -82,7 +82,7 @@ namespace Mac_EFI_Toolkit
             "Apple EFI/BIOS (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*";
 
         internal const string FILTER_SOCROM_SUPPORTED_FIRMWARE =
-            "Apple T2 SOCROM (*.bin, *.rom)|*.bin;*.rom|All Files (*.*)|*.*";
+            "Apple SOCROM (*.bin, *.rom)|*.bin;*.rom|All Files (*.*)|*.*";
 
         internal const string FILTER_BIN =
             "Binary Files (*.bin, *.rom, *.rgn)|*.bin;*.rom;*.rgn|All Files (*.*)|*.*";
@@ -531,7 +531,7 @@ namespace Mac_EFI_Toolkit
             "SCFG_REGION";
 
         internal const string MENU_TIP_OPEN =
-           "Open a T2 SOCROM";
+           "Open a Mac SOCROM";
 
         internal const string MENU_TIP_COPY =
             "Open the Copy Menu";
