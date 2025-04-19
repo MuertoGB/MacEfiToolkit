@@ -39,13 +39,13 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         public NvramStore SvsSecondary { get; private set; }
         public EFILock EfiPrimaryLockStatus { get; private set; }
         public EFILock EfiBackupLockStatus { get; private set; }
-        public FsysStore FsysStoreData { get; private set; }
+        public FsysStore Fsys { get; private set; }
         public AppleRomInformationSection AppleRomInfoSectionData { get; private set; }
         public EfiBiosIdSection EfiBiosIdSectionData { get; private set; }
 
         public ApfsCapableType IsApfsCapable { get; private set; } = ApfsCapableType.Unknown;
 
-        public int FsysRegionSize { get; private set; } = 0;
+        //public int FsysRegionSize { get; private set; } = 0;
         public int NvramBase { get; private set; } = -1;
         public int NvramSize { get; private set; } = -1;
         public int NvramLimit { get; private set; } = -1;
@@ -114,25 +114,25 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             MobileMeEmail = ParseFmmMobileMeEmail();
 
             // Parse Fsys Store data.
-            FsysStoreData = ParseFsysStoreData(sourcebuffer, false);
+            Fsys = ParseFsysStoreData(sourcebuffer, false);
 
             // Try to force find the Fsys store if it wasn't found in the first pass.
-            if (FsysStoreData.FsysBytes == null)
+            if (Fsys.Buffer == null)
             {
-                FsysStoreData = ParseFsysStoreData(sourcebuffer, false, true);
+                Fsys = ParseFsysStoreData(sourcebuffer, false, true);
 
-                if (FsysStoreData.FsysBytes != null)
+                if (Fsys.Buffer != null)
                 {
                     ForceFoundFsys = true;
 
-                    Logger.WriteLine($"Force found Fsys Store at {FsysStoreData.FsysBase:X}h. " +
+                    Logger.WriteLine($"Force found Fsys Store at {Fsys.BaseAddress:X}h. " +
                         $"The image may be misaligned or corrupt ({FirmwareInfo.FileNameExt}).", Logger.LogType.Application
                     );
                 }
             }
 
             // Fetch the Config Code
-            ConfigCode = FsysStoreData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(FsysStoreData.HWC) : null;
+            ConfigCode = Fsys.HWC != null ? MacTools.GetDeviceConfigCodeLocal(Fsys.HWC) : null;
 
             // Parse AppleRomSectionInformation region data.
             AppleRomInfoSectionData = ParseAppleRomInformationData(sourcebuffer);
@@ -224,13 +224,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             SvsSecondary = new NvramStore();
             EfiPrimaryLockStatus = new EFILock();
             EfiBackupLockStatus = new EFILock();
-            FsysStoreData = new FsysStore();
+            Fsys = new FsysStore();
             AppleRomInfoSectionData = new AppleRomInformationSection();
             EfiBiosIdSectionData = new EfiBiosIdSection();
 
             IsApfsCapable = ApfsCapableType.Unknown;
 
-            FsysRegionSize = 0;
             NvramBase = -1;
             NvramSize = -1;
             NvramLimit = -1;
@@ -308,7 +307,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
             NvramLimit = NvramBase + NvramSize - 1;
 
-            Console.WriteLine($"NVRAM - Base: {NvramBase:X}h, Size: {NvramSize:X}h, Limit: {NvramLimit:X}h");
+            Console.WriteLine($"NVRAM - Base: {NvramBase:X}h, Limit: {NvramLimit:X}h, Size: {NvramSize:X}h");
 
             int vssPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(sourcebuffer, Signatures.Nvram.VssStoreMarker, NvramBase, NvramLimit);
 
@@ -502,7 +501,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             {
                 if (IsValidEmailBlock(buffer, i, out string stringData))
                 {
-                    Console.WriteLine($"Email found: {stringData}");
+                    Console.WriteLine($"Mobile Me Found: {stringData}");
                     return stringData;
                 }
 
@@ -548,34 +547,34 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             }
 
             // Retrieve FsysStore bytes.
-            byte[] fsysBuffer = GetFsysStoreBytes(sourcebuffer, fsysBase);
+            var (fsysBuffer, fsysSize) = GetFsysStoreBytes(sourcebuffer, fsysBase);
 
             // If FsysStore is invalid, return default data.
-            if (!IsValidFsysStore(fsysBuffer))
+            if (!IsValidFsysStore(fsysBuffer, fsysSize))
             {
                 return DefaultFsysRegion();
             }
 
             // Retrieve CRC bytes and calculate CRC values.
-            byte[] crcBuffer = GetCrcBytes(sourcebuffer, fsysBase);
+            byte[] crcBuffer = GetCrcBytes(sourcebuffer, fsysBase, fsysSize);
             string crcString = GetFlippedCrcString(crcBuffer);
-            uint crcActualBuffer = GetUintFsysCrc32(fsysBuffer);
+            uint crcActualBuffer = GetUintFsysCrc32(fsysBuffer, fsysSize);
             string crcActualString = $"{crcActualBuffer:X8}";
 
             // Find and parse various signatures within FsysStore.
             int serialBase = FindSignatureAddress(
                 sourcebuffer,
                 fsysBase,
-                FsysRegionSize,
+                fsysSize,
                 Signatures.FsysStore.SerialUpperMarker,
                 Signatures.FsysStore.SerialLowerMarker,
                 Signatures.FsysStore.SerialPLowerMarker);
             string serialString = ParseFsysString(sourcebuffer, serialBase);
 
-            int hwcBase = FindSignatureAddress(sourcebuffer, fsysBase, FsysRegionSize, Signatures.FsysStore.HwcLowerMarker, Signatures.FsysStore.HwcUpperMarker);
+            int hwcBase = FindSignatureAddress(sourcebuffer, fsysBase, fsysSize, Signatures.FsysStore.HwcLowerMarker, Signatures.FsysStore.HwcUpperMarker);
             string hwcString = ParseFsysString(sourcebuffer, hwcBase);
 
-            int sonBase = FindSignatureAddress(sourcebuffer, fsysBase, FsysRegionSize, Signatures.FsysStore.SonLowerMarker, Signatures.FsysStore.SonUpperMarker);
+            int sonBase = FindSignatureAddress(sourcebuffer, fsysBase, fsysSize, Signatures.FsysStore.SonLowerMarker, Signatures.FsysStore.SonUpperMarker);
             string sonString = ParseFsysString(sourcebuffer, sonBase);
 
             // Trim trailing '/' from SON string if present.
@@ -593,11 +592,14 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                 }
             }
 
+            Console.WriteLine($"Fsys Store Size: {fsysSize:X}h ({fsysSize} bytes)");
+
             // Create and return FsysStore object.
             return new FsysStore
             {
-                FsysBytes = fsysBuffer,
-                FsysBase = fsysBase,
+                Buffer = fsysBuffer,
+                Size = fsysSize,
+                BaseAddress = fsysBase,
                 Serial = serialString,
                 SerialBase = serialBase != -1 ? serialBase + LITERAL_POS : -1,
                 HWC = hwcString,
@@ -664,9 +666,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return BinaryTools.GetBaseAddress(sourcebuffer, Signatures.FsysStore.FsysMarker, NvramBase, NvramSize);
         }
 
-        private bool IsValidFsysStore(byte[] sourcebuffer)
+        private bool IsValidFsysStore(byte[] sourcebuffer, int length)
         {
-            return sourcebuffer != null && sourcebuffer.Length == FsysRegionSize;
+            return sourcebuffer != null && sourcebuffer.Length == length;
         }
 
         private string GetFlippedCrcString(byte[] sourcebuffer)
@@ -690,36 +692,27 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return -1;
         }
 
-        private byte[] GetFsysStoreBytes(byte[] sourcebuffer, int baseposition)
+        private (byte[] Buffer, int Size) GetFsysStoreBytes(byte[] sourcebuffer, int baseposition)
         {
-            // Get Fsys Store size bytes - fsys base + 0x09, length 2 bytes (int16).
-            byte[] size = BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition + 9, 2);
+            byte[] sizeBuffer = BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition + 9, 2);
+            int fsysSize = BitConverter.ToInt16(sizeBuffer, 0);
+            byte[] fsysBuffer = BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition, fsysSize);
 
-            // Convert size to int16 value.
-            FsysRegionSize = BitConverter.ToInt16(size, 0);
-
-            // Min Fsys rgn size.
-            if (FsysRegionSize < 2048)
-            {
-                Logger.WriteLine($"Fsys Store size was less than the min expected size: {FsysRegionSize}", Logger.LogType.Application);
-
-                return null;
-            }
-
-            return BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition, FsysRegionSize);
+            return (fsysBuffer, fsysSize);
         }
 
-        private byte[] GetCrcBytes(byte[] sourcebuffer, int baseposition)
+        private byte[] GetCrcBytes(byte[] sourcebuffer, int baseposition, int length)
         {
-            return BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition + (FsysRegionSize - CRC32_SIZE), CRC32_SIZE);
+            return BinaryTools.GetBytesBaseLength(sourcebuffer, baseposition + (length - CRC32_SIZE), CRC32_SIZE);
         }
 
         private FsysStore DefaultFsysRegion()
         {
             return new FsysStore
             {
-                FsysBytes = null,
-                FsysBase = -1,
+                Buffer = null,
+                Size = 0,
+                BaseAddress = -1,
                 Serial = null,
                 SerialBase = -1,
                 HWC = null,
@@ -1054,13 +1047,13 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         /// <param name="sourcebuffer">The byte array representing the Fsys store.</param>
         /// <param name="newcrc">The new CRC value to be patched.</param>
         /// <returns>The patched Fsys store byte array.</returns>
-        internal byte[] PatchFsysCrc(byte[] sourcebuffer, uint newcrc)
+        internal byte[] PatchFsysCrc(byte[] sourcebuffer, uint newcrc, int fsyssize)
         {
             // Convert the new CRC value to bytes
             byte[] crcBuffer = BitConverter.GetBytes(newcrc);
 
             // Write the new bytes back to the Fsys store at the appropriate base
-            BinaryTools.OverwriteBytesAtBase(sourcebuffer, FsysRegionSize - CRC32_SIZE, crcBuffer);
+            BinaryTools.OverwriteBytesAtBase(sourcebuffer, fsyssize - CRC32_SIZE, crcBuffer);
 
             // Return the patched data
             return sourcebuffer;
@@ -1074,7 +1067,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         /// <param name="fsysbuffer">The byte array representing the Fsys store.</param>
         /// <param name="newcrc">The new CRC value to be patched in the Fsys store.</param>
         /// <returns>The patched file byte array, or null if the new calculated crc does not match the crc in the Fsys store.</returns>
-        internal byte[] MakeFsysCrcPatchedBinary(byte[] sourcebuffer, int baseposition, byte[] fsysbuffer, uint newcrc)
+        internal byte[] MakeFsysCrcPatchedBinary(byte[] sourcebuffer, int baseposition, byte[] fsysbuffer, uint newcrc, int fsyssize)
         {
             Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
@@ -1086,7 +1079,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             Logger.WriteCallerLine(LOGSTRINGS.CRC_PATCH);
 
             // Patch the Fsys store crc.
-            byte[] patchedBuffer = PatchFsysCrc(fsysbuffer, newcrc);
+            byte[] patchedBuffer = PatchFsysCrc(fsysbuffer, newcrc, fsyssize);
 
             Logger.WriteCallerLine(LOGSTRINGS.CRC_WRITE_TO_FW);
 
@@ -1178,20 +1171,20 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         /// </summary>
         /// /// <param name="sourcebuffer">The Fsys region to calcuate the CRC32 for.</param>
         /// <returns>The calculated Fsys CRC32 uint</returns>
-        internal uint GetUintFsysCrc32(byte[] sourcebuffer)
+        internal uint GetUintFsysCrc32(byte[] sourcebuffer, int fsyssize)
         {
-            if (sourcebuffer.Length < FsysRegionSize)
+            if (sourcebuffer.Length < fsyssize)
             {
                 throw new ArgumentException(nameof(sourcebuffer), "Given bytes are too small.");
             }
 
-            if (sourcebuffer.Length > FsysRegionSize)
+            if (sourcebuffer.Length > fsyssize)
             {
                 throw new ArgumentException(nameof(sourcebuffer), "Given bytes are too large.");
             }
 
             // Data we calculate is: Fsys Base + Fsys Size - CRC32 length of 4 bytes.
-            byte[] fsysBuffer = new byte[FsysRegionSize - EFIROM.CRC32_SIZE];
+            byte[] fsysBuffer = new byte[fsyssize - EFIROM.CRC32_SIZE];
 
             if (sourcebuffer != null)
             {

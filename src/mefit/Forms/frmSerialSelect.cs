@@ -56,7 +56,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (Tag is SerialSenderTag.EFIROMWindow && _efirom != null)
             {
-                tbxSerial.MaxLength = _efirom.FsysStoreData.Serial.Length;
+                tbxSerial.MaxLength = _efirom.Fsys.Serial.Length;
             }
             else if (Tag is SerialSenderTag.SOCROMWindow && _socrom != null)
             {

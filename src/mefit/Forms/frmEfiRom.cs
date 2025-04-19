@@ -379,7 +379,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string serial = _efirom.FsysStoreData.Serial;
+            string serial = _efirom.Fsys.Serial;
 
             if (string.IsNullOrEmpty(serial))
             {
@@ -475,7 +475,7 @@ namespace Mac_EFI_Toolkit.Forms
                 }
 
                 // Save the Fsys stores bytes to disk.
-                if (FileTools.WriteAllBytesEx(dialog.FileName, _efirom.FsysStoreData.FsysBytes) && File.Exists(dialog.FileName))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, _efirom.Fsys.Buffer) && File.Exists(dialog.FileName))
                 {
                     UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
@@ -707,14 +707,14 @@ namespace Mac_EFI_Toolkit.Forms
 
                 builder.AppendLine("Fsys");
                 builder.AppendLine("----------------------------------");
-                if (_efirom.FsysStoreData.FsysBytes != null)
+                if (_efirom.Fsys.Buffer != null)
                 {
-                    builder.AppendLine($"Base:            {_efirom.FsysStoreData.FsysBase:X}h");
-                    builder.AppendLine($"Size:            {_efirom.FsysRegionSize:X}h");
-                    builder.AppendLine($"CRC32:           {_efirom.FsysStoreData.CrcString ?? "N/A"}");
-                    builder.AppendLine($"Serial:          {_efirom.FsysStoreData.Serial ?? "N/A"}");
-                    builder.AppendLine($"HWC:             {_efirom.FsysStoreData.HWC ?? "N/A"}");
-                    builder.AppendLine($"SON:             {_efirom.FsysStoreData.SON ?? "N/A"}\r\n");
+                    builder.AppendLine($"Base:            {_efirom.Fsys.BaseAddress:X}h");
+                    builder.AppendLine($"Size:            {_efirom.Fsys.Size:X}h");
+                    builder.AppendLine($"CRC32:           {_efirom.Fsys.CrcString ?? "N/A"}");
+                    builder.AppendLine($"Serial:          {_efirom.Fsys.Serial ?? "N/A"}");
+                    builder.AppendLine($"HWC:             {_efirom.Fsys.HWC ?? "N/A"}");
+                    builder.AppendLine($"SON:             {_efirom.Fsys.SON ?? "N/A"}\r\n");
                 }
                 else
                 {
@@ -835,13 +835,13 @@ namespace Mac_EFI_Toolkit.Forms
         {
             string model = _efirom.EfiBiosIdSectionData.ModelPart ?? EFISTRINGS.NOMODEL;
             string version = _efirom.FirmwareVersion ?? EFISTRINGS.NOFWVER;
-            string serial = _efirom.FsysStoreData.Serial ?? EFISTRINGS.NOSERIAL;
+            string serial = _efirom.Fsys.Serial ?? EFISTRINGS.NOSERIAL;
 
             SetClipboardText($"{model}_{version}_{serial}");
         }
 
         private void lookupSerialNumberToolStripMenuItem_Click(object sender, EventArgs e) =>
-            MacTools.LookupSerialOnEveryMac(_efirom.FsysStoreData.Serial);
+            MacTools.LookupSerialOnEveryMac(_efirom.Fsys.Serial);
 
         private void viewRomInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1119,7 +1119,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
             lblConfigCode.ForeColor = Colours.Information;
-            GetConfigCodeAsync(_efirom.FsysStoreData.HWC);
+            GetConfigCodeAsync(_efirom.Fsys.HWC);
         }
 
         internal async void GetConfigCodeAsync(string hwc)
@@ -1142,12 +1142,12 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateFsysControls()
         {
-            if (_efirom.FsysStoreData.FsysBase != -1)
+            if (_efirom.Fsys.BaseAddress != -1)
             {
-                lblFsysStore.Text = $"{_efirom.FsysStoreData.FsysBase:X2}h";
-                bool crcMatch = string.Equals(_efirom.FsysStoreData.CrcString, _efirom.FsysStoreData.CrcActualString);
+                lblFsysStore.Text = $"{_efirom.Fsys.BaseAddress:X2}h";
+                bool crcMatch = string.Equals(_efirom.Fsys.CrcString, _efirom.Fsys.CrcActualString);
 
-                if (!string.IsNullOrEmpty(_efirom.FsysStoreData.CrcString))
+                if (!string.IsNullOrEmpty(_efirom.Fsys.CrcString))
                 {
                     lblFsysStore.Text += crcMatch ? $" ({EFISTRINGS.CRC_VALID})" : $" ({EFISTRINGS.CRC_INVALID})";
                     lblFsysStore.ForeColor = crcMatch ? lblFsysStore.ForeColor : Colours.Warning;
@@ -1171,7 +1171,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateSerialNumberControls()
         {
-            string serial = _efirom.FsysStoreData.Serial;
+            string serial = _efirom.Fsys.Serial;
 
             if (!string.IsNullOrEmpty(serial))
             {
@@ -1209,7 +1209,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateHardwareConfigControls()
         {
-            string hwc = _efirom.FsysStoreData.HWC;
+            string hwc = _efirom.Fsys.HWC;
             lblHwc.Text = hwc ?? APPSTRINGS.NA;
 
             if (!string.IsNullOrEmpty(hwc))
@@ -1224,7 +1224,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateOrderNumberControls()
         {
-            string son = _efirom.FsysStoreData.SON;
+            string son = _efirom.Fsys.SON;
             lblOrderNumber.Text = son ?? APPSTRINGS.NA;
 
             if (!string.IsNullOrEmpty(son))
@@ -1390,8 +1390,8 @@ namespace Mac_EFI_Toolkit.Forms
             if (enable)
             {
                 // Logic for enabling menus when controls are enabled
-                bool fsysBufferNull = _efirom.FsysStoreData.FsysBytes != null;
-                bool fsysCrcMatch = fsysBufferNull && !string.Equals(_efirom.FsysStoreData.CrcActualString, _efirom.FsysStoreData.CrcString);
+                bool fsysBufferNull = _efirom.Fsys.Buffer != null;
+                bool fsysCrcMatch = fsysBufferNull && !string.Equals(_efirom.Fsys.CrcActualString, _efirom.Fsys.CrcString);
                 bool allNvramStoresEmpty =
                     _efirom.VssPrimary.IsStoreEmpty &&
                     _efirom.VssSecondary.IsStoreEmpty &&
@@ -1407,16 +1407,16 @@ namespace Mac_EFI_Toolkit.Forms
                 exportFmmmobilemeEmailTextToolStripMenuItem.Enabled = _efirom.MobileMeEmail != null;
 
                 // Patch Menu
-                changeSerialNumberToolStripMenuItem.Enabled = _efirom.FsysStoreData.FsysBase != -1 && _efirom.FsysStoreData.SerialBase != -1;
+                changeSerialNumberToolStripMenuItem.Enabled = _efirom.Fsys.BaseAddress != -1 && _efirom.Fsys.SerialBase != -1;
                 replaceIntelMERegionToolStripMenuItem.Enabled = _efirom.Descriptor.IsDescriptorMode && _efirom.Descriptor.MeBase != 0 && _efirom.Descriptor.MeLimit != 0;
-                replaceFsysStoreToolStripMenuItem.Enabled = _efirom.FsysStoreData.FsysBase != -1;
+                replaceFsysStoreToolStripMenuItem.Enabled = _efirom.Fsys.BaseAddress != -1;
                 eraseNVRAMToolStripMenuItem.Enabled = !allNvramStoresEmpty;
                 fixFsysChecksumToolStripMenuItem.Enabled = fsysCrcMatch;
                 invalidateEFILockToolStripMenuItem.Enabled = _efirom.EfiPrimaryLockStatus.LockType == EfiLockType.Locked;
 
                 // Options Menu
                 viewRomInformationToolStripMenuItem.Enabled = _efirom.AppleRomInfoSectionData.SectionExists;
-                lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_efirom.FsysStoreData.Serial);
+                lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_efirom.Fsys.Serial);
             }
 
             // Always enable/disable these controls
@@ -1672,13 +1672,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetFirmwareConfigCode() => SetClipboardText(_efirom.ConfigCode);
 
-        private void ClipboardSetFsysBaseAddress() => SetClipboardText($"{_efirom.FsysStoreData.FsysBase:X2}");
+        private void ClipboardSetFsysBaseAddress() => SetClipboardText($"{_efirom.Fsys.BaseAddress:X2}");
 
-        private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(_efirom.FsysStoreData.CrcString);
+        private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(_efirom.Fsys.CrcString);
 
-        private void ClipboardSetFirmwareHwc() => SetClipboardText(_efirom.FsysStoreData.HWC);
+        private void ClipboardSetFirmwareHwc() => SetClipboardText(_efirom.Fsys.HWC);
 
-        private void ClipboardSetFirmwareOrderNumber() => SetClipboardText(_efirom.FsysStoreData.SON);
+        private void ClipboardSetFirmwareOrderNumber() => SetClipboardText(_efirom.Fsys.SON);
 
         private void ClipboardSetFirmwareVersion() => SetClipboardText(_efirom.FirmwareVersion);
 
@@ -1725,7 +1725,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Check if the SerialBase exists.
-            if (_efirom.FsysStoreData.SerialBase == -1)
+            if (_efirom.Fsys.SerialBase == -1)
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_BASE_NOT_FOUND}");
                 NotifyPatchingFailure();
@@ -1741,21 +1741,21 @@ namespace Mac_EFI_Toolkit.Forms
             // Overwrite serial in the binary buffer.
             Logger.WriteCallerLine(LOGSTRINGS.SSN_WTB);
 
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.FsysStoreData.SerialBase, newSerialBuffer);
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.SerialBase, newSerialBuffer);
 
             // Check HWC base and write new HWC.
-            bool hwcBasePresent = _efirom.FsysStoreData.HWCBase != -1;
+            bool hwcBasePresent = _efirom.Fsys.HWCBase != -1;
             string newHwc = null;
 
             if (hwcBasePresent)
             {
-                newHwc = serial.Substring(8, _efirom.FsysStoreData.Serial.Length == 11 ? 3 : 4);
+                newHwc = serial.Substring(8, _efirom.Fsys.Serial.Length == 11 ? 3 : 4);
                 byte[] newHwcBuffer = Encoding.UTF8.GetBytes(newHwc);
 
                 Logger.WriteCallerLine(LOGSTRINGS.HWC_WTB);
 
                 // Write new HWC.
-                BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.FsysStoreData.HWCBase, newHwcBuffer);
+                BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.HWCBase, newHwcBuffer);
             }
 
             Logger.WriteCallerLine(LOGSTRINGS.FSYS_LFB);
@@ -1784,7 +1784,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.HWC_WRITE_SUCCESS);
 
             // Patch fsys checksum in the binary buffer.
-            binaryBuffer = _efirom.MakeFsysCrcPatchedBinary(binaryBuffer, fsysStore.FsysBase, fsysStore.FsysBytes, fsysStore.CrcActual);
+            binaryBuffer = _efirom.MakeFsysCrcPatchedBinary(binaryBuffer, fsysStore.BaseAddress, fsysStore.Buffer, fsysStore.CrcActual, fsysStore.Size);
 
             // Reload fsys store from the binary buffer and verify CRC masking success.
             fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
@@ -2037,9 +2037,9 @@ namespace Mac_EFI_Toolkit.Forms
             int fsysBase = BinaryTools.GetBaseAddress(fsysBuffer, Signatures.FsysStore.FsysMarker);
 
             // Fsys store length should equal 800h, 2048 bytes.
-            if (fsysBuffer.Length != _efirom.FsysRegionSize)
+            if (fsysBuffer.Length != _efirom.Fsys.Size)
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {_efirom.FsysRegionSize:X}h ({fsysBuffer.Length:X}h)");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {_efirom.Fsys.Size:X}h ({fsysBuffer.Length:X}h)");
                 NotifyPatchingFailure();
                 return false;
             }
@@ -2057,18 +2057,18 @@ namespace Mac_EFI_Toolkit.Forms
             return true;
         }
 
-        private bool ValidateFsysCrc(FsysStore fsysDataBuffer, ref byte[] fsysbuffer)
+        private bool ValidateFsysCrc(FsysStore fsysstore, ref byte[] fsysbuffer)
         {
-            if (!string.Equals(fsysDataBuffer.CrcString, fsysDataBuffer.CrcActualString))
+            if (!string.Equals(fsysstore.CrcString, fsysstore.CrcActualString))
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.FSYS_SUM_INVALID} ({LOGSTRINGS.FOUND} {fsysDataBuffer.CrcString}, {LOGSTRINGS.CALCULATED} {fsysDataBuffer.CrcActualString})");
+                Logger.WriteCallerLine($"{LOGSTRINGS.FSYS_SUM_INVALID} ({LOGSTRINGS.FOUND} {fsysstore.CrcString}, {LOGSTRINGS.CALCULATED} {fsysstore.CrcActualString})");
 
                 Logger.WriteCallerLine(LOGSTRINGS.MASKING_SUM);
 
-                fsysbuffer = _efirom.PatchFsysCrc(fsysDataBuffer.FsysBytes, fsysDataBuffer.CrcActual);
-                fsysDataBuffer = _efirom.ParseFsysStoreData(fsysbuffer, true);
+                fsysbuffer = _efirom.PatchFsysCrc(fsysstore.Buffer, fsysstore.CrcActual, fsysstore.Size);
+                fsysstore = _efirom.ParseFsysStoreData(fsysbuffer, true);
 
-                if (!string.Equals(fsysDataBuffer.CrcString, fsysDataBuffer.CrcActualString))
+                if (!string.Equals(fsysstore.CrcString, fsysstore.CrcActualString))
                 {
                     Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SUM_MASKING_FAIL}");
                     NotifyPatchingFailure();
@@ -2085,10 +2085,10 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
 
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.FsysStoreData.FsysBase, newFsysBuffer);
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.BaseAddress, newFsysBuffer);
             FsysStore fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
 
-            if (!BinaryTools.ByteArraysMatch(fsysStore.FsysBytes, newFsysBuffer))
+            if (!BinaryTools.ByteArraysMatch(fsysStore.Buffer, newFsysBuffer))
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_COMP_FAILED}");
                 NotifyPatchingFailure();
@@ -2108,9 +2108,10 @@ namespace Mac_EFI_Toolkit.Forms
             byte[] binaryBuffer =
                 _efirom.MakeFsysCrcPatchedBinary(
                     BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer),
-                    _efirom.FsysStoreData.FsysBase,
-                    _efirom.FsysStoreData.FsysBytes,
-                    _efirom.FsysStoreData.CrcActual);
+                    _efirom.Fsys.BaseAddress,
+                    _efirom.Fsys.Buffer,
+                    _efirom.Fsys.CrcActual,
+                    _efirom.Fsys.Size);
 
             if (binaryBuffer == null)
             {

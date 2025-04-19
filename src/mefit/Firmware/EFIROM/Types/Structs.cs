@@ -85,8 +85,9 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
     #region FsysStore
     public struct FsysStore
     {
-        internal byte[] FsysBytes { get; set; }
-        internal int FsysBase { get; set; }
+        internal byte[] Buffer { get; set; }
+        internal int Size { get; set; }
+        internal int BaseAddress { get; set; }
         internal string Serial { get; set; }
         internal int SerialBase { get; set; }
         internal string HWC { get; set; }
