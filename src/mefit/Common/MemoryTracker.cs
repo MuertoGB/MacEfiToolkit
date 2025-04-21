@@ -5,9 +5,8 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Tools;
-using Mac_EFI_Toolkit.WIN32;
 using System;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Mac_EFI_Toolkit.Common
@@ -33,7 +32,7 @@ namespace Mac_EFI_Toolkit.Common
 
             if (!_isWine)
             {
-                _usageTimer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(4));
+                _usageTimer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
             }
         }
 
@@ -44,17 +43,41 @@ namespace Mac_EFI_Toolkit.Common
                 return;
             }
 
-            IntPtr ptr = NativeMethods.GetCurrentProcess();
-
-            NativeMethods.PROCESS_MEMORY_COUNTERS counters = new NativeMethods.PROCESS_MEMORY_COUNTERS
+            try
             {
-                cb = (uint)Marshal.SizeOf(typeof(NativeMethods.PROCESS_MEMORY_COUNTERS))
-            };
+                string categoryName = "Process";
+                PerformanceCounterCategory category = new PerformanceCounterCategory(categoryName);
+                string processName = Process.GetCurrentProcess().ProcessName;
+                int processId = Process.GetCurrentProcess().Id;
+                string instanceName = null;
 
-            if (NativeMethods.GetProcessMemoryInfo(ptr, out counters, counters.cb))
-            {
-                OnMemoryUsageUpdated?.Invoke(this, counters.PagefileUsage);
+                foreach (string name in category.GetInstanceNames())
+                {
+                    if (name.StartsWith(processName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        PerformanceCounter counter = new PerformanceCounter(categoryName, "ID Process", name, true);
+
+                        if ((int)counter.RawValue == processId)
+                        {
+                            instanceName = name;
+                            break;
+                        }
+                    }
+                }
+
+                if (instanceName == null)
+                {
+                    return;
+                }
+
+                PerformanceCounter workingSetCounter = new PerformanceCounter(categoryName, "Working Set - Private", instanceName, true);
+
+                float bytes = workingSetCounter.NextValue();
+                ulong memoryUsage = (ulong)bytes;
+
+                OnMemoryUsageUpdated?.Invoke(this, memoryUsage);
             }
+            catch { }
         }
         #endregion
     }

@@ -19,6 +19,10 @@
 ### Enhancements
 - User interface improvements.
 - Minor string adjustments.
+- **Memory Usage Display:**
+  - Vastly improved memory usage tracking to closely match Task Manager values. 
+  - Modified size conversion to consistently round memory values to one decimal place.
+  - Updated the refresh rate of memory usage to better reflect Task Manager's default behaviour.
 - Updated CREATED and MODIFIED timestamps to use a consistent, simplified format for improved readability.
 - Updated the layout of the output text file when exporting SOCROM firmware information, specifically for cases where the SCfg store is not present.
 - Included SHA-256 checksum in firmware information export data.

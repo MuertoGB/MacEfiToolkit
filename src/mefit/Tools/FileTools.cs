@@ -30,6 +30,7 @@ namespace Mac_EFI_Toolkit.Tools
 
         /// <summary>
         /// Converts a byte size into a human-readable format using appropriate units (e.g., KB, MB).
+        /// The size is rounded to one decimal place and always shows one decimal place.
         /// </summary>
         /// <param name="input">The size in bytes to convert.</param>
         /// <returns>A human-readable string representation of the size with the appropriate unit.</returns>
@@ -52,7 +53,8 @@ namespace Mac_EFI_Toolkit.Tools
             // Calculate the size in the chosen suffix and format it.
             double size = input / Math.Pow(1024, index);
 
-            return $"{size:N2} {suffixes[index]}";
+            // Always format the result with one decimal place, even if it's a whole number.
+            return $"{size:F1} {suffixes[index]}";
         }
 
         /// <summary>
