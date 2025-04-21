@@ -75,7 +75,7 @@ namespace Mac_EFI_Toolkit.Forms
             lblSectionData.Text = $"{APPSTRINGS.BASE.ToUpper()} {_efirom.AppleRomInfoSectionData.SectionBase:X}h" ?? APPSTRINGS.NA;
             lblSectionData.Text += $", {APPSTRINGS.SIZE.ToUpper()} {_efirom.AppleRomInfoSectionData.SectionBytes.Length:X}h" ?? APPSTRINGS.NA;
 
-            UITools.ApplyNestedPanelLabelForeColor(tlpInfo, Colours.DisabledText);
+            UITools.ApplyNestedPanelLabelForeColor(tlpInfo, ApplicationColours.DisabledText);
         }
         #endregion
 
@@ -143,8 +143,8 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void SetButtonProperties()
         {
-            cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.MDL2_EXIT_CROSS;
+            cmdClose.Font = Program.SegoeFluentRegular12;
+            cmdClose.Text = ApplicationChars.FLUENT_MULTIPLY;
         }
         #endregion
     }

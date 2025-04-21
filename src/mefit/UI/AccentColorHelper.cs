@@ -5,6 +5,7 @@
 // AccentColorHelper.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Drawing;
@@ -26,12 +27,12 @@ namespace Mac_EFI_Toolkit.UI
                     return Color.FromArgb(r, g, b);
                 }
 
-                return Colours.AppBorderDefault;
+                return ApplicationColours.AppBorderDefault;
             }
             catch (Exception e)
             {
                 Logger.WriteErrorLine(nameof(GetSystemAccentColor), e.GetType(), e.Message);
-                return Colours.AppBorderDefault;
+                return ApplicationColours.AppBorderDefault;
             }
         }
     }

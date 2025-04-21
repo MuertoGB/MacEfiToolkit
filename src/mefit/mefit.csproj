@@ -84,6 +84,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants\ApplicationChars.cs" />
+    <Compile Include="Common\Constants\ApplicationColors.cs" />
     <Compile Include="Common\Constants\ApplicationPaths.cs" />
     <Compile Include="Common\Constants\ApplicationUrls.cs" />
     <Compile Include="Common\Constants\ApplicationVersions.cs" />
@@ -176,7 +178,6 @@
     <Compile Include="WIN32\NativeMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\Colours.cs" />
     <Compile Include="UI\Renderers\METMenuRenderer.cs" />
     <Compile Include="Tools\BinaryTools.cs" />
     <Compile Include="Tools\MacTools.cs" />
@@ -279,7 +280,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\segmdl2.ttf" />
+    <None Include="Resources\SegoeIcons.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\imgSprite.png" />

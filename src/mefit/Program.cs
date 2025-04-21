@@ -33,18 +33,9 @@ namespace Mac_EFI_Toolkit
         #region Internal Members
         internal static string DraggedFile = string.Empty;
         internal static frmStartup MainWindow;
-        internal static Font FontSegMdl2Regular10;
-        internal static Font FontSegMdl2Regular12;
-        internal static Font FontSegMdl2Regular20;
-
-        internal const string MDL2_EXIT_CROSS = "\uE947";
-        internal const string MDL2_FILE_EXPLORER = "\uED25";
-        internal const string MDL2_DOWN_ARROW = "\uE74B";
-        internal const string MDL2_RIGHT_ARROW = "\u2192";
-        internal const string MDL2_REPORT = "\uE9F9";
-        internal const string MDL2_ACCOUNT = "\uE910";
-        internal const string SEGUI_DINGBAT1 = "\u2776";
-        internal const string NOWRAP_SPACE = "\u00A0";
+        internal static Font SegoeFluentRegular10;
+        internal static Font SegoeFluentRegular12;
+        internal static Font SegoeFluentRegular20;
         #endregion
 
         #region Main Entry Point
@@ -79,15 +70,15 @@ namespace Mac_EFI_Toolkit
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Load custom fonts into memory.
-            if (!FontResolver.LoadCustomFont(Properties.Resources.segmdl2, out Font[] fonts))
+            if (!FontResolver.LoadCustomFont(Properties.Resources.SegoeIcons, out Font[] fonts))
             {
                 return;
             }
 
             // Assign loaded fonts to corresponding variables.
-            FontSegMdl2Regular10 = fonts[0];
-            FontSegMdl2Regular12 = fonts[1];
-            FontSegMdl2Regular20 = fonts[2];
+            SegoeFluentRegular10 = fonts[0];
+            SegoeFluentRegular12 = fonts[1];
+            SegoeFluentRegular20 = fonts[2];
 
             // Initialize application settings.
             Settings.Initialize();
@@ -112,9 +103,9 @@ namespace Mac_EFI_Toolkit
         private static void HandleOnExitingCleanup()
         {
             // Dispose of memory fonts.
-            FontSegMdl2Regular10?.Dispose();
-            FontSegMdl2Regular12?.Dispose();
-            FontSegMdl2Regular20?.Dispose();
+            SegoeFluentRegular10?.Dispose();
+            SegoeFluentRegular12?.Dispose();
+            SegoeFluentRegular20?.Dispose();
         }
         #endregion
 
@@ -152,7 +143,7 @@ namespace Mac_EFI_Toolkit
             {
                 result =
                     MessageBox.Show(
-                        $"{e.Message}\r\n\r\nDetails were saved to {fullPath.Replace(" ", Program.NOWRAP_SPACE)}" +
+                        $"{e.Message}\r\n\r\nDetails were saved to {fullPath.Replace(" ", ApplicationChars.SEGUI_NOBREAKSPACE)}" +
                         $"'\r\n\r\nForce quit application?",
                         $"MET Exception Handler",
                         MessageBoxButtons.YesNo,

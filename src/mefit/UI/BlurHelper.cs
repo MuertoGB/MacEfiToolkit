@@ -5,6 +5,7 @@
 // BlurHelper.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Windows.Forms;
@@ -34,7 +35,7 @@ namespace Mac_EFI_Toolkit.UI
                 return;
             }
 
-            form.BackColor = Colours.AppBorderDefault;
+            form.BackColor = ApplicationColours.AppBorderDefault;
         }
 
         internal static void RemoveBlur(Form form)

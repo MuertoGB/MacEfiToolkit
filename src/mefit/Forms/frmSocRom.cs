@@ -146,9 +146,9 @@ namespace Mac_EFI_Toolkit.Forms
             }));
         }
 
-        private void frmSocRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.InactiveFormText);
+        private void frmSocRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
 
-        private void frmSocRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ActiveFormText);
+        private void frmSocRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -733,7 +733,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateWindowTitle()
         {
             this.Text = _socrom.FirmwareInfo.FileNameExt;
-            lblTitle.Text = $"{APPSTRINGS.SOCROM} {Program.MDL2_RIGHT_ARROW} {_socrom.FirmwareInfo.FileNameExt}";
+            lblTitle.Text = $"{APPSTRINGS.SOCROM} {ApplicationChars.SEGUI_RIGHTWARDSARROW} {_socrom.FirmwareInfo.FileNameExt}";
         }
 
         private void SetTipHandlers()
@@ -819,8 +819,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_EXIT_CROSS },
-                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_FILE_EXPLORER },
+                new { Button = cmdClose, Font = Program.SegoeFluentRegular12, Text = ApplicationChars.FLUENT_MULTIPLY },
+                new { Button = cmdOpenInExplorer, Font = Program.SegoeFluentRegular12, Text = ApplicationChars.FLUENT_OPENFOLDERHORIZ },
             };
 
             foreach (var property in buttons)
@@ -884,7 +884,7 @@ namespace Mac_EFI_Toolkit.Forms
             foreach (Label label in labels)
             {
                 label.Text = string.Empty;
-                label.ForeColor = Colours.NormalText;
+                label.ForeColor = ApplicationColours.NormalText;
             }
 
             // Reset parse time.
@@ -955,7 +955,7 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateModelControls();
 
             // Apply DISABLED_TEXT to N/A labels.
-            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, Colours.DisabledText);
+            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, ApplicationColours.DisabledText);
 
             // Update window title.
             UpdateWindowTitle();
@@ -980,7 +980,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!validSize)
             {
-                lblFilesize.ForeColor = Colours.Error;
+                lblFilesize.ForeColor = ApplicationColours.Error;
                 lblFilesize.Text += $" ({FirmwareFile.CalculateInvalidSize(length)})";
             }
         }
@@ -1055,7 +1055,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (!Serial.IsValid(serial))
                 {
-                    lblSerial.ForeColor = Colours.Warning;
+                    lblSerial.ForeColor = ApplicationColours.Warning;
                 }
 
                 cbxCensor.Enabled = true;
@@ -1079,7 +1079,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
-            lblConfigCode.ForeColor = Colours.Information;
+            lblConfigCode.ForeColor = ApplicationColours.Information;
 
             GetConfigCodeAsync(_socrom.SCfgStoreData.HWC);
         }
@@ -1092,14 +1092,14 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 _socrom.ConfigCode = configCode;
                 lblConfigCode.Text = configCode;
-                lblConfigCode.ForeColor = Colours.NormalText;
+                lblConfigCode.ForeColor = ApplicationColours.NormalText;
                 configToolStripMenuItem.Enabled = true;
                 return;
             }
 
             configToolStripMenuItem.Enabled = false;
             lblConfigCode.Text = APPSTRINGS.NA;
-            lblConfigCode.ForeColor = Colours.DisabledText;
+            lblConfigCode.ForeColor = ApplicationColours.DisabledText;
         }
 
         private void UpdateModelControls()

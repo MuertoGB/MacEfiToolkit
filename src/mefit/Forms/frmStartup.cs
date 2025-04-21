@@ -130,9 +130,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void frmStartup_DragLeave(object sender, EventArgs e) => ApplyDragLeaveColours();
 
-        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.InactiveFormText);
+        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
 
-        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ActiveFormText);
+        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -398,19 +398,19 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.MDL2_EXIT_CROSS;
+            cmdClose.Font = Program.SegoeFluentRegular12;
+            cmdClose.Text = ApplicationChars.FLUENT_MULTIPLY;
         }
 
         private void SetLabelGlyphAndText()
         {
-            lblGlyph.Font = Program.FontSegMdl2Regular20;
-            lblGlyph.Text = Program.MDL2_DOWN_ARROW;
+            lblGlyph.Font = Program.SegoeFluentRegular20;
+            lblGlyph.Text = ApplicationChars.FLUENT_OPENLOCAL;
         }
 
-        private void ApplyDragEnterColours() => lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
+        private void ApplyDragEnterColours() => lblGlyph.ForeColor = ApplicationColours.GlyphActive;
 
-        private void ApplyDragLeaveColours() => lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
+        private void ApplyDragLeaveColours() => lblGlyph.ForeColor = ApplicationColours.GlyphDefault;
 
         private void SetControlForeColor(Control parentcontrol, Color forecolor)
         {
@@ -458,7 +458,7 @@ namespace Mac_EFI_Toolkit.Forms
             // If a new version is available update the UI.
             if (result == Updater.VersionResult.NewVersionAvailable)
             {
-                cmdHelp.Text += $" {Program.SEGUI_DINGBAT1}";
+                cmdHelp.Text += $" {ApplicationChars.SEGUI_DINGBAT1}";
                 updateAvailableToolStripMenuItem.Visible = true;
             }
         }

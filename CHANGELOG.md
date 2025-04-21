@@ -18,6 +18,7 @@
 
 ### Enhancements
 - User interface improvements.
+- Replaced Segoe MDL2 Assets with Segoe Fluent Icons for UI glyphs.
 - Minor string adjustments.
 - **Memory Usage Display:**
   - Vastly improved memory usage tracking to closely match Task Manager values. 
@@ -28,7 +29,6 @@
 - Included SHA-256 checksum in firmware information export data.
 - Updated the internal database.
 - Added fallback for missing HWC during Fsys parsing: now derived from the last 3–4 characters of the serial when unavailable in firmware. Helps address instances of missing config data.
-
 
 ### Bugs
 - **Reworked firmware parser architecture:** Replaced the hotfix from version 2.1.1 with a permanent solution. Firmware parsing logic is now fully decoupled from form UI logic. Each window now operates on its own parser instance, preventing shared state issues when multiple windows are opened or closed. Support for using multiple firmware windows simultaneously has been restored.

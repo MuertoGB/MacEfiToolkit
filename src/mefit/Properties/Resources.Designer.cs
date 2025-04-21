@@ -160,9 +160,9 @@ namespace Mac_EFI_Toolkit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] segmdl2 {
+        internal static byte[] SegoeIcons {
             get {
-                object obj = ResourceManager.GetObject("segmdl2", resourceCulture);
+                object obj = ResourceManager.GetObject("SegoeIcons", resourceCulture);
                 return ((byte[])(obj));
             }
         }

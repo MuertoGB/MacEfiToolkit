@@ -5,6 +5,7 @@
 // METPrompt.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using System;
 using System.Drawing;
 using System.Media;
@@ -75,22 +76,22 @@ namespace Mac_EFI_Toolkit.UI
             switch (PromptType)
             {
                 case PType.Error:
-                    lblTitle.ForeColor = Colours.Error;
+                    lblTitle.ForeColor = ApplicationColours.Error;
                     lblTitle.Text = ERROR_STRING;
                     PromptSound = System.Media.SystemSounds.Hand;
                     break;
                 case PType.Warning:
-                    lblTitle.ForeColor = Colours.Warning;
+                    lblTitle.ForeColor = ApplicationColours.Warning;
                     lblTitle.Text = WARN_STRING;
                     PromptSound = System.Media.SystemSounds.Exclamation;
                     break;
                 case PType.Information:
-                    lblTitle.ForeColor = Colours.Information;
+                    lblTitle.ForeColor = ApplicationColours.Information;
                     lblTitle.Text = INFO_STRING;
                     PromptSound = System.Media.SystemSounds.Beep;
                     break;
                 case PType.Question:
-                    lblTitle.ForeColor = Colours.Information;
+                    lblTitle.ForeColor = ApplicationColours.Information;
                     lblTitle.Text = INFO_STRING;
                     PromptSound = System.Media.SystemSounds.Beep;
                     break;

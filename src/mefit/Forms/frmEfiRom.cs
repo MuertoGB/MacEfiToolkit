@@ -152,9 +152,9 @@ namespace Mac_EFI_Toolkit.Forms
             }));
         }
 
-        private void frmEfiRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.InactiveFormText);
+        private void frmEfiRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
 
-        private void frmEfiRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ActiveFormText);
+        private void frmEfiRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -1051,7 +1051,7 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateFmmEmailControls();
 
             // Apply DISABLED_TEXT to N/A labels.
-            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, Colours.DisabledText);
+            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, ApplicationColours.DisabledText);
 
             // Check which descriptor copy menu items should be enabled.
             pdrBaseToolStripMenuItem.Enabled = _efirom.Descriptor.PdrBase != 0;
@@ -1081,7 +1081,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!validSize)
             {
-                lblFilesize.ForeColor = Colours.Error;
+                lblFilesize.ForeColor = ApplicationColours.Error;
                 lblFilesize.Text += validSize ? string.Empty : $" ({FirmwareFile.CalculateInvalidSize(length)})";
             }
         }
@@ -1118,7 +1118,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
-            lblConfigCode.ForeColor = Colours.Information;
+            lblConfigCode.ForeColor = ApplicationColours.Information;
             GetConfigCodeAsync(_efirom.Fsys.HWC);
         }
 
@@ -1130,13 +1130,13 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 _efirom.ConfigCode = configCode;
                 lblConfigCode.Text = configCode;
-                lblConfigCode.ForeColor = Colours.NormalText;
+                lblConfigCode.ForeColor = ApplicationColours.NormalText;
                 configurationToolStripMenuItem.Enabled = true;
                 return;
             }
 
             lblConfigCode.Text = APPSTRINGS.NA;
-            lblConfigCode.ForeColor = Colours.DisabledText;
+            lblConfigCode.ForeColor = ApplicationColours.DisabledText;
             configurationToolStripMenuItem.Enabled = false;
         }
 
@@ -1150,7 +1150,7 @@ namespace Mac_EFI_Toolkit.Forms
                 if (!string.IsNullOrEmpty(_efirom.Fsys.CrcString))
                 {
                     lblFsysStore.Text += crcMatch ? $" ({EFISTRINGS.CRC_VALID})" : $" ({EFISTRINGS.CRC_INVALID})";
-                    lblFsysStore.ForeColor = crcMatch ? lblFsysStore.ForeColor : Colours.Warning;
+                    lblFsysStore.ForeColor = crcMatch ? lblFsysStore.ForeColor : ApplicationColours.Warning;
                 }
 
                 if (_efirom.ForceFoundFsys)
@@ -1193,7 +1193,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (!Serial.IsValid(serial))
                 {
-                    lblSerialNumber.ForeColor = Colours.Warning;
+                    lblSerialNumber.ForeColor = ApplicationColours.Warning;
                 }
 
                 cbxCensor.Enabled = true;
@@ -1297,7 +1297,7 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 case EfiLockType.Locked:
                     lblEfiLock.Text = EFISTRINGS.LOCKED.ToUpper();
-                    lblEfiLock.ForeColor = Colours.Warning;
+                    lblEfiLock.ForeColor = ApplicationColours.Warning;
                     break;
                 case EfiLockType.Unlocked:
                     lblEfiLock.Text = EFISTRINGS.UNLOCKED.ToUpper();
@@ -1305,7 +1305,7 @@ namespace Mac_EFI_Toolkit.Forms
                 case EfiLockType.Unknown:
                 default:
                     lblEfiLock.Text = APPSTRINGS.UNKNOWN.ToUpper();
-                    lblEfiLock.ForeColor = Colours.Warning;
+                    lblEfiLock.ForeColor = ApplicationColours.Warning;
                     break;
             }
         }
@@ -1319,11 +1319,11 @@ namespace Mac_EFI_Toolkit.Forms
                     break;
                 case ApfsCapableType.No:
                     lblApfsCapable.Text = EFISTRINGS.APFS_DRIVER_NOT_FOUND;
-                    lblApfsCapable.ForeColor = Colours.Warning;
+                    lblApfsCapable.ForeColor = ApplicationColours.Warning;
                     break;
                 case ApfsCapableType.Unknown:
                     lblApfsCapable.Text = APPSTRINGS.UNKNOWN.ToUpper();
-                    lblApfsCapable.ForeColor = Colours.Warning;
+                    lblApfsCapable.ForeColor = ApplicationColours.Warning;
                     break;
             }
         }
@@ -1357,10 +1357,10 @@ namespace Mac_EFI_Toolkit.Forms
             fitVersionToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_efirom.FitVersion);
 
         private void UpdateLzmaArchiveControls() =>
-            lblLzma.ForeColor = _efirom.LzmaDecompressedBuffer != null ? Colours.GlyphActive : Colours.GlyphDefault;
+            lblLzma.ForeColor = _efirom.LzmaDecompressedBuffer != null ? ApplicationColours.GlyphActive : ApplicationColours.GlyphDefault;
 
         private void UpdateFmmEmailControls() =>
-            lblFmmEmail.ForeColor = _efirom.MobileMeEmail != null ? Colours.GlyphActive : Colours.GlyphDefault;
+            lblFmmEmail.ForeColor = _efirom.MobileMeEmail != null ? ApplicationColours.GlyphActive : ApplicationColours.GlyphDefault;
         #endregion
 
         #region UI Events
@@ -1428,8 +1428,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_EXIT_CROSS },
-                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_FILE_EXPLORER },
+                new { Button = cmdClose, Font = Program.SegoeFluentRegular12, Text = ApplicationChars.FLUENT_MULTIPLY },
+                new { Button = cmdOpenInExplorer, Font = Program.SegoeFluentRegular12, Text = ApplicationChars.FLUENT_OPENFOLDERHORIZ },
             };
 
             foreach (var buttonData in buttons)
@@ -1441,11 +1441,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetLabelFontAndGlyph()
         {
-            lblLzma.Font = Program.FontSegMdl2Regular10;
-            lblLzma.Text = Program.MDL2_REPORT;
+            lblLzma.Font = Program.SegoeFluentRegular10;
+            lblLzma.Text = ApplicationChars.FLUENT_REPORT;
 
-            lblFmmEmail.Font = Program.FontSegMdl2Regular10;
-            lblFmmEmail.Text = Program.MDL2_ACCOUNT;
+            lblFmmEmail.Font = Program.SegoeFluentRegular10;
+            lblFmmEmail.Text = ApplicationChars.FLUENT_OTHERUSER;
         }
 
         private void SetTipHandlers()
@@ -1561,7 +1561,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateWindowTitle()
         {
             this.Text = _efirom.FirmwareInfo.FileNameExt;
-            lblTitle.Text = $"{APPSTRINGS.EFIROM} {Program.MDL2_RIGHT_ARROW} {_efirom.FirmwareInfo.FileNameExt}";
+            lblTitle.Text = $"{APPSTRINGS.EFIROM} {ApplicationChars.SEGUI_RIGHTWARDSARROW} {_efirom.FirmwareInfo.FileNameExt}";
         }
         #endregion
 
@@ -1611,13 +1611,13 @@ namespace Mac_EFI_Toolkit.Forms
             foreach (Label label in labels)
             {
                 label.Text = string.Empty;
-                label.ForeColor = Colours.NormalText;
+                label.ForeColor = ApplicationColours.NormalText;
             }
 
             // Reset parse time.
             lblParseTime.Text = "0.00s";
-            lblLzma.ForeColor = Colours.GlyphDefault;
-            lblFmmEmail.ForeColor = Colours.GlyphDefault;
+            lblLzma.ForeColor = ApplicationColours.GlyphDefault;
+            lblFmmEmail.ForeColor = ApplicationColours.GlyphDefault;
 
             // Reset window text.
             Text = APPSTRINGS.EFIROM;

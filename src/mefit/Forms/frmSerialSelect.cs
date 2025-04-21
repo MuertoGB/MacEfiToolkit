@@ -5,10 +5,10 @@
 // frmSerialSelect.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFIROM;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
-using Mac_EFI_Toolkit.UI;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -116,12 +116,12 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 if (Serial.IsValid(control.Text))
                 {
-                    UpdateTextBoxColour(control, Colours.Okay);
+                    UpdateTextBoxColour(control, ApplicationColours.Okay);
                     cmdOkay.Enabled = true;
                 }
                 else
                 {
-                    UpdateTextBoxColour(control, Colours.Error);
+                    UpdateTextBoxColour(control, ApplicationColours.Error);
                     lblValidity.Text += $" - {APPSTRINGS.INVALID}";
                     cmdOkay.Enabled = false;
                 }

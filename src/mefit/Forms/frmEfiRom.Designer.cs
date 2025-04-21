@@ -1055,7 +1055,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.lblParseTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.lblParseTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblParseTime.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblParseTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(220)))), ((int)(((byte)(210)))));
+            this.lblParseTime.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
             this.lblParseTime.Location = new System.Drawing.Point(10, 7);
             this.lblParseTime.Margin = new System.Windows.Forms.Padding(0, 0, 4, 0);
             this.lblParseTime.Name = "lblParseTime";
@@ -1076,7 +1076,7 @@ namespace Mac_EFI_Toolkit.Forms
             // lblLzma
             // 
             this.lblLzma.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblLzma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.lblLzma.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
             this.lblLzma.Location = new System.Drawing.Point(78, 0);
             this.lblLzma.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lblLzma.Name = "lblLzma";
@@ -1088,7 +1088,7 @@ namespace Mac_EFI_Toolkit.Forms
             // lblFmmEmail
             // 
             this.lblFmmEmail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFmmEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.lblFmmEmail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
             this.lblFmmEmail.Location = new System.Drawing.Point(104, 0);
             this.lblFmmEmail.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lblFmmEmail.Name = "lblFmmEmail";
@@ -1868,7 +1868,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.openWorkingDirectoryToolStripMenuItem});
             this.cmsFolders.Name = "cmsFolders";
             this.cmsFolders.ShowImageMargin = false;
-            this.cmsFolders.Size = new System.Drawing.Size(240, 234);
+            this.cmsFolders.Size = new System.Drawing.Size(240, 206);
             // 
             // openBackupsFolderToolStripMenuItem
             // 

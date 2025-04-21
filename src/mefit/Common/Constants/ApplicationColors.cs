@@ -7,9 +7,9 @@
 
 using System.Drawing;
 
-namespace Mac_EFI_Toolkit.UI
+namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal static class Colours
+    internal static class ApplicationColours
     {
         #region Status Colors
         internal static readonly Color Information = Color.FromArgb(128, 200, 255);
@@ -32,8 +32,8 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Glyphs
-        internal static readonly Color GlyphDefault = Color.FromArgb(100, 100, 100);
-        internal static readonly Color GlyphActive = Color.FromArgb(144, 238, 144);
+        internal static readonly Color GlyphDefault = Color.FromArgb(210, 210, 210);
+        internal static readonly Color GlyphActive = Okay;
         #endregion
     }
 }

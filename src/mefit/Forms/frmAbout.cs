@@ -68,8 +68,8 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FontSegMdl2Regular10;
-            cmdClose.Text = Program.MDL2_EXIT_CROSS;
+            cmdClose.Font = Program.SegoeFluentRegular10;
+            cmdClose.Text = ApplicationChars.FLUENT_MULTIPLY;
         }
         #endregion
     }

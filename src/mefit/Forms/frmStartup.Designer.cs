@@ -334,7 +334,7 @@
             // 
             this.lblGlyph.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lblGlyph.AutoSize = true;
-            this.lblGlyph.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblGlyph.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(210)))), ((int)(((byte)(210)))));
             this.lblGlyph.Location = new System.Drawing.Point(208, 45);
             this.lblGlyph.Name = "lblGlyph";
             this.lblGlyph.Padding = new System.Windows.Forms.Padding(0, 0, 0, 7);
@@ -382,7 +382,7 @@
             this.settingsToolStripMenuItem});
             this.cmsHelp.Name = "cmsMore";
             this.cmsHelp.ShowImageMargin = false;
-            this.cmsHelp.Size = new System.Drawing.Size(252, 352);
+            this.cmsHelp.Size = new System.Drawing.Size(252, 324);
             // 
             // changelogToolStripMenuItem
             // 

@@ -86,8 +86,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (OpenFolderDialog(settingsKey, ref pathField))
             {
-                labelToUpdate.Text = $"{Program.MDL2_RIGHT_ARROW} {pathField}";
-                labelToUpdate.ForeColor = Colours.Okay;
+                labelToUpdate.Text = $"{ApplicationChars.SEGUI_RIGHTWARDSARROW} {pathField}";
+                labelToUpdate.ForeColor = ApplicationColours.Okay;
             }
         }
 
@@ -240,13 +240,13 @@ namespace Mac_EFI_Toolkit.Forms
         {
             string strDirectory = Settings.ReadString(setting);
             control.Text = strDirectory;
-            control.ForeColor = Directory.Exists(strDirectory) ? Colours.SettingsDefault : Colours.Warning;
+            control.ForeColor = Directory.Exists(strDirectory) ? ApplicationColours.SettingsDefault : ApplicationColours.Warning;
         }
 
         private void SetButtonProperties()
         {
-            cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.MDL2_EXIT_CROSS;
+            cmdClose.Font = Program.SegoeFluentRegular12;
+            cmdClose.Text = ApplicationChars.FLUENT_MULTIPLY;
         }
         #endregion
     }

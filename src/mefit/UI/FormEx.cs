@@ -6,6 +6,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit;
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.Collections.Generic;
@@ -119,7 +120,7 @@ public class FormEx : Form
                 }
                 else
                 {
-                    form.BackColor = Colours.InactiveWindow; // Inactive forms get the inactive color
+                    form.BackColor = ApplicationColours.InactiveWindow; // Inactive forms get the inactive color
                 }
             }
         }
@@ -133,7 +134,7 @@ public class FormEx : Form
             return;
         }
 
-        BackColor = Colours.AppBorderDefault;
+        BackColor = ApplicationColours.AppBorderDefault;
     }
     #endregion
 }
