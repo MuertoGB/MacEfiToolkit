@@ -99,7 +99,7 @@ namespace Mac_EFI_Toolkit.Forms
                     if (_childWindowCount != 0)
                     {
                         e.Cancel = true;
-                        Program.HandleApplicationExit(this, ExitAction.Exit);
+                        Program.HandleApplicationExit(this, ExitType.Exit);
                     }
                     else
                     {
@@ -198,7 +198,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (_childWindowCount != 0)
             {
-                Program.HandleApplicationExit(this, ExitAction.Exit);
+                Program.HandleApplicationExit(this, ExitType.Exit);
                 return;
             }
 
@@ -274,7 +274,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (_childWindowCount != 0)
             {
-                Program.HandleApplicationExit(this, ExitAction.Restart);
+                Program.HandleApplicationExit(this, ExitType.Restart);
                 return;
             }
 

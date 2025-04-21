@@ -21,7 +21,7 @@ using System.Windows.Forms;
 namespace Mac_EFI_Toolkit
 {
     #region Enums
-    internal enum ExitAction
+    internal enum ExitType
     {
         Restart,
         Exit
@@ -172,7 +172,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Exit Action
-        internal static void HandleApplicationExit(Form owner, ExitAction action)
+        internal static void HandleApplicationExit(Form owner, ExitType action)
         {
             // Check if confirmation dialogs are disabled
             if (Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
@@ -182,10 +182,10 @@ namespace Mac_EFI_Toolkit
             }
 
             string title = action ==
-                ExitAction.Restart ? "Restart" : "Quit";
+                ExitType.Restart ? "Restart" : "Quit";
 
             string message = action ==
-                ExitAction.Restart
+                ExitType.Restart
                     ? $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_RESTART}"
                     : $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_EXIT}";
 
@@ -195,14 +195,14 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        private static void ExecuteExitAction(ExitAction action)
+        private static void ExecuteExitAction(ExitType action)
         {
             switch (action)
             {
-                case ExitAction.Restart:
+                case ExitType.Restart:
                     Restart();
                     break;
-                case ExitAction.Exit:
+                case ExitType.Exit:
                     Program.Exit();
                     break;
             }

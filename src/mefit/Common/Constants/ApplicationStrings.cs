@@ -1,10 +1,10 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// English.cs
+// ApplicationStrings.cs
 // Released under the GNU GLP v3.0
 
-namespace Mac_EFI_Toolkit
+namespace Mac_EFI_Toolkit.Common.Constants
 {
     internal class APPSTRINGS
     {

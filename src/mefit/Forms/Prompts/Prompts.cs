@@ -4,6 +4,7 @@
 // Prompts.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.UI;
 using System.Windows.Forms;
 

@@ -31,9 +31,9 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"Mac EFI Toolkit Unhandled Exception: {DateTime.Now}\r\n");
                 builder.AppendLine("<== Application ==>\r\n");
                 builder.AppendLine($"Name:     {Application.ProductName}");
-                builder.AppendLine($"Version:  {Application.ProductVersion}.{ApplicationVersions.CURRENT_BUILD}");
+                builder.AppendLine($"Version:  {Application.ProductVersion}.{ApplicationVersions.BUILD}");
                 builder.AppendLine($"LZMA SDK: {ApplicationVersions.LZMA_SDK_VERSION}");
-                builder.AppendLine($"Channel:  {ApplicationVersions.CURRENT_CHANNEL}");
+                builder.AppendLine($"Channel:  {ApplicationVersions.CHANNEL}");
                 builder.AppendLine($"Mode:     {SystemTools.GetSystemArchitectureMode()}");
                 builder.AppendLine($"Debug:    {Program.IsDebugMode()}");
                 builder.AppendLine($"Elevated: {SystemTools.IsUserAdmin()}");
