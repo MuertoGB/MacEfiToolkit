@@ -2,8 +2,14 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // Program.cs
-// Released under the GNU GLP v3.0
-// MET uses embedded font resource "Segoe MDL2 Assets" which is copyright Microsoft Corp.
+// Released under the GNU GPL v3.0
+
+// This application embeds the font resource "Segoe Fluent Icons" (Resources/SegoeIcons.ttf),
+// which is copyrighted by Microsoft Corporation.
+
+// This application is an independent project and is not affiliated with Apple Inc.
+// Any references to Apple, iOS, macOS, or other Apple trademarks are used for
+// identification purposes only and do not imply any endorsement or sponsorship by Apple Inc.
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;

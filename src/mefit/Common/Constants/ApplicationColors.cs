@@ -2,7 +2,7 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // UI Components
-// Colours.cs
+// ApplicationColors.cs
 // Released under the GNU GLP v3.0
 
 using System.Drawing;

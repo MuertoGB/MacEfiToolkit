@@ -157,6 +157,10 @@ This software uses the following third-party libraries and resources:
 - [MacModelShelf](https://github.com/MagerValp/MacModelShelf) database by MagerValp.
 - Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
 
+This application embeds the font resource "Segoe Fluent Icons" (Resources/SegoeIcons.ttf), which is copyrighted by Microsoft Corporation.
+
+This application is an independent project and is not affiliated with Apple Inc. Any references to Apple, iOS, macOS, or other Apple trademarks are used for identification purposes only and do not imply any endorsement or sponsorship by Apple Inc.
+
 ## Donate
 
 All donations go back into improving my software and workspace:
