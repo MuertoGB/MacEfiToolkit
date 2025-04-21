@@ -72,6 +72,7 @@ namespace Mac_EFI_Toolkit
             // Load custom fonts into memory.
             if (!FontResolver.LoadCustomFont(Properties.Resources.SegoeIcons, out Font[] fonts))
             {
+                Logger.WriteCallerLine(LOGSTRINGS.MAIN_FLUENT_NOTLOADED);
                 return;
             }
 
