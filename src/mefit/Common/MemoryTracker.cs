@@ -39,14 +39,11 @@ namespace Mac_EFI_Toolkit.Common
         private void UpdateMemoryUsage(object state)
         {
             if (_isWine)
-            {
                 return;
-            }
 
             try
             {
-                string categoryName = "Process";
-                PerformanceCounterCategory category = new PerformanceCounterCategory(categoryName);
+                PerformanceCounterCategory category = new PerformanceCounterCategory("Process");
                 string processName = Process.GetCurrentProcess().ProcessName;
                 int processId = Process.GetCurrentProcess().Id;
                 string instanceName = null;
@@ -55,7 +52,7 @@ namespace Mac_EFI_Toolkit.Common
                 {
                     if (name.StartsWith(processName, StringComparison.OrdinalIgnoreCase))
                     {
-                        PerformanceCounter counter = new PerformanceCounter(categoryName, "ID Process", name, true);
+                        PerformanceCounter counter = new PerformanceCounter("Process", "ID Process", name, true);
 
                         if ((int)counter.RawValue == processId)
                         {
@@ -66,11 +63,9 @@ namespace Mac_EFI_Toolkit.Common
                 }
 
                 if (instanceName == null)
-                {
                     return;
-                }
 
-                PerformanceCounter workingSetCounter = new PerformanceCounter(categoryName, "Working Set - Private", instanceName, true);
+                PerformanceCounter workingSetCounter = new PerformanceCounter("Process", "Working Set - Private", instanceName, true);
 
                 float bytes = workingSetCounter.NextValue();
                 ulong memoryUsage = (ulong)bytes;
