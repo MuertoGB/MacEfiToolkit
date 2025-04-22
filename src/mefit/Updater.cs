@@ -17,7 +17,7 @@ using System.Xml;
 
 namespace Mac_EFI_Toolkit
 {
-    internal class Updater
+    public class Updater
     {
         public enum VersionResult
         {
@@ -26,14 +26,16 @@ namespace Mac_EFI_Toolkit
             Error
         }
 
-        internal static string NewVersion { get; set; }
-        internal static string ExpectedSHA256 { get; set; }
+        public static string NewVersion { get; set; }
+        public static string ExpectedSHA256 { get; set; }
+        public static string Priority { get; set; }
 
-        internal static async Task<VersionResult> CheckForNewVersion()
+        public static async Task<VersionResult> CheckForNewVersion()
         {
             string manifestUrl = ApplicationUrls.VersionManifest;
             const string versionNodeXPath = "data/MET/VersionString";
             const string sha256NodeXPath = "data/MET/SHA256";
+            const string priorityNodeXPath = "data/MET/Priority";
 
             try
             {
@@ -49,6 +51,7 @@ namespace Mac_EFI_Toolkit
 
                         XmlNode xmlVersionNode = document.SelectSingleNode(versionNodeXPath);
                         XmlNode xmlSha256Node = document.SelectSingleNode(sha256NodeXPath);
+                        XmlNode xmlPriorityNode = document.SelectSingleNode(priorityNodeXPath);
 
                         if (xmlVersionNode == null || xmlSha256Node == null)
                         {
@@ -57,6 +60,7 @@ namespace Mac_EFI_Toolkit
 
                         NewVersion = xmlVersionNode.InnerText;
                         ExpectedSHA256 = xmlSha256Node.InnerText;
+                        Priority = xmlPriorityNode.InnerText;
 
                         Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(NewVersion)} '{xmlVersionNode.InnerText}'");
                         Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(ExpectedSHA256)} '{xmlSha256Node.InnerText}'");
@@ -79,7 +83,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static async Task DownloadAsync(Label label)
+        public static async Task DownloadAsync(Label label)
         {
             UpdateStatus(label, UPDATSTRINGS.WAIT);
             Logger.WriteCallerLine(UPDATSTRINGS.UPD_STARTED);

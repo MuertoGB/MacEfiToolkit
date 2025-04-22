@@ -35,6 +35,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             lblNew.Text = Updater.NewVersion;
             lblCurrent.Text = Application.ProductVersion;
+            lblPriority.Text = Updater.Priority;
         }
         #endregion
 
