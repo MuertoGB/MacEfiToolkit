@@ -26,16 +26,14 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    #region Enums
-    internal enum ExitType
-    {
-        Restart,
-        Exit
-    }
-    #endregion
-
     static class Program
     {
+        internal enum ExitType
+        {
+            Restart,
+            Exit
+        }
+
         #region Internal Members
         internal static string DraggedFile = string.Empty;
         internal static frmStartup MainWindow;
@@ -177,7 +175,7 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Exit Action
+        #region Exit
         internal static void HandleApplicationExit(Form owner, ExitType action)
         {
             // Check if confirmation dialogs are disabled
