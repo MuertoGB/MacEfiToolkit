@@ -25,8 +25,10 @@
   - Modified size conversion to consistently round memory values to one decimal place.
   - Updated the refresh rate of memory usage to better reflect Task Manager's default behaviour.
 - Updated CREATED and MODIFIED timestamps to use a consistent, simplified format for improved readability.
-- Updated the layout of the output text file when exporting SOCROM firmware information, specifically for cases where the SCfg store is not present.
-- Included SHA-256 checksum in firmware information export data.
+- **Firmware Information Export Data:**
+  - Added SHA-256 checksum.
+  - Added Shannon entropy.
+  - Updated layout of the output text file when exporting SOCROM firmware information, specifically for cases where the SCfg store is not present.
 - Updated the internal database.
 - Added fallback for missing HWC during Fsys parsing: now derived from the last 3–4 characters of the serial when unavailable in firmware. Helps address instances of missing config data.
 

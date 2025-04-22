@@ -671,6 +671,7 @@ namespace Mac_EFI_Toolkit.Forms
                 builder.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(_efirom.FirmwareInfo.Length)} bytes");
                 builder.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)_efirom.FirmwareInfo.Length)}");
                 builder.AppendLine($"Size (Hex):      {_efirom.FirmwareInfo.Length:X}h");
+                builder.AppendLine($"Entropy:         {_efirom.FirmwareInfo.Entropy}");
                 builder.AppendLine($"SHA256:          {_efirom.FirmwareInfo.SHA256}");
                 builder.AppendLine($"CRC32:           {_efirom.FirmwareInfo.CRC32:X8}");
                 builder.AppendLine($"Created:         {_efirom.FirmwareInfo.CreationTime}");
@@ -718,7 +719,7 @@ namespace Mac_EFI_Toolkit.Forms
                 }
                 else
                 {
-                    builder.AppendLine("Fsys Store was not found.\r\n");
+                    builder.AppendLine("Not found\r\n");
                 }
 
                 builder.AppendLine("Firmware");

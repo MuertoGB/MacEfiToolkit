@@ -17,6 +17,8 @@ namespace Mac_EFI_Toolkit.Common
         private static readonly Lazy<MemoryTracker> _instance = new Lazy<MemoryTracker>(() => new MemoryTracker());
         private readonly Timer _usageTimer;
         private readonly bool _isWine;
+        private string _instanceName;
+        private PerformanceCounter _workingSetCounter;
         #endregion
 
         #region Internal Members
@@ -36,6 +38,30 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
+        private void InitializeCounters()
+        {
+            if (_isWine || _instanceName != null)
+                return;
+
+            var category = new PerformanceCounterCategory("Process");
+            var processName = Process.GetCurrentProcess().ProcessName;
+            var processId = Process.GetCurrentProcess().Id;
+
+            foreach (string name in category.GetInstanceNames())
+            {
+                if (name.StartsWith(processName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var idCounter = new PerformanceCounter("Process", "ID Process", name, true);
+                    if ((int)idCounter.RawValue == processId)
+                    {
+                        _instanceName = name;
+                        _workingSetCounter = new PerformanceCounter("Process", "Working Set - Private", _instanceName, true);
+                        break;
+                    }
+                }
+            }
+        }
+
         private void UpdateMemoryUsage(object state)
         {
             if (_isWine)
@@ -43,31 +69,12 @@ namespace Mac_EFI_Toolkit.Common
 
             try
             {
-                PerformanceCounterCategory category = new PerformanceCounterCategory("Process");
-                string processName = Process.GetCurrentProcess().ProcessName;
-                int processId = Process.GetCurrentProcess().Id;
-                string instanceName = null;
+                InitializeCounters();
 
-                foreach (string name in category.GetInstanceNames())
-                {
-                    if (name.StartsWith(processName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        PerformanceCounter counter = new PerformanceCounter("Process", "ID Process", name, true);
-
-                        if ((int)counter.RawValue == processId)
-                        {
-                            instanceName = name;
-                            break;
-                        }
-                    }
-                }
-
-                if (instanceName == null)
+                if (_workingSetCounter == null)
                     return;
 
-                PerformanceCounter workingSetCounter = new PerformanceCounter("Process", "Working Set - Private", instanceName, true);
-
-                float bytes = workingSetCounter.NextValue();
+                float bytes = _workingSetCounter.NextValue();
                 ulong memoryUsage = (ulong)bytes;
 
                 OnMemoryUsageUpdated?.Invoke(this, memoryUsage);

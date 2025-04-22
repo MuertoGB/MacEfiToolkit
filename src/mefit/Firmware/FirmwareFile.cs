@@ -23,6 +23,7 @@ namespace Mac_EFI_Toolkit.Firmware
             internal long Length { get; set; }
             internal string SHA256 { get; set; }
             internal uint CRC32 { get; set; }
+            internal double Entropy { get; set; }
         }
 
         internal const int MIN_IMAGE_SIZE = 2097152;  // 200000h (2 MB image)
@@ -50,7 +51,8 @@ namespace Mac_EFI_Toolkit.Firmware
                 LastWriteTime = fileInfo.LastWriteTime.ToString(dateFormat),
                 Length = fileInfo.Length,
                 CRC32 = Cryptography.GetCrc32Digest(fileBuffer),
-                SHA256 = Cryptography.GetSha256Digest(fileBuffer)
+                SHA256 = Cryptography.GetSha256Digest(fileBuffer),
+                Entropy = CalculateShannonEntropy(fileBuffer)
             };
         }
 
@@ -153,6 +155,35 @@ namespace Mac_EFI_Toolkit.Firmware
             }
 
             return true;
+        }
+
+        internal static double CalculateShannonEntropy(byte[] data)
+        {
+            if (data == null || data.Length == 0)
+            {
+                return 0.0;
+            }
+                
+            int[] frequencies = new int[256];
+
+            foreach (byte b in data)
+            {
+                frequencies[b]++;
+            }
+
+            double entropy = 0.0;
+            int dataLength = data.Length;
+
+            for (int i = 0; i < 256; i++)
+            {
+                if (frequencies[i] > 0)
+                {
+                    double probability = (double)frequencies[i] / dataLength;
+                    entropy -= probability * Math.Log(probability, 2);
+                }
+            }
+
+            return entropy;
         }
     }
 }
