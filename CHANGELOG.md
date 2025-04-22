@@ -24,13 +24,14 @@
   - Vastly improved memory usage tracking to closely match Task Manager values. 
   - Modified size conversion to consistently round memory values to one decimal place.
   - Updated the refresh rate of memory usage to better reflect Task Manager's default behaviour.
-- Updated CREATED and MODIFIED timestamps to use a consistent, simplified format for improved readability.
 - **Firmware Information Export Data:**
   - Added SHA-256 checksum.
   - Added Shannon entropy.
   - Updated layout of the output text file when exporting SOCROM firmware information, specifically for cases where the SCfg store is not present.
+- Updated CREATED and MODIFIED timestamps to use a consistent, simplified format for improved readability.
 - Updated the internal database.
 - Added fallback for missing HWC during Fsys parsing: now derived from the last 3–4 characters of the serial when unavailable in firmware. Helps address instances of missing config data.
+- Defensive: Ensured the old SCfg store is explicitly erased using a 0xFF pattern across the original store base and length, preventing residual data from previous stores.
 
 ### Bugs
 - **Reworked firmware parser architecture:** Replaced the hotfix from version 2.1.1 with a permanent solution. Firmware parsing logic is now fully decoupled from form UI logic. Each window now operates on its own parser instance, preventing shared state issues when multiple windows are opened or closed. Support for using multiple firmware windows simultaneously has been restored.

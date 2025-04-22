@@ -1283,6 +1283,15 @@ namespace Mac_EFI_Toolkit.Forms
 
                 Logger.WriteLine(LOGSTRINGS.WRITE_NEW_DATA, Logger.LogType.Application);
 
+                // 0xFF the original store from base + store length, so we don't leave behind parts of an old store.
+                if (scfgExists)
+                {
+                    Logger.WriteCallerLine(LOGSTRINGS.ERASE_OLD_STORE);
+                    byte[] tempBuffer = new byte[_socrom.SCfgStoreData.StoreLength];
+                    BinaryTools.EraseByteArray(tempBuffer);
+                    BinaryTools.OverwriteBytesAtBase(binaryBuffer, scfgBase, tempBuffer);
+                }
+
                 // Overwrite Scfg store in the binary buffer.
                 BinaryTools.OverwriteBytesAtBase(binaryBuffer, scfgBase, scfgBuffer);
 

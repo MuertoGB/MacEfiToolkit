@@ -320,6 +320,9 @@ namespace Mac_EFI_Toolkit.Common.Constants
         internal const string SCFG_POS_INITIALIZED =
             "Cannot write to 0x28A000h (Length B8h) because initialized data is present";
 
+        internal const string ERASE_OLD_STORE =
+            "Wiping existing SCfg store area with 0xFF pattern";
+
         internal const string MAIN_FLUENT_NOTLOADED =
             "Could not load embedded font resource: Resources.SegoeIcons.ttf";
         #endregion
