@@ -59,7 +59,7 @@ namespace Mac_EFI_Toolkit
 
                         NewVersion = xmlVersionNode.InnerText;
                         ExpectedSHA256 = xmlSha256Node.InnerText;
-                        // Priority = xmlPriorityNode.InnerText;
+                        Priority = xmlPriorityNode.InnerText;
 
                         Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(NewVersion)} '{xmlVersionNode.InnerText}'");
                         Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(ExpectedSHA256)} '{xmlSha256Node.InnerText}'");
