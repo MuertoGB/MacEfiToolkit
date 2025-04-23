@@ -17,8 +17,7 @@ Mac EFI Toolkit
 6. [Support](#support)
 7. [Changelog](#changelog)
 8. [Features](#features)
-9. [Acknowledgements](#acknowledgements)
-10. [Donate](#donate)
+9. [Donate](#donate)
 
 ## Introduction
 
@@ -147,19 +146,6 @@ For more direct support, you can contact me via [email](mailto:muertogb@proton.m
   - Edit the serial number
   - Export and replace the SCfg store
   - Export firmware information to a text file
-
-## Acknowledgements
-
-This software uses the following third-party libraries and resources:
-
-- LZMA [v24.08 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.
-- [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and Vaughan Pratt.
-- [MacModelShelf](https://github.com/MagerValp/MacModelShelf) database by MagerValp.
-- Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
-
-This application embeds the font resource "Fluent System Icons" - an open-source font developed by Microsoft, which is released under the [MIT license](https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE).
-
-This application is an independent project and is not affiliated with Apple Inc. Any references to Apple, iOS, macOS, or other Apple trademarks are used for identification purposes only and do not imply any endorsement or sponsorship by Apple Inc.
 
 ## Donate
 
