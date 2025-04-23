@@ -4,8 +4,9 @@ This file provides legal notices, attributions, and disclaimers for third-party 
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for full terms.\
-https://github.com/MuertoGB/MacEfiToolkit/blob/main/LICENSE
+This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for full terms.
+
+    https://github.com/MuertoGB/MacEfiToolkit/blob/main/LICENSE
 
 ## Third-Party Components
 
