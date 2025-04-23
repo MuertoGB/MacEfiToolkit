@@ -4,13 +4,6 @@
 // Program.cs
 // Released under the GNU GPL v3.0
 
-// This application embeds the font resource "Segoe Fluent Icons" (Resources/SegoeIcons.ttf),
-// which is copyrighted by Microsoft Corporation.
-
-// This application is an independent project and is not affiliated with Apple Inc.
-// Any references to Apple, iOS, macOS, or other Apple trademarks are used for
-// identification purposes only and do not imply any endorsement or sponsorship by Apple Inc.
-
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Forms;
@@ -37,9 +30,9 @@ namespace Mac_EFI_Toolkit
         #region Internal Members
         internal static string DraggedFile = string.Empty;
         internal static frmStartup MainWindow;
-        internal static Font SegoeFluentRegular10;
-        internal static Font SegoeFluentRegular12;
-        internal static Font SegoeFluentRegular20;
+        internal static Font FluentRegular10;
+        internal static Font FluentRegular12;
+        internal static Font FluentRegular20;
         #endregion
 
         #region Main Entry Point
@@ -74,16 +67,16 @@ namespace Mac_EFI_Toolkit
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Load custom fonts into memory.
-            if (!FontResolver.LoadCustomFont(Properties.Resources.SegoeIcons, out Font[] fonts))
+            if (!FontResolver.LoadCustomFont(Properties.Resources.FluentSystemIcons, out Font[] fonts))
             {
                 Logger.WriteCallerLine(LOGSTRINGS.MAIN_FLUENT_NOTLOADED);
                 return;
             }
 
             // Assign loaded fonts to corresponding variables.
-            SegoeFluentRegular10 = fonts[0];
-            SegoeFluentRegular12 = fonts[1];
-            SegoeFluentRegular20 = fonts[2];
+            FluentRegular10 = fonts[0];
+            FluentRegular12 = fonts[1];
+            FluentRegular20 = fonts[2];
 
             // Initialize application settings.
             Settings.Initialize();
@@ -108,9 +101,9 @@ namespace Mac_EFI_Toolkit
         private static void HandleOnExitingCleanup()
         {
             // Dispose of memory fonts.
-            SegoeFluentRegular10?.Dispose();
-            SegoeFluentRegular12?.Dispose();
-            SegoeFluentRegular20?.Dispose();
+            FluentRegular10?.Dispose();
+            FluentRegular12?.Dispose();
+            FluentRegular20?.Dispose();
         }
         #endregion
 

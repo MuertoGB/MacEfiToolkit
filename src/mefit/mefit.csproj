@@ -280,9 +280,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\SegoeIcons.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\FluentSystemIcons.ttf" />
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>

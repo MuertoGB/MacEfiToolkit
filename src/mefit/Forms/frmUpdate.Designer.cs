@@ -36,7 +36,6 @@
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.pnlSeperatorBottom = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.lblStatus = new System.Windows.Forms.Label();
             this.lblText = new System.Windows.Forms.Label();
             this.tlpVersions = new System.Windows.Forms.TableLayoutPanel();
             this.lblNewVersionText = new System.Windows.Forms.Label();
@@ -74,7 +73,7 @@
             this.tlpButtons.Controls.Add(this.cmdDownload, 2, 0);
             this.tlpButtons.Controls.Add(this.cmdCancel, 0, 0);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tlpButtons.Location = new System.Drawing.Point(1, 264);
+            this.tlpButtons.Location = new System.Drawing.Point(1, 247);
             this.tlpButtons.Margin = new System.Windows.Forms.Padding(0);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 1;
@@ -135,40 +134,27 @@
             // 
             this.pnlSeperatorBottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(110)))), ((int)(((byte)(110)))));
             this.pnlSeperatorBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlSeperatorBottom.Location = new System.Drawing.Point(1, 263);
+            this.pnlSeperatorBottom.Location = new System.Drawing.Point(1, 246);
             this.pnlSeperatorBottom.Name = "pnlSeperatorBottom";
             this.pnlSeperatorBottom.Size = new System.Drawing.Size(308, 1);
             this.pnlSeperatorBottom.TabIndex = 5;
             // 
             // tlpMain
             // 
-            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
+            this.tlpMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(27)))), ((int)(((byte)(27)))));
             this.tlpMain.ColumnCount = 1;
             this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.Controls.Add(this.lblStatus, 0, 2);
-            this.tlpMain.Controls.Add(this.lblText, 0, 1);
             this.tlpMain.Controls.Add(this.tlpVersions, 0, 0);
+            this.tlpMain.Controls.Add(this.lblText, 0, 1);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMain.Location = new System.Drawing.Point(1, 34);
             this.tlpMain.Name = "tlpMain";
-            this.tlpMain.RowCount = 3;
+            this.tlpMain.RowCount = 2;
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 95F));
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpMain.Size = new System.Drawing.Size(308, 229);
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMain.Size = new System.Drawing.Size(308, 212);
             this.tlpMain.TabIndex = 6;
-            // 
-            // lblStatus
-            // 
-            this.lblStatus.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatus.ForeColor = System.Drawing.Color.SpringGreen;
-            this.lblStatus.Location = new System.Drawing.Point(154, 204);
-            this.lblStatus.Margin = new System.Windows.Forms.Padding(0);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(0, 20);
-            this.lblStatus.TabIndex = 2;
             // 
             // lblText
             // 
@@ -176,14 +162,15 @@
             this.lblText.AutoSize = true;
             this.lblText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblText.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lblText.Location = new System.Drawing.Point(9, 107);
+            this.lblText.Location = new System.Drawing.Point(10, 103);
             this.lblText.Margin = new System.Windows.Forms.Padding(0);
             this.lblText.Name = "lblText";
-            this.lblText.Size = new System.Drawing.Size(290, 80);
+            this.lblText.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblText.Size = new System.Drawing.Size(288, 100);
             this.lblText.TabIndex = 0;
-            this.lblText.Text = "The update will be downloaded and launched automatically. Please save any edits, " +
-    "as the program will close during the update process.";
-            this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblText.Text = "The update will be downloaded and launched automatically from the current directo" +
+    "ry. Please save any edits, as the program will close during the update process.";
+            this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tlpVersions
             // 
@@ -260,7 +247,7 @@
             this.lblCurrent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.lblCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCurrent.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.lblCurrent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.lblCurrent.Location = new System.Drawing.Point(154, 32);
             this.lblCurrent.Margin = new System.Windows.Forms.Padding(0);
             this.lblCurrent.Name = "lblCurrent";
@@ -290,7 +277,7 @@
             this.lblPriority.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.lblPriority.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblPriority.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPriority.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.lblPriority.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblPriority.Location = new System.Drawing.Point(154, 64);
             this.lblPriority.Margin = new System.Windows.Forms.Padding(0);
             this.lblPriority.Name = "lblPriority";
@@ -306,7 +293,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(310, 297);
+            this.ClientSize = new System.Drawing.Size(310, 280);
             this.Controls.Add(this.tlpMain);
             this.Controls.Add(this.pnlSeperatorBottom);
             this.Controls.Add(this.pnlSeperatorTop);
@@ -316,6 +303,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
+            this.MaximumSize = new System.Drawing.Size(310, 280);
+            this.MinimumSize = new System.Drawing.Size(310, 280);
             this.Name = "frmUpdate";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -338,7 +327,6 @@
         private System.Windows.Forms.Panel pnlSeperatorBottom;
         private System.Windows.Forms.TableLayoutPanel tlpMain;
         private System.Windows.Forms.Label lblText;
-        private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.TableLayoutPanel tlpVersions;
         private System.Windows.Forms.Label lblNewVersionText;
         private System.Windows.Forms.Label lblCurrentVersionText;

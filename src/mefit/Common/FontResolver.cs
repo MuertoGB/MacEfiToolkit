@@ -90,9 +90,9 @@ namespace Mac_EFI_Toolkit.Common
 
                 fonts = new[]
                 {
-                    new Font(resolvedFont, 10.0F, FontStyle.Regular),
                     new Font(resolvedFont, 12.0F, FontStyle.Regular),
-                    new Font(resolvedFont, 20.0F, FontStyle.Regular)
+                    new Font(resolvedFont, 14.0F, FontStyle.Regular),
+                    new Font(resolvedFont, 24.0F, FontStyle.Regular)
                 };
 
                 return true;

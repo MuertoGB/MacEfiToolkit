@@ -56,7 +56,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             ToggleControlEnable(false);
 
-            await Updater.DownloadAsync(lblStatus);
+            await Updater.DownloadAsync(lblWindowTitle);
 
             ToggleControlEnable(true);
         }

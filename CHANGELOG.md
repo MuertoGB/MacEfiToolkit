@@ -18,7 +18,7 @@
 
 ### Enhancements
 - User interface improvements.
-- Replaced Segoe MDL2 Assets with Segoe Fluent Icons for UI glyphs.
+- Replaced Segoe MDL2 Assets with [Fluent System Icons](https://github.com/microsoft/fluentui-system-icons) for UI glyphs.
 - Minor string adjustments.
 - **Memory Usage Display:**
   - Vastly improved memory usage tracking to closely match Task Manager values. 

@@ -398,14 +398,14 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.SegoeFluentRegular12;
-            cmdClose.Text = ApplicationChars.FLUENT_MULTIPLY;
+            cmdClose.Font = Program.FluentRegular12;
+            cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
         }
 
         private void SetLabelGlyphAndText()
         {
-            lblGlyph.Font = Program.SegoeFluentRegular20;
-            lblGlyph.Text = ApplicationChars.FLUENT_OPENLOCAL;
+            lblGlyph.Font = Program.FluentRegular20;
+            lblGlyph.Text = ApplicationChars.FLUENT_DOCDOWNARROW;
         }
 
         private void ApplyDragEnterColours() => lblGlyph.ForeColor = ApplicationColours.GlyphActive;

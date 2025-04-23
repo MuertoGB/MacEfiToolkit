@@ -820,8 +820,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.SegoeFluentRegular12, Text = ApplicationChars.FLUENT_MULTIPLY },
-                new { Button = cmdOpenInExplorer, Font = Program.SegoeFluentRegular12, Text = ApplicationChars.FLUENT_OPENFOLDERHORIZ },
+                new { Button = cmdClose, Font = Program.FluentRegular12, Text = ApplicationChars.FLUENT_DISMISS },
+                new { Button = cmdOpenInExplorer, Font = Program.FluentRegular12, Text = ApplicationChars.FLUENT_FOLDEROPEN },
             };
 
             foreach (var property in buttons)
