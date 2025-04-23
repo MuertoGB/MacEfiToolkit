@@ -6,6 +6,8 @@ This file provides legal notices, attributions, and disclaimers for third-party 
 
 This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for full terms.
 
+Copyright (c) 2023 David Roberts
+
     https://github.com/MuertoGB/MacEfiToolkit/blob/main/LICENSE
 
 ## Third-Party Components
