@@ -21,7 +21,7 @@ Mac EFI Toolkit
 
 ## Introduction
 
-**Mac EFI Toolkit** (also known as **mefit**) is designed to aid technicians in repair and analysis of Mac EFI and Intel based Mac SOCROM firmwares. Designed to be compact, this application provides information gathering capabilities and limited patching functionality.
+**Mac EFI Toolkit** (also known as **mefit**) is designed to aid technicians in repair and analysis of Mac EFI and SOCROM firmwares. Designed to be compact, this application provides information gathering capabilities and limited patching functionality.
 
 ## System Requirements
 
