@@ -5,6 +5,7 @@
 // METPrompt.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using System;
 using System.Drawing;
 using System.Media;
@@ -14,23 +15,28 @@ namespace Mac_EFI_Toolkit.UI
 {
     public partial class METPrompt : FormEx
     {
-        #region Static Members
-        static SystemSound PromtSound;
-        static string PromptMessage;
-        static METPromptType PromptType;
-        static METPromptButtons PromptButtons;
-        static DialogResult PromptResult;
+        #region Enums
+        public enum PType
+        {
+            Error,
+            Warning,
+            Information,
+            Question
+        }
+
+        public enum PButtons
+        {
+            Okay,
+            YesNo
+        }
         #endregion
 
-        #region Private Members
-        private const string _strInfo =
-            "INFORMATION";
-
-        private const string _strWarning =
-            "WARNING";
-
-        private const string _strError =
-            "ERROR";
+        #region Static Members
+        static SystemSound PromptSound;
+        static string PromptMessage;
+        static PType PromptType;
+        static PButtons PromptButtons;
+        static DialogResult PromptResult;
         #endregion
 
         #region Constants
@@ -38,6 +44,9 @@ namespace Mac_EFI_Toolkit.UI
         private const int MAX_HEIGHT = 800;
         private const int PADDING_WIDTH = 20;
         private const int PADDING_HEIGHT = 60;
+        private const string INFO_STRING = "INFORMATION";
+        private const string WARN_STRING = "WARNING";
+        private const string ERROR_STRING = "ERROR";
         #endregion
 
         #region Constructor
@@ -66,31 +75,31 @@ namespace Mac_EFI_Toolkit.UI
             // Set title and color based on the message type.
             switch (PromptType)
             {
-                case METPromptType.Error:
-                    lblTitle.ForeColor = Colours.ClrError;
-                    lblTitle.Text = _strError;
-                    PromtSound = System.Media.SystemSounds.Hand;
+                case PType.Error:
+                    lblTitle.ForeColor = ApplicationColours.Error;
+                    lblTitle.Text = ERROR_STRING;
+                    PromptSound = System.Media.SystemSounds.Hand;
                     break;
-                case METPromptType.Warning:
-                    lblTitle.ForeColor = Colours.ClrWarn;
-                    lblTitle.Text = _strWarning;
-                    PromtSound = System.Media.SystemSounds.Exclamation;
+                case PType.Warning:
+                    lblTitle.ForeColor = ApplicationColours.Warning;
+                    lblTitle.Text = WARN_STRING;
+                    PromptSound = System.Media.SystemSounds.Exclamation;
                     break;
-                case METPromptType.Information:
-                    lblTitle.ForeColor = Colours.ClrInfo;
-                    lblTitle.Text = _strInfo;
-                    PromtSound = System.Media.SystemSounds.Beep;
+                case PType.Information:
+                    lblTitle.ForeColor = ApplicationColours.Information;
+                    lblTitle.Text = INFO_STRING;
+                    PromptSound = System.Media.SystemSounds.Beep;
                     break;
-                case METPromptType.Question:
-                    lblTitle.ForeColor = Colours.ClrInfo;
-                    lblTitle.Text = _strInfo;
-                    PromtSound = System.Media.SystemSounds.Beep;
+                case PType.Question:
+                    lblTitle.ForeColor = ApplicationColours.Information;
+                    lblTitle.Text = INFO_STRING;
+                    PromptSound = System.Media.SystemSounds.Beep;
                     break;
             }
 
             lblMessage.Text = PromptMessage;
 
-            if (PromptButtons == METPromptButtons.Okay)
+            if (PromptButtons == PButtons.Okay)
             {
                 cmdYes.Hide();
                 cmdNo.Text = "OKAY";
@@ -107,9 +116,9 @@ namespace Mac_EFI_Toolkit.UI
 
         private void METMessageBox_Shown(object sender, EventArgs e)
         {
-            if (!Settings.ReadBool(SettingsBoolType.DisableMessageSounds))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableMessageSounds))
             {
-                PromtSound.Play();
+                PromptSound.Play();
             }
 
             UITools.FlashForecolor(lblTitle);
@@ -125,11 +134,11 @@ namespace Mac_EFI_Toolkit.UI
             tlpMain.AutoSize = true;
             tlpMain.AutoSizeMode = AutoSizeMode.GrowAndShrink;
 
-            Size szPreffered = lblMessage.PreferredSize;
-            int nIdealWidth = Math.Min(szPreffered.Width, MAX_WIDTH);
-            int nIdealHeight = Math.Min(szPreffered.Height, MAX_HEIGHT);
+            Size preferredSize = lblMessage.PreferredSize;
+            int idealWidth = Math.Min(preferredSize.Width, MAX_WIDTH);
+            int idealHeight = Math.Min(preferredSize.Height, MAX_HEIGHT);
 
-            this.ClientSize = new Size(nIdealWidth + PADDING_WIDTH, nIdealHeight + PADDING_HEIGHT);
+            this.ClientSize = new Size(idealWidth + PADDING_WIDTH, idealHeight + PADDING_HEIGHT);
 
             if (this.Owner != null)
             {
@@ -155,23 +164,23 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Overriden Events
-        public static DialogResult Show(Form owner, string message, METPromptType type, METPromptButtons buttons = METPromptButtons.Okay)
+        public static DialogResult Show(Form owner, string message, PType type, PButtons buttons = PButtons.Okay)
         {
             SetMessageBoxParameters(message, type, buttons);
 
-            using (METPrompt metPrompt = new METPrompt())
+            using (METPrompt prompt = new METPrompt())
             {
-                metPrompt.StartPosition = owner == null
+                prompt.StartPosition = owner == null
                     ? FormStartPosition.CenterScreen
                     : FormStartPosition.CenterParent;
 
-                DialogResult dlgResult = metPrompt.ShowDialog(owner);
+                DialogResult dlgResult = prompt.ShowDialog(owner);
 
                 return PromptResult;
             }
         }
 
-        private static void SetMessageBoxParameters(string message, METPromptType type, METPromptButtons buttons)
+        private static void SetMessageBoxParameters(string message, PType type, PButtons buttons)
         {
             PromptMessage = message;
             PromptType = type;
@@ -194,7 +203,7 @@ namespace Mac_EFI_Toolkit.UI
 
         private void cmdNo_Click(object sender, EventArgs e)
         {
-            PromptResult = PromptButtons == METPromptButtons.Okay ? DialogResult.OK : DialogResult.Cancel;
+            PromptResult = PromptButtons == PButtons.Okay ? DialogResult.OK : DialogResult.Cancel;
             Close();
         }
         #endregion

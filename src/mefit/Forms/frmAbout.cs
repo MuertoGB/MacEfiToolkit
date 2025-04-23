@@ -42,8 +42,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             lblBuild.Text =
                 $"Mac EFI Toolkit v{Application.ProductVersion} by Muerto{Environment.NewLine}" +
-                $"Build {ApplicationVersions.CURRENT_BUILD} ({ApplicationVersions.CURRENT_CHANNEL}){Environment.NewLine}" +
-                $"LZMA SDK {ApplicationVersions.LZMA_SDK_VERSION}";
+                $"Build: {ApplicationVersions.BUILD} ({ApplicationVersions.CHANNEL}){Environment.NewLine}" +
+                $"LZMA SDK: v{ApplicationVersions.LZMA_SDK_VERSION}";
         }
         #endregion
 
@@ -68,8 +68,8 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FontSegMdl2Regular10;
-            cmdClose.Text = Program.MDL2_EXIT_CROSS;
+            cmdClose.Font = Program.FluentRegular12;
+            cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
         }
         #endregion
     }

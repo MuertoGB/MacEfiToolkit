@@ -5,9 +5,8 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Tools;
-using Mac_EFI_Toolkit.WIN32;
 using System;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Mac_EFI_Toolkit.Common
@@ -18,6 +17,8 @@ namespace Mac_EFI_Toolkit.Common
         private static readonly Lazy<MemoryTracker> _instance = new Lazy<MemoryTracker>(() => new MemoryTracker());
         private readonly Timer _usageTimer;
         private readonly bool _isWine;
+        private string _instanceName;
+        private PerformanceCounter _workingSetCounter;
         #endregion
 
         #region Internal Members
@@ -33,35 +34,52 @@ namespace Mac_EFI_Toolkit.Common
 
             if (!_isWine)
             {
-                _usageTimer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(4));
+                _usageTimer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+            }
+        }
+
+        private void InitializeCounters()
+        {
+            if (_isWine || _instanceName != null)
+                return;
+
+            var category = new PerformanceCounterCategory("Process");
+            var processName = Process.GetCurrentProcess().ProcessName;
+            var processId = Process.GetCurrentProcess().Id;
+
+            foreach (string name in category.GetInstanceNames())
+            {
+                if (name.StartsWith(processName, StringComparison.OrdinalIgnoreCase))
+                {
+                    var idCounter = new PerformanceCounter("Process", "ID Process", name, true);
+                    if ((int)idCounter.RawValue == processId)
+                    {
+                        _instanceName = name;
+                        _workingSetCounter = new PerformanceCounter("Process", "Working Set - Private", _instanceName, true);
+                        break;
+                    }
+                }
             }
         }
 
         private void UpdateMemoryUsage(object state)
         {
             if (_isWine)
-            {
                 return;
-            }
 
-            IntPtr ptrHandle = NativeMethods.GetCurrentProcess();
-
-            NativeMethods.PROCESS_MEMORY_COUNTERS pmCounters = new NativeMethods.PROCESS_MEMORY_COUNTERS
+            try
             {
-                cb = (uint)Marshal.SizeOf(typeof(NativeMethods.PROCESS_MEMORY_COUNTERS))
-            };
+                InitializeCounters();
 
-            if (NativeMethods.GetProcessMemoryInfo(ptrHandle, out pmCounters, pmCounters.cb))
-            {
-                OnMemoryUsageUpdated?.Invoke(this, pmCounters.PagefileUsage);
+                if (_workingSetCounter == null)
+                    return;
+
+                float bytes = _workingSetCounter.NextValue();
+                ulong memoryUsage = (ulong)bytes;
+
+                OnMemoryUsageUpdated?.Invoke(this, memoryUsage);
             }
-
-            //NativeMethods.PROCESS_MEMORY_COUNTERS pmCounters;
-
-            //if (NativeMethods.GetProcessMemoryInfo(ptrHandle, out pmCounters, (uint)Marshal.SizeOf(typeof(NativeMethods.PROCESS_MEMORY_COUNTERS))))
-            //{
-            //    OnMemoryUsageUpdated?.Invoke(this, pmCounters.PagefileUsage);
-            //}
+            catch { }
         }
         #endregion
     }

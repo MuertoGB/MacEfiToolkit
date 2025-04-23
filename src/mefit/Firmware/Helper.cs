@@ -15,16 +15,17 @@ namespace Mac_EFI_Toolkit.Firmware
         {
             // Initialize a pointer to IntPtr with a default value.
             IntPtr ptr = IntPtr.Zero;
+
             try
             {
                 // Determine the size of the structure 'T' in bytes.
-                int iSize = Marshal.SizeOf(typeof(T));
+                int size = Marshal.SizeOf(typeof(T));
 
                 // Allocate unmanaged memory to hold the binary data.
-                ptr = Marshal.AllocHGlobal(iSize);
+                ptr = Marshal.AllocHGlobal(size);
 
                 // Copy the binary data from the byte array to the allocated memory.
-                Marshal.Copy(binary, 0, ptr, iSize);
+                Marshal.Copy(binary, 0, ptr, size);
 
                 // Convert the memory back to the original structure type and return it.
                 return (T)Marshal.PtrToStructure(ptr, typeof(T));

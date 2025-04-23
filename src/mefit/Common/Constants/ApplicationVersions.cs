@@ -9,8 +9,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
     internal static class ApplicationVersions
     {
         internal const string LZMA_SDK_VERSION = "24.08";
-        // YYmmDD.HHmm
-        internal const string CURRENT_BUILD = "250415.1300";
-        internal const string CURRENT_CHANNEL = "Stable";
+        internal const string BUILD = "20250423_1635"; // yyyyMMdd_HHmm
+        internal const string CHANNEL = "Stable";
     }
 }

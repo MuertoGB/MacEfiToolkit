@@ -33,7 +33,9 @@ namespace Mac_EFI_Toolkit.Forms
         #region Window Events
         private void frmUpdate_Load(object sender, EventArgs e)
         {
-            lblUpdating.Text = $"Updating {Application.ProductVersion} -> {Updater.NewVersion}";
+            lblNew.Text = Updater.NewVersion;
+            lblCurrent.Text = Application.ProductVersion;
+            lblPriority.Text = Updater.Priority;
         }
         #endregion
 
@@ -49,11 +51,23 @@ namespace Mac_EFI_Toolkit.Forms
 
         #region Button Events
         private void cmdCancel_Click(object sender, System.EventArgs e) => DialogResult = DialogResult.Cancel;
+
+        private async void cmdUpdate_Click(object sender, EventArgs e)
+        {
+            ToggleControlEnable(false);
+
+            await Updater.DownloadAsync(lblWindowTitle);
+
+            ToggleControlEnable(true);
+        }
         #endregion
 
-        private async void cmdDownload_Click(object sender, EventArgs e)
+        #region Private
+        private void ToggleControlEnable(bool enable)
         {
-            await Updater.DownloadAsync(lblStatus);
+            cmdCancel.Enabled = enable;
+            cmdDownload.Enabled = enable;
         }
+        #endregion
     }
 }

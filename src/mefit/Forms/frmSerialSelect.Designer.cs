@@ -90,7 +90,7 @@
             this.cmdOkay.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdOkay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOkay.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdOkay.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdOkay.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdOkay.Location = new System.Drawing.Point(154, 0);
             this.cmdOkay.Margin = new System.Windows.Forms.Padding(0);
             this.cmdOkay.Name = "cmdOkay";
@@ -110,7 +110,7 @@
             this.cmdCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdCancel.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdCancel.Location = new System.Drawing.Point(0, 0);
             this.cmdCancel.Margin = new System.Windows.Forms.Padding(0);
             this.cmdCancel.Name = "cmdCancel";
@@ -122,7 +122,7 @@
             // 
             // tlpSsn
             // 
-            this.tlpSsn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tlpSsn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tlpSsn.ColumnCount = 1;
             this.tlpSsn.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpSsn.Controls.Add(this.tbxSerial, 0, 0);
@@ -160,7 +160,7 @@
             this.lblValidity.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lblValidity.AutoSize = true;
             this.lblValidity.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblValidity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblValidity.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblValidity.Location = new System.Drawing.Point(143, 46);
             this.lblValidity.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.lblValidity.Name = "lblValidity";
@@ -173,7 +173,7 @@
             this.lblWindowTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWindowTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblWindowTitle.ForeColor = System.Drawing.Color.White;
             this.lblWindowTitle.Location = new System.Drawing.Point(1, 1);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";

@@ -12,9 +12,9 @@ namespace Mac_EFI_Toolkit.UI.Design
 {
     public class METSwitchDesigner : ControlDesigner
     {
-        protected override void PreFilterProperties(IDictionary properties)
+        protected override void PreFilterProperties(IDictionary dictionary)
         {
-            string[] arrProperties = new string[]
+            string[] properties = new string[]
             {
                 "Appearance",
                 "BackgroundImage",
@@ -38,15 +38,15 @@ namespace Mac_EFI_Toolkit.UI.Design
                 "AutoEllipsis"
             };
 
-            if (properties != null)
+            if (dictionary != null)
             {
-                foreach (string strProperty in arrProperties)
+                foreach (string property in properties)
                 {
-                    properties.Remove(strProperty);
+                    dictionary.Remove(property);
                 }
             }
 
-            base.PreFilterProperties(properties);
+            base.PreFilterProperties(dictionary);
         }
     }
 }

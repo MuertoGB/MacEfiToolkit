@@ -25,6 +25,9 @@ namespace Mac_EFI_Toolkit.Forms
     public partial class frmEfiRom : FormEx
     {
         #region Private Members
+        // EFIROM instance
+        private EFIROM _efirom = new EFIROM();
+
         private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private Thread _tLoadFirmware = null;
         private CancellationTokenSource _cancellationToken;
@@ -129,27 +132,29 @@ namespace Mac_EFI_Toolkit.Forms
 
             MemoryTracker.Instance.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
 
-            FlashDescriptor.ClearRegionData();
-            EFIROM.ResetFirmwareBaseData();
+            _efirom = null;
         }
 
         private void frmEfiRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();
 
-        private void frmEfiRom_DragEnter(object sender, DragEventArgs e) => Program.HandleDragEnter(sender, e);
+        private void frmEfiRom_DragEnter(object sender, DragEventArgs e) => Program.HandleDragEnter(sender, e, null);
 
         private void frmEfiRom_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
-            string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-            string strFileName = arrDraggedFiles[0];
+            string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string file = draggedFiles[0];
 
             // Open the binary file.
-            OpenBinary(strFileName);
+            this.BeginInvoke(new Action(() =>
+            {
+                OpenBinary(file);
+            }));
         }
 
-        private void frmEfiRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrInactiveFormText);
+        private void frmEfiRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
 
-        private void frmEfiRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrActiveFormText);
+        private void frmEfiRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -243,15 +248,15 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdOpen_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog
+            using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
                 Filter = APPSTRINGS.FILTER_EFI_SUPPORTED_FIRMWARE
             })
             {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    OpenBinary(openFileDialog.FileName);
+                    OpenBinary(dialog.FileName);
                 }
             }
         }
@@ -276,9 +281,9 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdMenuPatch_Click(object sender, EventArgs e)
         {
-            bool bOpenEditor = Settings.ReadBool(SettingsBoolType.AcceptedEditingTerms);
+            bool openEditor = Settings.ReadBoolean(Settings.BooleanKey.AcceptedEditingTerms);
 
-            if (!bOpenEditor)
+            if (!openEditor)
             {
                 BlurHelper.ApplyBlur(this);
 
@@ -286,11 +291,11 @@ namespace Mac_EFI_Toolkit.Forms
                 {
                     form.FormClosed += ChildWindowClosed;
                     DialogResult dlgResult = form.ShowDialog();
-                    bOpenEditor = (dlgResult != DialogResult.No);
+                    openEditor = (dlgResult != DialogResult.No);
                 }
             }
 
-            if (bOpenEditor)
+            if (openEditor)
             {
                 UITools.ShowContextMenuAtControlPoint(
                     sender,
@@ -311,8 +316,7 @@ namespace Mac_EFI_Toolkit.Forms
                 cmsHelp,
                 MenuPosition.BottomLeft);
 
-
-        private void cmdOpenInExplorer_Click(object sender, EventArgs e) => UITools.HighlightPathInExplorer(EFIROM.LoadedBinaryPath, this);
+        private void cmdOpenInExplorer_Click(object sender, EventArgs e) => UITools.HighlightPathInExplorer(_efirom.LoadedBinaryPath, this);
         #endregion
 
         #region Switch Events
@@ -322,22 +326,22 @@ namespace Mac_EFI_Toolkit.Forms
         #region Label Events
         private void lblFmmEmail_MouseEnter(object sender, EventArgs e)
         {
-            Label label = (Label)sender;
+            Label control = (Label)sender;
 
-            if (EFIROM.FmmEmail == null)
+            if (_efirom.MobileMeEmail == null)
             {
-                label.Cursor = Cursors.Default;
+                control.Cursor = Cursors.Default;
                 return;
             }
 
-            label.Cursor = Cursors.Hand;
+            control.Cursor = Cursors.Hand;
         }
 
         private void lblFmmEmail_Click(object sender, EventArgs e)
         {
-            if (EFIROM.FmmEmail != null)
+            if (_efirom.MobileMeEmail != null)
             {
-                METPrompt.Show(this, EFIROM.FmmEmail, METPromptType.Information, METPromptButtons.Okay);
+                METPrompt.Show(this, _efirom.MobileMeEmail, METPrompt.PType.Information, METPrompt.PButtons.Okay);
                 return;
             }
         }
@@ -375,23 +379,23 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string strSerial = EFIROM.FsysStoreData.Serial;
+            string serial = _efirom.Fsys.Serial;
 
-            if (string.IsNullOrEmpty(strSerial))
+            if (string.IsNullOrEmpty(serial))
             {
                 return;
             }
 
-            Clipboard.SetText(strSerial);
+            Clipboard.SetText(serial);
 
-            if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
                 METPrompt.Show(
                     this,
                     $"{APPSTRINGS.SERIAL_NUMBER} " +
                     $"{EFISTRINGS.COPIED_TO_CB_LC}",
-                    METPromptType.Information,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Information,
+                    METPrompt.PButtons.Okay);
             }
         }
 
@@ -457,43 +461,43 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Program.EnsureDirectoriesExist();
 
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.FSYS_REGION}",
+                FileName = $"{_efirom.FirmwareInfo.FileName}_{EFISTRINGS.FSYS_REGION}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.FsysDirectory
             })
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
                 // Save the Fsys stores bytes to disk.
-                if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, EFIROM.FsysStoreData.FsysBytes) && File.Exists(saveFileDialog.FileName))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, _efirom.Fsys.Buffer) && File.Exists(dialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
                 }
 
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.FSYS_EXPORT_FAIL,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
             }
         }
 
         private void exportIntelMERegionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (FlashDescriptor.MeBase == 0 || FlashDescriptor.MeLimit == 0)
+            if (_efirom.Descriptor.MeBase == 0 || _efirom.Descriptor.MeLimit == 0)
             {
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.IME_BASE_LIM_NOT_FOUND,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
@@ -501,43 +505,43 @@ namespace Mac_EFI_Toolkit.Forms
             Program.EnsureDirectoriesExist();
 
             // Set SaveFileDialog params.
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.ME_REGION}",
+                FileName = $"{_efirom.FirmwareInfo.FileName}_{EFISTRINGS.ME_REGION}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.IntelMeDirectory
             })
             {
                 // Action was cancelled.
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
-                byte[] bMeBuffer = BinaryTools.GetBytesBaseLength(EFIROM.LoadedBinaryBuffer, (int)FlashDescriptor.MeBase, (int)FlashDescriptor.MeSize);
+                byte[] meBuffer = BinaryTools.GetBytesBaseLength(_efirom.LoadedBinaryBuffer, (int)_efirom.Descriptor.MeBase, (int)_efirom.Descriptor.MeSize);
 
-                if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, bMeBuffer) && File.Exists(saveFileDialog.FileName))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, meBuffer) && File.Exists(dialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
                 }
 
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.IME_EXPORT_FAIL,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
             }
         }
 
         private void exportNVRAMVSSStoresToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ExportNVRAM(EFIROM.VssPrimary, EFIROM.VssSecondary, NvramStoreType.Variable, this);
+            ExportNVRAM(_efirom.VssPrimary, _efirom.VssSecondary, NvramStoreType.Variable, this);
 
         private void exportNVRAMSVSStoresToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ExportNVRAM(EFIROM.SvsPrimary, EFIROM.SvsSecondary, NvramStoreType.Secure, this);
+            ExportNVRAM(_efirom.SvsPrimary, _efirom.SvsSecondary, NvramStoreType.Secure, this);
 
-        internal static void ExportNVRAM(NvramStore nvramprimary, NvramStore nvramsecondary, NvramStoreType nvramstoretype, Form owner)
+        internal void ExportNVRAM(NvramStore nvramprimary, NvramStore nvramsecondary, NvramStoreType nvramstoretype, Form owner)
         {
             Program.EnsureDirectoriesExist();
 
@@ -552,27 +556,27 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private static void SaveFilesInFolder(byte[] primarystore, byte[] secondarystore, string nvramstoretype, Form owner)
+        private void SaveFilesInFolder(byte[] primarystore, byte[] secondarystore, string nvramstoretype, Form owner)
         {
-            using (FolderBrowserDialog fbDialog = new FolderBrowserDialog
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog
             {
                 Description = APPSTRINGS.SELECT_FOLDER,
                 SelectedPath = ApplicationPaths.NvramDirectory
             })
             {
-                if (fbDialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    string folderPath = Path.Combine(fbDialog.SelectedPath, $"{nvramstoretype}_{EFIROM.FileInfoData.FileName}");
+                    string path = Path.Combine(dialog.SelectedPath, $"{nvramstoretype}_{_efirom.FirmwareInfo.FileName}");
 
-                    if (!Directory.Exists(folderPath))
+                    if (!Directory.Exists(path))
                     {
-                        Directory.CreateDirectory(folderPath);
+                        Directory.CreateDirectory(path);
                     }
 
-                    if (primarystore != null) SaveFile(Path.Combine(folderPath, $"{nvramstoretype}_{EFISTRINGS.PRIMARY_REGION}_{EFIROM.FileInfoData.FileName}.bin"), primarystore);
-                    if (secondarystore != null) SaveFile(Path.Combine(folderPath, $"{nvramstoretype}_{EFISTRINGS.BACKUP_REGION}_{EFIROM.FileInfoData.FileName}.bin"), secondarystore);
+                    if (primarystore != null) SaveFile(Path.Combine(path, $"{nvramstoretype}_{EFISTRINGS.PRIMARY_REGION}_{_efirom.FirmwareInfo.FileName}.bin"), primarystore);
+                    if (secondarystore != null) SaveFile(Path.Combine(path, $"{nvramstoretype}_{EFISTRINGS.BACKUP_REGION}_{_efirom.FirmwareInfo.FileName}.bin"), secondarystore);
 
-                    UITools.ShowOpenFolderInExplorerPrompt(owner, folderPath);
+                    UITools.ShowOpenFolderInExplorerPrompt(owner, path);
                 }
             }
         }
@@ -583,30 +587,30 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Program.EnsureDirectoriesExist();
 
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_LZMA,
-                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.DXE_ARCHIVE}",
+                FileName = $"{_efirom.FirmwareInfo.FileName}_{EFISTRINGS.DXE_ARCHIVE}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.LzmaDirectory
             })
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
-                if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, EFIROM.LzmaDecompressedBuffer) && File.Exists(saveFileDialog.FileName))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, _efirom.LzmaDecompressedBuffer) && File.Exists(dialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
                 }
 
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.ARCHIVE_EXPORT_FAIL,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
             }
         }
 
@@ -614,170 +618,172 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Program.EnsureDirectoriesExist();
 
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 InitialDirectory = ApplicationPaths.BackupsDirectory,
                 Filter = APPSTRINGS.FILTER_ZIP,
-                FileName = $"{EFIROM.FileInfoData.FileName}_{APPSTRINGS.EFIROM}_{APPSTRINGS.BACKUP}",
+                FileName = $"{_efirom.FirmwareInfo.FileName}_{APPSTRINGS.EFIROM}_{APPSTRINGS.BACKUP}",
                 OverwritePrompt = true
             })
             {
                 // Action was cancelled
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
-                FileTools.BackupFileToZip(EFIROM.LoadedBinaryBuffer, EFIROM.FileInfoData.FileNameExt, saveFileDialog.FileName);
+                FileTools.BackupFileToZip(_efirom.LoadedBinaryBuffer, _efirom.FirmwareInfo.FileNameExt, dialog.FileName);
 
-                if (File.Exists(saveFileDialog.FileName))
+                if (File.Exists(dialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
                 }
 
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.ARCHIVE_CREATE_FAILED,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
             }
         }
 
         private void exportFirmwareInformationTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{EFIROM.FileInfoData.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
+                FileName = $"{_efirom.FirmwareInfo.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.WorkingDirectory
             })
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
-                StringBuilder sbFirmware = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
 
-                sbFirmware.AppendLine("File");
-                sbFirmware.AppendLine("----------------------------------");
-                sbFirmware.AppendLine($"Filename:        {EFIROM.FileInfoData.FileNameExt}");
-                sbFirmware.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(EFIROM.FileInfoData.Length)} bytes");
-                sbFirmware.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)EFIROM.FileInfoData.Length)}");
-                sbFirmware.AppendLine($"Size (Hex):      {EFIROM.FileInfoData.Length:X}h");
-                sbFirmware.AppendLine($"CRC32:           {EFIROM.FileInfoData.CRC32:X}");
-                sbFirmware.AppendLine($"Created:         {EFIROM.FileInfoData.CreationTime}");
-                sbFirmware.AppendLine($"Modified:        {EFIROM.FileInfoData.LastWriteTime}\r\n");
+                builder.AppendLine("File");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"Filename:        {_efirom.FirmwareInfo.FileNameExt}");
+                builder.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(_efirom.FirmwareInfo.Length)} bytes");
+                builder.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)_efirom.FirmwareInfo.Length)}");
+                builder.AppendLine($"Size (Hex):      {_efirom.FirmwareInfo.Length:X}h");
+                builder.AppendLine($"Entropy:         {_efirom.FirmwareInfo.Entropy}");
+                builder.AppendLine($"SHA256:          {_efirom.FirmwareInfo.SHA256}");
+                builder.AppendLine($"CRC32:           {_efirom.FirmwareInfo.CRC32:X8}");
+                builder.AppendLine($"Created:         {_efirom.FirmwareInfo.CreationTime}");
+                builder.AppendLine($"Modified:        {_efirom.FirmwareInfo.LastWriteTime}\r\n");
 
-                sbFirmware.AppendLine("Descriptor");
-                sbFirmware.AppendLine("----------------------------------");
-                if (FlashDescriptor.IsDescriptorMode)
+                builder.AppendLine("Descriptor");
+                builder.AppendLine("----------------------------------");
+                if (_efirom.Descriptor.IsDescriptorMode)
                 {
-                    sbFirmware.AppendLine(
-                        $"PDR Region:      Base: {FlashDescriptor.PdrBase:X}h, " +
-                        $"Limit: {FlashDescriptor.PdrLimit:X}h, " +
-                        $"Size: {FlashDescriptor.PdrSize:X}h");
-                    sbFirmware.AppendLine(
-                        $"ME Region:       Base: {FlashDescriptor.MeBase:X}h, " +
-                        $"Limit: {FlashDescriptor.MeLimit:X}h, " +
-                        $"Size: {FlashDescriptor.MeSize:X}h");
-                    sbFirmware.AppendLine(
-                        $"BIOS Region:     Base: {FlashDescriptor.BiosBase:X}h, " +
-                        $"Limit: {FlashDescriptor.BiosLimit:X}h, " +
-                        $"Size: {FlashDescriptor.BiosSize:X}h\r\n");
+                    builder.AppendLine(
+                        $"PDR Region:      Base: {_efirom.Descriptor.PdrBase:X}h, " +
+                        $"Limit: {_efirom.Descriptor.PdrLimit:X}h, " +
+                        $"Size: {_efirom.Descriptor.PdrSize:X}h");
+                    builder.AppendLine(
+                        $"ME Region:       Base: {_efirom.Descriptor.MeBase:X}h, " +
+                        $"Limit: {_efirom.Descriptor.MeLimit:X}h, " +
+                        $"Size: {_efirom.Descriptor.MeSize:X}h");
+                    builder.AppendLine(
+                        $"BIOS Region:     Base: {_efirom.Descriptor.BiosBase:X}h, " +
+                        $"Limit: {_efirom.Descriptor.BiosLimit:X}h, " +
+                        $"Size: {_efirom.Descriptor.BiosSize:X}h\r\n");
                 }
                 else
                 {
-                    sbFirmware.AppendLine("Descriptor mode is disabled.\r\n");
+                    builder.AppendLine("Descriptor mode is disabled.\r\n");
                 }
 
-                sbFirmware.AppendLine("Model");
-                sbFirmware.AppendLine("----------------------------------");
-                sbFirmware.AppendLine($"Identifier:      {EFIROM.EfiBiosIdSectionData.ModelPart ?? "N/A"}");
-                sbFirmware.AppendLine($"Model:           {MacTools.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart) ?? "N/A"}");
-                sbFirmware.AppendLine($"Configuration:   {EFIROM.ConfigCode ?? "N/A"}");
-                sbFirmware.AppendLine($"Board ID:        {EFIROM.PdrSectionData.BoardId ?? "N/A"}\r\n");
+                builder.AppendLine("Model");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"Identifier:      {_efirom.EfiBiosIdSectionData.ModelPart ?? "N/A"}");
+                builder.AppendLine($"Model:           {MacTools.ConvertEfiModelCode(_efirom.EfiBiosIdSectionData.ModelPart) ?? "N/A"}");
+                builder.AppendLine($"Configuration:   {_efirom.ConfigCode ?? "N/A"}");
+                builder.AppendLine($"Board ID:        {_efirom.PdrSectionData.BoardId ?? "N/A"}\r\n");
 
-                sbFirmware.AppendLine("Fsys");
-                sbFirmware.AppendLine("----------------------------------");
-                if (EFIROM.FsysStoreData.FsysBytes != null)
+                builder.AppendLine("Fsys");
+                builder.AppendLine("----------------------------------");
+                if (_efirom.Fsys.Buffer != null)
                 {
-                    sbFirmware.AppendLine($"Base:            {EFIROM.FsysStoreData.FsysBase:X}h");
-                    sbFirmware.AppendLine($"Size:            {EFIROM.FsysRegionSize:X}h");
-                    sbFirmware.AppendLine($"CRC32:           {EFIROM.FsysStoreData.CrcString ?? "N/A"}");
-                    sbFirmware.AppendLine($"Serial:          {EFIROM.FsysStoreData.Serial ?? "N/A"}");
-                    sbFirmware.AppendLine($"HWC:             {EFIROM.FsysStoreData.HWC ?? "N/A"}");
-                    sbFirmware.AppendLine($"SON:             {EFIROM.FsysStoreData.SON ?? "N/A"}\r\n");
+                    builder.AppendLine($"Base:            {_efirom.Fsys.BaseAddress:X}h");
+                    builder.AppendLine($"Size:            {_efirom.Fsys.Size:X}h");
+                    builder.AppendLine($"CRC32:           {_efirom.Fsys.CrcString ?? "N/A"}");
+                    builder.AppendLine($"Serial:          {_efirom.Fsys.Serial ?? "N/A"}");
+                    builder.AppendLine($"HWC:             {_efirom.Fsys.HWC ?? "N/A"}");
+                    builder.AppendLine($"SON:             {_efirom.Fsys.SON ?? "N/A"}\r\n");
                 }
                 else
                 {
-                    sbFirmware.AppendLine("Fsys Store was not found.\r\n");
+                    builder.AppendLine("Not found\r\n");
                 }
 
-                sbFirmware.AppendLine("Firmware");
-                sbFirmware.AppendLine("----------------------------------");
-                sbFirmware.AppendLine($"EFI Version:     {EFIROM.FirmwareVersion ?? "N/A"}");
-                sbFirmware.AppendLine($"EFI Lock:        {EFIROM.EfiPrimaryLockData.LockType.ToString() ?? "N/A"}");
-                sbFirmware.AppendLine($"APFS Capable:    {EFIROM.IsApfsCapable.ToString() ?? "N/A"}\r\n");
+                builder.AppendLine("Firmware");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine($"EFI Version:     {_efirom.FirmwareVersion ?? "N/A"}");
+                builder.AppendLine($"EFI Lock:        {_efirom.EfiPrimaryLockStatus.LockType.ToString() ?? "N/A"}");
+                builder.AppendLine($"APFS Capable:    {_efirom.IsApfsCapable.ToString() ?? "N/A"}\r\n");
 
-                File.WriteAllText(saveFileDialog.FileName, sbFirmware.ToString());
+                File.WriteAllText(dialog.FileName, builder.ToString());
 
-                sbFirmware.Clear();
+                builder.Clear();
 
-                if (!File.Exists(saveFileDialog.FileName))
+                if (!File.Exists(dialog.FileName))
                 {
                     METPrompt.Show(
                         this,
                         DIALOGSTRINGS.DATA_EXPORT_FAILED,
-                        METPromptType.Error,
-                        METPromptButtons.Okay);
+                        METPrompt.PType.Error,
+                        METPrompt.PButtons.Okay);
 
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
             }
         }
 
         private void exportFmmmobilemeEmailTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog
+            using (SaveFileDialog dialog = new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{EFIROM.FileInfoData.FileName}_{EFISTRINGS.FMM_EMAIL}",
+                FileName = $"{_efirom.FirmwareInfo.FileName}_{EFISTRINGS.FMM_EMAIL}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.WorkingDirectory
             })
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
 
-                StringBuilder sbEmailData = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
 
-                sbEmailData.AppendLine("Find My Mac Email:");
-                sbEmailData.AppendLine("----------------------------------");
-                sbEmailData.AppendLine(EFIROM.FmmEmail);
+                builder.AppendLine("Find My Mac Email:");
+                builder.AppendLine("----------------------------------");
+                builder.AppendLine(_efirom.MobileMeEmail);
 
-                File.WriteAllText(saveFileDialog.FileName, sbEmailData.ToString());
+                File.WriteAllText(dialog.FileName, builder.ToString());
 
-                sbEmailData.Clear();
+                builder.Clear();
 
-                if (!File.Exists(saveFileDialog.FileName))
+                if (!File.Exists(dialog.FileName))
                 {
                     METPrompt.Show(
                         this,
                         DIALOGSTRINGS.DATA_EXPORT_FAILED,
-                        METPromptType.Error,
-                        METPromptButtons.Okay);
+                        METPrompt.PType.Error,
+                        METPrompt.PButtons.Okay);
 
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlightPrompt(this, saveFileDialog.FileName);
+                UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
             }
         }
         #endregion
@@ -787,7 +793,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (frmSerialSelect form = new frmSerialSelect())
+            using (frmSerialSelect form = new frmSerialSelect(_efirom))
             {
                 form.Tag = SerialSenderTag.EFIROMWindow;
                 form.FormClosed += ChildWindowClosed;
@@ -795,7 +801,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (form.DialogResult == DialogResult.OK)
                 {
-                    WriteEfiromSerialNumber(EFIROM.NewSerial);
+                    WriteEfiromSerialNumber(_efirom.NewSerial);
                 }
             }
         }
@@ -804,14 +810,14 @@ namespace Mac_EFI_Toolkit.Forms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (frmNvramSelect form = new frmNvramSelect())
+            using (frmNvramSelect form = new frmNvramSelect(_efirom))
             {
                 form.FormClosed += ChildWindowClosed;
                 form.ShowDialog();
 
                 if (form.DialogResult == DialogResult.OK)
                 {
-                    EraseNvram(EFIROM.ResetVss, EFIROM.ResetSvs);
+                    EraseNvram(_efirom.ResetVss, _efirom.ResetSvs);
                 }
             }
         }
@@ -828,21 +834,21 @@ namespace Mac_EFI_Toolkit.Forms
         #region Tools Toolstrip Events
         private void generateFilenameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string strEfiModel = EFIROM.EfiBiosIdSectionData.ModelPart ?? EFISTRINGS.NOMODEL;
-            string strEfiVersion = EFIROM.FirmwareVersion ?? EFISTRINGS.NOFWVER;
-            string strSerial = EFIROM.FsysStoreData.Serial ?? EFISTRINGS.NOSERIAL;
+            string model = _efirom.EfiBiosIdSectionData.ModelPart ?? EFISTRINGS.NOMODEL;
+            string version = _efirom.FirmwareVersion ?? EFISTRINGS.NOFWVER;
+            string serial = _efirom.Fsys.Serial ?? EFISTRINGS.NOSERIAL;
 
-            SetClipboardText($"{strEfiModel}_{strEfiVersion}_{strSerial}");
+            SetClipboardText($"{model}_{version}_{serial}");
         }
 
         private void lookupSerialNumberToolStripMenuItem_Click(object sender, EventArgs e) =>
-            MacTools.LookupSerialOnEveryMac(EFIROM.FsysStoreData.Serial);
+            MacTools.LookupSerialOnEveryMac(_efirom.Fsys.Serial);
 
         private void viewRomInformationToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form form = new frmRominfo())
+            using (Form form = new frmRominfo(_efirom))
             {
                 form.FormClosed += ChildWindowClosed;
                 form.ShowDialog();
@@ -851,21 +857,21 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void resetWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
                 ToggleControlEnable(false);
                 ResetWindow();
                 return;
             }
 
-            DialogResult dlgResult =
+            DialogResult result =
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.UNLOAD_FIRMWARE_RESET,
-                    METPromptType.Warning,
-                    METPromptButtons.YesNo);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.YesNo);
 
-            if (dlgResult == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 ToggleControlEnable(false);
                 ResetWindow();
@@ -873,34 +879,34 @@ namespace Mac_EFI_Toolkit.Forms
         }
         private void reloadFileFromDiskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(EFIROM.LoadedBinaryPath))
+            if (!File.Exists(_efirom.LoadedBinaryPath))
             {
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.COULD_NOT_RELOAD,
-                    METPromptType.Error,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Error,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
 
             // Load bytes from loaded binary file.
-            byte[] bBinaryBuffer = File.ReadAllBytes(EFIROM.LoadedBinaryPath);
+            byte[] binaryBuffer = File.ReadAllBytes(_efirom.LoadedBinaryPath);
 
             // Check if the binaries match in size and data.
-            if (BinaryTools.ByteArraysMatch(bBinaryBuffer, EFIROM.LoadedBinaryBuffer))
+            if (BinaryTools.ByteArraysMatch(binaryBuffer, _efirom.LoadedBinaryBuffer))
             {
                 // Loaded binaries match.
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.WARN_DATA_MATCHES_BUFF,
-                    METPromptType.Warning,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
 
-            OpenBinary(EFIROM.LoadedBinaryPath);
+            OpenBinary(_efirom.LoadedBinaryPath);
         }
         #endregion
 
@@ -938,25 +944,25 @@ namespace Mac_EFI_Toolkit.Forms
         private void OpenBinary(string filepath)
         {
             // Check the filesize
-            if (!FileTools.IsValidMinMaxSize(filepath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
+            if (!FirmwareFile.IsValidMinMaxSize(filepath, this, FirmwareFile.MIN_IMAGE_SIZE, FirmwareFile.MAX_IMAGE_SIZE))
             {
                 return;
             }
 
             // Check if the image is what we're looking for.
-            if (!EFIROM.IsValidImage(File.ReadAllBytes(filepath)))
+            if (!_efirom.IsValidImage(File.ReadAllBytes(filepath)))
             {
                 METPrompt.Show(
                     this,
                     DIALOGSTRINGS.NOT_VALID_EFIROM,
-                    METPromptType.Warning,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
 
             // If a firmware is loaded, reset all data.
-            if (EFIROM.FirmwareLoaded)
+            if (_efirom.FirmwareLoaded)
             {
                 ResetWindow();
             }
@@ -964,8 +970,8 @@ namespace Mac_EFI_Toolkit.Forms
             ToggleControlEnable(false);
 
             // Set the binary path and load the bytes.
-            EFIROM.LoadedBinaryPath = filepath;
-            EFIROM.LoadedBinaryBuffer = File.ReadAllBytes(filepath);
+            _efirom.LoadedBinaryPath = filepath;
+            _efirom.LoadedBinaryBuffer = File.ReadAllBytes(filepath);
 
             // Set the current directory.
             _strInitialDirectory = Path.GetDirectoryName(filepath);
@@ -985,7 +991,7 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            EFIROM.LoadFirmwareBaseData(EFIROM.LoadedBinaryBuffer, filepath);
+            _efirom.LoadFirmwareBaseData(_efirom.LoadedBinaryBuffer, filepath);
 
             if (token.IsCancellationRequested)
             {
@@ -1009,7 +1015,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!token.IsCancellationRequested)
             {
-                EFIROM.FirmwareLoaded = true;
+                _efirom.FirmwareLoaded = true;
             }
         }
         #endregion
@@ -1046,12 +1052,12 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateFmmEmailControls();
 
             // Apply DISABLED_TEXT to N/A labels.
-            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, Colours.ClrDisabledText);
+            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, ApplicationColours.DisabledText);
 
             // Check which descriptor copy menu items should be enabled.
-            pdrBaseToolStripMenuItem.Enabled = FlashDescriptor.PdrBase != 0;
-            meBaseToolStripMenuItem.Enabled = FlashDescriptor.MeBase != 0;
-            biosBaseToolStripMenuItem.Enabled = FlashDescriptor.BiosBase != 0;
+            pdrBaseToolStripMenuItem.Enabled = _efirom.Descriptor.PdrBase != 0;
+            meBaseToolStripMenuItem.Enabled = _efirom.Descriptor.MeBase != 0;
+            biosBaseToolStripMenuItem.Enabled = _efirom.Descriptor.BiosBase != 0;
 
             // Update window title.
             UpdateWindowTitle();
@@ -1063,37 +1069,38 @@ namespace Mac_EFI_Toolkit.Forms
             ToggleControlEnable(true);
         }
 
-        private void UpdateParseTimeControls() => lblParseTime.Text = $"{EFIROM.ParseTime.TotalSeconds:F2}s";
+        private void UpdateParseTimeControls() => lblParseTime.Text = $"{_efirom.ParseTime.TotalSeconds:F2}s";
 
-        private void UpdateFileNameControls() => lblFilename.Text = $"{APPSTRINGS.FILE}: '{EFIROM.FileInfoData.FileNameExt}'";
+        private void UpdateFileNameControls() => lblFilename.Text = $"{APPSTRINGS.FILE}: '{_efirom.FirmwareInfo.FileNameExt}'";
 
         private void UpdateFileSizeControls()
         {
-            long lSize = EFIROM.FileInfoData.Length;
-            bool bValidSize = FileTools.GetIsValidBinSize(lSize);
-            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(lSize)} {APPSTRINGS.BYTES} ({lSize:X}h)";
+            long length = _efirom.FirmwareInfo.Length;
+            bool validSize = FirmwareFile.IsValidBinSize(length);
 
-            if (!bValidSize)
+            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(length)} {APPSTRINGS.BYTES} ({length:X}h)";
+
+            if (!validSize)
             {
-                lblFilesize.ForeColor = Colours.ClrError;
-                lblFilesize.Text += bValidSize ? string.Empty : $" ({FileTools.GetSizeDifference(lSize)})";
+                lblFilesize.ForeColor = ApplicationColours.Error;
+                lblFilesize.Text += validSize ? string.Empty : $" ({FirmwareFile.CalculateInvalidSize(length)})";
             }
         }
 
-        private void UpdateFileCrc32Controls() => lblFileCrc32.Text = $"{EFIROM.FileInfoData.CRC32:X8}";
+        private void UpdateFileCrc32Controls() => lblFileCrc32.Text = $"{_efirom.FirmwareInfo.CRC32:X8}";
 
-        private void UpdateFileCreationDateControls() => lblFileCreatedDate.Text = EFIROM.FileInfoData.CreationTime;
+        private void UpdateFileCreationDateControls() => lblFileCreatedDate.Text = _efirom.FirmwareInfo.CreationTime;
 
-        private void UpdateFileModifiedDateControls() => lblFileModifiedDate.Text = EFIROM.FileInfoData.LastWriteTime;
+        private void UpdateFileModifiedDateControls() => lblFileModifiedDate.Text = _efirom.FirmwareInfo.LastWriteTime;
 
         private void UpdateModelControls()
         {
-            string strIdentifier = EFIROM.EfiBiosIdSectionData.ModelPart;
+            string identifier = _efirom.EfiBiosIdSectionData.ModelPart;
 
-            if (!string.IsNullOrEmpty(strIdentifier))
+            if (!string.IsNullOrEmpty(identifier))
             {
-                string strModel = MacTools.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart);
-                lblModel.Text = $"{strModel} ({strIdentifier})" ?? APPSTRINGS.NA;
+                string model = MacTools.ConvertEfiModelCode(_efirom.EfiBiosIdSectionData.ModelPart);
+                lblModel.Text = $"{model} ({identifier})" ?? APPSTRINGS.NA;
                 modelToolStripMenuItem.Enabled = true;
                 return;
             }
@@ -1104,16 +1111,16 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateConfigCodeControls()
         {
-            if (!string.IsNullOrEmpty(EFIROM.ConfigCode))
+            if (!string.IsNullOrEmpty(_efirom.ConfigCode))
             {
-                lblConfigCode.Text = EFIROM.ConfigCode;
+                lblConfigCode.Text = _efirom.ConfigCode;
                 configurationToolStripMenuItem.Enabled = true;
                 return;
             }
 
             lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
-            lblConfigCode.ForeColor = Colours.ClrInfo;
-            GetConfigCodeAsync(EFIROM.FsysStoreData.HWC);
+            lblConfigCode.ForeColor = ApplicationColours.Information;
+            GetConfigCodeAsync(_efirom.Fsys.HWC);
         }
 
         internal async void GetConfigCodeAsync(string hwc)
@@ -1122,32 +1129,32 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!string.IsNullOrEmpty(configCode))
             {
-                EFIROM.ConfigCode = configCode;
+                _efirom.ConfigCode = configCode;
                 lblConfigCode.Text = configCode;
-                lblConfigCode.ForeColor = Colours.ClrNormalText;
+                lblConfigCode.ForeColor = ApplicationColours.NormalText;
                 configurationToolStripMenuItem.Enabled = true;
                 return;
             }
 
             lblConfigCode.Text = APPSTRINGS.NA;
-            lblConfigCode.ForeColor = Colours.ClrDisabledText;
+            lblConfigCode.ForeColor = ApplicationColours.DisabledText;
             configurationToolStripMenuItem.Enabled = false;
         }
 
         private void UpdateFsysControls()
         {
-            if (EFIROM.FsysStoreData.FsysBase != -1)
+            if (_efirom.Fsys.BaseAddress != -1)
             {
-                lblFsysStore.Text = $"{EFIROM.FsysStoreData.FsysBase:X2}h";
-                bool doesCrcMatch = string.Equals(EFIROM.FsysStoreData.CrcString, EFIROM.FsysStoreData.CrcActualString);
+                lblFsysStore.Text = $"{_efirom.Fsys.BaseAddress:X2}h";
+                bool crcMatch = string.Equals(_efirom.Fsys.CrcString, _efirom.Fsys.CrcActualString);
 
-                if (!string.IsNullOrEmpty(EFIROM.FsysStoreData.CrcString))
+                if (!string.IsNullOrEmpty(_efirom.Fsys.CrcString))
                 {
-                    lblFsysStore.Text += doesCrcMatch ? $" ({EFISTRINGS.CRC_VALID})" : $" ({EFISTRINGS.CRC_INVALID})";
-                    lblFsysStore.ForeColor = doesCrcMatch ? lblFsysStore.ForeColor : Colours.ClrWarn;
+                    lblFsysStore.Text += crcMatch ? $" ({EFISTRINGS.CRC_VALID})" : $" ({EFISTRINGS.CRC_INVALID})";
+                    lblFsysStore.ForeColor = crcMatch ? lblFsysStore.ForeColor : ApplicationColours.Warning;
                 }
 
-                if (EFIROM.ForceFoundFsys)
+                if (_efirom.ForceFoundFsys)
                 {
                     lblFsysStore.Text += " [F]";
                 }
@@ -1165,29 +1172,29 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateSerialNumberControls()
         {
-            string strSerial = EFIROM.FsysStoreData.Serial;
+            string serial = _efirom.Fsys.Serial;
 
-            if (!string.IsNullOrEmpty(strSerial))
+            if (!string.IsNullOrEmpty(serial))
             {
                 if (cbxCensor.Checked)
                 {
-                    lblSerialNumber.Text = strSerial;
+                    lblSerialNumber.Text = serial;
                 }
                 else
                 {
-                    if (strSerial.Length == 11)
+                    if (serial.Length == 11)
                     {
-                        lblSerialNumber.Text = $"{strSerial.Substring(0, 2)}******{strSerial.Substring(8, 3)}";
+                        lblSerialNumber.Text = $"{serial.Substring(0, 2)}******{serial.Substring(8, 3)}";
                     }
-                    else if (strSerial.Length == 12)
+                    else if (serial.Length == 12)
                     {
-                        lblSerialNumber.Text = $"{strSerial.Substring(0, 2)}******{strSerial.Substring(8, 4)}";
+                        lblSerialNumber.Text = $"{serial.Substring(0, 2)}******{serial.Substring(8, 4)}";
                     }
                 }
 
-                if (!Serial.IsValid(strSerial))
+                if (!Serial.IsValid(serial))
                 {
-                    lblSerialNumber.ForeColor = Colours.ClrWarn;
+                    lblSerialNumber.ForeColor = ApplicationColours.Warning;
                 }
 
                 cbxCensor.Enabled = true;
@@ -1203,10 +1210,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateHardwareConfigControls()
         {
-            string StrHwc = EFIROM.FsysStoreData.HWC;
-            lblHwc.Text = StrHwc ?? APPSTRINGS.NA;
+            string hwc = _efirom.Fsys.HWC;
+            lblHwc.Text = hwc ?? APPSTRINGS.NA;
 
-            if (!string.IsNullOrEmpty(StrHwc))
+            if (!string.IsNullOrEmpty(hwc))
             {
                 hwcToolStripMenuItem.Enabled = true;
 
@@ -1218,10 +1225,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateOrderNumberControls()
         {
-            string strSon = EFIROM.FsysStoreData.SON;
-            lblOrderNumber.Text = strSon ?? APPSTRINGS.NA;
+            string son = _efirom.Fsys.SON;
+            lblOrderNumber.Text = son ?? APPSTRINGS.NA;
 
-            if (!string.IsNullOrEmpty(strSon))
+            if (!string.IsNullOrEmpty(son))
             {
                 orderNoToolStripMenuItem.Enabled = true;
                 return;
@@ -1232,10 +1239,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateEfiVersionControls()
         {
-            string strEfiVersion = EFIROM.FirmwareVersion;
-            lblEfiVersion.Text = strEfiVersion ?? APPSTRINGS.NA;
+            string efiVersion = _efirom.FirmwareVersion;
+            lblEfiVersion.Text = efiVersion ?? APPSTRINGS.NA;
 
-            if (!string.IsNullOrEmpty(strEfiVersion))
+            if (!string.IsNullOrEmpty(efiVersion))
             {
                 efiVersionToolStripMenuItem.Enabled = true;
                 return;
@@ -1246,10 +1253,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateBoardIdControls()
         {
-            string strBoardId = EFIROM.PdrSectionData.BoardId;
-            lblBoardId.Text = strBoardId ?? APPSTRINGS.NA;
+            string boardId = _efirom.PdrSectionData.BoardId;
+            lblBoardId.Text = boardId ?? APPSTRINGS.NA;
 
-            if (!string.IsNullOrEmpty(strBoardId))
+            if (!string.IsNullOrEmpty(boardId))
             {
                 boardIDToolStripMenuItem.Enabled = true;
                 return;
@@ -1261,14 +1268,14 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateNvramControls()
         {
             // Retrieve base addresses and empty states
-            int iVssBase = EFIROM.VssPrimary.StoreBase;
-            int iSvsBase = EFIROM.SvsPrimary.StoreBase;
-            bool isVssEmpty = EFIROM.VssPrimary.IsStoreEmpty;
-            bool isSvsEmpty = EFIROM.SvsPrimary.IsStoreEmpty;
+            int vssBase = _efirom.VssPrimary.StoreBase;
+            int svsBase = _efirom.SvsPrimary.StoreBase;
+            bool vssStoreEmpty = _efirom.VssPrimary.IsStoreEmpty;
+            bool svsStoreEmpty = _efirom.SvsPrimary.IsStoreEmpty;
 
             // Update labels and menu items
-            UpdateStoreDisplay(lblVss, vSSBaseAddressToolStripMenuItem, iVssBase, isVssEmpty);
-            UpdateStoreDisplay(lblSvs, sVSBaseAddressToolStripMenuItem, iSvsBase, isSvsEmpty);
+            UpdateStoreDisplay(lblVss, vSSBaseAddressToolStripMenuItem, vssBase, vssStoreEmpty);
+            UpdateStoreDisplay(lblSvs, sVSBaseAddressToolStripMenuItem, svsBase, svsStoreEmpty);
         }
 
         private static void UpdateStoreDisplay(Label label, ToolStripMenuItem menuitem, int baseposition, bool isstoreempty)
@@ -1287,11 +1294,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateEfiLockControls()
         {
-            switch (EFIROM.EfiPrimaryLockData.LockType)
+            switch (_efirom.EfiPrimaryLockStatus.LockType)
             {
                 case EfiLockType.Locked:
                     lblEfiLock.Text = EFISTRINGS.LOCKED.ToUpper();
-                    lblEfiLock.ForeColor = Colours.ClrWarn;
+                    lblEfiLock.ForeColor = ApplicationColours.Warning;
                     break;
                 case EfiLockType.Unlocked:
                     lblEfiLock.Text = EFISTRINGS.UNLOCKED.ToUpper();
@@ -1299,44 +1306,44 @@ namespace Mac_EFI_Toolkit.Forms
                 case EfiLockType.Unknown:
                 default:
                     lblEfiLock.Text = APPSTRINGS.UNKNOWN.ToUpper();
-                    lblEfiLock.ForeColor = Colours.ClrWarn;
+                    lblEfiLock.ForeColor = ApplicationColours.Warning;
                     break;
             }
         }
 
         private void UpdateApfsCapableControls()
         {
-            switch (EFIROM.IsApfsCapable)
+            switch (_efirom.IsApfsCapable)
             {
-                case ApfsCapable.Yes:
+                case ApfsCapableType.Yes:
                     lblApfsCapable.Text = EFISTRINGS.APFS_DRIVER_FOUND;
                     break;
-                case ApfsCapable.No:
+                case ApfsCapableType.No:
                     lblApfsCapable.Text = EFISTRINGS.APFS_DRIVER_NOT_FOUND;
-                    lblApfsCapable.ForeColor = Colours.ClrWarn;
+                    lblApfsCapable.ForeColor = ApplicationColours.Warning;
                     break;
-                case ApfsCapable.Unknown:
+                case ApfsCapableType.Unknown:
                     lblApfsCapable.Text = APPSTRINGS.UNKNOWN.ToUpper();
-                    lblApfsCapable.ForeColor = Colours.ClrWarn;
+                    lblApfsCapable.ForeColor = ApplicationColours.Warning;
                     break;
             }
         }
 
-        private void UpdateDescriptorModeControls() => lblDescriptorMode.Text = $"{FlashDescriptor.IsDescriptorMode}";
+        private void UpdateDescriptorModeControls() => lblDescriptorMode.Text = $"{_efirom.Descriptor.IsDescriptorMode}";
 
         private void UpdateIntelMeControls()
         {
-            string strIntelMeVersion = EFIROM.MeVersion;
+            string meVersion = _efirom.MeVersion;
 
-            lblMeVersion.Text = strIntelMeVersion ?? APPSTRINGS.NA;
+            lblMeVersion.Text = meVersion ?? APPSTRINGS.NA;
 
-            if (!string.IsNullOrEmpty(strIntelMeVersion))
+            if (!string.IsNullOrEmpty(meVersion))
             {
-                if (FlashDescriptor.MeBase != 0)
+                if (_efirom.Descriptor.MeBase != 0)
                 {
-                    if (!string.IsNullOrEmpty(strIntelMeVersion))
+                    if (!string.IsNullOrEmpty(meVersion))
                     {
-                        lblMeVersion.Text += $" ({FlashDescriptor.MeBase:X}h)";
+                        lblMeVersion.Text += $" ({_efirom.Descriptor.MeBase:X}h)";
                     }
                 }
 
@@ -1348,13 +1355,13 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void UpdateIntelFitControls() =>
-            fitVersionToolStripMenuItem.Enabled = !string.IsNullOrEmpty(EFIROM.FitVersion);
+            fitVersionToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_efirom.FitVersion);
 
         private void UpdateLzmaArchiveControls() =>
-            lblLzma.ForeColor = EFIROM.LzmaDecompressedBuffer != null ? Colours.ClrGlyphActive : Colours.ClrGlyphDefault;
+            lblLzma.ForeColor = _efirom.LzmaDecompressedBuffer != null ? ApplicationColours.GlyphActive : ApplicationColours.GlyphDefault;
 
         private void UpdateFmmEmailControls() =>
-            lblFmmEmail.ForeColor = EFIROM.FmmEmail != null ? Colours.ClrGlyphActive : Colours.ClrGlyphDefault;
+            lblFmmEmail.ForeColor = _efirom.MobileMeEmail != null ? ApplicationColours.GlyphActive : ApplicationColours.GlyphDefault;
         #endregion
 
         #region UI Events
@@ -1368,11 +1375,11 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void EnableMenus(bool enable, params ContextMenuStrip[] contextmenus)
+        private void EnableMenus(bool enable, params ContextMenuStrip[] contextmenustrips)
         {
-            foreach (ContextMenuStrip contextMenuStrip in contextmenus)
+            foreach (ContextMenuStrip menu in contextmenustrips)
             {
-                contextMenuStrip.Enabled = enable;
+                menu.Enabled = enable;
             }
         }
 
@@ -1384,33 +1391,33 @@ namespace Mac_EFI_Toolkit.Forms
             if (enable)
             {
                 // Logic for enabling menus when controls are enabled
-                bool isFsysBufferNull = EFIROM.FsysStoreData.FsysBytes != null;
-                bool doesCrcMatch = isFsysBufferNull && !string.Equals(EFIROM.FsysStoreData.CrcActualString, EFIROM.FsysStoreData.CrcString);
-                bool areNvramStoresEmpty =
-                    EFIROM.VssPrimary.IsStoreEmpty &&
-                    EFIROM.VssSecondary.IsStoreEmpty &&
-                    EFIROM.SvsPrimary.IsStoreEmpty &&
-                    EFIROM.SvsSecondary.IsStoreEmpty;
+                bool fsysBufferNull = _efirom.Fsys.Buffer != null;
+                bool fsysCrcMatch = fsysBufferNull && !string.Equals(_efirom.Fsys.CrcActualString, _efirom.Fsys.CrcString);
+                bool allNvramStoresEmpty =
+                    _efirom.VssPrimary.IsStoreEmpty &&
+                    _efirom.VssSecondary.IsStoreEmpty &&
+                    _efirom.SvsPrimary.IsStoreEmpty &&
+                    _efirom.SvsSecondary.IsStoreEmpty;
 
                 // Export Menu
-                exportFsysStoreToolStripMenuItem.Enabled = isFsysBufferNull;
-                exportIntelMERegionToolStripMenuItem.Enabled = FlashDescriptor.IsDescriptorMode && FlashDescriptor.MeBase != 0 && FlashDescriptor.MeLimit != 0;
-                exportNVRAMVSSStoresToolStripMenuItem.Enabled = !EFIROM.VssPrimary.IsStoreEmpty || !EFIROM.VssSecondary.IsStoreEmpty;
-                exportNVRAMSVSStoresToolStripMenuItem.Enabled = !EFIROM.SvsPrimary.IsStoreEmpty || !EFIROM.SvsSecondary.IsStoreEmpty;
-                exportLZMADXEArchiveToolStripMenuItem.Enabled = EFIROM.LzmaDecompressedBuffer != null;
-                exportFmmmobilemeEmailTextToolStripMenuItem.Enabled = EFIROM.FmmEmail != null;
+                exportFsysStoreToolStripMenuItem.Enabled = fsysBufferNull;
+                exportIntelMERegionToolStripMenuItem.Enabled = _efirom.Descriptor.IsDescriptorMode && _efirom.Descriptor.MeBase != 0 && _efirom.Descriptor.MeLimit != 0;
+                exportNVRAMVSSStoresToolStripMenuItem.Enabled = !_efirom.VssPrimary.IsStoreEmpty || !_efirom.VssSecondary.IsStoreEmpty;
+                exportNVRAMSVSStoresToolStripMenuItem.Enabled = !_efirom.SvsPrimary.IsStoreEmpty || !_efirom.SvsSecondary.IsStoreEmpty;
+                exportLZMADXEArchiveToolStripMenuItem.Enabled = _efirom.LzmaDecompressedBuffer != null;
+                exportFmmmobilemeEmailTextToolStripMenuItem.Enabled = _efirom.MobileMeEmail != null;
 
                 // Patch Menu
-                changeSerialNumberToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1 && EFIROM.FsysStoreData.SerialBase != -1;
-                replaceIntelMERegionToolStripMenuItem.Enabled = FlashDescriptor.IsDescriptorMode && FlashDescriptor.MeBase != 0 && FlashDescriptor.MeLimit != 0;
-                replaceFsysStoreToolStripMenuItem.Enabled = EFIROM.FsysStoreData.FsysBase != -1;
-                eraseNVRAMToolStripMenuItem.Enabled = !areNvramStoresEmpty;
-                fixFsysChecksumToolStripMenuItem.Enabled = doesCrcMatch;
-                invalidateEFILockToolStripMenuItem.Enabled = EFIROM.EfiPrimaryLockData.LockType == EfiLockType.Locked;
+                changeSerialNumberToolStripMenuItem.Enabled = _efirom.Fsys.BaseAddress != -1 && _efirom.Fsys.SerialBase != -1;
+                replaceIntelMERegionToolStripMenuItem.Enabled = _efirom.Descriptor.IsDescriptorMode && _efirom.Descriptor.MeBase != 0 && _efirom.Descriptor.MeLimit != 0;
+                replaceFsysStoreToolStripMenuItem.Enabled = _efirom.Fsys.BaseAddress != -1;
+                eraseNVRAMToolStripMenuItem.Enabled = !allNvramStoresEmpty;
+                fixFsysChecksumToolStripMenuItem.Enabled = fsysCrcMatch;
+                invalidateEFILockToolStripMenuItem.Enabled = _efirom.EfiPrimaryLockStatus.LockType == EfiLockType.Locked;
 
                 // Options Menu
-                viewRomInformationToolStripMenuItem.Enabled = EFIROM.AppleRomInfoSectionData.SectionExists;
-                lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(EFIROM.FsysStoreData.Serial);
+                viewRomInformationToolStripMenuItem.Enabled = _efirom.AppleRomInfoSectionData.SectionExists;
+                lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_efirom.Fsys.Serial);
             }
 
             // Always enable/disable these controls
@@ -1422,8 +1429,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_EXIT_CROSS },
-                new { Button = cmdOpenInExplorer, Font = Program.FontSegMdl2Regular12, Text = Program.MDL2_FILE_EXPLORER },
+                new { Button = cmdClose, Font = Program.FluentRegular14, Text = ApplicationChars.FLUENT_DISMISS },
+                new { Button = cmdOpenInExplorer, Font = Program.FluentRegular14, Text = ApplicationChars.FLUENT_FOLDEROPEN },
             };
 
             foreach (var buttonData in buttons)
@@ -1435,11 +1442,11 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetLabelFontAndGlyph()
         {
-            lblLzma.Font = Program.FontSegMdl2Regular10;
-            lblLzma.Text = Program.MDL2_REPORT;
+            lblLzma.Font = Program.FluentRegular12;
+            lblLzma.Text = ApplicationChars.FLUENT_ZIPFILLED;
 
-            lblFmmEmail.Font = Program.FontSegMdl2Regular10;
-            lblFmmEmail.Text = Program.MDL2_ACCOUNT;
+            lblFmmEmail.Font = Program.FluentRegular12;
+            lblFmmEmail.Text = ApplicationChars.FLUENT_MAILCHECKFILLED;
         }
 
         private void SetTipHandlers()
@@ -1487,7 +1494,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void HandleMouseEnterTip(object sender, EventArgs e)
         {
-            if (!Settings.ReadBool(SettingsBoolType.DisableTips))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
             {
                 Dictionary<object, string> tooltips = new Dictionary<object, string>
                 {
@@ -1518,16 +1525,16 @@ namespace Mac_EFI_Toolkit.Forms
             $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER} (CTRL + SHIFT + N)";
 
         private string lzmaString() =>
-            EFIROM.LzmaDecompressedBuffer != null ? EFISTRINGS.LZMA_VOL_FOUND : string.Empty;
+            _efirom.LzmaDecompressedBuffer != null ? EFISTRINGS.LZMA_VOL_FOUND : string.Empty;
 
         private string emailString() =>
-            EFIROM.FmmEmail != null ? EFISTRINGS.FMM_EMAIL_FOUND : string.Empty;
+            _efirom.MobileMeEmail != null ? EFISTRINGS.FMM_EMAIL_FOUND : string.Empty;
 
         private void HandleCheckBoxChanged(object sender, EventArgs e)
         {
             if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
             {
-                if (!Settings.ReadBool(SettingsBoolType.DisableTips))
+                if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
                 {
                     lblStatusBarTip.Text = censorString();
                 }
@@ -1554,8 +1561,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateWindowTitle()
         {
-            this.Text = EFIROM.FileInfoData.FileNameExt;
-            lblTitle.Text = $"{APPSTRINGS.EFIROM} {Program.MDL2_RIGHT_ARROW} {EFIROM.FileInfoData.FileNameExt}";
+            this.Text = _efirom.FirmwareInfo.FileNameExt;
+            lblTitle.Text = $"{APPSTRINGS.EFIROM} {ApplicationChars.SEGUI_RIGHTWARDSARROW} {_efirom.FirmwareInfo.FileNameExt}";
         }
         #endregion
 
@@ -1563,7 +1570,7 @@ namespace Mac_EFI_Toolkit.Forms
         internal void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string directory = Settings.ReadString(SettingsStringType.EfiInitialDirectory);
+            string directory = Settings.ReadString(Settings.StringKey.EfiInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
@@ -1605,13 +1612,13 @@ namespace Mac_EFI_Toolkit.Forms
             foreach (Label label in labels)
             {
                 label.Text = string.Empty;
-                label.ForeColor = Colours.ClrNormalText;
+                label.ForeColor = ApplicationColours.NormalText;
             }
 
             // Reset parse time.
             lblParseTime.Text = "0.00s";
-            lblLzma.ForeColor = Colours.ClrGlyphDefault;
-            lblFmmEmail.ForeColor = Colours.ClrGlyphDefault;
+            lblLzma.ForeColor = ApplicationColours.GlyphDefault;
+            lblFmmEmail.ForeColor = ApplicationColours.GlyphDefault;
 
             // Reset window text.
             Text = APPSTRINGS.EFIROM;
@@ -1620,11 +1627,7 @@ namespace Mac_EFI_Toolkit.Forms
             // Reset initial directory.
             SetInitialDirectory();
 
-            // Reset Intel FD.
-            FlashDescriptor.ClearRegionData();
-
-            // Reset EFIROM.
-            EFIROM.ResetFirmwareBaseData();
+            _efirom.ResetFirmwareBaseData();
         }
         #endregion
 
@@ -1638,75 +1641,75 @@ namespace Mac_EFI_Toolkit.Forms
 
             Clipboard.SetText(text);
 
-            if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
                 METPrompt.Show(
                     this,
                     $"'{text}' {EFISTRINGS.COPIED_TO_CB_LC}",
-                    METPromptType.Information,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Information,
+                    METPrompt.PButtons.Okay);
             }
         }
 
-        private void ClipboardSetFilename(bool showExtension) =>
+        private void ClipboardSetFilename(bool showFileExtension) =>
             SetClipboardText(
-                showExtension
-                ? EFIROM.FileInfoData.FileNameExt
-                : EFIROM.FileInfoData.FileName);
+                showFileExtension
+                ? _efirom.FirmwareInfo.FileNameExt
+                : _efirom.FirmwareInfo.FileName);
 
         private void ClipboardSetFileSize() =>
             SetClipboardText(
-                $"{FileTools.FormatBytesWithCommas(EFIROM.FileInfoData.Length)} " +
-                $"{APPSTRINGS.BYTES} ({EFIROM.FileInfoData.Length:X}h)");
+                $"{FileTools.FormatBytesWithCommas(_efirom.FirmwareInfo.Length)} " +
+                $"{APPSTRINGS.BYTES} ({_efirom.FirmwareInfo.Length:X}h)");
 
-        private void ClipboardSetFileCrc32() => SetClipboardText($"{EFIROM.FileInfoData.CRC32:X8}");
+        private void ClipboardSetFileCrc32() => SetClipboardText($"{_efirom.FirmwareInfo.CRC32:X8}");
 
-        private void ClipboardSetFileCreationTime() => SetClipboardText(EFIROM.FileInfoData.CreationTime);
+        private void ClipboardSetFileCreationTime() => SetClipboardText(_efirom.FirmwareInfo.CreationTime);
 
-        private void ClipboardSetFileModifiedTime() => SetClipboardText(EFIROM.FileInfoData.LastWriteTime);
+        private void ClipboardSetFileModifiedTime() => SetClipboardText(_efirom.FirmwareInfo.LastWriteTime);
 
         private void ClipboardSetFirmwareModel() =>
-            SetClipboardText(MacTools.ConvertEfiModelCode(EFIROM.EfiBiosIdSectionData.ModelPart));
+            SetClipboardText(MacTools.ConvertEfiModelCode(_efirom.EfiBiosIdSectionData.ModelPart));
 
-        private void ClipboardSetFirmwareConfigCode() => SetClipboardText(EFIROM.ConfigCode);
+        private void ClipboardSetFirmwareConfigCode() => SetClipboardText(_efirom.ConfigCode);
 
-        private void ClipboardSetFsysBaseAddress() => SetClipboardText($"{EFIROM.FsysStoreData.FsysBase:X2}");
+        private void ClipboardSetFsysBaseAddress() => SetClipboardText($"{_efirom.Fsys.BaseAddress:X2}");
 
-        private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(EFIROM.FsysStoreData.CrcString);
+        private void ClipboardSetFirmwareFsysCrc32() => SetClipboardText(_efirom.Fsys.CrcString);
 
-        private void ClipboardSetFirmwareHwc() => SetClipboardText(EFIROM.FsysStoreData.HWC);
+        private void ClipboardSetFirmwareHwc() => SetClipboardText(_efirom.Fsys.HWC);
 
-        private void ClipboardSetFirmwareOrderNumber() => SetClipboardText(EFIROM.FsysStoreData.SON);
+        private void ClipboardSetFirmwareOrderNumber() => SetClipboardText(_efirom.Fsys.SON);
 
-        private void ClipboardSetFirmwareVersion() => SetClipboardText(EFIROM.FirmwareVersion);
+        private void ClipboardSetFirmwareVersion() => SetClipboardText(_efirom.FirmwareVersion);
 
-        private void ClipboardSetVssBaseAddress() => SetClipboardText($"{EFIROM.VssPrimary.StoreBase:X2}");
+        private void ClipboardSetVssBaseAddress() => SetClipboardText($"{_efirom.VssPrimary.StoreBase:X2}");
 
-        private void ClipboardSetSvsBaseAddress() => SetClipboardText($"{EFIROM.SvsPrimary.StoreBase:X2}");
+        private void ClipboardSetSvsBaseAddress() => SetClipboardText($"{_efirom.SvsPrimary.StoreBase:X2}");
 
-        private void ClipboardSetFirmwareBoardId() => SetClipboardText(EFIROM.PdrSectionData.BoardId);
+        private void ClipboardSetFirmwareBoardId() => SetClipboardText(_efirom.PdrSectionData.BoardId);
 
-        private void ClipboardSetFirmwareFitVersion() => SetClipboardText(EFIROM.FitVersion);
+        private void ClipboardSetFirmwareFitVersion() => SetClipboardText(_efirom.FitVersion);
 
-        private void ClipboardSetFirmwareMeVersion() => SetClipboardText(EFIROM.MeVersion);
+        private void ClipboardSetFirmwareMeVersion() => SetClipboardText(_efirom.MeVersion);
 
         private void ClipboardSetPdrRegionOffsets() =>
             SetClipboardText(
-                $"{APPSTRINGS.BASE} {FlashDescriptor.PdrBase:X}h, " +
-                $"{APPSTRINGS.LIMIT} {FlashDescriptor.PdrLimit:X}h, " +
-                $"{APPSTRINGS.SIZE} {FlashDescriptor.PdrSize:X}h");
+                $"{APPSTRINGS.BASE} {_efirom.Descriptor.PdrBase:X}h, " +
+                $"{APPSTRINGS.LIMIT} {_efirom.Descriptor.PdrLimit:X}h, " +
+                $"{APPSTRINGS.SIZE} {_efirom.Descriptor.PdrSize:X}h");
 
         private void ClipboardSetMeRegionOffsets() =>
             SetClipboardText(
-                $"{APPSTRINGS.BASE} {FlashDescriptor.MeBase:X}h, " +
-                $"{APPSTRINGS.LIMIT} {FlashDescriptor.MeLimit:X}h, " +
-                $"{APPSTRINGS.SIZE} {FlashDescriptor.MeSize:X}h");
+                $"{APPSTRINGS.BASE} {_efirom.Descriptor.MeBase:X}h, " +
+                $"{APPSTRINGS.LIMIT} {_efirom.Descriptor.MeLimit:X}h, " +
+                $"{APPSTRINGS.SIZE} {_efirom.Descriptor.MeSize:X}h");
 
         private void ClipboardSetBiosRegionOffsets() =>
             SetClipboardText(
-                $"{APPSTRINGS.BASE} {FlashDescriptor.BiosBase:X}h, " +
-                $"{APPSTRINGS.LIMIT} {FlashDescriptor.BiosLimit:X}h, " +
-                $"{APPSTRINGS.SIZE} {FlashDescriptor.BiosSize:X}h");
+                $"{APPSTRINGS.BASE} {_efirom.Descriptor.BiosBase:X}h, " +
+                $"{APPSTRINGS.LIMIT} {_efirom.Descriptor.BiosLimit:X}h, " +
+                $"{APPSTRINGS.SIZE} {_efirom.Descriptor.BiosSize:X}h");
         #endregion
 
         #region Write Serial
@@ -1723,7 +1726,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Check if the SerialBase exists.
-            if (EFIROM.FsysStoreData.SerialBase == -1)
+            if (_efirom.Fsys.SerialBase == -1)
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_BASE_NOT_FOUND}");
                 NotifyPatchingFailure();
@@ -1733,36 +1736,36 @@ namespace Mac_EFI_Toolkit.Forms
             // Create buffers.
             Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
-            byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
-            byte[] newSerialBytes = Encoding.UTF8.GetBytes(serial);
+            byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
+            byte[] newSerialBuffer = Encoding.UTF8.GetBytes(serial);
 
             // Overwrite serial in the binary buffer.
             Logger.WriteCallerLine(LOGSTRINGS.SSN_WTB);
 
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.FsysStoreData.SerialBase, newSerialBytes);
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.SerialBase, newSerialBuffer);
 
             // Check HWC base and write new HWC.
-            bool isHwcBasePresent = EFIROM.FsysStoreData.HWCBase != -1;
+            bool hwcBasePresent = _efirom.Fsys.HWCBase != -1;
             string newHwc = null;
 
-            if (isHwcBasePresent)
+            if (hwcBasePresent)
             {
-                newHwc = serial.Substring(8, EFIROM.FsysStoreData.Serial.Length == 11 ? 3 : 4);
-                byte[] newHwcBytes = Encoding.UTF8.GetBytes(newHwc);
+                newHwc = serial.Substring(8, _efirom.Fsys.Serial.Length == 11 ? 3 : 4);
+                byte[] newHwcBuffer = Encoding.UTF8.GetBytes(newHwc);
 
                 Logger.WriteCallerLine(LOGSTRINGS.HWC_WTB);
 
                 // Write new HWC.
-                BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.FsysStoreData.HWCBase, newHwcBytes);
+                BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.HWCBase, newHwcBuffer);
             }
 
             Logger.WriteCallerLine(LOGSTRINGS.FSYS_LFB);
 
             // Load patched fsys from the binary buffer.
-            FsysStore fsysStoreFromBuffer = EFIROM.GetFsysStoreData(binaryBuffer, false);
+            FsysStore fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
 
             // Verify the serial was written correctly.
-            if (!string.Equals(serial, fsysStoreFromBuffer.Serial))
+            if (!string.Equals(serial, fsysStore.Serial))
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_NOT_WRITTEN}");
                 NotifyPatchingFailure();
@@ -1772,7 +1775,7 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.SSN_WRITE_SUCCESS);
 
             // Verify the HWC was written correctly, if applicable.
-            if (isHwcBasePresent && fsysStoreFromBuffer.HWCBase != -1 && !string.Equals(newHwc, fsysStoreFromBuffer.HWC))
+            if (hwcBasePresent && fsysStore.HWCBase != -1 && !string.Equals(newHwc, fsysStore.HWC))
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.HWC_NOT_WRITTEN}");
                 NotifyPatchingFailure();
@@ -1782,12 +1785,12 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.HWC_WRITE_SUCCESS);
 
             // Patch fsys checksum in the binary buffer.
-            binaryBuffer = EFIROM.MakeFsysCrcPatchedBinary(binaryBuffer, fsysStoreFromBuffer.FsysBase, fsysStoreFromBuffer.FsysBytes, fsysStoreFromBuffer.CrcActual);
+            binaryBuffer = _efirom.MakeFsysCrcPatchedBinary(binaryBuffer, fsysStore.BaseAddress, fsysStore.Buffer, fsysStore.CrcActual, fsysStore.Size);
 
             // Reload fsys store from the binary buffer and verify CRC masking success.
-            fsysStoreFromBuffer = EFIROM.GetFsysStoreData(binaryBuffer, false);
+            fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
 
-            if (!string.Equals(fsysStoreFromBuffer.CrcString, fsysStoreFromBuffer.CrcActualString))
+            if (!string.Equals(fsysStore.CrcString, fsysStore.CrcActualString))
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.FSYS_SUM_MASK_FAIL}");
                 NotifyPatchingFailure();
@@ -1808,26 +1811,26 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Erase NVRAM
-        private void EraseNvram(bool resetVss, bool resetSvs)
+        private void EraseNvram(bool resetvss, bool resetsvs)
         {
             Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
 
             // Load current firmware into buffer.
-            byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
+            byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
 
             // Erase NVRAM sections if required
-            if (resetVss)
+            if (resetvss)
             {
                 Logger.WriteCallerLine(LOGSTRINGS.NVRAM_VSS_ERASE);
-                CheckEraseStore(nameof(EFIROM.VssPrimary), EFIROM.VssPrimary, binaryBuffer);
-                CheckEraseStore(nameof(EFIROM.VssSecondary), EFIROM.VssSecondary, binaryBuffer);
+                CheckEraseStore(nameof(_efirom.VssPrimary), _efirom.VssPrimary, binaryBuffer);
+                CheckEraseStore(nameof(_efirom.VssSecondary), _efirom.VssSecondary, binaryBuffer);
             }
 
-            if (resetSvs)
+            if (resetsvs)
             {
                 Logger.WriteCallerLine(LOGSTRINGS.NVRAM_SVS_ERASE);
-                CheckEraseStore(nameof(EFIROM.SvsPrimary), EFIROM.SvsPrimary, binaryBuffer);
-                CheckEraseStore(nameof(EFIROM.SvsSecondary), EFIROM.SvsSecondary, binaryBuffer);
+                CheckEraseStore(nameof(_efirom.SvsPrimary), _efirom.SvsPrimary, binaryBuffer);
+                CheckEraseStore(nameof(_efirom.SvsSecondary), _efirom.SvsSecondary, binaryBuffer);
             }
 
             Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
@@ -1841,42 +1844,42 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
         }
 
-        private void CheckEraseStore(string storeName, NvramStore store, byte[] buffer)
+        private void CheckEraseStore(string storename, NvramStore nvramstore, byte[] buffer)
         {
-            if (store.StoreBase == -1)
+            if (nvramstore.StoreBase == -1)
             {
-                Logger.WriteCallerLine($"{storeName} {LOGSTRINGS.NVR_BASE_NOT_FOUND}");
+                Logger.WriteCallerLine($"{storename} {LOGSTRINGS.NVR_BASE_NOT_FOUND}");
             }
-            else if (store.IsStoreEmpty)
+            else if (nvramstore.IsStoreEmpty)
             {
-                Logger.WriteCallerLine($"{storeName} {LOGSTRINGS.NVR_IS_EMPTY}");
+                Logger.WriteCallerLine($"{storename} {LOGSTRINGS.NVR_IS_EMPTY}");
             }
-            else if (!GetAndEraseStore(storeName, store, buffer))
+            else if (!GetAndEraseStore(storename, nvramstore, buffer))
             {
                 return;
             }
         }
 
-        private bool GetAndEraseStore(string storeName, NvramStore nvramStore, byte[] binaryBuffer)
+        private bool GetAndEraseStore(string storename, NvramStore nvramstore, byte[] binarybuffer)
         {
-            Logger.WriteCallerLine($"{storeName} {LOGSTRINGS.AT} {nvramStore.StoreBase:X}h {LOGSTRINGS.NVR_HAS_BODY_ERASING}");
+            Logger.WriteCallerLine($"{storename} {LOGSTRINGS.AT} {nvramstore.StoreBase:X}h {LOGSTRINGS.NVR_HAS_BODY_ERASING}");
 
-            byte[] erasedBuffer = EraseNvramStore(NvramStoreType.Variable, nvramStore);
+            byte[] erasedBuffer = EraseNvramStore(NvramStoreType.Variable, nvramstore);
 
             if (erasedBuffer == null)
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.NVR_FAIL_ERASE_BODY} ({storeName})");
+                Logger.WriteCallerLine($"{LOGSTRINGS.NVR_FAIL_ERASE_BODY} ({storename})");
                 NotifyPatchingFailure();
                 return false;
             }
 
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, nvramStore.StoreBase, erasedBuffer);
+            BinaryTools.OverwriteBytesAtBase(binarybuffer, nvramstore.StoreBase, erasedBuffer);
 
-            byte[] tempBuffer = BinaryTools.GetBytesBaseLength(binaryBuffer, nvramStore.StoreBase, nvramStore.StoreLength);
+            byte[] tempBuffer = BinaryTools.GetBytesBaseLength(binarybuffer, nvramstore.StoreBase, nvramstore.StoreLength);
 
             if (!BinaryTools.ByteArraysMatch(tempBuffer, erasedBuffer))
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.NVR_FAIL_WRITE_VERIFY} ({storeName})");
+                Logger.WriteCallerLine($"{LOGSTRINGS.NVR_FAIL_WRITE_VERIFY} ({storename})");
                 NotifyPatchingFailure();
                 return false;
             }
@@ -1884,7 +1887,7 @@ namespace Mac_EFI_Toolkit.Forms
             return true;
         }
 
-        private byte[] EraseNvramStore(NvramStoreType storeType, NvramStore store)
+        private byte[] EraseNvramStore(NvramStoreType storetype, NvramStore store)
         {
             try
             {
@@ -1899,7 +1902,7 @@ namespace Mac_EFI_Toolkit.Forms
                     storeBuffer[i] = 0xFF;
                 }
 
-                if (storeType == NvramStoreType.Variable)
+                if (storetype == NvramStoreType.Variable)
                 {
                     Logger.WriteCallerLine(LOGSTRINGS.NVRAM_INIT_HDR_VSS);
                     for (int i = 0x9; i <= 0xA; i++)
@@ -1909,7 +1912,7 @@ namespace Mac_EFI_Toolkit.Forms
                 }
 
                 // Verify that the relevant header bytes have been set to 0xFF.
-                if (!VerifyErasedHeader(storeBuffer, storeType))
+                if (!VerifyErasedHeader(storeBuffer, storetype))
                 {
                     Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.NVRAM_INIT_HDR_FAIL}");
                     return null;
@@ -1950,19 +1953,19 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private static bool VerifyErasedHeader(byte[] storeBuffer, NvramStoreType storeType)
+        private static bool VerifyErasedHeader(byte[] storebuffer, NvramStoreType storetype)
         {
             for (int i = 0x4; i <= 0x7; i++)
             {
-                if (storeBuffer[i] != 0xFF)
+                if (storebuffer[i] != 0xFF)
                     return false;
             }
 
-            if (storeType == NvramStoreType.Variable)
+            if (storetype == NvramStoreType.Variable)
             {
                 for (int i = 0x9; i <= 0xA; i++)
                 {
-                    if (storeBuffer[i] != 0xFF)
+                    if (storebuffer[i] != 0xFF)
                     {
                         return false;
                     }
@@ -1978,9 +1981,9 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
 
-            using (OpenFileDialog openFileDialog = CreateFsysOpenFileDialog())
+            using (OpenFileDialog dialog = CreateFsysOpenFileDialog())
             {
-                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.FSYS_IMPORT_CANCELLED}");
                     return;
@@ -1988,23 +1991,23 @@ namespace Mac_EFI_Toolkit.Forms
 
                 Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
-                byte[] newFsysBuffer = File.ReadAllBytes(openFileDialog.FileName);
+                byte[] fsysBuffer = File.ReadAllBytes(dialog.FileName);
 
-                if (!ValidateFsysStore(newFsysBuffer))
+                if (!ValidateFsysStore(fsysBuffer))
                 {
                     return;
                 }
 
-                FsysStore fsysTempStore = EFIROM.GetFsysStoreData(newFsysBuffer, true);
+                FsysStore fsysStore = _efirom.ParseFsysStoreData(fsysBuffer, true);
 
-                if (!ValidateFsysCrc(fsysTempStore, ref newFsysBuffer))
+                if (!ValidateFsysCrc(fsysStore, ref fsysBuffer))
                 {
                     return;
                 }
 
-                byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
+                byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
 
-                if (!WriteNewFsysStore(binaryBuffer, newFsysBuffer))
+                if (!WriteNewFsysStore(binaryBuffer, fsysBuffer))
                 {
                     return;
                 }
@@ -2032,12 +2035,12 @@ namespace Mac_EFI_Toolkit.Forms
 
         private bool ValidateFsysStore(byte[] fsysBuffer)
         {
-            int fsysBase = BinaryTools.GetBaseAddress(fsysBuffer, EFISigs.FsysMarker);
+            int fsysBase = BinaryTools.GetBaseAddress(fsysBuffer, Signatures.FsysStore.FsysMarker);
 
             // Fsys store length should equal 800h, 2048 bytes.
-            if (fsysBuffer.Length != EFIROM.FsysRegionSize)
+            if (fsysBuffer.Length != _efirom.Fsys.Size)
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {EFIROM.FsysRegionSize:X}h ({fsysBuffer.Length:X}h)");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {_efirom.Fsys.Size:X}h ({fsysBuffer.Length:X}h)");
                 NotifyPatchingFailure();
                 return false;
             }
@@ -2055,18 +2058,18 @@ namespace Mac_EFI_Toolkit.Forms
             return true;
         }
 
-        private bool ValidateFsysCrc(FsysStore tempFsysBuffer, ref byte[] newFsysBuffer)
+        private bool ValidateFsysCrc(FsysStore fsysstore, ref byte[] fsysbuffer)
         {
-            if (!string.Equals(tempFsysBuffer.CrcString, tempFsysBuffer.CrcActualString))
+            if (!string.Equals(fsysstore.CrcString, fsysstore.CrcActualString))
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.FSYS_SUM_INVALID} ({LOGSTRINGS.FOUND} {tempFsysBuffer.CrcString}, {LOGSTRINGS.CALCULATED} {tempFsysBuffer.CrcActualString})");
+                Logger.WriteCallerLine($"{LOGSTRINGS.FSYS_SUM_INVALID} ({LOGSTRINGS.FOUND} {fsysstore.CrcString}, {LOGSTRINGS.CALCULATED} {fsysstore.CrcActualString})");
 
                 Logger.WriteCallerLine(LOGSTRINGS.MASKING_SUM);
 
-                newFsysBuffer = EFIROM.PatchFsysCrc(tempFsysBuffer.FsysBytes, tempFsysBuffer.CrcActual);
-                tempFsysBuffer = EFIROM.GetFsysStoreData(newFsysBuffer, true);
+                fsysbuffer = _efirom.PatchFsysCrc(fsysstore.Buffer, fsysstore.CrcActual, fsysstore.Size);
+                fsysstore = _efirom.ParseFsysStoreData(fsysbuffer, true);
 
-                if (!string.Equals(tempFsysBuffer.CrcString, tempFsysBuffer.CrcActualString))
+                if (!string.Equals(fsysstore.CrcString, fsysstore.CrcActualString))
                 {
                     Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SUM_MASKING_FAIL}");
                     NotifyPatchingFailure();
@@ -2083,10 +2086,10 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
 
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.FsysStoreData.FsysBase, newFsysBuffer);
-            FsysStore fsysTempBuffer = EFIROM.GetFsysStoreData(binaryBuffer, false);
+            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.BaseAddress, newFsysBuffer);
+            FsysStore fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
 
-            if (!BinaryTools.ByteArraysMatch(fsysTempBuffer.FsysBytes, newFsysBuffer))
+            if (!BinaryTools.ByteArraysMatch(fsysStore.Buffer, newFsysBuffer))
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_COMP_FAILED}");
                 NotifyPatchingFailure();
@@ -2104,11 +2107,12 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Make binary with patched Fsys crc.
             byte[] binaryBuffer =
-                EFIROM.MakeFsysCrcPatchedBinary(
-                    BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer),
-                    EFIROM.FsysStoreData.FsysBase,
-                    EFIROM.FsysStoreData.FsysBytes,
-                    EFIROM.FsysStoreData.CrcActual);
+                _efirom.MakeFsysCrcPatchedBinary(
+                    BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer),
+                    _efirom.Fsys.BaseAddress,
+                    _efirom.Fsys.Buffer,
+                    _efirom.Fsys.CrcActual,
+                    _efirom.Fsys.Size);
 
             if (binaryBuffer == null)
             {
@@ -2136,16 +2140,16 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
             // Initialize buffers.
-            byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
+            byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
 
             // Patch the primary store.
-            byte[] unlockedPrimaryStore = PatchPrimaryStore(binaryBuffer);
+            byte[] primaryUnlockedBuffer = PatchPrimaryStore(binaryBuffer);
 
             // Patch the backup store, if necessary.
-            byte[] unlockedBackupStore = PatchBackupStore(binaryBuffer);
+            byte[] backupUnlockedBuffer = PatchBackupStore(binaryBuffer);
 
             // Verify patched stores.
-            if (!VerifyPatchedStores(binaryBuffer, unlockedPrimaryStore, unlockedBackupStore))
+            if (!VerifyPatchedStores(binaryBuffer, primaryUnlockedBuffer, backupUnlockedBuffer))
             {
                 NotifyPatchingFailure();
                 return;
@@ -2163,52 +2167,52 @@ namespace Mac_EFI_Toolkit.Forms
             Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
         }
 
-        private byte[] PatchPrimaryStore(byte[] binaryBuffer)
+        private byte[] PatchPrimaryStore(byte[] binarybuffer)
         {
             Logger.WriteCallerLine(LOGSTRINGS.LOCK_PRIMARY_MAC);
-            byte[] unlockedPrimaryStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsPrimary.StoreBuffer, EFIROM.EfiPrimaryLockData.LockBase);
+            byte[] unlockedBuffer = _efirom.PatchSvsStoreMac(_efirom.SvsPrimary.StoreBuffer, _efirom.EfiPrimaryLockStatus.LockBase);
 
             Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsPrimary.StoreBase, unlockedPrimaryStore);
+            BinaryTools.OverwriteBytesAtBase(binarybuffer, _efirom.SvsPrimary.StoreBase, unlockedBuffer);
 
-            return unlockedPrimaryStore;
+            return unlockedBuffer;
         }
 
-        private byte[] PatchBackupStore(byte[] binaryBuffer)
+        private byte[] PatchBackupStore(byte[] binarybuffer)
         {
-            byte[] unlockedBackupStore = null;
+            byte[] unlockedBuffer = null;
 
-            if (EFIROM.EfiBackupLockData.LockBase != -1)
+            if (_efirom.EfiBackupLockStatus.LockBase != -1)
             {
                 Logger.WriteCallerLine(LOGSTRINGS.LOCK_BACKUP_MAC);
-                unlockedBackupStore = EFIROM.PatchSvsStoreMac(EFIROM.SvsSecondary.StoreBuffer, EFIROM.EfiBackupLockData.LockBase);
+                unlockedBuffer = _efirom.PatchSvsStoreMac(_efirom.SvsSecondary.StoreBuffer, _efirom.EfiBackupLockStatus.LockBase);
 
                 Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
-                BinaryTools.OverwriteBytesAtBase(binaryBuffer, EFIROM.SvsSecondary.StoreBase, unlockedBackupStore);
+                BinaryTools.OverwriteBytesAtBase(binarybuffer, _efirom.SvsSecondary.StoreBase, unlockedBuffer);
             }
 
-            return unlockedBackupStore;
+            return unlockedBuffer;
         }
 
-        private bool VerifyPatchedStores(byte[] binaryBuffer, byte[] unlockedPrimaryStore, byte[] unlockedBackupStore)
+        private bool VerifyPatchedStores(byte[] binarybuffer, byte[] primaryunlockedbuffer, byte[] backupunlockedbuffer)
         {
             Logger.WriteCallerLine(LOGSTRINGS.LOCK_LOAD_SVS);
 
-            int svsPrimaryBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFISigs.SvsStoreMarker, EFIROM.NvramBase, EFIROM.NvramLimit);
-            NvramStore svsPrimary = EFIROM.ParseNvramStore(binaryBuffer, svsPrimaryBase, NvramStoreType.Secure);
+            int primaryBase = BinaryTools.GetBaseAddressUpToLimit(binarybuffer, Signatures.Nvram.SvsStoreMarker, _efirom.NvramBase, _efirom.NvramLimit);
+            NvramStore svsPrimary = _efirom.ParseSingleNvramStore(binarybuffer, primaryBase, NvramStoreType.Secure);
 
-            if (!BinaryTools.ByteArraysMatch(svsPrimary.StoreBuffer, unlockedPrimaryStore))
+            if (!BinaryTools.ByteArraysMatch(svsPrimary.StoreBuffer, primaryunlockedbuffer))
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_PRIM_VERIF_FAIL}");
                 return false;
             }
 
-            if (unlockedBackupStore != null)
+            if (backupunlockedbuffer != null)
             {
-                int svsBackupBase = BinaryTools.GetBaseAddressUpToLimit(binaryBuffer, EFISigs.SvsStoreMarker, svsPrimaryBase + EFIROM.HDR_SIZE, EFIROM.NvramLimit);
-                NvramStore svsBackup = EFIROM.ParseNvramStore(binaryBuffer, svsBackupBase, NvramStoreType.Secure);
+                int backupBase = BinaryTools.GetBaseAddressUpToLimit(binarybuffer, Signatures.Nvram.SvsStoreMarker, primaryBase + EFIROM.HDR_SIZE, _efirom.NvramLimit);
+                NvramStore svsBackup = _efirom.ParseSingleNvramStore(binarybuffer, backupBase, NvramStoreType.Secure);
 
-                if (!BinaryTools.ByteArraysMatch(svsBackup.StoreBuffer, unlockedBackupStore))
+                if (!BinaryTools.ByteArraysMatch(svsBackup.StoreBuffer, backupunlockedbuffer))
                 {
                     Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_BACK_VERIF_FAIL}");
                     return false;
@@ -2224,9 +2228,9 @@ namespace Mac_EFI_Toolkit.Forms
         {
             Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
 
-            using (OpenFileDialog openFileDialog = CreateImeOpenFileDialog())
+            using (OpenFileDialog dialog = CreateImeOpenFileDialog())
             {
-                if (openFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_IMPORT_CANCELLED}");
                     return;
@@ -2234,20 +2238,20 @@ namespace Mac_EFI_Toolkit.Forms
 
                 Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
 
-                byte[] imeBuffer = File.ReadAllBytes(openFileDialog.FileName);
+                byte[] meBuffer = File.ReadAllBytes(dialog.FileName);
 
-                if (!ValidateMeRegion(imeBuffer))
+                if (!ValidateMeRegion(meBuffer))
                 {
                     return;
                 }
 
-                string imeVersion = IntelME.GetVersionData(imeBuffer, ImeVersionType.ManagementEngine);
+                string meVersion = IntelME.GetVersionData(meBuffer, ImeVersionType.ME, _efirom.Descriptor);
 
-                Logger.WriteCallerLine($"{LOGSTRINGS.IME_VERSION} {imeVersion ?? APPSTRINGS.NOT_FOUND}");
+                Logger.WriteCallerLine($"{LOGSTRINGS.IME_VERSION} {meVersion ?? APPSTRINGS.NOT_FOUND}");
 
-                byte[] binaryBuffer = BinaryTools.CloneBuffer(EFIROM.LoadedBinaryBuffer);
+                byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
 
-                if (!WriteMeRegion(imeBuffer, binaryBuffer))
+                if (!WriteMeRegion(meBuffer, binaryBuffer))
                 {
                     return;
                 }
@@ -2273,9 +2277,9 @@ namespace Mac_EFI_Toolkit.Forms
             };
         }
 
-        private bool ValidateMeRegion(byte[] newImeBuffer)
+        private bool ValidateMeRegion(byte[] mebuffer)
         {
-            int fptBase = BinaryTools.GetBaseAddress(newImeBuffer, IntelME.FPTMarker);
+            int fptBase = BinaryTools.GetBaseAddress(mebuffer, IntelME.FPTMarker);
 
             if (fptBase == -1)
             {
@@ -2284,16 +2288,16 @@ namespace Mac_EFI_Toolkit.Forms
                 return false;
             }
 
-            if (newImeBuffer.Length > FlashDescriptor.MeSize)
+            if (mebuffer.Length > _efirom.Descriptor.MeSize)
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_TOO_LARGE} {newImeBuffer.Length:X}h > {FlashDescriptor.MeSize:X}h");
+                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_TOO_LARGE} {mebuffer.Length:X}h > {_efirom.Descriptor.MeSize:X}h");
                 NotifyPatchingFailure();
                 return false;
             }
 
-            if (newImeBuffer.Length < FlashDescriptor.MeSize)
+            if (mebuffer.Length < _efirom.Descriptor.MeSize)
             {
-                Logger.WriteCallerLine($"{LOGSTRINGS.IME_TOO_SMALL} {newImeBuffer.Length:X}h > {FlashDescriptor.MeSize:X}h");
+                Logger.WriteCallerLine($"{LOGSTRINGS.IME_TOO_SMALL} {mebuffer.Length:X}h > {_efirom.Descriptor.MeSize:X}h");
             }
 
             Logger.WriteCallerLine(LOGSTRINGS.VALIDATION_PASS);
@@ -2301,17 +2305,17 @@ namespace Mac_EFI_Toolkit.Forms
             return true;
         }
 
-        private bool WriteMeRegion(byte[] newImeBuffer, byte[] binaryBuffer)
+        private bool WriteMeRegion(byte[] mebuffer, byte[] binarybuffer)
         {
-            byte[] ffBuffer = new byte[FlashDescriptor.MeSize];
-            BinaryTools.EraseByteArray(ffBuffer);
+            byte[] emptyBuffer = new byte[_efirom.Descriptor.MeSize];
+            BinaryTools.EraseByteArray(emptyBuffer);
 
-            Array.Copy(newImeBuffer, 0, ffBuffer, 0, newImeBuffer.Length);
-            Array.Copy(ffBuffer, 0, binaryBuffer, FlashDescriptor.MeBase, ffBuffer.Length);
+            Array.Copy(mebuffer, 0, emptyBuffer, 0, mebuffer.Length);
+            Array.Copy(emptyBuffer, 0, binarybuffer, _efirom.Descriptor.MeBase, emptyBuffer.Length);
 
-            byte[] patchedMeBuffer = BinaryTools.GetBytesBaseLimit(binaryBuffer, (int)FlashDescriptor.MeBase, (int)FlashDescriptor.MeLimit);
+            byte[] patchedMeBuffer = BinaryTools.GetBytesBaseLimit(binarybuffer, (int)_efirom.Descriptor.MeBase, (int)_efirom.Descriptor.MeLimit);
 
-            if (!BinaryTools.ByteArraysMatch(patchedMeBuffer, ffBuffer))
+            if (!BinaryTools.ByteArraysMatch(patchedMeBuffer, emptyBuffer))
             {
                 Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_BUFFER_MISMATCH}");
                 NotifyPatchingFailure();
@@ -2323,48 +2327,47 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Patching IO
-        private static SaveFileDialog CreateFirmwareSaveFileDialog()
+        private SaveFileDialog CreateFirmwareSaveFileDialog()
         {
             Program.EnsureDirectoriesExist();
 
             return new SaveFileDialog
             {
                 Filter = APPSTRINGS.FILTER_BIN,
-                FileName = EFIROM.FileInfoData.FileName,
+                FileName = _efirom.FirmwareInfo.FileName,
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.BuildsDirectory
             };
         }
 
-        private void SaveOutputFirmwareEfirom(byte[] binaryBuffer)
+        private void SaveOutputFirmwareEfirom(byte[] binarybuffer)
         {
-            using (SaveFileDialog saveFileDialog = CreateFirmwareSaveFileDialog())
+            using (SaveFileDialog dialog = CreateFirmwareSaveFileDialog())
             {
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                if (dialog.ShowDialog() != DialogResult.OK)
                 {
                     Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
                     return;
                 }
 
-                if (FileTools.WriteAllBytesEx(saveFileDialog.FileName, binaryBuffer) && File.Exists(saveFileDialog.FileName))
+                if (FileTools.WriteAllBytesEx(dialog.FileName, binarybuffer) && File.Exists(dialog.FileName))
                 {
-                    Logger.WriteCallerLine($"{LOGSTRINGS.FILE_SAVE_SUCCESS} {saveFileDialog.FileName}");
+                    Logger.WriteCallerLine($"{LOGSTRINGS.FILE_SAVE_SUCCESS} {dialog.FileName}");
 
                     DialogResult result =
                         METPrompt.Show(
                             this,
                             DIALOGSTRINGS.FW_SAVED_SUCCESS_LOAD,
-                            METPromptType.Question,
-                            METPromptButtons.YesNo);
+                            METPrompt.PType.Question,
+                            METPrompt.PButtons.YesNo);
 
                     if (result == DialogResult.Yes)
                     {
-                        OpenBinary(saveFileDialog.FileName);
+                        OpenBinary(dialog.FileName);
                     }
                 }
             }
         }
-
         #endregion
     }
 }

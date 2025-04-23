@@ -5,10 +5,10 @@
 // frmSerialSelect.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.EFIROM;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
-using Mac_EFI_Toolkit.UI;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -17,12 +17,23 @@ namespace Mac_EFI_Toolkit.Forms
 {
     public partial class frmSerialSelect : FormEx
     {
+        #region Private Members
+        private readonly EFIROM _efirom;
+        private readonly SOCROM _socrom;
+        #endregion
+
         #region Constructor
-        public frmSerialSelect()
+        public frmSerialSelect(EFIROM efiromInstance)
         {
             InitializeComponent();
+            _efirom = efiromInstance;
+            WireEventHandlers();
+        }
 
-            // Attach event handlers.
+        public frmSerialSelect(SOCROM socromInstance)
+        {
+            InitializeComponent();
+            _socrom = socromInstance;
             WireEventHandlers();
         }
 
@@ -43,15 +54,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetSerialLength()
         {
-            if (Tag is SerialSenderTag.EFIROMWindow)
+            if (Tag is SerialSenderTag.EFIROMWindow && _efirom != null)
             {
-                tbxSerial.MaxLength = EFIROM.FsysStoreData.Serial.Length;
-                return;
+                tbxSerial.MaxLength = _efirom.Fsys.Serial.Length;
             }
-            else if (Tag is SerialSenderTag.SOCROMWindow)
+            else if (Tag is SerialSenderTag.SOCROMWindow && _socrom != null)
             {
                 tbxSerial.MaxLength = SOCROM.SERIAL_LENGTH;
-                return;
             }
         }
         #endregion
@@ -71,13 +80,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
-            if (Tag is SerialSenderTag.EFIROMWindow)
+            if (Tag is SerialSenderTag.EFIROMWindow && _efirom != null)
             {
-                EFIROM.NewSerial = tbxSerial.Text;
+                _efirom.NewSerial = tbxSerial.Text;
             }
-            else if (Tag is SerialSenderTag.SOCROMWindow)
+            else if (Tag is SerialSenderTag.SOCROMWindow && _socrom != null)
             {
-                SOCROM.NewSerial = tbxSerial.Text;
+                _socrom.NewSerial = tbxSerial.Text;
             }
 
             DialogResult = DialogResult.OK;
@@ -87,39 +96,39 @@ namespace Mac_EFI_Toolkit.Forms
         #region TextBox Events
         private void tbxSerial_TextChanged(object sender, EventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
-            int nCharCount = textBox.Text.Length;
+            TextBox control = (TextBox)sender;
+            int charCount = control.Text.Length;
 
-            // Update the validity label each time the text changes
+            // Update the validity label each time the text changes.
             UpdateValidityLabel();
 
-            if (Settings.ReadBool(SettingsBoolType.DisableSerialValidation))
+            if (Settings.ReadBoolean(Settings.BooleanKey.DisableSerialValidation))
             {
-                if (nCharCount == textBox.MaxLength)
+                if (charCount == control.MaxLength)
                 {
                     cmdOkay.Enabled = true;
                     return;
                 }
             }
 
-            // Check if the character length matches the expected serial length
-            if (nCharCount == textBox.MaxLength)
+            // Check if the character length matches the expected serial length.
+            if (charCount == control.MaxLength)
             {
-                if (Serial.IsValid(textBox.Text))
+                if (Serial.IsValid(control.Text))
                 {
-                    UpdateTextBoxColour(textBox, Colours.ClrOkay);
+                    UpdateTextBoxColour(control, ApplicationColours.Okay);
                     cmdOkay.Enabled = true;
                 }
                 else
                 {
-                    UpdateTextBoxColour(textBox, Colours.ClrError);
+                    UpdateTextBoxColour(control, ApplicationColours.Error);
                     lblValidity.Text += $" - {APPSTRINGS.INVALID}";
                     cmdOkay.Enabled = false;
                 }
             }
             else
             {
-                UpdateTextBoxColour(textBox, Color.FromArgb(235, 235, 235));
+                UpdateTextBoxColour(control, Color.FromArgb(235, 235, 235));
                 cmdOkay.Enabled = false;
             }
         }
@@ -128,10 +137,7 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void UpdateTextBoxColour(TextBox control, Color color) => control.ForeColor = color;
 
-        private void UpdateValidityLabel()
-        {
-            lblValidity.Text = $"{tbxSerial.Text.Length}/{tbxSerial.MaxLength}";
-        }
+        private void UpdateValidityLabel() => lblValidity.Text = $"{tbxSerial.Text.Length}/{tbxSerial.MaxLength}";
         #endregion
     }
 }

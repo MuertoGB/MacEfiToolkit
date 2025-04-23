@@ -6,7 +6,7 @@
 
 namespace Mac_EFI_Toolkit.Firmware.SOCROM
 {
-    internal enum SocRomType
+    public enum ControllerType
     {
         AppleT2 = 0,
         AppleSilicon = 1    

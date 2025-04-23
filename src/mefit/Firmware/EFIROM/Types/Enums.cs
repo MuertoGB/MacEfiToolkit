@@ -6,23 +6,23 @@
 
 namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
-    internal enum ApfsCapable
+    public enum ApfsCapableType
     {
         Yes, No, Unknown
     }
 
-    internal enum EfiLockType
+    public enum EfiLockType
     {
         Locked, Unlocked, Unknown
     }
 
-    internal enum NvramStoreType
+    public enum NvramStoreType
     {
         Variable, Secure, None
     }
 
-    internal enum ImeVersionType
+    public enum ImeVersionType
     {
-        FlashImageTool, ManagementEngine
+        FIT, ME
     }
 }

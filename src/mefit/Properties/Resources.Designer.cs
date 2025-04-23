@@ -78,6 +78,16 @@ namespace Mac_EFI_Toolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] FluentSystemIcons {
+            get {
+                object obj = ResourceManager.GetObject("FluentSystemIcons", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap icon24 {
@@ -154,16 +164,6 @@ namespace Mac_EFI_Toolkit.Properties {
         internal static string modeldb {
             get {
                 return ResourceManager.GetString("modeldb", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] segmdl2 {
-            get {
-                object obj = ResourceManager.GetObject("segmdl2", resourceCulture);
-                return ((byte[])(obj));
             }
         }
     }

@@ -1,10 +1,10 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// English.cs
+// ApplicationStrings.cs
 // Released under the GNU GLP v3.0
 
-namespace Mac_EFI_Toolkit
+namespace Mac_EFI_Toolkit.Common.Constants
 {
     internal class APPSTRINGS
     {
@@ -82,7 +82,7 @@ namespace Mac_EFI_Toolkit
             "Apple EFI/BIOS (*.bin, *.rom, *.fd, *.bio)|*.bin;*.rom;*.fd;*.bio|All Files (*.*)|*.*";
 
         internal const string FILTER_SOCROM_SUPPORTED_FIRMWARE =
-            "Apple T2 SOCROM (*.bin, *.rom)|*.bin;*.rom|All Files (*.*)|*.*";
+            "Apple SOCROM (*.bin, *.rom)|*.bin;*.rom|All Files (*.*)|*.*";
 
         internal const string FILTER_BIN =
             "Binary Files (*.bin, *.rom, *.rgn)|*.bin;*.rom;*.rgn|All Files (*.*)|*.*";
@@ -319,6 +319,12 @@ namespace Mac_EFI_Toolkit
 
         internal const string SCFG_POS_INITIALIZED =
             "Cannot write to 0x28A000h (Length B8h) because initialized data is present";
+
+        internal const string ERASE_OLD_STORE =
+            "Wiping existing SCfg store area with 0xFF pattern";
+
+        internal const string MAIN_FLUENT_NOTLOADED =
+            "Could not load embedded font resource: Resources.SegoeIcons.ttf";
         #endregion
     }
 
@@ -383,7 +389,7 @@ namespace Mac_EFI_Toolkit
             "The provided file was not a valid EFIROM.";
 
         internal const string NOT_VALID_SOCROM =
-            "The provided file was not a valid T2 SOCROM.";
+            "The provided file was not a valid SOCROM.";
 
         internal const string SCFG_EXPORT_FAIL =
             "SCfg Store export failed.";
@@ -531,7 +537,7 @@ namespace Mac_EFI_Toolkit
             "SCFG_REGION";
 
         internal const string MENU_TIP_OPEN =
-           "Open a T2 SOCROM";
+           "Open a Mac SOCROM";
 
         internal const string MENU_TIP_COPY =
             "Open the Copy Menu";

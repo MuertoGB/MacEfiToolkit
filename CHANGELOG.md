@@ -1,23 +1,41 @@
-<h4 align="center">Version History</h4>
-<p align="center">
-  <a href="#version-100">V1.0.0</a> •
-  <a href="#version-101">V1.0.1</a> •
-  <a href="#version-102">V1.0.2</a> •
-  <a href="#version-103">V1.0.3</a> •
-  <a href="#version-110">V1.1.0</a> •
-  <a href="#version-111">V1.1.1</a> •
-  <a href="#version-112">V1.1.2</a> •
-  <a href="#version-113">V1.1.3</a> •
-  <a href="#version-114">V1.1.4</a> •
-  <a href="#version-115">V1.1.5</a> •
-  <a href="#version-200">V2.0.0</a> •
-  <a href="#version-201">V2.0.1</a> •
-  <a href="#version-202">V2.0.2</a> •
-  <a href="#version-203">V2.0.3</a> •
-  <a href="#version-204">V2.0.4</a> •
-  <a href="#version-210">V2.1.0</a> •
-  <a href="#version-211">V2.1.1</a>
-</p>
+### Version History
+
+| Major 1.x     | Major 2.x     |
+|---------------|---------------|
+| [V1.0.0](#version-100) | [V2.0.0](#version-200) |
+| [V1.0.1](#version-101) | [V2.0.1](#version-201) |
+| [V1.0.2](#version-102) | [V2.0.2](#version-202) |
+| [V1.0.3](#version-103) | [V2.0.3](#version-203) |
+| [V1.1.0](#version-110) | [V2.0.4](#version-204) |
+| [V1.1.1](#version-111) | [V2.1.0](#version-210) |
+| [V1.1.2](#version-112) | [V2.1.1](#version-211) |
+| [V1.1.3](#version-113) | [V2.1.2](#version-212) |
+| [V1.1.4](#version-114) |               |
+| [V1.1.5](#version-115) |               |
+
+
+## Version 2.1.2
+
+### Enhancements
+- User interface improvements.
+- Replaced Segoe MDL2 Assets with [Fluent System Icons](https://github.com/microsoft/fluentui-system-icons) for UI glyphs.
+- Minor string adjustments.
+- **Memory Usage Display:**
+  - Vastly improved memory usage tracking to closely match Task Manager values. 
+  - Modified size conversion to consistently round memory values to one decimal place.
+  - Updated the refresh rate of memory usage to better reflect Task Manager's default behaviour.
+- **Firmware Information Export Data:**
+  - Added SHA-256 checksum.
+  - Added Shannon entropy.
+  - Updated layout of the output text file when exporting SOCROM firmware information, specifically for cases where the SCfg store is not present.
+- Updated CREATED and MODIFIED timestamps to use a consistent, simplified format for improved readability.
+- Updated the internal database.
+- Added fallback for missing HWC during Fsys parsing: now derived from the last 3–4 characters of the serial when unavailable in firmware. Helps address instances of missing config data.
+- Defensive: Ensured the old SCfg store is explicitly erased using a 0xFF pattern across the original store base and length, preventing residual data from previous stores.
+
+### Bugs
+- **Reworked firmware parser architecture:** Replaced the hotfix from version 2.1.1 with a permanent solution. Firmware parsing logic is now fully decoupled from form UI logic. Each window now operates on its own parser instance, preventing shared state issues when multiple windows are opened or closed. Support for using multiple firmware windows simultaneously has been restored.
+- Fixed an issue in the Settings window where an empty path could be displayed if the folder selection dialog was cancelled. The UI now only updates when a valid path is selected.
 
 ## Version 2.1.1
 

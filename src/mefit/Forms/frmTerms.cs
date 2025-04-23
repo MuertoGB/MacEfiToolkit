@@ -5,6 +5,7 @@
 // frmTerms.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.UI;
 using System;
 using System.Windows.Forms;
@@ -48,7 +49,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdAccept_Click(object sender, EventArgs e)
         {
-            Settings.SetBool(SettingsBoolType.AcceptedEditingTerms, true);
+            Settings.SetBool(Settings.BooleanKey.AcceptedEditingTerms, true);
 
             DialogResult = DialogResult.Yes;
             Close();
@@ -75,8 +76,8 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.MDL2_EXIT_CROSS;
+            cmdClose.Font = Program.FluentRegular14;
+            cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
         }
         #endregion
     }

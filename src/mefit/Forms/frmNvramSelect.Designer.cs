@@ -95,7 +95,7 @@
             this.cmdOkay.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdOkay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdOkay.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdOkay.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdOkay.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdOkay.Location = new System.Drawing.Point(154, 0);
             this.cmdOkay.Margin = new System.Windows.Forms.Padding(0);
             this.cmdOkay.Name = "cmdOkay";
@@ -115,7 +115,7 @@
             this.cmdCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(225)))), ((int)(((byte)(225)))));
+            this.cmdCancel.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.cmdCancel.Location = new System.Drawing.Point(0, 0);
             this.cmdCancel.Margin = new System.Windows.Forms.Padding(0);
             this.cmdCancel.Name = "cmdCancel";
@@ -127,7 +127,7 @@
             // 
             // tlpStores
             // 
-            this.tlpStores.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.tlpStores.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tlpStores.ColumnCount = 1;
             this.tlpStores.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpStores.Controls.Add(this.tableLayoutPanel1, 0, 1);
@@ -146,6 +146,7 @@
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -161,17 +162,17 @@
             // 
             // cbxResetVss
             // 
-            this.cbxResetVss.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cbxResetVss.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cbxResetVss.BackColor = System.Drawing.Color.Black;
             this.cbxResetVss.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.cbxResetVss.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxResetVss.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
+            this.cbxResetVss.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(200)))), ((int)(((byte)(47)))));
             this.cbxResetVss.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cbxResetVss.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxResetVss.Location = new System.Drawing.Point(10, 4);
+            this.cbxResetVss.Location = new System.Drawing.Point(8, 5);
             this.cbxResetVss.Margin = new System.Windows.Forms.Padding(0);
             this.cbxResetVss.Name = "cbxResetVss";
-            this.cbxResetVss.Size = new System.Drawing.Size(32, 18);
+            this.cbxResetVss.Size = new System.Drawing.Size(26, 16);
             this.cbxResetVss.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxResetVss.TabIndex = 0;
             this.cbxResetVss.CheckedChanged += new System.EventHandler(this.cbxResetVss_CheckedChanged);
@@ -181,7 +182,7 @@
             this.lblEraseVss.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblEraseVss.AutoSize = true;
             this.lblEraseVss.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEraseVss.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblEraseVss.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblEraseVss.Location = new System.Drawing.Point(45, 3);
             this.lblEraseVss.Name = "lblEraseVss";
             this.lblEraseVss.Size = new System.Drawing.Size(73, 20);
@@ -191,6 +192,7 @@
             // 
             // tableLayoutPanel2
             // 
+            this.tableLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -209,7 +211,7 @@
             this.lblEraseSvs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblEraseSvs.AutoSize = true;
             this.lblEraseSvs.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEraseSvs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblEraseSvs.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.lblEraseSvs.Location = new System.Drawing.Point(45, 3);
             this.lblEraseSvs.Name = "lblEraseSvs";
             this.lblEraseSvs.Size = new System.Drawing.Size(217, 20);
@@ -219,17 +221,17 @@
             // 
             // cbxResetSvs
             // 
-            this.cbxResetSvs.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cbxResetSvs.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cbxResetSvs.BackColor = System.Drawing.Color.Black;
             this.cbxResetSvs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
             this.cbxResetSvs.BorderColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
-            this.cbxResetSvs.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(170)))), ((int)(((byte)(180)))));
+            this.cbxResetSvs.CheckedColor = System.Drawing.Color.FromArgb(((int)(((byte)(47)))), ((int)(((byte)(200)))), ((int)(((byte)(47)))));
             this.cbxResetSvs.ClientColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.cbxResetSvs.ClientColorActive = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.cbxResetSvs.Location = new System.Drawing.Point(10, 4);
+            this.cbxResetSvs.Location = new System.Drawing.Point(8, 5);
             this.cbxResetSvs.Margin = new System.Windows.Forms.Padding(0);
             this.cbxResetSvs.Name = "cbxResetSvs";
-            this.cbxResetSvs.Size = new System.Drawing.Size(32, 18);
+            this.cbxResetSvs.Size = new System.Drawing.Size(26, 16);
             this.cbxResetSvs.SwitchHeadColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
             this.cbxResetSvs.TabIndex = 1;
             this.cbxResetSvs.CheckedChanged += new System.EventHandler(this.cbxResetSvs_CheckedChanged);
@@ -239,7 +241,7 @@
             this.lblWindowTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
             this.lblWindowTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblWindowTitle.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWindowTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
+            this.lblWindowTitle.ForeColor = System.Drawing.Color.White;
             this.lblWindowTitle.Location = new System.Drawing.Point(1, 1);
             this.lblWindowTitle.Margin = new System.Windows.Forms.Padding(0);
             this.lblWindowTitle.Name = "lblWindowTitle";
@@ -280,7 +282,7 @@
             this.Name = "frmNvramSelect";
             this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Reset NVRAM";
+            this.Text = "Select NVRAM Stores";
             this.tlpMain.ResumeLayout(false);
             this.tlpButtons.ResumeLayout(false);
             this.tlpStores.ResumeLayout(false);

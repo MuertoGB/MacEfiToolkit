@@ -23,19 +23,19 @@ namespace Mac_EFI_Toolkit.Common
 
         internal void WriteSection(string section)
         {
-            using (StreamWriter streamWriter = new StreamWriter(_strFilepath, true))
+            using (StreamWriter writer = new StreamWriter(_strFilepath, true))
             {
-                streamWriter.WriteLine($"[{section}]");
+                writer.WriteLine($"[{section}]");
             }
         }
 
         internal string Read(string section, string key, string defaultValue = "")
         {
-            StringBuilder stringBuilder = new StringBuilder(255);
+            StringBuilder builder = new StringBuilder(255);
 
-            NativeMethods.GetPrivateProfileString(section, key, defaultValue, stringBuilder, 255, _strFilepath);
+            NativeMethods.GetPrivateProfileString(section, key, defaultValue, builder, 255, _strFilepath);
 
-            return stringBuilder.ToString();
+            return builder.ToString();
         }
 
         internal void DeleteSection(string section) => Write(section, null, null);
@@ -44,13 +44,13 @@ namespace Mac_EFI_Toolkit.Common
 
         internal bool SectionExists(string section)
         {
-            string[] arrSectionNames = GetSectionNames(_strFilepath);
+            string[] sectionNames = GetSectionNames(_strFilepath);
 
-            if (arrSectionNames != null)
+            if (sectionNames != null)
             {
-                foreach (string strSection in arrSectionNames)
+                foreach (string s in sectionNames)
                 {
-                    if (strSection == section)
+                    if (s == section)
                     {
                         return true;
                     }
@@ -62,16 +62,16 @@ namespace Mac_EFI_Toolkit.Common
 
         internal bool KeyExists(string section, string key)
         {
-            string[] arrKeyNames = GetSectionKeys(section, _strFilepath);
+            string[] keyNames = GetSectionKeys(section, _strFilepath);
 
-            if (arrKeyNames == null)
+            if (keyNames == null)
             {
                 return false;
             }
 
-            foreach (string strKey in arrKeyNames)
+            foreach (string k in keyNames)
             {
-                if (strKey == key)
+                if (k == key)
                 {
                     return true;
                 }
@@ -84,15 +84,15 @@ namespace Mac_EFI_Toolkit.Common
         {
             try
             {
-                string strUnicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSectionNames(buffer, MAX_BUFFER, lpFileName));
+                string unicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSectionNames(buffer, MAX_BUFFER, lpFileName));
 
-                if (strUnicode == null)
+                if (unicode == null)
                 {
                     Logger.WriteCallerLine(nameof(GetSectionNames), "No section names found");
                     return null;
                 }
 
-                return strUnicode.Substring(0, strUnicode.Length - 1).Split('\0');
+                return unicode.Substring(0, unicode.Length - 1).Split('\0');
             }
             catch (Exception e)
             {
@@ -105,23 +105,23 @@ namespace Mac_EFI_Toolkit.Common
         {
             try
             {
-                string strUnicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSection(lpAppName, buffer, MAX_BUFFER, lpFileName));
+                string unicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSection(lpAppName, buffer, MAX_BUFFER, lpFileName));
 
-                if (strUnicode == null)
+                if (unicode == null)
                 {
                     Logger.WriteCallerLine(nameof(GetSectionKeys), "No section keys found");
                     return null;
                 }
 
-                string[] arrKeys = strUnicode.Substring(0, strUnicode.Length - 1).Split('\0');
+                string[] keys = unicode.Substring(0, unicode.Length - 1).Split('\0');
 
-                for (int i = 0; i < arrKeys.Length; i++)
+                for (int i = 0; i < keys.Length; i++)
                 {
-                    int iIndex = arrKeys[i].IndexOf('=');
-                    arrKeys[i] = iIndex != -1 ? arrKeys[i].Substring(0, iIndex) : arrKeys[i];
+                    int index = keys[i].IndexOf('=');
+                    keys[i] = index != -1 ? keys[i].Substring(0, index) : keys[i];
                 }
 
-                return arrKeys;
+                return keys;
             }
             catch (Exception e)
             {
@@ -130,27 +130,27 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        private static string ReadBuffer(Func<IntPtr, uint> nativeMethod)
+        private static string ReadBuffer(Func<IntPtr, uint> nativemethod)
         {
-            IntPtr buffer = IntPtr.Zero;
+            IntPtr ptr = IntPtr.Zero;
 
             try
             {
-                buffer = Marshal.AllocCoTaskMem(MAX_BUFFER);
-                uint uiData = nativeMethod(buffer);
+                ptr = Marshal.AllocCoTaskMem(MAX_BUFFER);
+                uint data = nativemethod(ptr);
 
-                if (uiData == 0)
+                if (data == 0)
                 {
                     return null;
                 }
 
-                return Marshal.PtrToStringUni(buffer, (int)uiData);
+                return Marshal.PtrToStringUni(ptr, (int)data);
             }
             finally
             {
-                if (buffer != IntPtr.Zero)
+                if (ptr != IntPtr.Zero)
                 {
-                    Marshal.FreeCoTaskMem(buffer);
+                    Marshal.FreeCoTaskMem(ptr);
                 }
             }
         }

@@ -5,6 +5,7 @@
 // BlurHelper.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Windows.Forms;
@@ -28,13 +29,13 @@ namespace Mac_EFI_Toolkit.UI
             form.BackColor = System.Drawing.Color.Green;
             form.TransparencyKey = System.Drawing.Color.Green;
 
-            if (Settings.ReadBool(SettingsBoolType.UseAccentColor))
+            if (Settings.ReadBoolean(Settings.BooleanKey.UseAccentColor))
             {
                 form.BackColor = AccentColorHelper.GetSystemAccentColor();
                 return;
             }
 
-            form.BackColor = Colours.ClrAppBorderDefault;
+            form.BackColor = ApplicationColours.AppBorderDefault;
         }
 
         internal static void RemoveBlur(Form form)

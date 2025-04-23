@@ -84,21 +84,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants\ApplicationChars.cs" />
+    <Compile Include="Common\Constants\ApplicationColors.cs" />
     <Compile Include="Common\Constants\ApplicationPaths.cs" />
     <Compile Include="Common\Constants\ApplicationUrls.cs" />
     <Compile Include="Common\Constants\ApplicationVersions.cs" />
+    <Compile Include="Common\Cryptography.cs" />
     <Compile Include="Firmware\EFIROM\FlashDescriptor.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Firmware\EFIROM\Guids.cs" />
     <Compile Include="Firmware\EFIROM\EFIROM.cs" />
-    <Compile Include="Firmware\EFIROM\EFISigs.cs" />
+    <Compile Include="Firmware\EFIROM\Signatures.cs" />
     <Compile Include="Firmware\EFIROM\Types\Structs.cs" />
+    <Compile Include="Firmware\FirmwareFile.cs" />
     <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Firmware\EFIROM\IntelME.cs" />
-    <Compile Include="Firmware\FirmwareVars.cs" />
     <Compile Include="Firmware\Serial.cs" />
-    <Compile Include="Firmware\SOCROM\SOCSigs.cs" />
+    <Compile Include="Firmware\SOCROM\Signatures.cs" />
     <Compile Include="Firmware\SOCROM\Types\Enums.cs" />
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
@@ -116,7 +119,6 @@
     </Compile>
     <Compile Include="Unhandled.cs" />
     <Compile Include="Firmware\EFIROM\Types\Enums.cs" />
-    <Compile Include="Tools\Types\Structs.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Common\SevenZip\Common\CommandLineParser.cs" />
     <Compile Include="Common\SevenZip\Common\CRC.cs" />
@@ -134,11 +136,10 @@
     <Compile Include="Common\SevenZip\ICoder.cs" />
     <Compile Include="Common\LzmaCoder.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="Language\English.cs" />
+    <Compile Include="Common\Constants\ApplicationStrings.cs" />
     <Compile Include="Firmware\SOCROM\Types\Structs.cs" />
     <Compile Include="Firmware\SOCROM\SOCROM.cs" />
     <Compile Include="UI\Design\METSwitchDesigner.cs" />
-    <Compile Include="UI\Types\Enums.cs" />
     <Compile Include="UI\UITools.cs" />
     <Compile Include="UI\Controls\METContextMenuStrip.cs">
       <SubType>Component</SubType>
@@ -177,7 +178,6 @@
     <Compile Include="WIN32\NativeMethods.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\Colours.cs" />
     <Compile Include="UI\Renderers\METMenuRenderer.cs" />
     <Compile Include="Tools\BinaryTools.cs" />
     <Compile Include="Tools\MacTools.cs" />
@@ -280,9 +280,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\segmdl2.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\FluentSystemIcons.ttf" />
     <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
@@ -294,13 +294,16 @@
     <None Include="Assets\editorterms.txt" />
     <None Include="Resources\modeldb.xml" />
   </ItemGroup>
-<ItemGroup>
-  <BootstrapperPackage Include="Microsoft.Net.Framework.4.8">
-    <Visible>False</Visible>
-    <ProductName>.NET Framework 4.8 (x86 and x64)</ProductName>
-    <Install>true</Install>
-  </BootstrapperPackage>
-</ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.4.8">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 4.8 (x86 and x64)</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\thirdparty\fluentui-system-icons\" />
+    <Folder Include="Assets\thirdparty\macmodelshelf\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,6 +5,7 @@
 // UITools.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
@@ -33,15 +34,15 @@ namespace Mac_EFI_Toolkit.UI
         #region Flash ForeColor
         internal static async void FlashForecolor(Control control)
         {
-            if (!Settings.ReadBool(SettingsBoolType.DisableFlashingUI))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableFlashingUI))
             {
-                Color clrOriginal = control.ForeColor;
+                Color original = control.ForeColor;
 
                 for (int i = 0; i < 3; i++)
                 {
                     control.ForeColor = Color.FromArgb(control.ForeColor.A, 130, 130, 130);
                     await Task.Delay(70);
-                    control.ForeColor = clrOriginal;
+                    control.ForeColor = original;
                     await Task.Delay(70);
                 }
             }
@@ -51,14 +52,14 @@ namespace Mac_EFI_Toolkit.UI
         #region Explorer
         internal static void ShowExplorerFileHighlightPrompt(Form owner, string filepath)
         {
-            DialogResult dlgResult =
+            DialogResult result =
                 METPrompt.Show(
                         owner,
                         $"{APPSTRINGS.FILE_SAVE_SUCCESS_NAV}",
-                        METPromptType.Information,
-                        METPromptButtons.YesNo);
+                        METPrompt.PType.Information,
+                        METPrompt.PButtons.YesNo);
 
-            if (dlgResult == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 HighlightPathInExplorer(filepath, owner);
             }
@@ -66,14 +67,14 @@ namespace Mac_EFI_Toolkit.UI
 
         internal static void ShowOpenFolderInExplorerPrompt(Form owner, string folderpath)
         {
-            DialogResult dlgResult =
+            DialogResult result =
                 METPrompt.Show(
                         owner,
                         $"{APPSTRINGS.FILES_SAVE_SUCCESS_NAV}",
-                        METPromptType.Information,
-                        METPromptButtons.YesNo);
+                        METPrompt.PType.Information,
+                        METPrompt.PButtons.YesNo);
 
-            if (dlgResult == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 Process.Start("explorer.exe", folderpath);
             }
@@ -91,8 +92,8 @@ namespace Mac_EFI_Toolkit.UI
                 METPrompt.Show(
                     owner,
                     $"File does not exist: {filepath}",
-                    METPromptType.Warning,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
@@ -107,21 +108,21 @@ namespace Mac_EFI_Toolkit.UI
                 METPrompt.Show(
                     owner,
                     $"Directory does not exist: {folderpath}",
-                    METPromptType.Warning,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
 
-            DirectoryInfo dirInfo = new DirectoryInfo(folderpath);
+            DirectoryInfo info = new DirectoryInfo(folderpath);
 
-            if (!dirInfo.Attributes.HasFlag(FileAttributes.Directory))
+            if (!info.Attributes.HasFlag(FileAttributes.Directory))
             {
                 METPrompt.Show(
                     owner,
                     $"The path is not a directory: {folderpath}",
-                    METPromptType.Warning,
-                    METPromptButtons.Okay);
+                    METPrompt.PType.Warning,
+                    METPrompt.PButtons.Okay);
 
                 return;
             }
@@ -133,35 +134,35 @@ namespace Mac_EFI_Toolkit.UI
         #region Context Menu Position
         internal static void ShowContextMenuAtControlPoint(object sender, ContextMenuStrip contextmenu, MenuPosition menuposition)
         {
-            Control ctrlContextMenu = sender as Control;
+            Control control = sender as Control;
 
-            if (ctrlContextMenu == null)
+            if (control == null)
             {
                 throw new ArgumentException("Invalid sender object type. Expected a Control.");
             }
 
-            Point ptPosition;
+            Point position;
 
             switch (menuposition)
             {
                 case MenuPosition.TopRight:
-                    ptPosition = ctrlContextMenu.PointToScreen(new Point(ctrlContextMenu.Width + 1, -1));
+                    position = control.PointToScreen(new Point(control.Width + 1, -1));
                     break;
                 case MenuPosition.BottomLeft:
-                    ptPosition = ctrlContextMenu.PointToScreen(new Point(0, ctrlContextMenu.Height + 1));
+                    position = control.PointToScreen(new Point(0, control.Height + 1));
                     break;
                 default:
                     throw new ArgumentException("Invalid MenuPosition value.");
             }
 
-            contextmenu.Show(ptPosition);
+            contextmenu.Show(position);
         }
 
         internal static void ShowContextMenuAtCursor(object sender, EventArgs e, ContextMenuStrip contextmenu, bool showonleftclick)
         {
-            MouseEventArgs mouseEventArgs = e as MouseEventArgs;
+            MouseEventArgs args = e as MouseEventArgs;
 
-            if (mouseEventArgs != null && (mouseEventArgs.Button == MouseButtons.Right || (showonleftclick && mouseEventArgs.Button == MouseButtons.Left)))
+            if (args != null && (args.Button == MouseButtons.Right || (showonleftclick && args.Button == MouseButtons.Left)))
             {
                 contextmenu.Show(Cursor.Position);
             }

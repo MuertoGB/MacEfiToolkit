@@ -4,6 +4,7 @@
 // SystemTools.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.Diagnostics;
@@ -61,17 +62,17 @@ namespace Mac_EFI_Toolkit.Tools
 
         internal static bool IsRunningUnderWine()
         {
-            string strNtdll = "ntdll.dll";
-            string strWineGetVersion = "wine_get_version";
-            IntPtr ptrHandle = NativeMethods.LoadLibrary(strNtdll);
+            string ntDll = "ntdll.dll";
+            string wineGetVersion = "wine_get_version";
+            IntPtr ptr = NativeMethods.LoadLibrary(ntDll);
 
-            if (ptrHandle == IntPtr.Zero)
+            if (ptr == IntPtr.Zero)
             {
                 return false;
             }
 
-            IntPtr ptrWineHandle = NativeMethods.GetProcAddress(ptrHandle, strWineGetVersion);
-            return ptrWineHandle != IntPtr.Zero; // If this function exists, we're running under Wine.
+            IntPtr winePtr = NativeMethods.GetProcAddress(ptr, wineGetVersion);
+            return winePtr != IntPtr.Zero; // If this function exists, we're running under Wine.
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
     #region EfiLock
-    internal struct EFILock
+    public struct EFILock
     {
         internal EfiLockType LockType { get; set; }
         internal int LockBase { get; set; }
@@ -17,7 +17,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
     #endregion
 
     #region PdrSection
-    internal struct PdrSection
+    public struct PdrSection
     {
         internal int BoardIdBase { get; set; }
         internal string BoardId { get; set; }
@@ -25,7 +25,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
     #endregion
 
     #region AppleRomInformationSection
-    internal struct AppleRomInformationSection
+    public struct AppleRomInformationSection
     {
         internal bool SectionExists { get; set; }
         internal byte[] SectionBytes { get; set; }
@@ -44,7 +44,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
     #endregion
 
     #region EfiBiosIdSection
-    internal struct EfiBiosIdSection
+    public struct EfiBiosIdSection
     {
         internal string ModelPart { get; set; }
         internal string ZzPart { get; set; }
@@ -56,7 +56,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
     #region NvramStore
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct NvramStoreHeader
+    public struct NvramStoreHeader
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         internal char[] Signature;
@@ -68,7 +68,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         public byte[] Reserved;
     }
 
-    internal struct NvramStore
+    public struct NvramStore
     {
         internal NvramStoreType StoreType { get; set; }
         internal int StoreBase { get; set; }
@@ -76,17 +76,18 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         internal byte[] StoreBuffer { get; set; }
         internal byte StoreFormat { get; set; }
         internal byte StoreState { get; set; }
-        internal int BodyStart { get; set; }
+        internal int BodyBase { get; set; }
         internal int BodyLength { get; set; }
         internal bool IsStoreEmpty { get; set; }
     }
     #endregion
 
     #region FsysStore
-    internal struct FsysStore
+    public struct FsysStore
     {
-        internal byte[] FsysBytes { get; set; }
-        internal int FsysBase { get; set; }
+        internal byte[] Buffer { get; set; }
+        internal int Size { get; set; }
+        internal int BaseAddress { get; set; }
         internal string Serial { get; set; }
         internal int SerialBase { get; set; }
         internal string HWC { get; set; }
@@ -100,7 +101,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
     #region Flash Descriptor
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DescriptorHeader
+    public struct DescriptorHeader
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)] // 10h
         internal byte[] ReservedVector;
@@ -109,7 +110,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DescriptorMap
+    public struct DescriptorMap
     {
         internal byte ComponentBase;
         internal byte NumOfFlashChips;
@@ -125,7 +126,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct DescriptorRegions
+    public struct DescriptorRegions
     {
         internal ushort DescriptorBase;
         internal ushort DescriptorLimit;
@@ -164,7 +165,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
     #region Management Engine
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct FPTHeader
+    public struct FPTHeader
     {
         internal uint Tag;
         internal uint NumEntries;
@@ -183,7 +184,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct MN2Manifest
+    public struct MN2Header
     {
         internal uint Tag;
         internal uint NumEntries;

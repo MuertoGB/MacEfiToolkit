@@ -12,7 +12,7 @@ namespace Mac_EFI_Toolkit.WIN32
 {
     class NativeMethods
     {
-        #region Types
+        #region Structs
         // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ns-dwmapi-dwm_blurbehind
         [StructLayout(LayoutKind.Sequential)]
         public struct DWM_BLURBEHIND
@@ -22,29 +22,15 @@ namespace Mac_EFI_Toolkit.WIN32
             public IntPtr hRgnBlur;
             public bool fTransitionOnMaximized;
         }
+        #endregion
 
+        #region Enums
         [Flags]
         public enum DwmBlurBehindFlags : uint
         {
             DWM_BB_ENABLE = 0x1,
             DWM_BB_BLURREGION = 0x2,
             DWM_BB_TRANSITIONONMAXIMIZED = 0x4
-        }
-
-        // https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct PROCESS_MEMORY_COUNTERS
-        {
-            public uint cb;
-            public uint PageFaultCount;
-            public ulong PeakWorkingSetSize;
-            public ulong WorkingSetSize;
-            public ulong QuotaPeakPagedPoolUsage;
-            public ulong QuotaPagedPoolUsage;
-            public ulong QuotaPeakNonPagedPoolUsage;
-            public ulong QuotaNonPagedPoolUsage;
-            public ulong PagefileUsage;
-            public ulong PeakPagefileUsage;
         }
         #endregion
 
@@ -111,17 +97,6 @@ namespace Mac_EFI_Toolkit.WIN32
         internal static extern int DwmGetColorizationColor(
             out uint pcrColorization,
             out bool pfOpaqueBlend);
-
-        // https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getcurrentprocess
-        [DllImport("kernel32.dll")]
-        internal static extern IntPtr GetCurrentProcess();
-
-        // https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters
-        [DllImport("psapi.dll", SetLastError = true)]
-        internal static extern bool GetProcessMemoryInfo(
-            IntPtr Process,
-            out PROCESS_MEMORY_COUNTERS ppsmemCounters,
-            uint cb);
 
         // https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]

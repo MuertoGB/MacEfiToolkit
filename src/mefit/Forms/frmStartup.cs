@@ -26,6 +26,9 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Private Members
+        private readonly EFIROM _efirom = new EFIROM();
+        private readonly SOCROM _socrom = new SOCROM();
+
         private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private int _childWindowCount = 0;
         #endregion
@@ -79,7 +82,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             // Check for a new application version.
-            if (!Settings.ReadBool(SettingsBoolType.DisableVersionCheck))
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableVersionCheck))
             {
                 StartupVersionCheck();
             }
@@ -91,12 +94,12 @@ namespace Mac_EFI_Toolkit.Forms
             if (ModifierKeys == Keys.Alt || ModifierKeys == Keys.F4)
             {
                 // We need to cancel the original request to close if confirmation dialogs are not disabled.
-                if (!Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+                if (!Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
                 {
                     if (_childWindowCount != 0)
                     {
                         e.Cancel = true;
-                        Program.HandleApplicationExit(this, ExitAction.Exit);
+                        Program.HandleApplicationExit(this, Program.ExitType.Exit);
                     }
                     else
                     {
@@ -108,29 +111,28 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void frmStartup_DragEnter(object sender, DragEventArgs e)
         {
-            ApplyDragEnterColours();
-            Program.HandleDragEnter(sender, e);
+            Program.HandleDragEnter(sender, e, ApplyDragEnterColours);
         }
 
         private void frmStartup_DragDrop(object sender, DragEventArgs e)
         {
             // Get the path of the dragged file.
-            string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-            string strFileName = arrDraggedFiles[0];
+            string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string file = draggedFiles[0];
 
             ApplyDragLeaveColours();
 
             this.BeginInvoke(new Action(() =>
             {
-                OpenBinary(strFileName);
+                OpenBinary(file);
             }));
         }
 
         private void frmStartup_DragLeave(object sender, EventArgs e) => ApplyDragLeaveColours();
 
-        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrInactiveFormText);
+        private void frmStartup_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
 
-        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, Colours.ClrActiveFormText);
+        private void frmStartup_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -196,7 +198,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (_childWindowCount != 0)
             {
-                Program.HandleApplicationExit(this, ExitAction.Exit);
+                Program.HandleApplicationExit(this, Program.ExitType.Exit);
                 return;
             }
 
@@ -205,15 +207,15 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdBrowse_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog
+            using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
                 Filter = APPSTRINGS.FILTER_STARTUP_WINDOW
             })
             {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    OpenBinary(openFileDialog.FileName);
+                    OpenBinary(dialog.FileName);
                 }
             }
         }
@@ -272,7 +274,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (_childWindowCount != 0)
             {
-                Program.HandleApplicationExit(this, ExitAction.Restart);
+                Program.HandleApplicationExit(this, Program.ExitType.Restart);
                 return;
             }
 
@@ -337,15 +339,15 @@ namespace Mac_EFI_Toolkit.Forms
         #region Open Binary
         private void OpenBinary(string filepath)
         {
-            if (!FileTools.IsValidMinMaxSize(filepath, this, FirmwareVars.MIN_IMAGE_SIZE, FirmwareVars.MAX_IMAGE_SIZE))
+            if (!FirmwareFile.IsValidMinMaxSize(filepath, this, FirmwareFile.MIN_IMAGE_SIZE, FirmwareFile.MAX_IMAGE_SIZE))
             {
                 return;
             }
 
-            byte[] bFileBuffer = File.ReadAllBytes(filepath);
+            byte[] fileBuffer = File.ReadAllBytes(filepath);
 
             // Identify and open the correct window based on the firmware type.
-            Form form = GetChildFormForImage(bFileBuffer);
+            Form form = GetChildFormForImage(fileBuffer);
 
             if (form != null)
             {
@@ -357,17 +359,17 @@ namespace Mac_EFI_Toolkit.Forms
             METPrompt.Show(
                 this,
                 DIALOGSTRINGS.NOT_VALID_FIRMWARE,
-                METPromptType.Warning,
-                METPromptButtons.Okay);
+                METPrompt.PType.Warning,
+                METPrompt.PButtons.Okay);
         }
 
         private Form GetChildFormForImage(byte[] sourceBytes)
         {
-            if (EFIROM.IsValidImage(sourceBytes))
+            if (_efirom.IsValidImage(sourceBytes))
             {
                 return new frmEfiRom();
             }
-            else if (SOCROM.IsValidImage(sourceBytes))
+            else if (_socrom.IsValidImage(sourceBytes))
             {
                 return new frmSocRom();
             }
@@ -379,9 +381,9 @@ namespace Mac_EFI_Toolkit.Forms
         #region UI Events
         private void ChildWindowClosed(object sender, EventArgs e)
         {
-            if (sender is Form closedChild)
+            if (sender is Form child)
             {
-                if (closedChild.Tag is StartupSenderTag formTag && formTag == StartupSenderTag.Firmware)
+                if (child.Tag is StartupSenderTag formTag && formTag == StartupSenderTag.Firmware)
                 {
                     if (_childWindowCount > 0)
                     {
@@ -396,19 +398,19 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FontSegMdl2Regular12;
-            cmdClose.Text = Program.MDL2_EXIT_CROSS;
+            cmdClose.Font = Program.FluentRegular14;
+            cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
         }
 
         private void SetLabelGlyphAndText()
         {
-            lblGlyph.Font = Program.FontSegMdl2Regular20;
-            lblGlyph.Text = Program.MDL2_DOWN_ARROW;
+            lblGlyph.Font = Program.FluentRegular24;
+            lblGlyph.Text = ApplicationChars.FLUENT_DOCDOWNARROW;
         }
 
-        private void ApplyDragEnterColours() => lblGlyph.ForeColor = Color.FromArgb(152, 251, 152);
+        private void ApplyDragEnterColours() => lblGlyph.ForeColor = ApplicationColours.GlyphActive;
 
-        private void ApplyDragLeaveColours() => lblGlyph.ForeColor = Color.FromArgb(80, 80, 80);
+        private void ApplyDragLeaveColours() => lblGlyph.ForeColor = ApplicationColours.GlyphDefault;
 
         private void SetControlForeColor(Control parentcontrol, Color forecolor)
         {
@@ -429,12 +431,12 @@ namespace Mac_EFI_Toolkit.Forms
             // Update window title.
             UpdateWindowTitle();
 
-            // Configure child.
+            // Configure child.         
             child.Tag = StartupSenderTag.Firmware;
             child.FormClosed += ChildWindowClosed;
             child.Location = new Point(this.Location.X + (this.Width - child.Width) / 2, this.Location.Y + (this.Height - child.Height) / 2);
             child.Owner = this;
-            child.ShowDialog();
+            child.Show();
         }
 
         private void UpdateWindowTitle()
@@ -451,12 +453,12 @@ namespace Mac_EFI_Toolkit.Forms
         internal async void StartupVersionCheck()
         {
             // Check for a new version.
-            Updater.VersionResult versionResult = await Updater.CheckForNewVersion();
+            Updater.VersionResult result = await Updater.CheckForNewVersion();
 
             // If a new version is available update the UI.
-            if (versionResult == Updater.VersionResult.NewVersionAvailable)
+            if (result == Updater.VersionResult.NewVersionAvailable)
             {
-                cmdHelp.Text += $" {Program.SEGUI_DINGBAT1}";
+                cmdHelp.Text += $" {ApplicationChars.SEGUI_DINGBAT1}";
                 updateAvailableToolStripMenuItem.Visible = true;
             }
         }
@@ -466,12 +468,12 @@ namespace Mac_EFI_Toolkit.Forms
         private void SetInitialDirectory()
         {
             // Get the initial directory from settings.
-            string strDirectory = Settings.ReadString(SettingsStringType.StartupInitialDirectory);
+            string directory = Settings.ReadString(Settings.StringKey.StartupInitialDirectory);
 
             // If the path is not empty check if it exists and set it as the initial directory.
-            if (!string.IsNullOrEmpty(strDirectory))
+            if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(strDirectory) ? strDirectory : ApplicationPaths.WorkingDirectory;
+                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
             }
         }
         #endregion
@@ -493,18 +495,18 @@ namespace Mac_EFI_Toolkit.Forms
 
             Rectangle labelRectangle = new Rectangle(2, tlp.Height - labelHeight, tlp.Width - 4, labelHeight - 2);
 
-            using (Brush backgroundBrush = new SolidBrush(Color.Tomato))
+            using (Brush brush = new SolidBrush(Color.Tomato))
             {
-                g.FillRectangle(backgroundBrush, labelRectangle);
+                g.FillRectangle(brush, labelRectangle);
             }
 
-            string labelText = "==== Debug Mode ====";
+            string text = "==== Debug Mode ====";
             using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
-            using (Brush textBrush = new SolidBrush(Color.Black))
+            using (Brush brush = new SolidBrush(Color.Black))
             {
-                SizeF textSize = g.MeasureString(labelText, font);
+                SizeF textSize = g.MeasureString(text, font);
                 PointF textPosition = new PointF((labelRectangle.Width - textSize.Width) / 2, labelRectangle.Top + (labelRectangle.Height - textSize.Height) / 2);
-                g.DrawString(labelText, font, textBrush, textPosition);
+                g.DrawString(text, font, brush, textPosition);
             }
         }
         #endregion

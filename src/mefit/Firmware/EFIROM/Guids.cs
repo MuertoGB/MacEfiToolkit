@@ -107,7 +107,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             0x0B, 0xF6, 0x17, 0xD8, 0x90,  0xDF
         };
 
-        internal static readonly byte[] AppleSmcDxeGuid = new byte[]
+        internal static readonly byte[] AppleSmcDxeGuid =
         {
             0xC9, 0x98, 0x69, 0xF4,
             0x30, 0xDD,

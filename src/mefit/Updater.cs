@@ -4,8 +4,8 @@
 // Updater.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;
-using Mac_EFI_Toolkit.Tools;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -16,7 +16,7 @@ using System.Xml;
 
 namespace Mac_EFI_Toolkit
 {
-    internal class Updater
+    public class Updater
     {
         public enum VersionResult
         {
@@ -25,29 +25,32 @@ namespace Mac_EFI_Toolkit
             Error
         }
 
-        internal static string NewVersion { get; set; }
-        internal static string ExpectedSHA256 { get; set; }
+        public static string NewVersion { get; set; }
+        public static string ExpectedSHA256 { get; set; }
+        public static string Priority { get; set; }
 
-        internal static async Task<VersionResult> CheckForNewVersion()
+        public static async Task<VersionResult> CheckForNewVersion()
         {
-            string versionManifestUrl = ApplicationUrls.VersionManifest;
+            string manifestUrl = ApplicationUrls.VersionManifest;
             const string versionNodeXPath = "data/MET/VersionString";
             const string sha256NodeXPath = "data/MET/SHA256";
+            const string priorityNodeXPath = "data/MET/Priority";
 
             try
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    byte[] bResponseData = await webClient.DownloadDataTaskAsync(versionManifestUrl);
+                    byte[] responseBuffer = await webClient.DownloadDataTaskAsync(manifestUrl);
 
-                    using (MemoryStream msResponseData = new MemoryStream(bResponseData))
-                    using (XmlReader xmlReader = XmlReader.Create(msResponseData))
+                    using (MemoryStream responseStream = new MemoryStream(responseBuffer))
+                    using (XmlReader reader = XmlReader.Create(responseStream))
                     {
-                        XmlDocument xmlDoc = new XmlDocument();
-                        xmlDoc.Load(xmlReader);
+                        XmlDocument document = new XmlDocument();
+                        document.Load(reader);
 
-                        XmlNode xmlVersionNode = xmlDoc.SelectSingleNode(versionNodeXPath);
-                        XmlNode xmlSha256Node = xmlDoc.SelectSingleNode(sha256NodeXPath);
+                        XmlNode xmlVersionNode = document.SelectSingleNode(versionNodeXPath);
+                        XmlNode xmlSha256Node = document.SelectSingleNode(sha256NodeXPath);
+                        XmlNode xmlPriorityNode = document.SelectSingleNode(priorityNodeXPath);
 
                         if (xmlVersionNode == null || xmlSha256Node == null)
                         {
@@ -56,14 +59,15 @@ namespace Mac_EFI_Toolkit
 
                         NewVersion = xmlVersionNode.InnerText;
                         ExpectedSHA256 = xmlSha256Node.InnerText;
+                        Priority = xmlPriorityNode.InnerText;
 
                         Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(NewVersion)} '{xmlVersionNode.InnerText}'");
                         Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(ExpectedSHA256)} '{xmlSha256Node.InnerText}'");
 
-                        Version verRemote = new Version(NewVersion);
-                        Version verLocal = new Version(Application.ProductVersion);
+                        Version remoteVersion = new Version(NewVersion);
+                        Version thisVersion = new Version(Application.ProductVersion);
 
-                        return verRemote > verLocal ? VersionResult.NewVersionAvailable : VersionResult.UpToDate;
+                        return remoteVersion > thisVersion ? VersionResult.NewVersionAvailable : VersionResult.UpToDate;
                     }
                 }
             }
@@ -78,7 +82,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static async Task DownloadAsync(Label label)
+        public static async Task DownloadAsync(Label label)
         {
             UpdateStatus(label, UPDATSTRINGS.WAIT);
             Logger.WriteCallerLine(UPDATSTRINGS.UPD_STARTED);
@@ -96,7 +100,7 @@ namespace Mac_EFI_Toolkit
                     Logger.WriteCallerLine($"{UPDATSTRINGS.DOWNLOADED} {exeBuffer.Length} {APPSTRINGS.BYTES}");
 
                     Logger.WriteCallerLine(UPDATSTRINGS.VERIFY_SHA256);
-                    string hash = FileTools.GetSha256Digest(exeBuffer);
+                    string hash = Cryptography.GetSha256Digest(exeBuffer);
 
                     Logger.WriteCallerLine($"{UPDATSTRINGS.EXPECTED}: {ExpectedSHA256}");
                     Logger.WriteCallerLine($"{UPDATSTRINGS.ACTUAL}: {hash}");

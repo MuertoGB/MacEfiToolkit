@@ -2,8 +2,7 @@
 // https://github.com/MuertoGB/MacEfiToolkit
 
 // Program.cs
-// Released under the GNU GLP v3.0
-// MET uses embedded font resource "Segoe MDL2 Assets" which is copyright Microsoft Corp.
+// Released under the GNU GPL v3.0
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;
@@ -20,31 +19,20 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    #region Enums
-    internal enum ExitAction
-    {
-        Restart,
-        Exit
-    }
-    #endregion
-
     static class Program
     {
+        internal enum ExitType
+        {
+            Restart,
+            Exit
+        }
+
         #region Internal Members
         internal static string DraggedFile = string.Empty;
         internal static frmStartup MainWindow;
-        internal static Font FontSegMdl2Regular10;
-        internal static Font FontSegMdl2Regular12;
-        internal static Font FontSegMdl2Regular20;
-
-        internal const string MDL2_EXIT_CROSS = "\uE947";
-        internal const string MDL2_FILE_EXPLORER = "\uED25";
-        internal const string MDL2_DOWN_ARROW = "\uE74B";
-        internal const string MDL2_RIGHT_ARROW = "\u2192";
-        internal const string MDL2_REPORT = "\uE9F9";
-        internal const string MDL2_ACCOUNT = "\uE910";
-        internal const string SEGUI_DINGBAT1 = "\u2776";
-        internal const string NOWRAP_SPACE = "\u00A0";
+        internal static Font FluentRegular12;
+        internal static Font FluentRegular14;
+        internal static Font FluentRegular24;
         #endregion
 
         #region Main Entry Point
@@ -79,15 +67,16 @@ namespace Mac_EFI_Toolkit
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Load custom fonts into memory.
-            if (!FontResolver.LoadCustomFont(Properties.Resources.segmdl2, out Font[] fonts))
+            if (!FontResolver.LoadCustomFont(Properties.Resources.FluentSystemIcons, out Font[] fonts))
             {
+                Logger.WriteCallerLine(LOGSTRINGS.MAIN_FLUENT_NOTLOADED);
                 return;
             }
 
             // Assign loaded fonts to corresponding variables.
-            FontSegMdl2Regular10 = fonts[0];
-            FontSegMdl2Regular12 = fonts[1];
-            FontSegMdl2Regular20 = fonts[2];
+            FluentRegular12 = fonts[0];
+            FluentRegular14 = fonts[1];
+            FluentRegular24 = fonts[2];
 
             // Initialize application settings.
             Settings.Initialize();
@@ -112,9 +101,9 @@ namespace Mac_EFI_Toolkit
         private static void HandleOnExitingCleanup()
         {
             // Dispose of memory fonts.
-            FontSegMdl2Regular10?.Dispose();
-            FontSegMdl2Regular12?.Dispose();
-            FontSegMdl2Regular20?.Dispose();
+            FluentRegular12?.Dispose();
+            FluentRegular14?.Dispose();
+            FluentRegular24?.Dispose();
         }
         #endregion
 
@@ -129,30 +118,30 @@ namespace Mac_EFI_Toolkit
 
         internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Exception ex = (Exception)e.ExceptionObject;
+            Exception exception = (Exception)e.ExceptionObject;
 
-            if (ex != null)
+            if (exception != null)
             {
-                ExceptionHandler(ex);
+                ExceptionHandler(exception);
             }
         }
 
         internal static void ExceptionHandler(Exception e)
         {
-            DialogResult dlgResult;
+            DialogResult result;
 
-            string strWorkingDirectory = ApplicationPaths.WorkingDirectory;
-            string strDatestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            string strFilename = $"unhandled_{strDatestamp}.log";
-            string strFinalPath = Path.Combine(strWorkingDirectory, strFilename);
+            string workingDirectory = ApplicationPaths.WorkingDirectory;
+            string dateStamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+            string fileName = $"unhandled_{dateStamp}.log";
+            string fullPath = Path.Combine(workingDirectory, fileName);
 
-            File.WriteAllText(strFinalPath, Unhandled.GenerateReport(e));
+            File.WriteAllText(fullPath, Unhandled.GenerateReport(e));
 
-            if (File.Exists(strFinalPath))
+            if (File.Exists(fullPath))
             {
-                dlgResult =
+                result =
                     MessageBox.Show(
-                        $"{e.Message}\r\n\r\nDetails were saved to {strFinalPath.Replace(" ", Program.NOWRAP_SPACE)}" +
+                        $"{e.Message}\r\n\r\nDetails were saved to {fullPath.Replace(" ", ApplicationChars.SEGUI_NOBREAKSPACE)}" +
                         $"'\r\n\r\nForce quit application?",
                         $"MET Exception Handler",
                         MessageBoxButtons.YesNo,
@@ -160,7 +149,7 @@ namespace Mac_EFI_Toolkit
             }
             else
             {
-                dlgResult =
+                result =
                     MessageBox.Show(
                         $"{e.Message}\r\n\r\n{e}\r\n\r\nForce quit application?",
                         $"{e.GetType()}",
@@ -168,7 +157,7 @@ namespace Mac_EFI_Toolkit
                         MessageBoxIcon.Error);
             }
 
-            if (dlgResult == DialogResult.Yes)
+            if (result == DialogResult.Yes)
             {
                 // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
                 HandleOnExitingCleanup();
@@ -179,38 +168,38 @@ namespace Mac_EFI_Toolkit
         }
         #endregion
 
-        #region Exit Action
-        internal static void HandleApplicationExit(Form owner, ExitAction action)
+        #region Exit
+        internal static void HandleApplicationExit(Form owner, ExitType action)
         {
             // Check if confirmation dialogs are disabled
-            if (Settings.ReadBool(SettingsBoolType.DisableConfDiag))
+            if (Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
             {
                 ExecuteExitAction(action);
                 return;
             }
 
-            string strTitle = action ==
-                ExitAction.Restart ? "Restart" : "Quit";
+            string title = action ==
+                ExitType.Restart ? "Restart" : "Quit";
 
-            string strMessage = action ==
-                ExitAction.Restart
+            string message = action ==
+                ExitType.Restart
                     ? $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_RESTART}"
                     : $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_EXIT}";
 
-            if (ShowConfirmationDialog(owner, strTitle, strMessage))
+            if (ShowConfirmationDialog(owner, title, message))
             {
                 ExecuteExitAction(action);
             }
         }
 
-        private static void ExecuteExitAction(ExitAction action)
+        private static void ExecuteExitAction(ExitType action)
         {
             switch (action)
             {
-                case ExitAction.Restart:
+                case ExitType.Restart:
                     Restart();
                     break;
-                case ExitAction.Exit:
+                case ExitType.Exit:
                     Program.Exit();
                     break;
             }
@@ -218,14 +207,14 @@ namespace Mac_EFI_Toolkit
 
         private static bool ShowConfirmationDialog(Form owner, string title, string message)
         {
-            DialogResult dlgResult =
+            DialogResult result =
                 METPrompt.Show(
                     owner,
                     message,
-                    METPromptType.Question,
-                    METPromptButtons.YesNo);
+                    METPrompt.PType.Question,
+                    METPrompt.PButtons.YesNo);
 
-            return dlgResult == DialogResult.Yes;
+            return result == DialogResult.Yes;
         }
 
         internal static void Restart()
@@ -285,24 +274,25 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        public static void HandleDragEnter(object sender, DragEventArgs e)
+        public static void HandleDragEnter(object sender, DragEventArgs e, Action applycolor)
         {
             // Check if the dragged data is a file.
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                string[] arrDraggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
 
                 // Check if only one file is being dragged.
-                if (arrDraggedFiles.Length == 1)
+                if (draggedFiles.Length == 1)
                 {
                     // Check if the dragged item is a file and not a folder.
-                    string strFile = arrDraggedFiles[0];
-                    FileAttributes fAttribues = File.GetAttributes(strFile);
+                    string file = draggedFiles[0];
+                    FileAttributes attributes = File.GetAttributes(file);
 
                     // If it's a file (not a folder) then allow the copy operation.
-                    if ((fAttribues & FileAttributes.Directory) == 0)
+                    if ((attributes & FileAttributes.Directory) == 0)
                     {
                         e.Effect = DragDropEffects.Copy;
+                        applycolor?.Invoke();
                         return;
                     }
                 }

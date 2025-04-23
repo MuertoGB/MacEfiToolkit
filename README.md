@@ -17,12 +17,11 @@ Mac EFI Toolkit
 6. [Support](#support)
 7. [Changelog](#changelog)
 8. [Features](#features)
-9. [Acknowledgements](#acknowledgements)
-10. [Donate](#donate)
+9. [Donate](#donate)
 
 ## Introduction
 
-**Mac EFI Toolkit** (also known as **mefit**) is designed to aid technicians in repair and analysis of Mac EFI and Intel based Mac SOCROM firmwares. Designed to be compact, this application provides information gathering capabilities and limited patching functionality.
+**Mac EFI Toolkit** (also known as **mefit**) is designed to aid technicians in repair and analysis of Mac EFI and SOCROM firmwares. Designed to be compact, this application provides information gathering capabilities and limited patching functionality.
 
 ## System Requirements
 
@@ -33,6 +32,7 @@ Mac EFI Toolkit
 
 - **Internet Connectivity** (optional, only required for specific features):
   - Receiving notifications about new versions (can be disabled in settings).
+  - Downloading automatic updates.
   - Fetching device configuration data from Apple’s server if not available in the internal database.
   - Checking serial numbers on EveryMac.
 
@@ -75,7 +75,6 @@ If you're experiencing a bug or issue, please check the [open issues](https://gi
 #### 2. **Email Me**
 For more direct support, you can contact me via [email](mailto:muertogb@proton.me).
 
-
 ## Changelog
 
 > 📋 View the full changelog [here](CHANGELOG.md).
@@ -87,6 +86,7 @@ For more direct support, you can contact me via [email](mailto:muertogb@proton.m
     - All files are edited in memory preserving the original
     - Backup firmwares to a .zip archive for long-term storage
     - Drag and drop support
+    - Open multiple firmwares simultaneously
   - **Error Handling and Logging**
     - Automatic handling of uncaught exceptions
     - Automatic background logging for errors and key actions
@@ -147,15 +147,6 @@ For more direct support, you can contact me via [email](mailto:muertogb@proton.m
   - Edit the serial number
   - Export and replace the SCfg store
   - Export firmware information to a text file
-
-## Acknowledgements
-
-This software uses the following third-party libraries and resources:
-
-- LZMA [v24.08 SDK](https://www.7-zip.org/sdk.html), by Igor Pavlov.
-- [Knuth-Morris-Pratt algorithm](https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm), by Donald Knuth, James H. Morris, and Vaughan Pratt.
-- [MacModelShelf](https://github.com/MagerValp/MacModelShelf) database by MagerValp.
-- Application icon by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
 
 ## Donate
 

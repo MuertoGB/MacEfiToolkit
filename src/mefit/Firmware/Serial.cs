@@ -74,10 +74,10 @@ namespace Mac_EFI_Toolkit.Firmware
                 return false;
             }
 
-            string strYearCode = serial.Substring(2, 1);
-            string strWeekCode = serial.Substring(3, 2);
+            string yearCode = serial.Substring(2, 1);
+            string weekCode = serial.Substring(3, 2);
 
-            return IsValidCode(strYearCode, _hsYearCodes11) && IsValidCode(strWeekCode, _hsWeekCodes11);
+            return IsValidCode(yearCode, _hsYearCodes11) && IsValidCode(weekCode, _hsWeekCodes11);
         }
 
         private static bool IsValid12CharSerial(string serial)
@@ -88,10 +88,10 @@ namespace Mac_EFI_Toolkit.Firmware
                 return false;
             }
 
-            string strYearCode = serial.Substring(3, 1);
-            string strWeekCode = serial.Substring(4, 1);
+            string yearCode = serial.Substring(3, 1);
+            string weekCode = serial.Substring(4, 1);
 
-            return IsValidCode(strYearCode, _hsYearCodes12) && IsValidCode(strWeekCode, _hsWeekCodes12);
+            return IsValidCode(yearCode, _hsYearCodes12) && IsValidCode(weekCode, _hsWeekCodes12);
         }
 
         private static bool IsValidCode(string code, HashSet<string> knowncodes)

@@ -13,13 +13,17 @@ namespace Mac_EFI_Toolkit.UI.Controls
 {
     internal class METContextMenuStrip : ContextMenuStrip
     {
+        private Color _bcDefault = Color.FromArgb(20, 20, 20);
+        private Color _fcDefault = Color.White;
+        private string _fontName = "Segoe UI";
+
         #region Constructor
         public METContextMenuStrip()
         {
             Renderer = new METMenuRenderer();
-            BackColor = Color.FromArgb(10, 10, 10);
-            ForeColor = Color.White;
-            Font = new Font("Segoe UI", 10.2f, FontStyle.Regular);
+            BackColor = _bcDefault;
+            ForeColor = _fcDefault;
+            Font = new Font(_fontName, 10.2f, FontStyle.Regular);
             ShowImageMargin = false;
         }
         #endregion

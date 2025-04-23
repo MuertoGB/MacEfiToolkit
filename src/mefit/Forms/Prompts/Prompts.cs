@@ -4,6 +4,7 @@
 // Prompts.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.UI;
 using System.Windows.Forms;
 
@@ -16,8 +17,8 @@ namespace Mac_EFI_Toolkit.Forms
             return METPrompt.Show(
                 owner,
                 EFISTRINGS.FIRMWARE_MOD_FAILED_LOG,
-                METPromptType.Warning,
-                METPromptButtons.YesNo);
+                METPrompt.PType.Warning,
+                METPrompt.PButtons.YesNo);
         }
 
         internal static DialogResult ShowPathSuccessPrompt(Form owner)
@@ -25,8 +26,8 @@ namespace Mac_EFI_Toolkit.Forms
             return METPrompt.Show(
                 owner,
                 EFISTRINGS.FIRMWARE_MOD_SUCCESS_SAVE,
-                METPromptType.Question,
-                METPromptButtons.YesNo);
+                METPrompt.PType.Question,
+                METPrompt.PButtons.YesNo);
         }
     }
 }

@@ -18,23 +18,23 @@ namespace Mac_EFI_Toolkit.Common
     {
         private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
 
-        internal static FontFamily LoadFont(byte[] fontData)
+        internal static FontFamily LoadFont(byte[] fontdata)
         {
             // Allocate unmanaged memory to hold the font data.
-            IntPtr pFileView = Marshal.AllocCoTaskMem(fontData.Length);
+            IntPtr pFileView = Marshal.AllocCoTaskMem(fontdata.Length);
 
             // Copy the font data from the byte array to the allocated memory.
-            Marshal.Copy(fontData, 0, pFileView, fontData.Length);
+            Marshal.Copy(fontdata, 0, pFileView, fontdata.Length);
 
             try
             {
                 uint pNumFonts = 0;
 
                 // Add the font data from the memory to the system's font collection.
-                NativeMethods.AddFontMemResourceEx(pFileView, (uint)fontData.Length, IntPtr.Zero, ref pNumFonts);
+                NativeMethods.AddFontMemResourceEx(pFileView, (uint)fontdata.Length, IntPtr.Zero, ref pNumFonts);
 
                 // Add the memory font to a private font collection.
-                _privateFontCollection.AddMemoryFont(pFileView, fontData.Length);
+                _privateFontCollection.AddMemoryFont(pFileView, fontdata.Length);
 
                 // Return the last font family added to the private font collection.
                 return _privateFontCollection.Families.Last();
@@ -54,13 +54,13 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        internal static FontStatus IsFontStyleAvailable(string fontFamily, FontStyle fontStyle)
+        internal static FontStatus IsFontStyleAvailable(string fontfamily, FontStyle fontstyle)
         {
             try
             {
-                using (FontFamily fFamily = new FontFamily(fontFamily))
+                using (FontFamily family = new FontFamily(fontfamily))
                 {
-                    if (fFamily.IsStyleAvailable(fontStyle))
+                    if (family.IsStyleAvailable(fontstyle))
                     {
                         return FontStatus.Available;
                     }
@@ -86,13 +86,13 @@ namespace Mac_EFI_Toolkit.Common
 
             try
             {
-                FontFamily ffLoadFont = FontResolver.LoadFont(fontbuffer);
+                FontFamily resolvedFont = FontResolver.LoadFont(fontbuffer);
 
                 fonts = new[]
                 {
-                    new Font(ffLoadFont, 10.0F, FontStyle.Regular),
-                    new Font(ffLoadFont, 12.0F, FontStyle.Regular),
-                    new Font(ffLoadFont, 20.0F, FontStyle.Regular)
+                    new Font(resolvedFont, 12.0F, FontStyle.Regular),
+                    new Font(resolvedFont, 14.0F, FontStyle.Regular),
+                    new Font(resolvedFont, 24.0F, FontStyle.Regular)
                 };
 
                 return true;
@@ -103,6 +103,5 @@ namespace Mac_EFI_Toolkit.Common
                 return false;
             }
         }
-
     }
 }

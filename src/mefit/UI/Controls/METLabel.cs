@@ -31,7 +31,7 @@ namespace Mac_EFI_Toolkit.UI.Controls
         #region Custom Methods
         private void DrawText(Graphics graphics, TextFormatFlags textformatflags, Color textcolour)
         {
-            Rectangle textRect =
+            Rectangle rect =
                 new Rectangle(
                     ClientRectangle.Left + Padding.Left,
                     ClientRectangle.Top + Padding.Top,
@@ -42,7 +42,7 @@ namespace Mac_EFI_Toolkit.UI.Controls
             // Override text color when the control is !enabled.
             textcolour = !Enabled ? Color.FromArgb(14, 14, 14) : ForeColor;
 
-            TextRenderer.DrawText(graphics, Text, Font, textRect, textcolour, textformatflags);
+            TextRenderer.DrawText(graphics, Text, Font, rect, textcolour, textformatflags);
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -63,8 +63,8 @@ namespace Mac_EFI_Toolkit.UI.Controls
         {
             using (Graphics g = CreateGraphics())
             {
-                Size szText = TextRenderer.MeasureText(Text, Font);
-                return szText.Width > ClientSize.Width;
+                Size textSize = TextRenderer.MeasureText(Text, Font);
+                return textSize.Width > ClientSize.Width;
             }
         }
         #endregion
