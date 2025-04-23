@@ -1429,8 +1429,8 @@ namespace Mac_EFI_Toolkit.Forms
         {
             var buttons = new[]
             {
-                new { Button = cmdClose, Font = Program.FluentRegular12, Text = ApplicationChars.FLUENT_DISMISS },
-                new { Button = cmdOpenInExplorer, Font = Program.FluentRegular12, Text = ApplicationChars.FLUENT_FOLDEROPEN },
+                new { Button = cmdClose, Font = Program.FluentRegular14, Text = ApplicationChars.FLUENT_DISMISS },
+                new { Button = cmdOpenInExplorer, Font = Program.FluentRegular14, Text = ApplicationChars.FLUENT_FOLDEROPEN },
             };
 
             foreach (var buttonData in buttons)
@@ -1442,10 +1442,10 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetLabelFontAndGlyph()
         {
-            lblLzma.Font = Program.FluentRegular10;
+            lblLzma.Font = Program.FluentRegular12;
             lblLzma.Text = ApplicationChars.FLUENT_ZIPFILLED;
 
-            lblFmmEmail.Font = Program.FluentRegular10;
+            lblFmmEmail.Font = Program.FluentRegular12;
             lblFmmEmail.Text = ApplicationChars.FLUENT_MAILCHECKFILLED;
         }
 

@@ -30,9 +30,9 @@ namespace Mac_EFI_Toolkit
         #region Internal Members
         internal static string DraggedFile = string.Empty;
         internal static frmStartup MainWindow;
-        internal static Font FluentRegular10;
         internal static Font FluentRegular12;
-        internal static Font FluentRegular20;
+        internal static Font FluentRegular14;
+        internal static Font FluentRegular24;
         #endregion
 
         #region Main Entry Point
@@ -74,9 +74,9 @@ namespace Mac_EFI_Toolkit
             }
 
             // Assign loaded fonts to corresponding variables.
-            FluentRegular10 = fonts[0];
-            FluentRegular12 = fonts[1];
-            FluentRegular20 = fonts[2];
+            FluentRegular12 = fonts[0];
+            FluentRegular14 = fonts[1];
+            FluentRegular24 = fonts[2];
 
             // Initialize application settings.
             Settings.Initialize();
@@ -101,9 +101,9 @@ namespace Mac_EFI_Toolkit
         private static void HandleOnExitingCleanup()
         {
             // Dispose of memory fonts.
-            FluentRegular10?.Dispose();
             FluentRegular12?.Dispose();
-            FluentRegular20?.Dispose();
+            FluentRegular14?.Dispose();
+            FluentRegular24?.Dispose();
         }
         #endregion
 

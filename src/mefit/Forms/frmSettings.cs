@@ -245,7 +245,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonProperties()
         {
-            cmdClose.Font = Program.FluentRegular12;
+            cmdClose.Font = Program.FluentRegular14;
             cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
         }
         #endregion

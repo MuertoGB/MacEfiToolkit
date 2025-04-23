@@ -398,13 +398,13 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetButtonGlyphAndText()
         {
-            cmdClose.Font = Program.FluentRegular12;
+            cmdClose.Font = Program.FluentRegular14;
             cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
         }
 
         private void SetLabelGlyphAndText()
         {
-            lblGlyph.Font = Program.FluentRegular20;
+            lblGlyph.Font = Program.FluentRegular24;
             lblGlyph.Text = ApplicationChars.FLUENT_DOCDOWNARROW;
         }
 
