@@ -2,14 +2,10 @@
 
 This file provides legal notices, attributions, and disclaimers for third-party components and trademarks used in this software.
 
----
-
 ## License
 
 This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for full terms.
 https://github.com/MuertoGB/MacEfiToolkit/blob/main/LICENSE
-
----
 
 ## Third-Party Components
 
@@ -48,7 +44,6 @@ https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm
 
 This software includes an implementation of the Knuth–Morris–Pratt (KMP) string-searching algorithm, originally developed by Donald Knuth, Vaughan Pratt, and James H. Morris in 1977. The algorithm itself is in the public domain. This implementation was written independently and does not use third-party code.
 
-
 - **MacModelShelf** by MagerValp
   Original License: Apache License 2.0
   https://github.com/MagerValp/MacModelShelf
@@ -70,8 +65,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 - **Application Icon** by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).
-
----
 
 ## Disclaimer
 
