@@ -4,15 +4,16 @@ This file provides legal notices, attributions, and disclaimers for third-party 
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for full terms.
+This project is licensed under the GNU General Public License v3.0. See the `LICENSE` file for full terms.\
 https://github.com/MuertoGB/MacEfiToolkit/blob/main/LICENSE
 
 ## Third-Party Components
 
 This software includes third-party components:
 
-- **Fluent System Icons** by Microsoft, License: MIT\
-https://github.com/microsoft/fluentui-system-icons
+- **Fluent System Icons** by Microsoft\
+  License: MIT\
+  https://github.com/microsoft/fluentui-system-icons
 
 Copyright (c) 2020 Microsoft Corporation
 
@@ -34,8 +35,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-- **LZMA SDK** by Igor Pavlov, License: Public Domain\
-https://www.7-zip.org/sdk.html
+- **LZMA SDK** by Igor Pavlov\
+  License: Public Domain\
+  https://www.7-zip.org/sdk.html
 
 Anyone is free to copy, modify, publish, use, compile, sell, or distribute the original LZMA SDK code, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means.
 
@@ -44,8 +46,8 @@ https://en.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm
 
 This software includes an implementation of the Knuth–Morris–Pratt (KMP) string-searching algorithm, originally developed by Donald Knuth, Vaughan Pratt, and James H. Morris in 1977. The algorithm itself is in the public domain. This implementation was written independently and does not use third-party code.
 
-- **MacModelShelf** by MagerValp
-  Original License: Apache License 2.0
+- **MacModelShelf** by MagerValp\
+  Original License: Apache License 2.0\
   https://github.com/MagerValp/MacModelShelf
 
 This software includes data derived from the MacModelShelf database. The data has been reformatted into XML and expanded with additional entries by David Roberts.
