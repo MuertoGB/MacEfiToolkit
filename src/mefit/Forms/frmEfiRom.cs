@@ -1681,11 +1681,11 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void ClipboardSetFilename(bool showFileExtension) =>
-            SetClipboardText(showFileExtension ? _efirom.FirmwareInfo.FileNameExt : _efirom.FirmwareInfo.FileName);
+        private void ClipboardSetFilename(bool showFileExtension)
+            => SetClipboardText(showFileExtension ? _efirom.FirmwareInfo.FileNameExt : _efirom.FirmwareInfo.FileName);
 
-        private void ClipboardSetFileSize() =>
-            SetClipboardText(
+        private void ClipboardSetFileSize()
+            => SetClipboardText(
                 $"{FileTools.FormatBytesWithCommas(_efirom.FirmwareInfo.Length)} " +
                 $"{APPSTRINGS.BYTES} ({_efirom.FirmwareInfo.Length:X}h)");
 
