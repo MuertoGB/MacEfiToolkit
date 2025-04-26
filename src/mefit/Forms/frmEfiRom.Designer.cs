@@ -161,7 +161,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.replaceIntelMERegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.fixFsysChecksumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.invalidateEFILockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DisableEFILockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsFolders = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.openBackupsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBuildsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1821,11 +1821,11 @@ namespace Mac_EFI_Toolkit.Forms
             this.replaceFsysStoreToolStripMenuItem,
             this.replaceIntelMERegionToolStripMenuItem,
             this.toolStripSeparator2,
-            this.fixFsysChecksumToolStripMenuItem,
-            this.invalidateEFILockToolStripMenuItem});
+            this.DisableEFILockToolStripMenuItem,
+            this.fixFsysChecksumToolStripMenuItem});
             this.cmsPatch.Name = "cmsPatch";
             this.cmsPatch.ShowImageMargin = false;
-            this.cmsPatch.Size = new System.Drawing.Size(241, 178);
+            this.cmsPatch.Size = new System.Drawing.Size(241, 206);
             // 
             // changeSerialNumberToolStripMenuItem
             // 
@@ -1873,13 +1873,13 @@ namespace Mac_EFI_Toolkit.Forms
             this.fixFsysChecksumToolStripMenuItem.Text = "Fix Fsys Checksum";
             this.fixFsysChecksumToolStripMenuItem.Click += new System.EventHandler(this.fixFsysChecksumToolStripMenuItem_Click);
             // 
-            // invalidateEFILockToolStripMenuItem
+            // DisableEFILockToolStripMenuItem
             // 
-            this.invalidateEFILockToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.invalidateEFILockToolStripMenuItem.Name = "invalidateEFILockToolStripMenuItem";
-            this.invalidateEFILockToolStripMenuItem.Size = new System.Drawing.Size(240, 28);
-            this.invalidateEFILockToolStripMenuItem.Text = "Invalidate EFI Lock";
-            this.invalidateEFILockToolStripMenuItem.Click += new System.EventHandler(this.invalidateEFILockToolStripMenuItem_Click);
+            this.DisableEFILockToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.DisableEFILockToolStripMenuItem.Name = "DisableEFILockToolStripMenuItem";
+            this.DisableEFILockToolStripMenuItem.Size = new System.Drawing.Size(240, 28);
+            this.DisableEFILockToolStripMenuItem.Text = "Disable EFI Lock";
+            this.DisableEFILockToolStripMenuItem.Click += new System.EventHandler(this.DisableEFILockToolStripMenuItem_Click);
             // 
             // cmsFolders
             // 
@@ -2163,7 +2163,7 @@ namespace Mac_EFI_Toolkit.Forms
         private System.Windows.Forms.ToolStripMenuItem viewRomInformationToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem fixFsysChecksumToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem invalidateEFILockToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DisableEFILockToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportNVRAMSVSStoresToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportNVRAMVSSStoresToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
