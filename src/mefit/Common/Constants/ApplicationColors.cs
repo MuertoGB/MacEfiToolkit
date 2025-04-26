@@ -32,7 +32,9 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
 
         #region Glyphs
-        internal static readonly Color GlyphDefault = Color.FromArgb(210, 210, 210);
+        internal static readonly Color DragDefault = NormalText;
+        internal static readonly Color DragActive = Okay;
+        internal static readonly Color GlyphDefault = Color.FromArgb(160, 160, 160);
         internal static readonly Color GlyphActive = Okay;
         #endregion
     }

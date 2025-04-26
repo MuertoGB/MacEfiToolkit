@@ -46,8 +46,8 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
-            _efirom.ResetVss = cbxResetVss.Checked;
-            _efirom.ResetSvs = cbxResetSvs.Checked;
+            _efirom.ResetNvVariableStore = cbxResetVss.Checked;
+            _efirom.ResetNvSecureStore = cbxResetSvs.Checked;
 
             DialogResult = DialogResult.OK;
         }

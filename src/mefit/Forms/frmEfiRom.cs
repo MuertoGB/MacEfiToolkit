@@ -25,9 +25,8 @@ namespace Mac_EFI_Toolkit.Forms
     public partial class frmEfiRom : FormEx
     {
         #region Private Members
-        // EFIROM instance
         private EFIROM _efirom = new EFIROM();
-
+        private EFIPatcher _patcher = new EFIPatcher();
         private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
         private Thread _tLoadFirmware = null;
         private CancellationTokenSource _cancellationToken;
@@ -69,7 +68,9 @@ namespace Mac_EFI_Toolkit.Forms
             DragDrop += frmEfiRom_DragDrop;
             Deactivate += frmEfiRom_Deactivate;
             Activated += frmEfiRom_Activated;
-            lblFmmEmail.MouseEnter += lblFmmEmail_MouseEnter;
+            lblDxeArchiveGlyph.MouseEnter += lblDxeArchiveGlyph_MouseEnter;
+            lblFmmEmailGlyph.MouseEnter += lblFmmEmailGlyph_MouseEnter;
+            lblEfiLockGlyph.MouseEnter += lblEfiLockGlyph_MouseEnter;
         }
 
         private void GetAndDisableMenuItems()
@@ -125,7 +126,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void frmEfiRom_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_cancellationToken != null && !_cancellationToken.IsCancellationRequested)
+            if (_cancellationToken != null & !_cancellationToken.IsCancellationRequested)
             {
                 _cancellationToken.Cancel();
             }
@@ -324,11 +325,11 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Label Events
-        private void lblFmmEmail_MouseEnter(object sender, EventArgs e)
+        private void lblDxeArchiveGlyph_MouseEnter(object sender, EventArgs e)
         {
             Label control = (Label)sender;
 
-            if (_efirom.MobileMeEmail == null)
+            if (_efirom.LzmaDecompressedBuffer == null)
             {
                 control.Cursor = Cursors.Default;
                 return;
@@ -337,13 +338,45 @@ namespace Mac_EFI_Toolkit.Forms
             control.Cursor = Cursors.Hand;
         }
 
-        private void lblFmmEmail_Click(object sender, EventArgs e)
+        private void lblDxeArchiveGlyph_Click(object sender, EventArgs e)
         {
-            if (_efirom.MobileMeEmail != null)
+            exportLZMADXEArchiveToolStripMenuItem.PerformClick();
+        }
+
+        private void lblFmmEmailGlyph_MouseEnter(object sender, EventArgs e)
+        {
+            Label control = (Label)sender;
+
+            if (string.IsNullOrEmpty(_efirom.MobileMeEmail))
             {
-                METPrompt.Show(this, _efirom.MobileMeEmail, METPrompt.PType.Information, METPrompt.PButtons.Okay);
+                control.Cursor = Cursors.Default;
                 return;
             }
+
+            control.Cursor = Cursors.Hand;
+        }
+
+        private void lblFmmEmailGlyph_Click(object sender, EventArgs e)
+        {
+            exportFmmmobilemeEmailTextToolStripMenuItem.PerformClick();
+        }
+
+        private void lblEfiLockGlyph_MouseEnter(object sender, EventArgs e)
+        {
+            Label control = (Label)sender;
+
+            if (_efirom.EfiPrimaryLockStatus.LockType != EfiLockType.Locked)
+            {
+                control.Cursor = Cursors.Default;
+                return;
+            }
+
+            control.Cursor = Cursors.Hand;
+        }
+
+        private void lblEfiLockGlyph_Click(object sender, EventArgs e)
+        {
+            invalidateEFILockToolStripMenuItem.PerformClick();
         }
         #endregion
 
@@ -583,7 +616,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private static void SaveFile(string filepath, byte[] buffer) => File.WriteAllBytes(filepath, buffer);
 
-        private void exportLZMADXEArchiveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exportDXEArchiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Program.EnsureDirectoriesExist();
 
@@ -801,7 +834,15 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (form.DialogResult == DialogResult.OK)
                 {
-                    WriteEfiromSerialNumber(_efirom.NewSerial);
+                    byte[] patchedBuffer = _patcher.WriteNewSerial(_efirom.NewSerial, _efirom);
+
+                    if (patchedBuffer == null)
+                    {
+                        NotifyPatchingFailure();
+                        return;
+                    }
+
+                    HandlePostPatch(patchedBuffer);
                 }
             }
         }
@@ -817,18 +858,107 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (form.DialogResult == DialogResult.OK)
                 {
-                    EraseNvram(_efirom.ResetVss, _efirom.ResetSvs);
+                    Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
+
+                    // Load current firmware into buffer.
+                    byte[] patchedBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
+
+                    // Erase NVRAM sections if required
+                    if (_efirom.ResetNvVariableStore)
+                    {
+                        Logger.WriteCallerLine(LOGSTRINGS.NVRAM_VSS_ERASE);
+                        _patcher.CheckEraseStore(nameof(_efirom.VssPrimary), _efirom.VssPrimary, patchedBuffer);
+                        _patcher.CheckEraseStore(nameof(_efirom.VssSecondary), _efirom.VssSecondary, patchedBuffer);
+                    }
+
+                    if (_efirom.ResetNvSecureStore)
+                    {
+                        Logger.WriteCallerLine(LOGSTRINGS.NVRAM_SVS_ERASE);
+                        _patcher.CheckEraseStore(nameof(_efirom.SvsPrimary), _efirom.SvsPrimary, patchedBuffer);
+                        _patcher.CheckEraseStore(nameof(_efirom.SvsSecondary), _efirom.SvsSecondary, patchedBuffer);
+                    }
+
+                    Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
+
+                    HandlePostPatch(patchedBuffer);
                 }
             }
         }
 
-        private void replaceFsysStoreToolStripMenuItem_Click(object sender, EventArgs e) => WriteFsysStore();
+        private void replaceFsysStoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            byte[] patchedBuffer = _patcher.WriteNewFsysStore(_efirom);
 
-        private void replaceIntelMERegionToolStripMenuItem_Click(object sender, EventArgs e) => WriteIntelMeRegion();
+            if (patchedBuffer == null)
+            {
+                NotifyPatchingFailure();
+                return;
+            }
 
-        private void fixFsysChecksumToolStripMenuItem_Click(object sender, EventArgs e) => MaskFsysChecksum();
+            HandlePostPatch(patchedBuffer);
+        }
 
-        private void invalidateEFILockToolStripMenuItem_Click(object sender, EventArgs e) => RemoveEfiLock();
+        private void replaceIntelMERegionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            byte[] patchedBuffer = _patcher.WriteNewIntelMeRegion(_efirom);
+
+            if (patchedBuffer == null)
+            {
+                NotifyPatchingFailure();
+                return;
+            }
+
+            HandlePostPatch(patchedBuffer);
+        }
+
+        private void fixFsysChecksumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            byte[] patchedBuffer =
+                _patcher.MakeFsysCrcPatchedBinary(
+                    BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer),
+                    _efirom.Fsys.BaseAddress,
+                    _efirom.Fsys.Buffer,
+                    _efirom.Fsys.CrcActual,
+                    _efirom.Fsys.Size,
+                    _efirom);
+
+            if (patchedBuffer == null)
+            {
+                NotifyPatchingFailure();
+                return;
+            }
+
+            HandlePostPatch(patchedBuffer);
+        }
+
+        private void invalidateEFILockToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            byte[] patchedBuffer = _patcher.RemoveEfiLock(_efirom);
+
+            if (patchedBuffer == null)
+            {
+                NotifyPatchingFailure();
+                return;
+            }
+
+            HandlePostPatch(patchedBuffer);
+        }
+
+        private void HandlePostPatch(byte[] patchedBuffer)
+        {
+            if (Prompts.ShowPatchSuccessPrompt(this) == DialogResult.Yes)
+            {
+                string savePath = _patcher.SaveOutputFirmware(patchedBuffer, _efirom);
+                if (!string.IsNullOrEmpty(savePath) && Prompts.PromptLoadNewFirmware(this) == DialogResult.Yes)
+                {
+                    OpenBinary(savePath);
+                }
+            }
+            else
+            {
+                Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
+            }
+        }
         #endregion
 
         #region Tools Toolstrip Events
@@ -1048,7 +1178,7 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateIntelFitControls();
             UpdateDescriptorModeControls();
             UpdateIntelMeControls();
-            UpdateLzmaArchiveControls();
+            UpdateDxeArchiveControls();
             UpdateFmmEmailControls();
 
             // Apply DISABLED_TEXT to N/A labels.
@@ -1298,7 +1428,7 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 case EfiLockType.Locked:
                     lblEfiLock.Text = EFISTRINGS.LOCKED.ToUpper();
-                    lblEfiLock.ForeColor = ApplicationColours.Warning;
+                    lblEfiLockGlyph.ForeColor = ApplicationColours.Warning;
                     break;
                 case EfiLockType.Unlocked:
                     lblEfiLock.Text = EFISTRINGS.UNLOCKED.ToUpper();
@@ -1306,7 +1436,6 @@ namespace Mac_EFI_Toolkit.Forms
                 case EfiLockType.Unknown:
                 default:
                     lblEfiLock.Text = APPSTRINGS.UNKNOWN.ToUpper();
-                    lblEfiLock.ForeColor = ApplicationColours.Warning;
                     break;
             }
         }
@@ -1317,14 +1446,13 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 case ApfsCapableType.Yes:
                     lblApfsCapable.Text = EFISTRINGS.APFS_DRIVER_FOUND;
+                    lblApfsGlyph.ForeColor = ApplicationColours.GlyphActive;
                     break;
                 case ApfsCapableType.No:
                     lblApfsCapable.Text = EFISTRINGS.APFS_DRIVER_NOT_FOUND;
-                    lblApfsCapable.ForeColor = ApplicationColours.Warning;
                     break;
                 case ApfsCapableType.Unknown:
                     lblApfsCapable.Text = APPSTRINGS.UNKNOWN.ToUpper();
-                    lblApfsCapable.ForeColor = ApplicationColours.Warning;
                     break;
             }
         }
@@ -1357,11 +1485,11 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateIntelFitControls() =>
             fitVersionToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_efirom.FitVersion);
 
-        private void UpdateLzmaArchiveControls() =>
-            lblLzma.ForeColor = _efirom.LzmaDecompressedBuffer != null ? ApplicationColours.GlyphActive : ApplicationColours.GlyphDefault;
+        private void UpdateDxeArchiveControls() =>
+            lblDxeArchiveGlyph.ForeColor = _efirom.LzmaDecompressedBuffer != null ? ApplicationColours.GlyphActive : ApplicationColours.GlyphDefault;
 
         private void UpdateFmmEmailControls() =>
-            lblFmmEmail.ForeColor = _efirom.MobileMeEmail != null ? ApplicationColours.GlyphActive : ApplicationColours.GlyphDefault;
+            lblFmmEmailGlyph.ForeColor = _efirom.MobileMeEmail != null ? ApplicationColours.GlyphActive : ApplicationColours.GlyphDefault;
         #endregion
 
         #region UI Events
@@ -1442,11 +1570,17 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void SetLabelFontAndGlyph()
         {
-            lblLzma.Font = Program.FluentRegular12;
-            lblLzma.Text = ApplicationChars.FLUENT_ZIPFILLED;
+            lblDxeArchiveGlyph.Font = Program.FluentRegular12;
+            lblDxeArchiveGlyph.Text = ApplicationChars.FLUENT_ZIPFILLED;
 
-            lblFmmEmail.Font = Program.FluentRegular12;
-            lblFmmEmail.Text = ApplicationChars.FLUENT_MAILCHECKFILLED;
+            lblFmmEmailGlyph.Font = Program.FluentRegular12;
+            lblFmmEmailGlyph.Text = ApplicationChars.FLUENT_MAILCHECKFILLED;
+
+            lblApfsGlyph.Font = Program.FluentRegular12;
+            lblApfsGlyph.Text = ApplicationChars.FLUENT_FOLDERLIGHTENING;
+
+            lblEfiLockGlyph.Font = Program.FluentRegular12;
+            lblEfiLockGlyph.Text = ApplicationChars.FLUENT_FOLDERPROHIBITED;
         }
 
         private void SetTipHandlers()
@@ -1466,8 +1600,10 @@ namespace Mac_EFI_Toolkit.Forms
             Label[] labels =
             {
                 lblParseTime,
-                lblLzma,
-                lblFmmEmail
+                lblDxeArchiveGlyph,
+                lblFmmEmailGlyph,
+                lblApfsGlyph,
+                lblEfiLockGlyph
             };
 
             CheckBox[] checkBoxes = { cbxCensor };
@@ -1507,9 +1643,11 @@ namespace Mac_EFI_Toolkit.Forms
                     { cmdMenuHelp, $"{EFISTRINGS.MENU_TIP_HELP} (CTRL + H)" },
                     { cmdOpenInExplorer, $"{EFISTRINGS.MENU_TIP_OPENFILELOCATION} (CTRL + SHIFT + L)" },
                     { lblParseTime, APPSTRINGS.FW_PARSE_TIME},
-                    { cbxCensor, censorString() },
-                    { lblLzma, lzmaString() },
-                    { lblFmmEmail, emailString() }
+                    { cbxCensor, censorTipString() },
+                    { lblDxeArchiveGlyph, dxeTipString() },
+                    { lblFmmEmailGlyph, fmmEmailTipString() },
+                    { lblApfsGlyph , apfsTipString() },
+                    { lblEfiLockGlyph, efiLockTipString() }
                 };
 
                 if (tooltips.TryGetValue(sender, out string value))
@@ -1521,14 +1659,20 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private string censorString() =>
+        private string censorTipString() =>
             $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER} (CTRL + SHIFT + N)";
 
-        private string lzmaString() =>
+        private string dxeTipString() =>
             _efirom.LzmaDecompressedBuffer != null ? EFISTRINGS.LZMA_VOL_FOUND : string.Empty;
 
-        private string emailString() =>
+        private string apfsTipString() =>
+            _efirom.IsApfsCapable == ApfsCapableType.Yes ? "EFI is APFS capable" : string.Empty;
+
+        private string fmmEmailTipString() =>
             _efirom.MobileMeEmail != null ? EFISTRINGS.FMM_EMAIL_FOUND : string.Empty;
+
+        private string efiLockTipString() =>
+            _efirom.EfiPrimaryLockStatus.LockType == EfiLockType.Locked ? "Firmware is EFI Locked (Click to Unlock)" : string.Empty;
 
         private void HandleCheckBoxChanged(object sender, EventArgs e)
         {
@@ -1536,7 +1680,7 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
                 {
-                    lblStatusBarTip.Text = censorString();
+                    lblStatusBarTip.Text = censorTipString();
                 }
             }
         }
@@ -1617,8 +1761,10 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Reset parse time.
             lblParseTime.Text = "0.00s";
-            lblLzma.ForeColor = ApplicationColours.GlyphDefault;
-            lblFmmEmail.ForeColor = ApplicationColours.GlyphDefault;
+            lblDxeArchiveGlyph.ForeColor = ApplicationColours.GlyphDefault;
+            lblFmmEmailGlyph.ForeColor = ApplicationColours.GlyphDefault;
+            lblEfiLockGlyph.ForeColor = ApplicationColours.GlyphDefault;
+            lblApfsGlyph.ForeColor = ApplicationColours.GlyphDefault;
 
             // Reset window text.
             Text = APPSTRINGS.EFIROM;
@@ -1710,664 +1856,6 @@ namespace Mac_EFI_Toolkit.Forms
                 $"{APPSTRINGS.BASE} {_efirom.Descriptor.BiosBase:X}h, " +
                 $"{APPSTRINGS.LIMIT} {_efirom.Descriptor.BiosLimit:X}h, " +
                 $"{APPSTRINGS.SIZE} {_efirom.Descriptor.BiosSize:X}h");
-        #endregion
-
-        #region Write Serial
-        private void WriteEfiromSerialNumber(string serial)
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
-
-            // Check serial length.
-            if (serial.Length != 11 && serial.Length != 12)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SERIAL_LEN_INVALID} ({serial.Length})");
-                NotifyPatchingFailure();
-                return;
-            }
-
-            // Check if the SerialBase exists.
-            if (_efirom.Fsys.SerialBase == -1)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_BASE_NOT_FOUND}");
-                NotifyPatchingFailure();
-                return;
-            }
-
-            // Create buffers.
-            Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
-
-            byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
-            byte[] newSerialBuffer = Encoding.UTF8.GetBytes(serial);
-
-            // Overwrite serial in the binary buffer.
-            Logger.WriteCallerLine(LOGSTRINGS.SSN_WTB);
-
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.SerialBase, newSerialBuffer);
-
-            // Check HWC base and write new HWC.
-            bool hwcBasePresent = _efirom.Fsys.HWCBase != -1;
-            string newHwc = null;
-
-            if (hwcBasePresent)
-            {
-                newHwc = serial.Substring(8, _efirom.Fsys.Serial.Length == 11 ? 3 : 4);
-                byte[] newHwcBuffer = Encoding.UTF8.GetBytes(newHwc);
-
-                Logger.WriteCallerLine(LOGSTRINGS.HWC_WTB);
-
-                // Write new HWC.
-                BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.HWCBase, newHwcBuffer);
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.FSYS_LFB);
-
-            // Load patched fsys from the binary buffer.
-            FsysStore fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
-
-            // Verify the serial was written correctly.
-            if (!string.Equals(serial, fsysStore.Serial))
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SSN_NOT_WRITTEN}");
-                NotifyPatchingFailure();
-                return;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.SSN_WRITE_SUCCESS);
-
-            // Verify the HWC was written correctly, if applicable.
-            if (hwcBasePresent && fsysStore.HWCBase != -1 && !string.Equals(newHwc, fsysStore.HWC))
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.HWC_NOT_WRITTEN}");
-                NotifyPatchingFailure();
-                return;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.HWC_WRITE_SUCCESS);
-
-            // Patch fsys checksum in the binary buffer.
-            binaryBuffer = _efirom.MakeFsysCrcPatchedBinary(binaryBuffer, fsysStore.BaseAddress, fsysStore.Buffer, fsysStore.CrcActual, fsysStore.Size);
-
-            // Reload fsys store from the binary buffer and verify CRC masking success.
-            fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
-
-            if (!string.Equals(fsysStore.CrcString, fsysStore.CrcActualString))
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.FSYS_SUM_MASK_FAIL}");
-                NotifyPatchingFailure();
-                return;
-            }
-
-            // Log success and prompt for saving the patched firmware.
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
-
-            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
-            {
-                SaveOutputFirmwareEfirom(binaryBuffer);
-                return;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-        }
-        #endregion
-
-        #region Erase NVRAM
-        private void EraseNvram(bool resetvss, bool resetsvs)
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
-
-            // Load current firmware into buffer.
-            byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
-
-            // Erase NVRAM sections if required
-            if (resetvss)
-            {
-                Logger.WriteCallerLine(LOGSTRINGS.NVRAM_VSS_ERASE);
-                CheckEraseStore(nameof(_efirom.VssPrimary), _efirom.VssPrimary, binaryBuffer);
-                CheckEraseStore(nameof(_efirom.VssSecondary), _efirom.VssSecondary, binaryBuffer);
-            }
-
-            if (resetsvs)
-            {
-                Logger.WriteCallerLine(LOGSTRINGS.NVRAM_SVS_ERASE);
-                CheckEraseStore(nameof(_efirom.SvsPrimary), _efirom.SvsPrimary, binaryBuffer);
-                CheckEraseStore(nameof(_efirom.SvsSecondary), _efirom.SvsSecondary, binaryBuffer);
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
-
-            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
-            {
-                SaveOutputFirmwareEfirom(binaryBuffer);
-                return;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-        }
-
-        private void CheckEraseStore(string storename, NvramStore nvramstore, byte[] buffer)
-        {
-            if (nvramstore.StoreBase == -1)
-            {
-                Logger.WriteCallerLine($"{storename} {LOGSTRINGS.NVR_BASE_NOT_FOUND}");
-            }
-            else if (nvramstore.IsStoreEmpty)
-            {
-                Logger.WriteCallerLine($"{storename} {LOGSTRINGS.NVR_IS_EMPTY}");
-            }
-            else if (!GetAndEraseStore(storename, nvramstore, buffer))
-            {
-                return;
-            }
-        }
-
-        private bool GetAndEraseStore(string storename, NvramStore nvramstore, byte[] binarybuffer)
-        {
-            Logger.WriteCallerLine($"{storename} {LOGSTRINGS.AT} {nvramstore.StoreBase:X}h {LOGSTRINGS.NVR_HAS_BODY_ERASING}");
-
-            byte[] erasedBuffer = EraseNvramStore(NvramStoreType.Variable, nvramstore);
-
-            if (erasedBuffer == null)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.NVR_FAIL_ERASE_BODY} ({storename})");
-                NotifyPatchingFailure();
-                return false;
-            }
-
-            BinaryTools.OverwriteBytesAtBase(binarybuffer, nvramstore.StoreBase, erasedBuffer);
-
-            byte[] tempBuffer = BinaryTools.GetBytesBaseLength(binarybuffer, nvramstore.StoreBase, nvramstore.StoreLength);
-
-            if (!BinaryTools.ByteArraysMatch(tempBuffer, erasedBuffer))
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.NVR_FAIL_WRITE_VERIFY} ({storename})");
-                NotifyPatchingFailure();
-                return false;
-            }
-
-            return true;
-        }
-
-        private byte[] EraseNvramStore(NvramStoreType storetype, NvramStore store)
-        {
-            try
-            {
-                byte[] storeBuffer = BinaryTools.CloneBuffer(store.StoreBuffer);
-                int bodyStart = EFIROM.HDR_SIZE;
-                int bodyEnd = store.StoreBuffer.Length - EFIROM.HDR_SIZE;
-
-                // Initialize header.
-                Logger.WriteCallerLine(LOGSTRINGS.NVRAM_INIT_HDR);
-                for (int i = 0x4; i <= 0x7; i++)
-                {
-                    storeBuffer[i] = 0xFF;
-                }
-
-                if (storetype == NvramStoreType.Variable)
-                {
-                    Logger.WriteCallerLine(LOGSTRINGS.NVRAM_INIT_HDR_VSS);
-                    for (int i = 0x9; i <= 0xA; i++)
-                    {
-                        storeBuffer[i] = 0xFF;
-                    }
-                }
-
-                // Verify that the relevant header bytes have been set to 0xFF.
-                if (!VerifyErasedHeader(storeBuffer, storetype))
-                {
-                    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.NVRAM_INIT_HDR_FAIL}");
-                    return null;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.NVRAM_INIT_HDR_SUCCESS);
-
-                // Pull the store body from the buffer.
-                byte[] erasedStoreBodyBuffer = BinaryTools.GetBytesBaseLength(storeBuffer, bodyStart, bodyEnd);
-
-                Logger.WriteCallerLine(LOGSTRINGS.NVR_ERASE_BODY);
-
-                // Erase the store body.
-                BinaryTools.EraseByteArray(erasedStoreBodyBuffer);
-
-                Logger.WriteCallerLine(LOGSTRINGS.NVR_WRITE_ERASED_BODY);
-
-                // Write the erased store back to the nvram store buffer.
-                BinaryTools.OverwriteBytesAtBase(storeBuffer, bodyStart, erasedStoreBodyBuffer);
-
-                // Check the body was erased.
-                erasedStoreBodyBuffer = BinaryTools.GetBytesBaseLength(storeBuffer, bodyStart, bodyEnd);
-
-                if (!BinaryTools.IsByteBlockEmpty(erasedStoreBodyBuffer))
-                {
-                    MessageBox.Show(LOGSTRINGS.NVR_BODY_WRITE_FAIL);
-                    return null;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.NVR_STORE_ERASE_SUCESS);
-
-                return storeBuffer;
-            }
-            catch (Exception e)
-            {
-                Logger.WriteErrorLine(nameof(EraseNvramStore), e.GetType(), e.Message);
-                return null;
-            }
-        }
-
-        private static bool VerifyErasedHeader(byte[] storebuffer, NvramStoreType storetype)
-        {
-            for (int i = 0x4; i <= 0x7; i++)
-            {
-                if (storebuffer[i] != 0xFF)
-                    return false;
-            }
-
-            if (storetype == NvramStoreType.Variable)
-            {
-                for (int i = 0x9; i <= 0xA; i++)
-                {
-                    if (storebuffer[i] != 0xFF)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-        #endregion
-
-        #region Write Fsys Store
-        private void WriteFsysStore()
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
-
-            using (OpenFileDialog dialog = CreateFsysOpenFileDialog())
-            {
-                if (dialog.ShowDialog() != DialogResult.OK)
-                {
-                    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.FSYS_IMPORT_CANCELLED}");
-                    return;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
-
-                byte[] fsysBuffer = File.ReadAllBytes(dialog.FileName);
-
-                if (!ValidateFsysStore(fsysBuffer))
-                {
-                    return;
-                }
-
-                FsysStore fsysStore = _efirom.ParseFsysStoreData(fsysBuffer, true);
-
-                if (!ValidateFsysCrc(fsysStore, ref fsysBuffer))
-                {
-                    return;
-                }
-
-                byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
-
-                if (!WriteNewFsysStore(binaryBuffer, fsysBuffer))
-                {
-                    return;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
-
-                if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
-                {
-                    SaveOutputFirmwareEfirom(binaryBuffer);
-                    return;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-            }
-        }
-
-        private static OpenFileDialog CreateFsysOpenFileDialog()
-        {
-            return new OpenFileDialog
-            {
-                InitialDirectory = ApplicationPaths.FsysDirectory,
-                Filter = APPSTRINGS.FILTER_BIN
-            };
-        }
-
-        private bool ValidateFsysStore(byte[] fsysBuffer)
-        {
-            int fsysBase = BinaryTools.GetBaseAddress(fsysBuffer, Signatures.FsysStore.FsysMarker);
-
-            // Fsys store length should equal 800h, 2048 bytes.
-            if (fsysBuffer.Length != _efirom.Fsys.Size)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.EXPECTED_STORE_SIZE_NOT} {_efirom.Fsys.Size:X}h ({fsysBuffer.Length:X}h)");
-                NotifyPatchingFailure();
-                return false;
-            }
-
-            // Expect Fsys signature at 0h.
-            if (fsysBase != 0)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_SIG_MISALIGNED}");
-                NotifyPatchingFailure();
-                return false;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.VALIDATION_PASS);
-
-            return true;
-        }
-
-        private bool ValidateFsysCrc(FsysStore fsysstore, ref byte[] fsysbuffer)
-        {
-            if (!string.Equals(fsysstore.CrcString, fsysstore.CrcActualString))
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.FSYS_SUM_INVALID} ({LOGSTRINGS.FOUND} {fsysstore.CrcString}, {LOGSTRINGS.CALCULATED} {fsysstore.CrcActualString})");
-
-                Logger.WriteCallerLine(LOGSTRINGS.MASKING_SUM);
-
-                fsysbuffer = _efirom.PatchFsysCrc(fsysstore.Buffer, fsysstore.CrcActual, fsysstore.Size);
-                fsysstore = _efirom.ParseFsysStoreData(fsysbuffer, true);
-
-                if (!string.Equals(fsysstore.CrcString, fsysstore.CrcActualString))
-                {
-                    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.SUM_MASKING_FAIL}");
-                    NotifyPatchingFailure();
-                    return false;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.FSYS_SUM_MASK_SUCCESS);
-            }
-
-            return true;
-        }
-
-        private bool WriteNewFsysStore(byte[] binaryBuffer, byte[] newFsysBuffer)
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
-
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, _efirom.Fsys.BaseAddress, newFsysBuffer);
-            FsysStore fsysStore = _efirom.ParseFsysStoreData(binaryBuffer, false);
-
-            if (!BinaryTools.ByteArraysMatch(fsysStore.Buffer, newFsysBuffer))
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.STORE_COMP_FAILED}");
-                NotifyPatchingFailure();
-                return false;
-            }
-
-            return true;
-        }
-        #endregion
-
-        #region Mask Fsys Checksum
-        private void MaskFsysChecksum()
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
-
-            // Make binary with patched Fsys crc.
-            byte[] binaryBuffer =
-                _efirom.MakeFsysCrcPatchedBinary(
-                    BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer),
-                    _efirom.Fsys.BaseAddress,
-                    _efirom.Fsys.Buffer,
-                    _efirom.Fsys.CrcActual,
-                    _efirom.Fsys.Size);
-
-            if (binaryBuffer == null)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.CRC_BUFFER_EMPTY}");
-                NotifyPatchingFailure();
-                return;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
-
-            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
-            {
-                SaveOutputFirmwareEfirom(binaryBuffer);
-                return;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-        }
-        #endregion
-
-        #region Remove EFI Lock
-        private void RemoveEfiLock()
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
-            Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
-
-            // Initialize buffers.
-            byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
-
-            // Patch the primary store.
-            byte[] primaryUnlockedBuffer = PatchPrimaryStore(binaryBuffer);
-
-            // Patch the backup store, if necessary.
-            byte[] backupUnlockedBuffer = PatchBackupStore(binaryBuffer);
-
-            // Verify patched stores.
-            if (!VerifyPatchedStores(binaryBuffer, primaryUnlockedBuffer, backupUnlockedBuffer))
-            {
-                NotifyPatchingFailure();
-                return;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
-
-            // Prompt for saving and export if confirmed.
-            if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
-            {
-                SaveOutputFirmwareEfirom(binaryBuffer);
-                return;
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-        }
-
-        private byte[] PatchPrimaryStore(byte[] binarybuffer)
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.LOCK_PRIMARY_MAC);
-            byte[] unlockedBuffer = _efirom.PatchSvsStoreMac(_efirom.SvsPrimary.StoreBuffer, _efirom.EfiPrimaryLockStatus.LockBase);
-
-            Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
-            BinaryTools.OverwriteBytesAtBase(binarybuffer, _efirom.SvsPrimary.StoreBase, unlockedBuffer);
-
-            return unlockedBuffer;
-        }
-
-        private byte[] PatchBackupStore(byte[] binarybuffer)
-        {
-            byte[] unlockedBuffer = null;
-
-            if (_efirom.EfiBackupLockStatus.LockBase != -1)
-            {
-                Logger.WriteCallerLine(LOGSTRINGS.LOCK_BACKUP_MAC);
-                unlockedBuffer = _efirom.PatchSvsStoreMac(_efirom.SvsSecondary.StoreBuffer, _efirom.EfiBackupLockStatus.LockBase);
-
-                Logger.WriteCallerLine(LOGSTRINGS.WRITE_NEW_DATA);
-                BinaryTools.OverwriteBytesAtBase(binarybuffer, _efirom.SvsSecondary.StoreBase, unlockedBuffer);
-            }
-
-            return unlockedBuffer;
-        }
-
-        private bool VerifyPatchedStores(byte[] binarybuffer, byte[] primaryunlockedbuffer, byte[] backupunlockedbuffer)
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.LOCK_LOAD_SVS);
-
-            int primaryBase = BinaryTools.GetBaseAddressUpToLimit(binarybuffer, Signatures.Nvram.SvsStoreMarker, _efirom.NvramBase, _efirom.NvramLimit);
-            NvramStore svsPrimary = _efirom.ParseSingleNvramStore(binarybuffer, primaryBase, NvramStoreType.Secure);
-
-            if (!BinaryTools.ByteArraysMatch(svsPrimary.StoreBuffer, primaryunlockedbuffer))
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_PRIM_VERIF_FAIL}");
-                return false;
-            }
-
-            if (backupunlockedbuffer != null)
-            {
-                int backupBase = BinaryTools.GetBaseAddressUpToLimit(binarybuffer, Signatures.Nvram.SvsStoreMarker, primaryBase + EFIROM.HDR_SIZE, _efirom.NvramLimit);
-                NvramStore svsBackup = _efirom.ParseSingleNvramStore(binarybuffer, backupBase, NvramStoreType.Secure);
-
-                if (!BinaryTools.ByteArraysMatch(svsBackup.StoreBuffer, backupunlockedbuffer))
-                {
-                    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.LOCK_BACK_VERIF_FAIL}");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        #endregion
-
-        #region Write Intel ME
-        private void WriteIntelMeRegion()
-        {
-            Logger.WriteCallerLine(LOGSTRINGS.PATCH_START);
-
-            using (OpenFileDialog dialog = CreateImeOpenFileDialog())
-            {
-                if (dialog.ShowDialog() != DialogResult.OK)
-                {
-                    Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_IMPORT_CANCELLED}");
-                    return;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.CREATING_BUFFERS);
-
-                byte[] meBuffer = File.ReadAllBytes(dialog.FileName);
-
-                if (!ValidateMeRegion(meBuffer))
-                {
-                    return;
-                }
-
-                string meVersion = IntelME.GetVersionData(meBuffer, ImeVersionType.ME, _efirom.Descriptor);
-
-                Logger.WriteCallerLine($"{LOGSTRINGS.IME_VERSION} {meVersion ?? APPSTRINGS.NOT_FOUND}");
-
-                byte[] binaryBuffer = BinaryTools.CloneBuffer(_efirom.LoadedBinaryBuffer);
-
-                if (!WriteMeRegion(meBuffer, binaryBuffer))
-                {
-                    return;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.PATCH_SUCCESS);
-
-                if (Prompts.ShowPathSuccessPrompt(this) == DialogResult.Yes)
-                {
-                    SaveOutputFirmwareEfirom(binaryBuffer);
-                    return;
-                }
-
-                Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-            }
-        }
-
-        private static OpenFileDialog CreateImeOpenFileDialog()
-        {
-            return new OpenFileDialog
-            {
-                InitialDirectory = ApplicationPaths.IntelMeDirectory,
-                Filter = APPSTRINGS.FILTER_BIN
-            };
-        }
-
-        private bool ValidateMeRegion(byte[] mebuffer)
-        {
-            int fptBase = BinaryTools.GetBaseAddress(mebuffer, IntelME.FPTMarker);
-
-            if (fptBase == -1)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_FPT_NOT_FOUND}");
-                NotifyPatchingFailure();
-                return false;
-            }
-
-            if (mebuffer.Length > _efirom.Descriptor.MeSize)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_TOO_LARGE} {mebuffer.Length:X}h > {_efirom.Descriptor.MeSize:X}h");
-                NotifyPatchingFailure();
-                return false;
-            }
-
-            if (mebuffer.Length < _efirom.Descriptor.MeSize)
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.IME_TOO_SMALL} {mebuffer.Length:X}h > {_efirom.Descriptor.MeSize:X}h");
-            }
-
-            Logger.WriteCallerLine(LOGSTRINGS.VALIDATION_PASS);
-
-            return true;
-        }
-
-        private bool WriteMeRegion(byte[] mebuffer, byte[] binarybuffer)
-        {
-            byte[] emptyBuffer = new byte[_efirom.Descriptor.MeSize];
-            BinaryTools.EraseByteArray(emptyBuffer);
-
-            Array.Copy(mebuffer, 0, emptyBuffer, 0, mebuffer.Length);
-            Array.Copy(emptyBuffer, 0, binarybuffer, _efirom.Descriptor.MeBase, emptyBuffer.Length);
-
-            byte[] patchedMeBuffer = BinaryTools.GetBytesBaseLimit(binarybuffer, (int)_efirom.Descriptor.MeBase, (int)_efirom.Descriptor.MeLimit);
-
-            if (!BinaryTools.ByteArraysMatch(patchedMeBuffer, emptyBuffer))
-            {
-                Logger.WriteCallerLine($"{LOGSTRINGS.PATCH_FAIL} {LOGSTRINGS.IME_BUFFER_MISMATCH}");
-                NotifyPatchingFailure();
-                return false;
-            }
-
-            return true;
-        }
-        #endregion
-
-        #region Patching IO
-        private SaveFileDialog CreateFirmwareSaveFileDialog()
-        {
-            Program.EnsureDirectoriesExist();
-
-            return new SaveFileDialog
-            {
-                Filter = APPSTRINGS.FILTER_BIN,
-                FileName = _efirom.FirmwareInfo.FileName,
-                OverwritePrompt = true,
-                InitialDirectory = ApplicationPaths.BuildsDirectory
-            };
-        }
-
-        private void SaveOutputFirmwareEfirom(byte[] binarybuffer)
-        {
-            using (SaveFileDialog dialog = CreateFirmwareSaveFileDialog())
-            {
-                if (dialog.ShowDialog() != DialogResult.OK)
-                {
-                    Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-                    return;
-                }
-
-                if (FileTools.WriteAllBytesEx(dialog.FileName, binarybuffer) && File.Exists(dialog.FileName))
-                {
-                    Logger.WriteCallerLine($"{LOGSTRINGS.FILE_SAVE_SUCCESS} {dialog.FileName}");
-
-                    DialogResult result =
-                        METPrompt.Show(
-                            this,
-                            DIALOGSTRINGS.FW_SAVED_SUCCESS_LOAD,
-                            METPrompt.PType.Question,
-                            METPrompt.PButtons.YesNo);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        OpenBinary(dialog.FileName);
-                    }
-                }
-            }
-        }
         #endregion
     }
 }

@@ -10,9 +10,19 @@
 | [V1.1.1](#version-111) | [V2.1.0](#version-210) |
 | [V1.1.2](#version-112) | [V2.1.1](#version-211) |
 | [V1.1.3](#version-113) | [V2.1.2](#version-212) |
-| [V1.1.4](#version-114) |               |
-| [V1.1.5](#version-115) |               |
+| [V1.1.4](#version-114) | [V2.1.3](#version-213) |
+| [V1.1.5](#version-115) |                        |
 
+## Version 2.1.3
+
+### Enhancements
+- **User Interface Improvements:**
+  - Updated button, menu, and switch colours throughout the application to make them more visually distinctive.
+  - New textured sprite for window title bars.
+  - Improved the EFIROM window status bar.
+  - Minor string and font adjustments.
+- Improved firmware patching logic.
+- Defensive: Ensure an empty serial number is correctly flagged as invalid.
 
 ## Version 2.1.2
 

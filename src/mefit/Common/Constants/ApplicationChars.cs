@@ -13,6 +13,8 @@ namespace Mac_EFI_Toolkit.Common.Constants
         internal const string FLUENT_DOCDOWNARROW = "\uE681";
         internal const string FLUENT_ZIPFILLED = "\uE894";
         internal const string FLUENT_MAILCHECKFILLED = "\uEB0B";
+        internal const string FLUENT_FOLDERPROHIBITED = "\uE88C";
+        internal const string FLUENT_FOLDERLIGHTENING = "\uE87A";
 
         internal const string SEGUI_RIGHTWARDSARROW = "\u2192";
         internal const string SEGUI_DINGBAT1 = "\u2776";

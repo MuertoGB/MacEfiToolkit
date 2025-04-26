@@ -24,7 +24,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         public string ConfigCode { get; set; }
         public string NewSerial { get; set; }
         public FirmwareFile.Information FirmwareInfo { get; private set; }
-        public SCfgStore SCfgStoreData { get; private set; }
+        public SCfgStore SCfg { get; private set; }
 
         public TimeSpan ParseTime { get; private set; }
         #endregion
@@ -54,10 +54,10 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             iBootVersion = GetiBootVersion(sourcebuffer);
 
             // Parse Scfg Store data.
-            SCfgStoreData = ParseSCfgStoreData(sourcebuffer, false);
+            SCfg = ParseSCfgStoreData(sourcebuffer, false);
 
             // Fetch the Config Code.
-            ConfigCode = SCfgStoreData.HWC != null ? MacTools.GetDeviceConfigCodeLocal(SCfgStoreData.HWC) : null;
+            ConfigCode = SCfg.HWC != null ? MacTools.GetDeviceConfigCodeLocal(SCfg.HWC) : null;
 
             parseTimer.Start();
             ParseTime = parseTimer.Elapsed;
@@ -102,7 +102,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             LoadedBinaryBuffer = null;
             FirmwareLoaded = false;
             FirmwareInfo = new FirmwareFile.Information();
-            SCfgStoreData = new SCfgStore();
+            SCfg = new SCfgStore();
             Controller = new ControllerType();
             ParseTime = TimeSpan.Zero;
         }

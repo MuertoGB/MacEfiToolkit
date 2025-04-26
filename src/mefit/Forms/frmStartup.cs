@@ -408,9 +408,9 @@ namespace Mac_EFI_Toolkit.Forms
             lblGlyph.Text = ApplicationChars.FLUENT_DOCDOWNARROW;
         }
 
-        private void ApplyDragEnterColours() => lblGlyph.ForeColor = ApplicationColours.GlyphActive;
+        private void ApplyDragEnterColours() => lblGlyph.ForeColor = ApplicationColours.DragActive;
 
-        private void ApplyDragLeaveColours() => lblGlyph.ForeColor = ApplicationColours.GlyphDefault;
+        private void ApplyDragLeaveColours() => lblGlyph.ForeColor = ApplicationColours.DragDefault;
 
         private void SetControlForeColor(Control parentcontrol, Color forecolor)
         {

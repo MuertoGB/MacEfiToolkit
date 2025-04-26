@@ -44,6 +44,12 @@ namespace Mac_EFI_Toolkit.Firmware
         //    - FFFF = Hardware Configuration (4 characters): Represents the hardware configuration or variant.
         internal static bool IsValid(string serial)
         {
+            // Null serial return false.
+            if (serial == null)
+            {
+                return false;
+            }
+
             // Check for valid length (11 or 12 characters).
             if (serial.Length != 11 && serial.Length != 12)
             {

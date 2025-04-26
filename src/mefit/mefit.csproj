@@ -90,6 +90,7 @@
     <Compile Include="Common\Constants\ApplicationUrls.cs" />
     <Compile Include="Common\Constants\ApplicationVersions.cs" />
     <Compile Include="Common\Cryptography.cs" />
+    <Compile Include="Firmware\EFIROM\EFIPatcher.cs" />
     <Compile Include="Firmware\EFIROM\FlashDescriptor.cs" />
     <Compile Include="Common\FontResolver.cs" />
     <Compile Include="Firmware\EFIROM\Guids.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Firmware\EFIROM\IntelME.cs" />
     <Compile Include="Firmware\Serial.cs" />
     <Compile Include="Firmware\SOCROM\Signatures.cs" />
+    <Compile Include="Firmware\SOCROM\SOCPatcher.cs" />
     <Compile Include="Firmware\SOCROM\Types\Enums.cs" />
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
@@ -283,10 +285,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\FluentSystemIcons.ttf" />
-    <None Include="Resources\imgSprite.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="mefit.ico" />
+    <None Include="Resources\imgSprite.png" />
     <None Include="Resources\icon64.png" />
     <None Include="Resources\icon24.png" />
     <None Include="Resources\icon32.png" />

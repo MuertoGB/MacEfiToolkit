@@ -520,10 +520,10 @@ namespace Mac_EFI_Toolkit.Common.Constants
             "Firmware modified successfully. Would you like to save the output?";
 
         internal const string LZMA_VOL_FOUND =
-            "LZMA DXE Archive Detected in Firmware";
+            "DXE Archive Detected (Click to Export)";
 
         internal const string FMM_EMAIL_FOUND =
-            "Find My Mac Email Detected in NVRAM (Click to view)";
+            "Find My Mac Email Detected (Click to Export)";
 
         internal const string FMM_EMAIL =
             "FindMyMac_Email";
