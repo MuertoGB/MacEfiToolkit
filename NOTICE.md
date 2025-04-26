@@ -74,12 +74,12 @@ limitations under the License.
 **Application Icon** by [ADI_ICONS](https://www.flaticon.com/authors/adi-icons) on [FlatIcon](https://www.flaticon.com/free-icon/wrench_17505678?related_id=17505678).\
 Resource used as the application and windows forms icon.
 
-<img src="stream/images/application/icon256.png" width="64" height="64" style="border:1px solid #ccc; border-radius:8px; padding:4px;"><br>
+<img src="stream/images/application/icon256.png" width="64" height="64">
 
 **Binding Dark Transparent sprite** by Tia Newbury on [Transparent Textures](https://www.transparenttextures.com/).\
 Resource used for textured window title bars.
 
-<img src="stream/images/application/sprite180.png" width="64" height="64" style="border:1px solid #ccc; border-radius:8px; padding:4px;"><br>
+<img src="stream/images/application/sprite180.png" width="64" height="64">
 
 ## Disclaimer
 
