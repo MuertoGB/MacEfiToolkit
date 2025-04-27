@@ -69,7 +69,7 @@ namespace Mac_EFI_Toolkit
             // Load custom fonts into memory.
             if (!FontResolver.LoadCustomFont(Properties.Resources.FluentSystemIcons, out Font[] fonts))
             {
-                Logger.WriteCallerLine(LOGSTRINGS.MAIN_FLUENT_NOTLOADED);
+                Logger.WriteCallerLine(LogStrings.MAIN_FLUENT_NOTLOADED);
                 return;
             }
 
@@ -183,8 +183,8 @@ namespace Mac_EFI_Toolkit
 
             string message = action ==
                 ExitType.Restart
-                    ? $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_RESTART}"
-                    : $"{APPSTRINGS.FIRMWARE_WINDOWS_OPEN} {APPSTRINGS.QUESTION_EXIT}";
+                    ? $"{AppStrings.FIRMWARE_WINDOWS_OPEN} {AppStrings.QUESTION_RESTART}"
+                    : $"{AppStrings.FIRMWARE_WINDOWS_OPEN} {AppStrings.QUESTION_EXIT}";
 
             if (ShowConfirmationDialog(owner, title, message))
             {

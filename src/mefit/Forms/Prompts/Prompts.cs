@@ -16,7 +16,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             return METPrompt.Show(
                 owner,
-                EFISTRINGS.FIRMWARE_MOD_FAILED_LOG,
+                EfiWindowStrings.FIRMWARE_MOD_FAILED_LOG,
                 METPrompt.PType.Warning,
                 METPrompt.PButtons.YesNo);
         }
@@ -25,7 +25,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             return METPrompt.Show(
                 owner,
-                EFISTRINGS.FIRMWARE_MOD_SUCCESS_SAVE,
+                EfiWindowStrings.FIRMWARE_MOD_SUCCESS_SAVE,
                 METPrompt.PType.Question,
                 METPrompt.PButtons.YesNo);
         }
@@ -34,7 +34,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             return METPrompt.Show(
                 owner,
-                DIALOGSTRINGS.FW_SAVED_SUCCESS_LOAD,
+                DialogStrings.FW_SAVED_SUCCESS_LOAD,
                 METPrompt.PType.Question,
                 METPrompt.PButtons.YesNo);
         }

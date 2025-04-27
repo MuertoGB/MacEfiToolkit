@@ -122,7 +122,7 @@ namespace Mac_EFI_Toolkit.Forms
                 else
                 {
                     UpdateTextBoxColour(control, ApplicationColours.Error);
-                    lblValidity.Text += $" - {APPSTRINGS.INVALID}";
+                    lblValidity.Text += $" - {AppStrings.INVALID}";
                     cmdOkay.Enabled = false;
                 }
             }

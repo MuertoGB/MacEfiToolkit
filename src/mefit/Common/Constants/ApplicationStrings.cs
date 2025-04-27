@@ -6,7 +6,7 @@
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal class APPSTRINGS
+    internal class AppStrings
     {
         #region Strings
         internal const string APPNAME =
@@ -119,7 +119,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class LOGSTRINGS
+    internal class LogStrings
     {
         #region Strings
         internal const string PATCH_START =
@@ -328,7 +328,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class DIALOGSTRINGS
+    internal class DialogStrings
     {
         #region Strings
         internal const string REQUIRES_WIN_10 =
@@ -411,13 +411,13 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class STARTUPSTRINGS
+    internal class StartupWindowStrings
     {
         #region Strings
         #endregion
     }
 
-    internal class EFISTRINGS
+    internal class EfiWindowStrings
     {
         #region Strings
         internal const string VSS =
@@ -527,10 +527,16 @@ namespace Mac_EFI_Toolkit.Common.Constants
 
         internal const string FMM_EMAIL =
             "FindMyMac_Email";
+
+        internal const string EFI_APFS =
+            "EFI is APFS capable";
+
+        internal const string EFI_LOCKED =
+            "Firmware is EFI Locked (Click to Unlock)";
         #endregion
     }
 
-    internal class SOCSTRINGS
+    internal class SocWindowStrings
     {
         #region Strings
         internal const string SCFG_REGION =
@@ -571,7 +577,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class UPDATSTRINGS
+    internal class UpdateWindowStrings
     {
         #region Strings
         internal const string WAIT =

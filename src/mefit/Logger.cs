@@ -66,7 +66,7 @@ namespace Mac_EFI_Toolkit
         private static void ShowLogFileNotFoundError(Form owner) =>
             METPrompt.Show(
                 owner,
-                DIALOGSTRINGS.LOG_NOT_FOUND,
+                DialogStrings.LOG_NOT_FOUND,
                 METPrompt.PType.Error,
                 METPrompt.PButtons.Okay);
     }

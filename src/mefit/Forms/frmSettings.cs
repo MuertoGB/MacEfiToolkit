@@ -100,7 +100,7 @@ namespace Mac_EFI_Toolkit.Forms
                         ? ApplicationPaths.WorkingDirectory
                         : Settings.ReadString(settingsType);
 
-                dialog.Description = APPSTRINGS.SELECT_FOLDER;
+                dialog.Description = AppStrings.SELECT_FOLDER;
                 dialog.ShowNewFolderButton = true;
 
                 if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath))
@@ -159,7 +159,7 @@ namespace Mac_EFI_Toolkit.Forms
             DialogResult result =
                 METPrompt.Show(
                     this,
-                    APPSTRINGS.RESET_SETTINGS_DEFAULT,
+                    AppStrings.RESET_SETTINGS_DEFAULT,
                     METPrompt.PType.Warning,
                     METPrompt.PButtons.YesNo);
 

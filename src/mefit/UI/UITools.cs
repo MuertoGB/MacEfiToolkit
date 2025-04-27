@@ -55,7 +55,7 @@ namespace Mac_EFI_Toolkit.UI
             DialogResult result =
                 METPrompt.Show(
                         owner,
-                        $"{APPSTRINGS.FILE_SAVE_SUCCESS_NAV}",
+                        $"{AppStrings.FILE_SAVE_SUCCESS_NAV}",
                         METPrompt.PType.Information,
                         METPrompt.PButtons.YesNo);
 
@@ -70,7 +70,7 @@ namespace Mac_EFI_Toolkit.UI
             DialogResult result =
                 METPrompt.Show(
                         owner,
-                        $"{APPSTRINGS.FILES_SAVE_SUCCESS_NAV}",
+                        $"{AppStrings.FILES_SAVE_SUCCESS_NAV}",
                         METPrompt.PType.Information,
                         METPrompt.PButtons.YesNo);
 
@@ -196,7 +196,7 @@ namespace Mac_EFI_Toolkit.UI
         {
             foreach (Control control in tablelayoutpanel.Controls)
             {
-                if (control is Label label && label.Text == APPSTRINGS.NA)
+                if (control is Label label && label.Text == AppStrings.NA)
                 {
                     label.ForeColor = color;
                 }

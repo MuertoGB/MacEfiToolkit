@@ -84,8 +84,8 @@ namespace Mac_EFI_Toolkit
 
         public static async Task DownloadAsync(Label label)
         {
-            UpdateStatus(label, UPDATSTRINGS.WAIT);
-            Logger.WriteCallerLine(UPDATSTRINGS.UPD_STARTED);
+            UpdateStatus(label, UpdateWindowStrings.WAIT);
+            Logger.WriteCallerLine(UpdateWindowStrings.UPD_STARTED);
 
             string version = string.IsNullOrEmpty(NewVersion) ? string.Empty : NewVersion.Replace(".", string.Empty);
             string savePath = Path.Combine(ApplicationPaths.WorkingDirectory, $"mefit_{version}.exe");
@@ -94,41 +94,41 @@ namespace Mac_EFI_Toolkit
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.DOWNLOADING_VERSION} {NewVersion}");
+                    Logger.WriteCallerLine($"{UpdateWindowStrings.DOWNLOADING_VERSION} {NewVersion}");
                     byte[] exeBuffer = await webClient.DownloadDataTaskAsync(ApplicationUrls.LatestBuild);
 
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.DOWNLOADED} {exeBuffer.Length} {APPSTRINGS.BYTES}");
+                    Logger.WriteCallerLine($"{UpdateWindowStrings.DOWNLOADED} {exeBuffer.Length} {AppStrings.BYTES}");
 
-                    Logger.WriteCallerLine(UPDATSTRINGS.VERIFY_SHA256);
+                    Logger.WriteCallerLine(UpdateWindowStrings.VERIFY_SHA256);
                     string hash = Cryptography.GetSha256Digest(exeBuffer);
 
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.EXPECTED}: {ExpectedSHA256}");
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.ACTUAL}: {hash}");
+                    Logger.WriteCallerLine($"{UpdateWindowStrings.EXPECTED}: {ExpectedSHA256}");
+                    Logger.WriteCallerLine($"{UpdateWindowStrings.ACTUAL}: {hash}");
 
                     if (!string.Equals(hash, ExpectedSHA256, StringComparison.OrdinalIgnoreCase))
                     {
                         // Destroy the buffer data.
                         exeBuffer = null;
-                        Logger.WriteCallerLine(UPDATSTRINGS.CHECKSUM_MISMATCH);
-                        UpdateStatus(label, UPDATSTRINGS.CHECKSUM_MISMATCH);
+                        Logger.WriteCallerLine(UpdateWindowStrings.CHECKSUM_MISMATCH);
+                        UpdateStatus(label, UpdateWindowStrings.CHECKSUM_MISMATCH);
                         return;
                     }
 
                     Program.EnsureDirectoriesExist();
 
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.SAVING_EXE} {savePath}");
+                    Logger.WriteCallerLine($"{UpdateWindowStrings.SAVING_EXE} {savePath}");
                     await Task.Run(() => File.WriteAllBytes(savePath, exeBuffer));
 
                     // Check file exists.
                     if (!File.Exists(savePath))
                     {
-                        Logger.WriteCallerLine(UPDATSTRINGS.SAVE_FAIL);
-                        UpdateStatus(label, UPDATSTRINGS.SAVE_FAIL);
+                        Logger.WriteCallerLine(UpdateWindowStrings.SAVE_FAIL);
+                        UpdateStatus(label, UpdateWindowStrings.SAVE_FAIL);
                         return;
                     }
 
                     FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(savePath);
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.LAUNCH_VERSION} {fileVersionInfo.ProductVersion}");
+                    Logger.WriteCallerLine($"{UpdateWindowStrings.LAUNCH_VERSION} {fileVersionInfo.ProductVersion}");
 
                     Process.Start(new ProcessStartInfo
                     {
@@ -136,7 +136,7 @@ namespace Mac_EFI_Toolkit
                         UseShellExecute = true
                     });
 
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.EXITING} {Application.ProductVersion}");
+                    Logger.WriteCallerLine($"{UpdateWindowStrings.EXITING} {Application.ProductVersion}");
                     await Task.Delay(500);
                     Application.Exit();
                 }
@@ -144,7 +144,7 @@ namespace Mac_EFI_Toolkit
             catch (Exception e)
             {
                 Logger.WriteErrorLine(nameof(DownloadAsync), e.GetType(), e.Message);
-                UpdateStatus(label, UPDATSTRINGS.ERROR);
+                UpdateStatus(label, UpdateWindowStrings.ERROR);
             }
         }
 

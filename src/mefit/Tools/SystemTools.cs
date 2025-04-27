@@ -52,8 +52,8 @@ namespace Mac_EFI_Toolkit.Tools
             }
 
             MessageBox.Show(
-                DIALOGSTRINGS.REQUIRES_WIN_10,
-                DIALOGSTRINGS.UNSUPPORTED_OS,
+                DialogStrings.REQUIRES_WIN_10,
+                DialogStrings.UNSUPPORTED_OS,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
 

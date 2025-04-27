@@ -210,7 +210,7 @@ namespace Mac_EFI_Toolkit.Forms
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
-                Filter = APPSTRINGS.FILTER_STARTUP_WINDOW
+                Filter = AppStrings.FILTER_STARTUP_WINDOW
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -358,7 +358,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             METPrompt.Show(
                 this,
-                DIALOGSTRINGS.NOT_VALID_FIRMWARE,
+                DialogStrings.NOT_VALID_FIRMWARE,
                 METPrompt.PType.Warning,
                 METPrompt.PButtons.Okay);
         }
@@ -443,11 +443,11 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (_childWindowCount == 0)
             {
-                lblWindowTitle.Text = APPSTRINGS.APPNAME;
+                lblWindowTitle.Text = AppStrings.APPNAME;
                 return;
             }
 
-            lblWindowTitle.Text = $"{APPSTRINGS.APPNAME} ({_childWindowCount})";
+            lblWindowTitle.Text = $"{AppStrings.APPNAME} ({_childWindowCount})";
         }
 
         internal async void StartupVersionCheck()

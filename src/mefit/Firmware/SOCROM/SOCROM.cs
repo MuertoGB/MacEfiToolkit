@@ -123,7 +123,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 // Fix invalid length byte.
                 if (length <= 0x0 || length >= 0x20) // Too short / Too long
                 {
-                    return APPSTRINGS.UNKNOWN;
+                    return AppStrings.UNKNOWN;
                 }
 
                 byte[] ibootBytes = BinaryTools.GetBytesBaseLength(sourcebytes, ibootBase + dataStart, length);
@@ -131,7 +131,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 return _utf8encoding.GetString(ibootBytes);
             }
 
-            return APPSTRINGS.UNKNOWN;
+            return AppStrings.UNKNOWN;
         }
         #endregion
 

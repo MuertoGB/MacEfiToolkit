@@ -42,9 +42,6 @@ namespace Mac_EFI_Toolkit.Forms
             // Attach event handlers.
             WireEventHandlers();
 
-            // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
-
             // Set tip handlers for controls.
             SetTipHandlers();
 
@@ -53,38 +50,9 @@ namespace Mac_EFI_Toolkit.Forms
 
             // Get and disable menu items.
             GetAndDisableMenuItems();
-        }
 
-        private void WireEventHandlers()
-        {
-            Load += frmSocRom_Load;
-            FormClosing += frmSocRom_FormClosing;
-            FormClosed += frmSocRom_FormClosed;
-            KeyDown += frmSocRom_KeyDown;
-            DragEnter += frmSocRom_DragEnter;
-            DragDrop += frmSocRom_DragDrop;
-            Deactivate += frmSocRom_Deactivate;
-            Activated += frmSocRom_Activated;
-        }
-
-        private void GetAndDisableMenuItems()
-        {
-            _menuButtons = new Button[]
-            {
-                cmdMenuCopy,
-                cmdMenuExport,
-                cmdMenuPatch,
-                cmdMenuTools,
-                cmdOpenInExplorer
-            };
-
-            _contextMenus = new ContextMenuStrip[]
-            {
-                cmsCopy, cmsExport, cmsPatch, cmsTools,
-            };
-
-            EnableButtons(false, _menuButtons);
-            EnableMenus(false, _contextMenus);
+            // Enable drag.
+            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
         }
         #endregion
 
@@ -129,9 +97,11 @@ namespace Mac_EFI_Toolkit.Forms
             _socrom = null;
         }
 
-        private void frmSocRom_FormClosed(object sender, FormClosedEventArgs e) => _cancellationToken?.Dispose();
+        private void frmSocRom_FormClosed(object sender, FormClosedEventArgs e)
+            => _cancellationToken?.Dispose();
 
-        private void frmSocRom_DragEnter(object sender, DragEventArgs e) => Program.HandleDragEnter(sender, e, null);
+        private void frmSocRom_DragEnter(object sender, DragEventArgs e)
+            => Program.HandleDragEnter(sender, e, null);
 
         private void frmSocRom_DragDrop(object sender, DragEventArgs e)
         {
@@ -146,9 +116,11 @@ namespace Mac_EFI_Toolkit.Forms
             }));
         }
 
-        private void frmSocRom_Deactivate(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
+        private void frmSocRom_Deactivate(object sender, EventArgs e)
+            => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
 
-        private void frmSocRom_Activated(object sender, EventArgs e) => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
+        private void frmSocRom_Activated(object sender, EventArgs e)
+            => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -232,16 +204,18 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e) => Close();
+        private void cmdClose_Click(object sender, EventArgs e)
+            => Close();
 
-        private void cmdMinimize_Click(object sender, EventArgs e) => WindowState = FormWindowState.Minimized;
+        private void cmdMinimize_Click(object sender, EventArgs e)
+            => WindowState = FormWindowState.Minimized;
 
         private void cmdMenuOpen_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog
             {
                 InitialDirectory = _strInitialDirectory,
-                Filter = APPSTRINGS.FILTER_SOCROM_SUPPORTED_FIRMWARE
+                Filter = AppStrings.FILTER_SOCROM_SUPPORTED_FIRMWARE
             })
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
@@ -251,26 +225,26 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void cmdMenuHelp_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
+        private void cmdMenuHelp_Click(object sender, EventArgs e)
+            => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsHelp,
                 MenuPosition.BottomLeft);
 
-        private void cmdMenuCopy_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
+        private void cmdMenuCopy_Click(object sender, EventArgs e)
+            => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsCopy,
                 MenuPosition.BottomLeft);
 
-        private void cmdMenuFolders_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
+        private void cmdMenuFolders_Click(object sender, EventArgs e)
+            => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsFolders,
                 MenuPosition.BottomLeft);
 
-        private void cmdMenuExport_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
+        private void cmdMenuExport_Click(object sender, EventArgs e)
+            => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsExport,
                 MenuPosition.BottomLeft);
@@ -300,58 +274,72 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void cmdMenuTools_Click(object sender, EventArgs e) =>
-            UITools.ShowContextMenuAtControlPoint(
+        private void cmdMenuTools_Click(object sender, EventArgs e)
+            => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsTools,
                 MenuPosition.BottomLeft);
 
-        private void cmdOpenInExplorer_Click(object sender, EventArgs e) => UITools.HighlightPathInExplorer(_socrom.LoadedBinaryPath, this);
+        private void cmdOpenInExplorer_Click(object sender, EventArgs e)
+            => UITools.HighlightPathInExplorer(_socrom.LoadedBinaryPath, this);
         #endregion
 
         #region Switch Events
-        private void cbxCensor_CheckedChanged(object sender, EventArgs e) => UpdateSerialControls();
+        private void cbxCensor_CheckedChanged(object sender, EventArgs e)
+            => UpdateSerialControls();
         #endregion
 
-        #region Copy Toolstrip Events
-        private void filenameToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetFilename(true);
+        #region Context Menu Events
+        // Folders Context Menu
+        private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e)
+            => UITools.OpenFolderInExplorer(ApplicationPaths.BackupsDirectory, this);
 
-        private void sizeToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetFileSize();
+        private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
+            => UITools.OpenFolderInExplorer(ApplicationPaths.BuildsDirectory, this);
 
-        private void cRC32ToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetFileCrc32();
+        private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e)
+            => UITools.OpenFolderInExplorer(ApplicationPaths.ScfgDirectory, this);
 
-        private void creationDateToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetFileCreationTime();
+        private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+            => UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
 
-        private void modifiedDateToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetFileModifiedTime();
+        // Copy Context Menu
+        private void filenameToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetFilename(true);
 
-        private void iBootVersionToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetIbootVersion();
+        private void sizeToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetFileSize();
 
-        private void scfgBaseAddressToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetScfgBaseAddress();
+        private void cRC32ToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetFileCrc32();
 
-        private void scfgSizeDecimalToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetScfgSizeDecimal();
+        private void creationDateToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetFileCreationTime();
 
-        private void scfgSizeHexToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetScfgSizeHex();
+        private void modifiedDateToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetFileModifiedTime();
 
-        private void scfgCRC32ToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetScfgCrc32();
+        private void iBootVersionToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetIbootVersion();
+
+        private void scfgBaseAddressToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetScfgBaseAddress();
+
+        private void scfgSizeDecimalToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetScfgSizeDecimal();
+
+        private void scfgSizeHexToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetScfgSizeHex();
+
+        private void scfgCRC32ToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetScfgCrc32();
 
         private void serialToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string serial = _socrom.SCfg.Serial;
 
             if (string.IsNullOrEmpty(serial))
-            {
                 return;
-            }
 
             Clipboard.SetText(serial);
 
@@ -359,53 +347,35 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 METPrompt.Show(
                     this,
-                    $"{APPSTRINGS.SERIAL_NUMBER} " +
-                    $"{EFISTRINGS.COPIED_TO_CB_LC}",
+                    $"{AppStrings.SERIAL_NUMBER} " +
+                    $"{EfiWindowStrings.COPIED_TO_CB_LC}",
                     METPrompt.PType.Information,
                     METPrompt.PButtons.Okay);
             }
         }
 
-        private void configToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetScfgConfig();
+        private void configToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetScfgConfig();
 
-        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e) =>
-            ClipboardSetScfgOrderNo();
-        #endregion
+        private void orderNoToolStripMenuItem_Click(object sender, EventArgs e)
+            => ClipboardSetScfgOrderNo();
 
-        #region Folders Toolstrip Events
-        private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(ApplicationPaths.BackupsDirectory, this);
-
-        private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(ApplicationPaths.BuildsDirectory, this);
-
-        private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(ApplicationPaths.ScfgDirectory, this);
-
-        private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e) =>
-            UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
-        #endregion
-
-        #region Export Toolstrip Events
+        // Export Context Menu
         private void exportScfgStoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Program.EnsureDirectoriesExist();
 
             using (SaveFileDialog dialog = new SaveFileDialog
             {
-                Filter = APPSTRINGS.FILTER_BIN,
-                FileName = $"{_socrom.FirmwareInfo.FileName}_{SOCSTRINGS.SCFG_REGION}",
+                Filter = AppStrings.FILTER_BIN,
+                FileName = $"{_socrom.FirmwareInfo.FileName}_{SocWindowStrings.SCFG_REGION}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.ScfgDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
-                {
                     return;
-                }
 
-                // Save the Scfg stores bytes to disk.
                 if (FileTools.WriteAllBytesEx(dialog.FileName, _socrom.SCfg.StoreBuffer))
                 {
                     UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
@@ -414,7 +384,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 METPrompt.Show(
                     this,
-                    DIALOGSTRINGS.SCFG_EXPORT_FAIL,
+                    DialogStrings.SCFG_EXPORT_FAIL,
                     METPrompt.PType.Error,
                     METPrompt.PButtons.Okay);
             }
@@ -427,16 +397,13 @@ namespace Mac_EFI_Toolkit.Forms
             using (SaveFileDialog dialog = new SaveFileDialog
             {
                 InitialDirectory = ApplicationPaths.BackupsDirectory,
-                Filter = APPSTRINGS.FILTER_ZIP,
-                FileName = $"{_socrom.FirmwareInfo.FileName}_{APPSTRINGS.SOCROM}_{APPSTRINGS.BACKUP}",
+                Filter = AppStrings.FILTER_ZIP,
+                FileName = $"{_socrom.FirmwareInfo.FileName}_{AppStrings.SOCROM}_{AppStrings.BACKUP}",
                 OverwritePrompt = true
             })
             {
-                // Action was cancelled
                 if (dialog.ShowDialog() != DialogResult.OK)
-                {
                     return;
-                }
 
                 FileTools.BackupFileToZip(_socrom.LoadedBinaryBuffer, _socrom.FirmwareInfo.FileNameExt, dialog.FileName);
 
@@ -448,7 +415,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 METPrompt.Show(
                     this,
-                    DIALOGSTRINGS.ARCHIVE_CREATE_FAILED,
+                    DialogStrings.ARCHIVE_CREATE_FAILED,
                     METPrompt.PType.Error,
                     METPrompt.PButtons.Okay);
             }
@@ -458,16 +425,14 @@ namespace Mac_EFI_Toolkit.Forms
         {
             using (SaveFileDialog dialog = new SaveFileDialog
             {
-                Filter = APPSTRINGS.FILTER_TEXT,
-                FileName = $"{_socrom.FirmwareInfo.FileName}_{APPSTRINGS.FIRMWARE_INFO}",
+                Filter = AppStrings.FILTER_TEXT,
+                FileName = $"{_socrom.FirmwareInfo.FileName}_{AppStrings.FIRMWARE_INFO}",
                 OverwritePrompt = true,
                 InitialDirectory = ApplicationPaths.WorkingDirectory
             })
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
-                {
                     return;
-                }
 
                 StringBuilder builder = new StringBuilder();
 
@@ -494,14 +459,14 @@ namespace Mac_EFI_Toolkit.Forms
                     builder.AppendLine($"Base:            {_socrom.SCfg.StoreBase:X}h");
                     builder.AppendLine($"Size (Bytes):    {_socrom.SCfg.StoreLength} bytes");
                     builder.AppendLine($"Size (Hex):      {_socrom.SCfg.StoreLength:X}h");
-                    builder.AppendLine($"CRC32:           {_socrom.SCfg.StoreCRC ?? APPSTRINGS.NA}");
-                    builder.AppendLine($"Serial:          {_socrom.SCfg.Serial ?? APPSTRINGS.NA}\r\n");
+                    builder.AppendLine($"CRC32:           {_socrom.SCfg.StoreCRC ?? AppStrings.NA}");
+                    builder.AppendLine($"Serial:          {_socrom.SCfg.Serial ?? AppStrings.NA}\r\n");
 
                     builder.AppendLine("Model");
                     builder.AppendLine("----------------------------------");
-                    builder.AppendLine($"Config:          {_socrom.ConfigCode ?? APPSTRINGS.NA}");
-                    builder.AppendLine($"Order No:        {_socrom.SCfg.SON ?? APPSTRINGS.NA}");
-                    builder.AppendLine($"Reg No:          {_socrom.SCfg.RegNum ?? APPSTRINGS.NA}\r\n");
+                    builder.AppendLine($"Config:          {_socrom.ConfigCode ?? AppStrings.NA}");
+                    builder.AppendLine($"Order No:        {_socrom.SCfg.SON ?? AppStrings.NA}");
+                    builder.AppendLine($"Reg No:          {_socrom.SCfg.RegNum ?? AppStrings.NA}\r\n");
                 }
                 else
                 {
@@ -516,7 +481,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 builder.AppendLine("Firmware");
                 builder.AppendLine("----------------------------------");
-                builder.AppendLine($"iBoot Version:   {_socrom.iBootVersion ?? APPSTRINGS.NA}");
+                builder.AppendLine($"iBoot Version:   {_socrom.iBootVersion ?? AppStrings.NA}");
 
                 File.WriteAllText(dialog.FileName, builder.ToString());
 
@@ -526,7 +491,7 @@ namespace Mac_EFI_Toolkit.Forms
                 {
                     METPrompt.Show(
                         this,
-                        DIALOGSTRINGS.DATA_EXPORT_FAILED,
+                        DialogStrings.DATA_EXPORT_FAILED,
                         METPrompt.PType.Error,
                         METPrompt.PButtons.Okay);
 
@@ -536,9 +501,8 @@ namespace Mac_EFI_Toolkit.Forms
                 UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
             }
         }
-        #endregion
 
-        #region Patch Toolstrip Events
+        // Patch Context Menu
         private void changeSerialNumberToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BlurHelper.ApplyBlur(this);
@@ -577,26 +541,9 @@ namespace Mac_EFI_Toolkit.Forms
             HandlePostPatch(patchedBuffer);
         }
 
-        private void HandlePostPatch(byte[] patchedbuffer)
-        {
-            if (Prompts.ShowPatchSuccessPrompt(this) == DialogResult.Yes)
-            {
-                string savePath = _patcher.SaveOutputFirmware(patchedbuffer, _socrom);
-                if (!string.IsNullOrEmpty(savePath) && Prompts.PromptLoadNewFirmware(this) == DialogResult.Yes)
-                {
-                    OpenBinary(savePath);
-                }
-            }
-            else
-            {
-                Logger.WriteCallerLine(LOGSTRINGS.FILE_EXPORT_CANCELLED);
-            }
-        }
-        #endregion
-
-        #region Tools Toolstrip Events
-        private void lookupSerialNumberToolStripMenuItem_Click(object sender, EventArgs e) =>
-            MacTools.LookupSerialOnEveryMac(_socrom.SCfg.Serial);
+        // Tools Context Menu
+        private void lookupSerialNumberToolStripMenuItem_Click(object sender, EventArgs e)
+            => MacTools.LookupSerialOnEveryMac(_socrom.SCfg.Serial);
 
         private void resetWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -610,7 +557,7 @@ namespace Mac_EFI_Toolkit.Forms
             DialogResult result =
                 METPrompt.Show(
                     this,
-                    DIALOGSTRINGS.UNLOAD_FIRMWARE_RESET,
+                    DialogStrings.UNLOAD_FIRMWARE_RESET,
                     METPrompt.PType.Warning,
                     METPrompt.PButtons.YesNo);
 
@@ -627,7 +574,7 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 METPrompt.Show(
                     this,
-                    DIALOGSTRINGS.COULD_NOT_RELOAD,
+                    DialogStrings.COULD_NOT_RELOAD,
                     METPrompt.PType.Error,
                     METPrompt.PButtons.Okay);
 
@@ -643,7 +590,7 @@ namespace Mac_EFI_Toolkit.Forms
                 // Loaded binaries match.
                 METPrompt.Show(
                     this,
-                    DIALOGSTRINGS.WARN_DATA_MATCHES_BUFF,
+                    DialogStrings.WARN_DATA_MATCHES_BUFF,
                     METPrompt.PType.Warning,
                     METPrompt.PButtons.Okay);
 
@@ -652,12 +599,13 @@ namespace Mac_EFI_Toolkit.Forms
 
             OpenBinary(_socrom.LoadedBinaryPath);
         }
-        #endregion
 
-        #region Help Toolstrip Events
-        private void manualToolStripMenuItem_Click(object sender, EventArgs e) => Process.Start(ApplicationUrls.GithubManual);
+        // Help Context Menu
+        private void manualToolStripMenuItem_Click(object sender, EventArgs e)
+            => Process.Start(ApplicationUrls.GithubManual);
 
-        private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e) => Logger.OpenLogFile(this);
+        private void viewApplicationLogToolStripMenuItem_Click(object sender, EventArgs e)
+            => Logger.OpenLogFile(this);
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -689,16 +637,14 @@ namespace Mac_EFI_Toolkit.Forms
         {
             // Check filesize.
             if (!FirmwareFile.IsValidMinMaxSize(filepath, this, FirmwareFile.MIN_IMAGE_SIZE, FirmwareFile.MAX_IMAGE_SIZE))
-            {
                 return;
-            }
 
             // Check if the image is what we're looking for.
             if (!_socrom.IsValidImage(File.ReadAllBytes(filepath)))
             {
                 METPrompt.Show(
                     this,
-                    DIALOGSTRINGS.NOT_VALID_SOCROM,
+                    DialogStrings.NOT_VALID_SOCROM,
                     METPrompt.PType.Warning,
                     METPrompt.PButtons.Okay);
 
@@ -730,16 +676,12 @@ namespace Mac_EFI_Toolkit.Forms
         private void LoadFirmwareBase(string filePath, CancellationToken token)
         {
             if (token.IsCancellationRequested)
-            {
                 return;
-            }
 
             _socrom.LoadFirmwareBaseData(_socrom.LoadedBinaryBuffer, filePath);
 
             if (token.IsCancellationRequested)
-            {
                 return;
-            }
 
             if (IsHandleCreated && !token.IsCancellationRequested)
             {
@@ -747,7 +689,7 @@ namespace Mac_EFI_Toolkit.Forms
                 {
                     this.Invoke((MethodInvoker)delegate
                     {
-                        UpdateUI();
+                        UpdateUIControls();
                     });
                 }
                 catch (ObjectDisposedException)
@@ -763,215 +705,8 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region UI Events
-        private void ChildWindowClosed(object sender, EventArgs e) => BlurHelper.RemoveBlur(this);
-
-        private void UpdateWindowTitle()
-        {
-            this.Text = _socrom.FirmwareInfo.FileNameExt;
-            lblTitle.Text = $"{APPSTRINGS.SOCROM} {ApplicationChars.SEGUI_RIGHTWARDSARROW} {_socrom.FirmwareInfo.FileNameExt}";
-        }
-
-        private void SetTipHandlers()
-        {
-            Button[] buttons =
-            {
-                cmdMenuOpen,
-                cmdMenuFolders,
-                cmdMenuCopy,
-                cmdMenuExport,
-                cmdMenuTools,
-                cmdMenuPatch,
-                cmdMenuHelp,
-                cmdOpenInExplorer
-            };
-
-            Label[] labels = { lblParseTime };
-
-            CheckBox[] checkboxes = { cbxCensor };
-
-            foreach (Button button in buttons)
-            {
-                button.MouseEnter += HandleMouseEnterTip;
-                button.MouseLeave += HandleMouseLeaveTip;
-            }
-
-            foreach (Label label in labels)
-            {
-                label.MouseEnter += HandleMouseEnterTip;
-                label.MouseLeave += HandleMouseLeaveTip;
-            }
-
-            foreach (CheckBox checkBox in checkboxes)
-            {
-                checkBox.MouseEnter += HandleMouseEnterTip;
-                checkBox.MouseLeave += HandleMouseLeaveTip;
-                checkBox.CheckedChanged += HandleCheckBoxChanged;
-            }
-        }
-
-        private void HandleMouseEnterTip(object sender, EventArgs e)
-        {
-            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
-            {
-                Dictionary<object, string> tooltips = new Dictionary<object, string>
-                {
-                    { cmdMenuOpen, $"{SOCSTRINGS.MENU_TIP_OPEN} (CTRL + O)" },
-                    { cmdMenuCopy, $"{SOCSTRINGS.MENU_TIP_COPY} (CTRL + C)" },
-                    { cmdMenuFolders, $"{SOCSTRINGS.MENU_TIP_FOLDERS} (CTRL + L)" },
-                    { cmdMenuExport, $"{SOCSTRINGS.MENU_TIP_EXPORT} (CTRL + E)"},
-                    { cmdMenuPatch, $"{SOCSTRINGS.MENU_TIP_PATCH} (CTRL + P)"},
-                    { cmdMenuTools, $"{SOCSTRINGS.MENU_TIP_TOOLS} (CTRL + T)"},
-                    { cmdMenuHelp, $"{SOCSTRINGS.MENU_TIP_HELP} (CTRL + H)"},
-                    { cmdOpenInExplorer, $"{SOCSTRINGS.MENU_TIP_OPENFILELOCATION} (CTRL + SHIFT + L)"},
-                    { lblParseTime, APPSTRINGS.FW_PARSE_TIME},
-                    { cbxCensor, cbxCensorTipString() }
-                };
-
-                if (tooltips.TryGetValue(sender, out string value))
-                {
-                    lblStatusBarTip.Text = value;
-                }
-            }
-        }
-
-        private string cbxCensorTipString() =>
-            $"{(cbxCensor.Checked ? APPSTRINGS.HIDE : APPSTRINGS.SHOW)} {APPSTRINGS.SERIAL_NUMBER} (CTRL + SHIFT + N)";
-
-        private void HandleCheckBoxChanged(object sender, EventArgs e)
-        {
-            if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
-            {
-                if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
-                {
-                    lblStatusBarTip.Text = cbxCensorTipString();
-                }
-            }
-        }
-
-        private void HandleMouseLeaveTip(object sender, EventArgs e) => lblStatusBarTip.Text = string.Empty;
-
-        private void SetButtonFontAndGlyph()
-        {
-            var buttons = new[]
-            {
-                new { Button = cmdClose, Font = Program.FluentRegular14, Text = ApplicationChars.FLUENT_DISMISS },
-                new { Button = cmdOpenInExplorer, Font = Program.FluentRegular14, Text = ApplicationChars.FLUENT_FOLDEROPEN },
-            };
-
-            foreach (var property in buttons)
-            {
-                property.Button.Font = property.Font;
-                property.Button.Text = property.Text;
-            }
-        }
-
-        private static void SetControlForeColor(Control parentcontrol, Color forecolor)
-        {
-            foreach (Control control in parentcontrol.Controls)
-            {
-                control.ForeColor = forecolor;
-            }
-        }
-
-        private void NotifyPatchingFailure()
-        {
-            if (Prompts.ShowPatchFailedPrompt(this) == DialogResult.Yes)
-            {
-                Logger.OpenLogFile(this);
-            }
-        }
-        #endregion
-
-        #region Misc Events
-        internal void SetInitialDirectory()
-        {
-            // Get the initial directory from settings.
-            string directory = Settings.ReadString(Settings.StringKey.SocInitialDirectory);
-
-            // If the path is not empty check if it exists and set it as the initial directory.
-            if (!string.IsNullOrEmpty(directory))
-            {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
-            }
-        }
-
-        private void ResetWindow()
-        {
-            // Reset censor switch.
-            cbxCensor.Checked = false;
-            cbxCensor.Enabled = false;
-
-            // Reset labels.
-            Label[] labels =
-            {
-                lblFilename,
-                lblFilesize,
-                lblCrc,
-                lblCreated,
-                lblModified,
-                lbliBoot,
-                lblScfg,
-                lblSerial,
-                lblConfigCode,
-                lblSon
-            };
-
-            foreach (Label label in labels)
-            {
-                label.Text = string.Empty;
-                label.ForeColor = ApplicationColours.NormalText;
-            }
-
-            // Reset parse time.
-            lblParseTime.Text = "0.00s";
-
-            // Reset initial directory.
-            SetInitialDirectory();
-
-            // Reset window text.
-            Text = APPSTRINGS.SOCROM;
-            lblTitle.Text = APPSTRINGS.SOCROM;
-
-            _socrom.ResetFirmwareBaseData();
-        }
-
-        private void EnableButtons(bool enable, params Button[] buttons)
-        {
-            foreach (Button button in buttons)
-            {
-                button.Enabled = enable;
-            }
-        }
-
-        private void EnableMenus(bool enable, params ContextMenuStrip[] contextMenus)
-        {
-            foreach (ContextMenuStrip contextMenuStrip in contextMenus)
-            {
-                contextMenuStrip.Enabled = enable;
-            }
-        }
-
-        private void ToggleControlEnable(bool enable)
-        {
-            EnableButtons(enable, _menuButtons);
-            EnableMenus(enable, _contextMenus);
-
-            if (enable)
-            {
-                exportScfgStoreToolStripMenuItem.Enabled = _socrom.SCfg.StoreBase != -1;
-                lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_socrom.SCfg.Serial);
-
-                cmdMenuPatch.Enabled = _socrom.Controller == ControllerType.AppleT2; // Apple Silicon ROM patching is not supported.
-                changeSerialNumberToolStripMenuItem.Enabled = _socrom.SCfg.StoreBase != -1;
-            }
-
-            tlpFirmware.Enabled = enable;
-        }
-        #endregion
-
-        #region Update Window
-        internal void UpdateUI()
+        #region User Interface
+        internal void UpdateUIControls()
         {
             // Parse time.
             UpdateParseTimeControls();
@@ -1003,16 +738,18 @@ namespace Mac_EFI_Toolkit.Forms
             ToggleControlEnable(true);
         }
 
-        private void UpdateParseTimeControls() => lblParseTime.Text = $"{_socrom.ParseTime.TotalSeconds:F2}s";
+        private void UpdateParseTimeControls()
+            => lblParseTime.Text = $"{_socrom.ParseTime.TotalSeconds:F2}s";
 
-        private void UpdateFilenameControls() => lblFilename.Text = $"{APPSTRINGS.FILE}: '{_socrom.FirmwareInfo.FileNameExt}'";
+        private void UpdateFilenameControls()
+            => lblFilename.Text = $"{AppStrings.FILE}: '{_socrom.FirmwareInfo.FileNameExt}'";
 
         private void UpdateFileSizeControls()
         {
             long length = _socrom.FirmwareInfo.Length;
             bool validSize = FirmwareFile.IsValidBinSize(length);
 
-            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(length)} {APPSTRINGS.BYTES} ({length:X}h)";
+            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(length)} {AppStrings.BYTES} ({length:X}h)";
 
             if (!validSize)
             {
@@ -1021,23 +758,26 @@ namespace Mac_EFI_Toolkit.Forms
             }
         }
 
-        private void UpdateFileCrc32Controls() => lblCrc.Text = $"{_socrom.FirmwareInfo.CRC32:X8}";
+        private void UpdateFileCrc32Controls()
+            => lblCrc.Text = $"{_socrom.FirmwareInfo.CRC32:X8}";
 
-        private void UpdateFileCreationDateControls() => lblCreated.Text = _socrom.FirmwareInfo.CreationTime;
+        private void UpdateFileCreationDateControls()
+            => lblCreated.Text = _socrom.FirmwareInfo.CreationTime;
 
-        private void UpdateFileModifiedDateControls() => lblModified.Text = _socrom.FirmwareInfo.LastWriteTime;
+        private void UpdateFileModifiedDateControls()
+            => lblModified.Text = _socrom.FirmwareInfo.LastWriteTime;
 
         private void UpdateIbootControls()
         {
             if (!string.IsNullOrEmpty(_socrom.iBootVersion))
             {
-                lbliBoot.Text = $"{_socrom.iBootVersion} {SOCSTRINGS.ON} {(_socrom.Controller == 0 ? SOCSTRINGS.T2 : SOCSTRINGS.SILICON)}";
+                lbliBoot.Text = $"{_socrom.iBootVersion} {SocWindowStrings.ON} {(_socrom.Controller == 0 ? SocWindowStrings.T2 : SocWindowStrings.SILICON)}";
                 iBootVersionToolStripMenuItem.Enabled = true;
                 return;
             }
 
             iBootVersionToolStripMenuItem.Enabled = false;
-            lbliBoot.Text = APPSTRINGS.NA;
+            lbliBoot.Text = AppStrings.NA;
         }
 
         private void UpdateScfgControls()
@@ -1045,7 +785,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (_socrom.SCfg.StoreBase == -1)
             {
                 DisableScfgMenuItems();
-                lblScfg.Text = APPSTRINGS.NA;
+                lblScfg.Text = AppStrings.NA;
                 return;
             }
 
@@ -1099,7 +839,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
             else
             {
-                lblSerial.Text = APPSTRINGS.NA;
+                lblSerial.Text = AppStrings.NA;
                 cbxCensor.Enabled = false;
                 serialToolStripMenuItem.Enabled = false;
             }
@@ -1114,7 +854,7 @@ namespace Mac_EFI_Toolkit.Forms
                 return;
             }
 
-            lblConfigCode.Text = APPSTRINGS.CONTACT_SERVER;
+            lblConfigCode.Text = AppStrings.CONTACT_SERVER;
             lblConfigCode.ForeColor = ApplicationColours.Information;
 
             GetConfigCodeAsync(_socrom.SCfg.HWC);
@@ -1134,7 +874,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             configToolStripMenuItem.Enabled = false;
-            lblConfigCode.Text = APPSTRINGS.NA;
+            lblConfigCode.Text = AppStrings.NA;
             lblConfigCode.ForeColor = ApplicationColours.DisabledText;
         }
 
@@ -1142,7 +882,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (string.IsNullOrEmpty(_socrom.SCfg.SON))
             {
-                lblSon.Text = APPSTRINGS.NA;
+                lblSon.Text = AppStrings.NA;
                 orderNoToolStripMenuItem.Enabled = false;
                 return;
             }
@@ -1156,15 +896,225 @@ namespace Mac_EFI_Toolkit.Forms
                 lblSon.Text += $" ({_socrom.SCfg.RegNum})";
             }
         }
+
+        private void ChildWindowClosed(object sender, EventArgs e)
+            => BlurHelper.RemoveBlur(this);
+
+        private void SetTipHandlers()
+        {
+            Button[] buttons =
+            {
+                cmdMenuOpen,
+                cmdMenuFolders,
+                cmdMenuCopy,
+                cmdMenuExport,
+                cmdMenuTools,
+                cmdMenuPatch,
+                cmdMenuHelp,
+                cmdOpenInExplorer
+            };
+
+            Label[] labels = { lblParseTime };
+
+            CheckBox[] checkboxes = { cbxCensor };
+
+            foreach (Button button in buttons)
+            {
+                button.MouseEnter += HandleMouseEnterTip;
+                button.MouseLeave += HandleMouseLeaveTip;
+            }
+
+            foreach (Label label in labels)
+            {
+                label.MouseEnter += HandleMouseEnterTip;
+                label.MouseLeave += HandleMouseLeaveTip;
+            }
+
+            foreach (CheckBox checkBox in checkboxes)
+            {
+                checkBox.MouseEnter += HandleMouseEnterTip;
+                checkBox.MouseLeave += HandleMouseLeaveTip;
+                checkBox.CheckedChanged += HandleCheckBoxChanged;
+            }
+        }
+
+        private void HandleMouseEnterTip(object sender, EventArgs e)
+        {
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
+            {
+                Dictionary<object, string> tooltips = new Dictionary<object, string>
+                {
+                    { cmdMenuOpen, $"{SocWindowStrings.MENU_TIP_OPEN} (CTRL + O)" },
+                    { cmdMenuCopy, $"{SocWindowStrings.MENU_TIP_COPY} (CTRL + C)" },
+                    { cmdMenuFolders, $"{SocWindowStrings.MENU_TIP_FOLDERS} (CTRL + L)" },
+                    { cmdMenuExport, $"{SocWindowStrings.MENU_TIP_EXPORT} (CTRL + E)"},
+                    { cmdMenuPatch, $"{SocWindowStrings.MENU_TIP_PATCH} (CTRL + P)"},
+                    { cmdMenuTools, $"{SocWindowStrings.MENU_TIP_TOOLS} (CTRL + T)"},
+                    { cmdMenuHelp, $"{SocWindowStrings.MENU_TIP_HELP} (CTRL + H)"},
+                    { cmdOpenInExplorer, $"{SocWindowStrings.MENU_TIP_OPENFILELOCATION} (CTRL + SHIFT + L)"},
+                    { lblParseTime, AppStrings.FW_PARSE_TIME},
+                    { cbxCensor, SwitchStateTipString() }
+                };
+
+                if (tooltips.TryGetValue(sender, out string value))
+                {
+                    lblStatusBarTip.Text = value;
+                }
+            }
+        }
+
+        private string SwitchStateTipString() =>
+            $"{(cbxCensor.Checked ? AppStrings.HIDE : AppStrings.SHOW)} {AppStrings.SERIAL_NUMBER} (CTRL + SHIFT + N)";
+
+        private void HandleCheckBoxChanged(object sender, EventArgs e)
+        {
+            if (sender == cbxCensor && cbxCensor.ClientRectangle.Contains(cbxCensor.PointToClient(Cursor.Position)))
+            {
+                if (!Settings.ReadBoolean(Settings.BooleanKey.DisableTips))
+                {
+                    lblStatusBarTip.Text = SwitchStateTipString();
+                }
+            }
+        }
+
+        private void HandleMouseLeaveTip(object sender, EventArgs e) => lblStatusBarTip.Text = string.Empty;
+
+        private void SetButtonFontAndGlyph()
+        {
+            var buttons = new[]
+            {
+                new { Button = cmdClose, Font = Program.FluentRegular14, Text = ApplicationChars.FLUENT_DISMISS },
+                new { Button = cmdOpenInExplorer, Font = Program.FluentRegular14, Text = ApplicationChars.FLUENT_FOLDEROPEN },
+            };
+
+            foreach (var property in buttons)
+            {
+                property.Button.Font = property.Font;
+                property.Button.Text = property.Text;
+            }
+        }
+
+        private static void SetControlForeColor(Control parentcontrol, Color forecolor)
+        {
+            foreach (Control control in parentcontrol.Controls)
+            {
+                control.ForeColor = forecolor;
+            }
+        }
+
+        private void NotifyPatchingFailure()
+        {
+            if (Prompts.ShowPatchFailedPrompt(this) == DialogResult.Yes)
+            {
+                Logger.OpenLogFile(this);
+            }
+        }
+
+        private void UpdateWindowTitle()
+        {
+            this.Text = _socrom.FirmwareInfo.FileNameExt;
+            lblTitle.Text = $"{AppStrings.SOCROM} {ApplicationChars.SEGUI_RIGHTWARDSARROW} {_socrom.FirmwareInfo.FileNameExt}";
+        }
+
+        private void ResetWindow()
+        {
+            // Reset censor switch.
+            cbxCensor.Checked = false;
+            cbxCensor.Enabled = false;
+
+            // Reset labels.
+            Label[] labels =
+            {
+                lblFilename,
+                lblFilesize,
+                lblCrc,
+                lblCreated,
+                lblModified,
+                lbliBoot,
+                lblScfg,
+                lblSerial,
+                lblConfigCode,
+                lblSon
+            };
+
+            foreach (Label label in labels)
+            {
+                label.Text = string.Empty;
+                label.ForeColor = ApplicationColours.NormalText;
+            }
+
+            // Reset parse time.
+            lblParseTime.Text = "0.00s";
+
+            // Reset initial directory.
+            SetInitialDirectory();
+
+            // Reset window text.
+            Text = AppStrings.SOCROM;
+            lblTitle.Text = AppStrings.SOCROM;
+
+            _socrom.ResetFirmwareBaseData();
+        }
+
+        private void EnableButtons(bool enable, params Button[] buttons)
+        {
+            foreach (Button button in buttons)
+            {
+                button.Enabled = enable;
+            }
+        }
+
+        private void EnableMenus(bool enable, params ContextMenuStrip[] contextMenus)
+        {
+            foreach (ContextMenuStrip contextMenuStrip in contextMenus)
+            {
+                contextMenuStrip.Enabled = enable;
+            }
+        }
+
+        private void ToggleControlEnable(bool enable)
+        {
+            EnableButtons(enable, _menuButtons);
+            EnableMenus(enable, _contextMenus);
+
+            if (enable)
+            {
+                exportScfgStoreToolStripMenuItem.Enabled = _socrom.SCfg.StoreBase != -1;
+                lookupSerialNumberToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_socrom.SCfg.Serial);
+
+                cmdMenuPatch.Enabled = _socrom.Controller == ControllerType.AppleT2; // Apple Silicon ROM patching is not supported.
+                changeSerialNumberToolStripMenuItem.Enabled = _socrom.SCfg.StoreBase != -1;
+            }
+
+            tlpFirmware.Enabled = enable;
+        }
+
+        private void GetAndDisableMenuItems()
+        {
+            _menuButtons = new Button[]
+            {
+                cmdMenuCopy,
+                cmdMenuExport,
+                cmdMenuPatch,
+                cmdMenuTools,
+                cmdOpenInExplorer
+            };
+
+            _contextMenus = new ContextMenuStrip[]
+            {
+                cmsCopy, cmsExport, cmsPatch, cmsTools,
+            };
+
+            EnableButtons(false, _menuButtons);
+            EnableMenus(false, _contextMenus);
+        }
         #endregion
 
-        #region Clipboard
+        #region Set Clipboard Text
         internal void SetClipboardText(string text)
         {
             if (string.IsNullOrEmpty(text))
-            {
                 return;
-            }
 
             Clipboard.SetText(text);
 
@@ -1172,37 +1122,92 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 METPrompt.Show(
                     this,
-                    $"'{text}' {EFISTRINGS.COPIED_TO_CB_LC}",
+                    $"'{text}' {EfiWindowStrings.COPIED_TO_CB_LC}",
                     METPrompt.PType.Information,
                     METPrompt.PButtons.Okay);
             }
         }
 
-        private void ClipboardSetFilename(bool showExtention) =>
-            SetClipboardText(showExtention ? _socrom.FirmwareInfo.FileNameExt : _socrom.FirmwareInfo.FileName);
+        private void ClipboardSetFilename(bool showExtention)
+            => SetClipboardText(showExtention ? _socrom.FirmwareInfo.FileNameExt : _socrom.FirmwareInfo.FileName);
 
-        private void ClipboardSetFileSize() =>
-            SetClipboardText($"{FileTools.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} {APPSTRINGS.BYTES} ({_socrom.FirmwareInfo.Length:X}h)");
+        private void ClipboardSetFileSize()
+            => SetClipboardText(
+                $"{FileTools.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} " +
+                $"{AppStrings.BYTES} ({_socrom.FirmwareInfo.Length:X}h)");
 
-        private void ClipboardSetFileCrc32() => SetClipboardText($"{_socrom.FirmwareInfo.CRC32:X8}");
+        private void ClipboardSetFileCrc32()
+            => SetClipboardText($"{_socrom.FirmwareInfo.CRC32:X8}");
 
-        private void ClipboardSetFileCreationTime() => SetClipboardText(_socrom.FirmwareInfo.CreationTime);
+        private void ClipboardSetFileCreationTime()
+            => SetClipboardText(_socrom.FirmwareInfo.CreationTime);
 
-        private void ClipboardSetFileModifiedTime() => SetClipboardText(_socrom.FirmwareInfo.LastWriteTime);
+        private void ClipboardSetFileModifiedTime()
+            => SetClipboardText(_socrom.FirmwareInfo.LastWriteTime);
 
-        private void ClipboardSetIbootVersion() => SetClipboardText(_socrom.iBootVersion);
+        private void ClipboardSetIbootVersion()
+            => SetClipboardText(_socrom.iBootVersion);
 
-        private void ClipboardSetScfgBaseAddress() => SetClipboardText($"{_socrom.SCfg.StoreBase:X}");
+        private void ClipboardSetScfgBaseAddress()
+            => SetClipboardText($"{_socrom.SCfg.StoreBase:X}");
 
-        private void ClipboardSetScfgSizeDecimal() => SetClipboardText($"{_socrom.SCfg.StoreLength} {APPSTRINGS.BYTES}");
+        private void ClipboardSetScfgSizeDecimal()
+            => SetClipboardText($"{_socrom.SCfg.StoreLength} {AppStrings.BYTES}");
 
-        private void ClipboardSetScfgSizeHex() => SetClipboardText($"{_socrom.SCfg.StoreLength:X}h");
+        private void ClipboardSetScfgSizeHex()
+            => SetClipboardText($"{_socrom.SCfg.StoreLength:X}h");
 
-        private void ClipboardSetScfgCrc32() => SetClipboardText(_socrom.SCfg.StoreCRC);
+        private void ClipboardSetScfgCrc32()
+            => SetClipboardText(_socrom.SCfg.StoreCRC);
 
-        private void ClipboardSetScfgConfig() => SetClipboardText(_socrom.ConfigCode);
+        private void ClipboardSetScfgConfig()
+            => SetClipboardText(_socrom.ConfigCode);
 
-        private void ClipboardSetScfgOrderNo() => SetClipboardText($"{_socrom.SCfg.SON}{_socrom.SCfg.RegNum ?? string.Empty}");
+        private void ClipboardSetScfgOrderNo()
+            => SetClipboardText(
+                $"{_socrom.SCfg.SON}{_socrom.SCfg.RegNum ?? string.Empty}");
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += frmSocRom_Load;
+            FormClosing += frmSocRom_FormClosing;
+            FormClosed += frmSocRom_FormClosed;
+            KeyDown += frmSocRom_KeyDown;
+            DragEnter += frmSocRom_DragEnter;
+            DragDrop += frmSocRom_DragDrop;
+            Deactivate += frmSocRom_Deactivate;
+            Activated += frmSocRom_Activated;
+        }
+
+        internal void SetInitialDirectory()
+        {
+            // Get the initial directory from settings.
+            string directory = Settings.ReadString(Settings.StringKey.SocInitialDirectory);
+
+            // If the path is not empty check if it exists and set it as the initial directory.
+            if (!string.IsNullOrEmpty(directory))
+            {
+                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
+            }
+        }
+
+        private void HandlePostPatch(byte[] patchedbuffer)
+        {
+            if (Prompts.ShowPatchSuccessPrompt(this) == DialogResult.Yes)
+            {
+                string savePath = _patcher.SaveOutputFirmware(patchedbuffer, _socrom);
+                if (!string.IsNullOrEmpty(savePath) && Prompts.PromptLoadNewFirmware(this) == DialogResult.Yes)
+                {
+                    OpenBinary(savePath);
+                }
+            }
+            else
+            {
+                Logger.WriteCallerLine(LogStrings.FILE_EXPORT_CANCELLED);
+            }
+        }
         #endregion
     }
 }
