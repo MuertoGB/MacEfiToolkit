@@ -76,7 +76,7 @@ namespace Mac_EFI_Toolkit.Forms
             MemoryTracker.Instance.OnMemoryUsageUpdated += MemoryTracker_OnMemoryUsageUpdated;
         }
 
-        private void MemoryTracker_OnMemoryUsageUpdated(object sender, ulong pagefileUsage)
+        private void MemoryTracker_OnMemoryUsageUpdated(object sender, ulong privateset)
         {
             Invoke(new Action(() =>
             {
@@ -85,7 +85,7 @@ namespace Mac_EFI_Toolkit.Forms
                     lblPagefile.Visible = true;
                 }
 
-                lblPagefile.Text = FileTools.FormatBytesToReadableUnit(pagefileUsage);
+                lblPagefile.Text = FileTools.FormatBytesToReadableUnit(privateset);
             }));
         }
 
