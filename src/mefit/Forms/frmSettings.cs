@@ -31,17 +31,11 @@ namespace Mac_EFI_Toolkit.Forms
             // Attach event handlers.
             WireEventHandlers();
 
-            // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
-
             // Set button properties
             SetButtonProperties();
-        }
 
-        private void WireEventHandlers()
-        {
-            Load += frmSettings_Load;
-            KeyDown += frmSettings_KeyDown;
+            // Enable drag.
+            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
         }
         #endregion
 
@@ -65,53 +59,17 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e) => Close();
+        private void cmdClose_Click(object sender, EventArgs e)
+            => Close();
 
         private void cmdEditStartupDir_Click(object sender, EventArgs e)
-        {
-            EditDirectory(Settings.StringKey.StartupInitialDirectory, ref _strStartupInitialPath, lblStartupDirectory);
-        }
+            => EditDirectory(Settings.StringKey.StartupInitialDirectory, ref _strStartupInitialPath, lblStartupDirectory);
 
         private void cmdEditEfiDir_Click(object sender, EventArgs e)
-        {
-            EditDirectory(Settings.StringKey.EfiInitialDirectory, ref _strEfiInitialPath, lblEfiDirectory);
-        }
+            => EditDirectory(Settings.StringKey.EfiInitialDirectory, ref _strEfiInitialPath, lblEfiDirectory);
 
         private void cmdEditSocDir_Click(object sender, EventArgs e)
-        {
-            EditDirectory(Settings.StringKey.SocInitialDirectory, ref _strSocInitialPath, lblSocDirectory);
-        }
-
-        private void EditDirectory(Settings.StringKey settingsKey, ref string pathField, Label labelToUpdate)
-        {
-            if (OpenFolderDialog(settingsKey, ref pathField))
-            {
-                labelToUpdate.Text = $"{ApplicationChars.SEGUI_RIGHTWARDSARROW} {pathField}";
-                labelToUpdate.ForeColor = ApplicationColours.Okay;
-            }
-        }
-
-        private static bool OpenFolderDialog(Settings.StringKey settingsType, ref string path)
-        {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
-            {
-                dialog.SelectedPath =
-                    string.IsNullOrEmpty(Settings.ReadString(settingsType))
-                        ? ApplicationPaths.WorkingDirectory
-                        : Settings.ReadString(settingsType);
-
-                dialog.Description = AppStrings.SELECT_FOLDER;
-                dialog.ShowNewFolderButton = true;
-
-                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath))
-                {
-                    path = dialog.SelectedPath;
-                    return true;
-                }
-            }
-
-            return false;
-        }
+            => EditDirectory(Settings.StringKey.SocInitialDirectory, ref _strSocInitialPath, lblSocDirectory);
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
@@ -187,35 +145,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Label Events
-        private void ShowSettingsAppliedLabel()
-        {
-            lblSettingsSaved.Show();
-
-            if (_timer != null && _timer.Enabled)
-            {
-                _timer.Stop();
-                _timer.Dispose();
-            }
-
-            _timer = new Timer
-            {
-                Interval = 2000
-            };
-
-            _timer.Tick += Timer_Tick;
-            _timer.Start();
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            lblSettingsSaved.Hide();
-            _timer.Stop();
-            _timer.Dispose();
-        }
-        #endregion
-
-        #region METSwitch Events
+        #region Switch Events
         private void UpdateCheckBoxControls()
         {
             swDisableVersionCheck.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableVersionCheck) ? true : false;
@@ -228,7 +158,7 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region UI Events
+        #region User Interface
         private void UpdatePathLabel()
         {
             UpdateLabel(lblStartupDirectory, Settings.StringKey.StartupInitialDirectory);
@@ -248,6 +178,72 @@ namespace Mac_EFI_Toolkit.Forms
             cmdClose.Font = Program.FluentRegular14;
             cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
         }
+
+        private void ShowSettingsAppliedLabel()
+        {
+            lblSettingsSaved.Show();
+
+            if (_timer != null && _timer.Enabled)
+            {
+                _timer.Stop();
+                _timer.Dispose();
+            }
+
+            _timer = new Timer
+            {
+                Interval = 2000
+            };
+
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+        }
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += frmSettings_Load;
+            KeyDown += frmSettings_KeyDown;
+        }
+
+        private void EditDirectory(Settings.StringKey settingsKey, ref string pathField, Label labelToUpdate)
+        {
+            if (OpenFolderDialog(settingsKey, ref pathField))
+            {
+                labelToUpdate.Text = $"{ApplicationChars.SEGUI_RIGHTWARDSARROW} {pathField}";
+                labelToUpdate.ForeColor = ApplicationColours.Okay;
+            }
+        }
+
+        private static bool OpenFolderDialog(Settings.StringKey settingsType, ref string path)
+        {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                dialog.SelectedPath =
+                    string.IsNullOrEmpty(Settings.ReadString(settingsType))
+                        ? ApplicationPaths.WorkingDirectory
+                        : Settings.ReadString(settingsType);
+
+                dialog.Description = AppStrings.SELECT_FOLDER;
+                dialog.ShowNewFolderButton = true;
+
+                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath))
+                {
+                    path = dialog.SelectedPath;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            lblSettingsSaved.Hide();
+            _timer.Stop();
+            _timer.Dispose();
+        }
+
         #endregion
     }
 }

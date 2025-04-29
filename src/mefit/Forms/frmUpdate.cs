@@ -22,12 +22,6 @@ namespace Mac_EFI_Toolkit.Forms
 
             UITools.EnableFormDrag(this, lblWindowTitle);
         }
-
-        private void WireEventHandlers()
-        {
-            Load += frmUpdate_Load;
-            KeyDown += frmUpdate_KeyDown;
-        }
         #endregion
 
         #region Window Events
@@ -50,7 +44,8 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdCancel_Click(object sender, System.EventArgs e) => DialogResult = DialogResult.Cancel;
+        private void cmdCancel_Click(object sender, System.EventArgs e)
+            => DialogResult = DialogResult.Cancel;
 
         private async void cmdUpdate_Click(object sender, EventArgs e)
         {
@@ -62,11 +57,19 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Private
+        #region User Interface
         private void ToggleControlEnable(bool enable)
         {
             cmdCancel.Enabled = enable;
             cmdDownload.Enabled = enable;
+        }
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += frmUpdate_Load;
+            KeyDown += frmUpdate_KeyDown;
         }
         #endregion
     }

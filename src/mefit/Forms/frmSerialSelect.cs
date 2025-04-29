@@ -36,12 +36,6 @@ namespace Mac_EFI_Toolkit.Forms
             _socrom = socromInstance;
             WireEventHandlers();
         }
-
-        private void WireEventHandlers()
-        {
-            Load += frmSerialSelect_Load;
-            KeyDown += frmSerialSelect_KeyDown;
-        }
         #endregion
 
         #region Window Events
@@ -50,18 +44,6 @@ namespace Mac_EFI_Toolkit.Forms
             SetSerialLength();
             UpdateValidityLabel();
             tbxSerial.Select();
-        }
-
-        private void SetSerialLength()
-        {
-            if (Tag is SerialSenderTag.EFIROMWindow && _efirom != null)
-            {
-                tbxSerial.MaxLength = _efirom.Fsys.Serial.Length;
-            }
-            else if (Tag is SerialSenderTag.SOCROMWindow && _socrom != null)
-            {
-                tbxSerial.MaxLength = SOCROM.SERIAL_LENGTH;
-            }
         }
         #endregion
 
@@ -76,7 +58,8 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdCancel_Click(object sender, EventArgs e) => DialogResult = DialogResult.Cancel;
+        private void cmdCancel_Click(object sender, EventArgs e)
+            => DialogResult = DialogResult.Cancel;
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
@@ -134,10 +117,32 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region UI Events
-        private void UpdateTextBoxColour(TextBox control, Color color) => control.ForeColor = color;
+        #region User Interface
+        private void UpdateTextBoxColour(TextBox control, Color color)
+            => control.ForeColor = color;
 
-        private void UpdateValidityLabel() => lblValidity.Text = $"{tbxSerial.Text.Length}/{tbxSerial.MaxLength}";
+        private void UpdateValidityLabel()
+            => lblValidity.Text = $"{tbxSerial.Text.Length}/{tbxSerial.MaxLength}";
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += frmSerialSelect_Load;
+            KeyDown += frmSerialSelect_KeyDown;
+        }
+
+        private void SetSerialLength()
+        {
+            if (Tag is SerialSenderTag.EFIROMWindow && _efirom != null)
+            {
+                tbxSerial.MaxLength = _efirom.Fsys.Serial.Length;
+            }
+            else if (Tag is SerialSenderTag.SOCROMWindow && _socrom != null)
+            {
+                tbxSerial.MaxLength = SOCROM.SERIAL_LENGTH;
+            }
+        }
         #endregion
     }
 }

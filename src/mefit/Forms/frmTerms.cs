@@ -22,22 +22,17 @@ namespace Mac_EFI_Toolkit.Forms
             // Attach event handlers.
             WireEventHandlers();
 
-            // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
-
             // Set button properties.
             SetButtonGlyphAndText();
-        }
 
-        private void WireEventHandlers()
-        {
-            Load += frmTerms_Load;
-            KeyDown += frmTerms_KeyDown;
+            // Enable drag.
+            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
         }
         #endregion
 
         #region Window Events
-        private void frmTerms_Load(object sender, EventArgs e) => tbxTermsText.Text = Properties.Resources.editorterms;
+        private void frmTerms_Load(object sender, EventArgs e)
+            => tbxTermsText.Text = Properties.Resources.editorterms;
         #endregion
 
         #region Button Events
@@ -73,11 +68,19 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region UI Events
+        #region User Interface
         private void SetButtonGlyphAndText()
         {
             cmdClose.Font = Program.FluentRegular14;
             cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
+        }
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += frmTerms_Load;
+            KeyDown += frmTerms_KeyDown;
         }
         #endregion
     }

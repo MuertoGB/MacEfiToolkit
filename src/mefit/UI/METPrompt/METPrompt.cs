@@ -31,12 +31,12 @@ namespace Mac_EFI_Toolkit.UI
         }
         #endregion
 
-        #region Static Members
-        static SystemSound PromptSound;
-        static string PromptMessage;
-        static PType PromptType;
-        static PButtons PromptButtons;
-        static DialogResult PromptResult;
+        #region Public Members
+        public static SystemSound PromptSound;
+        public static string PromptMessage;
+        public static PType PromptType;
+        public static PButtons PromptButtons;
+        public static DialogResult PromptResult;
         #endregion
 
         #region Constants
@@ -59,13 +59,6 @@ namespace Mac_EFI_Toolkit.UI
 
             // Enable drag.
             UITools.EnableFormDrag(this, lblTitle);
-        }
-
-        private void WireEventHandlers()
-        {
-            Load += new EventHandler(METMessageBox_Load);
-            Shown += new EventHandler(METMessageBox_Shown);
-            KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
         }
         #endregion
 
@@ -125,7 +118,23 @@ namespace Mac_EFI_Toolkit.UI
         }
         #endregion
 
-        #region Dynamic Resizing
+        #region User Interface
+        public static DialogResult Show(Form owner, string message, PType type, PButtons buttons = PButtons.Okay)
+        {
+            SetMessageBoxParameters(message, type, buttons);
+
+            using (METPrompt prompt = new METPrompt())
+            {
+                prompt.StartPosition = owner == null
+                    ? FormStartPosition.CenterScreen
+                    : FormStartPosition.CenterParent;
+
+                DialogResult dlgResult = prompt.ShowDialog(owner);
+
+                return PromptResult;
+            }
+        }
+
         private void AdjustFormSize()
         {
             lblMessage.MaximumSize = new Size(MAX_WIDTH, MAX_HEIGHT);
@@ -163,31 +172,6 @@ namespace Mac_EFI_Toolkit.UI
         }
         #endregion
 
-        #region Overriden Events
-        public static DialogResult Show(Form owner, string message, PType type, PButtons buttons = PButtons.Okay)
-        {
-            SetMessageBoxParameters(message, type, buttons);
-
-            using (METPrompt prompt = new METPrompt())
-            {
-                prompt.StartPosition = owner == null
-                    ? FormStartPosition.CenterScreen
-                    : FormStartPosition.CenterParent;
-
-                DialogResult dlgResult = prompt.ShowDialog(owner);
-
-                return PromptResult;
-            }
-        }
-
-        private static void SetMessageBoxParameters(string message, PType type, PButtons buttons)
-        {
-            PromptMessage = message;
-            PromptType = type;
-            PromptButtons = buttons;
-        }
-        #endregion
-
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e)
         {
@@ -205,6 +189,22 @@ namespace Mac_EFI_Toolkit.UI
         {
             PromptResult = PromptButtons == PButtons.Okay ? DialogResult.OK : DialogResult.Cancel;
             Close();
+        }
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += new EventHandler(METMessageBox_Load);
+            Shown += new EventHandler(METMessageBox_Shown);
+            KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
+        }
+
+        private static void SetMessageBoxParameters(string message, PType type, PButtons buttons)
+        {
+            PromptMessage = message;
+            PromptType = type;
+            PromptButtons = buttons;
         }
         #endregion
     }
