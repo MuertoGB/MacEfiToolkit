@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI.Renderers
 {
-    class METMenuRenderer : ToolStripRenderer
+    public class METMenuRenderer : ToolStripRenderer
     {
         private readonly Color BorderColor = Color.FromArgb(80, 80, 80);
         private readonly Color ItemHoverBorderColor = Color.FromArgb(50, 70, 90);

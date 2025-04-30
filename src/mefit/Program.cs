@@ -7,8 +7,8 @@
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Forms;
-using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.Utilities;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -19,25 +19,25 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    static class Program
+    public static class Program
     {
-        internal enum ExitType
+        public enum ExitType
         {
             Restart,
             Exit
         }
 
-        #region Internal Members
-        internal static string DraggedFile = string.Empty;
-        internal static frmStartup MainWindow;
-        internal static Font FluentRegular12;
-        internal static Font FluentRegular14;
-        internal static Font FluentRegular24;
+        #region Public Members
+        public static string DraggedFile = string.Empty;
+        public static frmStartup MainWindow;
+        public static Font FluentRegular12;
+        public static Font FluentRegular14;
+        public static Font FluentRegular24;
         #endregion
 
         #region Main Entry Point
         [STAThread]
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             // Register application-wide exception handlers.
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
@@ -54,7 +54,7 @@ namespace Mac_EFI_Toolkit
             Application.ApplicationExit += OnExiting;
 
             // Check if the OS is supported (Windows 7 or later is required).
-            if (!SystemTools.IsSupportedOS())
+            if (!SystemUtils.IsSupportedOS())
             {
                 return;
             }
@@ -67,7 +67,8 @@ namespace Mac_EFI_Toolkit
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Load custom fonts into memory.
-            if (!FontResolver.LoadCustomFont(Properties.Resources.FluentSystemIcons, out Font[] fonts))
+            FontResolver resolver = new FontResolver();
+            if (!resolver.LoadCustomFont(Properties.Resources.FluentSystemIcons, out Font[] fonts))
             {
                 Logger.WriteCallerLine(LogStrings.MAIN_FLUENT_NOTLOADED);
                 return;
@@ -96,7 +97,8 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region OnExiting
-        private static void OnExiting(object sender, EventArgs e) => HandleOnExitingCleanup();
+        private static void OnExiting(object sender, EventArgs e)
+            => HandleOnExitingCleanup();
 
         private static void HandleOnExitingCleanup()
         {
@@ -108,7 +110,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Exception Handler
-        internal static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        public static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
             if (e != null)
             {
@@ -116,7 +118,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        public static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception exception = (Exception)e.ExceptionObject;
 
@@ -126,7 +128,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void ExceptionHandler(Exception e)
+        public static void ExceptionHandler(Exception e)
         {
             DialogResult result;
 
@@ -169,7 +171,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Exit
-        internal static void HandleApplicationExit(Form owner, ExitType action)
+        public static void HandleApplicationExit(Form owner, ExitType action)
         {
             // Check if confirmation dialogs are disabled
             if (Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
@@ -217,7 +219,7 @@ namespace Mac_EFI_Toolkit
             return result == DialogResult.Yes;
         }
 
-        internal static void Restart()
+        public static void Restart()
         {
             try
             {
@@ -234,7 +236,8 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void Exit() => Application.Exit();
+        internal static void Exit()
+            => Application.Exit();
         #endregion
 
         #region Functions
@@ -248,7 +251,7 @@ namespace Mac_EFI_Toolkit
             return string.Empty;
         }
 
-        internal static void EnsureDirectoriesExist()
+        public static void EnsureDirectoriesExist()
         {
             CreateDirectoryIfNotExists(ApplicationPaths.BackupsDirectory);
             CreateDirectoryIfNotExists(ApplicationPaths.BuildsDirectory);
@@ -302,7 +305,7 @@ namespace Mac_EFI_Toolkit
             e.Effect = DragDropEffects.None;
         }
 
-        internal static bool IsDebugMode()
+        public static bool IsDebugMode()
         {
 #if DEBUG
             return true;

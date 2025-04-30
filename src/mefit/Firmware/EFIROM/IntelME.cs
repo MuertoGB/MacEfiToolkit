@@ -4,7 +4,8 @@
 // IntelME.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.Interop;
+using Mac_EFI_Toolkit.Utilities;
 
 namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
@@ -28,12 +29,12 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             switch (versiontype)
             {
                 case ImeVersionType.FIT:
-                    headerBase = BinaryTools.GetBaseAddress(sourcebytes, FPTMarker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
+                    headerBase = BinaryUtils.GetBaseAddress(sourcebytes, FPTMarker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
                     length = 0x20;
                     break;
 
                 case ImeVersionType.ME:
-                    headerBase = BinaryTools.GetBaseAddress(sourcebytes, MN2Marker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
+                    headerBase = BinaryUtils.GetBaseAddress(sourcebytes, MN2Marker, (int)flashDescriptor.MeBase, (int)flashDescriptor.MeSize);
                     length = 0x10;
                     break;
             }
@@ -45,18 +46,18 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                     headerBase += 2;
                 }
 
-                byte[] headerBuffer = BinaryTools.GetBytesBaseLength(sourcebytes, headerBase, length);
+                byte[] headerBuffer = BinaryUtils.GetBytesBaseLength(sourcebytes, headerBase, length);
 
                 if (headerBuffer != null)
                 {
                     if (versiontype == ImeVersionType.FIT)
                     {
-                        FPTHeader fptHeader = Helper.DeserializeHeader<FPTHeader>(headerBuffer);
+                        FPTHeader fptHeader = MarshalHelper.ReadStruct<FPTHeader>(headerBuffer);
                         version = $"{fptHeader.FitMajor}.{fptHeader.FitMinor}.{fptHeader.FitHotfix}.{fptHeader.FitBuild}";
                     }
                     else if (versiontype == ImeVersionType.ME)
                     {
-                        MN2Header mn2Header = Helper.DeserializeHeader<MN2Header>(headerBuffer);
+                        MN2Header mn2Header = MarshalHelper.ReadStruct<MN2Header>(headerBuffer);
                         version = $"{mn2Header.EngineMajor}.{mn2Header.EngineMinor}.{mn2Header.EngineHotfix}.{mn2Header.EngineBuild}";
                     }
                 }

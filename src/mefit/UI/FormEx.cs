@@ -18,11 +18,9 @@ public class FormEx : Form
     #region Private Members
     private const int WM_SETTINGCHANGE = 0x001A;
     private const int WM_DWMCOMPOSITIONCHANGED = 0x031E;
-
     private const int WS_MINIMIZEBOX = 0x20000;
     private const int CS_DBLCLKS = 0x8;
     private const int CS_DROP = 0x20000;
-
     private static List<FormEx> _openForms = new List<FormEx>();
     #endregion
 

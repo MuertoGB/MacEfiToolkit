@@ -7,8 +7,8 @@
 
 using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Firmware.EFIROM;
-using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.Utilities;
 using System;
 using System.IO;
 using System.Text;
@@ -115,7 +115,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             lblBiosId.Text = _efirom.AppleRomInfoSectionData.BiosId ?? AppStrings.NA;
             lblModel.Text = _efirom.AppleRomInfoSectionData.Model != null
-                ? $"{_efirom.AppleRomInfoSectionData.Model} ({MacTools.ConvertEfiModelCode(_efirom.AppleRomInfoSectionData.Model)})"
+                ? $"{_efirom.AppleRomInfoSectionData.Model} ({MacUtils.ConvertEfiModelCode(_efirom.AppleRomInfoSectionData.Model)})"
                 : AppStrings.NA;
             lblEfiVersion.Text = _efirom.AppleRomInfoSectionData.EfiVersion ?? AppStrings.NA;
             lblBuiltBy.Text = _efirom.AppleRomInfoSectionData.BuiltBy ?? AppStrings.NA;

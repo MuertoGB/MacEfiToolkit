@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    internal class Prompts
+    public static class Prompts
     {
         public static DialogResult ShowPatchFailedPrompt(Form owner)
         {

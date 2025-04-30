@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal static class ApplicationColours
+    public static class ApplicationColours
     {
         #region Status Colors
         internal static readonly Color Information = Color.FromArgb(128, 200, 255);

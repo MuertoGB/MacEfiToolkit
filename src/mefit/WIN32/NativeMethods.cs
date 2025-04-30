@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Mac_EFI_Toolkit.WIN32
 {
-    class NativeMethods
+    public static class NativeMethods
     {
         #region Structs
         // https://learn.microsoft.com/en-us/windows/win32/api/dwmapi/ns-dwmapi-dwm_blurbehind

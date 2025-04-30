@@ -5,7 +5,7 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common.Constants;
-using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.Utilities;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -36,13 +36,13 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             // Create buffers.
             Logger.WriteCallerLine(LogStrings.CREATING_BUFFERS);
 
-            byte[] binaryBuffer = BinaryTools.CloneBuffer(socrom.LoadedBinaryBuffer);
+            byte[] binaryBuffer = BinaryUtils.CloneBuffer(socrom.LoadedBinaryBuffer);
             byte[] serialBuffer = Encoding.UTF8.GetBytes(serial);
 
             // Overwrite serial in the binary buffer.
             Logger.WriteCallerLine(LogStrings.SSN_WTB);
 
-            BinaryTools.OverwriteBytesAtBase(binaryBuffer, socrom.SCfg.SerialBase, serialBuffer);
+            BinaryUtils.OverwriteBytesAtBase(binaryBuffer, socrom.SCfg.SerialBase, serialBuffer);
 
             Logger.WriteCallerLine(LogStrings.SCFG_LFB);
 
@@ -92,7 +92,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
                 Logger.WriteCallerLine(LogStrings.CREATING_BUFFERS);
 
-                byte[] binaryBuffer = BinaryTools.CloneBuffer(socrom.LoadedBinaryBuffer);
+                byte[] binaryBuffer = BinaryUtils.CloneBuffer(socrom.LoadedBinaryBuffer);
                 byte[] scfgBuffer = File.ReadAllBytes(dialog.FileName);
 
                 if (!ValidateScfgStore(scfgBuffer))
@@ -103,7 +103,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 // Check were not writing over data we shouldn't be.
                 if (!scfgExists)
                 {
-                    byte[] emptyBuffer = BinaryTools.GetBytesBaseLength(binaryBuffer, SOCROM.SCFG_EXPECTED_BASE, scfgBuffer.Length);
+                    byte[] emptyBuffer = BinaryUtils.GetBytesBaseLength(binaryBuffer, SOCROM.SCFG_EXPECTED_BASE, scfgBuffer.Length);
 
                     for (int i = 0; i < emptyBuffer.Length; i++)
                     {
@@ -122,18 +122,18 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 {
                     Logger.WriteCallerLine(LogStrings.ERASE_OLD_STORE);
                     byte[] tempBuffer = new byte[socrom.SCfg.StoreLength];
-                    BinaryTools.EraseByteArray(tempBuffer);
-                    BinaryTools.OverwriteBytesAtBase(binaryBuffer, scfgBase, tempBuffer);
+                    BinaryUtils.EraseByteArray(tempBuffer);
+                    BinaryUtils.OverwriteBytesAtBase(binaryBuffer, scfgBase, tempBuffer);
                 }
 
                 // Overwrite Scfg store in the binary buffer.
-                BinaryTools.OverwriteBytesAtBase(binaryBuffer, scfgBase, scfgBuffer);
+                BinaryUtils.OverwriteBytesAtBase(binaryBuffer, scfgBase, scfgBuffer);
 
                 // Load Scfg store from the binary buffer.
                 SCfgStore scfg = socrom.ParseSCfgStoreData(binaryBuffer, false);
 
                 // Check store was written successfully.
-                if (!BinaryTools.ByteArraysMatch(scfg.StoreBuffer, scfgBuffer))
+                if (!BinaryUtils.ByteArraysMatch(scfg.StoreBuffer, scfgBuffer))
                 {
                     Logger.WriteCallerLine($"{LogStrings.PATCH_FAIL} {LogStrings.STORE_COMP_FAILED}");
                     return null;
@@ -147,7 +147,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
         private bool ValidateScfgStore(byte[] scfgbuffer)
         {
-            int scfgBase = BinaryTools.GetBaseAddress(scfgbuffer, Signatures.Scfg.HeaderMarker);
+            int scfgBase = BinaryUtils.GetBaseAddress(scfgbuffer, Signatures.Scfg.HeaderMarker);
 
             // Expect scfg signature at address 0h.
             if (scfgBase != 0)
@@ -195,7 +195,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                     return string.Empty;
                 }
 
-                if (FileTools.WriteAllBytesEx(dialog.FileName, buffer) && File.Exists(dialog.FileName))
+                if (FileUtils.WriteAllBytesEx(dialog.FileName, buffer) && File.Exists(dialog.FileName))
                 {
                     Logger.WriteCallerLine($"{LogStrings.FILE_SAVE_SUCCESS} {dialog.FileName}");
                     return dialog.FileName;

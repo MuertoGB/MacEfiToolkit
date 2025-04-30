@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal static class ApplicationPaths
+    public static class ApplicationPaths
     {
         internal static readonly string WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
         internal static readonly string FriendlyName = AppDomain.CurrentDomain.FriendlyName;

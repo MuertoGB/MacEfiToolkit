@@ -17,22 +17,19 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
 {
-
-    #region Enums
-    internal enum MenuPosition
+    public static class UITools
     {
-        TopRight,
-        BottomLeft
-    }
-    #endregion
+        public enum MenuPosition
+        {
+            TopRight,
+            BottomLeft
+        }
 
-    class UITools
-    {
         private const int WM_NCLBUTTONDOWN = 0xA1;
         private const int HT_CAPTION = 0x2;
 
         #region Flash ForeColor
-        internal static async void FlashForecolor(Control control)
+        public static async void FlashForecolor(Control control)
         {
             if (!Settings.ReadBoolean(Settings.BooleanKey.DisableFlashingUI))
             {
@@ -50,7 +47,7 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Explorer
-        internal static void ShowExplorerFileHighlightPrompt(Form owner, string filepath)
+        public static void ShowExplorerFileHighlightPrompt(Form owner, string filepath)
         {
             DialogResult result =
                 METPrompt.Show(
@@ -65,7 +62,7 @@ namespace Mac_EFI_Toolkit.UI
             }
         }
 
-        internal static void ShowOpenFolderInExplorerPrompt(Form owner, string folderpath)
+        public static void ShowOpenFolderInExplorerPrompt(Form owner, string folderpath)
         {
             DialogResult result =
                 METPrompt.Show(
@@ -85,7 +82,7 @@ namespace Mac_EFI_Toolkit.UI
         /// </summary>
         /// <param name="filepath">The path of the file to open and highlight in Windows Explorer.</param>
         /// <param name="owner">The form instance used to display prompts to the user.</param>
-        internal static void HighlightPathInExplorer(string filepath, Form owner)
+        public static void HighlightPathInExplorer(string filepath, Form owner)
         {
             if (!File.Exists(filepath))
             {
@@ -101,7 +98,7 @@ namespace Mac_EFI_Toolkit.UI
             Process.Start("explorer.exe", $"/select,\"{filepath}\"");
         }
 
-        internal static void OpenFolderInExplorer(string folderpath, Form owner)
+        public static void OpenFolderInExplorer(string folderpath, Form owner)
         {
             if (!Directory.Exists(folderpath))
             {
@@ -132,7 +129,7 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Context Menu Position
-        internal static void ShowContextMenuAtControlPoint(object sender, ContextMenuStrip contextmenu, MenuPosition menuposition)
+        public static void ShowContextMenuAtControlPoint(object sender, ContextMenuStrip contextmenu, MenuPosition menuposition)
         {
             Control control = sender as Control;
 
@@ -158,7 +155,7 @@ namespace Mac_EFI_Toolkit.UI
             contextmenu.Show(position);
         }
 
-        internal static void ShowContextMenuAtCursor(object sender, EventArgs e, ContextMenuStrip contextmenu, bool showonleftclick)
+        public static void ShowContextMenuAtCursor(object sender, EventArgs e, ContextMenuStrip contextmenu, bool showonleftclick)
         {
             MouseEventArgs args = e as MouseEventArgs;
 
@@ -192,7 +189,7 @@ namespace Mac_EFI_Toolkit.UI
         #endregion
 
         #region Nested panel text color setter
-        internal static void ApplyNestedPanelLabelForeColor(TableLayoutPanel tablelayoutpanel, Color color)
+        public static void ApplyNestedPanelLabelForeColor(TableLayoutPanel tablelayoutpanel, Color color)
         {
             foreach (Control control in tablelayoutpanel.Controls)
             {

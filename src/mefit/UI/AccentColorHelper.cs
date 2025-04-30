@@ -12,9 +12,9 @@ using System.Drawing;
 
 namespace Mac_EFI_Toolkit.UI
 {
-    internal class AccentColorHelper
+    public static class AccentColorHelper
     {
-        internal static Color GetSystemAccentColor()
+        public static Color GetSystemAccentColor()
         {
             try
             {

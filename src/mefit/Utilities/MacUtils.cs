@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// MacTools.cs
+// MacUtils.cs
 // Released under the GNU GLP v3.0
 
 using System;
@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace Mac_EFI_Toolkit.Tools
+namespace Mac_EFI_Toolkit.Utilities
 {
-    class MacTools
+    public static class MacUtils
     {
         #region Configuation Code
         /// <summary>
@@ -25,7 +25,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static string GetDeviceConfigCodeLocal(string hwc)
+        public static string GetDeviceConfigCodeLocal(string hwc)
         {
             try
             {
@@ -55,20 +55,17 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="hwc">The HWC identifier to retrieve a model string for.</param>
         /// <returns>The model string.</returns>
-        internal static async Task<string> GetDeviceConfigCodeSupportRemote(string hwc)
+        public static async Task<string> GetDeviceConfigCodeRemote(string hwc)
         {
             string supportUrl = "http://support-sp.apple.com/sp/product?cc=";
             string langPart = "&lang=en_GB";
             string xmlNode = "/root/configCode";
+            string fullUrl = $"{supportUrl}{hwc}{langPart}";
 
             try
             {
-                string fullUrl = $"{supportUrl}{hwc}{langPart}";
-
-                if (!NetworkTools.IsWebsiteAvailable(fullUrl))
-                {
+                if (!NetworkUtils.IsWebsiteAvailable(fullUrl))
                     return null;
-                }
 
                 using (WebClient webClient = new WebClient())
                 {
@@ -85,7 +82,7 @@ namespace Mac_EFI_Toolkit.Tools
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetDeviceConfigCodeSupportRemote), e.GetType(), e.Message);
+                Logger.WriteErrorLine(nameof(GetDeviceConfigCodeRemote), e.GetType(), e.Message);
                 return null;
             }
         }
@@ -97,13 +94,11 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="model">The EFI model code.</param>
         /// <returns>The full model identifier representation.</returns>
-        internal static string ConvertEfiModelCode(string model)
+        public static string ConvertEfiModelCode(string model)
         {
             // Example MBP121 becomes MacBookPro12,1.
             if (string.IsNullOrEmpty(model))
-            {
                 return null;
-            }
 
             string letters = new string(model.Where(char.IsLetter).ToArray());
             string numbers = new string(model.Where(char.IsDigit).ToArray());
@@ -114,6 +109,7 @@ namespace Mac_EFI_Toolkit.Tools
             if (letters.Length < minLength || letters.Length > maxLength ||
                 numbers.Length < minLength || numbers.Length > maxLength)
             {
+                // Return the string arg received.
                 return model;
             }
 
@@ -140,14 +136,13 @@ namespace Mac_EFI_Toolkit.Tools
                 numbers = $"{numbers.Substring(0, 2)},{numbers.Substring(2)}"; // Format XX,Y.
             }
 
-            // Return the generated full model, otherwise what was passed in will be returned.
             return $"{letters}{numbers}";
         }
         #endregion
 
         #region Serial Lookup
-        internal static void LookupSerialOnEveryMac(string serial) =>
-            Process.Start($"https://everymac.com/ultimate-mac-lookup/?search_keywords={serial}");
+        public static void LookupSerialOnEveryMac(string serial)
+            => Process.Start($"https://everymac.com/ultimate-mac-lookup/?search_keywords={serial}");
         #endregion
     }
 }

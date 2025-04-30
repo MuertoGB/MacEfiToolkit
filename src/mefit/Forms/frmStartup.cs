@@ -27,8 +27,9 @@ namespace Mac_EFI_Toolkit.Forms
         #region Private Members
         private readonly EFIROM _efirom = new EFIROM();
         private readonly SOCROM _socrom = new SOCROM();
-        private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
-        private int _childWindowCount = 0;
+        private readonly Updater _updater = new Updater();
+        private string _initialDirectory = ApplicationPaths.WorkingDirectory;
+        private int _firmwareWindowCount = 0;
         #endregion
 
         #region Constructor
@@ -81,7 +82,7 @@ namespace Mac_EFI_Toolkit.Forms
                 // We need to cancel the original request to close if confirmation dialogs are not disabled.
                 if (!Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag))
                 {
-                    if (_childWindowCount != 0)
+                    if (_firmwareWindowCount != 0)
                     {
                         e.Cancel = true;
                         Program.HandleApplicationExit(this, Program.ExitType.Exit);
@@ -183,7 +184,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void cmdClose_Click(object sender, EventArgs e)
         {
-            if (_childWindowCount != 0)
+            if (_firmwareWindowCount != 0)
             {
                 Program.HandleApplicationExit(this, Program.ExitType.Exit);
                 return;
@@ -196,7 +197,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             using (OpenFileDialog dialog = new OpenFileDialog
             {
-                InitialDirectory = _strInitialDirectory,
+                InitialDirectory = _initialDirectory,
                 Filter = AppStrings.FILTER_STARTUP_WINDOW
             })
             {
@@ -211,19 +212,19 @@ namespace Mac_EFI_Toolkit.Forms
             => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsOptions,
-                MenuPosition.BottomLeft);
+                UITools.MenuPosition.BottomLeft);
 
         private void cmdMenuFolders_Click(object sender, EventArgs e)
             => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsFolders,
-                MenuPosition.BottomLeft);
+                UITools.MenuPosition.BottomLeft);
 
         private void cmdHelp_Click(object sender, EventArgs e)
             => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsHelp,
-                MenuPosition.BottomLeft);
+                UITools.MenuPosition.BottomLeft);
         #endregion
 
         #region Context Menu events
@@ -261,7 +262,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void restartApplicationToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (_childWindowCount != 0)
+            if (_firmwareWindowCount != 0)
             {
                 Program.HandleApplicationExit(this, Program.ExitType.Restart);
                 return;
@@ -296,7 +297,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             BlurHelper.ApplyBlur(this);
 
-            using (Form form = new frmUpdate())
+            using (Form form = new frmUpdate(_updater))
             {
                 form.Tag = StartupSenderTag.Other;
                 form.FormClosed += ChildWindowClosed;
@@ -335,7 +336,7 @@ namespace Mac_EFI_Toolkit.Forms
         #region Open Binary
         private void OpenBinary(string filepath)
         {
-            if (!FirmwareFile.IsValidMinMaxSize(filepath, this, FirmwareFile.MIN_IMAGE_SIZE, FirmwareFile.MAX_IMAGE_SIZE))
+            if (!FirmwareAnalyzer.CheckFileSizeWithinRange(filepath, this, FirmwareAnalyzer.MinImageSize, FirmwareAnalyzer.MaxImageSize))
                 return;
 
             byte[] fileBuffer = File.ReadAllBytes(filepath);
@@ -345,7 +346,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (form != null)
             {
-                _strInitialDirectory = Path.GetDirectoryName(filepath);
+                _initialDirectory = Path.GetDirectoryName(filepath);
                 InitializeChildForm(form, filepath);
                 return;
             }
@@ -365,9 +366,9 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 if (child.Tag is StartupSenderTag formTag && formTag == StartupSenderTag.Firmware)
                 {
-                    if (_childWindowCount > 0)
+                    if (_firmwareWindowCount > 0)
                     {
-                        _childWindowCount--;
+                        _firmwareWindowCount--;
                         UpdateWindowTitle();
                     }
                 }
@@ -408,7 +409,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.LoadedFirmware = filepath;
 
             // Increment child count and update window text.
-            _childWindowCount++;
+            _firmwareWindowCount++;
 
             // Update window title.
             UpdateWindowTitle();
@@ -423,19 +424,18 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void UpdateWindowTitle()
         {
-            if (_childWindowCount == 0)
+            if (_firmwareWindowCount == 0)
             {
                 lblWindowTitle.Text = AppStrings.APPNAME;
                 return;
             }
 
-            lblWindowTitle.Text = $"{AppStrings.APPNAME} ({_childWindowCount})";
+            lblWindowTitle.Text = $"{AppStrings.APPNAME} ({_firmwareWindowCount})";
         }
 
         internal async void StartupVersionCheck()
         {
-            // Check for a new version.
-            Updater.VersionResult result = await Updater.CheckForNewVersion();
+            Updater.VersionResult result = await _updater.CheckForNewVersionAsync();
 
             // If a new version is available update the UI.
             if (result == Updater.VersionResult.NewVersionAvailable)
@@ -468,7 +468,7 @@ namespace Mac_EFI_Toolkit.Forms
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
+                _initialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
             }
         }
 

@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    class Logger
+    public static class Logger
     {
         public enum LogType
         {
@@ -43,13 +43,13 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void WriteErrorLine(string methodname, Type exceptiontype, string message) =>
-            WriteLine($"{methodname} - {exceptiontype.Name}: {message}", LogType.Application);
+        public static void WriteErrorLine(string methodname, Type exceptiontype, string message)
+            => WriteLine($"{methodname} - {exceptiontype.Name}: {message}", LogType.Application);
 
-        internal static void WriteCallerLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
-            WriteLine($"{methodName}: {logText}", LogType.Application);
+        public static void WriteCallerLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
+            => WriteLine($"{methodName}: {logText}", LogType.Application);
 
-        internal static void OpenLogFile(Form owner)
+        public static void OpenLogFile(Form owner)
         {
             string logPath = ApplicationPaths.ApplicationLog;
 
@@ -63,8 +63,8 @@ namespace Mac_EFI_Toolkit
             Process.Start("notepad.exe", logPath);
         }
 
-        private static void ShowLogFileNotFoundError(Form owner) =>
-            METPrompt.Show(
+        private static void ShowLogFileNotFoundError(Form owner)
+            => METPrompt.Show(
                 owner,
                 DialogStrings.LOG_NOT_FOUND,
                 METPrompt.PType.Error,

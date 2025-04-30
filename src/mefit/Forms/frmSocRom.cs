@@ -9,8 +9,8 @@ using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;
 using Mac_EFI_Toolkit.Firmware;
 using Mac_EFI_Toolkit.Firmware.SOCROM;
-using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.UI;
+using Mac_EFI_Toolkit.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,9 +26,10 @@ namespace Mac_EFI_Toolkit.Forms
     {
         #region Private Members
         private SOCROM _socrom = new SOCROM();
-        private SOCPatcher _patcher = new SOCPatcher();
-        private string _strInitialDirectory = ApplicationPaths.WorkingDirectory;
-        private Thread _tLoadFirmware = null;
+        private SOCPatcher _socPatcher = new SOCPatcher();
+        private MemoryTracker _memoryTracker = new MemoryTracker();
+        private string _initialDirectory = ApplicationPaths.WorkingDirectory;
+        private Thread _parseThread = null;
         private CancellationTokenSource _cancellationToken;
         private Button[] _menuButtons;
         private ContextMenuStrip[] _contextMenus;
@@ -69,7 +70,7 @@ namespace Mac_EFI_Toolkit.Forms
                 Program.MainWindow.LoadedFirmware = null;
             }
 
-            MemoryTracker.Instance.OnMemoryUsageUpdated += MemoryTracker_OnMemoryUsageUpdated;
+            _memoryTracker.OnMemoryUsageUpdated += MemoryTracker_OnMemoryUsageUpdated;
         }
 
         private void MemoryTracker_OnMemoryUsageUpdated(object sender, ulong privateset)
@@ -81,7 +82,7 @@ namespace Mac_EFI_Toolkit.Forms
                     lblPagefile.Visible = true;
                 }
 
-                lblPagefile.Text = FileTools.FormatBytesToReadableUnit(privateset);
+                lblPagefile.Text = FileUtils.FormatBytesToReadableUnit(privateset);
             }));
         }
 
@@ -92,7 +93,10 @@ namespace Mac_EFI_Toolkit.Forms
                 _cancellationToken.Cancel();
             }
 
-            MemoryTracker.Instance.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
+            if (_memoryTracker != null)
+            {
+                _memoryTracker.OnMemoryUsageUpdated -= MemoryTracker_OnMemoryUsageUpdated;
+            }
 
             _socrom = null;
         }
@@ -214,7 +218,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             using (OpenFileDialog dialog = new OpenFileDialog
             {
-                InitialDirectory = _strInitialDirectory,
+                InitialDirectory = _initialDirectory,
                 Filter = AppStrings.FILTER_SOCROM_SUPPORTED_FIRMWARE
             })
             {
@@ -229,25 +233,25 @@ namespace Mac_EFI_Toolkit.Forms
             => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsHelp,
-                MenuPosition.BottomLeft);
+                UITools.MenuPosition.BottomLeft);
 
         private void cmdMenuCopy_Click(object sender, EventArgs e)
             => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsCopy,
-                MenuPosition.BottomLeft);
+                UITools.MenuPosition.BottomLeft);
 
         private void cmdMenuFolders_Click(object sender, EventArgs e)
             => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsFolders,
-                MenuPosition.BottomLeft);
+                UITools.MenuPosition.BottomLeft);
 
         private void cmdMenuExport_Click(object sender, EventArgs e)
             => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsExport,
-                MenuPosition.BottomLeft);
+                UITools.MenuPosition.BottomLeft);
 
         private void cmdMenuPatch_Click(object sender, EventArgs e)
         {
@@ -270,7 +274,7 @@ namespace Mac_EFI_Toolkit.Forms
                 UITools.ShowContextMenuAtControlPoint(
                     sender,
                     cmsPatch,
-                    MenuPosition.BottomLeft);
+                    UITools.MenuPosition.BottomLeft);
             }
         }
 
@@ -278,7 +282,7 @@ namespace Mac_EFI_Toolkit.Forms
             => UITools.ShowContextMenuAtControlPoint(
                 sender,
                 cmsTools,
-                MenuPosition.BottomLeft);
+                UITools.MenuPosition.BottomLeft);
 
         private void cmdOpenInExplorer_Click(object sender, EventArgs e)
             => UITools.HighlightPathInExplorer(_socrom.LoadedBinaryPath, this);
@@ -376,7 +380,7 @@ namespace Mac_EFI_Toolkit.Forms
                 if (dialog.ShowDialog() != DialogResult.OK)
                     return;
 
-                if (FileTools.WriteAllBytesEx(dialog.FileName, _socrom.SCfg.StoreBuffer))
+                if (FileUtils.WriteAllBytesEx(dialog.FileName, _socrom.SCfg.StoreBuffer))
                 {
                     UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
                     return;
@@ -405,7 +409,7 @@ namespace Mac_EFI_Toolkit.Forms
                 if (dialog.ShowDialog() != DialogResult.OK)
                     return;
 
-                FileTools.BackupFileToZip(_socrom.LoadedBinaryBuffer, _socrom.FirmwareInfo.FileNameExt, dialog.FileName);
+                FileUtils.BackupFileToZip(_socrom.LoadedBinaryBuffer, _socrom.FirmwareInfo.FileNameExt, dialog.FileName);
 
                 if (File.Exists(dialog.FileName))
                 {
@@ -439,8 +443,8 @@ namespace Mac_EFI_Toolkit.Forms
                 builder.AppendLine("File");
                 builder.AppendLine("----------------------------------");
                 builder.AppendLine($"Filename:        {_socrom.FirmwareInfo.FileNameExt}");
-                builder.AppendLine($"Size (Bytes):    {FileTools.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} bytes");
-                builder.AppendLine($"Size (MB):       {FileTools.FormatBytesToReadableUnit((ulong)_socrom.FirmwareInfo.Length)}");
+                builder.AppendLine($"Size (Bytes):    {FileUtils.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} bytes");
+                builder.AppendLine($"Size (MB):       {FileUtils.FormatBytesToReadableUnit((ulong)_socrom.FirmwareInfo.Length)}");
                 builder.AppendLine($"Size (Hex):      {_socrom.FirmwareInfo.Length:X}h");
                 builder.AppendLine($"Entropy:         {_socrom.FirmwareInfo.Entropy}");
                 builder.AppendLine($"SHA256:          {_socrom.FirmwareInfo.SHA256}");
@@ -515,7 +519,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (form.DialogResult == DialogResult.OK)
                 {
-                    byte[] patchedBuffer = _patcher.WriteNewSerial(_socrom.NewSerial, _socrom);
+                    byte[] patchedBuffer = _socPatcher.WriteNewSerial(_socrom.NewSerial, _socrom);
 
                     if (patchedBuffer == null)
                     {
@@ -530,7 +534,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void replaceScfgStoreToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            byte[] patchedBuffer = _patcher.WriteScfgStore(_socrom);
+            byte[] patchedBuffer = _socPatcher.WriteScfgStore(_socrom);
 
             if (patchedBuffer == null)
             {
@@ -543,7 +547,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         // Tools Context Menu
         private void lookupSerialNumberToolStripMenuItem_Click(object sender, EventArgs e)
-            => MacTools.LookupSerialOnEveryMac(_socrom.SCfg.Serial);
+            => MacUtils.LookupSerialOnEveryMac(_socrom.SCfg.Serial);
 
         private void resetWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -585,7 +589,7 @@ namespace Mac_EFI_Toolkit.Forms
             byte[] binaryBuffer = File.ReadAllBytes(_socrom.LoadedBinaryPath);
 
             // Check if the binaries match in size and data.
-            if (BinaryTools.ByteArraysMatch(binaryBuffer, _socrom.LoadedBinaryBuffer))
+            if (BinaryUtils.ByteArraysMatch(binaryBuffer, _socrom.LoadedBinaryBuffer))
             {
                 // Loaded binaries match.
                 METPrompt.Show(
@@ -636,7 +640,7 @@ namespace Mac_EFI_Toolkit.Forms
         private void OpenBinary(string filepath)
         {
             // Check filesize.
-            if (!FirmwareFile.IsValidMinMaxSize(filepath, this, FirmwareFile.MIN_IMAGE_SIZE, FirmwareFile.MAX_IMAGE_SIZE))
+            if (!FirmwareAnalyzer.CheckFileSizeWithinRange(filepath, this, FirmwareAnalyzer.MinImageSize, FirmwareAnalyzer.MaxImageSize))
                 return;
 
             // Check if the image is what we're looking for.
@@ -664,13 +668,13 @@ namespace Mac_EFI_Toolkit.Forms
             _socrom.LoadedBinaryBuffer = File.ReadAllBytes(filepath);
 
             // Set the current directory.
-            _strInitialDirectory = Path.GetDirectoryName(filepath);
+            _initialDirectory = Path.GetDirectoryName(filepath);
 
             // Show loading bar.
             pbxLoad.Image = Properties.Resources.loading;
 
-            _tLoadFirmware = new Thread(() => LoadFirmwareBase(filepath, _cancellationToken.Token)) { IsBackground = true };
-            _tLoadFirmware.Start();
+            _parseThread = new Thread(() => LoadFirmwareBase(filepath, _cancellationToken.Token)) { IsBackground = true };
+            _parseThread.Start();
         }
 
         private void LoadFirmwareBase(string filePath, CancellationToken token)
@@ -747,14 +751,14 @@ namespace Mac_EFI_Toolkit.Forms
         private void UpdateFileSizeControls()
         {
             long length = _socrom.FirmwareInfo.Length;
-            bool validSize = FirmwareFile.IsValidBinSize(length);
+            bool validSize = FirmwareAnalyzer.IsValidBinSize(length);
 
-            lblFilesize.Text = $"{FileTools.FormatBytesWithCommas(length)} {AppStrings.BYTES} ({length:X}h)";
+            lblFilesize.Text = $"{FileUtils.FormatBytesWithCommas(length)} {AppStrings.BYTES} ({length:X}h)";
 
             if (!validSize)
             {
                 lblFilesize.ForeColor = ApplicationColours.Error;
-                lblFilesize.Text += $" ({FirmwareFile.CalculateInvalidSize(length)})";
+                lblFilesize.Text += $" ({FirmwareAnalyzer.CalculateInvalidSize(length)})";
             }
         }
 
@@ -862,7 +866,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         internal async void GetConfigCodeAsync(string hwc)
         {
-            string configCode = await MacTools.GetDeviceConfigCodeSupportRemote(hwc);
+            string configCode = await MacUtils.GetDeviceConfigCodeRemote(hwc);
 
             if (!string.IsNullOrEmpty(configCode))
             {
@@ -1133,7 +1137,7 @@ namespace Mac_EFI_Toolkit.Forms
 
         private void ClipboardSetFileSize()
             => SetClipboardText(
-                $"{FileTools.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} " +
+                $"{FileUtils.FormatBytesWithCommas(_socrom.FirmwareInfo.Length)} " +
                 $"{AppStrings.BYTES} ({_socrom.FirmwareInfo.Length:X}h)");
 
         private void ClipboardSetFileCrc32()
@@ -1189,7 +1193,7 @@ namespace Mac_EFI_Toolkit.Forms
             // If the path is not empty check if it exists and set it as the initial directory.
             if (!string.IsNullOrEmpty(directory))
             {
-                _strInitialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
+                _initialDirectory = Directory.Exists(directory) ? directory : ApplicationPaths.WorkingDirectory;
             }
         }
 
@@ -1197,7 +1201,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             if (Prompts.ShowPatchSuccessPrompt(this) == DialogResult.Yes)
             {
-                string savePath = _patcher.SaveOutputFirmware(patchedbuffer, _socrom);
+                string savePath = _socPatcher.SaveOutputFirmware(patchedbuffer, _socrom);
                 if (!string.IsNullOrEmpty(savePath) && Prompts.PromptLoadNewFirmware(this) == DialogResult.Yes)
                 {
                     OpenBinary(savePath);

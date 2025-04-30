@@ -1,21 +1,21 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// FileTools.cs
+// FileUtils.cs
 // Released under the GNU GLP v3.0
 
 using System;
 using System.IO;
 using System.IO.Compression;
 
-namespace Mac_EFI_Toolkit.Tools
+namespace Mac_EFI_Toolkit.Utilities
 {
-    public class FileTools
+    public static class FileUtils
     {
-        public enum CreationStatus
+        public enum DirectoryCreationStatus
         {
-            SUCCESS,
-            FAILED
+            Success,
+            Failed
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="input">The number of bytes to format.</param>
         /// <returns>A string representation of the number of bytes with commas.</returns>
-        internal static string FormatBytesWithCommas(long input)
+        public static string FormatBytesWithCommas(long input)
         {
             return string.Format("{0:#,##0}", input);
         }
@@ -34,15 +34,13 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="input">The size in bytes to convert.</param>
         /// <returns>A human-readable string representation of the size with the appropriate unit.</returns>
-        internal static string FormatBytesToReadableUnit(ulong input)
+        public static string FormatBytesToReadableUnit(ulong input)
         {
             // Define a set of suffixes for file sizes.
             string[] suffixes = { "bytes", "KB", "MB", "GB", "TB" };
 
             if (input == 0)
-            {
                 return $"0 {suffixes[0]}";
-            }
 
             // Calculate the appropriate suffix index based on the size of the input.
             int index = (int)Math.Floor(Math.Log(input, 1024));
@@ -63,7 +61,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="filepath">The path of the file to write.</param>
         /// <param name="sourcebuffer">The byte array containing the data to be written.</param>
         /// <returns>True if the data was written successfully and integrity is verified; otherwise, false.</returns>
-        internal static bool WriteAllBytesEx(string filepath, byte[] sourcebuffer)
+        public static bool WriteAllBytesEx(string filepath, byte[] sourcebuffer)
         {
             try
             {
@@ -71,7 +69,7 @@ namespace Mac_EFI_Toolkit.Tools
 
                 byte[] fileBuffer = File.ReadAllBytes(filepath);
 
-                return BinaryTools.ByteArraysMatch(sourcebuffer, fileBuffer);
+                return BinaryUtils.ByteArraysMatch(sourcebuffer, fileBuffer);
             }
             catch (Exception e)
             {
@@ -85,19 +83,23 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="directory">The path of the directory to create.</param>
         /// <returns>
-        /// The status of the directory creation operation. Returns <see cref="CreationStatus.SUCCESS"/> if the directory is successfully created,
-        /// or <see cref="CreationStatus.FAILED"/> if the creation fails.
+        /// The status of the directory creation operation. Returns <see cref="DirectoryCreationStatus.Success"/> if the directory is successfully created,
+        /// or <see cref="DirectoryCreationStatus.Failed"/> if the creation fails.
         /// </returns>
-        public static CreationStatus CreateDirectory(string directory)
+        public static DirectoryCreationStatus CreateDirectory(string directory)
         {
-            Directory.CreateDirectory(directory);
-
-            if (Directory.Exists(directory))
+            try
             {
-                return CreationStatus.SUCCESS;
-            }
+                Directory.CreateDirectory(directory);
 
-            return CreationStatus.FAILED;
+                return Directory.Exists(directory)
+                    ? DirectoryCreationStatus.Success
+                    : DirectoryCreationStatus.Failed;
+            }
+            catch
+            {
+                return DirectoryCreationStatus.Failed;
+            }
         }
 
         /// <summary>
@@ -106,7 +108,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="sourcebuffer">The byte array to be backed up.</param>
         /// <param name="entryname">The name of the entry to be created within the zip archive.</param>
         /// <param name="filepath">The path of the zip file to be created.</param>
-        internal static void BackupFileToZip(byte[] sourcebuffer, string entryname, string filepath)
+        public static void BackupFileToZip(byte[] sourcebuffer, string entryname, string filepath)
         {
             try
             {

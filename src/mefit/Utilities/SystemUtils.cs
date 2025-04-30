@@ -12,41 +12,35 @@ using System.IO;
 using System.Security.Principal;
 using System.Windows.Forms;
 
-namespace Mac_EFI_Toolkit.Tools
+namespace Mac_EFI_Toolkit.Utilities
 {
-    #region Enum
-    enum FontStatus
+    public static class SystemUtils
     {
-        Available,
-        Missing,
-        Unknown
-    }
-    #endregion
+        public static string GetOperatingSystemName
+            => new Microsoft.VisualBasic.Devices.ComputerInfo().OSFullName;
 
-    internal class SystemTools
-    {
-        internal static string GetOperatingSystemName =>
-            new Microsoft.VisualBasic.Devices.ComputerInfo().OSFullName;
+        public static string GetOperatingSystemArchitecture(bool useshortstring = false)
+            => Environment.Is64BitOperatingSystem
+            ? (useshortstring ? "x64" : "64-Bit")
+            : (useshortstring ? "x86" : "32-Bit");
 
-        internal static string GetOperatingSystemArchitecture(bool useshortstring = false) =>
-            Environment.Is64BitOperatingSystem ? (useshortstring ? "x64" : "64-Bit") : (useshortstring ? "x86" : "32-Bit");
+        public static FileVersionInfo GetKernelVersion
+            => FileVersionInfo.GetVersionInfo(
+                Path.Combine(Environment.SystemDirectory, "kernel32.dll"));
 
-        internal static FileVersionInfo GetKernelVersion =>
-            FileVersionInfo.GetVersionInfo(Path.Combine(Environment.SystemDirectory, "kernel32.dll"));
-
-        internal static bool IsUserAdmin()
+        public static bool IsUserAdmin()
         {
             return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
         }
 
-        internal static string GetSystemArchitectureMode()
+        public static string GetSystemArchitectureMode()
         {
             return IntPtr.Size == 8 ? "x64" : "x86";
         }
 
-        internal static bool IsSupportedOS()
+        public static bool IsSupportedOS()
         {
-            if (SystemTools.GetKernelVersion.ProductMajorPart >= 10)
+            if (SystemUtils.GetKernelVersion.ProductMajorPart >= 10)
             {
                 return true;
             }
@@ -60,7 +54,7 @@ namespace Mac_EFI_Toolkit.Tools
             return false;
         }
 
-        internal static bool IsRunningUnderWine()
+        public static bool IsRunningUnderWine()
         {
             string ntDll = "ntdll.dll";
             string wineGetVersion = "wine_get_version";

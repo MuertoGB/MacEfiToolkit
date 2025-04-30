@@ -6,7 +6,7 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;
-using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.Utilities;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,11 +17,13 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    internal class Unhandled
+    public static class Unhandled
     {
-        internal static string GenerateReport(Exception unhandled)
+        public static string GenerateReport(Exception exception)
         {
             StringBuilder builder = new StringBuilder();
+            FontResolver resolver = new FontResolver();
+
             string appPath = Path.Combine(ApplicationPaths.WorkingDirectory, ApplicationPaths.FriendlyName);
 
             try
@@ -34,21 +36,21 @@ namespace Mac_EFI_Toolkit
                 builder.AppendLine($"Version:  {Application.ProductVersion}.{ApplicationVersions.BUILD}");
                 builder.AppendLine($"LZMA SDK: {ApplicationVersions.LZMA_SDK_VERSION}");
                 builder.AppendLine($"Channel:  {ApplicationVersions.CHANNEL}");
-                builder.AppendLine($"Mode:     {SystemTools.GetSystemArchitectureMode()}");
+                builder.AppendLine($"Mode:     {SystemUtils.GetSystemArchitectureMode()}");
                 builder.AppendLine($"Debug:    {Program.IsDebugMode()}");
-                builder.AppendLine($"Elevated: {SystemTools.IsUserAdmin()}");
+                builder.AppendLine($"Elevated: {SystemUtils.IsUserAdmin()}");
                 builder.AppendLine($"SHA256:   {Cryptography.GetSha256Digest(appBuffer)}\r\n");
                 builder.AppendLine("<== Operating System ==>\r\n");
-                builder.AppendLine($"Name:     {SystemTools.GetOperatingSystemName}");
-                builder.AppendLine($"Bitness:  {SystemTools.GetOperatingSystemArchitecture()}");
-                builder.AppendLine($"Kernel:   {SystemTools.GetKernelVersion.ProductVersion}\r\n");
+                builder.AppendLine($"Name:     {SystemUtils.GetOperatingSystemName}");
+                builder.AppendLine($"Bitness:  {SystemUtils.GetOperatingSystemArchitecture()}");
+                builder.AppendLine($"Kernel:   {SystemUtils.GetKernelVersion.ProductVersion}\r\n");
                 builder.AppendLine("<== Fonts ==>\r\n");
-                builder.AppendLine($"Segoe UI Reg: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Regular)}");
-                builder.AppendLine($"Segoe UI Bol: {FontResolver.IsFontStyleAvailable("Segoe UI", FontStyle.Bold)}");
-                builder.AppendLine($"Segoe UI Sem: {FontResolver.IsFontStyleAvailable("Segoe UI Semibold", FontStyle.Regular)}");
-                builder.AppendLine($"Consolas Reg: {FontResolver.IsFontStyleAvailable("Consolas", FontStyle.Bold)}\r\n");
+                builder.AppendLine($"Segoe UI Reg: {GetFontStatus(resolver.IsFontStyleAvailable("Segoe UI", FontStyle.Regular))}");
+                builder.AppendLine($"Segoe UI Bol: {GetFontStatus(resolver.IsFontStyleAvailable("Segoe UI", FontStyle.Bold))}");
+                builder.AppendLine($"Segoe UI Sem: {GetFontStatus(resolver.IsFontStyleAvailable("Segoe UI Semibold", FontStyle.Regular))}");
+                builder.AppendLine($"Consolas Reg: {GetFontStatus(resolver.IsFontStyleAvailable("Consolas", FontStyle.Bold))}\r\n");
                 builder.AppendLine("<== Exception Data ==>\r\n");
-                builder.AppendLine(GetExceptionData(unhandled));
+                builder.AppendLine(GetExceptionData(exception));
                 builder.AppendLine("<== Modules ==>\r\n");
                 builder.AppendLine(GetProcessModules());
                 builder.AppendLine("// End of file //");
@@ -59,6 +61,21 @@ namespace Mac_EFI_Toolkit
             {
                 Logger.WriteErrorLine(nameof(GenerateReport), e.GetType(), e.Message);
                 return null;
+            }
+        }
+
+        private static string GetFontStatus(FontResolver.FontStatus status)
+        {
+            switch (status)
+            {
+                case FontResolver.FontStatus.Available:
+                    return "Available";
+                case FontResolver.FontStatus.Missing:
+                    return "Missing";
+                case FontResolver.FontStatus.Unknown:
+                    return "Unknown (Could not check availability)";
+                default:
+                    return "Unknown status";
             }
         }
 

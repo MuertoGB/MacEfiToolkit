@@ -4,7 +4,8 @@
 // FlashDescriptor.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.Interop;
+using Mac_EFI_Toolkit.Utilities;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -55,7 +56,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         public void ParseRegionData(byte[] sourcebuffer)
         {
-            byte[] descriptorBytes = BinaryTools.GetBytesBaseLength(sourcebuffer, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
+            byte[] descriptorBytes = BinaryUtils.GetBytesBaseLength(sourcebuffer, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
             DescriptorHeader header = DeserializeStruct<DescriptorHeader>(descriptorBytes, 0);
 
             IsDescriptorMode = header.Tag.SequenceEqual(FlashDecriptorMarker);
@@ -98,7 +99,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
         {
             byte[] structBytes = new byte[Marshal.SizeOf(typeof(T))];
             Array.Copy(source, offset, structBytes, 0, structBytes.Length);
-            return Helper.DeserializeHeader<T>(structBytes);
+            return MarshalHelper.ReadStruct<T>(structBytes);
         }
 
         private void ParseRegion(ushort baseposition, ushort limitposition, int sourcelength, out uint regionbase, out uint regionlimit, out uint regionlength)

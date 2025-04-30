@@ -12,7 +12,7 @@ using System.IO;
 
 namespace Mac_EFI_Toolkit
 {
-    class Settings
+    public static class Settings
     {
         #region Enums
         public enum BooleanKey
@@ -55,7 +55,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Initialize
-        internal static void Initialize()
+        public static void Initialize()
         {
             IniFile iniFile = new IniFile(ApplicationPaths.SettingsFile);
             WriteSections(iniFile);
@@ -138,7 +138,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Read Values
-        internal static bool ReadBoolean(BooleanKey booleanKey)
+        public static bool ReadBoolean(BooleanKey booleanKey)
         {
             if (!SettingsFileExists())
             {
@@ -205,7 +205,7 @@ namespace Mac_EFI_Toolkit
             return bool.Parse(iniFile.Read(section, key));
         }
 
-        internal static string ReadString(StringKey stringKey)
+        public static string ReadString(StringKey stringKey)
         {
             if (!SettingsFileExists())
             {
@@ -259,7 +259,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Write Values
-        internal static void SetBool(BooleanKey booleanKey, bool value)
+        public static void SetBool(BooleanKey booleanKey, bool value)
         {
             if (!SettingsFileExists())
             {
@@ -313,7 +313,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void SetString(StringKey stringKey, string value)
+        public static void SetString(StringKey stringKey, string value)
         {
             if (!SettingsFileExists())
             {
@@ -361,7 +361,7 @@ namespace Mac_EFI_Toolkit
             return File.Exists(ApplicationPaths.SettingsFile);
         }
 
-        internal static bool DeleteSettings()
+        public static bool DeleteSettings()
         {
             try
             {

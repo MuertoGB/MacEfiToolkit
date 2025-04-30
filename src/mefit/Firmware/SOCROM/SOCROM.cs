@@ -6,7 +6,7 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Common.Constants;
-using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.Utilities;
 using System;
 using System.Diagnostics;
 using System.Text;
@@ -48,7 +48,9 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             Stopwatch parseTimer = Stopwatch.StartNew();
 
             // Parse file info.
-            FirmwareInfo = FirmwareFile.GetFileInfo(filename);
+            //FirmwareInfo = FirmwareFile.GetFileInfo(filename);
+            FirmwareFile firmware = new FirmwareFile(filename);
+            FirmwareInfo = firmware.Metadata;
 
             // Parse iBoot version.
             iBootVersion = GetiBootVersion(sourcebuffer);
@@ -57,7 +59,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             SCfg = ParseSCfgStoreData(sourcebuffer, false);
 
             // Fetch the Config Code.
-            ConfigCode = SCfg.HWC != null ? MacTools.GetDeviceConfigCodeLocal(SCfg.HWC) : null;
+            ConfigCode = SCfg.HWC != null ? MacUtils.GetDeviceConfigCodeLocal(SCfg.HWC) : null;
 
             parseTimer.Start();
             ParseTime = parseTimer.Elapsed;
@@ -66,23 +68,23 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         public bool IsValidImage(byte[] sourcebuffer)
         {
             // Check for ROM signature at 0x0h (T2ROM).
-            byte[] signature = BinaryTools.GetBytesBaseLength(sourcebuffer, T2_ROM_BASE, Signatures.SocRom.SocRomMarker.Length);
+            byte[] signature = BinaryUtils.GetBytesBaseLength(sourcebuffer, T2_ROM_BASE, Signatures.SocRom.SocRomMarker.Length);
 
-            if (BinaryTools.ByteArraysMatch(signature, Signatures.SocRom.SocRomMarker))
+            if (BinaryUtils.ByteArraysMatch(signature, Signatures.SocRom.SocRomMarker))
             {
                 Controller = ControllerType.AppleT2;
                 return true;
             }
 
             // Check Apple Silicon HUFA signature.
-            byte[] hufaSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, T2_ROM_BASE, Signatures.SocRom.AppleSiliconSocRomMarker.Length);
+            byte[] hufaSignature = BinaryUtils.GetBytesBaseLength(sourcebuffer, T2_ROM_BASE, Signatures.SocRom.AppleSiliconSocRomMarker.Length);
 
-            if (BinaryTools.ByteArraysMatch(hufaSignature, Signatures.SocRom.AppleSiliconSocRomMarker))
+            if (BinaryUtils.ByteArraysMatch(hufaSignature, Signatures.SocRom.AppleSiliconSocRomMarker))
             {
                 // Check SOCROM marker at a 0x20000h.
-                byte[] romSignature = BinaryTools.GetBytesBaseLength(sourcebuffer, SILICON_ROM_BASE, Signatures.SocRom.SocRomMarker.Length);
+                byte[] romSignature = BinaryUtils.GetBytesBaseLength(sourcebuffer, SILICON_ROM_BASE, Signatures.SocRom.SocRomMarker.Length);
 
-                if (BinaryTools.ByteArraysMatch(romSignature, Signatures.SocRom.SocRomMarker))
+                if (BinaryUtils.ByteArraysMatch(romSignature, Signatures.SocRom.SocRomMarker))
                 {
                     Controller = ControllerType.AppleSilicon;
                     return true;
@@ -111,13 +113,13 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
         #region IBoot
         public string GetiBootVersion(byte[] sourcebytes)
         {
-            int ibootBase = BinaryTools.GetBaseAddress(sourcebytes, Signatures.IBoot.iBootMarker, 0);
+            int ibootBase = BinaryUtils.GetBaseAddress(sourcebytes, Signatures.IBoot.iBootMarker, 0);
             const int dataStart = 0x6;
 
             if (ibootBase != -1) // Signature found.
             {
                 // Get byte containing data length.
-                byte[] lengthBuffer = BinaryTools.GetBytesBaseLength(sourcebytes, ibootBase + Signatures.IBoot.iBootMarker.Length + 1, 1);
+                byte[] lengthBuffer = BinaryUtils.GetBytesBaseLength(sourcebytes, ibootBase + Signatures.IBoot.iBootMarker.Length + 1, 1);
                 // Convert data length to unsigned int8.
                 byte length = (byte)lengthBuffer[0];
                 // Fix invalid length byte.
@@ -126,7 +128,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                     return AppStrings.UNKNOWN;
                 }
 
-                byte[] ibootBytes = BinaryTools.GetBytesBaseLength(sourcebytes, ibootBase + dataStart, length);
+                byte[] ibootBytes = BinaryUtils.GetBytesBaseLength(sourcebytes, ibootBase + dataStart, length);
 
                 return _utf8encoding.GetString(ibootBytes);
             }
@@ -145,21 +147,21 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 return DefaultScfgData();
             }
 
-            byte storeLength = BinaryTools.GetBytesBaseLength(sourcebuffer, scfgBase + Signatures.Scfg.HeaderMarker.Length, 1)[0];
+            byte storeLength = BinaryUtils.GetBytesBaseLength(sourcebuffer, scfgBase + Signatures.Scfg.HeaderMarker.Length, 1)[0];
 
             if (storeLength == 0)
             {
                 return DefaultScfgData();
             }
 
-            byte[] scfgBuffer = BinaryTools.GetBytesBaseLength(sourcebuffer, scfgBase, storeLength);
+            byte[] scfgBuffer = BinaryUtils.GetBytesBaseLength(sourcebuffer, scfgBase, storeLength);
 
             if (scfgBuffer == null)
             {
                 return DefaultScfgData();
             }
 
-            int serialBase = BinaryTools.GetBaseAddress(sourcebuffer, Signatures.Scfg.SerialMarker) + Signatures.Scfg.SerialMarker.Length;
+            int serialBase = BinaryUtils.GetBaseAddress(sourcebuffer, Signatures.Scfg.SerialMarker) + Signatures.Scfg.SerialMarker.Length;
 
             string serialString = GetStringFromSig(scfgBuffer, Signatures.Scfg.SerialMarker, SERIAL_LENGTH, out string hwcString);
             string sonString = GetStringFromSigWithLimit(scfgBuffer, Signatures.Scfg.SonMarker, _limitChars);
@@ -188,21 +190,21 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 return 0;
             }
 
-            return BinaryTools.GetBaseAddress(sourcebuffer, Signatures.Scfg.HeaderMarker);
+            return BinaryUtils.GetBaseAddress(sourcebuffer, Signatures.Scfg.HeaderMarker);
         }
 
         private string GetStringFromSig(byte[] sourcebuffer, byte[] marker, int expectedlength, out string hwc)
         {
             hwc = null;
 
-            int markerBase = BinaryTools.GetBaseAddress(sourcebuffer, marker);
+            int markerBase = BinaryUtils.GetBaseAddress(sourcebuffer, marker);
 
             if (markerBase == -1)
             {
                 return null;
             }
 
-            byte[] dataBuffer = BinaryTools.GetBytesBaseLength(sourcebuffer, markerBase + marker.Length, expectedlength);
+            byte[] dataBuffer = BinaryUtils.GetBytesBaseLength(sourcebuffer, markerBase + marker.Length, expectedlength);
 
             if (dataBuffer?.Length != expectedlength)
             {
@@ -217,7 +219,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
         private string GetStringFromSigWithLimit(byte[] sourcebuffer, byte[] marker, byte[] limitchars)
         {
-            int markerBase = BinaryTools.GetBaseAddress(sourcebuffer, marker);
+            int markerBase = BinaryUtils.GetBaseAddress(sourcebuffer, marker);
 
             if (markerBase == -1)
             {
@@ -226,14 +228,14 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
 
             markerBase += marker.Length;
 
-            int markerLimit = BinaryTools.GetBaseAddress(sourcebuffer, limitchars, markerBase);
+            int markerLimit = BinaryUtils.GetBaseAddress(sourcebuffer, limitchars, markerBase);
 
             if (markerLimit == -1)
             {
                 return null;
             }
 
-            byte[] outputBuffer = BinaryTools.GetBytesBaseLimit(sourcebuffer, markerBase, markerLimit);
+            byte[] outputBuffer = BinaryUtils.GetBytesBaseLimit(sourcebuffer, markerBase, markerLimit);
 
             return _utf8encoding.GetString(outputBuffer);
         }

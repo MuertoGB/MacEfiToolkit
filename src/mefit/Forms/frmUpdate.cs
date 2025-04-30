@@ -13,10 +13,14 @@ namespace Mac_EFI_Toolkit.Forms
 {
     public partial class frmUpdate : FormEx
     {
+        private readonly Updater _updater;
+
         #region Constructor
-        public frmUpdate()
+        public frmUpdate(Updater updater)
         {
             InitializeComponent();
+
+            _updater = updater;
 
             WireEventHandlers();
 
@@ -27,9 +31,9 @@ namespace Mac_EFI_Toolkit.Forms
         #region Window Events
         private void frmUpdate_Load(object sender, EventArgs e)
         {
-            lblNew.Text = Updater.NewVersion;
+            lblNew.Text = _updater.NewVersion;
             lblCurrent.Text = Application.ProductVersion;
-            lblPriority.Text = Updater.Priority;
+            lblPriority.Text = _updater.Priority;
         }
         #endregion
 
@@ -51,7 +55,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             ToggleControlEnable(false);
 
-            await Updater.DownloadAsync(lblWindowTitle);
+            await _updater.DownloadAndInstallUpdateAsync(lblWindowTitle);
 
             ToggleControlEnable(true);
         }

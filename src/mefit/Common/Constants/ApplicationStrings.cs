@@ -6,7 +6,7 @@
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal class AppStrings
+    public static class AppStrings
     {
         #region Strings
         internal const string APPNAME =
@@ -119,7 +119,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class LogStrings
+    public static class LogStrings
     {
         #region Strings
         internal const string PATCH_START =
@@ -328,7 +328,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class DialogStrings
+    public static class DialogStrings
     {
         #region Strings
         internal const string REQUIRES_WIN_10 =
@@ -411,13 +411,13 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class StartupWindowStrings
+    public static class StartupWindowStrings
     {
         #region Strings
         #endregion
     }
 
-    internal class EfiWindowStrings
+    public static class EfiWindowStrings
     {
         #region Strings
         internal const string VSS =
@@ -536,7 +536,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class SocWindowStrings
+    public static class SocWindowStrings
     {
         #region Strings
         internal const string SCFG_REGION =
@@ -577,13 +577,13 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class UpdateWindowStrings
+    public static class UpdateWindowStrings
     {
         #region Strings
         internal const string WAIT =
             "Please wait...";
 
-        internal const string UPD_STARTED =
+        internal const string UPDATE_STARTED =
             "Update started";
 
         internal const string DOWNLOADING_VERSION =

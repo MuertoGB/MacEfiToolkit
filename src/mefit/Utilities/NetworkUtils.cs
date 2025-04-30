@@ -1,23 +1,23 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// NetworkTools.cs
+// NetworkUtils.cs
 // Released under the GNU GLP v3.0
 
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
 
-namespace Mac_EFI_Toolkit.Tools
+namespace Mac_EFI_Toolkit.Utilities
 {
-    class NetworkTools
+    public static class NetworkUtils
     {
         /// <summary>
         /// Checks if a website is available by making a HEAD request to its URL.
         /// </summary>
         /// <param name="url">The URL of the website to check.</param>
         /// <returns>True if the website is available, false otherwise.</returns>
-        internal static bool IsWebsiteAvailable(string url)
+        public static bool IsWebsiteAvailable(string url)
         {
             WebRequest webRequest;
 
@@ -43,12 +43,10 @@ namespace Mac_EFI_Toolkit.Tools
         /// Checks if a network connection is available by attempting to send a ping request to a known IP address.
         /// </summary>
         /// <returns>True if a network connection is available, false otherwise.</returns>
-        internal static bool IsNetworkAvailable()
+        public static bool IsNetworkAvailable()
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
-            {
                 return false;
-            }
 
             try
             {

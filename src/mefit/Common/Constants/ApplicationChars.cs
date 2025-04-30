@@ -6,7 +6,7 @@
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal class ApplicationChars
+    public static class ApplicationChars
     {
         internal const string FLUENT_DISMISS = "\uE667";
         internal const string FLUENT_FOLDEROPEN = "\uE883";

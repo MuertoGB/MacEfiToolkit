@@ -97,8 +97,8 @@
     <Compile Include="Firmware\EFIROM\EFIROM.cs" />
     <Compile Include="Firmware\EFIROM\Signatures.cs" />
     <Compile Include="Firmware\EFIROM\Types\Structs.cs" />
+    <Compile Include="Firmware\FirmwareAnalyzer.cs" />
     <Compile Include="Firmware\FirmwareFile.cs" />
-    <Compile Include="Firmware\Helper.cs" />
     <Compile Include="Common\IniFile.cs" />
     <Compile Include="Firmware\EFIROM\IntelME.cs" />
     <Compile Include="Firmware\Serial.cs" />
@@ -114,6 +114,7 @@
     <Compile Include="Forms\Prompts\Prompts.cs" />
     <Compile Include="Forms\Types\Enums.cs" />
     <Compile Include="Common\MemoryTracker.cs" />
+    <Compile Include="Interop\MarshalHelper.cs" />
     <Compile Include="UI\AccentColorHelper.cs" />
     <Compile Include="UI\BlurHelper.cs" />
     <Compile Include="UI\FormEx.cs">
@@ -158,7 +159,8 @@
     <Compile Include="UI\Controls\METSwitch.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Tools\SystemTools.cs" />
+    <Compile Include="Utilities\MathUtils.cs" />
+    <Compile Include="Utilities\SystemUtils.cs" />
     <Compile Include="Forms\frmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,10 +183,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Renderers\METMenuRenderer.cs" />
-    <Compile Include="Tools\BinaryTools.cs" />
-    <Compile Include="Tools\MacTools.cs" />
-    <Compile Include="Tools\FileTools.cs" />
-    <Compile Include="Tools\NetworkTools.cs" />
+    <Compile Include="Utilities\BinaryUtils.cs" />
+    <Compile Include="Utilities\MacUtils.cs" />
+    <Compile Include="Utilities\FileUtils.cs" />
+    <Compile Include="Utilities\NetworkUtils.cs" />
     <Compile Include="Forms\frmNvramSelect.cs">
       <SubType>Form</SubType>
     </Compile>
