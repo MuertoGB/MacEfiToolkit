@@ -630,7 +630,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
                 if (FileUtils.WriteAllBytesEx(dialog.FileName, binarybuffer) && File.Exists(dialog.FileName))
                 {
-                    
+                    return dialog.FileName;
                 }
             }
 
