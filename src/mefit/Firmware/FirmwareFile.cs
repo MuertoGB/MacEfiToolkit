@@ -6,7 +6,6 @@
 
 using Mac_EFI_Toolkit.Common;
 using Mac_EFI_Toolkit.Utilities;
-using System;
 using System.IO;
 
 namespace Mac_EFI_Toolkit.Firmware
@@ -19,9 +18,6 @@ namespace Mac_EFI_Toolkit.Firmware
 
         public FirmwareFile(string filepath)
         {
-            if (!File.Exists(filepath))
-                throw new FileNotFoundException("Firmware file not found.", filepath);
-
             Path = filepath;
             Data = File.ReadAllBytes(filepath);
             Metadata = Analyze();

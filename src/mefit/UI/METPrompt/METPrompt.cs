@@ -6,9 +6,11 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common.Constants;
+using Mac_EFI_Toolkit.Forms;
 using System;
 using System.Drawing;
 using System.Media;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
@@ -58,7 +60,7 @@ namespace Mac_EFI_Toolkit.UI
             WireEventHandlers();
 
             // Enable drag.
-            UITools.EnableFormDrag(this, lblTitle);
+            WindowManager.EnableFormDrag(this, lblTitle);
         }
         #endregion
 
@@ -69,22 +71,22 @@ namespace Mac_EFI_Toolkit.UI
             switch (PromptType)
             {
                 case PType.Error:
-                    lblTitle.ForeColor = ApplicationColours.Error;
+                    lblTitle.ForeColor = ApplicationColors.Error;
                     lblTitle.Text = ERROR_STRING;
                     PromptSound = System.Media.SystemSounds.Hand;
                     break;
                 case PType.Warning:
-                    lblTitle.ForeColor = ApplicationColours.Warning;
+                    lblTitle.ForeColor = ApplicationColors.Warning;
                     lblTitle.Text = WARN_STRING;
                     PromptSound = System.Media.SystemSounds.Exclamation;
                     break;
                 case PType.Information:
-                    lblTitle.ForeColor = ApplicationColours.Information;
+                    lblTitle.ForeColor = ApplicationColors.Information;
                     lblTitle.Text = INFO_STRING;
                     PromptSound = System.Media.SystemSounds.Beep;
                     break;
                 case PType.Question:
-                    lblTitle.ForeColor = ApplicationColours.Information;
+                    lblTitle.ForeColor = ApplicationColors.Information;
                     lblTitle.Text = INFO_STRING;
                     PromptSound = System.Media.SystemSounds.Beep;
                     break;
@@ -114,7 +116,7 @@ namespace Mac_EFI_Toolkit.UI
                 PromptSound.Play();
             }
 
-            UITools.FlashForecolor(lblTitle);
+            FlashForecolor(lblTitle);
         }
         #endregion
 
@@ -205,6 +207,23 @@ namespace Mac_EFI_Toolkit.UI
             PromptMessage = message;
             PromptType = type;
             PromptButtons = buttons;
+        }
+
+        private static async void FlashForecolor(Control control)
+        {
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableFlashingUI))
+            {
+                Color original = control.ForeColor;
+                Int32 msDelay = 70;
+
+                for (int i = 0; i < 6; i++)
+                {
+                    control.ForeColor = Color.FromArgb(100, 100, 100);
+                    await Task.Delay(msDelay);
+                    control.ForeColor = original;
+                    await Task.Delay(msDelay);
+                }
+            }
         }
         #endregion
     }

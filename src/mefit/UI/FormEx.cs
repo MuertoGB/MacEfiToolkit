@@ -28,7 +28,7 @@ public class FormEx : Form
     public FormEx()
     {
         // Wire event handlers.
-        Load += METForm_Load;
+        Load += FormEx_Load;
 
         // Resister this instance.
         _openForms.Add(this);
@@ -43,7 +43,7 @@ public class FormEx : Form
         base.OnFormClosed(e);
     }
 
-    private void METForm_Load(object sender, EventArgs e)
+    private void FormEx_Load(object sender, EventArgs e)
     {
         // Ensure the form is within screen bounds.
         AdjustFormToScreenBounds();
@@ -118,7 +118,7 @@ public class FormEx : Form
                 }
                 else
                 {
-                    form.BackColor = ApplicationColours.InactiveWindow; // Inactive forms get the inactive color
+                    form.BackColor = ApplicationColors.InactiveWindow; // Inactive forms get the inactive color
                 }
             }
         }
@@ -132,7 +132,7 @@ public class FormEx : Form
             return;
         }
 
-        BackColor = ApplicationColours.AppBorderDefault;
+        BackColor = ApplicationColors.AppBorderDefault;
     }
     #endregion
 }

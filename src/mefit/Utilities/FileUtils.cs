@@ -7,6 +7,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Runtime.CompilerServices;
 
 namespace Mac_EFI_Toolkit.Utilities
 {
@@ -73,7 +74,7 @@ namespace Mac_EFI_Toolkit.Utilities
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(WriteAllBytesEx), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(WriteAllBytesEx));
                 return false;
             }
         }
@@ -125,7 +126,7 @@ namespace Mac_EFI_Toolkit.Utilities
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(BackupFileToZip), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(BackupFileToZip));
             }
         }
     }

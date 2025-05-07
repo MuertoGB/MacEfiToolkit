@@ -10,6 +10,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -70,7 +71,7 @@ namespace Mac_EFI_Toolkit
             {
                 if (!Program.IsDebugMode())
                 {
-                    Logger.WriteErrorLine(nameof(CheckForNewVersionAsync), e.GetType(), e.Message);
+                    Logger.LogException(e, nameof(CheckForNewVersionAsync));
                 }
 
                 return VersionResult.Error;
@@ -80,7 +81,7 @@ namespace Mac_EFI_Toolkit
         public async Task<bool> DownloadAndInstallUpdateAsync(Label label)
         {
             UpdateStatus(label, UpdateWindowStrings.WAIT);
-            Logger.WriteCallerLine(UpdateWindowStrings.UPDATE_STARTED);
+            Logger.LogInfo(UpdateWindowStrings.UPDATE_STARTED);
 
             string version = NewVersion?.Replace(".", "") ?? "unknown";
             string savePath = Path.Combine(ApplicationPaths.WorkingDirectory, $"mefit_{version}.exe");
@@ -89,33 +90,33 @@ namespace Mac_EFI_Toolkit
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    Logger.WriteCallerLine($"{UpdateWindowStrings.DOWNLOADING_VERSION} {NewVersion}");
+                    Logger.LogInfo($"{UpdateWindowStrings.DOWNLOADING_VERSION} {NewVersion}");
                     byte[] exeBuffer = await webClient.DownloadDataTaskAsync(ApplicationUrls.LatestBuild);
                     string actualHash = Cryptography.GetSha256Digest(exeBuffer);
 
-                    Logger.WriteCallerLine($"{UpdateWindowStrings.DOWNLOADED} {exeBuffer.Length} {AppStrings.BYTES}");
-                    Logger.WriteCallerLine(UpdateWindowStrings.VERIFY_SHA256);
+                    Logger.LogInfo($"{UpdateWindowStrings.DOWNLOADED} {exeBuffer.Length} {AppStrings.BYTES}");
+                    Logger.LogInfo(UpdateWindowStrings.VERIFY_SHA256);
 
                     if (!string.Equals(actualHash, ExpectedSHA256, StringComparison.OrdinalIgnoreCase))
                     {
-                        Logger.WriteCallerLine(UpdateWindowStrings.CHECKSUM_MISMATCH);
+                        Logger.LogInfo(UpdateWindowStrings.CHECKSUM_MISMATCH);
                         UpdateStatus(label, UpdateWindowStrings.CHECKSUM_MISMATCH);
                         return false;
                     }
 
-                    Logger.WriteCallerLine($"{UpdateWindowStrings.SAVING_EXE} {savePath}");
+                    Logger.LogInfo($"{UpdateWindowStrings.SAVING_EXE} {savePath}");
 
                     Program.EnsureDirectoriesExist();
                     await Task.Run(() => File.WriteAllBytes(savePath, exeBuffer));
 
                     if (!File.Exists(savePath))
                     {
-                        Logger.WriteCallerLine(UpdateWindowStrings.SAVE_FAIL);
+                        Logger.LogInfo(UpdateWindowStrings.SAVE_FAIL);
                         UpdateStatus(label, UpdateWindowStrings.SAVE_FAIL);
                         return false;
                     }
 
-                    Logger.WriteCallerLine($"{UpdateWindowStrings.LAUNCH_VERSION} {FileVersionInfo.GetVersionInfo(savePath).ProductVersion}");
+                    Logger.LogInfo($"{UpdateWindowStrings.LAUNCH_VERSION} {FileVersionInfo.GetVersionInfo(savePath).ProductVersion}");
 
                     Process.Start(new ProcessStartInfo
                     {
@@ -130,7 +131,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(DownloadAndInstallUpdateAsync), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(DownloadAndInstallUpdateAsync));
                 UpdateStatus(label, UpdateWindowStrings.ERROR);
                 return false;
             }

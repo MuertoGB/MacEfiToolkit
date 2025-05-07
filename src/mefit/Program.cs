@@ -35,29 +35,34 @@ namespace Mac_EFI_Toolkit
         public static Font FluentRegular24;
         #endregion
 
+        #region Private Members
+        private static FontResolver _fontResolver;
+        #endregion
+
         #region Main Entry Point
         [STAThread]
         public static void Main(string[] args)
         {
             // Register application-wide exception handlers.
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.SetUnhandledExceptionMode(
+                UnhandledExceptionMode.CatchException);
 
             // Catch exceptions on the main thread.
             Application.ThreadException +=
-                new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+                new System.Threading.ThreadExceptionEventHandler(
+                    ExceptionManager.ThreadException);
 
             // Catch exceptions from non-UI threads.
             AppDomain.CurrentDomain.UnhandledException +=
-                new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+                new UnhandledExceptionEventHandler(
+                    ExceptionManager.CurrentDomainException);
 
             // Register application exit handler.
             Application.ApplicationExit += OnExiting;
 
-            // Check if the OS is supported (Windows 7 or later is required).
+            // Check if the OS is supported (Windows 10 or later is required).
             if (!SystemUtils.IsSupportedOS())
-            {
                 return;
-            }
 
             // Set the security protocol to TLS 1.2.
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
@@ -67,10 +72,10 @@ namespace Mac_EFI_Toolkit
             Application.SetCompatibleTextRenderingDefault(false);
 
             // Load custom fonts into memory.
-            FontResolver resolver = new FontResolver();
-            if (!resolver.LoadCustomFont(Properties.Resources.FluentSystemIcons, out Font[] fonts))
+            _fontResolver = new FontResolver();
+            if (!_fontResolver.LoadCustomFont(Properties.Resources.FluentSystemIcons, out Font[] fonts))
             {
-                Logger.WriteCallerLine(LogStrings.MAIN_FLUENT_NOTLOADED);
+                Logger.LogInfo(LogStrings.MAIN_FLUENT_NOTLOADED);
                 return;
             }
 
@@ -100,73 +105,12 @@ namespace Mac_EFI_Toolkit
         private static void OnExiting(object sender, EventArgs e)
             => HandleOnExitingCleanup();
 
-        private static void HandleOnExitingCleanup()
+        public static void HandleOnExitingCleanup()
         {
             // Dispose of memory fonts.
             FluentRegular12?.Dispose();
             FluentRegular14?.Dispose();
             FluentRegular24?.Dispose();
-        }
-        #endregion
-
-        #region Exception Handler
-        public static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
-        {
-            if (e != null)
-            {
-                ExceptionHandler(e.Exception);
-            }
-        }
-
-        public static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            Exception exception = (Exception)e.ExceptionObject;
-
-            if (exception != null)
-            {
-                ExceptionHandler(exception);
-            }
-        }
-
-        public static void ExceptionHandler(Exception e)
-        {
-            DialogResult result;
-
-            string workingDirectory = ApplicationPaths.WorkingDirectory;
-            string dateStamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-            string fileName = $"unhandled_{dateStamp}.log";
-            string fullPath = Path.Combine(workingDirectory, fileName);
-
-            File.WriteAllText(fullPath, Unhandled.GenerateReport(e));
-
-            if (File.Exists(fullPath))
-            {
-                result =
-                    MessageBox.Show(
-                        $"{e.Message}\r\n\r\nDetails were saved to {fullPath.Replace(" ", ApplicationChars.SEGUI_NOBREAKSPACE)}" +
-                        $"'\r\n\r\nForce quit application?",
-                        $"MET Exception Handler",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Error);
-            }
-            else
-            {
-                result =
-                    MessageBox.Show(
-                        $"{e.Message}\r\n\r\n{e}\r\n\r\nForce quit application?",
-                        $"{e.GetType()}",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Error);
-            }
-
-            if (result == DialogResult.Yes)
-            {
-                // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
-                HandleOnExitingCleanup();
-                Environment.Exit(-1);
-            }
-
-            BlurHelper.RemoveBlur(MainWindow);
         }
         #endregion
 
@@ -227,7 +171,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Win32Exception e)
             {
-                Logger.WriteErrorLine(nameof(Restart), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(Restart));
                 return;
             }
             finally
@@ -236,8 +180,7 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        internal static void Exit()
-            => Application.Exit();
+        internal static void Exit() => Application.Exit();
         #endregion
 
         #region Functions
@@ -273,36 +216,8 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(CreateDirectoryIfNotExists), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(CreateDirectoryIfNotExists));
             }
-        }
-
-        public static void HandleDragEnter(object sender, DragEventArgs e, Action applycolor)
-        {
-            // Check if the dragged data is a file.
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] draggedFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                // Check if only one file is being dragged.
-                if (draggedFiles.Length == 1)
-                {
-                    // Check if the dragged item is a file and not a folder.
-                    string file = draggedFiles[0];
-                    FileAttributes attributes = File.GetAttributes(file);
-
-                    // If it's a file (not a folder) then allow the copy operation.
-                    if ((attributes & FileAttributes.Directory) == 0)
-                    {
-                        e.Effect = DragDropEffects.Copy;
-                        applycolor?.Invoke();
-                        return;
-                    }
-                }
-            }
-
-            // Disable the drop operation.
-            e.Effect = DragDropEffects.None;
         }
 
         public static bool IsDebugMode()
@@ -312,6 +227,18 @@ namespace Mac_EFI_Toolkit
 #else
             return false;
 #endif
+        }
+
+        public static string BitnessMode()
+        {
+            if (Environment.Is64BitProcess)
+            {
+                return "64-bit Process";
+            }
+            else
+            {
+                return "32-bit Process";
+            }
         }
         #endregion
     }

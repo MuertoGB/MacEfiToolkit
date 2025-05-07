@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit.Forms
             SetButtonProperties();
 
             // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
+            WindowManager.EnableFormDrag(this, tlpTitle, lblTitle);
         }
         #endregion
 
@@ -170,7 +170,7 @@ namespace Mac_EFI_Toolkit.Forms
         {
             string strDirectory = Settings.ReadString(setting);
             control.Text = strDirectory;
-            control.ForeColor = Directory.Exists(strDirectory) ? ApplicationColours.SettingsDefault : ApplicationColours.Warning;
+            control.ForeColor = Directory.Exists(strDirectory) ? ApplicationColors.SettingsDefault : ApplicationColors.Warning;
         }
 
         private void SetButtonProperties()
@@ -211,7 +211,7 @@ namespace Mac_EFI_Toolkit.Forms
             if (OpenFolderDialog(settingsKey, ref pathField))
             {
                 labelToUpdate.Text = $"{ApplicationChars.SEGUI_RIGHTWARDSARROW} {pathField}";
-                labelToUpdate.ForeColor = ApplicationColours.Okay;
+                labelToUpdate.ForeColor = ApplicationColors.Okay;
             }
         }
 

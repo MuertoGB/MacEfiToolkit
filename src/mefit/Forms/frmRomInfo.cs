@@ -36,7 +36,7 @@ namespace Mac_EFI_Toolkit.Forms
             SetButtonProperties();
 
             // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
+            WindowManager.EnableFormDrag(this, tlpTitle, lblTitle);
         }
         #endregion
 
@@ -97,7 +97,10 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
+                if (Prompts.ShowExplorerFileHighlightPrompt(this) == DialogResult.Yes)
+                {
+                    UITools.HighlightFileInExplorer(dialog.FileName);
+                }
             }
         }
 
@@ -128,7 +131,8 @@ namespace Mac_EFI_Toolkit.Forms
             lblSectionData.Text = $"{AppStrings.BASE.ToUpper()} {_efirom.AppleRomInfoSectionData.SectionBase:X}h" ?? AppStrings.NA;
             lblSectionData.Text += $", {AppStrings.SIZE.ToUpper()} {_efirom.AppleRomInfoSectionData.SectionBytes.Length:X}h" ?? AppStrings.NA;
 
-            UITools.ApplyNestedPanelLabelForeColor(tlpInfo, ApplicationColours.DisabledText);
+            // Apply DisabledText to labels when the text matches AppStrings.NA.
+            UITools.SetLabelColorInNestedPanels(tlpInfo, ApplicationColors.DisabledText, AppStrings.NA);
         }
         #endregion
 

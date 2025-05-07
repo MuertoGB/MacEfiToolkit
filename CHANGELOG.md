@@ -23,6 +23,8 @@
   - Minor string and font adjustments.
 - Improved firmware patching logic.
 - Improved LZMA decompressed method.
+- Improved logging system.
+- Improved exception handler.
 - Defensive: Ensure an empty serial number is correctly flagged as invalid.
 
 ## Version 2.1.2

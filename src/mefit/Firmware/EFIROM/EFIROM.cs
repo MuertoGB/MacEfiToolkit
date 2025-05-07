@@ -1,7 +1,7 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// EFIROM.cs - Handles parsing of firmware data
+// EFIROM.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common;
@@ -91,7 +91,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
             if (NvramBase < 0 || NvramBase > FirmwareInfo.Length)
             {
-                Logger.WriteLine($"Invalid NVRAM base address: {NvramBase}", Logger.LogType.Application);
+                Logger.LogWarning($"Invalid NVRAM base address: {NvramBase}", nameof(LoadFirmwareBaseData));
                 NvramBase = -1;
             }
 
@@ -102,7 +102,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
             if (NvramSize < 0 || NvramSize > FirmwareInfo.Length)
             {
-                Logger.WriteLine($"Invalid NVRAM size: {NvramSize}", Logger.LogType.Application);
+                Logger.LogWarning($"Invalid NVRAM size: {NvramSize}", nameof(LoadFirmwareBaseData));
                 NvramSize = -1;
             }
 
@@ -128,13 +128,14 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                 {
                     ForceFoundFsys = true;
 
-                    Logger.WriteLine($"Force found Fsys Store at {Fsys.BaseAddress:X}h. " +
-                        $"The image may be misaligned or corrupt ({FirmwareInfo.FileNameExt}).", Logger.LogType.Application
+                    Logger.LogWarning($"Force found Fsys Store at {Fsys.BaseAddress:X}h. " +
+                        $"The image may be misaligned or corrupt ({FirmwareInfo.FileNameExt}).",
+                        nameof(LoadFirmwareBaseData)
                     );
                 }
             }
 
-            // Fetch the Config Code
+            // Fetch the Config Code.
             ConfigCode = Fsys.HWC != null ? MacUtils.GetDeviceConfigCodeLocal(Fsys.HWC) : null;
 
             // Parse AppleRomSectionInformation region data.
@@ -983,7 +984,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             LzmaDecompressedBuffer = decompressedBuffer;
 
             // Search the decompressed volume for the APFS DXE GUID.
-            if (    BinaryUtils.GetBaseAddress(decompressedBuffer, Guids.ApfsDxeGuid) == -1)
+            if (BinaryUtils.GetBaseAddress(decompressedBuffer, Guids.ApfsDxeGuid) == -1)
             {
                 Console.WriteLine(" > No APFS GUID found in decompressed archive");
                 // The APFS DXE GUID was not found in the compressed volume.

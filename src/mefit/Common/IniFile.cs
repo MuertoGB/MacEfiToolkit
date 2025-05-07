@@ -19,7 +19,9 @@ namespace Mac_EFI_Toolkit.Common
         private const int MAX_BUFFER = 32767;
 
         public IniFile(string filepath)
-            => this._strFilepath = filepath;
+        {
+            this._strFilepath = filepath;
+        }
 
         public void Write(string section, string key, string value)
             => NativeMethods.WritePrivateProfileString(section, key, value, _strFilepath);
@@ -58,14 +60,14 @@ namespace Mac_EFI_Toolkit.Common
                 string unicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSectionNames(buffer, MAX_BUFFER, _strFilepath));
                 if (unicode == null)
                 {
-                    Logger.WriteCallerLine(nameof(GetSectionNames), "No section names found");
+                    Logger.LogInfo(nameof(GetSectionNames), "No section names found");
                     return null;
                 }
                 return unicode.Substring(0, unicode.Length - 1).Split('\0');
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetSectionNames), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(GetSectionNames));
                 return null;
             }
         }
@@ -77,7 +79,7 @@ namespace Mac_EFI_Toolkit.Common
                 string unicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSection(section, buffer, MAX_BUFFER, _strFilepath));
                 if (unicode == null)
                 {
-                    Logger.WriteCallerLine(nameof(GetSectionKeys), "No section keys found");
+                    Logger.LogInfo(nameof(GetSectionKeys), "No section keys found");
                     return null;
                 }
                 string[] keys = unicode.Substring(0, unicode.Length - 1).Split('\0');
@@ -90,7 +92,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetSectionKeys), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(GetSectionKeys));
                 return null;
             }
         }

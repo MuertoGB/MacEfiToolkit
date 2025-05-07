@@ -99,12 +99,12 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 if (Serial.IsValid(control.Text))
                 {
-                    UpdateTextBoxColour(control, ApplicationColours.Okay);
+                    UpdateTextBoxColour(control, ApplicationColors.Okay);
                     cmdOkay.Enabled = true;
                 }
                 else
                 {
-                    UpdateTextBoxColour(control, ApplicationColours.Error);
+                    UpdateTextBoxColour(control, ApplicationColors.Error);
                     lblValidity.Text += $" - {AppStrings.INVALID}";
                     cmdOkay.Enabled = false;
                 }

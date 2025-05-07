@@ -6,6 +6,7 @@
 
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
@@ -24,7 +25,10 @@ namespace Mac_EFI_Toolkit.Common
 
         private PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
 
-        public FontResolver() => _privateFontCollection = new PrivateFontCollection();
+        public FontResolver()
+        {
+            this._privateFontCollection = new PrivateFontCollection();
+        }
 
         // Method to load a font from a byte array.
         public FontFamily LoadFont(byte[] fontdata)
@@ -50,7 +54,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(LoadFont), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(LoadFont));
                 return null;
             }
             finally
@@ -63,35 +67,12 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        public FontStatus IsFontStyleAvailable(string fontfamily, FontStyle fontstyle)
-        {
-            try
-            {
-                using (FontFamily family = new FontFamily(fontfamily))
-                {
-                    if (family.IsStyleAvailable(fontstyle))
-                    {
-                        return FontStatus.Available;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.WriteErrorLine(nameof(IsFontStyleAvailable), e.GetType(), e.Message);
-                return FontStatus.Unknown;
-            }
-
-            return FontStatus.Missing;
-        }
-
         public bool LoadCustomFont(byte[] fontbuffer, out Font[] fonts)
         {
             fonts = null;
 
             if (fontbuffer == null)
-            {
                 return false;
-            }
 
             try
             {
@@ -108,7 +89,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(LoadCustomFont), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(LoadCustomFont));
                 return false;
             }
         }

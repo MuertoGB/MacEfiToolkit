@@ -38,7 +38,7 @@ namespace Mac_EFI_Toolkit.Common
                     // Check the decompressed length matches the expected file length.
                     if (streamBuffer.Length != fileLength)
                     {
-                        Logger.WriteLine($"Decompressed length mismatch. Expected: {fileLength}, Actual: {streamBuffer.Length}", Logger.LogType.Application);
+                        Logger.LogWarning($"Decompressed length mismatch. Expected: {fileLength}, Actual: {streamBuffer.Length}", nameof(DecompressLzmaArchive));
                     }
 
                     return streamBuffer.ToArray();
@@ -46,7 +46,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(DecompressLzmaArchive), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(DecompressLzmaArchive));
                 return null;
             }
         }
@@ -54,7 +54,8 @@ namespace Mac_EFI_Toolkit.Common
         public static bool IsValidLzmaHeader(byte[] sourcebuffer)
         {
             // Ensure the buffer has enough length.
-            if (sourcebuffer.Length < 5) return false;
+            if (sourcebuffer.Length < 5)
+                return false;
 
             byte properties = sourcebuffer[0];
             int lc = properties % 9;  // Literal context bits.
@@ -64,7 +65,7 @@ namespace Mac_EFI_Toolkit.Common
             // Validate the properties byte.
             if (lc < 0 || lc > 8 || lp < 0 || lp > 4 || pb < 0 || pb > 4)
             {
-                Logger.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid properties byte: lc={lc}, lp={lp}, pb={pb}", Logger.LogType.Application);
+                Logger.LogWarning($"{nameof(IsValidLzmaHeader)}: Invalid properties byte: lc={lc}, lp={lp}, pb={pb}", nameof(IsValidLzmaHeader));
                 return false;
             }
 
@@ -73,7 +74,7 @@ namespace Mac_EFI_Toolkit.Common
 
             if (dictSize <= 0 || !MathUtils.IsPowerOfTwo(dictSize))
             {
-                Logger.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {dictSize}", Logger.LogType.Application);
+                Logger.LogWarning($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {dictSize}", nameof(IsValidLzmaHeader));
                 return false;
             }
 

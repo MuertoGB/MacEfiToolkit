@@ -9,6 +9,7 @@ using Mac_EFI_Toolkit.Common.Constants;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace Mac_EFI_Toolkit
 {
@@ -181,7 +182,7 @@ namespace Mac_EFI_Toolkit
 
             if (!iniFile.SectionExists(section))
             {
-                Logger.WriteCallerLine($"{nameof(ReadBoolean)} Section '{section}' was missing and created automatically.");
+                Logger.LogInfo($"{nameof(ReadBoolean)} Section '{section}' was missing and created automatically.");
 
                 using (StreamWriter writer = new StreamWriter(ApplicationPaths.SettingsFile, true))
                 {
@@ -195,7 +196,7 @@ namespace Mac_EFI_Toolkit
 
             if (!iniFile.KeyExists(section, key))
             {
-                Logger.WriteCallerLine($"{nameof(ReadBoolean)} Key '{key}' was missing and created automatically.");
+                Logger.LogInfo($"{nameof(ReadBoolean)} Key '{key}' was missing and created automatically.");
 
                 iniFile.Write(section, key, "False");
 
@@ -233,7 +234,7 @@ namespace Mac_EFI_Toolkit
 
             if (!iniFile.SectionExists(section))
             {
-                Logger.WriteCallerLine($"{nameof(ReadString)} Section '{section}' was missing and created automatically.");
+                Logger.LogInfo($"{nameof(ReadString)} Section '{section}' was missing and created automatically.");
 
                 using (StreamWriter writer = new StreamWriter(ApplicationPaths.SettingsFile, true))
                 {
@@ -247,7 +248,7 @@ namespace Mac_EFI_Toolkit
 
             if (!iniFile.KeyExists(section, key))
             {
-                Logger.WriteCallerLine($"{nameof(ReadString)} Key '{key}' was missing and created automatically.");
+                Logger.LogInfo($"{nameof(ReadString)} Key '{key}' was missing and created automatically.");
 
                 iniFile.Write(section, key, "False");
 
@@ -308,7 +309,7 @@ namespace Mac_EFI_Toolkit
                 }
                 else
                 {
-                    Logger.WriteCallerLine($"{nameof(SetBool)} {section} > {key} > Key not found, setting was not written.");
+                    Logger.LogInfo($"{nameof(SetBool)} {section} > {key} > Key not found, setting was not written.");
                 }
             }
         }
@@ -350,7 +351,7 @@ namespace Mac_EFI_Toolkit
             }
             else
             {
-                Logger.WriteCallerLine($"{nameof(SetString)} {section} > {key} > Key not found, setting was not written.");
+                Logger.LogInfo($"{nameof(SetString)} {section} > {key} > Key not found, setting was not written.");
             }
         }
         #endregion
@@ -370,7 +371,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(DeleteSettings), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(DeleteSettings));
                 return false;
             }
         }

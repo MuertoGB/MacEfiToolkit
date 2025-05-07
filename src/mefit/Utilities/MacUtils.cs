@@ -45,7 +45,7 @@ namespace Mac_EFI_Toolkit.Utilities
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetDeviceConfigCodeLocal), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(GetDeviceConfigCodeLocal));
                 return null;
             }
         }
@@ -74,7 +74,7 @@ namespace Mac_EFI_Toolkit.Utilities
 
                     if (!string.IsNullOrEmpty(configCode))
                     {
-                        Logger.WriteLine($"'{hwc}' not present in local db > support-sp server returned: '{configCode}'", Logger.LogType.Database);
+                        Logger.LogWarning($"'{hwc}' not present in local db > support-sp server returned: '{configCode}'", nameof(GetDeviceConfigCodeRemote));
                     }
 
                     return configCode;
@@ -82,7 +82,7 @@ namespace Mac_EFI_Toolkit.Utilities
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetDeviceConfigCodeRemote), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(GetDeviceConfigCodeRemote));
                 return null;
             }
         }

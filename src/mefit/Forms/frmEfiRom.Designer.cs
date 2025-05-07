@@ -160,8 +160,8 @@ namespace Mac_EFI_Toolkit.Forms
             this.replaceFsysStoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.replaceIntelMERegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.fixFsysChecksumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DisableEFILockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixFsysChecksumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsFolders = new Mac_EFI_Toolkit.UI.Controls.METContextMenuStrip();
             this.openBackupsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openBuildsFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1382,7 +1382,7 @@ namespace Mac_EFI_Toolkit.Forms
             // 
             this.lblPagefile.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblPagefile.AutoSize = true;
-            this.lblPagefile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.lblPagefile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblPagefile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblPagefile.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPagefile.ForeColor = System.Drawing.Color.White;
@@ -1825,7 +1825,7 @@ namespace Mac_EFI_Toolkit.Forms
             this.fixFsysChecksumToolStripMenuItem});
             this.cmsPatch.Name = "cmsPatch";
             this.cmsPatch.ShowImageMargin = false;
-            this.cmsPatch.Size = new System.Drawing.Size(241, 206);
+            this.cmsPatch.Size = new System.Drawing.Size(241, 178);
             // 
             // changeSerialNumberToolStripMenuItem
             // 
@@ -1865,14 +1865,6 @@ namespace Mac_EFI_Toolkit.Forms
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(237, 6);
             // 
-            // fixFsysChecksumToolStripMenuItem
-            // 
-            this.fixFsysChecksumToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.fixFsysChecksumToolStripMenuItem.Name = "fixFsysChecksumToolStripMenuItem";
-            this.fixFsysChecksumToolStripMenuItem.Size = new System.Drawing.Size(240, 28);
-            this.fixFsysChecksumToolStripMenuItem.Text = "Fix Fsys Checksum";
-            this.fixFsysChecksumToolStripMenuItem.Click += new System.EventHandler(this.fixFsysChecksumToolStripMenuItem_Click);
-            // 
             // DisableEFILockToolStripMenuItem
             // 
             this.DisableEFILockToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -1880,6 +1872,14 @@ namespace Mac_EFI_Toolkit.Forms
             this.DisableEFILockToolStripMenuItem.Size = new System.Drawing.Size(240, 28);
             this.DisableEFILockToolStripMenuItem.Text = "Disable EFI Lock";
             this.DisableEFILockToolStripMenuItem.Click += new System.EventHandler(this.DisableEFILockToolStripMenuItem_Click);
+            // 
+            // fixFsysChecksumToolStripMenuItem
+            // 
+            this.fixFsysChecksumToolStripMenuItem.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.fixFsysChecksumToolStripMenuItem.Name = "fixFsysChecksumToolStripMenuItem";
+            this.fixFsysChecksumToolStripMenuItem.Size = new System.Drawing.Size(240, 28);
+            this.fixFsysChecksumToolStripMenuItem.Text = "Fix Fsys Checksum";
+            this.fixFsysChecksumToolStripMenuItem.Click += new System.EventHandler(this.fixFsysChecksumToolStripMenuItem_Click);
             // 
             // cmsFolders
             // 

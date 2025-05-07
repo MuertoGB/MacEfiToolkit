@@ -5,204 +5,55 @@
 // UITools.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Common.Constants;
-using Mac_EFI_Toolkit.WIN32;
-using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
 {
     public static class UITools
     {
-        public enum MenuPosition
+        public static void HighlightFileInExplorer(string file)
         {
-            TopRight,
-            BottomLeft
-        }
-
-        private const int WM_NCLBUTTONDOWN = 0xA1;
-        private const int HT_CAPTION = 0x2;
-
-        #region Flash ForeColor
-        public static async void FlashForecolor(Control control)
-        {
-            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableFlashingUI))
-            {
-                Color original = control.ForeColor;
-
-                for (int i = 0; i < 3; i++)
-                {
-                    control.ForeColor = Color.FromArgb(control.ForeColor.A, 130, 130, 130);
-                    await Task.Delay(70);
-                    control.ForeColor = original;
-                    await Task.Delay(70);
-                }
-            }
-        }
-        #endregion
-
-        #region Explorer
-        public static void ShowExplorerFileHighlightPrompt(Form owner, string filepath)
-        {
-            DialogResult result =
-                METPrompt.Show(
-                        owner,
-                        $"{AppStrings.FILE_SAVE_SUCCESS_NAV}",
-                        METPrompt.PType.Information,
-                        METPrompt.PButtons.YesNo);
-
-            if (result == DialogResult.Yes)
-            {
-                HighlightPathInExplorer(filepath, owner);
-            }
-        }
-
-        public static void ShowOpenFolderInExplorerPrompt(Form owner, string folderpath)
-        {
-            DialogResult result =
-                METPrompt.Show(
-                        owner,
-                        $"{AppStrings.FILES_SAVE_SUCCESS_NAV}",
-                        METPrompt.PType.Information,
-                        METPrompt.PButtons.YesNo);
-
-            if (result == DialogResult.Yes)
-            {
-                Process.Start("explorer.exe", folderpath);
-            }
-        }
-
-        /// <summary>
-        /// Navigate to, and highlight a file in Windows Explorer.
-        /// </summary>
-        /// <param name="filepath">The path of the file to open and highlight in Windows Explorer.</param>
-        /// <param name="owner">The form instance used to display prompts to the user.</param>
-        public static void HighlightPathInExplorer(string filepath, Form owner)
-        {
-            if (!File.Exists(filepath))
-            {
-                METPrompt.Show(
-                    owner,
-                    $"File does not exist: {filepath}",
-                    METPrompt.PType.Warning,
-                    METPrompt.PButtons.Okay);
-
+            if (!File.Exists(file))
                 return;
-            }
 
-            Process.Start("explorer.exe", $"/select,\"{filepath}\"");
+            Process.Start("explorer.exe", $"/select,\"{file}\"");
         }
 
-        public static void OpenFolderInExplorer(string folderpath, Form owner)
+        public static void GoToFolderInExplorer(string directory)
         {
-            if (!Directory.Exists(folderpath))
-            {
-                METPrompt.Show(
-                    owner,
-                    $"Directory does not exist: {folderpath}",
-                    METPrompt.PType.Warning,
-                    METPrompt.PButtons.Okay);
-
+            if (!Directory.Exists(directory))
                 return;
-            }
 
-            DirectoryInfo info = new DirectoryInfo(folderpath);
+            DirectoryInfo info =
+                new DirectoryInfo(directory);
 
             if (!info.Attributes.HasFlag(FileAttributes.Directory))
-            {
-                METPrompt.Show(
-                    owner,
-                    $"The path is not a directory: {folderpath}",
-                    METPrompt.PType.Warning,
-                    METPrompt.PButtons.Okay);
-
                 return;
-            }
 
-            Process.Start("explorer.exe", folderpath);
-        }
-        #endregion
-
-        #region Context Menu Position
-        public static void ShowContextMenuAtControlPoint(object sender, ContextMenuStrip contextmenu, MenuPosition menuposition)
-        {
-            Control control = sender as Control;
-
-            if (control == null)
-            {
-                throw new ArgumentException("Invalid sender object type. Expected a Control.");
-            }
-
-            Point position;
-
-            switch (menuposition)
-            {
-                case MenuPosition.TopRight:
-                    position = control.PointToScreen(new Point(control.Width + 1, -1));
-                    break;
-                case MenuPosition.BottomLeft:
-                    position = control.PointToScreen(new Point(0, control.Height + 1));
-                    break;
-                default:
-                    throw new ArgumentException("Invalid MenuPosition value.");
-            }
-
-            contextmenu.Show(position);
+            Process.Start("explorer.exe", directory);
         }
 
-        public static void ShowContextMenuAtCursor(object sender, EventArgs e, ContextMenuStrip contextmenu, bool showonleftclick)
+        public static void SetLabelColorInNestedPanels(TableLayoutPanel tableLayoutPanel, Color color, string matchString)
         {
-            MouseEventArgs args = e as MouseEventArgs;
-
-            if (args != null && (args.Button == MouseButtons.Right || (showonleftclick && args.Button == MouseButtons.Left)))
+            foreach (Control control in tableLayoutPanel.Controls)
             {
-                contextmenu.Show(Cursor.Position);
-            }
-        }
-        #endregion
-
-        #region Form Drag
-        public static void EnableFormDrag(Form form, params Control[] controls)
-        {
-            foreach (Control control in controls)
-            {
-                control.MouseMove += (sender, e) =>
+                if (control is Label label && label.Text == matchString)
                 {
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        StartDrag(form);
-                    }
-                };
-            }
-        }
-
-        private static void StartDrag(Form form)
-        {
-            NativeMethods.ReleaseCapture();
-            NativeMethods.SendMessage(new HandleRef(form, form.Handle), WM_NCLBUTTONDOWN, (IntPtr)HT_CAPTION, IntPtr.Zero);
-        }
-        #endregion
-
-        #region Nested panel text color setter
-        public static void ApplyNestedPanelLabelForeColor(TableLayoutPanel tablelayoutpanel, Color color)
-        {
-            foreach (Control control in tablelayoutpanel.Controls)
-            {
-                if (control is Label label && label.Text == AppStrings.NA)
-                {
-                    label.ForeColor = color;
+                    SetLabelColor(label, color);
                 }
-                else if (control is TableLayoutPanel nestedTableLayoutPanel)
+                else if (control is TableLayoutPanel nestedPanel)
                 {
-                    ApplyNestedPanelLabelForeColor(nestedTableLayoutPanel, color);
+                    SetLabelColorInNestedPanels(nestedPanel, color, matchString);
                 }
             }
         }
-        #endregion
+
+        private static void SetLabelColor(Label label, Color color)
+        {
+            label.ForeColor = color;
+        }
     }
 }

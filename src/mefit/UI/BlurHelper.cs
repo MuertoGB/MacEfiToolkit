@@ -35,7 +35,7 @@ namespace Mac_EFI_Toolkit.UI
                 return;
             }
 
-            form.BackColor = ApplicationColours.AppBorderDefault;
+            form.BackColor = ApplicationColors.AppBorderDefault;
         }
 
         public static void RemoveBlur(Form form)

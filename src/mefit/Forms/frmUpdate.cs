@@ -24,7 +24,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             WireEventHandlers();
 
-            UITools.EnableFormDrag(this, lblWindowTitle);
+            WindowManager.EnableFormDrag(this, lblWindowTitle);
         }
         #endregion
 

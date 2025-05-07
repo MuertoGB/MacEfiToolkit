@@ -27,12 +27,12 @@ namespace Mac_EFI_Toolkit.UI
                     return Color.FromArgb(r, g, b);
                 }
 
-                return ApplicationColours.AppBorderDefault;
+                return ApplicationColors.AppBorderDefault;
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetSystemAccentColor), e.GetType(), e.Message);
-                return ApplicationColours.AppBorderDefault;
+                Logger.LogException(e, nameof(GetSystemAccentColor));
+                return ApplicationColors.AppBorderDefault;
             }
         }
     }

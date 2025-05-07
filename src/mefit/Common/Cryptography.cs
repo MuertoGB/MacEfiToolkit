@@ -35,7 +35,6 @@ namespace Mac_EFI_Toolkit.Common
             for (int i = 0; i < sourcebuffer.Length; i++)
             {
                 crc ^= sourcebuffer[i];
-
                 for (int j = 0; j < 8; j++)
                 {
                     crc = (uint)((crc >> 1) ^ (poly & -(crc & 1)));

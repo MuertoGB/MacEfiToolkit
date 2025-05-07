@@ -53,7 +53,7 @@ namespace Mac_EFI_Toolkit.Forms
             GetAndDisableMenuItems();
 
             // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
+            WindowManager.EnableFormDrag(this, tlpTitle, lblTitle);
         }
         #endregion
 
@@ -105,7 +105,7 @@ namespace Mac_EFI_Toolkit.Forms
             => _cancellationToken?.Dispose();
 
         private void frmSocRom_DragEnter(object sender, DragEventArgs e)
-            => Program.HandleDragEnter(sender, e, null);
+            => WindowManager.HandleDragEnter(sender, e, null);
 
         private void frmSocRom_DragDrop(object sender, DragEventArgs e)
         {
@@ -121,10 +121,10 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void frmSocRom_Deactivate(object sender, EventArgs e)
-            => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
+            => SetControlForeColor(tlpTitle, ApplicationColors.InactiveFormText);
 
         private void frmSocRom_Activated(object sender, EventArgs e)
-            => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
+            => SetControlForeColor(tlpTitle, ApplicationColors.ActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -230,28 +230,28 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void cmdMenuHelp_Click(object sender, EventArgs e)
-            => UITools.ShowContextMenuAtControlPoint(
+            => WindowManager.ShowContextMenuAtControlPoint(
                 sender,
                 cmsHelp,
-                UITools.MenuPosition.BottomLeft);
+                WindowManager.ContextMenuPosition.BottomLeft);
 
         private void cmdMenuCopy_Click(object sender, EventArgs e)
-            => UITools.ShowContextMenuAtControlPoint(
+            => WindowManager.ShowContextMenuAtControlPoint(
                 sender,
                 cmsCopy,
-                UITools.MenuPosition.BottomLeft);
+                WindowManager.ContextMenuPosition.BottomLeft);
 
         private void cmdMenuFolders_Click(object sender, EventArgs e)
-            => UITools.ShowContextMenuAtControlPoint(
+            => WindowManager.ShowContextMenuAtControlPoint(
                 sender,
                 cmsFolders,
-                UITools.MenuPosition.BottomLeft);
+                WindowManager.ContextMenuPosition.BottomLeft);
 
         private void cmdMenuExport_Click(object sender, EventArgs e)
-            => UITools.ShowContextMenuAtControlPoint(
+            => WindowManager.ShowContextMenuAtControlPoint(
                 sender,
                 cmsExport,
-                UITools.MenuPosition.BottomLeft);
+                WindowManager.ContextMenuPosition.BottomLeft);
 
         private void cmdMenuPatch_Click(object sender, EventArgs e)
         {
@@ -271,21 +271,21 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (openEditor)
             {
-                UITools.ShowContextMenuAtControlPoint(
+                WindowManager.ShowContextMenuAtControlPoint(
                     sender,
                     cmsPatch,
-                    UITools.MenuPosition.BottomLeft);
+                    WindowManager.ContextMenuPosition.BottomLeft);
             }
         }
 
         private void cmdMenuTools_Click(object sender, EventArgs e)
-            => UITools.ShowContextMenuAtControlPoint(
+            => WindowManager.ShowContextMenuAtControlPoint(
                 sender,
                 cmsTools,
-                UITools.MenuPosition.BottomLeft);
+                WindowManager.ContextMenuPosition.BottomLeft);
 
         private void cmdOpenInExplorer_Click(object sender, EventArgs e)
-            => UITools.HighlightPathInExplorer(_socrom.LoadedBinaryPath, this);
+            => UITools.HighlightFileInExplorer(_socrom.LoadedBinaryPath);
         #endregion
 
         #region Switch Events
@@ -296,16 +296,16 @@ namespace Mac_EFI_Toolkit.Forms
         #region Context Menu Events
         // Folders Context Menu
         private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.BackupsDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.BackupsDirectory);
 
         private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.BuildsDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.BuildsDirectory);
 
         private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.ScfgDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.ScfgDirectory);
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.WorkingDirectory);
 
         // Copy Context Menu
         private void filenameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -382,7 +382,10 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (FileUtils.WriteAllBytesEx(dialog.FileName, _socrom.SCfg.StoreBuffer))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
+                    if (Prompts.ShowExplorerFileHighlightPrompt(this) == DialogResult.Yes)
+                    {
+                        UITools.HighlightFileInExplorer(dialog.FileName);
+                    }
                     return;
                 }
 
@@ -413,7 +416,10 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (File.Exists(dialog.FileName))
                 {
-                    UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
+                    if (Prompts.ShowExplorerFileHighlightPrompt(this) == DialogResult.Yes)
+                    {
+                        UITools.HighlightFileInExplorer(dialog.FileName);
+                    }
                     return;
                 }
 
@@ -502,7 +508,10 @@ namespace Mac_EFI_Toolkit.Forms
                     return;
                 }
 
-                UITools.ShowExplorerFileHighlightPrompt(this, dialog.FileName);
+                if (Prompts.ShowExplorerFileHighlightPrompt(this) == DialogResult.Yes)
+                {
+                    UITools.HighlightFileInExplorer(dialog.FileName);
+                }
             }
         }
 
@@ -729,8 +738,8 @@ namespace Mac_EFI_Toolkit.Forms
             UpdateConfigCodeControls();
             UpdateModelControls();
 
-            // Apply DISABLED_TEXT to N/A labels.
-            UITools.ApplyNestedPanelLabelForeColor(tlpFirmware, ApplicationColours.DisabledText);
+            // Apply DisabledText to labels when the text matches AppStrings.NA.
+            UITools.SetLabelColorInNestedPanels(tlpFirmware, ApplicationColors.DisabledText, AppStrings.NA);
 
             // Update window title.
             UpdateWindowTitle();
@@ -757,7 +766,7 @@ namespace Mac_EFI_Toolkit.Forms
 
             if (!validSize)
             {
-                lblFilesize.ForeColor = ApplicationColours.Error;
+                lblFilesize.ForeColor = ApplicationColors.Error;
                 lblFilesize.Text += $" ({FirmwareAnalyzer.CalculateInvalidSize(length)})";
             }
         }
@@ -835,7 +844,7 @@ namespace Mac_EFI_Toolkit.Forms
 
                 if (!Serial.IsValid(serial))
                 {
-                    lblSerial.ForeColor = ApplicationColours.Warning;
+                    lblSerial.ForeColor = ApplicationColors.Warning;
                 }
 
                 cbxCensor.Enabled = true;
@@ -859,7 +868,7 @@ namespace Mac_EFI_Toolkit.Forms
             }
 
             lblConfigCode.Text = AppStrings.CONTACT_SERVER;
-            lblConfigCode.ForeColor = ApplicationColours.Information;
+            lblConfigCode.ForeColor = ApplicationColors.Information;
 
             GetConfigCodeAsync(_socrom.SCfg.HWC);
         }
@@ -872,14 +881,14 @@ namespace Mac_EFI_Toolkit.Forms
             {
                 _socrom.ConfigCode = configCode;
                 lblConfigCode.Text = configCode;
-                lblConfigCode.ForeColor = ApplicationColours.NormalText;
+                lblConfigCode.ForeColor = ApplicationColors.NormalText;
                 configToolStripMenuItem.Enabled = true;
                 return;
             }
 
             configToolStripMenuItem.Enabled = false;
             lblConfigCode.Text = AppStrings.NA;
-            lblConfigCode.ForeColor = ApplicationColours.DisabledText;
+            lblConfigCode.ForeColor = ApplicationColors.DisabledText;
         }
 
         private void UpdateModelControls()
@@ -1044,7 +1053,7 @@ namespace Mac_EFI_Toolkit.Forms
             foreach (Label label in labels)
             {
                 label.Text = string.Empty;
-                label.ForeColor = ApplicationColours.NormalText;
+                label.ForeColor = ApplicationColors.NormalText;
             }
 
             // Reset parse time.
@@ -1202,14 +1211,14 @@ namespace Mac_EFI_Toolkit.Forms
             if (Prompts.ShowPatchSuccessPrompt(this) == DialogResult.Yes)
             {
                 string savePath = _socPatcher.SaveOutputFirmware(patchedbuffer, _socrom);
-                if (!string.IsNullOrEmpty(savePath) && Prompts.PromptLoadNewFirmware(this) == DialogResult.Yes)
+                if (!string.IsNullOrEmpty(savePath) && Prompts.ShowLoadNewFirmwarePrompt(this) == DialogResult.Yes)
                 {
                     OpenBinary(savePath);
                 }
             }
             else
             {
-                Logger.WriteCallerLine(LogStrings.FILE_EXPORT_CANCELLED);
+                Logger.LogInfo(LogStrings.FILE_EXPORT_CANCELLED);
             }
         }
         #endregion

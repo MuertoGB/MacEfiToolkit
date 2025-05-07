@@ -9,18 +9,18 @@ using Mac_EFI_Toolkit.Utilities;
 
 namespace Mac_EFI_Toolkit.Firmware.EFIROM
 {
-    class IntelME
+    public static class IntelME
     {
-        #region Internal Members
-        internal static readonly byte[] FPTMarker = { 0x24, 0x46, 0x50, 0x54 };
-        internal static readonly byte[] MN2Marker = { 0x00, 0x00, 0x24, 0x4D, 0x4E, 0x32 };
+        #region Public Members
+        public static readonly byte[] FPTMarker = { 0x24, 0x46, 0x50, 0x54 };
+        public static readonly byte[] MN2Marker = { 0x00, 0x00, 0x24, 0x4D, 0x4E, 0x32 };
         #endregion
 
         #region Private Members
-        private static string _default = "0.0.0.0";
+        private static string _defaultVersion = "0.0.0.0";
         #endregion
 
-        internal static string GetVersionData(byte[] sourcebytes, ImeVersionType versiontype, FlashDescriptor flashDescriptor)
+        public static string GetVersionData(byte[] sourcebytes, ImeVersionType versiontype, FlashDescriptor flashDescriptor)
         {
             int headerBase = -1;
             int length = 0;
@@ -63,10 +63,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                 }
             }
 
-            if (string.IsNullOrEmpty(version) || version == _default)
-            {
+            if (string.IsNullOrEmpty(version) || version == _defaultVersion)
                 return null;
-            }
 
             return version;
         }

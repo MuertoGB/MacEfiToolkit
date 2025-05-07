@@ -47,7 +47,7 @@ namespace Mac_EFI_Toolkit.Forms
             SetLabelGlyphAndText();
 
             // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblWindowTitle);
+            WindowManager.EnableFormDrag(this, tlpTitle, lblWindowTitle);
         }
         #endregion
 
@@ -110,16 +110,16 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void frmStartup_DragEnter(object sender, DragEventArgs e)
-            => Program.HandleDragEnter(sender, e, ApplyDragEnterColours);
+            => WindowManager.HandleDragEnter(sender, e, ApplyDragEnterColours);
 
         private void frmStartup_DragLeave(object sender, EventArgs e)
             => ApplyDragLeaveColours();
 
         private void frmStartup_Deactivate(object sender, EventArgs e)
-            => SetControlForeColor(tlpTitle, ApplicationColours.InactiveFormText);
+            => SetControlForeColor(tlpTitle, ApplicationColors.InactiveFormText);
 
         private void frmStartup_Activated(object sender, EventArgs e)
-            => SetControlForeColor(tlpTitle, ApplicationColours.ActiveFormText);
+            => SetControlForeColor(tlpTitle, ApplicationColors.ActiveFormText);
         #endregion
 
         #region KeyDown Events
@@ -209,49 +209,49 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void cmdOptions_Click(object sender, EventArgs e)
-            => UITools.ShowContextMenuAtControlPoint(
+            => WindowManager.ShowContextMenuAtControlPoint(
                 sender,
                 cmsOptions,
-                UITools.MenuPosition.BottomLeft);
+                WindowManager.ContextMenuPosition.BottomLeft);
 
         private void cmdMenuFolders_Click(object sender, EventArgs e)
-            => UITools.ShowContextMenuAtControlPoint(
+            => WindowManager.ShowContextMenuAtControlPoint(
                 sender,
                 cmsFolders,
-                UITools.MenuPosition.BottomLeft);
+                WindowManager.ContextMenuPosition.BottomLeft);
 
         private void cmdHelp_Click(object sender, EventArgs e)
-            => UITools.ShowContextMenuAtControlPoint(
+            => WindowManager.ShowContextMenuAtControlPoint(
                 sender,
                 cmsHelp,
-                UITools.MenuPosition.BottomLeft);
+                WindowManager.ContextMenuPosition.BottomLeft);
         #endregion
 
         #region Context Menu events
         // Folders Context Menu
         private void openBackupsFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.BackupsDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.BackupsDirectory);
 
         private void openBuildsFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.BuildsDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.BuildsDirectory);
 
         private void openFsysStoresFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.FsysDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.FsysDirectory);
 
         private void openIntelMEFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.IntelMeDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.IntelMeDirectory);
 
         private void openNVRAMFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.NvramDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.NvramDirectory);
 
         private void openLZMADXEFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.LzmaDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.LzmaDirectory);
 
         private void openSCFGFolderToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.ScfgDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.ScfgDirectory);
 
         private void openWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-            => UITools.OpenFolderInExplorer(ApplicationPaths.WorkingDirectory, this);
+            => UITools.GoToFolderInExplorer(ApplicationPaths.WorkingDirectory);
 
         // Tools Context Menu
         private void newEFIROMSessionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -390,10 +390,10 @@ namespace Mac_EFI_Toolkit.Forms
         }
 
         private void ApplyDragEnterColours()
-            => lblGlyph.ForeColor = ApplicationColours.DragActive;
+            => lblGlyph.ForeColor = ApplicationColors.DragActive;
 
         private void ApplyDragLeaveColours()
-            => lblGlyph.ForeColor = ApplicationColours.DragDefault;
+            => lblGlyph.ForeColor = ApplicationColors.DragDefault;
 
         private void SetControlForeColor(Control parentcontrol, Color forecolor)
         {

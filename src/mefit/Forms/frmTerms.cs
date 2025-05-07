@@ -26,7 +26,7 @@ namespace Mac_EFI_Toolkit.Forms
             SetButtonGlyphAndText();
 
             // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
+            WindowManager.EnableFormDrag(this, tlpTitle, lblTitle);
         }
         #endregion
 
