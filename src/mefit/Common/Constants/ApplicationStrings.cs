@@ -4,8 +4,6 @@
 // ApplicationStrings.cs
 // Released under the GNU GLP v3.0
 
-using System.Drawing;
-
 namespace Mac_EFI_Toolkit.Common.Constants
 {
     public static class AppStrings
