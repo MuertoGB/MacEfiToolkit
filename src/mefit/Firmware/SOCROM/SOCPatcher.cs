@@ -22,14 +22,14 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             // Check serial length.
             if (serial.Length != SOCROM.SERIAL_LENGTH)
             {
-                Logger.LogInfo($"{LogStrings.PATCH_FAIL} {LogStrings.SERIAL_LEN_INVALID} ({serial.Length})");
+                Logger.LogError($"{LogStrings.PATCH_FAIL} {LogStrings.SERIAL_LEN_INVALID} ({serial.Length})");
                 return null;
             }
 
-            // Check if the SerialBase exists.
+            // Check if the serial base address exists.
             if (socrom.SCfg.SerialBase == -1)
             {
-                Logger.LogInfo($"{LogStrings.PATCH_FAIL} {LogStrings.SSN_BASE_NOT_FOUND}");
+                Logger.LogError($"{LogStrings.PATCH_FAIL} {LogStrings.SSN_BASE_NOT_FOUND}");
                 return null;
             }
 
@@ -42,7 +42,10 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             // Overwrite serial in the binary buffer.
             Logger.LogInfo(LogStrings.SSN_WTB);
 
-            BinaryUtils.OverwriteBytesAtBase(binaryBuffer, socrom.SCfg.SerialBase, serialBuffer);
+            BinaryUtils.OverwriteBytesAtBase(
+                binaryBuffer,
+                socrom.SCfg.SerialBase,
+                serialBuffer);
 
             Logger.LogInfo(LogStrings.SCFG_LFB);
 
@@ -52,7 +55,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             // Verify the serial was written correctly.
             if (!string.Equals(serial, scfgStore.Serial))
             {
-                Logger.LogInfo($"{LogStrings.PATCH_FAIL} {LogStrings.SSN_NOT_WRITTEN}");
+                Logger.LogError($"{LogStrings.PATCH_FAIL} {LogStrings.SSN_NOT_WRITTEN}");
                 return null;
             }
 
@@ -74,7 +77,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
-                    Logger.LogInfo($"{LogStrings.PATCH_FAIL} {LogStrings.SCFG_IMPORT_CANCELLED}");
+                    Logger.LogError($"{LogStrings.PATCH_FAIL} {LogStrings.SCFG_IMPORT_CANCELLED}");
                     return null;
                 }
 
@@ -86,7 +89,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 if (scfgBase == -1)
                 {
                     scfgExists = false;
-                    Logger.LogInfo($"{LogStrings.SCFG_BASE_ADJUST} {SOCROM.SCFG_EXPECTED_BASE:X}h");
+                    Logger.LogWarning($"{LogStrings.SCFG_BASE_ADJUST} {SOCROM.SCFG_EXPECTED_BASE:X}h");
                     scfgBase = SOCROM.SCFG_EXPECTED_BASE;
                 }
 
@@ -109,7 +112,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                     {
                         if (emptyBuffer[i] != 0xFF)
                         {
-                            Logger.LogInfo($"{LogStrings.PATCH_FAIL} {LogStrings.SCFG_POS_INITIALIZED}");
+                            Logger.LogError($"{LogStrings.PATCH_FAIL} {LogStrings.SCFG_POS_INITIALIZED}");
                             return null;
                         }
                     }
@@ -124,6 +127,8 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                     byte[] tempBuffer = new byte[socrom.SCfg.StoreLength];
                     BinaryUtils.EraseByteArray(tempBuffer);
                     BinaryUtils.OverwriteBytesAtBase(binaryBuffer, scfgBase, tempBuffer);
+
+                    // TODO: We need to verify store was erased.
                 }
 
                 // Overwrite Scfg store in the binary buffer.
@@ -135,7 +140,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 // Check store was written successfully.
                 if (!BinaryUtils.ByteArraysMatch(scfg.StoreBuffer, scfgBuffer))
                 {
-                    Logger.LogInfo($"{LogStrings.PATCH_FAIL} {LogStrings.STORE_COMP_FAILED}");
+                    Logger.LogError($"{LogStrings.PATCH_FAIL} {LogStrings.STORE_COMP_FAILED}");
                     return null;
                 }
 
@@ -152,7 +157,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             // Expect scfg signature at address 0h.
             if (scfgBase != 0)
             {
-                Logger.LogInfo($"{LogStrings.PATCH_FAIL} {LogStrings.STORE_SIG_MISALIGNED}");
+                Logger.LogError($"{LogStrings.PATCH_FAIL} {LogStrings.STORE_SIG_MISALIGNED}");
                 return false;
             }
 
@@ -191,7 +196,7 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
             {
                 if (dialog.ShowDialog() != DialogResult.OK)
                 {
-                    Logger.LogInfo(LogStrings.FILE_EXPORT_CANCELLED);
+                    Logger.LogWarning(LogStrings.FILE_EXPORT_CANCELLED);
                     return string.Empty;
                 }
 

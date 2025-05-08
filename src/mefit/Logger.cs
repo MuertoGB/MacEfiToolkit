@@ -24,6 +24,7 @@ namespace Mac_EFI_Toolkit
             Info,
             Warning,
             Error,
+            Exception,
             Debug
         }
 
@@ -43,7 +44,10 @@ namespace Mac_EFI_Toolkit
         }
 
         public static void LogException(Exception ex, [CallerMemberName] string methodName = "")
-            => WriteToLog($"{methodName} - Exception: {ex}", LogLevel.Error);
+            => WriteToLog($"{methodName} - Exception: {ex}", LogLevel.Exception);
+
+        public static void LogError(string logText, [CallerMemberName] string methodName = "")
+            => WriteToLog($"{methodName}: {logText}", LogLevel.Error);
 
         public static void LogWarning(string logText, [CallerMemberName] string methodName = "")
             => WriteToLog($"{methodName}: {logText}", LogLevel.Warning);
