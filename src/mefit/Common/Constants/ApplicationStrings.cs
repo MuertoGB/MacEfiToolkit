@@ -4,6 +4,8 @@
 // ApplicationStrings.cs
 // Released under the GNU GLP v3.0
 
+using System.Drawing;
+
 namespace Mac_EFI_Toolkit.Common.Constants
 {
     public static class AppStrings
@@ -116,6 +118,9 @@ namespace Mac_EFI_Toolkit.Common.Constants
 
         internal const string FILE_SAVE_SUCCESS_NAV =
             "File saved successfully. Would you like to open the file location?";
+
+        internal const string ERROR =
+            "Error";
         #endregion
     }
 
@@ -323,8 +328,8 @@ namespace Mac_EFI_Toolkit.Common.Constants
         internal const string ERASE_OLD_STORE =
             "Wiping existing SCfg store area with 0xFF pattern";
 
-        internal const string MAIN_FLUENT_NOTLOADED =
-            "Could not load embedded font resource: Resources.SegoeIcons.ttf";
+        internal const string FONT_NOT_LOADED =
+            "Unable to load embedded font resource 'Resources.SegoeIcons.ttf'.";
         #endregion
     }
 
@@ -408,6 +413,9 @@ namespace Mac_EFI_Toolkit.Common.Constants
 
         internal const string IME_PATCH_SUCCESS_SAVE =
             "IME patching was successful. Do you want to save the output?";
+
+        internal const string FF_UNABLE_TO_LOAD_FONT =
+            "Unable to load a required font. The application will now exit.";
         #endregion
     }
 
