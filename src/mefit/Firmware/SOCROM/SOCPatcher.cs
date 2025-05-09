@@ -123,12 +123,21 @@ namespace Mac_EFI_Toolkit.Firmware.SOCROM
                 // 0xFF the original store from base + store length, so we don't leave behind parts of an old store.
                 if (scfgExists)
                 {
-                    Logger.LogInfo(LogStrings.ERASE_OLD_STORE);
+                    Logger.LogInfo(LogStrings.SCFG_ERASE);
+
                     byte[] tempBuffer = new byte[socrom.SCfg.StoreLength];
                     BinaryUtils.EraseByteArray(tempBuffer);
                     BinaryUtils.OverwriteBytesAtBase(binaryBuffer, scfgBase, tempBuffer);
 
-                    // TODO: We need to verify store was erased.
+                    tempBuffer = BinaryUtils.GetBytesBaseLength(binaryBuffer, scfgBase, tempBuffer.Length);
+
+                    if (!BinaryUtils.IsByteArrayFF(tempBuffer))
+                    {
+                        Logger.LogError($"{LogStrings.PATCH_FAIL} {LogStrings.SCFG_ERASE_FAILED}");
+                        return null;
+                    }
+
+                    Logger.LogInfo(LogStrings.SCFG_ERASE_SUCCESS);
                 }
 
                 // Overwrite Scfg store in the binary buffer.

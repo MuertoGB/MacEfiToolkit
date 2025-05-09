@@ -64,8 +64,6 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                     binaryBuffer,
                     efirom.Fsys.HWCBase,
                     newHwcBuffer);
-
-                // TODO: We need HWC write verification.
             }
 
             Logger.LogInfo(LogStrings.FSYS_LFB);
@@ -535,7 +533,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                         bodyStart,
                         bodyEnd);
 
-                if (!BinaryUtils.IsByteBlockEmpty(erasedStoreBodyBuffer))
+                if (!BinaryUtils.IsByteArrayFF(erasedStoreBodyBuffer))
                 {
                     Logger.LogError(LogStrings.NVR_BODY_WRITE_FAIL);
                     return null;

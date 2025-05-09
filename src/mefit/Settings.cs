@@ -9,7 +9,6 @@ using Mac_EFI_Toolkit.Common.Constants;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace Mac_EFI_Toolkit
 {

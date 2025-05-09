@@ -386,7 +386,7 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                     bodyLength = storeLength - HDR_SIZE;
 
                     byte[] bBodyBuffer = BinaryUtils.GetBytesBaseLength(sourcebuffer, bodyBase, bodyLength);
-                    isStoreEmpty = BinaryUtils.IsByteBlockEmpty(bBodyBuffer);
+                    isStoreEmpty = BinaryUtils.IsByteArrayFF(bBodyBuffer);
                 }
             }
 

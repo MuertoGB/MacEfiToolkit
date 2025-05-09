@@ -222,7 +222,7 @@ namespace Mac_EFI_Toolkit.Utilities
         /// </summary>
         /// <param name="sourcebuffer">The byte array to check.</param>
         /// <returns>True if the byte array is empty or contains only 0xFF values; otherwise, false.</returns>
-        public static bool IsByteBlockEmpty(byte[] sourcebuffer)
+        public static bool IsByteArrayFF(byte[] sourcebuffer)
         {
             if (sourcebuffer == null)
             {
