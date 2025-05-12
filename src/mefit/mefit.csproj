@@ -89,6 +89,7 @@
     <Compile Include="Common\Constants\ApplicationUrls.cs" />
     <Compile Include="Common\Constants\ApplicationVersions.cs" />
     <Compile Include="Common\Cryptography.cs" />
+    <Compile Include="ExitCodes.cs" />
     <Compile Include="Firmware\EFIROM\EFIPatcher.cs" />
     <Compile Include="Firmware\EFIROM\FlashDescriptor.cs" />
     <Compile Include="Common\FontResolver.cs" />

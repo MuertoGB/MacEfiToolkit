@@ -27,14 +27,6 @@ namespace Mac_EFI_Toolkit
             Exit
         }
 
-        public enum ExitCode
-        {
-            Success = 0,
-            FontError = 1,
-            ExceptionHandler = 2,
-            MessageLoop = 3
-        }
-
         #region Public Members
         public static string DraggedFile = string.Empty;
         public static frmStartup MainWindow;
@@ -83,7 +75,7 @@ namespace Mac_EFI_Toolkit
             _fontResolver = new FontResolver();
             if (!_fontResolver.LoadCustomFont(Properties.Resources.FluentSystemIcons, out Font[] fonts))
             {
-                FailFast(DialogStrings.FF_UNABLE_TO_LOAD_FONT, ExitCode.FontError);
+                FailFast(ExitCodes.FontImport, DialogStrings.FF_UNABLE_TO_LOAD_FONT);
                 return;
             }
 
@@ -249,11 +241,20 @@ namespace Mac_EFI_Toolkit
             }
         }
 
-        public static void FailFast(string message, ExitCode exitCode)
+        public static void FailFast(
+            int exitCode,
+            string exitReason = AppStrings.NO_REASON_GIVEN)
         {
-            Logger.LogError(message);
-            MessageBox.Show($"{message}", "Fatal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Environment.Exit((int)exitCode);
+            Logger.LogError(
+                $"{exitReason} ({nameof(exitCode)} {exitCode})");
+
+            MessageBox.Show(
+                $"{exitReason}. {AppStrings.APP_WILL_EXIT}",
+                AppStrings.FATAL_ERROR,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+            Environment.Exit(exitCode);
         }
         #endregion
     }

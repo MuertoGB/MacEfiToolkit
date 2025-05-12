@@ -4,6 +4,8 @@
 // ApplicationStrings.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Properties;
+
 namespace Mac_EFI_Toolkit.Common.Constants
 {
     public static class AppStrings
@@ -119,6 +121,15 @@ namespace Mac_EFI_Toolkit.Common.Constants
 
         internal const string ERROR =
             "Error";
+
+        internal const string APP_WILL_EXIT =
+            "The application will now exit.";
+
+        public const string NO_REASON_GIVEN =
+            "No reason given.";
+
+        public const string FATAL_ERROR =
+            "Fatal Error";
         #endregion
     }
 
@@ -418,14 +429,8 @@ namespace Mac_EFI_Toolkit.Common.Constants
         internal const string IME_PATCH_SUCCESS_SAVE =
             "IME patching was successful. Do you want to save the output?";
 
-        internal const string FF_UNABLE_TO_LOAD_FONT =
-            "Unable to load a required font. The application will now exit.";
-        #endregion
-    }
-
-    public static class StartupWindowStrings
-    {
-        #region Strings
+        internal static readonly string FF_UNABLE_TO_LOAD_FONT =
+            $"Unable to load a required font {nameof(Resources.FluentSystemIcons)}";
         #endregion
     }
 

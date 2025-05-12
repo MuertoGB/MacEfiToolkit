@@ -76,7 +76,7 @@ namespace Mac_EFI_Toolkit
             {
                 // We need to clean any necessary objects as OnExit will not fire when Environment.Exit is called.
                 Program.HandleOnExitingCleanup();
-                Environment.Exit((int)Program.ExitCode.ExceptionHandler);
+                Environment.Exit(ExitCodes.ExceptionManager);
             }
 
             // Fix to stop blur becoming stuck.
