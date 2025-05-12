@@ -27,6 +27,9 @@
 - Improved exception handler.
 - Defensive: Ensure an empty serial number is correctly flagged as invalid.
 
+### Bugs
+- Fixed a Windows 11 bug where opening the log file using the application could summon an army of text file windows like it was preparing for digital war.
+
 ## Version 2.1.2
 
 ### Enhancements
