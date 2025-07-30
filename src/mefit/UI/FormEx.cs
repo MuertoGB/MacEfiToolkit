@@ -18,11 +18,9 @@ public class FormEx : Form
     #region Private Members
     private const int WM_SETTINGCHANGE = 0x001A;
     private const int WM_DWMCOMPOSITIONCHANGED = 0x031E;
-
     private const int WS_MINIMIZEBOX = 0x20000;
     private const int CS_DBLCLKS = 0x8;
     private const int CS_DROP = 0x20000;
-
     private static List<FormEx> _openForms = new List<FormEx>();
     #endregion
 
@@ -30,7 +28,7 @@ public class FormEx : Form
     public FormEx()
     {
         // Wire event handlers.
-        Load += METForm_Load;
+        Load += FormEx_Load;
 
         // Resister this instance.
         _openForms.Add(this);
@@ -45,7 +43,7 @@ public class FormEx : Form
         base.OnFormClosed(e);
     }
 
-    private void METForm_Load(object sender, EventArgs e)
+    private void FormEx_Load(object sender, EventArgs e)
     {
         // Ensure the form is within screen bounds.
         AdjustFormToScreenBounds();
@@ -120,7 +118,7 @@ public class FormEx : Form
                 }
                 else
                 {
-                    form.BackColor = ApplicationColours.InactiveWindow; // Inactive forms get the inactive color
+                    form.BackColor = ApplicationColors.InactiveWindow; // Inactive forms get the inactive color
                 }
             }
         }
@@ -134,7 +132,7 @@ public class FormEx : Form
             return;
         }
 
-        BackColor = ApplicationColours.AppBorderDefault;
+        BackColor = ApplicationColors.AppBorderDefault;
     }
     #endregion
 }

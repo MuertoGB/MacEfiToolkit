@@ -6,13 +6,13 @@
 
 namespace Mac_EFI_Toolkit.Forms
 {
-    internal enum SerialSenderTag
+    public enum SerialSenderTag
     {
         EFIROMWindow,
         SOCROMWindow
     }
 
-    internal enum StartupSenderTag
+    public enum StartupSenderTag
     {
         Firmware,
         Other

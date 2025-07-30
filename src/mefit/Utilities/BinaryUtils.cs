@@ -1,18 +1,16 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// BinaryTools.cs - A collection of functions to handle binary data.
-// This code uses the Knuth-Morris-Pratt algorithm for pattern matching and string searching,
-// developed by Donald Knuth, Vaughan Pratt, and James Morris.
+// BinaryUtils.cs
 // Released under the GNU GLP v3.0
 
 using System;
 using System.IO;
 using System.Linq;
 
-namespace Mac_EFI_Toolkit.Tools
+namespace Mac_EFI_Toolkit.Utilities
 {
-    internal class BinaryTools
+    public static class BinaryUtils
     {
         #region Binary Find
         /// <summary>
@@ -21,7 +19,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="sourcebuffer">The byte array to search in.</param>
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern)
+        public static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern)
         {
             // Call the overload that takes a basePos parameter and sets it to 0.
             return GetBaseAddress(sourcebuffer, pattern, 0);
@@ -34,7 +32,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="pattern">The byte pattern to search for.</param>
         /// <param name="baseposition">The base to start the search from.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern, int baseposition)
+        public static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern, int baseposition)
         {
             // Call the overload that takes a basePosition and maxSearchLength parameters and sets maxSearchLength to the remaining length of the sourceBytes array.
             return GetBaseAddress(sourcebuffer, pattern, baseposition, sourcebuffer.Length - baseposition);
@@ -48,7 +46,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="baseposition">The base to start the search from.</param>
         /// <param name="maxsearchlength">The maximum length of the search within the byte array.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern, int baseposition, int maxsearchlength)
+        public static int GetBaseAddress(byte[] sourcebuffer, byte[] pattern, int baseposition, int maxsearchlength)
         {
             return FindPatternBase(sourcebuffer, pattern, baseposition, maxsearchlength);
         }
@@ -61,7 +59,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="baseposition">The base to start the search from.</param>
         /// <param name="limitposition">The address at which the search is limited.</param>
         /// <returns>The base of the byte pattern within the byte array, or -1 if the pattern is not found.</returns>
-        internal static int GetBaseAddressUpToLimit(byte[] sourcebuffer, byte[] pattern, int baseposition, int limitposition)
+        public static int GetBaseAddressUpToLimit(byte[] sourcebuffer, byte[] pattern, int baseposition, int limitposition)
         {
             int maxSearchLength = limitposition - baseposition;
             return FindPatternBase(sourcebuffer, pattern, baseposition, maxSearchLength);
@@ -150,7 +148,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="baseposition">The base in the byte array to read from.</param>
         /// <param name="readlength">The number of bytes to read.</param>
         /// <returns>The bytes read from the byte array.</returns>
-        internal static byte[] GetBytesBaseLength(byte[] sourcebuffer, int baseposition, int readlength)
+        public static byte[] GetBytesBaseLength(byte[] sourcebuffer, int baseposition, int readlength)
         {
             if (baseposition < 0 || baseposition + readlength > sourcebuffer.Length)
             {
@@ -170,7 +168,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="baseposition">The starting base in the byte array to read from.</param>
         /// <param name="limitposition">The ending base in the byte array to read from.</param>
         /// <returns>The bytes read from the byte array.</returns>
-        internal static byte[] GetBytesBaseLimit(byte[] sourcebuffer, int baseposition, int limitposition)
+        public static byte[] GetBytesBaseLimit(byte[] sourcebuffer, int baseposition, int limitposition)
         {
             if (limitposition <= baseposition)
             {
@@ -191,7 +189,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="initialbyte">The starting byte to read from.</param>
         /// <param name="terminationbytes">The terminating byte params to stop reading at.</param>
         /// <returns>The bytes read from the byte array up to the terminating byte.</returns>
-        internal static byte[] GetBytesDelimited(byte[] sourcebuffer, int baseposition, byte initialbyte, params byte[] terminationbytes)
+        public static byte[] GetBytesDelimited(byte[] sourcebuffer, int baseposition, byte initialbyte, params byte[] terminationbytes)
         {
             int iIndex = Array.IndexOf(sourcebuffer, initialbyte, baseposition);
 
@@ -224,7 +222,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="sourcebuffer">The byte array to check.</param>
         /// <returns>True if the byte array is empty or contains only 0xFF values; otherwise, false.</returns>
-        internal static bool IsByteBlockEmpty(byte[] sourcebuffer)
+        public static bool IsByteArrayFF(byte[] sourcebuffer)
         {
             if (sourcebuffer == null)
             {
@@ -248,7 +246,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="array1">The first byte array to compare.</param>
         /// <param name="array2">The second byte array to compare.</param>
         /// <returns>True if the byte arrays have the same size and content, false otherwise.</returns>
-        internal static bool ByteArraysMatch(byte[] array1, byte[] array2)
+        public static bool ByteArraysMatch(byte[] array1, byte[] array2)
         {
             if (array1 == null || array2 == null)
             {
@@ -271,7 +269,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// <param name="sourcebuffer">The byte array to overwrite.</param>
         /// <param name="baseposition">The base in the byte array to overwrite at.</param>
         /// <param name="newbytedata">The new bytes to write.</param>
-        internal static void OverwriteBytesAtBase(byte[] sourcebuffer, int baseposition, byte[] newbytedata)
+        public static void OverwriteBytesAtBase(byte[] sourcebuffer, int baseposition, byte[] newbytedata)
         {
             if (baseposition < 0 || baseposition + newbytedata.Length > sourcebuffer.Length)
             {
@@ -285,7 +283,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// Fills a byte array with 0xFF values.
         /// </summary>
         /// <param name="sourcebuffer">The byte array to fill with 0xFF values.</param>
-        internal static void EraseByteArray(byte[] sourcebuffer)
+        public static void EraseByteArray(byte[] sourcebuffer)
         {
             if (sourcebuffer == null)
             {
@@ -303,7 +301,7 @@ namespace Mac_EFI_Toolkit.Tools
         /// </summary>
         /// <param name="sourcebuffer">The byte array to clone.</param>
         /// <returns>A new byte array containing a copy of the elements from the original buffer.</returns>
-        internal static byte[] CloneBuffer(byte[] sourcebuffer)
+        public static byte[] CloneBuffer(byte[] sourcebuffer)
         {
             if (sourcebuffer == null)
             {

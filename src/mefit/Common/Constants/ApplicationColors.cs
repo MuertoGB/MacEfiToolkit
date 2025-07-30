@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal static class ApplicationColours
+    public static class ApplicationColors
     {
         #region Status Colors
         internal static readonly Color Information = Color.FromArgb(128, 200, 255);
@@ -21,7 +21,7 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #region Text Colors
         internal static readonly Color ActiveFormText = Color.White;
         internal static readonly Color InactiveFormText = Color.FromArgb(100, 100, 100);
-        internal static readonly Color DisabledText = Color.FromArgb(140, 140, 140);
+        internal static readonly Color DisabledText = Color.FromArgb(100, 95, 90);
         internal static readonly Color NormalText = Color.FromArgb(245, 245, 245);
         #endregion
 
@@ -32,7 +32,9 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
 
         #region Glyphs
-        internal static readonly Color GlyphDefault = Color.FromArgb(210, 210, 210);
+        internal static readonly Color DragDefault = NormalText;
+        internal static readonly Color DragActive = Okay;
+        internal static readonly Color GlyphDefault = Color.FromArgb(160, 160, 160);
         internal static readonly Color GlyphActive = Okay;
         #endregion
     }

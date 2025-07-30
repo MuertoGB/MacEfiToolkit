@@ -4,9 +4,11 @@
 // ApplicationStrings.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Properties;
+
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal class APPSTRINGS
+    public static class AppStrings
     {
         #region Strings
         internal const string APPNAME =
@@ -116,10 +118,22 @@ namespace Mac_EFI_Toolkit.Common.Constants
 
         internal const string FILE_SAVE_SUCCESS_NAV =
             "File saved successfully. Would you like to open the file location?";
+
+        internal const string ERROR =
+            "Error";
+
+        internal const string APP_WILL_EXIT =
+            "The application will now exit.";
+
+        public const string NO_REASON_GIVEN =
+            "No reason given.";
+
+        public const string FATAL_ERROR =
+            "Fatal Error";
         #endregion
     }
 
-    internal class LOGSTRINGS
+    public static class LogStrings
     {
         #region Strings
         internal const string PATCH_START =
@@ -320,15 +334,21 @@ namespace Mac_EFI_Toolkit.Common.Constants
         internal const string SCFG_POS_INITIALIZED =
             "Cannot write to 0x28A000h (Length B8h) because initialized data is present";
 
-        internal const string ERASE_OLD_STORE =
-            "Wiping existing SCfg store area with 0xFF pattern";
+        internal const string SCFG_ERASE =
+            "Erasing existing SCfg store area with 0xFF pattern";
 
-        internal const string MAIN_FLUENT_NOTLOADED =
-            "Could not load embedded font resource: Resources.SegoeIcons.ttf";
+        internal const string SCFG_ERASE_SUCCESS =
+            "SCfg region erased successully";
+
+        internal const string SCFG_ERASE_FAILED =
+            "Exisiting SCfg area could not be erased";
+
+        internal const string FONT_NOT_LOADED =
+            "Unable to load embedded font resource 'Resources.SegoeIcons.ttf'.";
         #endregion
     }
 
-    internal class DIALOGSTRINGS
+    public static class DialogStrings
     {
         #region Strings
         internal const string REQUIRES_WIN_10 =
@@ -408,16 +428,13 @@ namespace Mac_EFI_Toolkit.Common.Constants
 
         internal const string IME_PATCH_SUCCESS_SAVE =
             "IME patching was successful. Do you want to save the output?";
+
+        internal static readonly string FF_UNABLE_TO_LOAD_FONT =
+            $"Unable to load a required font {nameof(Resources.FluentSystemIcons)}";
         #endregion
     }
 
-    internal class STARTUPSTRINGS
-    {
-        #region Strings
-        #endregion
-    }
-
-    internal class EFISTRINGS
+    public static class EfiWindowStrings
     {
         #region Strings
         internal const string VSS =
@@ -520,17 +537,23 @@ namespace Mac_EFI_Toolkit.Common.Constants
             "Firmware modified successfully. Would you like to save the output?";
 
         internal const string LZMA_VOL_FOUND =
-            "LZMA DXE Archive Detected in Firmware";
+            "DXE Archive Detected (Click to Export)";
 
         internal const string FMM_EMAIL_FOUND =
-            "Find My Mac Email Detected in NVRAM (Click to view)";
+            "Find My Mac Email Detected (Click to Export)";
 
         internal const string FMM_EMAIL =
             "FindMyMac_Email";
+
+        internal const string EFI_APFS =
+            "EFI is APFS capable";
+
+        internal const string EFI_LOCKED =
+            "Firmware is EFI Locked (Click to Unlock)";
         #endregion
     }
 
-    internal class SOCSTRINGS
+    public static class SocWindowStrings
     {
         #region Strings
         internal const string SCFG_REGION =
@@ -571,13 +594,13 @@ namespace Mac_EFI_Toolkit.Common.Constants
         #endregion
     }
 
-    internal class UPDATSTRINGS
+    public static class UpdateWindowStrings
     {
         #region Strings
         internal const string WAIT =
             "Please wait...";
 
-        internal const string UPD_STARTED =
+        internal const string UPDATE_STARTED =
             "Update started";
 
         internal const string DOWNLOADING_VERSION =

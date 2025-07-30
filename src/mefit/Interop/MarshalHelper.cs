@@ -1,17 +1,17 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Helper.cs
+// MarshalHelper.cs
 // Released under the GNU GLP v3.0
 
 using System;
 using System.Runtime.InteropServices;
 
-namespace Mac_EFI_Toolkit.Firmware
+namespace Mac_EFI_Toolkit.Interop
 {
-    class Helper
+    public static class MarshalHelper
     {
-        internal static T DeserializeHeader<T>(byte[] binary) where T : struct
+        internal static T ReadStruct<T>(byte[] binary) where T : struct
         {
             // Initialize a pointer to IntPtr with a default value.
             IntPtr ptr = IntPtr.Zero;
@@ -38,16 +38,6 @@ namespace Mac_EFI_Toolkit.Firmware
                     Marshal.FreeHGlobal(ptr);
                 }
             }
-        }
-
-        public static int ToInt24(byte[] inputbytes)
-        {
-            if (inputbytes.Length != 3)
-            {
-                throw new ArgumentException("Byte data must be 3 bytes long.", nameof(inputbytes));
-            }
-
-            return (inputbytes[2] << 16) | (inputbytes[1] << 8) | inputbytes[0];
         }
     }
 }

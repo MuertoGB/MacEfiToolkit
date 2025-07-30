@@ -12,7 +12,7 @@ using System.IO;
 
 namespace Mac_EFI_Toolkit
 {
-    class Settings
+    public static class Settings
     {
         #region Enums
         public enum BooleanKey
@@ -55,7 +55,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Initialize
-        internal static void Initialize()
+        public static void Initialize()
         {
             IniFile iniFile = new IniFile(ApplicationPaths.SettingsFile);
             WriteSections(iniFile);
@@ -138,7 +138,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Read Values
-        internal static bool ReadBoolean(BooleanKey booleanKey)
+        public static bool ReadBoolean(BooleanKey booleanKey)
         {
             if (!SettingsFileExists())
             {
@@ -181,7 +181,7 @@ namespace Mac_EFI_Toolkit
 
             if (!iniFile.SectionExists(section))
             {
-                Logger.WriteCallerLine($"{nameof(ReadBoolean)} Section '{section}' was missing and created automatically.");
+                Logger.LogInfo($"{nameof(ReadBoolean)} Section '{section}' was missing and created automatically.");
 
                 using (StreamWriter writer = new StreamWriter(ApplicationPaths.SettingsFile, true))
                 {
@@ -195,7 +195,7 @@ namespace Mac_EFI_Toolkit
 
             if (!iniFile.KeyExists(section, key))
             {
-                Logger.WriteCallerLine($"{nameof(ReadBoolean)} Key '{key}' was missing and created automatically.");
+                Logger.LogInfo($"{nameof(ReadBoolean)} Key '{key}' was missing and created automatically.");
 
                 iniFile.Write(section, key, "False");
 
@@ -205,7 +205,7 @@ namespace Mac_EFI_Toolkit
             return bool.Parse(iniFile.Read(section, key));
         }
 
-        internal static string ReadString(StringKey stringKey)
+        public static string ReadString(StringKey stringKey)
         {
             if (!SettingsFileExists())
             {
@@ -233,7 +233,7 @@ namespace Mac_EFI_Toolkit
 
             if (!iniFile.SectionExists(section))
             {
-                Logger.WriteCallerLine($"{nameof(ReadString)} Section '{section}' was missing and created automatically.");
+                Logger.LogInfo($"{nameof(ReadString)} Section '{section}' was missing and created automatically.");
 
                 using (StreamWriter writer = new StreamWriter(ApplicationPaths.SettingsFile, true))
                 {
@@ -247,7 +247,7 @@ namespace Mac_EFI_Toolkit
 
             if (!iniFile.KeyExists(section, key))
             {
-                Logger.WriteCallerLine($"{nameof(ReadString)} Key '{key}' was missing and created automatically.");
+                Logger.LogInfo($"{nameof(ReadString)} Key '{key}' was missing and created automatically.");
 
                 iniFile.Write(section, key, "False");
 
@@ -259,7 +259,7 @@ namespace Mac_EFI_Toolkit
         #endregion
 
         #region Write Values
-        internal static void SetBool(BooleanKey booleanKey, bool value)
+        public static void SetBool(BooleanKey booleanKey, bool value)
         {
             if (!SettingsFileExists())
             {
@@ -308,12 +308,12 @@ namespace Mac_EFI_Toolkit
                 }
                 else
                 {
-                    Logger.WriteCallerLine($"{nameof(SetBool)} {section} > {key} > Key not found, setting was not written.");
+                    Logger.LogInfo($"{nameof(SetBool)} {section} > {key} > Key not found, setting was not written.");
                 }
             }
         }
 
-        internal static void SetString(StringKey stringKey, string value)
+        public static void SetString(StringKey stringKey, string value)
         {
             if (!SettingsFileExists())
             {
@@ -350,7 +350,7 @@ namespace Mac_EFI_Toolkit
             }
             else
             {
-                Logger.WriteCallerLine($"{nameof(SetString)} {section} > {key} > Key not found, setting was not written.");
+                Logger.LogInfo($"{nameof(SetString)} {section} > {key} > Key not found, setting was not written.");
             }
         }
         #endregion
@@ -361,7 +361,7 @@ namespace Mac_EFI_Toolkit
             return File.Exists(ApplicationPaths.SettingsFile);
         }
 
-        internal static bool DeleteSettings()
+        public static bool DeleteSettings()
         {
             try
             {
@@ -370,7 +370,7 @@ namespace Mac_EFI_Toolkit
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(DeleteSettings), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(DeleteSettings));
                 return false;
             }
         }

@@ -14,7 +14,7 @@ namespace Mac_EFI_Toolkit.UI
 {
     public static class BlurHelper
     {
-        internal static void ApplyBlur(Form form)
+        public static void ApplyBlur(Form form)
         {
             NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
             {
@@ -35,10 +35,10 @@ namespace Mac_EFI_Toolkit.UI
                 return;
             }
 
-            form.BackColor = ApplicationColours.AppBorderDefault;
+            form.BackColor = ApplicationColors.AppBorderDefault;
         }
 
-        internal static void RemoveBlur(Form form)
+        public static void RemoveBlur(Form form)
         {
             NativeMethods.DWM_BLURBEHIND dwmBlurBehind = new NativeMethods.DWM_BLURBEHIND
             {

@@ -36,7 +36,6 @@
             this.pnlSeperatorTop = new System.Windows.Forms.Panel();
             this.pnlSeperatorBottom = new System.Windows.Forms.Panel();
             this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
-            this.lblText = new System.Windows.Forms.Label();
             this.tlpVersions = new System.Windows.Forms.TableLayoutPanel();
             this.lblNewVersionText = new System.Windows.Forms.Label();
             this.lblCurrentVersionText = new System.Windows.Forms.Label();
@@ -44,6 +43,7 @@
             this.lblCurrent = new System.Windows.Forms.Label();
             this.lblPriorityText = new System.Windows.Forms.Label();
             this.lblPriority = new System.Windows.Forms.Label();
+            this.lblText = new System.Windows.Forms.Label();
             this.tlpButtons.SuspendLayout();
             this.tlpMain.SuspendLayout();
             this.tlpVersions.SuspendLayout();
@@ -83,12 +83,12 @@
             // 
             // cmdDownload
             // 
-            this.cmdDownload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdDownload.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(50)))), ((int)(((byte)(70)))));
             this.cmdDownload.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdDownload.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdDownload.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(50)))), ((int)(((byte)(70)))));
             this.cmdDownload.FlatAppearance.BorderSize = 0;
-            this.cmdDownload.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.cmdDownload.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdDownload.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(70)))), ((int)(((byte)(90)))));
+            this.cmdDownload.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(60)))), ((int)(((byte)(80)))));
             this.cmdDownload.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdDownload.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdDownload.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -103,12 +103,12 @@
             // 
             // cmdCancel
             // 
-            this.cmdCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(50)))), ((int)(((byte)(70)))));
             this.cmdCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cmdCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(40)))), ((int)(((byte)(50)))));
+            this.cmdCancel.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(50)))), ((int)(((byte)(70)))));
             this.cmdCancel.FlatAppearance.BorderSize = 0;
-            this.cmdCancel.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(50)))), ((int)(((byte)(60)))));
-            this.cmdCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(70)))));
+            this.cmdCancel.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(70)))), ((int)(((byte)(90)))));
+            this.cmdCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(60)))), ((int)(((byte)(80)))));
             this.cmdCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmdCancel.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdCancel.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -155,22 +155,6 @@
             this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpMain.Size = new System.Drawing.Size(308, 212);
             this.tlpMain.TabIndex = 6;
-            // 
-            // lblText
-            // 
-            this.lblText.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblText.AutoSize = true;
-            this.lblText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblText.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.lblText.Location = new System.Drawing.Point(10, 103);
-            this.lblText.Margin = new System.Windows.Forms.Padding(0);
-            this.lblText.Name = "lblText";
-            this.lblText.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lblText.Size = new System.Drawing.Size(288, 100);
-            this.lblText.TabIndex = 0;
-            this.lblText.Text = "The update will be downloaded and launched automatically from the current directo" +
-    "ry. Please save any edits, as the program will close during the update process.";
-            this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tlpVersions
             // 
@@ -286,6 +270,22 @@
             this.lblPriority.TabIndex = 5;
             this.lblPriority.Text = "...";
             this.lblPriority.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblText
+            // 
+            this.lblText.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblText.AutoSize = true;
+            this.lblText.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblText.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.lblText.Location = new System.Drawing.Point(6, 103);
+            this.lblText.Margin = new System.Windows.Forms.Padding(0);
+            this.lblText.Name = "lblText";
+            this.lblText.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblText.Size = new System.Drawing.Size(295, 100);
+            this.lblText.TabIndex = 0;
+            this.lblText.Text = "The update will be downloaded and launched automatically from the current directo" +
+    "ry. Please save any edits, as the program will close during the update process.";
+            this.lblText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // frmUpdate
             // 

@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace Mac_EFI_Toolkit.Firmware
 {
-    internal class Serial
+    public static class Serial
     {
         #region Serial Validation
         /// <summary>
@@ -42,8 +42,14 @@ namespace Mac_EFI_Toolkit.Firmware
         //                              Valid codes are stored in the 'yearAndWeekCodes12' HashSet.
         //    - EEE  = Unique Device Identifier (3 characters): Typically, a unique identifier for the device model.
         //    - FFFF = Hardware Configuration (4 characters): Represents the hardware configuration or variant.
-        internal static bool IsValid(string serial)
+        public static bool IsValid(string serial)
         {
+            // Null serial return false.
+            if (serial == null)
+            {
+                return false;
+            }
+
             // Check for valid length (11 or 12 characters).
             if (serial.Length != 11 && serial.Length != 12)
             {

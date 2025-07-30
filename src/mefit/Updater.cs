@@ -10,6 +10,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -18,6 +19,10 @@ namespace Mac_EFI_Toolkit
 {
     public class Updater
     {
+        public string NewVersion { get; private set; }
+        public string ExpectedSHA256 { get; private set; }
+        public string Priority { get; private set; }
+
         public enum VersionResult
         {
             UpToDate,
@@ -25,11 +30,7 @@ namespace Mac_EFI_Toolkit
             Error
         }
 
-        public static string NewVersion { get; set; }
-        public static string ExpectedSHA256 { get; set; }
-        public static string Priority { get; set; }
-
-        public static async Task<VersionResult> CheckForNewVersion()
+        public async Task<VersionResult> CheckForNewVersionAsync()
         {
             string manifestUrl = ApplicationUrls.VersionManifest;
             const string versionNodeXPath = "data/MET/VersionString";
@@ -48,21 +49,16 @@ namespace Mac_EFI_Toolkit
                         XmlDocument document = new XmlDocument();
                         document.Load(reader);
 
-                        XmlNode xmlVersionNode = document.SelectSingleNode(versionNodeXPath);
-                        XmlNode xmlSha256Node = document.SelectSingleNode(sha256NodeXPath);
-                        XmlNode xmlPriorityNode = document.SelectSingleNode(priorityNodeXPath);
+                        XmlNode versionNode = document.SelectSingleNode(versionNodeXPath);
+                        XmlNode shaNode = document.SelectSingleNode(sha256NodeXPath);
+                        XmlNode priorityNode = document.SelectSingleNode(priorityNodeXPath);
 
-                        if (xmlVersionNode == null || xmlSha256Node == null)
-                        {
+                        if (versionNode == null || shaNode == null)
                             return VersionResult.Error;
-                        }
 
-                        NewVersion = xmlVersionNode.InnerText;
-                        ExpectedSHA256 = xmlSha256Node.InnerText;
-                        Priority = xmlPriorityNode.InnerText;
-
-                        Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(NewVersion)} '{xmlVersionNode.InnerText}'");
-                        Console.WriteLine($"{nameof(CheckForNewVersion)} -> {nameof(ExpectedSHA256)} '{xmlSha256Node.InnerText}'");
+                        this.NewVersion = versionNode.InnerText;
+                        this.ExpectedSHA256 = shaNode.InnerText;
+                        this.Priority = priorityNode.InnerText;
 
                         Version remoteVersion = new Version(NewVersion);
                         Version thisVersion = new Version(Application.ProductVersion);
@@ -75,60 +71,52 @@ namespace Mac_EFI_Toolkit
             {
                 if (!Program.IsDebugMode())
                 {
-                    Logger.WriteErrorLine(nameof(CheckForNewVersion), e.GetType(), e.Message);
+                    Logger.LogException(e, nameof(CheckForNewVersionAsync));
                 }
 
                 return VersionResult.Error;
             }
         }
 
-        public static async Task DownloadAsync(Label label)
+        public async Task<bool> DownloadAndInstallUpdateAsync(Label label)
         {
-            UpdateStatus(label, UPDATSTRINGS.WAIT);
-            Logger.WriteCallerLine(UPDATSTRINGS.UPD_STARTED);
+            UpdateStatus(label, UpdateWindowStrings.WAIT);
+            Logger.LogInfo(UpdateWindowStrings.UPDATE_STARTED);
 
-            string version = string.IsNullOrEmpty(NewVersion) ? string.Empty : NewVersion.Replace(".", string.Empty);
+            string version = NewVersion?.Replace(".", "") ?? "unknown";
             string savePath = Path.Combine(ApplicationPaths.WorkingDirectory, $"mefit_{version}.exe");
 
             try
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.DOWNLOADING_VERSION} {NewVersion}");
+                    Logger.LogInfo($"{UpdateWindowStrings.DOWNLOADING_VERSION} {NewVersion}");
                     byte[] exeBuffer = await webClient.DownloadDataTaskAsync(ApplicationUrls.LatestBuild);
+                    string actualHash = Cryptography.GetSha256Digest(exeBuffer);
 
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.DOWNLOADED} {exeBuffer.Length} {APPSTRINGS.BYTES}");
+                    Logger.LogInfo($"{UpdateWindowStrings.DOWNLOADED} {exeBuffer.Length} {AppStrings.BYTES}");
+                    Logger.LogInfo(UpdateWindowStrings.VERIFY_SHA256);
 
-                    Logger.WriteCallerLine(UPDATSTRINGS.VERIFY_SHA256);
-                    string hash = Cryptography.GetSha256Digest(exeBuffer);
-
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.EXPECTED}: {ExpectedSHA256}");
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.ACTUAL}: {hash}");
-
-                    if (!string.Equals(hash, ExpectedSHA256, StringComparison.OrdinalIgnoreCase))
+                    if (!string.Equals(actualHash, ExpectedSHA256, StringComparison.OrdinalIgnoreCase))
                     {
-                        // Destroy the buffer data.
-                        exeBuffer = null;
-                        Logger.WriteCallerLine(UPDATSTRINGS.CHECKSUM_MISMATCH);
-                        UpdateStatus(label, UPDATSTRINGS.CHECKSUM_MISMATCH);
-                        return;
+                        Logger.LogInfo(UpdateWindowStrings.CHECKSUM_MISMATCH);
+                        UpdateStatus(label, UpdateWindowStrings.CHECKSUM_MISMATCH);
+                        return false;
                     }
+
+                    Logger.LogInfo($"{UpdateWindowStrings.SAVING_EXE} {savePath}");
 
                     Program.EnsureDirectoriesExist();
-
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.SAVING_EXE} {savePath}");
                     await Task.Run(() => File.WriteAllBytes(savePath, exeBuffer));
 
-                    // Check file exists.
                     if (!File.Exists(savePath))
                     {
-                        Logger.WriteCallerLine(UPDATSTRINGS.SAVE_FAIL);
-                        UpdateStatus(label, UPDATSTRINGS.SAVE_FAIL);
-                        return;
+                        Logger.LogInfo(UpdateWindowStrings.SAVE_FAIL);
+                        UpdateStatus(label, UpdateWindowStrings.SAVE_FAIL);
+                        return false;
                     }
 
-                    FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(savePath);
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.LAUNCH_VERSION} {fileVersionInfo.ProductVersion}");
+                    Logger.LogInfo($"{UpdateWindowStrings.LAUNCH_VERSION} {FileVersionInfo.GetVersionInfo(savePath).ProductVersion}");
 
                     Process.Start(new ProcessStartInfo
                     {
@@ -136,27 +124,29 @@ namespace Mac_EFI_Toolkit
                         UseShellExecute = true
                     });
 
-                    Logger.WriteCallerLine($"{UPDATSTRINGS.EXITING} {Application.ProductVersion}");
                     await Task.Delay(500);
                     Application.Exit();
+                    return true;
                 }
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(DownloadAsync), e.GetType(), e.Message);
-                UpdateStatus(label, UPDATSTRINGS.ERROR);
+                Logger.LogException(e, nameof(DownloadAndInstallUpdateAsync));
+                UpdateStatus(label, UpdateWindowStrings.ERROR);
+                return false;
             }
         }
 
-        private static void UpdateStatus(Label label, string status)
+        private void UpdateStatus(Label control, string status)
         {
-            if (label.InvokeRequired)
+            if (control.InvokeRequired)
             {
-                label.Invoke((Action)(() => label.Text = status));
-                return;
+                control.Invoke((Action)(() => control.Text = status));
             }
-
-            label.Text = status;
+            else
+            {
+                control.Text = status;
+            }
         }
     }
 }

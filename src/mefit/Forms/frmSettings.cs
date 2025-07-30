@@ -31,17 +31,11 @@ namespace Mac_EFI_Toolkit.Forms
             // Attach event handlers.
             WireEventHandlers();
 
-            // Enable drag.
-            UITools.EnableFormDrag(this, tlpTitle, lblTitle);
-
             // Set button properties
             SetButtonProperties();
-        }
 
-        private void WireEventHandlers()
-        {
-            Load += frmSettings_Load;
-            KeyDown += frmSettings_KeyDown;
+            // Enable drag.
+            WindowManager.EnableFormDrag(this, tlpTitle, lblTitle);
         }
         #endregion
 
@@ -65,53 +59,17 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e) => Close();
+        private void cmdClose_Click(object sender, EventArgs e)
+            => Close();
 
         private void cmdEditStartupDir_Click(object sender, EventArgs e)
-        {
-            EditDirectory(Settings.StringKey.StartupInitialDirectory, ref _strStartupInitialPath, lblStartupDirectory);
-        }
+            => EditDirectory(Settings.StringKey.StartupInitialDirectory, ref _strStartupInitialPath, lblStartupDirectory);
 
         private void cmdEditEfiDir_Click(object sender, EventArgs e)
-        {
-            EditDirectory(Settings.StringKey.EfiInitialDirectory, ref _strEfiInitialPath, lblEfiDirectory);
-        }
+            => EditDirectory(Settings.StringKey.EfiInitialDirectory, ref _strEfiInitialPath, lblEfiDirectory);
 
         private void cmdEditSocDir_Click(object sender, EventArgs e)
-        {
-            EditDirectory(Settings.StringKey.SocInitialDirectory, ref _strSocInitialPath, lblSocDirectory);
-        }
-
-        private void EditDirectory(Settings.StringKey settingsKey, ref string pathField, Label labelToUpdate)
-        {
-            if (OpenFolderDialog(settingsKey, ref pathField))
-            {
-                labelToUpdate.Text = $"{ApplicationChars.SEGUI_RIGHTWARDSARROW} {pathField}";
-                labelToUpdate.ForeColor = ApplicationColours.Okay;
-            }
-        }
-
-        private static bool OpenFolderDialog(Settings.StringKey settingsType, ref string path)
-        {
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
-            {
-                dialog.SelectedPath =
-                    string.IsNullOrEmpty(Settings.ReadString(settingsType))
-                        ? ApplicationPaths.WorkingDirectory
-                        : Settings.ReadString(settingsType);
-
-                dialog.Description = APPSTRINGS.SELECT_FOLDER;
-                dialog.ShowNewFolderButton = true;
-
-                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath))
-                {
-                    path = dialog.SelectedPath;
-                    return true;
-                }
-            }
-
-            return false;
-        }
+            => EditDirectory(Settings.StringKey.SocInitialDirectory, ref _strSocInitialPath, lblSocDirectory);
 
         private void cmdOkay_Click(object sender, EventArgs e)
         {
@@ -159,7 +117,7 @@ namespace Mac_EFI_Toolkit.Forms
             DialogResult result =
                 METPrompt.Show(
                     this,
-                    APPSTRINGS.RESET_SETTINGS_DEFAULT,
+                    AppStrings.RESET_SETTINGS_DEFAULT,
                     METPrompt.PType.Warning,
                     METPrompt.PButtons.YesNo);
 
@@ -187,7 +145,40 @@ namespace Mac_EFI_Toolkit.Forms
         }
         #endregion
 
-        #region Label Events
+        #region Switch Events
+        private void UpdateCheckBoxControls()
+        {
+            swDisableVersionCheck.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableVersionCheck) ? true : false;
+            swUseAccentColor.Checked = Settings.ReadBoolean(Settings.BooleanKey.UseAccentColor) ? true : false;
+            swDisableSnValidation.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableSerialValidation) ? true : false;
+            swDisableFlashingUiElements.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableFlashingUI) ? true : false;
+            swDisableMessageWindowSounds.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableMessageSounds) ? true : false;
+            swDisableStatusBarTips.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableTips) ? true : false;
+            swDisableConfirmationDialogs.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag) ? true : false;
+        }
+        #endregion
+
+        #region User Interface
+        private void UpdatePathLabel()
+        {
+            UpdateLabel(lblStartupDirectory, Settings.StringKey.StartupInitialDirectory);
+            UpdateLabel(lblEfiDirectory, Settings.StringKey.EfiInitialDirectory);
+            UpdateLabel(lblSocDirectory, Settings.StringKey.SocInitialDirectory);
+        }
+
+        private static void UpdateLabel(Label control, Settings.StringKey setting)
+        {
+            string strDirectory = Settings.ReadString(setting);
+            control.Text = strDirectory;
+            control.ForeColor = Directory.Exists(strDirectory) ? ApplicationColors.SettingsDefault : ApplicationColors.Warning;
+        }
+
+        private void SetButtonProperties()
+        {
+            cmdClose.Font = Program.FluentRegular14;
+            cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
+        }
+
         private void ShowSettingsAppliedLabel()
         {
             lblSettingsSaved.Show();
@@ -206,6 +197,45 @@ namespace Mac_EFI_Toolkit.Forms
             _timer.Tick += Timer_Tick;
             _timer.Start();
         }
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += frmSettings_Load;
+            KeyDown += frmSettings_KeyDown;
+        }
+
+        private void EditDirectory(Settings.StringKey settingsKey, ref string pathField, Label labelToUpdate)
+        {
+            if (OpenFolderDialog(settingsKey, ref pathField))
+            {
+                labelToUpdate.Text = $"{ApplicationChars.SEGUI_RIGHTWARDSARROW} {pathField}";
+                labelToUpdate.ForeColor = ApplicationColors.Okay;
+            }
+        }
+
+        private static bool OpenFolderDialog(Settings.StringKey settingsType, ref string path)
+        {
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                dialog.SelectedPath =
+                    string.IsNullOrEmpty(Settings.ReadString(settingsType))
+                        ? ApplicationPaths.WorkingDirectory
+                        : Settings.ReadString(settingsType);
+
+                dialog.Description = AppStrings.SELECT_FOLDER;
+                dialog.ShowNewFolderButton = true;
+
+                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrEmpty(dialog.SelectedPath))
+                {
+                    path = dialog.SelectedPath;
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -213,41 +243,7 @@ namespace Mac_EFI_Toolkit.Forms
             _timer.Stop();
             _timer.Dispose();
         }
-        #endregion
 
-        #region METSwitch Events
-        private void UpdateCheckBoxControls()
-        {
-            swDisableVersionCheck.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableVersionCheck) ? true : false;
-            swUseAccentColor.Checked = Settings.ReadBoolean(Settings.BooleanKey.UseAccentColor) ? true : false;
-            swDisableSnValidation.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableSerialValidation) ? true : false;
-            swDisableFlashingUiElements.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableFlashingUI) ? true : false;
-            swDisableMessageWindowSounds.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableMessageSounds) ? true : false;
-            swDisableStatusBarTips.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableTips) ? true : false;
-            swDisableConfirmationDialogs.Checked = Settings.ReadBoolean(Settings.BooleanKey.DisableConfDiag) ? true : false;
-        }
-        #endregion
-
-        #region UI Events
-        private void UpdatePathLabel()
-        {
-            UpdateLabel(lblStartupDirectory, Settings.StringKey.StartupInitialDirectory);
-            UpdateLabel(lblEfiDirectory, Settings.StringKey.EfiInitialDirectory);
-            UpdateLabel(lblSocDirectory, Settings.StringKey.SocInitialDirectory);
-        }
-
-        private static void UpdateLabel(Label control, Settings.StringKey setting)
-        {
-            string strDirectory = Settings.ReadString(setting);
-            control.Text = strDirectory;
-            control.ForeColor = Directory.Exists(strDirectory) ? ApplicationColours.SettingsDefault : ApplicationColours.Warning;
-        }
-
-        private void SetButtonProperties()
-        {
-            cmdClose.Font = Program.FluentRegular14;
-            cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
-        }
         #endregion
     }
 }

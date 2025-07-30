@@ -13,29 +13,27 @@ namespace Mac_EFI_Toolkit.Forms
 {
     public partial class frmUpdate : FormEx
     {
+        private readonly Updater _updater;
+
         #region Constructor
-        public frmUpdate()
+        public frmUpdate(Updater updater)
         {
             InitializeComponent();
 
+            _updater = updater;
+
             WireEventHandlers();
 
-            UITools.EnableFormDrag(this, lblWindowTitle);
-        }
-
-        private void WireEventHandlers()
-        {
-            Load += frmUpdate_Load;
-            KeyDown += frmUpdate_KeyDown;
+            WindowManager.EnableFormDrag(this, lblWindowTitle);
         }
         #endregion
 
         #region Window Events
         private void frmUpdate_Load(object sender, EventArgs e)
         {
-            lblNew.Text = Updater.NewVersion;
+            lblNew.Text = _updater.NewVersion;
             lblCurrent.Text = Application.ProductVersion;
-            lblPriority.Text = Updater.Priority;
+            lblPriority.Text = _updater.Priority;
         }
         #endregion
 
@@ -50,23 +48,32 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdCancel_Click(object sender, System.EventArgs e) => DialogResult = DialogResult.Cancel;
+        private void cmdCancel_Click(object sender, System.EventArgs e)
+            => DialogResult = DialogResult.Cancel;
 
         private async void cmdUpdate_Click(object sender, EventArgs e)
         {
             ToggleControlEnable(false);
 
-            await Updater.DownloadAsync(lblWindowTitle);
+            await _updater.DownloadAndInstallUpdateAsync(lblWindowTitle);
 
             ToggleControlEnable(true);
         }
         #endregion
 
-        #region Private
+        #region User Interface
         private void ToggleControlEnable(bool enable)
         {
             cmdCancel.Enabled = enable;
             cmdDownload.Enabled = enable;
+        }
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += frmUpdate_Load;
+            KeyDown += frmUpdate_KeyDown;
         }
         #endregion
     }

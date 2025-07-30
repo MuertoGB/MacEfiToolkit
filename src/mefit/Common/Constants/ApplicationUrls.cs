@@ -6,7 +6,7 @@
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal static class ApplicationUrls
+    public static class ApplicationUrls
     {
         internal const string Changelog = "https://github.com/MuertoGB/MacEfiToolkit/blob/main/CHANGELOG.md";
         internal const string PaypalDonate = "https://www.paypal.com/donate/?hosted_button_id=Z88F3UEZB47SQ";

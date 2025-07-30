@@ -4,37 +4,35 @@
 // MemoryTracker.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.Utilities;
 using System;
 using System.Diagnostics;
 using System.Threading;
 
 namespace Mac_EFI_Toolkit.Common
 {
-    internal class MemoryTracker
+    public class MemoryTracker
     {
         #region Private Members
-        private static readonly Lazy<MemoryTracker> _instance = new Lazy<MemoryTracker>(() => new MemoryTracker());
-        private readonly Timer _usageTimer;
+        private readonly Timer _timer;
         private readonly bool _isWine;
         private string _instanceName;
-        private PerformanceCounter _workingSetCounter;
+        private PerformanceCounter _performanceCounter;
         #endregion
 
         #region Internal Members
-        // Event to notify UI updates on memory usage change
-        internal event EventHandler<ulong> OnMemoryUsageUpdated;
-        internal static MemoryTracker Instance => _instance.Value;
+        // Event to notify UI updates on memory usage change.
+        public event EventHandler<ulong> OnMemoryUsageUpdated;
         #endregion
 
         #region Constructor
-        private MemoryTracker()
+        public MemoryTracker()
         {
-            _isWine = SystemTools.IsRunningUnderWine();
+            _isWine = SystemUtils.IsRunningUnderWine();
 
             if (!_isWine)
             {
-                _usageTimer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
+                _timer = new Timer(UpdateMemoryUsage, null, TimeSpan.Zero, TimeSpan.FromSeconds(2));
             }
         }
 
@@ -43,19 +41,19 @@ namespace Mac_EFI_Toolkit.Common
             if (_isWine || _instanceName != null)
                 return;
 
-            var category = new PerformanceCounterCategory("Process");
-            var processName = Process.GetCurrentProcess().ProcessName;
-            var processId = Process.GetCurrentProcess().Id;
+            PerformanceCounterCategory category = new PerformanceCounterCategory("Process");
+            string processName = Process.GetCurrentProcess().ProcessName;
+            int processId = Process.GetCurrentProcess().Id;
 
             foreach (string name in category.GetInstanceNames())
             {
                 if (name.StartsWith(processName, StringComparison.OrdinalIgnoreCase))
                 {
-                    var idCounter = new PerformanceCounter("Process", "ID Process", name, true);
+                    PerformanceCounter idCounter = new PerformanceCounter("Process", "ID Process", name, true);
                     if ((int)idCounter.RawValue == processId)
                     {
                         _instanceName = name;
-                        _workingSetCounter = new PerformanceCounter("Process", "Working Set - Private", _instanceName, true);
+                        _performanceCounter = new PerformanceCounter("Process", "Working Set - Private", _instanceName, true);
                         break;
                     }
                 }
@@ -71,10 +69,10 @@ namespace Mac_EFI_Toolkit.Common
             {
                 InitializeCounters();
 
-                if (_workingSetCounter == null)
+                if (_performanceCounter == null)
                     return;
 
-                float bytes = _workingSetCounter.NextValue();
+                float bytes = _performanceCounter.NextValue();
                 ulong memoryUsage = (ulong)bytes;
 
                 OnMemoryUsageUpdated?.Invoke(this, memoryUsage);

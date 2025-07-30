@@ -23,17 +23,11 @@ namespace Mac_EFI_Toolkit.Forms
             // Attach event handlers.
             WireEventHandlers();
 
-            // Enable drag.
-            UITools.EnableFormDrag(this, lblTitle);
-
             // Set button properties.
             SetButtonGlyphAndText();
-        }
 
-        private void WireEventHandlers()
-        {
-            Load += frmAbout_Load;
-            KeyDown += frmAbout_KeyDown;
+            // Enable drag.
+            WindowManager.EnableFormDrag(this, lblTitle);
         }
         #endregion
 
@@ -58,18 +52,28 @@ namespace Mac_EFI_Toolkit.Forms
         #endregion
 
         #region Button Events
-        private void cmdClose_Click(object sender, EventArgs e) => Close();
+        private void cmdClose_Click(object sender, EventArgs e)
+            => Close();
         #endregion
 
         #region LinkLabel Events
-        private void lnkPaypal_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => Process.Start(ApplicationUrls.PaypalDonate);
+        private void lnkPaypal_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+            => Process.Start(ApplicationUrls.PaypalDonate);
         #endregion
 
-        #region UI Events
+        #region User Interface
         private void SetButtonGlyphAndText()
         {
             cmdClose.Font = Program.FluentRegular12;
             cmdClose.Text = ApplicationChars.FLUENT_DISMISS;
+        }
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += frmAbout_Load;
+            KeyDown += frmAbout_KeyDown;
         }
         #endregion
     }

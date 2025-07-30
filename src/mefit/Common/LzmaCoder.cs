@@ -4,94 +4,77 @@
 // LzmaCoder.cs
 // Released under the GNU GLP v3.0
 
+using Mac_EFI_Toolkit.Utilities;
+using SevenZip.Compression.LZMA;
 using System;
 using System.IO;
 
 namespace Mac_EFI_Toolkit.Common
 {
-    class LzmaCoder
+    public static class LzmaCoder
     {
-        internal static byte[] DecompressBytes(byte[] sourcebuffer)
+        public static byte[] DecompressLzmaArchive(byte[] sourcebuffer)
         {
-            // Create a new instance of the Decoder class.
-            SevenZip.Compression.LZMA.Decoder lzmaDecoder =
-                new SevenZip.Compression.LZMA.Decoder();
-
-            // Create a memory stream to store the decompressed data.
-            MemoryStream streamBuffer = new MemoryStream();
-
             try
             {
-                // Create a memory stream to hold the compressed input data.
                 using (MemoryStream streamInput = new MemoryStream(sourcebuffer))
+                using (MemoryStream streamBuffer = new MemoryStream())
                 {
-                    // Read the first 5 bytes which contain decoder property data.
+                    // Create LZMA decoder instance.
+                    Decoder lzmaCoder = new Decoder();
+
+                    // Read decoder properties and the decompressed data length.
                     byte[] propertyBytes = new byte[5];
-
-                    streamInput.Read(propertyBytes, 0, 5);
-
-                    // Read the next 8 bytes which represent the decompressed data length.
                     byte[] decompressedLength = new byte[8];
+                    streamInput.Read(propertyBytes, 0, 5);
                     streamInput.Read(decompressedLength, 0, 8);
 
-                    // Convert the 8-byte array to a long, representing the total file length.
                     long fileLength = BitConverter.ToInt64(decompressedLength, 0);
 
-                    // Set the decoder properties using the propertyBytes.
-                    lzmaDecoder.SetDecoderProperties(propertyBytes);
+                    // Set the decoder properties and decode the stream.
+                    lzmaCoder.SetDecoderProperties(propertyBytes);
+                    lzmaCoder.Code(streamInput, streamBuffer, streamInput.Length, fileLength, null);
 
-                    // Decode the compressed input stream and write the result to decoderStream.
-                    lzmaDecoder.Code(streamInput, streamBuffer, streamInput.Length, fileLength, null);
-
-                    // Validate the decompressed length.
+                    // Check the decompressed length matches the expected file length.
                     if (streamBuffer.Length != fileLength)
                     {
-                        Logger.WriteLine($"Decompressed length mismatch. Expected: {fileLength}, Actual: {streamBuffer.Length}", Logger.LogType.Application);
+                        Logger.LogWarning($"Decompressed length mismatch. Expected: {fileLength}, Actual: {streamBuffer.Length}", nameof(DecompressLzmaArchive));
                     }
-                }
 
-                // Return the decompressed data as a byte array.
-                return streamBuffer.ToArray();
+                    return streamBuffer.ToArray();
+                }
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(DecompressBytes), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(DecompressLzmaArchive));
                 return null;
             }
         }
 
-        internal static bool IsValidLzmaHeader(byte[] sourcebuffer)
+        public static bool IsValidLzmaHeader(byte[] sourcebuffer)
         {
+            // Ensure the buffer has enough length.
             if (sourcebuffer.Length < 5)
-            {
-                // Header is too short to be valid.
                 return false;
-            }
 
             byte properties = sourcebuffer[0];
-            int lc = properties % 9;        // Literal context bits.
-            int remainder = properties / 9;
-            int lp = remainder % 5;         // Literal position bits.
-            int pb = remainder / 5;         // Position bits.
+            int lc = properties % 9;  // Literal context bits.
+            int lp = (properties / 9) % 5;  // Literal position bits.
+            int pb = (properties / 9) / 5;  // Position bits.
 
+            // Validate the properties byte.
             if (lc < 0 || lc > 8 || lp < 0 || lp > 4 || pb < 0 || pb > 4)
             {
-                // Invalid properties byte.
-                Console.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid properties byte: lc={lc}, lp={lp}, pb={pb}");
+                Logger.LogWarning($"{nameof(IsValidLzmaHeader)}: Invalid properties byte: lc={lc}, lp={lp}, pb={pb}", nameof(IsValidLzmaHeader));
                 return false;
             }
 
+            // Check dictionary size.
             int dictSize = BitConverter.ToInt32(sourcebuffer, 1);
 
-            bool IsPow2(int i)
+            if (dictSize <= 0 || !MathUtils.IsPowerOfTwo(dictSize))
             {
-                return (i > 0) && ((i & (i - 1)) == 0);
-            }
-
-            if (dictSize <= 0 || !IsPow2(dictSize))
-            {
-                // Invalid dictionary size <= 0 or not a power of 2.
-                Console.WriteLine($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {dictSize}");
+                Logger.LogWarning($"{nameof(IsValidLzmaHeader)}: Invalid dictionary size: {dictSize}", nameof(IsValidLzmaHeader));
                 return false;
             }
 

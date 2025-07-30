@@ -6,9 +6,11 @@
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common.Constants;
+using Mac_EFI_Toolkit.Forms;
 using System;
 using System.Drawing;
 using System.Media;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI
@@ -31,12 +33,12 @@ namespace Mac_EFI_Toolkit.UI
         }
         #endregion
 
-        #region Static Members
-        static SystemSound PromptSound;
-        static string PromptMessage;
-        static PType PromptType;
-        static PButtons PromptButtons;
-        static DialogResult PromptResult;
+        #region Public Members
+        public static SystemSound PromptSound;
+        public static string PromptMessage;
+        public static PType PromptType;
+        public static PButtons PromptButtons;
+        public static DialogResult PromptResult;
         #endregion
 
         #region Constants
@@ -58,14 +60,7 @@ namespace Mac_EFI_Toolkit.UI
             WireEventHandlers();
 
             // Enable drag.
-            UITools.EnableFormDrag(this, lblTitle);
-        }
-
-        private void WireEventHandlers()
-        {
-            Load += new EventHandler(METMessageBox_Load);
-            Shown += new EventHandler(METMessageBox_Shown);
-            KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
+            WindowManager.EnableFormDrag(this, lblTitle);
         }
         #endregion
 
@@ -76,22 +71,22 @@ namespace Mac_EFI_Toolkit.UI
             switch (PromptType)
             {
                 case PType.Error:
-                    lblTitle.ForeColor = ApplicationColours.Error;
+                    lblTitle.ForeColor = ApplicationColors.Error;
                     lblTitle.Text = ERROR_STRING;
                     PromptSound = System.Media.SystemSounds.Hand;
                     break;
                 case PType.Warning:
-                    lblTitle.ForeColor = ApplicationColours.Warning;
+                    lblTitle.ForeColor = ApplicationColors.Warning;
                     lblTitle.Text = WARN_STRING;
                     PromptSound = System.Media.SystemSounds.Exclamation;
                     break;
                 case PType.Information:
-                    lblTitle.ForeColor = ApplicationColours.Information;
+                    lblTitle.ForeColor = ApplicationColors.Information;
                     lblTitle.Text = INFO_STRING;
                     PromptSound = System.Media.SystemSounds.Beep;
                     break;
                 case PType.Question:
-                    lblTitle.ForeColor = ApplicationColours.Information;
+                    lblTitle.ForeColor = ApplicationColors.Information;
                     lblTitle.Text = INFO_STRING;
                     PromptSound = System.Media.SystemSounds.Beep;
                     break;
@@ -121,11 +116,27 @@ namespace Mac_EFI_Toolkit.UI
                 PromptSound.Play();
             }
 
-            UITools.FlashForecolor(lblTitle);
+            FlashForecolor(lblTitle);
         }
         #endregion
 
-        #region Dynamic Resizing
+        #region User Interface
+        public static DialogResult Show(Form owner, string message, PType type, PButtons buttons = PButtons.Okay)
+        {
+            SetMessageBoxParameters(message, type, buttons);
+
+            using (METPrompt prompt = new METPrompt())
+            {
+                prompt.StartPosition = owner == null
+                    ? FormStartPosition.CenterScreen
+                    : FormStartPosition.CenterParent;
+
+                DialogResult dlgResult = prompt.ShowDialog(owner);
+
+                return PromptResult;
+            }
+        }
+
         private void AdjustFormSize()
         {
             lblMessage.MaximumSize = new Size(MAX_WIDTH, MAX_HEIGHT);
@@ -163,31 +174,6 @@ namespace Mac_EFI_Toolkit.UI
         }
         #endregion
 
-        #region Overriden Events
-        public static DialogResult Show(Form owner, string message, PType type, PButtons buttons = PButtons.Okay)
-        {
-            SetMessageBoxParameters(message, type, buttons);
-
-            using (METPrompt prompt = new METPrompt())
-            {
-                prompt.StartPosition = owner == null
-                    ? FormStartPosition.CenterScreen
-                    : FormStartPosition.CenterParent;
-
-                DialogResult dlgResult = prompt.ShowDialog(owner);
-
-                return PromptResult;
-            }
-        }
-
-        private static void SetMessageBoxParameters(string message, PType type, PButtons buttons)
-        {
-            PromptMessage = message;
-            PromptType = type;
-            PromptButtons = buttons;
-        }
-        #endregion
-
         #region Button Events
         private void cmdClose_Click(object sender, EventArgs e)
         {
@@ -205,6 +191,39 @@ namespace Mac_EFI_Toolkit.UI
         {
             PromptResult = PromptButtons == PButtons.Okay ? DialogResult.OK : DialogResult.Cancel;
             Close();
+        }
+        #endregion
+
+        #region Private Events
+        private void WireEventHandlers()
+        {
+            Load += new EventHandler(METMessageBox_Load);
+            Shown += new EventHandler(METMessageBox_Shown);
+            KeyDown += new KeyEventHandler(METMessageBox_KeyDown);
+        }
+
+        private static void SetMessageBoxParameters(string message, PType type, PButtons buttons)
+        {
+            PromptMessage = message;
+            PromptType = type;
+            PromptButtons = buttons;
+        }
+
+        private static async void FlashForecolor(Control control)
+        {
+            if (!Settings.ReadBoolean(Settings.BooleanKey.DisableFlashingUI))
+            {
+                Color original = control.ForeColor;
+                Int32 msDelay = 70;
+
+                for (int i = 0; i < 6; i++)
+                {
+                    control.ForeColor = Color.FromArgb(100, 100, 100);
+                    await Task.Delay(msDelay);
+                    control.ForeColor = original;
+                    await Task.Delay(msDelay);
+                }
+            }
         }
         #endregion
     }

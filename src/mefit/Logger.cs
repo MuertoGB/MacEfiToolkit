@@ -1,73 +1,75 @@
 ﻿// Mac EFI Toolkit
 // https://github.com/MuertoGB/MacEfiToolkit
 
-// Logger.cs - Handles logging of data and text
+// Logger.cs
 // Released under the GNU GLP v3.0
 
 using Mac_EFI_Toolkit.Common.Constants;
-using Mac_EFI_Toolkit.UI;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit
 {
-    class Logger
+    public static class Logger
     {
-        public enum LogType
+        private static readonly object _lockObject = new object();
+        private static readonly string _logFile = ApplicationPaths.LogFile;
+        private static readonly string _logDirectory = Path.GetDirectoryName(_logFile);
+
+        public enum LogLevel
         {
-            Application,
-            Database
+            Info,
+            Warning,
+            Error,
+            Exception,
+            Debug
         }
 
-        public static void WriteLine(string message, LogType logtype)
+        public static void WriteToLog(string message, LogLevel level)
         {
-            string logPath;
+            if (!string.IsNullOrEmpty(_logDirectory))
+                Directory.CreateDirectory(_logDirectory);
 
-            switch (logtype)
+            lock (_lockObject)
             {
-                case LogType.Application:
-                    logPath = ApplicationPaths.ApplicationLog;
-                    break;
-                case LogType.Database:
-                    logPath = ApplicationPaths.DatabaseLog;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(logtype), logtype, null);
-            }
-
-            using (StreamWriter writer = new StreamWriter(logPath, true))
-            {
-                writer.WriteLine($"{DateTime.Now} : {message}");
+                using (StreamWriter streamWriter = new StreamWriter(_logFile, true))
+                {
+                    string stamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+                    streamWriter.WriteLine($"{stamp} [{level}]: {message}");
+                }
             }
         }
 
-        internal static void WriteErrorLine(string methodname, Type exceptiontype, string message) =>
-            WriteLine($"{methodname} - {exceptiontype.Name}: {message}", LogType.Application);
+        public static void LogException(Exception ex, [CallerMemberName] string methodName = "")
+            => WriteToLog($"{methodName} - Exception: {ex}", LogLevel.Exception);
 
-        internal static void WriteCallerLine(string logText, [System.Runtime.CompilerServices.CallerMemberName] string methodName = "") =>
-            WriteLine($"{methodName}: {logText}", LogType.Application);
+        public static void LogError(string logText, [CallerMemberName] string methodName = "")
+            => WriteToLog($"{methodName}: {logText}", LogLevel.Error);
 
-        internal static void OpenLogFile(Form owner)
+        public static void LogWarning(string logText, [CallerMemberName] string methodName = "")
+            => WriteToLog($"{methodName}: {logText}", LogLevel.Warning);
+
+        public static void LogInfo(string logText, [CallerMemberName] string methodName = "")
+            => WriteToLog($"{methodName}: {logText}", LogLevel.Info);
+
+        public static void OpenLogFile(Form owner)
         {
-            string logPath = ApplicationPaths.ApplicationLog;
-
-            // Check if the log file exists
-            if (!File.Exists(logPath))
-            {
-                ShowLogFileNotFoundError(owner);
+            // Check if the log file exists.
+            if (!File.Exists(_logFile))
                 return;
-            }
 
-            Process.Start("notepad.exe", logPath);
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/c start notepad.exe \"{_logFile}\"",
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true
+            };
+
+            Process.Start(startInfo);
         }
-
-        private static void ShowLogFileNotFoundError(Form owner) =>
-            METPrompt.Show(
-                owner,
-                DIALOGSTRINGS.LOG_NOT_FOUND,
-                METPrompt.PType.Error,
-                METPrompt.PButtons.Okay);
     }
 }

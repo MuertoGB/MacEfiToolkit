@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace Mac_EFI_Toolkit.UI.Renderers
 {
-    class METMenuRenderer : ToolStripRenderer
+    public class METMenuRenderer : ToolStripRenderer
     {
         private readonly Color BorderColor = Color.FromArgb(80, 80, 80);
-        private readonly Color ItemHoverBorderColor = Color.FromArgb(50, 60, 70);
-        private readonly Color ItemHoverColor = Color.FromArgb(40, 50, 60);
+        private readonly Color ItemHoverBorderColor = Color.FromArgb(50, 70, 90);
+        private readonly Color ItemHoverColor = Color.FromArgb(30, 50, 70);
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {

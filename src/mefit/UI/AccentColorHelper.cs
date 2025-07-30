@@ -12,9 +12,9 @@ using System.Drawing;
 
 namespace Mac_EFI_Toolkit.UI
 {
-    internal class AccentColorHelper
+    public static class AccentColorHelper
     {
-        internal static Color GetSystemAccentColor()
+        public static Color GetSystemAccentColor()
         {
             try
             {
@@ -27,12 +27,12 @@ namespace Mac_EFI_Toolkit.UI
                     return Color.FromArgb(r, g, b);
                 }
 
-                return ApplicationColours.AppBorderDefault;
+                return ApplicationColors.AppBorderDefault;
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetSystemAccentColor), e.GetType(), e.Message);
-                return ApplicationColours.AppBorderDefault;
+                Logger.LogException(e, nameof(GetSystemAccentColor));
+                return ApplicationColors.AppBorderDefault;
             }
         }
     }

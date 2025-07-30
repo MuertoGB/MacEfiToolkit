@@ -7,21 +7,26 @@
 using Mac_EFI_Toolkit.WIN32;
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Mac_EFI_Toolkit.Common
 {
-    class IniFile
+    public class IniFile
     {
         private readonly string _strFilepath;
         private const int MAX_BUFFER = 32767;
 
-        internal IniFile(string filepath) => this._strFilepath = filepath;
+        public IniFile(string filepath)
+        {
+            this._strFilepath = filepath;
+        }
 
-        internal void Write(string section, string key, string value) => NativeMethods.WritePrivateProfileString(section, key, value, _strFilepath);
+        public void Write(string section, string key, string value)
+            => NativeMethods.WritePrivateProfileString(section, key, value, _strFilepath);
 
-        internal void WriteSection(string section)
+        public void WriteSection(string section)
         {
             using (StreamWriter writer = new StreamWriter(_strFilepath, true))
             {
@@ -29,108 +34,70 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        internal string Read(string section, string key, string defaultValue = "")
+        public string Read(string section, string key, string defaultValue = "")
         {
             StringBuilder builder = new StringBuilder(255);
-
             NativeMethods.GetPrivateProfileString(section, key, defaultValue, builder, 255, _strFilepath);
-
             return builder.ToString();
         }
 
-        internal void DeleteSection(string section) => Write(section, null, null);
+        public void DeleteSection(string section)
+            => Write(section, null, null);
 
-        internal void DeleteKey(string section, string key) => Write(section, key, null);
+        public void DeleteKey(string section, string key)
+            => Write(section, key, null);
 
-        internal bool SectionExists(string section)
-        {
-            string[] sectionNames = GetSectionNames(_strFilepath);
+        public bool SectionExists(string section)
+            => GetSectionNames()?.Contains(section) ?? false;
 
-            if (sectionNames != null)
-            {
-                foreach (string s in sectionNames)
-                {
-                    if (s == section)
-                    {
-                        return true;
-                    }
-                }
-            }
+        public bool KeyExists(string section, string key)
+            => GetSectionKeys(section)?.Contains(key) ?? false;
 
-            return false;
-        }
-
-        internal bool KeyExists(string section, string key)
-        {
-            string[] keyNames = GetSectionKeys(section, _strFilepath);
-
-            if (keyNames == null)
-            {
-                return false;
-            }
-
-            foreach (string k in keyNames)
-            {
-                if (k == key)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        internal static string[] GetSectionNames(string lpFileName)
+        public string[] GetSectionNames()
         {
             try
             {
-                string unicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSectionNames(buffer, MAX_BUFFER, lpFileName));
-
+                string unicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSectionNames(buffer, MAX_BUFFER, _strFilepath));
                 if (unicode == null)
                 {
-                    Logger.WriteCallerLine(nameof(GetSectionNames), "No section names found");
+                    Logger.LogInfo(nameof(GetSectionNames), "No section names found");
                     return null;
                 }
-
                 return unicode.Substring(0, unicode.Length - 1).Split('\0');
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetSectionNames), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(GetSectionNames));
                 return null;
             }
         }
 
-        internal static string[] GetSectionKeys(string lpAppName, string lpFileName)
+        public string[] GetSectionKeys(string section)
         {
             try
             {
-                string unicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSection(lpAppName, buffer, MAX_BUFFER, lpFileName));
-
+                string unicode = ReadBuffer(buffer => NativeMethods.GetPrivateProfileSection(section, buffer, MAX_BUFFER, _strFilepath));
                 if (unicode == null)
                 {
-                    Logger.WriteCallerLine(nameof(GetSectionKeys), "No section keys found");
+                    Logger.LogInfo(nameof(GetSectionKeys), "No section keys found");
                     return null;
                 }
-
                 string[] keys = unicode.Substring(0, unicode.Length - 1).Split('\0');
-
                 for (int i = 0; i < keys.Length; i++)
                 {
                     int index = keys[i].IndexOf('=');
                     keys[i] = index != -1 ? keys[i].Substring(0, index) : keys[i];
                 }
-
                 return keys;
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(GetSectionKeys), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(GetSectionKeys));
                 return null;
             }
         }
 
-        private static string ReadBuffer(Func<IntPtr, uint> nativemethod)
+        private string ReadBuffer(Func<IntPtr, uint> nativemethod)
         {
             IntPtr ptr = IntPtr.Zero;
 

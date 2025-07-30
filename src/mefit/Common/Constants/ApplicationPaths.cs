@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal static class ApplicationPaths
+    public static class ApplicationPaths
     {
         internal static readonly string WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
         internal static readonly string FriendlyName = AppDomain.CurrentDomain.FriendlyName;
@@ -21,7 +21,6 @@ namespace Mac_EFI_Toolkit.Common.Constants
         internal static readonly string ScfgDirectory = Path.Combine(WorkingDirectory, "scfg_stores");
         internal static readonly string LzmaDirectory = Path.Combine(WorkingDirectory, "lzma_archives");
         internal static readonly string SettingsFile = Path.Combine(WorkingDirectory, "Settings.ini");
-        internal static readonly string ApplicationLog = Path.Combine(WorkingDirectory, "application.log");
-        internal static readonly string DatabaseLog = Path.Combine(WorkingDirectory, "database.log");
+        internal static readonly string LogFile = Path.Combine(WorkingDirectory, "application.log");
     }
 }

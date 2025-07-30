@@ -4,9 +4,9 @@
 // FontResolver.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Tools;
 using Mac_EFI_Toolkit.WIN32;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
@@ -14,11 +14,24 @@ using System.Runtime.InteropServices;
 
 namespace Mac_EFI_Toolkit.Common
 {
-    internal class FontResolver
+    public class FontResolver
     {
-        private static PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
+        public enum FontStatus
+        {
+            Available,
+            Missing,
+            Unknown
+        }
 
-        internal static FontFamily LoadFont(byte[] fontdata)
+        private PrivateFontCollection _privateFontCollection = new PrivateFontCollection();
+
+        public FontResolver()
+        {
+            this._privateFontCollection = new PrivateFontCollection();
+        }
+
+        // Method to load a font from a byte array.
+        public FontFamily LoadFont(byte[] fontdata)
         {
             // Allocate unmanaged memory to hold the font data.
             IntPtr pFileView = Marshal.AllocCoTaskMem(fontdata.Length);
@@ -41,7 +54,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(LoadFont), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(LoadFont));
                 return null;
             }
             finally
@@ -54,39 +67,16 @@ namespace Mac_EFI_Toolkit.Common
             }
         }
 
-        internal static FontStatus IsFontStyleAvailable(string fontfamily, FontStyle fontstyle)
-        {
-            try
-            {
-                using (FontFamily family = new FontFamily(fontfamily))
-                {
-                    if (family.IsStyleAvailable(fontstyle))
-                    {
-                        return FontStatus.Available;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.WriteErrorLine(nameof(IsFontStyleAvailable), e.GetType(), e.Message);
-                return FontStatus.Unknown;
-            }
-
-            return FontStatus.Missing;
-        }
-
-        internal static bool LoadCustomFont(byte[] fontbuffer, out Font[] fonts)
+        public bool LoadCustomFont(byte[] fontbuffer, out Font[] fonts)
         {
             fonts = null;
 
             if (fontbuffer == null)
-            {
                 return false;
-            }
 
             try
             {
-                FontFamily resolvedFont = FontResolver.LoadFont(fontbuffer);
+                FontFamily resolvedFont = LoadFont(fontbuffer);
 
                 fonts = new[]
                 {
@@ -99,7 +89,7 @@ namespace Mac_EFI_Toolkit.Common
             }
             catch (Exception e)
             {
-                Logger.WriteErrorLine(nameof(LoadCustomFont), e.GetType(), e.Message);
+                Logger.LogException(e, nameof(LoadCustomFont));
                 return false;
             }
         }

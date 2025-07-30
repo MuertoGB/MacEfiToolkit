@@ -4,7 +4,8 @@
 // FlashDescriptor.cs
 // Released under the GNU GLP v3.0
 
-using Mac_EFI_Toolkit.Tools;
+using Mac_EFI_Toolkit.Interop;
+using Mac_EFI_Toolkit.Utilities;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -55,8 +56,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
 
         public void ParseRegionData(byte[] sourcebuffer)
         {
-            byte[] descriptorBytes = BinaryTools.GetBytesBaseLength(sourcebuffer, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
-            DescriptorHeader header = DeserializeStruct<DescriptorHeader>(descriptorBytes, 0);
+            byte[] descriptorBytes = BinaryUtils.GetBytesBaseLength(sourcebuffer, (int)DESCRIPTOR_BASE, (int)DESCRIPTOR_LENGTH);
+            DescriptorHeader header = ReadStruct<DescriptorHeader>(descriptorBytes, 0);
 
             IsDescriptorMode = header.Tag.SequenceEqual(FlashDecriptorMarker);
 
@@ -68,8 +69,8 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
                 return;
             }
 
-            DescriptorMap map = DeserializeStruct<DescriptorMap>(descriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)));
-            DescriptorRegions regions = DeserializeStruct<DescriptorRegions>(descriptorBytes, map.RegionBase << 4);
+            DescriptorMap map = ReadStruct<DescriptorMap>(descriptorBytes, Marshal.SizeOf(typeof(DescriptorHeader)));
+            DescriptorRegions regions = ReadStruct<DescriptorRegions>(descriptorBytes, map.RegionBase << 4);
 
             uint biosBase, biosLimit, biosSize;
             uint meBase, meLimit, meSize;
@@ -94,11 +95,11 @@ namespace Mac_EFI_Toolkit.Firmware.EFIROM
             return;
         }
 
-        private static T DeserializeStruct<T>(byte[] source, int offset) where T : struct
+        private static T ReadStruct<T>(byte[] source, int offset) where T : struct
         {
             byte[] structBytes = new byte[Marshal.SizeOf(typeof(T))];
             Array.Copy(source, offset, structBytes, 0, structBytes.Length);
-            return Helper.DeserializeHeader<T>(structBytes);
+            return MarshalHelper.ReadStruct<T>(structBytes);
         }
 
         private void ParseRegion(ushort baseposition, ushort limitposition, int sourcelength, out uint regionbase, out uint regionlimit, out uint regionlength)

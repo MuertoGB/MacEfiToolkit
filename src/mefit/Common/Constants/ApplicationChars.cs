@@ -6,16 +6,20 @@
 
 namespace Mac_EFI_Toolkit.Common.Constants
 {
-    internal class ApplicationChars
+    public static class ApplicationChars
     {
-        internal const string FLUENT_DISMISS = "\uE667";
-        internal const string FLUENT_FOLDEROPEN = "\uE883";
-        internal const string FLUENT_DOCDOWNARROW = "\uE681";
-        internal const string FLUENT_ZIPFILLED = "\uE894";
-        internal const string FLUENT_MAILCHECKFILLED = "\uEB0B";
+        // Fluent System Icons
+        public const string FLUENT_DISMISS = "\uE667";
+        public const string FLUENT_FOLDEROPEN = "\uE883";
+        public const string FLUENT_DOCDOWNARROW = "\uE681";
+        public const string FLUENT_ZIPFILLED = "\uE894";
+        public const string FLUENT_MAILCHECKFILLED = "\uEB0B";
+        public const string FLUENT_FOLDERPROHIBITED = "\uE88C";
+        public const string FLUENT_FOLDERLIGHTENING = "\uE87A";
 
-        internal const string SEGUI_RIGHTWARDSARROW = "\u2192";
-        internal const string SEGUI_DINGBAT1 = "\u2776";
-        internal const string SEGUI_NOBREAKSPACE = "\u00A0";
+        // Segoe UI
+        public const string SEGUI_RIGHTWARDSARROW = "\u2192";
+        public const string SEGUI_DINGBAT1 = "\u2776";
+        public const string SEGUI_NOBREAKSPACE = "\u00A0";
     }
 }
