@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
  <MET>
-    <VersionString>2.1.2</VersionString>
-    <Build>20250423_1635</Build>
-    <ReleaseDate>2025-04-23</ReleaseDate>
+    <VersionString>2.1.3</VersionString>
+    <Build>202730_1445</Build>
+    <ReleaseDate>2025-07-30</ReleaseDate>
     <Channel>Stable</Channel>
-    <SHA256>fb7a40839b51109a716818d53f3963da2053392ccec98f5736ad89619829c9b0</SHA256>
-    <Priority>High</Priority>
+    <SHA256>a82b68d1cc1e97756e75f7034f1e2272cafcafc1a2583604d27bc8ebff5ce08c</SHA256>
+    <Priority>Medium</Priority>
  </MET>
 </data>

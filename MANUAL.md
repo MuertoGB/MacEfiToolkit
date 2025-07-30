@@ -131,9 +131,11 @@ This section explains the EFIROM Window and its functionality.
 
 ### Status Bar
 - **Firmware Parse Time**: The leftmost label displays the time taken by the application to process the firmware.
-- **File Glyph**: Indicates whether an LZMA DXE archive was found within the firmware.
+- **Archive Glyph**: Indicates whether an LZMA DXE archive was found within the firmware.
 - **Email Glyph**: Indicates whether a Find My Mac email was detected in the NVRAM.
-- **Tooltips**: The status bar shows important messages and keyboard shortcuts.
+- **Bolt Glyph**: Indicates whether the EFI is APFS capable.
+- **No Entry Glyph**: Indicates whether the firmware is locked with an EFI password.
+- **Tooltips**: The status bar shows important messages and keyboard short cuts.
 
 ## SOCROM Window
 
