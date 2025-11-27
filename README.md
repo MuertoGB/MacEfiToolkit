@@ -2,6 +2,7 @@
 <img width="160" src="stream/images/application/icon256.png" alt="SMCFT Logo">
 <br>
 Mac EFI Toolkit
+This project is now end of life, and shall receive no more updates by the developer. Issues will no longer be responded to.
 </h1>
 
 <p align="center" width="100%">
